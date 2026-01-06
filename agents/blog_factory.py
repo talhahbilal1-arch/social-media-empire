@@ -31,6 +31,14 @@ from core.notifications import send_alert
 class BlogFactory:
     """Creates and publishes SEO-optimized blog articles."""
 
+    # Affiliate program priority (higher commission = more preferred)
+    AFFILIATE_PRIORITY = {
+        'shareasale': {'priority': 100, 'avg_commission': 20.0},
+        'impact': {'priority': 90, 'avg_commission': 17.5},
+        'cj': {'priority': 80, 'avg_commission': 12.5},
+        'amazon': {'priority': 10, 'avg_commission': 3.5}
+    }
+
     # Brand-specific blog configuration
     BRAND_CONFIG = {
         'daily_deal_darling': {
@@ -481,10 +489,60 @@ The content_markdown should be a complete, publish-ready article with:
             return html
 
     def _add_affiliate_links(self, content: str, affiliate_tag: str) -> str:
-        """Transform Amazon URLs to include affiliate tag."""
-        if not affiliate_tag:
-            return content
+        """
+        Transform product URLs to use best affiliate links.
 
+        Priority: ShareASale > Impact > CJ > Amazon (fallback)
+        """
+        result = content
+
+        # First, try to replace products with higher-commission affiliate links
+        result = self._upgrade_to_best_affiliate(result, affiliate_tag)
+
+        # Then ensure all Amazon links have the affiliate tag
+        if affiliate_tag:
+            result = self._add_amazon_tags(result, affiliate_tag)
+
+        return result
+
+    def _upgrade_to_best_affiliate(self, content: str, affiliate_tag: str) -> str:
+        """
+        Check for products and replace with higher-commission affiliate links if available.
+        """
+        result = content
+
+        # Extract ASINs from Amazon links
+        asin_pattern = r'amazon\.com/(?:dp|gp/product)/([A-Z0-9]{10})'
+        asins = re.findall(asin_pattern, content)
+
+        for asin in set(asins):
+            # Look up product in product_affiliates table
+            try:
+                product_affiliate = self.db.get_product_affiliate_by_asin(asin)
+                if product_affiliate:
+                    best_program = product_affiliate.get('best_program')
+                    if best_program and best_program != 'amazon':
+                        # Get the higher-commission link
+                        link_field = f"{best_program}_link"
+                        better_link = product_affiliate.get(link_field)
+                        if better_link:
+                            # Replace Amazon link with better affiliate link
+                            amazon_patterns = [
+                                rf'https?://(?:www\.)?amazon\.com/dp/{asin}[^\s\)\]]*',
+                                rf'https?://(?:www\.)?amazon\.com/[^/]+/dp/{asin}[^\s\)\]]*',
+                                rf'https?://(?:www\.)?amazon\.com/gp/product/{asin}[^\s\)\]]*'
+                            ]
+                            for pattern in amazon_patterns:
+                                result = re.sub(pattern, better_link, result)
+                            print(f"    Upgraded ASIN {asin} to {best_program} link")
+            except Exception as e:
+                # If lookup fails, keep Amazon link
+                pass
+
+        return result
+
+    def _add_amazon_tags(self, content: str, affiliate_tag: str) -> str:
+        """Add affiliate tag to any remaining Amazon URLs."""
         # Pattern to match Amazon product URLs
         amazon_patterns = [
             # Match amazon.com/dp/ASIN or amazon.com/gp/product/ASIN

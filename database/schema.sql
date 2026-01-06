@@ -145,6 +145,10 @@ CREATE TABLE IF NOT EXISTS videos (
     height INTEGER DEFAULT 1920,
     platform_format TEXT DEFAULT '9:16',
     file_size_bytes BIGINT,
+    -- Pinterest Idea Pin support (multi-page video format)
+    idea_pin_url TEXT,
+    idea_pin_render_id TEXT,
+    idea_pin_pages INTEGER DEFAULT 0,
     status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'rendering', 'ready', 'failed')),
     error_message TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -153,6 +157,55 @@ CREATE TABLE IF NOT EXISTS videos (
 
 CREATE INDEX idx_videos_content ON videos(content_id);
 CREATE INDEX idx_videos_status ON videos(status);
+
+-- ============================================
+-- AFFILIATE PROGRAMS (Higher Commission Support)
+-- ============================================
+
+-- Stores affiliate program configurations
+CREATE TABLE IF NOT EXISTS affiliate_programs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL UNIQUE,
+    display_name TEXT NOT NULL,
+    commission_rate DECIMAL(5,2) NOT NULL, -- Average commission percentage
+    min_commission DECIMAL(5,2),
+    max_commission DECIMAL(5,2),
+    signup_url TEXT,
+    api_endpoint TEXT,
+    api_key_secret_name TEXT, -- Name of the secret in GitHub
+    is_active BOOLEAN DEFAULT true,
+    priority INTEGER DEFAULT 0, -- Higher = more preferred
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Insert default affiliate programs with priority order
+INSERT INTO affiliate_programs (name, display_name, commission_rate, min_commission, max_commission, signup_url, api_key_secret_name, priority) VALUES
+('shareasale', 'ShareASale', 20.00, 10.00, 30.00, 'https://www.shareasale.com/join/', 'SHAREASALE_API_KEY', 100),
+('impact', 'Impact', 17.50, 10.00, 25.00, 'https://impact.com/', 'IMPACT_API_KEY', 90),
+('cj', 'CJ Affiliate', 12.50, 5.00, 20.00, 'https://www.cj.com/', 'CJ_API_KEY', 80),
+('amazon', 'Amazon Associates', 3.50, 1.00, 10.00, 'https://affiliate-program.amazon.com/', NULL, 10)
+ON CONFLICT (name) DO NOTHING;
+
+-- Stores product-specific affiliate links across programs
+CREATE TABLE IF NOT EXISTS product_affiliates (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    product_name TEXT NOT NULL,
+    product_category TEXT,
+    amazon_asin TEXT,
+    amazon_link TEXT,
+    shareasale_link TEXT,
+    impact_link TEXT,
+    cj_link TEXT,
+    best_program TEXT REFERENCES affiliate_programs(name),
+    best_commission DECIMAL(5,2),
+    last_verified_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_product_affiliates_name ON product_affiliates(product_name);
+CREATE INDEX idx_product_affiliates_category ON product_affiliates(product_category);
+CREATE INDEX idx_product_affiliates_best ON product_affiliates(best_program);
 
 -- ============================================
 -- POSTS LOG (Agent 3 - Multi-Platform Poster)

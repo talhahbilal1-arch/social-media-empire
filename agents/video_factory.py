@@ -7,8 +7,15 @@ Creates short-form videos using Creatomate API:
 - Pulls pending video content from Supabase
 - Renders videos using templates
 - Saves video URLs back to database
+- Creates Pinterest Idea Pins (multi-page format for 9x more reach)
 
-Supports TikTok, Reels, and YouTube Shorts formats (9:16 vertical).
+Supports TikTok, Reels, YouTube Shorts, and Pinterest Idea Pins (9:16 vertical).
+
+Pinterest Idea Pin Specs:
+- 9:16 aspect ratio (1080x1920)
+- 2-20 pages/clips
+- Each clip 1-60 seconds
+- Total max 5 minutes
 """
 import os
 import sys
@@ -27,6 +34,16 @@ from core.notifications import send_alert
 
 class VideoFactory:
     """Creates videos using Creatomate API."""
+
+    # Pinterest Idea Pin configuration
+    IDEA_PIN_CONFIG = {
+        'width': 1080,
+        'height': 1920,
+        'min_pages': 2,
+        'max_pages': 5,  # Conservative default, can go up to 20
+        'page_duration': 5,  # Seconds per page
+        'format': '9:16'
+    }
 
     def __init__(self):
         self.db = SupabaseClient()
@@ -49,6 +66,7 @@ class VideoFactory:
         results = {
             'total_rendered': 0,
             'total_failed': 0,
+            'idea_pins_created': 0,
             'videos': [],
             'errors': []
         }
@@ -78,7 +96,7 @@ class VideoFactory:
                         print(f"  No suitable template found")
                         continue
 
-                    # Start render
+                    # Start regular video render
                     render_result = self._start_render(content, template)
 
                     if render_result.get('success'):
@@ -87,7 +105,15 @@ class VideoFactory:
                             'content_id': content['id'],
                             'render_id': render_result['render_id']
                         })
-                        print(f"  Render started: {render_result['render_id']}")
+                        print(f"  Regular video render started: {render_result['render_id']}")
+
+                        # Also create Pinterest Idea Pin version
+                        idea_pin_result = self._create_idea_pin(content, template)
+                        if idea_pin_result.get('success'):
+                            results['idea_pins_created'] += 1
+                            print(f"  Idea Pin render started: {idea_pin_result['render_id']}")
+                        else:
+                            print(f"  Idea Pin skipped: {idea_pin_result.get('reason', 'unknown')}")
 
                         # Update content status
                         self.db.update_content_status(content['id'], 'video_ready')
@@ -103,7 +129,7 @@ class VideoFactory:
                 run_id,
                 status='completed',
                 items_processed=len(pending),
-                items_created=results['total_rendered'],
+                items_created=results['total_rendered'] + results['idea_pins_created'],
                 items_failed=results['total_failed']
             )
 
@@ -113,7 +139,7 @@ class VideoFactory:
             send_alert("Video Factory Failed", str(e), severity="error")
             raise
 
-        print(f"\nVideo Factory complete: {results['total_rendered']} rendered, {results['total_failed']} failed")
+        print(f"\nVideo Factory complete: {results['total_rendered']} videos, {results['idea_pins_created']} idea pins, {results['total_failed']} failed")
         return results
 
     def _get_templates(self) -> List[Dict]:
@@ -212,6 +238,112 @@ class VideoFactory:
                 modifications[f'image_{i+1}'] = img
 
         return modifications
+
+    def _create_idea_pin(self, content: Dict, template: Dict) -> Dict:
+        """
+        Create a Pinterest Idea Pin version of the content.
+
+        Idea Pins are multi-page video/image posts that get 9x more reach on Pinterest.
+        Specs: 9:16 aspect ratio, 2-20 pages, each clip 1-60 seconds, total max 5 minutes.
+        """
+        try:
+            # Only create Idea Pins for content types that make sense
+            content_type = content.get('content_type', '')
+            if content_type not in ['video', 'reel', 'short', 'pin']:
+                return {'success': False, 'reason': f'Content type {content_type} not suitable for Idea Pin'}
+
+            # Build multi-page structure for Idea Pin
+            pages = self._build_idea_pin_pages(content)
+            if len(pages) < self.IDEA_PIN_CONFIG['min_pages']:
+                return {'success': False, 'reason': 'Not enough content for multi-page Idea Pin'}
+
+            # Create Creatomate render for Idea Pin format
+            render_data = {
+                "template_id": template['id'],
+                "modifications": self._build_modifications(content),
+                "output_format": "mp4",
+                "width": self.IDEA_PIN_CONFIG['width'],
+                "height": self.IDEA_PIN_CONFIG['height'],
+                "metadata": {
+                    "format": "idea_pin",
+                    "pages": len(pages)
+                }
+            }
+
+            response = requests.post(
+                f"{self.base_url}/renders",
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json"
+                },
+                json=render_data,
+                timeout=60
+            )
+            response.raise_for_status()
+            result = response.json()
+
+            render_id = result[0]['id'] if isinstance(result, list) else result['id']
+
+            # Update the video record with Idea Pin info
+            self.db.update_video_idea_pin(
+                content_id=content['id'],
+                idea_pin_render_id=render_id,
+                idea_pin_pages=len(pages)
+            )
+
+            return {
+                'success': True,
+                'render_id': render_id,
+                'pages': len(pages)
+            }
+
+        except Exception as e:
+            return {'success': False, 'reason': str(e)}
+
+    def _build_idea_pin_pages(self, content: Dict) -> List[Dict]:
+        """
+        Build page structure for Pinterest Idea Pin.
+
+        Breaks content into 2-5 pages optimized for Pinterest engagement.
+        """
+        pages = []
+
+        # Page 1: Hook/Title page
+        pages.append({
+            'type': 'title',
+            'text': content.get('title', '')[:100],
+            'duration': self.IDEA_PIN_CONFIG['page_duration']
+        })
+
+        # Page 2-4: Content pages from description or script
+        script = content.get('video_script') or content.get('description', '')
+        if script:
+            # Split script into chunks for multiple pages
+            sentences = script.replace('\n', ' ').split('.')
+            sentences = [s.strip() for s in sentences if s.strip()]
+
+            # Group sentences into pages (2-3 sentences per page)
+            chunk_size = max(1, len(sentences) // 3)
+            for i in range(0, min(len(sentences), 9), chunk_size):
+                chunk = '. '.join(sentences[i:i+chunk_size])
+                if chunk:
+                    pages.append({
+                        'type': 'content',
+                        'text': chunk[:200],
+                        'duration': self.IDEA_PIN_CONFIG['page_duration']
+                    })
+                if len(pages) >= self.IDEA_PIN_CONFIG['max_pages'] - 1:
+                    break
+
+        # Final page: CTA
+        cta = content.get('cta_text', 'Learn more!')
+        pages.append({
+            'type': 'cta',
+            'text': cta,
+            'duration': self.IDEA_PIN_CONFIG['page_duration']
+        })
+
+        return pages[:self.IDEA_PIN_CONFIG['max_pages']]
 
 
 def main():

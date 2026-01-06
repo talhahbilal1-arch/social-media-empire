@@ -27,6 +27,15 @@ from core.notifications import send_alert
 class ContentBrain:
     """AI-powered content generation engine."""
 
+    # Affiliate program priority (higher = more preferred)
+    # Commission rates: ShareASale 10-30%, Impact 10-25%, CJ 5-20%, Amazon 3-4%
+    AFFILIATE_PRIORITY = {
+        'shareasale': {'priority': 100, 'avg_commission': 20.0, 'secret_name': 'SHAREASALE_API_KEY'},
+        'impact': {'priority': 90, 'avg_commission': 17.5, 'secret_name': 'IMPACT_API_KEY'},
+        'cj': {'priority': 80, 'avg_commission': 12.5, 'secret_name': 'CJ_API_KEY'},
+        'amazon': {'priority': 10, 'avg_commission': 3.5, 'secret_name': None}  # Always available as fallback
+    }
+
     # Brand-specific content guidelines
     BRAND_GUIDELINES = {
         'daily_deal_darling': {
@@ -446,6 +455,139 @@ Return a JSON array of exactly {count} items. Each must be unique and engaging."
         import re
         uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.I)
         return bool(uuid_pattern.match(str(value)))
+
+    def get_best_affiliate_link(self, product: Dict, brand: Dict) -> Dict:
+        """
+        Get the best affiliate link for a product based on commission priority.
+
+        Priority order: ShareASale > Impact > CJ > Amazon (fallback)
+
+        Args:
+            product: Dict with product info (name, asin, category, etc.)
+            brand: Brand configuration with affiliate_tag
+
+        Returns:
+            Dict with best_link, best_program, and commission_rate
+        """
+        product_name = product.get('name', '')
+        asin = product.get('asin')
+
+        # Check for existing product affiliate record
+        existing = self.db.get_product_affiliate(product_name)
+
+        if existing:
+            # Use cached affiliate data
+            best_program = existing.get('best_program', 'amazon')
+            link_field = f"{best_program}_link"
+            if existing.get(link_field):
+                return {
+                    'best_link': existing[link_field],
+                    'best_program': best_program,
+                    'commission_rate': existing.get('best_commission', 3.5)
+                }
+
+        # Check which affiliate programs are configured (have API keys)
+        available_programs = self._get_available_affiliate_programs()
+
+        # Try each program in priority order
+        for program, config in sorted(
+            self.AFFILIATE_PRIORITY.items(),
+            key=lambda x: x[1]['priority'],
+            reverse=True
+        ):
+            if program == 'amazon':
+                continue  # Amazon is always fallback
+            if program not in available_programs:
+                continue
+
+            # Try to find product in this affiliate network
+            link = self._lookup_affiliate_link(program, product_name, product.get('category'))
+            if link:
+                # Save for future use
+                self._save_product_affiliate(product, program, link, config['avg_commission'])
+                return {
+                    'best_link': link,
+                    'best_program': program,
+                    'commission_rate': config['avg_commission']
+                }
+
+        # Fallback to Amazon
+        amazon_link = self._build_amazon_link(asin, brand.get('affiliate_tag'))
+        return {
+            'best_link': amazon_link,
+            'best_program': 'amazon',
+            'commission_rate': 3.5
+        }
+
+    def _get_available_affiliate_programs(self) -> List[str]:
+        """Check which affiliate programs have API keys configured."""
+        available = []
+        for program, config in self.AFFILIATE_PRIORITY.items():
+            secret_name = config.get('secret_name')
+            if secret_name is None:  # Amazon - always available
+                available.append(program)
+            elif os.environ.get(secret_name):
+                available.append(program)
+        return available
+
+    def _lookup_affiliate_link(self, program: str, product_name: str, category: str = None) -> Optional[str]:
+        """
+        Look up a product in an affiliate network.
+
+        This is a placeholder - actual implementation requires API integration.
+        Returns None if product not found in the network.
+        """
+        # TODO: Implement actual API calls to each network
+        # For now, check if we have a cached link in the database
+        existing = self.db.get_product_affiliate(product_name)
+        if existing:
+            link_field = f"{program}_link"
+            return existing.get(link_field)
+        return None
+
+    def _build_amazon_link(self, asin: str, affiliate_tag: str) -> Optional[str]:
+        """Build an Amazon affiliate link."""
+        if not asin or asin == 'unknown':
+            return None
+        if not affiliate_tag:
+            return f"https://www.amazon.com/dp/{asin}"
+        return f"https://www.amazon.com/dp/{asin}?tag={affiliate_tag}"
+
+    def _save_product_affiliate(self, product: Dict, program: str, link: str, commission: float):
+        """Save product affiliate link for future use."""
+        try:
+            self.db.save_product_affiliate({
+                'product_name': product.get('name', ''),
+                'product_category': product.get('category'),
+                'amazon_asin': product.get('asin'),
+                f'{program}_link': link,
+                'best_program': program,
+                'best_commission': commission
+            })
+        except Exception as e:
+            print(f"  Warning: Could not save product affiliate: {e}")
+
+    def enhance_affiliate_products(self, products: List[Dict], brand: Dict) -> List[Dict]:
+        """
+        Enhance product list with best affiliate links.
+
+        Args:
+            products: List of product dicts from content generation
+            brand: Brand configuration
+
+        Returns:
+            Enhanced product list with best_link and best_program fields
+        """
+        enhanced = []
+        for product in products:
+            affiliate_info = self.get_best_affiliate_link(product, brand)
+            product.update({
+                'affiliate_link': affiliate_info['best_link'],
+                'affiliate_program': affiliate_info['best_program'],
+                'commission_rate': affiliate_info['commission_rate']
+            })
+            enhanced.append(product)
+        return enhanced
 
 
 def main():
