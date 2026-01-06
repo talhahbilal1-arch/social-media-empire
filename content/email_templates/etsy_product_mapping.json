@@ -1,0 +1,71 @@
+{
+  "brand": "menopause-planner",
+  "etsy_shop_url": "https://www.etsy.com/shop/TheMenopausePlanner",
+  "products": [
+    {
+      "id": "symptom_tracker",
+      "name": "Menopause Symptom Tracker",
+      "description": "Track your symptoms daily to identify patterns and triggers. Includes sections for hot flashes, mood, sleep, and more.",
+      "url": "https://www.etsy.com/shop/TheMenopausePlanner",
+      "price_range": "$5.99 - $12.99",
+      "quiz_triggers": ["symptom", "track", "pattern", "monitor", "daily"],
+      "email_cta": "Get your Menopause Symptom Tracker"
+    },
+    {
+      "id": "hot_flash_journal",
+      "name": "Hot Flash Journal",
+      "description": "Document your hot flash triggers and find relief strategies that work for you. Identify patterns and take control.",
+      "url": "https://www.etsy.com/shop/TheMenopausePlanner",
+      "price_range": "$4.99 - $9.99",
+      "quiz_triggers": ["hot", "flash", "sweating", "temperature", "night sweats"],
+      "email_cta": "Try our Hot Flash Journal"
+    },
+    {
+      "id": "mood_tracker",
+      "name": "Menopause Mood Tracker",
+      "description": "Understand your emotional patterns during menopause. Track mood swings, anxiety, and emotional well-being.",
+      "url": "https://www.etsy.com/shop/TheMenopausePlanner",
+      "price_range": "$4.99 - $8.99",
+      "quiz_triggers": ["mood", "emotion", "anxiety", "stress", "mental", "feeling"],
+      "email_cta": "Track your moods with our Mood Tracker"
+    },
+    {
+      "id": "sleep_log",
+      "name": "Sleep Quality Log",
+      "description": "Improve your sleep during menopause. Track sleep patterns, identify issues, and find solutions for better rest.",
+      "url": "https://www.etsy.com/shop/TheMenopausePlanner",
+      "price_range": "$4.99 - $8.99",
+      "quiz_triggers": ["sleep", "insomnia", "tired", "fatigue", "rest", "night"],
+      "email_cta": "Get better sleep with our Sleep Log"
+    },
+    {
+      "id": "wellness_planner",
+      "name": "Complete Menopause Wellness Planner",
+      "description": "The all-in-one planner for your menopause journey. Combines symptom tracking, mood monitoring, sleep logging, and wellness goals.",
+      "url": "https://www.etsy.com/shop/TheMenopausePlanner",
+      "price_range": "$12.99 - $24.99",
+      "quiz_triggers": ["complete", "all", "comprehensive", "full", "everything"],
+      "email_cta": "Get the Complete Wellness Planner"
+    },
+    {
+      "id": "hormone_tracker",
+      "name": "Hormone Cycle Tracker",
+      "description": "Track your hormonal changes through perimenopause and menopause. Understand your body's patterns.",
+      "url": "https://www.etsy.com/shop/TheMenopausePlanner",
+      "price_range": "$5.99 - $10.99",
+      "quiz_triggers": ["hormone", "perimenopause", "cycle", "period", "irregular"],
+      "email_cta": "Understand your hormones with our Tracker"
+    }
+  ],
+  "quiz_result_mappings": {
+    "early_menopause": ["symptom_tracker", "hormone_tracker"],
+    "perimenopause": ["hormone_tracker", "mood_tracker", "symptom_tracker"],
+    "menopause": ["wellness_planner", "symptom_tracker", "sleep_log"],
+    "post_menopause": ["wellness_planner", "mood_tracker"],
+    "hot_flash_heavy": ["hot_flash_journal", "sleep_log"],
+    "mood_focused": ["mood_tracker", "wellness_planner"],
+    "sleep_issues": ["sleep_log", "mood_tracker"],
+    "general_wellness": ["wellness_planner", "symptom_tracker"]
+  },
+  "default_recommendations": ["symptom_tracker", "wellness_planner"]
+}

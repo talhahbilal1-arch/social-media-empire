@@ -202,6 +202,85 @@ Self-Improvement (Weekly) -> optimizes based on patterns
 
 ---
 
+## AGENT 3 TASKS - Content Enhancements (January 6, 2026)
+
+**Status: COMPLETED**
+
+### Task 1: Pinterest Idea Pins in Video Factory
+- [x] Add `idea_pin_url` field to videos table
+- [x] Update video_factory.py to create TWO outputs:
+  - Regular short video (current behavior)
+  - Pinterest Idea Pin format (multi-page, vertical 9:16)
+- [x] Idea Pin specs: 9:16 ratio, 2-20 pages, each 1-60 seconds
+
+### Task 2: Higher Commission Affiliate Programs
+- [x] Add `affiliate_programs` table to schema.sql
+- [x] Add `product_affiliates` table to schema.sql
+- [x] Update content_brain.py with affiliate matching function
+- [x] Priority: ShareASale (10-30%) > Impact (10-25%) > CJ (5-20%) > Amazon (3-4%)
+- [x] Update blog_factory.py to use best affiliate link
+
+### Task 3: Documentation
+- [x] Create tasks/agent3-content-enhancements.md with implementation details
+
+### Files Changed by Agent 3
+- `database/schema.sql` - Added idea_pin fields, affiliate_programs & product_affiliates tables
+- `agents/video_factory.py` - Added Idea Pin creation methods
+- `agents/content_brain.py` - Added affiliate matching with priority system
+- `agents/blog_factory.py` - Updated to use best affiliate links
+- `tasks/agent3-content-enhancements.md` - Full documentation
+
+---
+
+## AGENT 4 TASKS - Email Monetization (January 6, 2026)
+
+**Status: COMPLETED**
+
+### Task 1: ConvertKit Setup
+- [x] Created `core/convertkit_client.py` - Full API client
+- [x] Documented manual setup steps for ConvertKit account
+- [ ] **MANUAL**: Create ConvertKit (Kit) account at https://kit.com
+- [ ] **MANUAL**: Create form "Get Your Personalized Product Guide"
+- [ ] **MANUAL**: Create tags: quiz-morning, quiz-organization, quiz-selfcare, quiz-beauty, quiz-lifestyle
+- [ ] **MANUAL**: Create brand tags: daily-deal-darling, menopause-planner
+- [ ] **MANUAL**: Add CONVERTKIT_API_KEY to GitHub Secrets
+- [ ] **MANUAL**: Add CONVERTKIT_FORM_ID to GitHub Secrets
+
+### Task 2: Quiz Email Capture
+- [x] Created `QuizEmailCapture` class with automatic tagging
+- [x] Created `capture_quiz_email()` helper function
+- [x] Integrated Etsy product recommendations for Menopause Planner brand
+
+### Task 3: Email Sequence Templates
+- [x] Email 1: Quiz Results + Top Picks (Immediate)
+- [x] Email 2: Common Mistake (Day 2)
+- [x] Email 3: Reader Favorite (Day 4)
+- [x] Email 4: New Arrivals (Day 7)
+- [x] Email 5: Hidden Gems (Day 14)
+- [ ] **MANUAL**: Create sequence in ConvertKit using templates
+
+### Task 4: Etsy Product Connections
+- [x] Created `etsy_product_mapping.json` with quiz-to-product mappings
+- [x] Integrated Etsy recommendations in QuizEmailCapture class
+- [x] Products: Symptom Tracker, Hot Flash Journal, Mood Tracker, Sleep Log, Wellness Planner
+
+### Files Created by Agent 4
+- `core/convertkit_client.py` - ConvertKit API client
+- `content/email_templates/email_1_quiz_results.md`
+- `content/email_templates/email_2_common_mistake.md`
+- `content/email_templates/email_3_reader_favorite.md`
+- `content/email_templates/email_4_new_arrivals.md`
+- `content/email_templates/email_5_hidden_gems.md`
+- `content/email_templates/etsy_product_mapping.json`
+- `tasks/agent4-email-monetization.md` - Full documentation
+
+### Notes
+- Browser automation had auth issues, so ConvertKit account setup requires manual action
+- All code is ready to use once API credentials are added to GitHub Secrets
+- Did NOT touch: Make.com, video_factory.py, content_brain.py, YouTube, Repurpose.io
+
+---
+
 ## FILES CHANGED (January 6, 2026)
 
 1. `agents/blog_factory.py`
