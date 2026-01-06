@@ -64,20 +64,35 @@ class NetlifyClient:
 
         # Deploy to Netlify
         try:
-            # First, get the current site
+            # First, get the current site info
             site_response = requests.get(
                 f"{self.base_url}/sites/{self.site_id}",
                 headers=self._headers()
             )
             site_response.raise_for_status()
             site_data = site_response.json()
+            site_url = site_data.get('ssl_url') or site_data.get('url')
 
-            # Create a new deploy
-            deploy_data = {
-                "files": {
-                    f"/blog/{slug}/index.html": file_hash
-                }
-            }
+            # Get the current production deploy to preserve existing files
+            current_deploy_id = site_data.get('published_deploy', {}).get('id')
+            existing_files = {}
+
+            if current_deploy_id:
+                # Get files from current deploy
+                files_response = requests.get(
+                    f"{self.base_url}/deploys/{current_deploy_id}/files",
+                    headers=self._headers()
+                )
+                if files_response.status_code == 200:
+                    for f in files_response.json():
+                        existing_files[f['path']] = f['sha']
+
+            # Add our new file to the existing files
+            new_file_path = f"/blog/{slug}/index.html"
+            existing_files[new_file_path] = file_hash
+
+            # Create a new deploy with ALL files (existing + new)
+            deploy_data = {"files": existing_files}
 
             deploy_response = requests.post(
                 f"{self.base_url}/sites/{self.site_id}/deploys",
@@ -88,19 +103,21 @@ class NetlifyClient:
             deploy = deploy_response.json()
             deploy_id = deploy['id']
 
-            # Upload the file
-            upload_response = requests.put(
-                f"{self.base_url}/deploys/{deploy_id}/files/blog/{slug}/index.html",
-                headers={
-                    "Authorization": f"Bearer {self.api_token}",
-                    "Content-Type": "application/octet-stream"
-                },
-                data=file_content
-            )
-            upload_response.raise_for_status()
+            # Check which files need uploading (Netlify returns 'required' list)
+            required_files = deploy.get('required', [])
 
-            # Get the published URL
-            site_url = site_data.get('ssl_url') or site_data.get('url')
+            # Upload our new file if it's in the required list
+            if file_hash in required_files:
+                upload_response = requests.put(
+                    f"{self.base_url}/deploys/{deploy_id}/files/blog/{slug}/index.html",
+                    headers={
+                        "Authorization": f"Bearer {self.api_token}",
+                        "Content-Type": "application/octet-stream"
+                    },
+                    data=file_content
+                )
+                upload_response.raise_for_status()
+
             published_url = f"{site_url}/blog/{slug}/"
 
             return {
@@ -113,7 +130,12 @@ class NetlifyClient:
         except requests.exceptions.RequestException as e:
             return {
                 'success': False,
-                'error': str(e)
+                'error': f"Netlify API error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                'success': False,
+                'error': f"Unexpected error: {str(e)}"
             }
 
     def _build_blog_page(self,

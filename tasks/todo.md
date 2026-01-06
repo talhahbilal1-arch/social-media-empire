@@ -1,10 +1,10 @@
 # Social Media Empire - Setup Checklist
 
-Last Updated: January 5, 2026
+Last Updated: January 6, 2026
 
 ---
 
-## COMPLETED ✅
+## COMPLETED
 
 ### Infrastructure
 - [x] All 8 agents built (Python files in /agents folder)
@@ -48,32 +48,81 @@ Last Updated: January 5, 2026
 
 ---
 
-## IN PROGRESS 🔄
+## CRITICAL AUDIT - January 6, 2026
 
-### Multi-Platform Poster
-- [x] Agent built (agents/multi_platform_poster.py)
-- [x] Workflow created (.github/workflows/multi-platform-poster.yml)
-- [ ] Add MAKECOM_PINTEREST_WEBHOOK to GitHub Secrets (optional - for webhook trigger)
-- [ ] First live posting test
+### Audit 1: Blog Factory Affiliate Links & SEO
+**Status:** FIXED
+**Issues Found:**
+- Blog Factory was NOT adding affiliate tags to Amazon links
+- No internal links to quiz pages
+- affiliate_products had asin="unknown"
 
----
+**Fixes Applied:**
+- Added `_add_affiliate_links()` method to `blog_factory.py` - transforms all Amazon URLs to include `?tag=dailydealdarling1-20`
+- Added `_add_internal_links()` method - adds quiz page links and related posts
+- Added `quiz_links` config for both brands in BRAND_CONFIG
 
-## BLOCKED / SKIPPED ❌
+### Audit 2: Blog Publishing to Netlify
+**Status:** FIXED
+**Issues Found:**
+- dailydealdarling.com/blog showing 404
+- blog_articles table has 2 records but `published_at` is NULL
+- Netlify Deploy API was incorrectly replacing entire site with single file
 
-### TikTok Integration
-- **Status**: No viable solution
-- **Reason**: TikTok has no official API for posting, and Make.com has no TikTok integration
-- **Alternative**: Manual posting or third-party paid services (Repurpose.io)
+**Fixes Applied:**
+- Rewrote `netlify_client.py` to preserve existing files when deploying
+- Now fetches current production deploy files first
+- Creates deploy with ALL files (existing + new)
+- Only uploads new file content
 
-### Instagram Reels Integration
-- **Status**: No viable solution
-- **Reason**: Instagram Business API doesn't support Reels posting via Make.com
-- **Alternative**: Manual posting or Meta Business Suite
+### Audit 3: Two Pinterest Accounts Separation
+**Status:** VERIFIED OK
+**Findings:**
+- Daily Deal Darling: Amazon affiliate (beauty, home, lifestyle)
+- The Menopause Planner: Etsy + Pinterest (wellness planners)
+- Make.com has separate scenarios for each brand
+- brands table has correct separate IDs
 
-### Pinterest Direct API
-- **Status**: Skipped
-- **Reason**: Trial access denied for app "Daily Deal Darling Automation"
-- **Alternative**: Using Make.com Pinterest scenarios (already working!)
+### Audit 4: posts_log Not Logging
+**Status:** REQUIRES MANUAL ACTION
+**Issues Found:**
+- posts_log table is EMPTY
+- Make.com scenarios post directly to Pinterest but don't log to Supabase
+- Multi-Platform Poster logs correctly, but Make.com bypasses it
+
+**Fix Required (Manual in Make.com):**
+Add HTTP module to each Pinterest scenario AFTER successful pin creation:
+```
+POST https://epfoxpgrpsnhlsglxvsa.supabase.co/rest/v1/posts_log
+Headers:
+  apikey: [SUPABASE_KEY]
+  Authorization: Bearer [SUPABASE_KEY]
+  Content-Type: application/json
+Body:
+{
+  "brand_id": "[brand UUID]",
+  "platform": "pinterest",
+  "platform_post_id": "{{pin_id}}",
+  "post_url": "{{pin_url}}",
+  "status": "posted",
+  "posted_at": "{{now}}"
+}
+```
+
+### Audit 5: Multi-Platform Poster Webhook
+**Status:** VERIFIED OK
+**Findings:**
+- Webhook functionality exists in code
+- MAKECOM_PINTEREST_WEBHOOK is optional (scenarios run on schedule)
+- Make.com scenarios already running successfully (398+ executions)
+
+### Audit 6: YouTube Shorts Capability
+**Status:** DOCUMENTED LIMITATION
+**Findings:**
+- YOUTUBE_API_KEY only allows reading, not uploading
+- Full YouTube posting requires OAuth 2.0 with refresh token
+- Code correctly marks videos as "youtube_ready" for manual upload
+- This is expected behavior - YouTube upload automation requires OAuth setup
 
 ---
 
@@ -82,30 +131,30 @@ Last Updated: January 5, 2026
 ### Operational Agents
 | Agent | Schedule | Status |
 |-------|----------|--------|
-| Trend Discovery | 5:00 AM UTC | ✅ Running |
-| Content Brain | 6:00 AM UTC | ✅ Running |
-| Blog Factory | 7:00 AM UTC | ✅ Running |
-| Video Factory | 8:00 AM UTC | ✅ Running |
-| Multi-Platform Poster | 9 AM, 1 PM, 9 PM UTC | ✅ Created |
-| Analytics Collector | 11:00 PM UTC | ✅ Running |
-| Self-Improvement | Sundays 2:00 AM | ✅ Running |
-| Health Monitor | Every hour | ✅ Running |
+| Trend Discovery | 5:00 AM UTC | Running |
+| Content Brain | 6:00 AM UTC | Running |
+| Blog Factory | 7:00 AM UTC | Running |
+| Video Factory | 8:00 AM UTC | Running |
+| Multi-Platform Poster | 9 AM, 1 PM, 9 PM UTC | Created |
+| Analytics Collector | 11:00 PM UTC | Running |
+| Self-Improvement | Sundays 2:00 AM | Running |
+| Health Monitor | Every hour | Running |
 
 ### Content Pipeline Flow
 ```
-Trend Discovery (5 AM) → finds trending products/topics
-        ↓
-Content Brain (6 AM) → generates 10-20 content pieces per brand
-        ↓
-Blog Factory (7 AM) → creates SEO blog articles → Netlify
-        ↓
-Video Factory (8 AM) → renders short-form videos → Creatomate
-        ↓
-Multi-Platform Poster (3x daily) → posts to Pinterest (via Make.com)
-        ↓
-Analytics Collector (11 PM) → tracks engagement metrics
-        ↓
-Self-Improvement (Weekly) → optimizes based on patterns
+Trend Discovery (5 AM) -> finds trending products/topics
+        |
+Content Brain (6 AM) -> generates 10-20 content pieces per brand
+        |
+Blog Factory (7 AM) -> creates SEO blog articles -> Netlify
+        |
+Video Factory (8 AM) -> renders short-form videos -> Creatomate
+        |
+Multi-Platform Poster (3x daily) -> posts to Pinterest (via Make.com)
+        |
+Analytics Collector (11 PM) -> tracks engagement metrics
+        |
+Self-Improvement (Weekly) -> optimizes based on patterns
 ```
 
 ### Make.com Scenarios (Live)
@@ -143,9 +192,28 @@ Self-Improvement (Weekly) → optimizes based on patterns
 
 ---
 
-## NEXT STEPS (Optional Enhancements)
+## NEXT STEPS
 
-1. **Add MAKECOM_PINTEREST_WEBHOOK** - Enable direct webhook triggering from Multi-Platform Poster
+1. **Add posts_log HTTP module to Make.com scenarios** - Manual action required
 2. **YouTube OAuth Setup** - Enable actual YouTube Shorts uploading (requires OAuth refresh token)
 3. **Content Quality Review** - Monitor first week of automated content
 4. **Performance Tuning** - Adjust posting frequency based on engagement data
+5. **Test Blog Factory** - Run manually to verify Netlify publishing works with fix
+
+---
+
+## FILES CHANGED (January 6, 2026)
+
+1. `agents/blog_factory.py`
+   - Added `_add_affiliate_links()` method
+   - Added `_add_internal_links()` method
+   - Added `quiz_links` to BRAND_CONFIG for both brands
+   - Modified `_create_for_brand()` to call new methods
+
+2. `core/netlify_client.py`
+   - Fixed `publish_article()` to preserve existing site files
+   - Now fetches current deploy files before creating new deploy
+   - Added better error handling
+
+3. `tasks/todo.md`
+   - Updated with full audit findings and fixes

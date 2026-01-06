@@ -38,6 +38,12 @@ class BlogFactory:
             'word_count_target': 1500,
             'primary_cta': 'Take our quiz to find your perfect products!',
             'cta_link': 'https://dailydealdarling.com/quiz',
+            'quiz_links': [
+                {'url': 'https://dailydealdarling.com/quiz-morning', 'text': 'Morning Routine Quiz'},
+                {'url': 'https://dailydealdarling.com/quiz-skin', 'text': 'Skin Type Quiz'},
+                {'url': 'https://dailydealdarling.com/quiz-organization', 'text': 'Organization Style Quiz'},
+                {'url': 'https://dailydealdarling.com/quiz-selfcare', 'text': 'Self-Care Quiz'},
+            ],
             'topic_categories': [
                 'skincare routines',
                 'home organization hacks',
@@ -55,6 +61,10 @@ class BlogFactory:
             'word_count_target': 1800,
             'primary_cta': 'Download our free symptom tracker!',
             'cta_link': 'https://themenopauseplanner.com/free-tracker',
+            'quiz_links': [
+                {'url': 'https://themenopauseplanner.com/symptom-tracker', 'text': 'Free Symptom Tracker'},
+                {'url': 'https://themenopauseplanner.com/quiz-stage', 'text': 'Menopause Stage Quiz'},
+            ],
             'topic_categories': [
                 'menopause symptom management',
                 'perimenopause signs',
@@ -184,19 +194,32 @@ class BlogFactory:
                     results['errors'].append(f"Failed to generate: {topic['title']}")
                     continue
 
+                # Process content: add affiliate links and internal links
+                processed_content = article_data['content_markdown']
+
+                # Add affiliate tags to Amazon links
+                affiliate_tag = brand.get('affiliate_tag')
+                if affiliate_tag:
+                    processed_content = self._add_affiliate_links(processed_content, affiliate_tag)
+                    print(f"    Added affiliate tag: {affiliate_tag}")
+
+                # Add internal links (quiz pages, related posts)
+                processed_content = self._add_internal_links(processed_content, config, existing_blogs)
+                print(f"    Added internal links")
+
                 # Save to database
                 article_record = {
                     'brand_id': brand_id,
                     'title': article_data['title'],
                     'slug': article_data['slug'],
                     'meta_description': article_data['meta_description'],
-                    'content_markdown': article_data['content_markdown'],
-                    'content_html': self._markdown_to_html(article_data['content_markdown']),
+                    'content_markdown': processed_content,
+                    'content_html': self._markdown_to_html(processed_content),
                     'featured_image_prompt': article_data.get('featured_image_prompt'),
                     'affiliate_products': article_data.get('affiliate_products', []),
                     'seo_keywords': article_data.get('seo_keywords', []),
-                    'word_count': len(article_data['content_markdown'].split()),
-                    'reading_time_minutes': max(1, len(article_data['content_markdown'].split()) // 200),
+                    'word_count': len(processed_content.split()),
+                    'reading_time_minutes': max(1, len(processed_content.split()) // 200),
                     'status': 'ready'
                 }
 
@@ -456,6 +479,87 @@ The content_markdown should be a complete, publish-ready article with:
             html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html)
             html = re.sub(r'\[(.+?)\]\((.+?)\)', r'<a href="\2">\1</a>', html)
             return html
+
+    def _add_affiliate_links(self, content: str, affiliate_tag: str) -> str:
+        """Transform Amazon URLs to include affiliate tag."""
+        if not affiliate_tag:
+            return content
+
+        # Pattern to match Amazon product URLs
+        amazon_patterns = [
+            # Match amazon.com/dp/ASIN or amazon.com/gp/product/ASIN
+            (r'(https?://(?:www\.)?amazon\.com/(?:dp|gp/product)/[A-Z0-9]{10})(?:\?[^\s\)]*)?', r'\1'),
+            # Match amazon.com/anything/dp/ASIN
+            (r'(https?://(?:www\.)?amazon\.com/[^/]+/dp/[A-Z0-9]{10})(?:\?[^\s\)]*)?', r'\1'),
+            # Match amzn.to short links (keep as-is but add tag if no tag present)
+            (r'(https?://amzn\.to/[A-Za-z0-9]+)(?:\?[^\s\)]*)?', r'\1'),
+        ]
+
+        result = content
+        for pattern, base_group in amazon_patterns:
+            def add_tag(match):
+                url = match.group(1)
+                # Check if tag already present
+                if f'tag={affiliate_tag}' in url or f'tag=' in match.group(0):
+                    return match.group(0)
+                separator = '&' if '?' in url else '?'
+                return f'{url}{separator}tag={affiliate_tag}'
+            result = re.sub(pattern, add_tag, result)
+
+        # Also handle generic amazon.com links with product in URL
+        generic_pattern = r'(https?://(?:www\.)?amazon\.com/[^\s\)]+)(?<!\?tag=' + affiliate_tag + r')'
+        def add_tag_generic(match):
+            url = match.group(1)
+            if f'tag={affiliate_tag}' in url or 'tag=' in url:
+                return url
+            separator = '&' if '?' in url else '?'
+            return f'{url}{separator}tag={affiliate_tag}'
+
+        # Only apply to URLs that don't already have a tag
+        if affiliate_tag not in result:
+            result = re.sub(
+                r'(https?://(?:www\.)?amazon\.com/[^\s\)\]]+)',
+                add_tag_generic,
+                result
+            )
+
+        return result
+
+    def _add_internal_links(self, content: str, config: Dict, existing_blogs: List[Dict]) -> str:
+        """Add internal links to quiz pages and existing blog posts."""
+        result = content
+
+        # Add quiz link section if not present
+        quiz_links = config.get('quiz_links', [])
+        if quiz_links and 'quiz' not in content.lower():
+            quiz_section = "\n\n---\n\n**Discover More:**\n"
+            for quiz in quiz_links[:2]:  # Add up to 2 quiz links
+                quiz_section += f"- [{quiz['text']}]({quiz['url']})\n"
+            # Add before the last paragraph
+            paragraphs = result.rsplit('\n\n', 1)
+            if len(paragraphs) == 2:
+                result = paragraphs[0] + quiz_section + '\n\n' + paragraphs[1]
+            else:
+                result += quiz_section
+
+        # Add related posts section if we have existing blogs
+        if existing_blogs and 'related' not in content.lower():
+            related_section = "\n\n**Related Articles:**\n"
+            for blog in existing_blogs[:3]:  # Add up to 3 related posts
+                blog_url = blog.get('published_url') or f"/{blog['slug']}"
+                related_section += f"- [{blog['title']}]({blog_url})\n"
+            # Add before conclusion if possible
+            if '## Conclusion' in result or '## Final' in result:
+                result = re.sub(
+                    r'(## (?:Conclusion|Final[^\n]*))',
+                    related_section + r'\n\1',
+                    result,
+                    count=1
+                )
+            else:
+                result += related_section
+
+        return result
 
 
 def main():
