@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(gh repo view:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git remote:*)",
+      "Bash(git pull:*)",
+      "Bash(if not exist \"C:\\\\Users\\\\talha\\\\.claude\" mkdir \"C:\\\\Users\\\\talha\\\\.claude\")",
+      "Bash(if not exist \"C:\\\\Users\\\\talha\\\\OneDrive\\\\Desktop\\\\social-media-empire\\\\tasks\" mkdir \"C:\\\\Users\\\\talha\\\\OneDrive\\\\Desktop\\\\social-media-empire\\\\tasks\")"
+    ]
+  }
+}
