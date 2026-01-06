@@ -1,0 +1,34 @@
+# Agent 3: Multi-Platform Poster
+# Runs 3x daily to post content to Pinterest and YouTube
+
+name: Multi-Platform Poster
+
+on:
+  schedule:
+    - cron: '0 9 * * *'   # 9:00 AM UTC
+    - cron: '0 13 * * *'  # 1:00 PM UTC
+    - cron: '0 21 * * *'  # 9:00 PM UTC
+  workflow_dispatch:
+
+env:
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+  MAKECOM_PINTEREST_WEBHOOK: ${{ secrets.MAKECOM_PINTEREST_WEBHOOK }}
+  PINTEREST_ACCESS_TOKEN: ${{ secrets.PINTEREST_ACCESS_TOKEN }}
+
+jobs:
+  post-content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - run: python -m agents.multi_platform_poster
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
