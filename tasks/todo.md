@@ -194,11 +194,74 @@ Self-Improvement (Weekly) -> optimizes based on patterns
 
 ## NEXT STEPS
 
-1. **Add posts_log HTTP module to Make.com scenarios** - Manual action required
+1. **Add posts_log HTTP module to Make.com scenarios** - See detailed instructions below
 2. **YouTube OAuth Setup** - Enable actual YouTube Shorts uploading (requires OAuth refresh token)
 3. **Content Quality Review** - Monitor first week of automated content
 4. **Performance Tuning** - Adjust posting frequency based on engagement data
 5. **Test Blog Factory** - Run manually to verify Netlify publishing works with fix
+
+---
+
+## MANUAL TASK: Add HTTP Module to Make.com Pinterest Scenarios
+
+**Status: PENDING - Requires Manual Action**
+
+The posts_log table is currently empty because Make.com scenarios post directly to Pinterest but don't log to Supabase. Follow these steps to add logging:
+
+### Scenario 1: Agent 2: Pinterest Value Pins (Complete)
+
+1. **Open Make.com**: https://us2.make.com/1686661/scenarios/3798284/edit
+2. **Enter Edit Mode**: Click "Edit" button if not already in edit mode
+3. **Add HTTP Module**:
+   - Right-click after "8. Post to Pinterest" module
+   - Select "+ Add a module"
+   - Search for "HTTP" and select "HTTP - Make a request"
+4. **Configure HTTP Module**:
+   - **URL**: `https://epfoxpgrpsnhlsglxvsa.supabase.co/rest/v1/posts_log`
+   - **Method**: `POST`
+   - **Headers** (click "+ Add a header" for each):
+     | Name | Value |
+     |------|-------|
+     | apikey | `[Your SUPABASE_KEY from GitHub Secrets]` |
+     | Authorization | `Bearer [Your SUPABASE_KEY]` |
+     | Content-Type | `application/json` |
+   - **Body type**: `Raw`
+   - **Content type**: `JSON (application/json)`
+   - **Request content**:
+     ```json
+     {
+       "brand_id": "1",
+       "platform": "pinterest",
+       "platform_post_id": "{{8.id}}",
+       "post_url": "https://pinterest.com/pin/{{8.id}}",
+       "status": "posted",
+       "posted_at": "{{now}}"
+     }
+     ```
+     Note: Use Make.com's variable picker to select `{{8.id}}` from "8. Post to Pinterest" output
+5. **Save**: Click "Save" at bottom of HTTP module panel, then save the scenario
+
+### Scenario 2: The Menopause Planner - Pinterest Value Pins
+
+1. **Open Make.com**: Navigate to "The Menopause Planner" Pinterest scenario
+2. **Repeat steps 3-5** from above, but change:
+   - **brand_id**: `"2"` (for The Menopause Planner)
+   - Use the correct module number for Pinterest output variables
+
+### Finding Your SUPABASE_KEY
+
+Your Supabase key is stored in GitHub Secrets:
+- Go to: https://github.com/talhahbilal1-arch/social-media-empire/settings/secrets/actions
+- The key is named `SUPABASE_KEY`
+- Copy the value (you'll need to re-enter it as GitHub doesn't show stored secrets)
+
+### Verification
+
+After adding the HTTP module:
+1. Run the scenario once manually ("Run once" button)
+2. Check Supabase: https://supabase.com/dashboard/project/epfoxpgrpsnhlsglxvsa
+3. Go to Table Editor > posts_log
+4. Verify new records appear after successful Pinterest posts
 
 ---
 
