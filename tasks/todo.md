@@ -281,6 +281,46 @@ Self-Improvement (Weekly) -> optimizes based on patterns
 
 ---
 
+## AGENT 2 TASKS - Video Distribution (January 6, 2026)
+
+**Status: PARTIALLY COMPLETE - Manual Steps Required**
+
+### Task 1: YouTube OAuth Setup
+- [x] Created Google Cloud project "social-media-empire"
+- [x] Enabled YouTube Data API v3
+- [x] Started OAuth consent screen configuration
+- [x] Created `core/youtube_client.py` with full OAuth flow
+- [x] Updated `agents/multi_platform_poster.py` to use YouTube client
+- [ ] **MANUAL**: Complete OAuth consent screen (add scopes, test users)
+- [ ] **MANUAL**: Create OAuth 2.0 credentials (Desktop app)
+- [ ] **MANUAL**: Run `python core/youtube_client.py` to get refresh token
+- [ ] **MANUAL**: Add to GitHub Secrets:
+  - YOUTUBE_CLIENT_ID
+  - YOUTUBE_CLIENT_SECRET
+  - YOUTUBE_REFRESH_TOKEN
+
+### Task 2: Repurpose.io for TikTok/Instagram
+- [x] Documented setup steps in agent2-video-distribution.md
+- [ ] **MANUAL**: Sign up at https://repurpose.io
+- [ ] **MANUAL**: Connect TikTok account (Daily Deal Darling)
+- [ ] **MANUAL**: Connect Instagram account (Daily Deal Darling)
+- [ ] **MANUAL**: Create workflow: Source -> TikTok + Instagram Reels
+
+### Task 3: Documentation
+- [x] Created `tasks/agent2-video-distribution.md` with full setup guide
+
+### Files Created/Modified by Agent 2
+- `core/youtube_client.py` - NEW: Full OAuth 2.0 YouTube upload client
+- `agents/multi_platform_poster.py` - MODIFIED: Uses YouTubeClient for uploads
+- `tasks/agent2-video-distribution.md` - NEW: Full documentation
+
+### Notes
+- YouTube OAuth requires manual browser authentication for refresh token
+- Repurpose.io account creation requires human verification
+- Did NOT touch: Make.com, quiz pages, blog_factory.py affiliate logic, content_brain.py
+
+---
+
 ## FILES CHANGED (January 6, 2026)
 
 1. `agents/blog_factory.py`

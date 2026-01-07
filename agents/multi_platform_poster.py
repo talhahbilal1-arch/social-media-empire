@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.supabase_client import SupabaseClient
 from core.notifications import send_alert
+from core.youtube_client import YouTubeClient
 
 
 class MultiPlatformPoster:
@@ -39,17 +40,17 @@ class MultiPlatformPoster:
         # Make.com webhook URL for Pinterest (triggers existing scenario)
         self.pinterest_webhook = os.environ.get('MAKECOM_PINTEREST_WEBHOOK')
 
-        # YouTube API
-        self.youtube_api_key = os.environ.get('YOUTUBE_API_KEY')
+        # YouTube OAuth client
+        self.youtube_client = YouTubeClient()
 
         # Track what's enabled
         self.pinterest_enabled = bool(self.pinterest_webhook)
-        self.youtube_enabled = bool(self.youtube_api_key)
+        self.youtube_enabled = self.youtube_client.oauth_configured
 
         if not self.pinterest_enabled:
             print("Note: Pinterest posting disabled (no MAKECOM_PINTEREST_WEBHOOK)")
         if not self.youtube_enabled:
-            print("Note: YouTube posting disabled (no YOUTUBE_API_KEY)")
+            print("Note: YouTube posting disabled (OAuth not configured)")
 
     def run(self) -> Dict:
         """Main entry point - post content to all platforms."""
@@ -221,11 +222,10 @@ class MultiPlatformPoster:
 
     def _post_to_youtube(self, content: Dict, brand_name: str) -> tuple:
         """
-        Post to YouTube Shorts.
-        Note: Full YouTube posting requires OAuth, not just API key.
-        This logs the intent - actual upload needs OAuth refresh token.
+        Post to YouTube Shorts using OAuth 2.0.
+        Requires YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN.
         """
-        if not self.youtube_api_key:
+        if not self.youtube_enabled:
             return False, None, None
 
         # Check if we have a video URL
@@ -244,16 +244,35 @@ class MultiPlatformPoster:
             print(f"    YouTube: No rendered video URL found")
             return False, None, None
 
-        # Note: Full YouTube upload requires OAuth 2.0 with refresh token
-        # The YOUTUBE_API_KEY alone only allows reading, not uploading
-        # For now, we mark as ready for manual upload or future OAuth implementation
+        # Prepare video metadata
+        title = content.get('title', 'Untitled')
+        description = content.get('description', '')
 
-        print(f"    YouTube: Video ready at {video_url[:50]}...")
-        print(f"    Note: YouTube upload requires OAuth - marking as youtube_ready")
+        # Add hashtags to description
+        hashtags = content.get('hashtags', [])
+        if hashtags:
+            description += '\n\n' + ' '.join([f'#{tag}' for tag in hashtags[:10]])
 
-        # Update status to indicate YouTube-ready
-        # In production, this would use OAuth to actually upload
-        return False, None, None  # Return False since we can't actually upload without OAuth
+        # Add affiliate link if present
+        affiliate_link = content.get('affiliate_link') or content.get('source_url')
+        if affiliate_link:
+            description += f'\n\nShop here: {affiliate_link}'
+
+        # Upload using YouTube client
+        print(f"    YouTube: Uploading video...")
+        success, youtube_url, video_id = self.youtube_client.upload_short(
+            video_url=video_url,
+            title=title,
+            description=description,
+            tags=hashtags[:20] if hashtags else None
+        )
+
+        if success:
+            print(f"    YouTube: Uploaded successfully - {youtube_url}")
+        else:
+            print(f"    YouTube: Upload failed")
+
+        return success, youtube_url, video_id
 
 
 class PinterestDirectPoster:
