@@ -336,3 +336,33 @@ Self-Improvement (Weekly) -> optimizes based on patterns
 
 3. `tasks/todo.md`
    - Updated with full audit findings and fixes
+
+---
+
+## DATABASE UPDATES (January 7, 2026)
+
+### SQL Executed Successfully
+**Status: COMPLETED**
+
+Ran the following SQL in Supabase SQL Editor:
+
+1. **Videos Table - New Columns Added:**
+   - `idea_pin_url` (text) - URL for Pinterest Idea Pin
+   - `idea_pin_render_id` (text) - Creatomate render ID for Idea Pin
+   - `idea_pin_pages` (integer) - Number of pages in Idea Pin
+
+2. **affiliate_programs Table - Created with Data:**
+   - ShareASale (10-30%, priority 100)
+   - Impact (10-25%, priority 90)
+   - CJ Affiliate (5-20%, priority 80)
+   - Amazon Associates (3-4%, priority 10)
+
+3. **product_affiliates Table - Created:**
+   - Caches best affiliate link per product
+   - Fields: product_name, amazon_link, shareasale_link, impact_link, cj_link, best_program, best_commission
+
+### Verification
+- ✅ SQL query executed: "Success. No rows returned"
+- ✅ affiliate_programs table: 8 records visible in Table Editor
+- ✅ product_affiliates table: Created
+- ✅ videos table: New idea_pin columns added
