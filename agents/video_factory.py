@@ -258,16 +258,11 @@ class VideoFactory:
                 return {'success': False, 'reason': 'Not enough content for multi-page Idea Pin'}
 
             # Create Creatomate render for Idea Pin format
+            # Note: Template must already be 9:16 vertical format
+            # Creatomate API only accepts template_id and modifications
             render_data = {
                 "template_id": template['id'],
-                "modifications": self._build_modifications(content),
-                "output_format": "mp4",
-                "width": self.IDEA_PIN_CONFIG['width'],
-                "height": self.IDEA_PIN_CONFIG['height'],
-                "metadata": {
-                    "format": "idea_pin",
-                    "pages": len(pages)
-                }
+                "modifications": self._build_modifications(content)
             }
 
             response = requests.post(
