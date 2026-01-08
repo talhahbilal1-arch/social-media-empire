@@ -209,6 +209,13 @@ class SupabaseClient:
             .execute()
         return response.data
 
+    def update_video_idea_pin(self, content_id: str, idea_pin_render_id: str, idea_pin_pages: int) -> None:
+        """Update video record with Pinterest Idea Pin information."""
+        self.client.table('videos').update({
+            'idea_pin_render_id': idea_pin_render_id,
+            'idea_pin_pages': idea_pin_pages
+        }).eq('content_id', content_id).execute()
+
     # ==========================================
     # POSTS LOG (Agent 3)
     # ==========================================

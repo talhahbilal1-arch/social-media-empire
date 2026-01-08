@@ -429,3 +429,29 @@ Ran the following SQL in Supabase SQL Editor:
 - ✅ affiliate_programs table: 8 records visible in Table Editor
 - ✅ product_affiliates table: Created
 - ✅ videos table: New idea_pin columns added
+
+---
+
+## BUG FIX: Pinterest Idea Pins (January 8, 2026)
+
+**Status: FIXED**
+
+### Issue Found
+Video Factory was failing with `AttributeError: 'SupabaseClient' object has no attribute 'update_video_idea_pin'`
+
+### Root Cause
+The `video_factory.py` code called `self.db.update_video_idea_pin()` on line 288, but this method was never added to `core/supabase_client.py` when the Idea Pins feature was implemented.
+
+### Fix Applied
+Added the missing method to `core/supabase_client.py`:
+```python
+def update_video_idea_pin(self, content_id: str, idea_pin_render_id: str, idea_pin_pages: int) -> None:
+    """Update video record with Pinterest Idea Pin information."""
+    self.client.table('videos').update({
+        'idea_pin_render_id': idea_pin_render_id,
+        'idea_pin_pages': idea_pin_pages
+    }).eq('content_id', content_id).execute()
+```
+
+### Files Changed
+- `core/supabase_client.py` - Added `update_video_idea_pin()` method
