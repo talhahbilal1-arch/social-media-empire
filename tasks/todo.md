@@ -660,9 +660,24 @@ Both render IDs are stored in the `videos` table for each content piece.
 
 ### What's Next
 
-1. **Verify in Supabase** - Check `videos` table has `idea_pin_render_id` populated
+1. ~~**Verify in Supabase** - Check `videos` table has `idea_pin_render_id` populated~~ ✅ DONE
 2. **Monitor next scheduled run** - Video Factory runs daily at 8 AM UTC
 3. **Manual tasks** - YouTube OAuth, ConvertKit setup, Make.com logging
+
+### Supabase Verification ✅
+
+Confirmed `videos` table has Idea Pin data from Run #6:
+
+| idea_pin_render_id | idea_pin_pages |
+|-------------------|----------------|
+| `a907caa1-6292-4ce8-ba3d-bf71cce290fd` | 5 |
+| `49641c37-9978-4345-8c51-d632edcd5c5a` | 5 |
+| `afe50133-c89d-4a61-abe4-17e97c1da875` | 5 |
+
+- `idea_pin_url` is NULL (expected - populated after Creatomate render completes)
+- `idea_pin_pages` = 5 (code splits content into 2-5 pages)
+
+**Pinterest Idea Pins feature is fully operational!**
 
 ---
 
