@@ -1,6 +1,6 @@
 # Social Media Empire - Setup Checklist
 
-Last Updated: January 6, 2026
+Last Updated: January 8, 2026
 
 ---
 
@@ -194,11 +194,19 @@ Self-Improvement (Weekly) -> optimizes based on patterns
 
 ## NEXT STEPS
 
+### Priority 1: Manual Setup Tasks
 1. **Add posts_log HTTP module to Make.com scenarios** - See detailed instructions below
 2. **YouTube OAuth Setup** - Enable actual YouTube Shorts uploading (requires OAuth refresh token)
-3. **Content Quality Review** - Monitor first week of automated content
-4. **Performance Tuning** - Adjust posting frequency based on engagement data
-5. **Test Blog Factory** - Run manually to verify Netlify publishing works with fix
+3. **ConvertKit Setup** - Create account, forms, tags, and email sequences
+
+### Priority 2: Monitoring & Optimization
+4. **Content Quality Review** - Monitor first week of automated content
+5. **Performance Tuning** - Adjust posting frequency based on engagement data
+6. **Verify Idea Pins in Supabase** - Check `videos` table for `idea_pin_render_id` data
+
+### Priority 3: Future Enhancements
+7. **Repurpose.io Setup** - For TikTok/Instagram auto-posting
+8. **Higher Commission Affiliates** - Sign up for ShareASale, Impact, CJ networks
 
 ---
 
@@ -593,3 +601,69 @@ Both render IDs are stored in the `videos` table for each content piece.
 1. When adding new features that call database methods, always verify the method exists in the client
 2. Creatomate API only accepts `template_id` and `modifications` - dimensions must be set in the template itself
 3. Always test new features end-to-end before marking as complete
+
+---
+
+## SESSION SUMMARY: January 8, 2026
+
+### What We Did Today
+
+**Task:** Debug and fix Pinterest Idea Pins feature in Video Factory
+
+**Investigation Steps:**
+1. Read `agents/video_factory.py` - Found Idea Pin creation code calling `update_video_idea_pin()`
+2. Read `core/supabase_client.py` - Discovered the method was MISSING
+3. Checked `agents/multi_platform_poster.py` - Verified posting logic was correct
+4. Triggered test run via GitHub Actions browser automation
+
+**Bugs Found & Fixed:**
+
+| Bug | File | Fix | Commit |
+|-----|------|-----|--------|
+| Missing `update_video_idea_pin()` method | `core/supabase_client.py` | Added the method | `cb00f13` |
+| Creatomate 400 Bad Request | `agents/video_factory.py` | Removed invalid API params | `4c7b318` |
+
+**Test Results:**
+- Run #5: Fixed AttributeError, but Idea Pins failed (400 error)
+- Run #6: ✅ ALL WORKING - 3 videos + 3 idea pins created
+
+### Files Changed Today
+
+| File | Change |
+|------|--------|
+| `core/supabase_client.py` | Added `update_video_idea_pin()` method |
+| `agents/video_factory.py` | Fixed Creatomate API request (removed invalid params) |
+| `tasks/todo.md` | Updated with bug fixes and session summary |
+
+### Commits Pushed to Main
+
+1. `cb00f13` - Fix missing update_video_idea_pin method in SupabaseClient
+2. `4c7b318` - Fix Idea Pin Creatomate API 400 error
+3. `d55393a` - Add review section for Pinterest Idea Pins bug fixes
+4. `[current]` - Update todo.md with session summary
+
+### Current System Status
+
+**All 8 Workflows Operational:**
+- ✅ Trend Discovery (5 AM UTC)
+- ✅ Content Brain (6 AM UTC)
+- ✅ Blog Factory (7 AM UTC)
+- ✅ Video Factory (8 AM UTC) - **NOW WITH IDEA PINS**
+- ✅ Multi-Platform Poster (9AM/1PM/9PM UTC)
+- ✅ Analytics Collector (11 PM UTC)
+- ✅ Self-Improvement (Sundays)
+- ✅ Health Monitor (Hourly)
+
+**Video Factory Output:**
+- Regular short-form videos (TikTok/Reels/Shorts)
+- Pinterest Idea Pins (tracked separately with `idea_pin_render_id`)
+
+### What's Next
+
+1. **Verify in Supabase** - Check `videos` table has `idea_pin_render_id` populated
+2. **Monitor next scheduled run** - Video Factory runs daily at 8 AM UTC
+3. **Manual tasks** - YouTube OAuth, ConvertKit setup, Make.com logging
+
+---
+
+*End of January 8, 2026 Session*
