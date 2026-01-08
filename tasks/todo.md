@@ -544,3 +544,52 @@ Verified `_add_affiliate_links()` method exists at `blog_factory.py:491`:
 1. Push changes to GitHub
 2. Test workflows by triggering them manually
 3. Add posts_log HTTP module to Make.com Pinterest scenarios (documented above)
+
+---
+
+## REVIEW: Pinterest Idea Pins Bug Fixes (January 8, 2026)
+
+**Session Summary:** Investigated and fixed Pinterest Idea Pins feature that was failing in Video Factory.
+
+### Bugs Fixed
+
+| # | Bug | Root Cause | Fix | Commit |
+|---|-----|------------|-----|--------|
+| 1 | `AttributeError: 'SupabaseClient' object has no attribute 'update_video_idea_pin'` | Method was called in `video_factory.py:288` but never implemented in `supabase_client.py` | Added `update_video_idea_pin()` method | `cb00f13` |
+| 2 | Creatomate API returning 400 Bad Request for Idea Pins | Code was passing invalid parameters (`width`, `height`, `output_format`, `metadata`) that Creatomate doesn't accept | Removed invalid parameters from render request | `4c7b318` |
+
+### Files Changed
+
+1. **`core/supabase_client.py`**
+   - Added `update_video_idea_pin(content_id, idea_pin_render_id, idea_pin_pages)` method
+
+2. **`agents/video_factory.py`**
+   - Removed invalid Creatomate API parameters from `_create_idea_pin()` method
+   - Before: `{"template_id", "modifications", "output_format", "width", "height", "metadata"}`
+   - After: `{"template_id", "modifications"}` (dimensions set in template)
+
+### Test Results
+
+**Run #5 (commit cb00f13):**
+- ✅ No AttributeError crash
+- ✅ 10 regular videos rendered
+- ⚠️ 0 idea pins (Creatomate 400 error)
+
+**Run #6 (commit 4c7b318):**
+- ✅ 3 regular videos rendered
+- ✅ 3 idea pins created
+- ✅ 0 failures
+
+### Verification
+
+Video Factory now successfully creates:
+- Regular short-form videos (TikTok/Reels/Shorts format)
+- Pinterest Idea Pins (same video, tracked separately for Pinterest posting)
+
+Both render IDs are stored in the `videos` table for each content piece.
+
+### Lessons Learned
+
+1. When adding new features that call database methods, always verify the method exists in the client
+2. Creatomate API only accepts `template_id` and `modifications` - dimensions must be set in the template itself
+3. Always test new features end-to-end before marking as complete
