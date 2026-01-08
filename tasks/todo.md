@@ -455,3 +455,92 @@ def update_video_idea_pin(self, content_id: str, idea_pin_render_id: str, idea_p
 
 ### Files Changed
 - `core/supabase_client.py` - Added `update_video_idea_pin()` method
+
+---
+
+## SYSTEM TEST REPORT (January 8, 2026)
+
+**Status: COMPLETED - 1 Bug Found & Fixed**
+
+### Testing Summary Table
+
+| Component | Status | Issues Found | Fixed? |
+|-----------|--------|--------------|--------|
+| Database Schema | OK | None | N/A |
+| Supabase Client | FIXED | Missing 3 methods for product_affiliates | YES |
+| Content Brain (Agent 1) | OK | None | N/A |
+| Video Factory (Agent 2) | OK | None | N/A |
+| Blog Factory (Agent 8) | OK | `_add_affiliate_links()` exists | N/A |
+| Multi-Platform Poster (Agent 3) | OK | None | N/A |
+| Trend Discovery (Agent 7) | OK | None | N/A |
+| Analytics Collector (Agent 4) | OK | None | N/A |
+| Self-Improvement (Agent 5) | OK | None | N/A |
+| Health Monitor (Agent 6) | OK | None | N/A |
+| GitHub Workflows | OK | 8 workflows configured | N/A |
+| API Keys | OK | All referenced correctly | N/A |
+
+### Bug Found & Fixed
+
+**Issue:** Missing database methods in `supabase_client.py`
+
+The following methods were called in agents but not implemented:
+- `get_product_affiliate(product_name)` - Called in `content_brain.py:476`
+- `get_product_affiliate_by_asin(asin)` - Called in `blog_factory.py:521`
+- `save_product_affiliate(data)` - Called in `content_brain.py`
+
+**Fix Applied:** Added all 3 methods to `core/supabase_client.py`:
+```python
+def get_product_affiliate(self, product_name: str) -> Optional[Dict]:
+    """Get cached affiliate data for a product by name."""
+    ...
+
+def get_product_affiliate_by_asin(self, asin: str) -> Optional[Dict]:
+    """Get cached affiliate data for a product by Amazon ASIN."""
+    ...
+
+def save_product_affiliate(self, data: Dict) -> Optional[Dict]:
+    """Save or update product affiliate data."""
+    ...
+```
+
+### GitHub Workflows Review
+
+| Workflow | Schedule | Secrets Used |
+|----------|----------|--------------|
+| Trend Discovery | 5:00 AM UTC | SUPABASE_URL, SUPABASE_KEY, ANTHROPIC_API_KEY |
+| Content Brain | 6:00 AM UTC | SUPABASE_URL, SUPABASE_KEY, ANTHROPIC_API_KEY |
+| Blog Factory | 7:00 AM UTC | SUPABASE_URL, SUPABASE_KEY, ANTHROPIC_API_KEY, NETLIFY_* |
+| Video Factory | 8:00 AM UTC | SUPABASE_URL, SUPABASE_KEY, CREATOMATE_API_KEY |
+| Multi-Platform Poster | 9AM/1PM/9PM | SUPABASE_*, YOUTUBE_API_KEY, MAKECOM_PINTEREST_WEBHOOK |
+| Analytics Collector | 11:00 PM UTC | SUPABASE_URL, SUPABASE_KEY, YOUTUBE_API_KEY |
+| Self-Improvement | Sundays 6 AM | SUPABASE_*, ANTHROPIC_API_KEY, ALERT_EMAIL_* |
+| Health Monitor | Hourly (xx:30) | SUPABASE_*, ANTHROPIC_*, CREATOMATE_*, NETLIFY_*, ALERT_EMAIL_* |
+
+### API Keys Verification
+
+All referenced secrets in workflows:
+- SUPABASE_URL, SUPABASE_KEY - Core database
+- ANTHROPIC_API_KEY - Claude AI (content generation)
+- CREATOMATE_API_KEY - Video creation
+- NETLIFY_API_TOKEN, NETLIFY_SITE_ID - Blog publishing
+- YOUTUBE_API_KEY - Analytics reading
+- MAKECOM_PINTEREST_WEBHOOK - Pinterest posting
+- PINTEREST_ACCESS_TOKEN - Direct Pinterest access
+- ALERT_EMAIL_FROM, ALERT_EMAIL_PASSWORD, ALERT_EMAIL_TO - Email alerts
+
+**Note:** Code uses `ANTHROPIC_API_KEY` (correct), not `CLAUDE_API_KEY`.
+
+### Blog Factory Affiliate Links
+
+Verified `_add_affiliate_links()` method exists at `blog_factory.py:491`:
+- Transforms Amazon URLs to include `?tag=dailydealdarling1-20`
+- Checks `product_affiliates` table for higher-commission links
+- Priority: ShareASale > Impact > CJ > Amazon
+
+### Files Changed
+- `core/supabase_client.py` - Added 3 missing product_affiliates methods
+
+### Remaining Manual Tasks
+1. Push changes to GitHub
+2. Test workflows by triggering them manually
+3. Add posts_log HTTP module to Make.com Pinterest scenarios (documented above)

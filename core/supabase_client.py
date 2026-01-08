@@ -386,3 +386,41 @@ class SupabaseClient:
             'completed_at': datetime.utcnow().isoformat(),
             'duration_seconds': duration
         }).eq('id', run_id).execute()
+
+    # ==========================================
+    # PRODUCT AFFILIATES
+    # ==========================================
+
+    def get_product_affiliate(self, product_name: str) -> Optional[Dict]:
+        """Get cached affiliate data for a product by name."""
+        try:
+            response = self.client.table('product_affiliates').select('*')\
+                .eq('product_name', product_name)\
+                .limit(1)\
+                .execute()
+            return response.data[0] if response.data else None
+        except Exception:
+            return None
+
+    def get_product_affiliate_by_asin(self, asin: str) -> Optional[Dict]:
+        """Get cached affiliate data for a product by Amazon ASIN."""
+        try:
+            response = self.client.table('product_affiliates').select('*')\
+                .eq('amazon_asin', asin)\
+                .limit(1)\
+                .execute()
+            return response.data[0] if response.data else None
+        except Exception:
+            return None
+
+    def save_product_affiliate(self, data: Dict) -> Optional[Dict]:
+        """Save or update product affiliate data."""
+        try:
+            data['updated_at'] = datetime.utcnow().isoformat()
+            response = self.client.table('product_affiliates').upsert(
+                data,
+                on_conflict='product_name'
+            ).execute()
+            return response.data[0] if response.data else None
+        except Exception:
+            return None
