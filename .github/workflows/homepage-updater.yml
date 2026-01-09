@@ -1,0 +1,54 @@
+# Homepage Updater
+# Runs after Blog Factory to update homepage with articles section
+
+name: Homepage Updater
+
+on:
+  schedule:
+    # 7:30 AM UTC daily (30 minutes after Blog Factory)
+    - cron: '30 7 * * *'
+  workflow_dispatch:
+  # Also trigger after Blog Factory completes
+  workflow_run:
+    workflows: ["Blog Factory"]
+    types:
+      - completed
+
+env:
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  NETLIFY_API_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+jobs:
+  update-homepage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Homepage Updater
+        run: |
+          python -m agents.homepage_updater
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Homepage Updater Run Complete" >> $GITHUB_STEP_SUMMARY
+          echo "Run ID: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "Homepage updated with articles section" >> $GITHUB_STEP_SUMMARY
