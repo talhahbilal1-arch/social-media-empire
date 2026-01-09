@@ -681,4 +681,60 @@ Confirmed `videos` table has Idea Pin data from Run #6:
 
 ---
 
-*End of January 8, 2026 Session*
+## VIDEO FACTORY CRITICAL BUG FIX (January 8, 2026 - Session 2)
+
+**Status: FIXED**
+
+### Critical Bug Found
+
+The Video Factory was starting Creatomate renders but **never polling for completion**. This caused:
+- `video_url` = NULL (always)
+- `idea_pin_url` = NULL (always)
+- Videos stuck in "rendering" status forever
+- Multi-Platform Poster couldn't find videos to post
+
+### Root Cause
+
+Creatomate renders are **asynchronous**:
+1. POST `/renders` -> Returns `render_id` immediately
+2. Video renders in background (takes 10-60 seconds)
+3. GET `/renders/{id}` -> Must poll until `status = "succeeded"`
+4. Only then does the response contain the final video `url`
+
+The code was doing step 1 and 2, but skipping steps 3 and 4.
+
+### Fixes Applied
+
+| File | Change |
+|------|--------|
+| `agents/video_factory.py` | Added `_poll_render_completion()` method |
+| `agents/video_factory.py` | Updated `_start_render()` to poll and save `video_url` |
+| `agents/video_factory.py` | Updated `_create_idea_pin()` to poll and save `idea_pin_url` |
+| `core/supabase_client.py` | Added `idea_pin_url` parameter to `update_video_idea_pin()` |
+
+### How It Works Now
+
+```
+1. Start render -> Get render_id
+2. Poll GET /renders/{id} every 5 seconds (max 5 minutes)
+3. When status = "succeeded", extract URL
+4. Save video_url/idea_pin_url to database
+5. Update status to "ready"
+```
+
+### Files Changed
+
+- `agents/video_factory.py` - Added polling logic, ~50 lines added
+- `core/supabase_client.py` - Added `idea_pin_url` parameter
+
+### Next Steps
+
+1. Push changes to GitHub
+2. Trigger manual Video Factory run to test
+3. Verify URLs are populated in Supabase `videos` table
+
+See full report: `tasks/VIDEO_FACTORY_DEBUG_REPORT.md`
+
+---
+
+*End of January 8, 2026 Session 2*

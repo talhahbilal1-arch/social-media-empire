@@ -45,6 +45,10 @@ class VideoFactory:
         'format': '9:16'
     }
 
+    # Render polling configuration
+    RENDER_POLL_INTERVAL = 5  # seconds between status checks
+    RENDER_MAX_WAIT = 300  # 5 minutes max wait per render
+
     def __init__(self):
         self.db = SupabaseClient()
         self.api_key = os.environ.get('CREATOMATE_API_KEY')
@@ -171,8 +175,58 @@ class VideoFactory:
 
         return templates[0] if templates else None
 
+    def _poll_render_completion(self, render_id: str) -> Dict:
+        """
+        Poll Creatomate API until render completes or fails.
+
+        Returns dict with:
+        - success: bool
+        - url: video URL if successful
+        - status: final status
+        - error: error message if failed
+        """
+        start_time = time.time()
+
+        while time.time() - start_time < self.RENDER_MAX_WAIT:
+            try:
+                response = requests.get(
+                    f"{self.base_url}/renders/{render_id}",
+                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    timeout=30
+                )
+                response.raise_for_status()
+                result = response.json()
+
+                status = result.get('status', 'unknown')
+
+                if status == 'succeeded':
+                    return {
+                        'success': True,
+                        'url': result.get('url'),
+                        'status': status
+                    }
+                elif status in ['failed', 'error']:
+                    return {
+                        'success': False,
+                        'status': status,
+                        'error': result.get('error_message', 'Render failed')
+                    }
+                # Status is still 'planned', 'rendering', etc - keep waiting
+                print(f"    Render {render_id[:8]}... status: {status}")
+
+            except Exception as e:
+                print(f"    Poll error: {e}")
+
+            time.sleep(self.RENDER_POLL_INTERVAL)
+
+        return {
+            'success': False,
+            'status': 'timeout',
+            'error': f'Render did not complete within {self.RENDER_MAX_WAIT}s'
+        }
+
     def _start_render(self, content: Dict, template: Dict) -> Dict:
-        """Start a video render using Creatomate."""
+        """Start a video render using Creatomate and wait for completion."""
         try:
             # Build modifications based on content
             modifications = self._build_modifications(content)
@@ -194,20 +248,49 @@ class VideoFactory:
             response.raise_for_status()
             result = response.json()
 
-            # Save video record
+            render_id = result[0]['id'] if isinstance(result, list) else result['id']
+
+            # Save video record with 'rendering' status
             video_record = {
                 'content_id': content['id'],
-                'creatomate_render_id': result[0]['id'] if isinstance(result, list) else result['id'],
+                'creatomate_render_id': render_id,
                 'status': 'rendering',
                 'width': template.get('width', 1080),
                 'height': template.get('height', 1920)
             }
-            self.db.save_video(video_record)
+            saved = self.db.save_video(video_record)
+            video_id = saved['id'] if saved else None
 
-            return {
-                'success': True,
-                'render_id': video_record['creatomate_render_id']
-            }
+            # Poll for render completion
+            print(f"    Waiting for render to complete...")
+            poll_result = self._poll_render_completion(render_id)
+
+            if poll_result['success']:
+                # Update video record with final URL and status
+                if video_id:
+                    self.db.update_video(
+                        video_id,
+                        video_url=poll_result['url'],
+                        status='ready'
+                    )
+                print(f"    Video ready: {poll_result['url'][:60]}...")
+                return {
+                    'success': True,
+                    'render_id': render_id,
+                    'video_url': poll_result['url']
+                }
+            else:
+                # Update video record with failed status
+                if video_id:
+                    self.db.update_video(
+                        video_id,
+                        status='failed',
+                        error_message=poll_result.get('error', 'Unknown error')
+                    )
+                return {
+                    'success': False,
+                    'error': poll_result.get('error', 'Render failed')
+                }
 
         except Exception as e:
             return {'success': False, 'error': str(e)}
@@ -279,18 +362,37 @@ class VideoFactory:
 
             render_id = result[0]['id'] if isinstance(result, list) else result['id']
 
-            # Update the video record with Idea Pin info
-            self.db.update_video_idea_pin(
-                content_id=content['id'],
-                idea_pin_render_id=render_id,
-                idea_pin_pages=len(pages)
-            )
+            # Poll for render completion
+            print(f"    Waiting for Idea Pin render to complete...")
+            poll_result = self._poll_render_completion(render_id)
 
-            return {
-                'success': True,
-                'render_id': render_id,
-                'pages': len(pages)
-            }
+            if poll_result['success']:
+                # Update the video record with Idea Pin info including URL
+                self.db.update_video_idea_pin(
+                    content_id=content['id'],
+                    idea_pin_render_id=render_id,
+                    idea_pin_pages=len(pages),
+                    idea_pin_url=poll_result['url']
+                )
+                print(f"    Idea Pin ready: {poll_result['url'][:60]}...")
+                return {
+                    'success': True,
+                    'render_id': render_id,
+                    'pages': len(pages),
+                    'idea_pin_url': poll_result['url']
+                }
+            else:
+                # Still save the render_id but note it failed
+                self.db.update_video_idea_pin(
+                    content_id=content['id'],
+                    idea_pin_render_id=render_id,
+                    idea_pin_pages=len(pages)
+                )
+                return {
+                    'success': False,
+                    'reason': poll_result.get('error', 'Render failed'),
+                    'render_id': render_id
+                }
 
         except Exception as e:
             return {'success': False, 'reason': str(e)}
