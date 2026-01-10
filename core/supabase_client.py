@@ -427,3 +427,75 @@ class SupabaseClient:
             return response.data[0] if response.data else None
         except Exception:
             return None
+
+    # ==========================================
+    # ERROR LOG (Error Handler Agent)
+    # ==========================================
+
+    def get_failed_agent_runs(self, hours: int = 6) -> List[Dict]:
+        """Get agent runs that failed in the last N hours."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+        response = self.client.table('agent_runs').select('*')\
+            .eq('status', 'failed')\
+            .gt('started_at', cutoff)\
+            .order('started_at', desc=True)\
+            .execute()
+        return response.data
+
+    def log_error(self, error_data: Dict) -> Optional[Dict]:
+        """Log an error to the error_log table."""
+        response = self.client.table('error_log').insert(error_data).execute()
+        return response.data[0] if response.data else None
+
+    def get_pending_errors(self, agent_name: str = None) -> List[Dict]:
+        """Get errors pending retry."""
+        query = self.client.table('error_log').select('*')\
+            .in_('retry_status', ['pending', 'retrying'])
+
+        if agent_name:
+            query = query.eq('agent_name', agent_name)
+
+        response = query.order('created_at', desc=True).execute()
+        return response.data
+
+    def get_error_by_run_id(self, agent_run_id: str) -> Optional[Dict]:
+        """Check if an error already exists for this agent run."""
+        response = self.client.table('error_log').select('*')\
+            .eq('agent_run_id', agent_run_id)\
+            .limit(1)\
+            .execute()
+        return response.data[0] if response.data else None
+
+    def update_error_status(self, error_id: str, retry_status: str, **kwargs) -> None:
+        """Update error status and optional fields."""
+        update_data = {'retry_status': retry_status, **kwargs}
+        if retry_status == 'resolved':
+            update_data['resolved_at'] = datetime.utcnow().isoformat()
+        self.client.table('error_log').update(update_data).eq('id', error_id).execute()
+
+    def increment_error_retry(self, error_id: str) -> None:
+        """Increment retry count for an error."""
+        # Get current count
+        response = self.client.table('error_log').select('retry_count')\
+            .eq('id', error_id).single().execute()
+        current = response.data['retry_count'] if response.data else 0
+
+        self.client.table('error_log').update({
+            'retry_count': current + 1,
+            'retry_status': 'retrying'
+        }).eq('id', error_id).execute()
+
+    def get_error_patterns(self, hours: int = 24) -> List[Dict]:
+        """Get agents with multiple failures (error patterns)."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+        response = self.client.table('error_log').select('agent_name')\
+            .gt('created_at', cutoff)\
+            .execute()
+
+        # Count failures per agent
+        from collections import Counter
+        counts = Counter(e['agent_name'] for e in response.data)
+
+        # Return agents with 2+ failures
+        return [{'agent_name': agent, 'failure_count': count}
+                for agent, count in counts.items() if count >= 2]

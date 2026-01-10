@@ -1,0 +1,52 @@
+# Error Handler Agent
+# Runs every 15 minutes to detect failures, auto-retry, and alert
+
+name: Error Handler
+
+on:
+  schedule:
+    # Every 15 minutes for aggressive error monitoring
+    - cron: '*/15 * * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
+  ALERT_EMAIL_PASSWORD: ${{ secrets.ALERT_EMAIL_PASSWORD }}
+  ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+
+jobs:
+  handle-errors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Error Handler
+        run: |
+          python -m agents.error_handler
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Error Handler Run Complete" >> $GITHUB_STEP_SUMMARY
+          echo "Run ID: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "Time: $(date -u)" >> $GITHUB_STEP_SUMMARY

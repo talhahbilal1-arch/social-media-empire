@@ -563,6 +563,28 @@ CREATE TRIGGER update_system_config_updated_at
     EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================
+-- ERROR LOG (Error Handler Agent)
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS error_log (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    agent_name TEXT NOT NULL,
+    agent_run_id UUID REFERENCES agent_runs(id) ON DELETE SET NULL,
+    error_type TEXT CHECK (error_type IN ('runtime', 'api', 'timeout', 'data', 'unknown')),
+    error_message TEXT,
+    stack_trace TEXT,
+    retry_count INTEGER DEFAULT 0,
+    retry_status TEXT DEFAULT 'pending' CHECK (retry_status IN ('pending', 'retrying', 'retried', 'exhausted', 'resolved')),
+    workflow_name TEXT,  -- GitHub workflow name for retry
+    resolved_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_error_log_agent ON error_log(agent_name);
+CREATE INDEX idx_error_log_status ON error_log(retry_status);
+CREATE INDEX idx_error_log_created ON error_log(created_at DESC);
+
+-- ============================================
 -- COMMENTS FOR DOCUMENTATION
 -- ============================================
 
@@ -576,6 +598,7 @@ COMMENT ON TABLE analytics IS 'Agent 4: Engagement metrics per post';
 COMMENT ON TABLE winning_patterns IS 'Agent 5: Patterns that drive engagement, updated by Self-Improvement';
 COMMENT ON TABLE health_checks IS 'Agent 6: System health monitoring logs';
 COMMENT ON TABLE system_changes IS 'Audit trail for all automated system changes';
+COMMENT ON TABLE error_log IS 'Error Handler: Tracks errors, retries, and resolutions';
 
 -- ============================================
 -- DONE! Your database schema is ready.
