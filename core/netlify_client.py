@@ -88,7 +88,8 @@ class NetlifyClient:
                         existing_files[f['path']] = f['sha']
 
             # Add our new file to the existing files
-            new_file_path = f"/blog/{slug}/index.html"
+            # Site uses /articles/ folder with .html extension
+            new_file_path = f"/articles/{slug}.html"
             existing_files[new_file_path] = file_hash
 
             # Create a new deploy with ALL files (existing + new)
@@ -118,7 +119,7 @@ class NetlifyClient:
                 )
                 upload_response.raise_for_status()
 
-            published_url = f"{site_url}/blog/{slug}/"
+            published_url = f"{site_url}/articles/{slug}.html"
 
             return {
                 'success': True,
