@@ -499,3 +499,116 @@ class SupabaseClient:
         # Return agents with 2+ failures
         return [{'agent_name': agent, 'failure_count': count}
                 for agent, count in counts.items() if count >= 2]
+
+    # ==========================================
+    # DAILY REPORT STATS
+    # ==========================================
+
+    def get_content_stats(self, hours: int = 24) -> Dict:
+        """Get content generation stats for the last N hours."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+
+        # Content bank items created
+        content = self.client.table('content_bank').select('brand_id, content_type')\
+            .gt('created_at', cutoff).execute()
+
+        # Group by brand and type
+        from collections import Counter
+        by_brand = Counter(c['brand_id'] for c in content.data)
+        by_type = Counter(c['content_type'] for c in content.data)
+
+        return {
+            'total': len(content.data),
+            'by_brand': dict(by_brand),
+            'by_type': dict(by_type)
+        }
+
+    def get_video_stats(self, hours: int = 24) -> Dict:
+        """Get video creation stats for the last N hours."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+
+        videos = self.client.table('videos').select('status')\
+            .gt('created_at', cutoff).execute()
+
+        from collections import Counter
+        by_status = Counter(v['status'] for v in videos.data)
+
+        return {
+            'total': len(videos.data),
+            'ready': by_status.get('ready', 0),
+            'rendering': by_status.get('rendering', 0),
+            'failed': by_status.get('failed', 0)
+        }
+
+    def get_posting_stats(self, hours: int = 24) -> Dict:
+        """Get social posting stats for the last N hours."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+
+        posts = self.client.table('posts_log').select('platform, status')\
+            .gt('created_at', cutoff).execute()
+
+        from collections import Counter
+        by_platform = Counter(p['platform'] for p in posts.data if p['status'] == 'posted')
+
+        return {
+            'total': len(posts.data),
+            'posted': sum(1 for p in posts.data if p['status'] == 'posted'),
+            'failed': sum(1 for p in posts.data if p['status'] == 'failed'),
+            'by_platform': dict(by_platform)
+        }
+
+    def get_blog_stats(self, hours: int = 24) -> Dict:
+        """Get blog article stats for the last N hours."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+
+        blogs = self.client.table('blog_articles').select('status, brand_id')\
+            .gt('created_at', cutoff).execute()
+
+        return {
+            'total': len(blogs.data),
+            'published': sum(1 for b in blogs.data if b['status'] == 'published'),
+            'draft': sum(1 for b in blogs.data if b['status'] == 'draft')
+        }
+
+    def get_trend_stats(self, hours: int = 24) -> Dict:
+        """Get trend discovery stats for the last N hours."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+
+        trends = self.client.table('trending_discoveries').select('source, used')\
+            .gt('discovered_at', cutoff).execute()
+
+        from collections import Counter
+        by_source = Counter(t['source'] for t in trends.data)
+
+        return {
+            'total': len(trends.data),
+            'used': sum(1 for t in trends.data if t['used']),
+            'by_source': dict(by_source)
+        }
+
+    def get_agent_run_stats(self, hours: int = 24) -> Dict:
+        """Get agent run stats for the last N hours."""
+        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+
+        runs = self.client.table('agent_runs').select('agent_name, status')\
+            .gt('started_at', cutoff).execute()
+
+        from collections import Counter
+        by_agent = {}
+        for run in runs.data:
+            agent = run['agent_name']
+            if agent not in by_agent:
+                by_agent[agent] = {'completed': 0, 'failed': 0}
+            if run['status'] == 'completed':
+                by_agent[agent]['completed'] += 1
+            elif run['status'] == 'failed':
+                by_agent[agent]['failed'] += 1
+
+        total_failed = sum(1 for r in runs.data if r['status'] == 'failed')
+
+        return {
+            'total': len(runs.data),
+            'completed': sum(1 for r in runs.data if r['status'] == 'completed'),
+            'failed': total_failed,
+            'by_agent': by_agent
+        }
