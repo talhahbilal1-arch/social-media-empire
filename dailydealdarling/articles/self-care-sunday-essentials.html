@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Care Sunday: Essential Products for Ultimate Relaxation | Daily Deal Darling</title>
+    <meta name="description" content="Create the perfect at-home spa experience with these self-care essentials. From diffusers to bath bombs, discover products for ultimate relaxation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blush: #F5E6E0;
+            --rose: #E8C4C4;
+            --terracotta: #C68B77;
+            --sage: #A8B5A0;
+            --cream: #FDF8F5;
+            --charcoal: #3D3D3D;
+            --gold: #C9A962;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--blush) 50%, var(--rose) 100%);
+            min-height: 100vh;
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--terracotta);
+            text-decoration: none;
+        }
+        .back-link {
+            color: var(--terracotta);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .category-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--terracotta), var(--gold));
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        .article-header h1 {
+            font-size: 2.5rem;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .article-meta {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+        }
+        .article-content {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .article-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        .article-content h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--charcoal);
+        }
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .product-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+        .product-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--charcoal);
+        }
+        .product-info p {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        .product-price {
+            color: var(--terracotta);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+        .buy-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--terracotta), var(--gold));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+        .buy-btn:hover { opacity: 0.9; }
+        footer {
+            background: var(--charcoal);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        footer p { font-size: 0.85rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
+        footer .copyright { margin-top: 1rem; opacity: 0.6; font-size: 0.8rem; }
+        @media (max-width: 768px) {
+            .article-header h1 { font-size: 1.8rem; }
+            .product-card { flex-direction: column; }
+            .product-image { width: 100%; height: 200px; }
+            .article-container { padding: 1rem; }
+            .article-content { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="logo">Daily Deal Darling</a>
+            <a href="../index.html" class="back-link">&larr; Back to Home</a>
+        </div>
+    </header>
+
+    <div class="article-container">
+        <div class="article-header">
+            <span class="category-badge">Wellness</span>
+            <h1>Self-Care Sunday: Essential Products for Ultimate Relaxation</h1>
+            <p class="article-meta">Updated January 2025 &bull; 5 min read</p>
+        </div>
+
+        <img src="https://images.pexels.com/photos/3997993/pexels-photo-3997993.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Relaxing spa setup with candles" class="hero-image">
+
+        <div class="article-content">
+            <p>You deserve a day dedicated entirely to relaxation and self-care. Transform your home into a personal spa sanctuary with these carefully curated products. From aromatic diffusers to luxurious bath bombs, here's everything you need to create the ultimate Self-Care Sunday experience.</p>
+
+            <h2>1. Best Essential Oil Diffuser: URPOWER 2nd Version</h2>
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Essential oil diffuser" class="product-image">
+                <div class="product-info">
+                    <h3>URPOWER Essential Oil Diffuser</h3>
+                    <p>Fill your space with calming aromas using this whisper-quiet diffuser. Features 7 LED color options, multiple mist modes, and auto shut-off for safety. Holds 100ml and runs for up to 6 hours.</p>
+                    <p class="product-price">Around $15-20</p>
+                    <a href="https://www.amazon.com/dp/B00Y2CQRZY?tag=dailydealdarling1-20" class="buy-btn" target="_blank" rel="noopener">Shop on Amazon</a>
+                </div>
+            </div>
+
+            <h2>2. Best Bath Bombs: LifeAround2Angels Bath Bombs Gift Set</h2>
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/3997989/pexels-photo-3997989.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Colorful bath bombs" class="product-image">
+                <div class="product-info">
+                    <h3>LifeAround2Angels Bath Bombs (Set of 12)</h3>
+                    <p>Transform your bath into a fizzy, fragrant oasis. These handcrafted bath bombs feature natural ingredients like shea butter and essential oils. Each one creates a different spa-like experience with gorgeous colors and scents.</p>
+                    <p class="product-price">Around $25-30</p>
+                    <a href="https://www.amazon.com/dp/B01MFGN8S5?tag=dailydealdarling1-20" class="buy-btn" target="_blank" rel="noopener">Shop on Amazon</a>
+                </div>
+            </div>
+
+            <h2>3. Best Face Masks: LAPCOS Daily Sheet Masks Variety Set</h2>
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Sheet face masks" class="product-image">
+                <div class="product-info">
+                    <h3>LAPCOS Daily Sheet Mask Variety Pack (14 Masks)</h3>
+                    <p>K-beauty meets self-care with these deeply nourishing sheet masks. Includes a variety of formulas for hydration, brightening, firming, and soothing. Perfect for a multi-masking session or weekly pampering.</p>
+                    <p class="product-price">Around $18-22</p>
+                    <a href="https://www.amazon.com/dp/B07D6M9HRK?tag=dailydealdarling1-20" class="buy-btn" target="_blank" rel="noopener">Shop on Amazon</a>
+                </div>
+            </div>
+
+            <h2>4. Best Cozy Blanket: Bedsure Fleece Throw Blanket</h2>
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/6032280/pexels-photo-6032280.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Cozy throw blanket" class="product-image">
+                <div class="product-info">
+                    <h3>Bedsure Fleece Throw Blanket</h3>
+                    <p>Wrap yourself in pure comfort with this incredibly soft microfiber blanket. Lightweight yet warm, it's perfect for couch relaxation after your bath. Machine washable and comes in gorgeous colors.</p>
+                    <p class="product-price">Around $18-25</p>
+                    <a href="https://www.amazon.com/dp/B01N5JJOAW?tag=dailydealdarling1-20" class="buy-btn" target="_blank" rel="noopener">Shop on Amazon</a>
+                </div>
+            </div>
+
+            <h2>5. Best Massage Tool: TheraGun Mini</h2>
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/5793706/pexels-photo-5793706.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Massage gun" class="product-image">
+                <div class="product-info">
+                    <h3>Therabody TheraGun Mini</h3>
+                    <p>Release tension and soothe sore muscles with this compact percussion massager. Ultra-quiet design with 3 speed settings. Small enough to target hard-to-reach areas and travel-friendly for on-the-go relief.</p>
+                    <p class="product-price">Around $175-200</p>
+                    <a href="https://www.amazon.com/dp/B09CC81WC1?tag=dailydealdarling1-20" class="buy-btn" target="_blank" rel="noopener">Shop on Amazon</a>
+                </div>
+            </div>
+
+            <p style="margin-top: 2rem;">Remember, self-care isn't selfish - it's essential. Schedule your Self-Care Sunday as a non-negotiable appointment with yourself. You'll feel refreshed, recharged, and ready to take on the week ahead.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Amazon Associates Disclosure:</strong> As an Amazon Associate, Daily Deal Darling earns from qualifying purchases. This means we may earn a small commission when you click on product links and make a purchase, at no additional cost to you. We only recommend products we genuinely believe in.</p>
+        <p class="copyright">&copy; 2026 Daily Deal Darling. All rights reserved.</p>
+    </footer>
+</body>
+</html>
