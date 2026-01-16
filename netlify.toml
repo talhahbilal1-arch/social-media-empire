@@ -1,0 +1,37 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/quiz-morning"
+  to = "/quiz-morning.html"
+  status = 200
+
+[[redirects]]
+  from = "/quiz-beauty"
+  to = "/quiz-beauty.html"
+  status = 200
+
+[[redirects]]
+  from = "/quiz-selfcare"
+  to = "/quiz-selfcare.html"
+  status = 200
+
+[[redirects]]
+  from = "/quiz-organization"
+  to = "/quiz-organization.html"
+  status = 200
+
+[[redirects]]
+  from = "/quiz-lifestyle"
+  to = "/quiz-lifestyle.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

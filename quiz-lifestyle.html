@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Take our Lifestyle Quiz to explore home, fashion, and lifestyle deals that fit your vibe!">
+    <title>Lifestyle Quiz - Daily Deal Darling</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">Daily<span>Deal</span>Darling</a>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#quizzes">Quizzes</a></li>
+                    <li><a href="/#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1>&#127968; Lifestyle Quiz</h1>
+                <p>Discover home and lifestyle deals that match your vibe!</p>
+            </div>
+
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" style="width: 20%;"></div>
+            </div>
+
+            <div class="quiz-questions">
+                <!-- Question 1 -->
+                <div class="quiz-question">
+                    <h3>1. How would you describe your home style?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Minimalist - Clean and simple</div>
+                        <div class="quiz-option">Cozy - Warm and inviting</div>
+                        <div class="quiz-option">Modern - Sleek and trendy</div>
+                        <div class="quiz-option">Eclectic - Mix of everything</div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>2. What's your fashion vibe?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Classic - Timeless pieces</div>
+                        <div class="quiz-option">Casual - Comfort first</div>
+                        <div class="quiz-option">Trendy - Latest styles</div>
+                        <div class="quiz-option">Athleisure - Active chic</div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>3. What room do you spend the most time in?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Living room - Relaxation central</div>
+                        <div class="quiz-option">Bedroom - My sanctuary</div>
+                        <div class="quiz-option">Kitchen - Heart of the home</div>
+                        <div class="quiz-option">Home office - Where I work</div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>4. What's your weekend vibe?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Brunch and shopping</div>
+                        <div class="quiz-option">Outdoor adventures</div>
+                        <div class="quiz-option">Home projects and nesting</div>
+                        <div class="quiz-option">Social gatherings</div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>5. What lifestyle upgrade are you looking for?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Home decor refresh</div>
+                        <div class="quiz-option">Wardrobe update</div>
+                        <div class="quiz-option">Kitchen gadgets</div>
+                        <div class="quiz-option">Entertainment and tech</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-nav">
+                <button class="quiz-btn quiz-btn-prev" disabled>Previous</button>
+                <button class="quiz-btn quiz-btn-next">Next</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="quiz-results">
+                <div class="result-icon">&#127793;</div>
+                <h2>Your Lifestyle Deals Are Ready!</h2>
+                <p>Based on your answers, here are lifestyle deals curated just for you.</p>
+
+                <div class="deal-recommendations">
+                    <div class="deal-item">
+                        <strong>Home Decor Finds</strong>
+                        <p>Pillows, throws, candles, and decor at amazing prices.</p>
+                    </div>
+                    <div class="deal-item">
+                        <strong>Fashion Favorites</strong>
+                        <p>Clothing, accessories, and shoes on sale now.</p>
+                    </div>
+                    <div class="deal-item">
+                        <strong>Kitchen & Entertaining</strong>
+                        <p>Cookware, gadgets, and hosting essentials discounted.</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 2rem; color: #666;">Sign up above to get these deals delivered to your inbox!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-signup">
+                <h3>Get daily deals in your inbox</h3>
+                <form id="footer-signup-form" class="footer-signup-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/#quizzes">Quizzes</a>
+                    <a href="/#about">About</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2024 Daily Deal Darling. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Exit Intent Email Popup -->
+    <div id="email-popup" class="email-popup-overlay">
+        <div class="email-popup">
+            <button class="popup-close">&times;</button>
+            <div class="popup-form-content">
+                <div class="popup-icon">&#128149;</div>
+                <h2>Wait! Get Exclusive Deals &#128149;</h2>
+                <p>Join 10,000+ smart shoppers getting the best daily deals delivered free.</p>
+                <form class="popup-form">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit">Send Me Deals!</button>
+                </form>
+                <p class="popup-disclaimer">No spam, ever. Unsubscribe anytime.</p>
+            </div>
+            <div class="popup-success">
+                <div class="popup-icon">&#127881;</div>
+                <h2>You're In!</h2>
+                <p>Check your inbox for amazing deals coming your way!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

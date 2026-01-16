@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Daily Deal Darling - Discover the best daily deals tailored just for you. Take our fun quizzes to find deals that match your lifestyle!">
+    <title>Daily Deal Darling - Your Personal Deal Finder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">Daily<span>Deal</span>Darling</a>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#quizzes">Quizzes</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Find Your Perfect Deals</h1>
+            <p>Take our fun quizzes to discover personalized deals that match your lifestyle, interests, and daily routines!</p>
+            <a href="#quizzes" class="cta-button">Start Finding Deals</a>
+        </section>
+
+        <!-- Quiz Cards Section -->
+        <section id="quizzes">
+            <h2 style="text-align: center; margin-bottom: 1rem;">Choose Your Quiz</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Each quiz helps us find the perfect deals for different parts of your day</p>
+
+            <div class="quiz-grid">
+                <a href="/quiz-morning" class="quiz-card">
+                    <div class="quiz-card-icon">&#9728;&#65039;</div>
+                    <h3>Morning Routine</h3>
+                    <p>Discover deals for your perfect morning - from coffee to skincare essentials</p>
+                </a>
+
+                <a href="/quiz-beauty" class="quiz-card">
+                    <div class="quiz-card-icon">&#128132;</div>
+                    <h3>Beauty Finds</h3>
+                    <p>Uncover makeup, skincare, and beauty deals tailored to your style</p>
+                </a>
+
+                <a href="/quiz-selfcare" class="quiz-card">
+                    <div class="quiz-card-icon">&#128149;</div>
+                    <h3>Self-Care</h3>
+                    <p>Find relaxation and wellness deals for your self-care moments</p>
+                </a>
+
+                <a href="/quiz-organization" class="quiz-card">
+                    <div class="quiz-card-icon">&#128221;</div>
+                    <h3>Organization</h3>
+                    <p>Get deals on planners, storage, and tools to organize your life</p>
+                </a>
+
+                <a href="/quiz-lifestyle" class="quiz-card">
+                    <div class="quiz-card-icon">&#127968;</div>
+                    <h3>Lifestyle</h3>
+                    <p>Explore home, fashion, and lifestyle deals that fit your vibe</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" style="margin-top: 4rem; text-align: center; max-width: 700px; margin-left: auto; margin-right: auto;">
+            <h2>Why Daily Deal Darling?</h2>
+            <p style="color: #666; margin-top: 1rem;">
+                We know how overwhelming it can be to find great deals among the noise. That's why we created Daily Deal Darling -
+                to help smart shoppers like you discover personalized deals that actually matter. Take our quick quizzes and
+                let us do the hunting for you!
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <!-- Email Signup Section -->
+            <div class="footer-signup">
+                <h3>Get daily deals in your inbox</h3>
+                <form id="footer-signup-form" class="footer-signup-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="#quizzes">Quizzes</a>
+                    <a href="#about">About</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2024 Daily Deal Darling. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Exit Intent Email Popup -->
+    <div id="email-popup" class="email-popup-overlay">
+        <div class="email-popup">
+            <button class="popup-close">&times;</button>
+
+            <div class="popup-form-content">
+                <div class="popup-icon">&#128149;</div>
+                <h2>Wait! Get Exclusive Deals &#128149;</h2>
+                <p>Join 10,000+ smart shoppers getting the best daily deals delivered free.</p>
+
+                <form class="popup-form">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit">Send Me Deals!</button>
+                </form>
+
+                <p class="popup-disclaimer">No spam, ever. Unsubscribe anytime.</p>
+            </div>
+
+            <div class="popup-success">
+                <div class="popup-icon">&#127881;</div>
+                <h2>You're In!</h2>
+                <p>Check your inbox for amazing deals coming your way!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
