@@ -4,182 +4,429 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gift Finder Quiz | Daily Deal Darling</title>
-    <meta name="description" content="Find the perfect gift with our personalized quiz. Get gift recommendations for anyone on your list!">
-    <link rel="stylesheet" href="/styles.css">
+    <meta name="description" content="Find the perfect gift with our personalized quiz. Get gift recommendations for anyone on your list based on their interests and your budget.">
+    <link rel="canonical" href="https://dailydealdarling.com/quizzes/gift-finder.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dailydealdarling.com/quizzes/gift-finder.html">
+    <meta property="og:title" content="Gift Finder Quiz | Daily Deal Darling">
+    <meta property="og:description" content="Find the perfect gift for anyone on your list.">
+    <meta property="og:site_name" content="Daily Deal Darling">
+
+    <!-- Schema.org for Quiz -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Quiz",
+        "name": "Gift Finder Quiz",
+        "description": "Find the perfect gift for anyone based on their interests, the occasion, and your budget",
+        "provider": {
+            "@type": "Organization",
+            "name": "Daily Deal Darling",
+            "url": "https://dailydealdarling.com"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Gift Ideas"
+        }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --primary-dark: #E85555;
+            --secondary: #FFE5E5;
+            --accent: #FFD93D;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --white: #FFFFFF;
+            --bg-light: #FFF9F9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--white) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--white);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--white);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-content {
+            padding: 40px;
+        }
+
+        .question {
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question h2 {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--secondary);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .results > p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .product-recommendations {
+            display: grid;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .product {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .product h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .product p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .product .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .product .buy-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .product .buy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            .quiz-header h1 {
+                font-size: 1.5rem;
+            }
+            .quiz-content {
+                padding: 25px;
+            }
+            .question h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div>
-                <a href="/" class="logo">Daily Deal Darling</a>
-                <p class="tagline">Your guide to the best products & deals</p>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <a href="/" class="back-link">&#8592; Back to Home</a>
+            <h1>&#127873; Gift Finder Quiz</h1>
+            <p>Find the perfect gift in 4 quick questions</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 0%"></div>
             </div>
         </div>
-    </header>
 
-    <main>
-        <a href="/" class="back-link">&larr; Back to Home</a>
-
-        <div class="quiz-container">
-            <div class="quiz-header">
-                <h1>Find the Perfect Gift</h1>
-                <p>Tell us about who you're shopping for and we'll find the ideal present!</p>
-            </div>
-
-            <div class="quiz-progress">
-                <div class="quiz-progress-bar" id="progress-bar" style="width: 25%;"></div>
-            </div>
-
-            <div id="quiz-content">
-                <!-- Questions will be rendered here by JavaScript -->
-            </div>
-
-            <div class="quiz-results" id="results">
-                <div class="result-icon">&#127873;</div>
-                <h2>Perfect Gift Ideas!</h2>
-                <p id="results-intro">Based on your answers, here are our top gift recommendations:</p>
-                <div class="product-recommendations" id="product-list">
-                    <!-- Products will be rendered here -->
+        <div class="quiz-content">
+            <!-- Question 1 -->
+            <div class="question active" data-question="1">
+                <h2>Who are you shopping for?</h2>
+                <div class="options">
+                    <div class="option" data-value="woman-young">Woman (18-35)</div>
+                    <div class="option" data-value="woman-mature">Woman (35+)</div>
+                    <div class="option" data-value="man">Man</div>
+                    <div class="option" data-value="teen">Teen/Young Adult</div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <footer>
-        <div class="footer-container">
-            <p class="disclosure">
-                As an Amazon Associate, I earn from qualifying purchases. This site contains affiliate links - if you click and buy, I may receive a small commission at no extra cost to you.
-            </p>
-            <p class="footer-copyright">&copy; 2026 Daily Deal Darling</p>
+            <!-- Question 2 -->
+            <div class="question" data-question="2">
+                <h2>What are their interests?</h2>
+                <div class="options">
+                    <div class="option" data-value="selfcare">Self-care & Beauty</div>
+                    <div class="option" data-value="home">Home & Cooking</div>
+                    <div class="option" data-value="tech">Tech & Gadgets</div>
+                    <div class="option" data-value="relaxation">Reading & Relaxation</div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question" data-question="3">
+                <h2>What's the occasion?</h2>
+                <div class="options">
+                    <div class="option" data-value="birthday">Birthday</div>
+                    <div class="option" data-value="holiday">Holiday/Christmas</div>
+                    <div class="option" data-value="justbecause">Just Because</div>
+                    <div class="option" data-value="thankyou">Thank You Gift</div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question" data-question="4">
+                <h2>What's your budget?</h2>
+                <div class="options">
+                    <div class="option" data-value="budget">Under $25</div>
+                    <div class="option" data-value="mid">$25-$50</div>
+                    <div class="option" data-value="high">$50-$100</div>
+                    <div class="option" data-value="premium">$100+</div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="results" id="results">
+                <h2>Perfect Gift Ideas!</h2>
+                <p>Based on your answers, here are our top recommendations:</p>
+
+                <div class="product-recommendations" id="recommendations">
+                    <!-- Products will be inserted here by JavaScript -->
+                </div>
+
+                <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+                <br>
+                <a href="/" class="home-link">&#8592; Back to Home</a>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script>
-        const questions = [
-            {
-                question: "Who are you shopping for?",
-                options: ["Woman (18-35)", "Woman (35+)", "Man", "Teen/Young Adult"]
-            },
-            {
-                question: "What are their interests?",
-                options: ["Self-care & Beauty", "Home & Cooking", "Tech & Gadgets", "Reading & Relaxation"]
-            },
-            {
-                question: "What's the occasion?",
-                options: ["Birthday", "Holiday/Christmas", "Just Because", "Thank You Gift"]
-            },
-            {
-                question: "What's your budget?",
-                options: ["Under $25", "$25-$50", "$50-$100", "$100+"]
-            }
-        ];
-
-        const productCategories = {
+        const products = {
             selfcare: [
-                { name: "Theragun Mini Massage Gun", asin: "B086Z4P8MD", description: "Portable deep tissue massage therapy. Perfect for muscle recovery and relaxation.", price: "$199" },
-                { name: "Laneige Lip Sleeping Mask", asin: "B07GQWQFHM", description: "Cult-favorite overnight lip treatment that leaves lips soft and supple.", price: "$24" },
-                { name: "Essential Oil Diffuser", asin: "B07L9LT62H", description: "Create a spa-like atmosphere at home with this elegant aromatherapy diffuser.", price: "$19.99" }
+                { name: "Theragun Mini Massage Gun", description: "Portable deep tissue massage therapy. Perfect for muscle recovery and relaxation after a long day.", price: "$199", asin: "B086Z4P8MD" },
+                { name: "Laneige Lip Sleeping Mask", description: "Cult-favorite overnight lip treatment that leaves lips soft and supple. A luxurious treat!", price: "$24", asin: "B07GQWQFHM" },
+                { name: "Essential Oil Diffuser", description: "Create a spa-like atmosphere at home with this elegant aromatherapy diffuser.", price: "$19.99", asin: "B07L9LT62H" },
+                { name: "Silk Pillowcase", description: "Luxurious silk that's gentle on skin and hair. Wake up feeling pampered.", price: "$23.99", asin: "B07RJBVLBL" }
             ],
             home: [
-                { name: "Instant Pot Duo 7-in-1", asin: "B00FLYWNYQ", description: "The ultimate kitchen multi-cooker. Pressure cooker, slow cooker, rice cooker, and more!", price: "$89" },
-                { name: "Lodge Cast Iron Skillet", asin: "B00006JSUB", description: "A kitchen classic that lasts generations. Pre-seasoned and ready to use.", price: "$24.99" },
-                { name: "KitchenAid Mixing Bowls", asin: "B079Q72WF1", description: "Beautiful, functional mixing bowls in assorted sizes. Dishwasher safe.", price: "$39.99" }
+                { name: "Instant Pot Duo 7-in-1", description: "The ultimate kitchen multi-cooker. Pressure cooker, slow cooker, rice cooker, and more!", price: "$89", asin: "B00FLYWNYQ" },
+                { name: "Lodge Cast Iron Skillet", description: "A kitchen classic that lasts generations. Pre-seasoned and ready to use.", price: "$24.99", asin: "B00006JSUB" },
+                { name: "KitchenAid Mixing Bowls", description: "Beautiful, functional mixing bowls in assorted sizes. Dishwasher safe.", price: "$39.99", asin: "B079Q72WF1" },
+                { name: "OXO Good Grips Measuring Cups", description: "Soft, non-slip handles make measuring easy. A kitchen essential.", price: "$19.99", asin: "B0000CCY2E" }
             ],
             tech: [
-                { name: "Kindle Paperwhite", asin: "B08KTZ8249", description: "Waterproof e-reader with adjustable warm light. Read anywhere, anytime.", price: "$139" },
-                { name: "Ninja Blender", asin: "B07SS87PMB", description: "Professional-grade blending for smoothies, soups, and more.", price: "$99.99" }
+                { name: "Kindle Paperwhite", description: "Waterproof e-reader with adjustable warm light. Read anywhere, anytime.", price: "$139", asin: "B08KTZ8249" },
+                { name: "Anker Portable Charger", description: "Never run out of battery again. High-capacity portable power bank.", price: "$21.99", asin: "B07QXV6N1B" },
+                { name: "Ninja Professional Blender", description: "Professional-grade blending for smoothies, soups, and more.", price: "$99.99", asin: "B07SS87PMB" }
             ],
             relaxation: [
-                { name: "Weighted Blanket", asin: "B07JR3B1FV", description: "Promotes relaxation and better sleep with gentle, even pressure.", price: "$49.99" },
-                { name: "Kindle Paperwhite", asin: "B08KTZ8249", description: "Waterproof e-reader with adjustable warm light. Perfect for book lovers.", price: "$139" },
-                { name: "Laneige Lip Sleeping Mask", asin: "B07GQWQFHM", description: "Luxurious overnight lip treatment. A pampering treat!", price: "$24" }
+                { name: "Weighted Blanket", description: "Promotes relaxation and better sleep with gentle, even pressure.", price: "$49.99", asin: "B07JR3B1FV" },
+                { name: "Kindle Paperwhite", description: "Waterproof e-reader perfect for book lovers. Read comfortably anywhere.", price: "$139", asin: "B08KTZ8249" },
+                { name: "Essential Oil Diffuser", description: "Turn any space into a relaxing oasis with aromatherapy.", price: "$19.99", asin: "B07L9LT62H" }
             ],
             budget: [
-                { name: "Laneige Lip Sleeping Mask", asin: "B07GQWQFHM", description: "Luxurious lip treatment that makes an amazing gift.", price: "$24" },
-                { name: "Essential Oil Diffuser", asin: "B07L9LT62H", description: "Turn any space into a relaxing oasis.", price: "$19.99" },
-                { name: "OXO Good Grips Measuring Cups", asin: "B0000CCY2E", description: "Kitchen essential with soft, comfortable handles.", price: "$19.99" }
+                { name: "Laneige Lip Sleeping Mask", description: "Luxurious lip treatment that makes an amazing gift under $25.", price: "$24", asin: "B07GQWQFHM" },
+                { name: "Anker Portable Charger", description: "Practical and useful - everyone needs a backup battery.", price: "$21.99", asin: "B07QXV6N1B" },
+                { name: "Essential Oil Diffuser", description: "Turn any space into a relaxing oasis. Great value gift.", price: "$19.99", asin: "B07L9LT62H" }
             ]
         };
 
-        let currentQuestion = 0;
-        const answers = [];
+        let answers = {};
+        let currentQuestion = 1;
+        const totalQuestions = 4;
 
-        function renderQuestion() {
-            const container = document.getElementById('quiz-content');
-            const progress = document.getElementById('progress-bar');
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                const value = this.dataset.value;
 
-            if (currentQuestion >= questions.length) {
-                showResults();
-                return;
-            }
+                answers[questionNum] = value;
 
-            const q = questions[currentQuestion];
-            progress.style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
 
-            container.innerHTML = `
-                <div class="quiz-question">
-                    <h3>${currentQuestion + 1}. ${q.question}</h3>
-                    <div class="quiz-options">
-                        ${q.options.map((opt, i) => `
-                            <div class="quiz-option" onclick="selectOption(${i})">${opt}</div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button class="quiz-btn quiz-btn-prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>Previous</button>
-                    <button class="quiz-btn quiz-btn-next" onclick="nextQuestion()" id="next-btn" disabled>Next</button>
-                </div>
-            `;
-        }
-
-        function selectOption(index) {
-            answers[currentQuestion] = index;
-            document.querySelectorAll('.quiz-option').forEach((opt, i) => {
-                opt.classList.toggle('selected', i === index);
+                setTimeout(() => {
+                    if (currentQuestion < totalQuestions) {
+                        currentQuestion++;
+                        updateProgress();
+                        showQuestion(currentQuestion);
+                    } else {
+                        showResults();
+                    }
+                }, 400);
             });
-            document.getElementById('next-btn').disabled = false;
+        });
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress').style.width = progress + '%';
         }
 
-        function nextQuestion() {
-            if (answers[currentQuestion] !== undefined) {
-                currentQuestion++;
-                renderQuestion();
-            }
-        }
-
-        function prevQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                renderQuestion();
-            }
+        function showQuestion(num) {
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.querySelector('.question[data-question="' + num + '"]').classList.add('active');
         }
 
         function showResults() {
-            document.getElementById('quiz-content').style.display = 'none';
-            document.getElementById('results').classList.add('show');
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.getElementById('results').classList.add('active');
+            document.getElementById('progress').style.width = '100%';
 
-            const interest = answers[1]; // 0=selfcare, 1=home, 2=tech, 3=relaxation
-            const budget = answers[3]; // 0=under25, 1=25-50, 2=50-100, 3=100+
+            const interest = answers['2'] || 'selfcare';
+            const budget = answers['4'] || 'mid';
 
             let recommendedProducts = [];
 
-            // Select products based on interest
-            if (interest === 0) {
-                recommendedProducts = [...productCategories.selfcare];
-            } else if (interest === 1) {
-                recommendedProducts = [...productCategories.home];
-            } else if (interest === 2) {
-                recommendedProducts = [...productCategories.tech];
-            } else {
-                recommendedProducts = [...productCategories.relaxation];
+            // Get products based on interest
+            if (products[interest]) {
+                recommendedProducts = [...products[interest]];
             }
 
             // If budget is low, prioritize budget items
-            if (budget === 0) {
-                recommendedProducts = [...productCategories.budget, ...recommendedProducts];
+            if (budget === 'budget') {
+                recommendedProducts = [...products.budget, ...recommendedProducts];
             }
 
-            // Remove duplicates and limit to 4
+            // Remove duplicates by ASIN
             const seen = new Set();
             recommendedProducts = recommendedProducts.filter(p => {
                 if (seen.has(p.asin)) return false;
@@ -187,21 +434,29 @@
                 return true;
             }).slice(0, 4);
 
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = recommendedProducts.map(p => `
-                <div class="product-card">
-                    <h4>${p.name}</h4>
-                    <p>${p.description}</p>
-                    <a href="https://www.amazon.com/dp/${p.asin}?tag=dailydealdarling1-20"
-                       class="product-link" target="_blank" rel="nofollow noopener">
-                        Check Price on Amazon &rarr;
-                    </a>
-                </div>
-            `).join('');
+            let html = '';
+            recommendedProducts.forEach(product => {
+                html += '<div class="product">' +
+                    '<h3>' + product.name + '</h3>' +
+                    '<p>' + product.description + '</p>' +
+                    '<div class="price">' + product.price + '</div>' +
+                    '<a href="https://www.amazon.com/dp/' + product.asin + '?tag=dailydealdarling1-20" target="_blank" rel="nofollow noopener" class="buy-btn">View on Amazon</a>' +
+                    '</div>';
+            });
+
+            document.getElementById('recommendations').innerHTML = html;
         }
 
-        // Initialize
-        renderQuestion();
+        function restartQuiz() {
+            answers = {};
+            currentQuestion = 1;
+            document.getElementById('results').classList.remove('active');
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('progress').style.width = '0%';
+            showQuestion(1);
+        }
+
+        updateProgress();
     </script>
 </body>
 </html>

@@ -4,218 +4,532 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skincare Routine Quiz | Daily Deal Darling</title>
-    <meta name="description" content="Find your perfect skincare routine with our personalized quiz. Get product recommendations for your skin type!">
-    <link rel="stylesheet" href="/styles.css">
+    <meta name="description" content="Take our skincare quiz to find the perfect products for your skin type. Get personalized recommendations for cleansers, serums, and moisturizers.">
+    <link rel="canonical" href="https://dailydealdarling.com/quizzes/skincare-routine.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dailydealdarling.com/quizzes/skincare-routine.html">
+    <meta property="og:title" content="Skincare Routine Quiz | Daily Deal Darling">
+    <meta property="og:description" content="Find your perfect skincare routine based on your skin type and concerns.">
+    <meta property="og:site_name" content="Daily Deal Darling">
+
+    <!-- Schema.org for Quiz -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Quiz",
+        "name": "Skincare Routine Quiz",
+        "description": "Find your perfect skincare routine based on your skin type and concerns",
+        "provider": {
+            "@type": "Organization",
+            "name": "Daily Deal Darling",
+            "url": "https://dailydealdarling.com"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Skincare"
+        }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --primary-dark: #E85555;
+            --secondary: #FFE5E5;
+            --accent: #FFD93D;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --white: #FFFFFF;
+            --bg-light: #FFF9F9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--white) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--white);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--white);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-content {
+            padding: 40px;
+        }
+
+        .question {
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question h2 {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--secondary);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .results > p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .product-recommendations {
+            display: grid;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .product {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .product-step {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .product p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .product .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .product .buy-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .product .buy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            .quiz-header h1 {
+                font-size: 1.5rem;
+            }
+            .quiz-content {
+                padding: 25px;
+            }
+            .question h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div>
-                <a href="/" class="logo">Daily Deal Darling</a>
-                <p class="tagline">Your guide to the best products & deals</p>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <a href="/" class="back-link">&#8592; Back to Home</a>
+            <h1>&#10024; Skincare Routine Quiz</h1>
+            <p>Find your perfect products in 5 quick questions</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 0%"></div>
             </div>
         </div>
-    </header>
 
-    <main>
-        <a href="/" class="back-link">&larr; Back to Home</a>
-
-        <div class="quiz-container">
-            <div class="quiz-header">
-                <h1>Find Your Perfect Skincare Routine</h1>
-                <p>Answer a few questions to get personalized product recommendations!</p>
-            </div>
-
-            <div class="quiz-progress">
-                <div class="quiz-progress-bar" id="progress-bar" style="width: 20%;"></div>
-            </div>
-
-            <div id="quiz-content">
-                <!-- Questions will be rendered here by JavaScript -->
-            </div>
-
-            <div class="quiz-results" id="results">
-                <div class="result-icon">&#10024;</div>
-                <h2>Your Personalized Skincare Recommendations!</h2>
-                <p id="results-intro">Based on your answers, here are the perfect products for your skincare routine:</p>
-                <div class="product-recommendations" id="product-list">
-                    <!-- Products will be rendered here -->
+        <div class="quiz-content">
+            <!-- Question 1 -->
+            <div class="question active" data-question="1">
+                <h2>What's your skin type?</h2>
+                <div class="options">
+                    <div class="option" data-value="oily">Oily - Shiny T-zone, enlarged pores</div>
+                    <div class="option" data-value="dry">Dry - Tight, flaky, needs moisture</div>
+                    <div class="option" data-value="combination">Combination - Oily T-zone, dry cheeks</div>
+                    <div class="option" data-value="sensitive">Sensitive - Easily irritated, reactive</div>
+                    <div class="option" data-value="normal">Normal - Balanced, few issues</div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <footer>
-        <div class="footer-container">
-            <p class="disclosure">
-                As an Amazon Associate, I earn from qualifying purchases. This site contains affiliate links - if you click and buy, I may receive a small commission at no extra cost to you.
-            </p>
-            <p class="footer-copyright">&copy; 2026 Daily Deal Darling</p>
+            <!-- Question 2 -->
+            <div class="question" data-question="2">
+                <h2>What's your biggest skin concern?</h2>
+                <div class="options">
+                    <div class="option" data-value="acne">Acne & Breakouts</div>
+                    <div class="option" data-value="aging">Fine Lines & Wrinkles</div>
+                    <div class="option" data-value="dullness">Dullness & Uneven Tone</div>
+                    <div class="option" data-value="dryness">Dryness & Dehydration</div>
+                    <div class="option" data-value="redness">Redness & Sensitivity</div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question" data-question="3">
+                <h2>How much time do you spend on skincare?</h2>
+                <div class="options">
+                    <div class="option" data-value="minimal">Under 5 minutes - Keep it simple</div>
+                    <div class="option" data-value="moderate">5-10 minutes - Basic routine</div>
+                    <div class="option" data-value="extensive">10+ minutes - Love a full routine</div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question" data-question="4">
+                <h2>What's your budget for skincare?</h2>
+                <div class="options">
+                    <div class="option" data-value="budget">Budget-Friendly (Under $50 total)</div>
+                    <div class="option" data-value="mid">Mid-Range ($50-100 total)</div>
+                    <div class="option" data-value="premium">Premium (Willing to invest)</div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question" data-question="5">
+                <h2>Any ingredients you want to avoid?</h2>
+                <div class="options">
+                    <div class="option" data-value="fragrance">Fragrance-Free preferred</div>
+                    <div class="option" data-value="natural">Natural/Clean beauty only</div>
+                    <div class="option" data-value="none">No restrictions</div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="results" id="results">
+                <h2>Your Perfect Skincare Routine!</h2>
+                <p>Based on your answers, here are our top recommendations:</p>
+
+                <div class="product-recommendations" id="recommendations">
+                    <!-- Products will be inserted here by JavaScript -->
+                </div>
+
+                <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+                <br>
+                <a href="/" class="home-link">&#8592; Back to Home</a>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script>
-        const questions = [
-            {
-                question: "What's your skin type?",
-                options: ["Oily", "Dry", "Combination", "Sensitive"]
-            },
-            {
-                question: "What's your biggest skin concern?",
-                options: ["Acne & Breakouts", "Dryness & Dehydration", "Fine Lines & Aging", "Redness & Irritation"]
-            },
-            {
-                question: "How much time do you spend on skincare?",
-                options: ["Quick - 5 minutes max", "Moderate - 10-15 minutes", "Full routine - 20+ minutes"]
-            },
-            {
-                question: "What's your skincare budget?",
-                options: ["Budget-friendly (under $20)", "Mid-range ($20-50)", "Premium ($50+)"]
-            },
-            {
-                question: "Do you prefer products with fragrance?",
-                options: ["Yes, I love scented products", "No fragrance please", "Don't mind either way"]
-            }
-        ];
-
         const products = {
-            moisturizer: {
-                name: "CeraVe Moisturizing Cream",
-                asin: "B00TTD9BRC",
-                description: "A dermatologist-recommended moisturizer with ceramides and hyaluronic acid. Perfect for all skin types and helps restore the skin barrier.",
-                price: "$18.99"
-            },
-            hydrating: {
-                name: "Neutrogena Hydro Boost",
-                asin: "B00NR1YQHM",
-                description: "Lightweight water-gel moisturizer with hyaluronic acid. Provides intense hydration without clogging pores.",
-                price: "$19.97"
-            },
-            sensitive: {
-                name: "La Roche-Posay Toleriane",
-                asin: "B01N7T7JKJ",
-                description: "Ultra-gentle cleanser for sensitive skin. Fragrance-free and soap-free formula that respects skin's natural pH.",
-                price: "$14.99"
-            },
-            exfoliant: {
-                name: "Paula's Choice 2% BHA Exfoliant",
-                asin: "B00949CTQQ",
-                description: "Cult-favorite salicylic acid exfoliant that unclogs pores, smooths wrinkles, and evens skin tone.",
-                price: "$35.00"
+            cleanser: {
+                budget: {
+                    name: "CeraVe Hydrating Facial Cleanser",
+                    description: "Gentle, non-foaming cleanser that hydrates while cleansing. Perfect for all skin types.",
+                    price: "$15.99",
+                    asin: "B01MSSDEPK"
+                },
+                mid: {
+                    name: "La Roche-Posay Toleriane Hydrating Cleanser",
+                    description: "Dermatologist-tested, fragrance-free cleanser for sensitive skin.",
+                    price: "$15.99",
+                    asin: "B01N7T7JKJ"
+                },
+                premium: {
+                    name: "Cetaphil Gentle Skin Cleanser",
+                    description: "Dermatologist recommended gentle cleanser that's perfect for all skin types.",
+                    price: "$14.99",
+                    asin: "B07GC74LL5"
+                }
             },
             serum: {
-                name: "The Ordinary Niacinamide 10%",
-                asin: "B0B5NXVPPP",
-                description: "High-strength vitamin and mineral formula that reduces the appearance of skin blemishes and congestion.",
-                price: "$11.90"
+                acne: {
+                    name: "Paula's Choice 2% BHA Liquid Exfoliant",
+                    description: "Unclogs pores and smooths wrinkles. Cult-favorite for acne-prone skin.",
+                    price: "$35.00",
+                    asin: "B00949CTQQ"
+                },
+                aging: {
+                    name: "The Ordinary Retinol 0.5% in Squalane",
+                    description: "Effective anti-aging serum that reduces fine lines and improves texture.",
+                    price: "$6.80",
+                    asin: "B07L8MWLJD"
+                },
+                dullness: {
+                    name: "The Ordinary Niacinamide 10% + Zinc 1%",
+                    description: "Brightening serum that minimizes pores and balances oil production.",
+                    price: "$6.50",
+                    asin: "B0B5NXVPPP"
+                },
+                dryness: {
+                    name: "The Ordinary Hyaluronic Acid 2% + B5",
+                    description: "Intense hydration that plumps and smooths dehydrated skin.",
+                    price: "$8.90",
+                    asin: "B07QPK46NV"
+                },
+                redness: {
+                    name: "Thayers Witch Hazel Toner",
+                    description: "Alcohol-free toner that soothes and balances sensitive skin.",
+                    price: "$10.95",
+                    asin: "B00016XJ4M"
+                }
+            },
+            moisturizer: {
+                oily: {
+                    name: "Neutrogena Hydro Boost Water Gel",
+                    description: "Lightweight, oil-free hydration that won't clog pores or feel greasy.",
+                    price: "$19.97",
+                    asin: "B00NR1YQHM"
+                },
+                dry: {
+                    name: "CeraVe Moisturizing Cream",
+                    description: "Rich, ceramide-packed cream that restores and protects dry skin barrier.",
+                    price: "$18.99",
+                    asin: "B00TTD9BRC"
+                },
+                combination: {
+                    name: "La Roche-Posay Toleriane Double Repair",
+                    description: "Balanced moisturizer that hydrates without being too heavy or too light.",
+                    price: "$22.99",
+                    asin: "B01N7T7JKJ"
+                },
+                sensitive: {
+                    name: "CeraVe Moisturizing Cream",
+                    description: "Gentle, fragrance-free cream that's dermatologist recommended for sensitive skin.",
+                    price: "$18.99",
+                    asin: "B00TTD9BRC"
+                },
+                normal: {
+                    name: "Neutrogena Hydro Boost Water Gel",
+                    description: "Lightweight daily moisturizer for balanced, healthy skin.",
+                    price: "$19.97",
+                    asin: "B00NR1YQHM"
+                }
             }
         };
 
-        let currentQuestion = 0;
-        const answers = [];
+        let answers = {};
+        let currentQuestion = 1;
+        const totalQuestions = 5;
 
-        function renderQuestion() {
-            const container = document.getElementById('quiz-content');
-            const progress = document.getElementById('progress-bar');
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                const value = this.dataset.value;
 
-            if (currentQuestion >= questions.length) {
-                showResults();
-                return;
-            }
+                // Store answer
+                answers[questionNum] = value;
 
-            const q = questions[currentQuestion];
-            progress.style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+                // Visual feedback
+                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
 
-            container.innerHTML = `
-                <div class="quiz-question">
-                    <h3>${currentQuestion + 1}. ${q.question}</h3>
-                    <div class="quiz-options">
-                        ${q.options.map((opt, i) => `
-                            <div class="quiz-option" onclick="selectOption(${i})">${opt}</div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button class="quiz-btn quiz-btn-prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>Previous</button>
-                    <button class="quiz-btn quiz-btn-next" onclick="nextQuestion()" id="next-btn" disabled>Next</button>
-                </div>
-            `;
-        }
-
-        function selectOption(index) {
-            answers[currentQuestion] = index;
-            document.querySelectorAll('.quiz-option').forEach((opt, i) => {
-                opt.classList.toggle('selected', i === index);
+                // Move to next question after delay
+                setTimeout(() => {
+                    if (currentQuestion < totalQuestions) {
+                        currentQuestion++;
+                        updateProgress();
+                        showQuestion(currentQuestion);
+                    } else {
+                        showResults();
+                    }
+                }, 400);
             });
-            document.getElementById('next-btn').disabled = false;
+        });
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress').style.width = progress + '%';
         }
 
-        function nextQuestion() {
-            if (answers[currentQuestion] !== undefined) {
-                currentQuestion++;
-                renderQuestion();
-            }
-        }
-
-        function prevQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                renderQuestion();
-            }
+        function showQuestion(num) {
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.querySelector('.question[data-question="' + num + '"]').classList.add('active');
         }
 
         function showResults() {
-            document.getElementById('quiz-content').style.display = 'none';
-            document.getElementById('results').classList.add('show');
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.getElementById('results').classList.add('active');
+            document.getElementById('progress').style.width = '100%';
 
-            // Generate recommendations based on answers
-            const skinType = answers[0]; // 0=Oily, 1=Dry, 2=Combo, 3=Sensitive
-            const concern = answers[1];
+            // Get personalized recommendations
+            const skinType = answers['1'] || 'normal';
+            const concern = answers['2'] || 'dullness';
+            const budget = answers['4'] || 'budget';
 
-            let recommendedProducts = [];
+            const cleanser = products.cleanser[budget];
+            const serum = products.serum[concern];
+            const moisturizer = products.moisturizer[skinType];
 
-            // Always recommend based on skin type
-            if (skinType === 1) { // Dry
-                recommendedProducts.push(products.moisturizer);
-                recommendedProducts.push(products.hydrating);
-            } else if (skinType === 3) { // Sensitive
-                recommendedProducts.push(products.sensitive);
-                recommendedProducts.push(products.moisturizer);
-            } else { // Oily or Combo
-                recommendedProducts.push(products.hydrating);
-                recommendedProducts.push(products.serum);
-            }
+            const recommendations = [
+                { step: 'Step 1: Cleanser', product: cleanser },
+                { step: 'Step 2: Treatment', product: serum },
+                { step: 'Step 3: Moisturizer', product: moisturizer }
+            ];
 
-            // Add based on concern
-            if (concern === 0) { // Acne
-                recommendedProducts.push(products.exfoliant);
-            } else if (concern === 2) { // Aging
-                recommendedProducts.push(products.exfoliant);
-            }
+            let html = '';
+            recommendations.forEach(rec => {
+                html += '<div class="product">' +
+                    '<div class="product-step">' + rec.step + '</div>' +
+                    '<h3>' + rec.product.name + '</h3>' +
+                    '<p>' + rec.product.description + '</p>' +
+                    '<div class="price">' + rec.product.price + '</div>' +
+                    '<a href="https://www.amazon.com/dp/' + rec.product.asin + '?tag=dailydealdarling1-20" target="_blank" rel="nofollow noopener" class="buy-btn">View on Amazon</a>' +
+                    '</div>';
+            });
 
-            // Always add serum if not already there
-            if (!recommendedProducts.includes(products.serum)) {
-                recommendedProducts.push(products.serum);
-            }
+            document.getElementById('recommendations').innerHTML = html;
+        }
 
-            // Limit to 4 products
-            recommendedProducts = recommendedProducts.slice(0, 4);
-
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = recommendedProducts.map(p => `
-                <div class="product-card">
-                    <h4>${p.name}</h4>
-                    <p>${p.description}</p>
-                    <a href="https://www.amazon.com/dp/${p.asin}?tag=dailydealdarling1-20"
-                       class="product-link" target="_blank" rel="nofollow noopener">
-                        Check Price on Amazon &rarr;
-                    </a>
-                </div>
-            `).join('');
+        function restartQuiz() {
+            answers = {};
+            currentQuestion = 1;
+            document.getElementById('results').classList.remove('active');
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('progress').style.width = '0%';
+            showQuestion(1);
         }
 
         // Initialize
-        renderQuestion();
+        updateProgress();
     </script>
 </body>
 </html>

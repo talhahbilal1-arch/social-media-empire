@@ -4,186 +4,434 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Organization Quiz | Daily Deal Darling</title>
-    <meta name="description" content="Get personalized home organization recommendations based on your needs and space!">
-    <link rel="stylesheet" href="/styles.css">
+    <meta name="description" content="Get personalized home organization recommendations based on your needs and space. Find the perfect storage solutions for every room.">
+    <link rel="canonical" href="https://dailydealdarling.com/quizzes/home-organization.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dailydealdarling.com/quizzes/home-organization.html">
+    <meta property="og:title" content="Home Organization Quiz | Daily Deal Darling">
+    <meta property="og:description" content="Find the perfect organization products for your space.">
+    <meta property="og:site_name" content="Daily Deal Darling">
+
+    <!-- Schema.org for Quiz -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Quiz",
+        "name": "Home Organization Quiz",
+        "description": "Get personalized home organization recommendations based on your space and needs",
+        "provider": {
+            "@type": "Organization",
+            "name": "Daily Deal Darling",
+            "url": "https://dailydealdarling.com"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Home Organization"
+        }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --primary-dark: #E85555;
+            --secondary: #FFE5E5;
+            --accent: #FFD93D;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --white: #FFFFFF;
+            --bg-light: #FFF9F9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--white) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--white);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--white);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-content {
+            padding: 40px;
+        }
+
+        .question {
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question h2 {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--secondary);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .results > p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .product-recommendations {
+            display: grid;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .product {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .product h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .product p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .product .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .product .buy-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .product .buy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            .quiz-header h1 {
+                font-size: 1.5rem;
+            }
+            .quiz-content {
+                padding: 25px;
+            }
+            .question h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div>
-                <a href="/" class="logo">Daily Deal Darling</a>
-                <p class="tagline">Your guide to the best products & deals</p>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <a href="/" class="back-link">&#8592; Back to Home</a>
+            <h1>&#127968; Home Organization Quiz</h1>
+            <p>Find the perfect organization solutions in 5 questions</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 0%"></div>
             </div>
         </div>
-    </header>
 
-    <main>
-        <a href="/" class="back-link">&larr; Back to Home</a>
-
-        <div class="quiz-container">
-            <div class="quiz-header">
-                <h1>Home Organization Quiz</h1>
-                <p>Tell us about your space and we'll recommend the perfect organization solutions!</p>
-            </div>
-
-            <div class="quiz-progress">
-                <div class="quiz-progress-bar" id="progress-bar" style="width: 20%;"></div>
-            </div>
-
-            <div id="quiz-content">
-                <!-- Questions will be rendered here by JavaScript -->
-            </div>
-
-            <div class="quiz-results" id="results">
-                <div class="result-icon">&#127968;</div>
-                <h2>Your Organization Essentials!</h2>
-                <p id="results-intro">Here are the perfect products to transform your space:</p>
-                <div class="product-recommendations" id="product-list">
-                    <!-- Products will be rendered here -->
+        <div class="quiz-content">
+            <!-- Question 1 -->
+            <div class="question active" data-question="1">
+                <h2>Which area needs the most organization help?</h2>
+                <div class="options">
+                    <div class="option" data-value="kitchen">Kitchen & Pantry</div>
+                    <div class="option" data-value="closet">Closet & Bedroom</div>
+                    <div class="option" data-value="office">Home Office</div>
+                    <div class="option" data-value="bathroom">Bathroom & Storage</div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <footer>
-        <div class="footer-container">
-            <p class="disclosure">
-                As an Amazon Associate, I earn from qualifying purchases. This site contains affiliate links - if you click and buy, I may receive a small commission at no extra cost to you.
-            </p>
-            <p class="footer-copyright">&copy; 2026 Daily Deal Darling</p>
+            <!-- Question 2 -->
+            <div class="question" data-question="2">
+                <h2>What's your biggest organization challenge?</h2>
+                <div class="options">
+                    <div class="option" data-value="space">Too much stuff, not enough space</div>
+                    <div class="option" data-value="findthings">Can't find things when I need them</div>
+                    <div class="option" data-value="messy">Everything looks messy</div>
+                    <div class="option" data-value="nohome">Items don't have a 'home'</div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question" data-question="3">
+                <h2>What's your organization style?</h2>
+                <div class="options">
+                    <div class="option" data-value="minimalist">Minimalist - clean and simple</div>
+                    <div class="option" data-value="functional">Functional - practicality first</div>
+                    <div class="option" data-value="aesthetic">Aesthetic - looks matter</div>
+                    <div class="option" data-value="hidden">Hidden - out of sight, out of mind</div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question" data-question="4">
+                <h2>How much time can you dedicate to organizing?</h2>
+                <div class="options">
+                    <div class="option" data-value="quick">Quick wins - 30 minutes</div>
+                    <div class="option" data-value="weekend">A weekend project</div>
+                    <div class="option" data-value="ongoing">Ongoing improvements</div>
+                    <div class="option" data-value="makeover">Full room makeover</div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question" data-question="5">
+                <h2>What's your budget for organization products?</h2>
+                <div class="options">
+                    <div class="option" data-value="budget">Budget-friendly (under $30)</div>
+                    <div class="option" data-value="moderate">Moderate ($30-$75)</div>
+                    <div class="option" data-value="investment">Investment ($75-$150)</div>
+                    <div class="option" data-value="premium">Premium ($150+)</div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="results" id="results">
+                <h2>Your Organization Essentials!</h2>
+                <p>Here are the perfect products to transform your space:</p>
+
+                <div class="product-recommendations" id="recommendations">
+                    <!-- Products will be inserted here by JavaScript -->
+                </div>
+
+                <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+                <br>
+                <a href="/" class="home-link">&#8592; Back to Home</a>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script>
-        const questions = [
-            {
-                question: "Which area needs the most organization help?",
-                options: ["Kitchen & Pantry", "Closet & Bedroom", "Home Office", "Bathroom & Storage"]
-            },
-            {
-                question: "What's your biggest organization challenge?",
-                options: ["Too much stuff, not enough space", "Can't find things when I need them", "Everything looks messy", "Items don't have a 'home'"]
-            },
-            {
-                question: "What's your organization style?",
-                options: ["Minimalist - clean and simple", "Functional - practicality first", "Aesthetic - looks matter", "Hidden - out of sight, out of mind"]
-            },
-            {
-                question: "How much time can you dedicate to organizing?",
-                options: ["Quick wins - 30 minutes", "A weekend project", "Ongoing improvements", "Full room makeover"]
-            },
-            {
-                question: "What's your budget for organization products?",
-                options: ["Budget-friendly (under $30)", "Moderate ($30-$75)", "Investment ($75-$150)", "Premium ($150+)"]
-            }
-        ];
-
         const products = {
             kitchen: [
-                { name: "OXO Good Grips Containers", asin: "B079S4TJ1R", description: "Airtight food storage containers that keep pantry items fresh. Stackable and space-saving design.", price: "$49.99" },
-                { name: "OXO Good Grips Measuring Cups", asin: "B0000CCY2E", description: "Soft, non-slip handles make measuring easy. Includes both dry and liquid measurements.", price: "$19.99" }
+                { name: "OXO Good Grips Pop Containers", description: "Airtight food storage containers that keep pantry items fresh. Stackable and space-saving design.", price: "$49.99", asin: "B079S4TJ1R" },
+                { name: "OXO Good Grips Measuring Cups", description: "Soft, non-slip handles make measuring easy. Includes both dry and liquid measurements.", price: "$19.99", asin: "B0000CCY2E" },
+                { name: "Joseph Joseph Index Cutting Boards", description: "Color-coded cutting boards for different food types. Keeps your kitchen organized and hygienic.", price: "$39.99", asin: "B0014XXB4A" }
             ],
             closet: [
-                { name: "Lifewit Large Capacity Clothes Storage", asin: "B07PFQ4MZB", description: "Foldable storage bags for seasonal clothes and bedding. Clear window for easy identification.", price: "$25.99" },
-                { name: "Sorbus Drawer Organizer", asin: "B07VL1M49M", description: "Adjustable drawer dividers that keep clothes neat and visible. Works in any drawer size.", price: "$21.99" }
+                { name: "Lifewit Large Capacity Clothes Storage", description: "Foldable storage bags for seasonal clothes and bedding. Clear window for easy identification.", price: "$25.99", asin: "B07PFQ4MZB" },
+                { name: "Sorbus Drawer Organizer", description: "Adjustable drawer dividers that keep clothes neat and visible. Works in any drawer size.", price: "$21.99", asin: "B07VL1M49M" },
+                { name: "SONGMICS Cube Storage Organizer", description: "Modular storage cubes perfect for closets, bedrooms, or living rooms.", price: "$49.99", asin: "B074N4TSKM" }
             ],
             office: [
-                { name: "SimpleHouseware Mesh Desk Organizer", asin: "B074FXWS81", description: "Keep your desk tidy with this multi-compartment organizer. Holds supplies, files, and more.", price: "$14.97" },
-                { name: "mDesign Plastic Storage Bins", asin: "B07D7WDN8D", description: "Versatile storage bins with handles. Great for office supplies, craft materials, or bathroom items.", price: "$29.99" }
+                { name: "SimpleHouseware Mesh Desk Organizer", description: "Keep your desk tidy with this multi-compartment organizer. Holds supplies, files, and more.", price: "$14.97", asin: "B074FXWS81" },
+                { name: "mDesign Plastic Storage Bins", description: "Versatile storage bins with handles. Great for office supplies, craft materials, or bathroom items.", price: "$29.99", asin: "B07D7WDN8D" }
             ],
-            storage: [
-                { name: "mDesign Plastic Storage Bins", asin: "B07D7WDN8D", description: "Clear storage bins with built-in handles. Perfect for bathroom, closet, or pantry organization.", price: "$29.99" },
-                { name: "Lifewit Large Capacity Clothes Storage", asin: "B07PFQ4MZB", description: "Protect and store seasonal items. Sturdy handles and reinforced bottom.", price: "$25.99" }
-            ],
-            budget: [
-                { name: "SimpleHouseware Mesh Desk Organizer", asin: "B074FXWS81", description: "Affordable way to organize any workspace. Durable steel mesh construction.", price: "$14.97" },
-                { name: "Sorbus Drawer Organizer", asin: "B07VL1M49M", description: "Transform messy drawers instantly. Easy to install and adjust.", price: "$21.99" }
+            bathroom: [
+                { name: "mDesign Plastic Storage Bins", description: "Clear storage bins with built-in handles. Perfect for bathroom, closet, or pantry organization.", price: "$29.99", asin: "B07D7WDN8D" },
+                { name: "Sorbus Drawer Organizer", description: "Keep bathroom drawers neat and tidy. Find what you need instantly.", price: "$21.99", asin: "B07VL1M49M" },
+                { name: "SimpleHouseware Mesh Desk Organizer", description: "Works great in bathrooms too! Organize toiletries and accessories.", price: "$14.97", asin: "B074FXWS81" }
             ]
         };
 
-        let currentQuestion = 0;
-        const answers = [];
+        let answers = {};
+        let currentQuestion = 1;
+        const totalQuestions = 5;
 
-        function renderQuestion() {
-            const container = document.getElementById('quiz-content');
-            const progress = document.getElementById('progress-bar');
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                const value = this.dataset.value;
 
-            if (currentQuestion >= questions.length) {
-                showResults();
-                return;
-            }
+                answers[questionNum] = value;
 
-            const q = questions[currentQuestion];
-            progress.style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
 
-            container.innerHTML = `
-                <div class="quiz-question">
-                    <h3>${currentQuestion + 1}. ${q.question}</h3>
-                    <div class="quiz-options">
-                        ${q.options.map((opt, i) => `
-                            <div class="quiz-option" onclick="selectOption(${i})">${opt}</div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button class="quiz-btn quiz-btn-prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>Previous</button>
-                    <button class="quiz-btn quiz-btn-next" onclick="nextQuestion()" id="next-btn" disabled>Next</button>
-                </div>
-            `;
-        }
-
-        function selectOption(index) {
-            answers[currentQuestion] = index;
-            document.querySelectorAll('.quiz-option').forEach((opt, i) => {
-                opt.classList.toggle('selected', i === index);
+                setTimeout(() => {
+                    if (currentQuestion < totalQuestions) {
+                        currentQuestion++;
+                        updateProgress();
+                        showQuestion(currentQuestion);
+                    } else {
+                        showResults();
+                    }
+                }, 400);
             });
-            document.getElementById('next-btn').disabled = false;
+        });
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress').style.width = progress + '%';
         }
 
-        function nextQuestion() {
-            if (answers[currentQuestion] !== undefined) {
-                currentQuestion++;
-                renderQuestion();
-            }
-        }
-
-        function prevQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                renderQuestion();
-            }
+        function showQuestion(num) {
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.querySelector('.question[data-question="' + num + '"]').classList.add('active');
         }
 
         function showResults() {
-            document.getElementById('quiz-content').style.display = 'none';
-            document.getElementById('results').classList.add('show');
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.getElementById('results').classList.add('active');
+            document.getElementById('progress').style.width = '100%';
 
-            const area = answers[0]; // 0=kitchen, 1=closet, 2=office, 3=storage
-            const budget = answers[4]; // 0=budget, 1=moderate, 2=investment, 3=premium
+            const area = answers['1'] || 'kitchen';
 
             let recommendedProducts = [];
 
-            // Select products based on area
-            if (area === 0) {
-                recommendedProducts = [...products.kitchen];
-            } else if (area === 1) {
-                recommendedProducts = [...products.closet];
-            } else if (area === 2) {
-                recommendedProducts = [...products.office];
-            } else {
-                recommendedProducts = [...products.storage];
+            // Get products based on area
+            if (products[area]) {
+                recommendedProducts = [...products[area]];
             }
 
-            // Add budget items if budget-conscious
-            if (budget === 0) {
-                recommendedProducts = [...products.budget, ...recommendedProducts];
+            // Add complementary products from other areas
+            if (area !== 'kitchen' && products.kitchen[0]) {
+                recommendedProducts.push(products.kitchen[0]);
+            }
+            if (area !== 'office' && products.office[0]) {
+                recommendedProducts.push(products.office[0]);
             }
 
-            // Add complementary products
-            if (area !== 0) recommendedProducts.push(products.kitchen[0]);
-            if (area !== 2) recommendedProducts.push(products.office[0]);
-
-            // Remove duplicates and limit to 4
+            // Remove duplicates by ASIN
             const seen = new Set();
             recommendedProducts = recommendedProducts.filter(p => {
                 if (seen.has(p.asin)) return false;
@@ -191,21 +439,29 @@
                 return true;
             }).slice(0, 4);
 
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = recommendedProducts.map(p => `
-                <div class="product-card">
-                    <h4>${p.name}</h4>
-                    <p>${p.description}</p>
-                    <a href="https://www.amazon.com/dp/${p.asin}?tag=dailydealdarling1-20"
-                       class="product-link" target="_blank" rel="nofollow noopener">
-                        Check Price on Amazon &rarr;
-                    </a>
-                </div>
-            `).join('');
+            let html = '';
+            recommendedProducts.forEach(product => {
+                html += '<div class="product">' +
+                    '<h3>' + product.name + '</h3>' +
+                    '<p>' + product.description + '</p>' +
+                    '<div class="price">' + product.price + '</div>' +
+                    '<a href="https://www.amazon.com/dp/' + product.asin + '?tag=dailydealdarling1-20" target="_blank" rel="nofollow noopener" class="buy-btn">View on Amazon</a>' +
+                    '</div>';
+            });
+
+            document.getElementById('recommendations').innerHTML = html;
         }
 
-        // Initialize
-        renderQuestion();
+        function restartQuiz() {
+            answers = {};
+            currentQuestion = 1;
+            document.getElementById('results').classList.remove('active');
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('progress').style.width = '0%';
+            showQuestion(1);
+        }
+
+        updateProgress();
     </script>
 </body>
 </html>
