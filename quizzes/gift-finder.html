@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Finder Quiz | Daily Deal Darling</title>
+    <meta name="description" content="Find the perfect gift with our personalized quiz. Get gift recommendations for anyone on your list!">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div>
+                <a href="/" class="logo">Daily Deal Darling</a>
+                <p class="tagline">Your guide to the best products & deals</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <a href="/" class="back-link">&larr; Back to Home</a>
+
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1>Find the Perfect Gift</h1>
+                <p>Tell us about who you're shopping for and we'll find the ideal present!</p>
+            </div>
+
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" id="progress-bar" style="width: 25%;"></div>
+            </div>
+
+            <div id="quiz-content">
+                <!-- Questions will be rendered here by JavaScript -->
+            </div>
+
+            <div class="quiz-results" id="results">
+                <div class="result-icon">&#127873;</div>
+                <h2>Perfect Gift Ideas!</h2>
+                <p id="results-intro">Based on your answers, here are our top gift recommendations:</p>
+                <div class="product-recommendations" id="product-list">
+                    <!-- Products will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <p class="disclosure">
+                As an Amazon Associate, I earn from qualifying purchases. This site contains affiliate links - if you click and buy, I may receive a small commission at no extra cost to you.
+            </p>
+            <p class="footer-copyright">&copy; 2026 Daily Deal Darling</p>
+        </div>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "Who are you shopping for?",
+                options: ["Woman (18-35)", "Woman (35+)", "Man", "Teen/Young Adult"]
+            },
+            {
+                question: "What are their interests?",
+                options: ["Self-care & Beauty", "Home & Cooking", "Tech & Gadgets", "Reading & Relaxation"]
+            },
+            {
+                question: "What's the occasion?",
+                options: ["Birthday", "Holiday/Christmas", "Just Because", "Thank You Gift"]
+            },
+            {
+                question: "What's your budget?",
+                options: ["Under $25", "$25-$50", "$50-$100", "$100+"]
+            }
+        ];
+
+        const productCategories = {
+            selfcare: [
+                { name: "Theragun Mini Massage Gun", asin: "B086Z4P8MD", description: "Portable deep tissue massage therapy. Perfect for muscle recovery and relaxation.", price: "$199" },
+                { name: "Laneige Lip Sleeping Mask", asin: "B07GQWQFHM", description: "Cult-favorite overnight lip treatment that leaves lips soft and supple.", price: "$24" },
+                { name: "Essential Oil Diffuser", asin: "B07L9LT62H", description: "Create a spa-like atmosphere at home with this elegant aromatherapy diffuser.", price: "$19.99" }
+            ],
+            home: [
+                { name: "Instant Pot Duo 7-in-1", asin: "B00FLYWNYQ", description: "The ultimate kitchen multi-cooker. Pressure cooker, slow cooker, rice cooker, and more!", price: "$89" },
+                { name: "Lodge Cast Iron Skillet", asin: "B00006JSUB", description: "A kitchen classic that lasts generations. Pre-seasoned and ready to use.", price: "$24.99" },
+                { name: "KitchenAid Mixing Bowls", asin: "B079Q72WF1", description: "Beautiful, functional mixing bowls in assorted sizes. Dishwasher safe.", price: "$39.99" }
+            ],
+            tech: [
+                { name: "Kindle Paperwhite", asin: "B08KTZ8249", description: "Waterproof e-reader with adjustable warm light. Read anywhere, anytime.", price: "$139" },
+                { name: "Ninja Blender", asin: "B07SS87PMB", description: "Professional-grade blending for smoothies, soups, and more.", price: "$99.99" }
+            ],
+            relaxation: [
+                { name: "Weighted Blanket", asin: "B07JR3B1FV", description: "Promotes relaxation and better sleep with gentle, even pressure.", price: "$49.99" },
+                { name: "Kindle Paperwhite", asin: "B08KTZ8249", description: "Waterproof e-reader with adjustable warm light. Perfect for book lovers.", price: "$139" },
+                { name: "Laneige Lip Sleeping Mask", asin: "B07GQWQFHM", description: "Luxurious overnight lip treatment. A pampering treat!", price: "$24" }
+            ],
+            budget: [
+                { name: "Laneige Lip Sleeping Mask", asin: "B07GQWQFHM", description: "Luxurious lip treatment that makes an amazing gift.", price: "$24" },
+                { name: "Essential Oil Diffuser", asin: "B07L9LT62H", description: "Turn any space into a relaxing oasis.", price: "$19.99" },
+                { name: "OXO Good Grips Measuring Cups", asin: "B0000CCY2E", description: "Kitchen essential with soft, comfortable handles.", price: "$19.99" }
+            ]
+        };
+
+        let currentQuestion = 0;
+        const answers = [];
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-content');
+            const progress = document.getElementById('progress-bar');
+
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            progress.style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <h3>${currentQuestion + 1}. ${q.question}</h3>
+                    <div class="quiz-options">
+                        ${q.options.map((opt, i) => `
+                            <div class="quiz-option" onclick="selectOption(${i})">${opt}</div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="quiz-nav">
+                    <button class="quiz-btn quiz-btn-prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>Previous</button>
+                    <button class="quiz-btn quiz-btn-next" onclick="nextQuestion()" id="next-btn" disabled>Next</button>
+                </div>
+            `;
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            document.querySelectorAll('.quiz-option').forEach((opt, i) => {
+                opt.classList.toggle('selected', i === index);
+            });
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestion] !== undefined) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('results').classList.add('show');
+
+            const interest = answers[1]; // 0=selfcare, 1=home, 2=tech, 3=relaxation
+            const budget = answers[3]; // 0=under25, 1=25-50, 2=50-100, 3=100+
+
+            let recommendedProducts = [];
+
+            // Select products based on interest
+            if (interest === 0) {
+                recommendedProducts = [...productCategories.selfcare];
+            } else if (interest === 1) {
+                recommendedProducts = [...productCategories.home];
+            } else if (interest === 2) {
+                recommendedProducts = [...productCategories.tech];
+            } else {
+                recommendedProducts = [...productCategories.relaxation];
+            }
+
+            // If budget is low, prioritize budget items
+            if (budget === 0) {
+                recommendedProducts = [...productCategories.budget, ...recommendedProducts];
+            }
+
+            // Remove duplicates and limit to 4
+            const seen = new Set();
+            recommendedProducts = recommendedProducts.filter(p => {
+                if (seen.has(p.asin)) return false;
+                seen.add(p.asin);
+                return true;
+            }).slice(0, 4);
+
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = recommendedProducts.map(p => `
+                <div class="product-card">
+                    <h4>${p.name}</h4>
+                    <p>${p.description}</p>
+                    <a href="https://www.amazon.com/dp/${p.asin}?tag=dailydealdarling1-20"
+                       class="product-link" target="_blank" rel="nofollow noopener">
+                        Check Price on Amazon &rarr;
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        renderQuestion();
+    </script>
+</body>
+</html>

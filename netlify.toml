@@ -1,6 +1,23 @@
 [build]
   publish = "."
 
+# Quiz routes - clean URLs
+[[redirects]]
+  from = "/quiz/skincare-routine"
+  to = "/quizzes/skincare-routine.html"
+  status = 200
+
+[[redirects]]
+  from = "/quiz/gift-finder"
+  to = "/quizzes/gift-finder.html"
+  status = 200
+
+[[redirects]]
+  from = "/quiz/home-organization"
+  to = "/quizzes/home-organization.html"
+  status = 200
+
+# Legacy quiz routes (from previous version)
 [[redirects]]
   from = "/quiz-morning"
   to = "/quiz-morning.html"
@@ -35,3 +52,9 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Pretty URLs for HTML files
+[build.processing]
+  skip_processing = false
+[build.processing.html]
+  pretty_urls = true

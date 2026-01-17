@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Daily Deal Darling - Discover the best daily deals tailored just for you. Take our fun quizzes to find deals that match your lifestyle!">
-    <title>Daily Deal Darling - Your Personal Deal Finder</title>
+    <title>Daily Deal Darling | Product Recommendations & Deals</title>
+    <meta name="description" content="Find the best Amazon deals and product recommendations with our fun quizzes and expert reviews. Your guide to smart shopping!">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Header -->
     <header>
         <div class="header-container">
-            <a href="/" class="logo">Daily<span>Deal</span>Darling</a>
+            <div>
+                <a href="/" class="logo">Daily Deal Darling</a>
+                <p class="tagline">Your guide to the best products & deals</p>
+            </div>
             <nav>
                 <ul>
-                    <li><a href="/">Home</a></li>
                     <li><a href="#quizzes">Quizzes</a></li>
+                    <li><a href="#articles">Articles</a></li>
                     <li><a href="#about">About</a></li>
                 </ul>
             </nav>
@@ -26,56 +29,91 @@
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <h1>Find Your Perfect Deals</h1>
-            <p>Take our fun quizzes to discover personalized deals that match your lifestyle, interests, and daily routines!</p>
-            <a href="#quizzes" class="cta-button">Start Finding Deals</a>
+            <h1>Find Your Perfect Products</h1>
+            <p>Take our fun quizzes to discover personalized product recommendations, or browse our expert reviews to find the best deals on items you'll love!</p>
+            <a href="#quizzes" class="cta-button">Take a Quiz</a>
         </section>
 
-        <!-- Quiz Cards Section -->
+        <!-- Quiz Section -->
         <section id="quizzes">
-            <h2 style="text-align: center; margin-bottom: 1rem;">Choose Your Quiz</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Each quiz helps us find the perfect deals for different parts of your day</p>
-
+            <h2>Find Your Perfect Products</h2>
             <div class="quiz-grid">
-                <a href="/quiz-morning" class="quiz-card">
-                    <div class="quiz-card-icon">&#9728;&#65039;</div>
-                    <h3>Morning Routine</h3>
-                    <p>Discover deals for your perfect morning - from coffee to skincare essentials</p>
+                <a href="/quiz/skincare-routine" class="card">
+                    <div class="card-icon">&#129535;</div>
+                    <h3>Skincare Routine Quiz</h3>
+                    <p>Discover the perfect skincare products for your unique skin type and concerns.</p>
+                    <span class="card-tag">5 Questions</span>
                 </a>
 
-                <a href="/quiz-beauty" class="quiz-card">
-                    <div class="quiz-card-icon">&#128132;</div>
-                    <h3>Beauty Finds</h3>
-                    <p>Uncover makeup, skincare, and beauty deals tailored to your style</p>
+                <a href="/quiz/gift-finder" class="card">
+                    <div class="card-icon">&#127873;</div>
+                    <h3>Gift Finder Quiz</h3>
+                    <p>Find the perfect gift for anyone on your list - we'll match you with great ideas!</p>
+                    <span class="card-tag">4 Questions</span>
                 </a>
 
-                <a href="/quiz-selfcare" class="quiz-card">
-                    <div class="quiz-card-icon">&#128149;</div>
-                    <h3>Self-Care</h3>
-                    <p>Find relaxation and wellness deals for your self-care moments</p>
+                <a href="/quiz/home-organization" class="card">
+                    <div class="card-icon">&#127968;</div>
+                    <h3>Home Organization Quiz</h3>
+                    <p>Get personalized recommendations for organizing every room in your home.</p>
+                    <span class="card-tag">5 Questions</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Articles Section -->
+        <section id="articles">
+            <h2>Latest Reviews & Guides</h2>
+            <div class="article-grid">
+                <a href="/articles/best-skincare-routine-2025.html" class="card">
+                    <div class="card-icon">&#10024;</div>
+                    <h3>Best Skincare Routine 2025</h3>
+                    <p>Our top picks for cleansers, serums, and moisturizers that actually work.</p>
+                    <span class="card-tag">5 Products</span>
                 </a>
 
-                <a href="/quiz-organization" class="quiz-card">
-                    <div class="quiz-card-icon">&#128221;</div>
-                    <h3>Organization</h3>
-                    <p>Get deals on planners, storage, and tools to organize your life</p>
+                <a href="/articles/home-organization-essentials.html" class="card">
+                    <div class="card-icon">&#128230;</div>
+                    <h3>Home Organization Essentials</h3>
+                    <p>Transform your space with these must-have storage and organization products.</p>
+                    <span class="card-tag">5 Products</span>
                 </a>
 
-                <a href="/quiz-lifestyle" class="quiz-card">
-                    <div class="quiz-card-icon">&#127968;</div>
-                    <h3>Lifestyle</h3>
-                    <p>Explore home, fashion, and lifestyle deals that fit your vibe</p>
+                <a href="/articles/self-care-sunday-essentials.html" class="card">
+                    <div class="card-icon">&#128149;</div>
+                    <h3>Self-Care Sunday Essentials</h3>
+                    <p>Create the ultimate relaxation routine with these pampering products.</p>
+                    <span class="card-tag">5 Products</span>
+                </a>
+
+                <a href="/articles/morning-routine-products.html" class="card">
+                    <div class="card-icon">&#9728;&#65039;</div>
+                    <h3>Morning Routine Products</h3>
+                    <p>Start your day right with these energizing and productivity-boosting finds.</p>
+                    <span class="card-tag">5 Products</span>
+                </a>
+
+                <a href="/articles/amazon-finds-under-25.html" class="card">
+                    <div class="card-icon">&#128176;</div>
+                    <h3>Amazon Finds Under $25</h3>
+                    <p>Amazing deals that won't break the bank - all under twenty-five dollars!</p>
+                    <span class="card-tag">10 Products</span>
+                </a>
+
+                <a href="/articles/best-kitchen-gadgets.html" class="card">
+                    <div class="card-icon">&#127859;</div>
+                    <h3>Best Kitchen Gadgets</h3>
+                    <p>Level up your cooking game with these genius kitchen tools and appliances.</p>
+                    <span class="card-tag">5 Products</span>
                 </a>
             </div>
         </section>
 
         <!-- About Section -->
-        <section id="about" style="margin-top: 4rem; text-align: center; max-width: 700px; margin-left: auto; margin-right: auto;">
-            <h2>Why Daily Deal Darling?</h2>
+        <section id="about" style="text-align: center; max-width: 700px; margin: 0 auto;">
+            <h2>About Daily Deal Darling</h2>
             <p style="color: #666; margin-top: 1rem;">
-                We know how overwhelming it can be to find great deals among the noise. That's why we created Daily Deal Darling -
-                to help smart shoppers like you discover personalized deals that actually matter. Take our quick quizzes and
-                let us do the hunting for you!
+                We're passionate about helping you find the best products at the best prices. Our team tests and reviews hundreds of products to bring you honest recommendations you can trust. Whether you're looking for skincare essentials, home organization solutions, or the perfect gift, we've got you covered!
             </p>
         </section>
     </main>
@@ -85,24 +123,26 @@
         <div class="footer-container">
             <!-- Email Signup Section -->
             <div class="footer-signup">
-                <h3>Get daily deals in your inbox</h3>
+                <h3>Get Daily Deals in Your Inbox</h3>
                 <form id="footer-signup-form" class="footer-signup-form">
                     <input type="email" placeholder="Enter your email" required>
                     <button type="submit">Subscribe</button>
                 </form>
             </div>
 
-            <!-- Footer Bottom -->
-            <div class="footer-bottom">
-                <div class="footer-links">
-                    <a href="/">Home</a>
-                    <a href="#quizzes">Quizzes</a>
-                    <a href="#about">About</a>
-                </div>
-                <div class="footer-copyright">
-                    &copy; 2024 Daily Deal Darling. All rights reserved.
-                </div>
+            <!-- Affiliate Disclosure -->
+            <p class="disclosure">
+                As an Amazon Associate, I earn from qualifying purchases. This site contains affiliate links - if you click and buy, I may receive a small commission at no extra cost to you.
+            </p>
+
+            <!-- Footer Links -->
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="#quizzes">Quizzes</a>
+                <a href="#articles">Articles</a>
             </div>
+
+            <p class="footer-copyright">&copy; 2026 Daily Deal Darling. All rights reserved.</p>
         </div>
     </footer>
 
@@ -110,20 +150,16 @@
     <div id="email-popup" class="email-popup-overlay">
         <div class="email-popup">
             <button class="popup-close">&times;</button>
-
             <div class="popup-form-content">
                 <div class="popup-icon">&#128149;</div>
-                <h2>Wait! Get Exclusive Deals &#128149;</h2>
+                <h2>Wait! Get Exclusive Deals</h2>
                 <p>Join 10,000+ smart shoppers getting the best daily deals delivered free.</p>
-
                 <form class="popup-form">
                     <input type="email" placeholder="Enter your email address" required>
                     <button type="submit">Send Me Deals!</button>
                 </form>
-
                 <p class="popup-disclaimer">No spam, ever. Unsubscribe anytime.</p>
             </div>
-
             <div class="popup-success">
                 <div class="popup-icon">&#127881;</div>
                 <h2>You're In!</h2>

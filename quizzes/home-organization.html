@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Organization Quiz | Daily Deal Darling</title>
+    <meta name="description" content="Get personalized home organization recommendations based on your needs and space!">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div>
+                <a href="/" class="logo">Daily Deal Darling</a>
+                <p class="tagline">Your guide to the best products & deals</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <a href="/" class="back-link">&larr; Back to Home</a>
+
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1>Home Organization Quiz</h1>
+                <p>Tell us about your space and we'll recommend the perfect organization solutions!</p>
+            </div>
+
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" id="progress-bar" style="width: 20%;"></div>
+            </div>
+
+            <div id="quiz-content">
+                <!-- Questions will be rendered here by JavaScript -->
+            </div>
+
+            <div class="quiz-results" id="results">
+                <div class="result-icon">&#127968;</div>
+                <h2>Your Organization Essentials!</h2>
+                <p id="results-intro">Here are the perfect products to transform your space:</p>
+                <div class="product-recommendations" id="product-list">
+                    <!-- Products will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <p class="disclosure">
+                As an Amazon Associate, I earn from qualifying purchases. This site contains affiliate links - if you click and buy, I may receive a small commission at no extra cost to you.
+            </p>
+            <p class="footer-copyright">&copy; 2026 Daily Deal Darling</p>
+        </div>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "Which area needs the most organization help?",
+                options: ["Kitchen & Pantry", "Closet & Bedroom", "Home Office", "Bathroom & Storage"]
+            },
+            {
+                question: "What's your biggest organization challenge?",
+                options: ["Too much stuff, not enough space", "Can't find things when I need them", "Everything looks messy", "Items don't have a 'home'"]
+            },
+            {
+                question: "What's your organization style?",
+                options: ["Minimalist - clean and simple", "Functional - practicality first", "Aesthetic - looks matter", "Hidden - out of sight, out of mind"]
+            },
+            {
+                question: "How much time can you dedicate to organizing?",
+                options: ["Quick wins - 30 minutes", "A weekend project", "Ongoing improvements", "Full room makeover"]
+            },
+            {
+                question: "What's your budget for organization products?",
+                options: ["Budget-friendly (under $30)", "Moderate ($30-$75)", "Investment ($75-$150)", "Premium ($150+)"]
+            }
+        ];
+
+        const products = {
+            kitchen: [
+                { name: "OXO Good Grips Containers", asin: "B079S4TJ1R", description: "Airtight food storage containers that keep pantry items fresh. Stackable and space-saving design.", price: "$49.99" },
+                { name: "OXO Good Grips Measuring Cups", asin: "B0000CCY2E", description: "Soft, non-slip handles make measuring easy. Includes both dry and liquid measurements.", price: "$19.99" }
+            ],
+            closet: [
+                { name: "Lifewit Large Capacity Clothes Storage", asin: "B07PFQ4MZB", description: "Foldable storage bags for seasonal clothes and bedding. Clear window for easy identification.", price: "$25.99" },
+                { name: "Sorbus Drawer Organizer", asin: "B07VL1M49M", description: "Adjustable drawer dividers that keep clothes neat and visible. Works in any drawer size.", price: "$21.99" }
+            ],
+            office: [
+                { name: "SimpleHouseware Mesh Desk Organizer", asin: "B074FXWS81", description: "Keep your desk tidy with this multi-compartment organizer. Holds supplies, files, and more.", price: "$14.97" },
+                { name: "mDesign Plastic Storage Bins", asin: "B07D7WDN8D", description: "Versatile storage bins with handles. Great for office supplies, craft materials, or bathroom items.", price: "$29.99" }
+            ],
+            storage: [
+                { name: "mDesign Plastic Storage Bins", asin: "B07D7WDN8D", description: "Clear storage bins with built-in handles. Perfect for bathroom, closet, or pantry organization.", price: "$29.99" },
+                { name: "Lifewit Large Capacity Clothes Storage", asin: "B07PFQ4MZB", description: "Protect and store seasonal items. Sturdy handles and reinforced bottom.", price: "$25.99" }
+            ],
+            budget: [
+                { name: "SimpleHouseware Mesh Desk Organizer", asin: "B074FXWS81", description: "Affordable way to organize any workspace. Durable steel mesh construction.", price: "$14.97" },
+                { name: "Sorbus Drawer Organizer", asin: "B07VL1M49M", description: "Transform messy drawers instantly. Easy to install and adjust.", price: "$21.99" }
+            ]
+        };
+
+        let currentQuestion = 0;
+        const answers = [];
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-content');
+            const progress = document.getElementById('progress-bar');
+
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            progress.style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <h3>${currentQuestion + 1}. ${q.question}</h3>
+                    <div class="quiz-options">
+                        ${q.options.map((opt, i) => `
+                            <div class="quiz-option" onclick="selectOption(${i})">${opt}</div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="quiz-nav">
+                    <button class="quiz-btn quiz-btn-prev" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>Previous</button>
+                    <button class="quiz-btn quiz-btn-next" onclick="nextQuestion()" id="next-btn" disabled>Next</button>
+                </div>
+            `;
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            document.querySelectorAll('.quiz-option').forEach((opt, i) => {
+                opt.classList.toggle('selected', i === index);
+            });
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestion] !== undefined) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('results').classList.add('show');
+
+            const area = answers[0]; // 0=kitchen, 1=closet, 2=office, 3=storage
+            const budget = answers[4]; // 0=budget, 1=moderate, 2=investment, 3=premium
+
+            let recommendedProducts = [];
+
+            // Select products based on area
+            if (area === 0) {
+                recommendedProducts = [...products.kitchen];
+            } else if (area === 1) {
+                recommendedProducts = [...products.closet];
+            } else if (area === 2) {
+                recommendedProducts = [...products.office];
+            } else {
+                recommendedProducts = [...products.storage];
+            }
+
+            // Add budget items if budget-conscious
+            if (budget === 0) {
+                recommendedProducts = [...products.budget, ...recommendedProducts];
+            }
+
+            // Add complementary products
+            if (area !== 0) recommendedProducts.push(products.kitchen[0]);
+            if (area !== 2) recommendedProducts.push(products.office[0]);
+
+            // Remove duplicates and limit to 4
+            const seen = new Set();
+            recommendedProducts = recommendedProducts.filter(p => {
+                if (seen.has(p.asin)) return false;
+                seen.add(p.asin);
+                return true;
+            }).slice(0, 4);
+
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = recommendedProducts.map(p => `
+                <div class="product-card">
+                    <h4>${p.name}</h4>
+                    <p>${p.description}</p>
+                    <a href="https://www.amazon.com/dp/${p.asin}?tag=dailydealdarling1-20"
+                       class="product-link" target="_blank" rel="nofollow noopener">
+                        Check Price on Amazon &rarr;
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        renderQuestion();
+    </script>
+</body>
+</html>
