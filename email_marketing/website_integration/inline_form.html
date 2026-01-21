@@ -1,0 +1,224 @@
+<!--
+  Inline Email Signup Form
+  Use: Embed within blog posts or content pages
+
+  Usage:
+  1. Copy this HTML where you want the form
+  2. Update form_id in the script
+  3. Customize colors with CSS variables
+-->
+
+<style>
+  .sme-inline-signup {
+    --brand-primary: #E91E63;
+    --brand-light: #FCE4EC;
+
+    background: linear-gradient(135deg, var(--brand-light) 0%, #fff 100%);
+    border-radius: 16px;
+    padding: 30px;
+    margin: 40px 0;
+    border: 2px solid var(--brand-primary);
+  }
+
+  .sme-inline-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  .sme-inline-icon {
+    font-size: 40px;
+  }
+
+  .sme-inline-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+
+  .sme-inline-description {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .sme-inline-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+  }
+
+  .sme-inline-benefits li {
+    padding: 8px 0;
+    padding-left: 28px;
+    position: relative;
+    color: #555;
+  }
+
+  .sme-inline-benefits li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--brand-primary);
+    font-weight: bold;
+  }
+
+  .sme-inline-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .sme-inline-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 14px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .sme-inline-input:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+  }
+
+  .sme-inline-button {
+    padding: 14px 28px;
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .sme-inline-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .sme-inline-privacy {
+    font-size: 12px;
+    color: #999;
+    margin-top: 12px;
+  }
+
+  .sme-inline-success {
+    display: none;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .sme-inline-success.show {
+    display: block;
+  }
+
+  .sme-inline-success h3 {
+    color: var(--brand-primary);
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .sme-inline-form {
+      flex-direction: column;
+    }
+
+    .sme-inline-input,
+    .sme-inline-button {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="sme-inline-signup" id="inline-signup-form">
+  <div class="sme-inline-content">
+    <div class="sme-inline-header">
+      <span class="sme-inline-icon">📬</span>
+      <h3 class="sme-inline-title">Get Weekly Tips & Deals</h3>
+    </div>
+
+    <p class="sme-inline-description">
+      Join our community and never miss out on the best finds, tips, and exclusive content!
+    </p>
+
+    <ul class="sme-inline-benefits">
+      <li>Weekly curated deals & recommendations</li>
+      <li>Exclusive tips you won't find anywhere else</li>
+      <li>Free downloadable resources</li>
+      <li>First access to new content</li>
+    </ul>
+
+    <form class="sme-inline-form" id="inline-form" onsubmit="return submitInlineForm(event)">
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter your email"
+        class="sme-inline-input"
+        required
+      >
+      <button type="submit" class="sme-inline-button">
+        Subscribe Free →
+      </button>
+    </form>
+
+    <p class="sme-inline-privacy">
+      No spam, ever. Unsubscribe anytime.
+    </p>
+  </div>
+
+  <div class="sme-inline-success" id="inline-success">
+    <h3>🎉 Welcome to the family!</h3>
+    <p>Check your inbox for a confirmation email.</p>
+  </div>
+</div>
+
+<script>
+async function submitInlineForm(e) {
+  e.preventDefault();
+
+  const form = document.getElementById('inline-form');
+  const email = form.querySelector('input[name="email"]').value;
+
+  const config = {
+    formId: 'YOUR_CONVERTKIT_FORM_ID',
+    apiEndpoint: '/api/subscribe'
+  };
+
+  try {
+    const response = await fetch(config.apiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        form_id: config.formId,
+        source: 'inline_form'
+      })
+    });
+
+    if (response.ok) {
+      document.querySelector('.sme-inline-content').style.display = 'none';
+      document.getElementById('inline-success').classList.add('show');
+
+      // Track conversion
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'signup', {
+          event_category: 'email',
+          event_label: 'inline_form'
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Signup error:', error);
+    alert('Something went wrong. Please try again.');
+  }
+
+  return false;
+}
+</script>

@@ -1,0 +1,103 @@
+{
+  "name": "menopause_tips",
+  "description": "Menopause wellness and symptom management tips",
+  "duration_seconds": 30,
+  "aspect_ratio": "9:16",
+  "brand": "menopause_planner",
+  "segments": [
+    {
+      "name": "hook",
+      "duration": 4,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "large",
+          "animation": "fade_in",
+          "style": "empathetic"
+        },
+        "background": {
+          "type": "video",
+          "query": "calm nature wellness"
+        }
+      }
+    },
+    {
+      "name": "symptom_intro",
+      "duration": 4,
+      "elements": {
+        "text": {
+          "position": "center",
+          "animation": "slide_up"
+        },
+        "icon": "symptom_related"
+      }
+    },
+    {
+      "name": "solution_1",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "checkmark": true,
+        "background_tint": "purple_soft"
+      }
+    },
+    {
+      "name": "solution_2",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "checkmark": true
+      }
+    },
+    {
+      "name": "solution_3",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "checkmark": true
+      }
+    },
+    {
+      "name": "cta",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "content": "Get your free symptom tracker!",
+          "position": "center",
+          "animation": "pulse"
+        },
+        "link_indicator": "bio"
+      }
+    }
+  ],
+  "colors": {
+    "primary": "#9C27B0",
+    "secondary": "#E1BEE7",
+    "text": "#FFFFFF",
+    "background_overlay": "rgba(46,26,71,0.5)"
+  },
+  "music": {
+    "type": "background",
+    "volume": 0.25,
+    "mood": "supportive_calm"
+  },
+  "content_themes": [
+    "hot_flash_management",
+    "sleep_improvement",
+    "mood_support",
+    "energy_boosting",
+    "hormone_balance",
+    "stress_relief",
+    "nutrition_tips",
+    "exercise_modifications"
+  ]
+}

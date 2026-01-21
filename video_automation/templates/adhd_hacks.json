@@ -1,0 +1,119 @@
+{
+  "name": "adhd_hacks",
+  "description": "ADHD-friendly productivity and organization hacks",
+  "duration_seconds": 30,
+  "aspect_ratio": "9:16",
+  "brand": "adhd_planner",
+  "segments": [
+    {
+      "name": "hook",
+      "duration": 4,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "large",
+          "animation": "pop_in",
+          "style": "attention_grabbing"
+        },
+        "background": {
+          "type": "video",
+          "query": "colorful workspace productivity"
+        },
+        "emoji_accents": ["🧠", "⚡"]
+      }
+    },
+    {
+      "name": "relate",
+      "duration": 4,
+      "elements": {
+        "text": {
+          "position": "center",
+          "style": "understanding",
+          "animation": "typewriter"
+        },
+        "background_effect": "gentle_movement"
+      }
+    },
+    {
+      "name": "hack_1",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium",
+          "highlight_keywords": true
+        },
+        "visual_cue": "bright_icon",
+        "transition": "quick_cut"
+      }
+    },
+    {
+      "name": "hack_2",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "visual_cue": "bright_icon"
+      }
+    },
+    {
+      "name": "hack_3",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "visual_cue": "bright_icon"
+      }
+    },
+    {
+      "name": "cta",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "content": "Save this before you forget! 📌",
+          "position": "center",
+          "animation": "wiggle"
+        },
+        "reminder_icon": true,
+        "follow_button_effect": true
+      }
+    }
+  ],
+  "colors": {
+    "primary": "#FF9800",
+    "secondary": "#FFE0B2",
+    "text": "#212121",
+    "background": "#FFF8E1",
+    "highlight": "#FF5722"
+  },
+  "music": {
+    "type": "background",
+    "volume": 0.3,
+    "mood": "upbeat_motivating",
+    "tempo": "medium_fast"
+  },
+  "visual_style": {
+    "transitions": "quick_engaging",
+    "text_style": "chunked_readable",
+    "color_coding": true,
+    "visual_anchors": true
+  },
+  "content_themes": [
+    "task_initiation",
+    "time_blindness_hacks",
+    "body_doubling_tips",
+    "dopamine_menu",
+    "object_permanence",
+    "working_memory_aids",
+    "hyperfocus_management",
+    "rejection_sensitivity",
+    "morning_routine_hacks",
+    "deadline_strategies",
+    "organization_systems",
+    "decision_fatigue"
+  ]
+}

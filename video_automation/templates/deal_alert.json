@@ -1,0 +1,79 @@
+{
+  "name": "deal_alert",
+  "description": "Time-sensitive deal announcement format",
+  "duration_seconds": 15,
+  "aspect_ratio": "9:16",
+  "segments": [
+    {
+      "name": "alert",
+      "duration": 3,
+      "elements": {
+        "alert_banner": {
+          "text": "🚨 DEAL ALERT 🚨",
+          "position": "top",
+          "style": "flashing",
+          "color": "#FF0000"
+        },
+        "sound_effect": "notification"
+      }
+    },
+    {
+      "name": "deal_reveal",
+      "duration": 5,
+      "elements": {
+        "product_name": {
+          "position": "center_top",
+          "font_size": "large"
+        },
+        "product_image": {
+          "position": "center"
+        },
+        "discount_badge": {
+          "position": "top_right",
+          "style": "starburst",
+          "animation": "rotate"
+        }
+      }
+    },
+    {
+      "name": "price_comparison",
+      "duration": 4,
+      "elements": {
+        "original_price": {
+          "position": "left",
+          "style": "strikethrough",
+          "color": "#999999"
+        },
+        "sale_price": {
+          "position": "right",
+          "style": "highlight",
+          "color": "#00FF00",
+          "font_size": "extra_large"
+        }
+      }
+    },
+    {
+      "name": "urgency_cta",
+      "duration": 3,
+      "elements": {
+        "text": {
+          "content": "🔥 Link in bio before it's gone!",
+          "position": "center",
+          "animation": "shake"
+        },
+        "countdown_effect": "optional"
+      }
+    }
+  ],
+  "music": {
+    "type": "energetic",
+    "volume": 0.4,
+    "mood": "urgent"
+  },
+  "brand_specific": {
+    "daily_deal_darling": {
+      "alert_color": "#E91E63",
+      "deal_badge_style": "star"
+    }
+  }
+}

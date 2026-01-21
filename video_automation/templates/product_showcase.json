@@ -1,0 +1,92 @@
+{
+  "name": "product_showcase",
+  "description": "Product highlight with benefits format",
+  "duration_seconds": 30,
+  "aspect_ratio": "9:16",
+  "segments": [
+    {
+      "name": "hook",
+      "duration": 3,
+      "elements": {
+        "text": {
+          "position": "top_center",
+          "font_size": "large",
+          "animation": "bounce"
+        },
+        "background": "product_image"
+      }
+    },
+    {
+      "name": "product_reveal",
+      "duration": 5,
+      "elements": {
+        "product_image": {
+          "position": "center",
+          "animation": "zoom_in"
+        },
+        "price_tag": {
+          "position": "bottom_left",
+          "style": "badge"
+        }
+      }
+    },
+    {
+      "name": "benefit_1",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium",
+          "animation": "slide_left"
+        },
+        "checkmark_icon": true
+      }
+    },
+    {
+      "name": "benefit_2",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium",
+          "animation": "slide_left"
+        },
+        "checkmark_icon": true
+      }
+    },
+    {
+      "name": "benefit_3",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium",
+          "animation": "slide_left"
+        },
+        "checkmark_icon": true
+      }
+    },
+    {
+      "name": "cta",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "content": "Link in bio!",
+          "position": "center",
+          "font_size": "large",
+          "animation": "pulse"
+        },
+        "arrow_indicator": "bottom"
+      }
+    }
+  ],
+  "music": {
+    "type": "background",
+    "volume": 0.25,
+    "mood": "upbeat"
+  },
+  "transitions": {
+    "type": "smooth_fade",
+    "duration_ms": 300
+  }
+}

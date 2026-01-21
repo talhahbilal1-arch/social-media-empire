@@ -1,0 +1,118 @@
+{
+  "description": "Content ideas for deals and product recommendations",
+  "brand": "daily_deal_darling",
+  "categories": {
+    "beauty": {
+      "topics": [
+        "Drugstore dupes for high-end products",
+        "Amazon beauty finds under $20",
+        "Skincare routine on a budget",
+        "Hair tools that changed my life",
+        "Makeup bag essentials"
+      ],
+      "hooks": [
+        "This $12 product works better than the $80 version",
+        "Amazon haul you NEED to see",
+        "Why is nobody talking about this?",
+        "RUN don't walk to get this",
+        "Found: the viral product that actually works"
+      ],
+      "search_queries": [
+        "beauty products aesthetic",
+        "skincare routine",
+        "makeup flatlay"
+      ]
+    },
+    "home": {
+      "topics": [
+        "Home organization finds",
+        "Kitchen gadgets worth it",
+        "Cleaning products that work",
+        "Cozy home essentials",
+        "Small space solutions"
+      ],
+      "hooks": [
+        "This organized my entire life",
+        "Kitchen find that's actually useful",
+        "Why didn't I buy this sooner?",
+        "Makes cleaning so much easier",
+        "Small apartment game changer"
+      ],
+      "search_queries": [
+        "organized home",
+        "kitchen aesthetic",
+        "cozy home decor"
+      ]
+    },
+    "lifestyle": {
+      "topics": [
+        "Daily essentials I can't live without",
+        "Travel must-haves",
+        "Fitness finds on Amazon",
+        "Work from home setup",
+        "Self-care products"
+      ],
+      "hooks": [
+        "Things I use literally every day",
+        "Pack this for your next trip",
+        "Gym bag essentials under $30",
+        "WFH setup that boosted productivity",
+        "Treat yourself to these"
+      ],
+      "search_queries": [
+        "lifestyle flatlay",
+        "travel essentials",
+        "workout aesthetic"
+      ]
+    },
+    "seasonal": {
+      "spring": [
+        "Spring cleaning essentials",
+        "Allergy season must-haves",
+        "Outdoor entertaining finds"
+      ],
+      "summer": [
+        "Beach bag essentials",
+        "Sunscreen favorites",
+        "Cooling products for hot days"
+      ],
+      "fall": [
+        "Cozy fall favorites",
+        "Back to routine essentials",
+        "Pumpkin spice everything"
+      ],
+      "winter": [
+        "Holiday gift guide",
+        "Winter skincare must-haves",
+        "Cozy night in essentials"
+      ]
+    }
+  },
+  "deal_types": [
+    {
+      "type": "flash_sale",
+      "urgency": "high",
+      "template": "deal_alert",
+      "phrases": ["LIMITED TIME", "TODAY ONLY", "ALMOST GONE"]
+    },
+    {
+      "type": "everyday_low",
+      "urgency": "low",
+      "template": "product_showcase",
+      "phrases": ["Always affordable", "Budget-friendly find", "Everyday essential"]
+    },
+    {
+      "type": "prime_deal",
+      "urgency": "medium",
+      "template": "deal_alert",
+      "phrases": ["Prime deal", "Member exclusive", "Prime Day pricing"]
+    }
+  ],
+  "call_to_actions": [
+    "Link in bio!",
+    "Comment LINK for the direct link!",
+    "Save this for later!",
+    "Share with someone who needs this!",
+    "Follow for more finds like this!"
+  ]
+}
