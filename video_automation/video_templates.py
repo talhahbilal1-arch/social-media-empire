@@ -129,37 +129,32 @@ class VideoTemplateManager:
         content: dict,
         background_url: Optional[str] = None
     ) -> dict:
-        """Create Creatomate modifications from content."""
+        """Create Creatomate modifications from content.
+
+        Maps content to Creatomate Storytelling Video template elements:
+        - Text-1: Hook/opening text
+        - Text-2: Body point 1
+        - Text-3: Body point 2
+        - Text-4: CTA/closing text
+        """
         brand_config = self.get_brand_config(brand)
+        body_points = content.get("body_points", [])
 
+        # Map content to Creatomate template element names
         modifications = {
-            # Colors
-            "Primary-Color": brand_config["colors"]["primary"],
-            "Secondary-Color": brand_config["colors"]["secondary"],
-            "Text-Color": brand_config["colors"]["text"],
-
-            # Hook text
-            "Hook-Text": content.get("hook", ""),
-
-            # Body points
-            "Body-1": content.get("body_points", [""])[0] if content.get("body_points") else "",
-            "Body-2": content.get("body_points", ["", ""])[1] if len(content.get("body_points", [])) > 1 else "",
-            "Body-3": content.get("body_points", ["", "", ""])[2] if len(content.get("body_points", [])) > 2 else "",
-
-            # CTA
-            "CTA-Text": content.get("cta", "Follow for more!"),
-
-            # Hashtags
-            "Hashtags": " ".join(content.get("hashtags", [])),
+            # Text elements (matching Creatomate Storytelling Video template)
+            "Text-1": content.get("hook", ""),
+            "Text-2": body_points[0] if len(body_points) > 0 else "",
+            "Text-3": body_points[1] if len(body_points) > 1 else "",
+            "Text-4": content.get("cta", "Follow for more!"),
         }
 
-        # Add background if provided
+        # Add background if provided (applies to all background elements)
         if background_url:
-            modifications["Background-Video"] = background_url
-
-        # Add logo if available
-        if brand_config.get("logo_url"):
-            modifications["Logo"] = brand_config["logo_url"]
+            modifications["Background-1"] = background_url
+            modifications["Background-2"] = background_url
+            modifications["Background-3"] = background_url
+            modifications["Background-4"] = background_url
 
         return modifications
 
