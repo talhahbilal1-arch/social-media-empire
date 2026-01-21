@@ -1,0 +1,133 @@
+name: Error Alerts
+
+on:
+  schedule:
+    # Check for errors every hour
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      send_digest:
+        description: 'Send error digest email'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  check-errors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check for critical errors
+        id: errors
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -c "
+          import json
+          from monitoring.error_reporter import ErrorReporter
+
+          reporter = ErrorReporter()
+          summary = reporter.get_error_summary()
+
+          print(json.dumps(summary, indent=2))
+
+          # Output for workflow
+          critical = summary.get('by_severity', {}).get('critical', 0)
+          high = summary.get('by_severity', {}).get('high', 0)
+          total = summary.get('total_unresolved', 0)
+
+          print(f'::set-output name=critical::{critical}')
+          print(f'::set-output name=high::{high}')
+          print(f'::set-output name=total::{total}')
+
+          # Fail if critical errors exist
+          if critical > 0:
+              print('::error::Critical errors detected!')
+              exit(1)
+          "
+        continue-on-error: true
+
+      - name: Send digest if requested
+        if: github.event.inputs.send_digest == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          python -m monitoring.error_reporter --digest
+
+      - name: Alert on critical errors
+        if: steps.errors.outcome == 'failure'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          pip install resend
+          python -c "
+          import resend
+          import os
+
+          resend.api_key = os.environ['RESEND_API_KEY']
+
+          resend.Emails.send({
+              'from': 'alerts@socialmediaempire.com',
+              'to': [os.environ['ALERT_EMAIL']],
+              'subject': '🚨 CRITICAL: Unresolved Critical Errors Detected',
+              'html': '''
+              <h1>Critical Errors Detected</h1>
+              <p>There are critical errors that require immediate attention.</p>
+              <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View error details</a></p>
+              <p>Please check the Supabase errors table for full context.</p>
+              '''
+          })
+          "
+
+  daily-digest:
+    runs-on: ubuntu-latest
+    # Run at 8 AM PST daily
+    if: github.event_name == 'schedule' && github.event.schedule == '0 16 * * *'
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Send daily error digest
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          python -m monitoring.error_reporter --digest
