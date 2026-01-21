@@ -62,14 +62,18 @@ class DailyVideoGenerator:
             logger.info(f"Generating content for topic: {topic or 'auto-generated'}")
             content = self.content_generator.generate_content(brand, topic)
 
-            # Step 2: Get background media
+            # Step 2: Get background media (with fallback for rate limits)
             logger.info(f"Fetching background media for: {content.background_query}")
-            backgrounds = self.content_generator.get_background_media(
-                content.background_query,
-                media_type="video",
-                count=1
-            )
-            background_url = backgrounds[0]["url"] if backgrounds else None
+            try:
+                backgrounds = self.content_generator.get_background_media(
+                    content.background_query,
+                    media_type="video",
+                    count=1
+                )
+                background_url = backgrounds[0]["url"] if backgrounds else None
+            except Exception as e:
+                logger.warning(f"Pexels API unavailable ({e}), using placeholder")
+                background_url = None
 
             # Step 3: Render video
             logger.info("Rendering video with Creatomate")
