@@ -12,7 +12,7 @@ class GeminiClient:
     """Client for Google Gemini AI content generation."""
 
     api_key: str
-    model_name: str = "gemini-1.5-flash"
+    model_name: str = "gemini-2.0-flash"
 
     def __post_init__(self):
         genai.configure(api_key=self.api_key)
@@ -77,7 +77,10 @@ class PexelsClient:
 
     @property
     def headers(self) -> dict:
-        return {"Authorization": self.api_key}
+        return {
+            "Authorization": self.api_key,
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        }
 
     def search_photos(
         self,

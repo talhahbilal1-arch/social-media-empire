@@ -245,28 +245,41 @@ Make it conversational, engaging, and valuable. The hook must create curiosity o
         self,
         query: str,
         media_type: str = "video",
-        count: int = 3
+        count: int = 3,
+        max_retries: int = 3
     ) -> list[dict]:
-        """Get background media from Pexels."""
-        if media_type == "video":
-            results = self.pexels_client.search_videos(query, per_page=count)
-            return [
-                {
-                    "url": self.pexels_client.get_video_url(v),
-                    "id": v.get("id"),
-                    "duration": v.get("duration")
-                }
-                for v in results
-            ]
-        else:
-            results = self.pexels_client.search_photos(query, per_page=count)
-            return [
-                {
-                    "url": self.pexels_client.get_photo_url(p),
-                    "id": p.get("id")
-                }
-                for p in results
-            ]
+        """Get background media from Pexels with retry logic for rate limiting."""
+        import time
+
+        for attempt in range(max_retries):
+            try:
+                if media_type == "video":
+                    results = self.pexels_client.search_videos(query, per_page=count)
+                    return [
+                        {
+                            "url": self.pexels_client.get_video_url(v),
+                            "id": v.get("id"),
+                            "duration": v.get("duration")
+                        }
+                        for v in results
+                    ]
+                else:
+                    results = self.pexels_client.search_photos(query, per_page=count)
+                    return [
+                        {
+                            "url": self.pexels_client.get_photo_url(p),
+                            "id": p.get("id")
+                        }
+                        for p in results
+                    ]
+            except Exception as e:
+                if "401" in str(e) and attempt < max_retries - 1:
+                    # Rate limited - wait with exponential backoff
+                    wait_time = (2 ** attempt) * 2  # 2, 4, 8 seconds
+                    time.sleep(wait_time)
+                    continue
+                raise
+        return []
 
     def generate_batch_content(
         self,
