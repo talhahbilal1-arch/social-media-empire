@@ -9,10 +9,14 @@ from utils.config import get_config
 from utils.api_clients import CreatomateClient
 
 
+# Creatomate Storytelling Video Template (9:16 vertical)
+# This template has 4 text compositions with backgrounds
+CREATOMATE_TEMPLATE_ID = "1be9bec1-93d3-40b4-811b-e9ba235112fb"
+
 # Brand-specific Creatomate template configurations
 BRAND_TEMPLATES = {
     "daily_deal_darling": {
-        "template_id": "deal-darling-vertical",  # Replace with actual Creatomate template ID
+        "template_id": CREATOMATE_TEMPLATE_ID,  # Storytelling Video template
         "colors": {
             "primary": "#E91E63",  # Pink
             "secondary": "#FFC107",  # Gold
@@ -26,7 +30,7 @@ BRAND_TEMPLATES = {
         "logo_url": "https://dailydealdarling.com/logo.png"
     },
     "menopause_planner": {
-        "template_id": "menopause-vertical",
+        "template_id": CREATOMATE_TEMPLATE_ID,
         "colors": {
             "primary": "#9C27B0",  # Purple
             "secondary": "#E1BEE7",  # Light purple
@@ -40,7 +44,7 @@ BRAND_TEMPLATES = {
         "logo_url": None
     },
     "nurse_planner": {
-        "template_id": "nurse-vertical",
+        "template_id": CREATOMATE_TEMPLATE_ID,
         "colors": {
             "primary": "#00BCD4",  # Teal
             "secondary": "#B2EBF2",  # Light teal
@@ -54,7 +58,7 @@ BRAND_TEMPLATES = {
         "logo_url": None
     },
     "adhd_planner": {
-        "template_id": "adhd-vertical",
+        "template_id": CREATOMATE_TEMPLATE_ID,
         "colors": {
             "primary": "#FF9800",  # Orange
             "secondary": "#FFE0B2",  # Light orange
