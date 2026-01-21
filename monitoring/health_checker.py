@@ -136,7 +136,7 @@ class HealthChecker:
 
             start = datetime.now()
             # Simple test generation
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-2.0-flash")
             response = model.generate_content(
                 "Say 'ok'",
                 generation_config=genai.GenerationConfig(max_output_tokens=10)
