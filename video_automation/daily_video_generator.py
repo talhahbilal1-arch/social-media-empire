@@ -80,6 +80,11 @@ class DailyVideoGenerator:
             render_result = self._render_video(brand, content, background_url)
 
             video_url = render_result.get("url", "")
+            is_placeholder = "placeholder.video" in video_url or render_result.get("status") == "placeholder"
+
+            if is_placeholder:
+                logger.error(f"Video rendering failed - using placeholder URL. Cannot post to platforms.")
+                logger.error(f"Check that CREATOMATE_API_KEY is configured correctly.")
 
             # Step 4: Log to database
             video_record = db.log_video_creation(
@@ -88,12 +93,12 @@ class DailyVideoGenerator:
                 video_url=video_url,
                 title=content.hook,
                 description=self._format_description(content),
-                status="rendered"
+                status="placeholder" if is_placeholder else "rendered"
             )
 
-            # Step 5: Post to platforms
+            # Step 5: Post to platforms (skip if using placeholder video)
             posting_results = {}
-            if not dry_run and video_url:
+            if not dry_run and video_url and not is_placeholder:
                 logger.info(f"Posting to platforms: {platforms}")
                 posting_results = self.platform_poster.post_to_all(
                     video_url=video_url,
@@ -119,6 +124,14 @@ class DailyVideoGenerator:
                             context={"brand": brand, "platform": platform}
                         )
 
+            # Log error if placeholder was used
+            if is_placeholder:
+                db.log_error(
+                    error_type="render_failure",
+                    error_message="Creatomate rendering failed - video not posted",
+                    context={"brand": brand, "topic": content.topic}
+                )
+
             # Log analytics
             db.log_analytics_event(
                 event_type="video_created",
@@ -127,12 +140,13 @@ class DailyVideoGenerator:
                 data={
                     "topic": content.topic,
                     "hook": content.hook,
-                    "platforms_posted": list(posting_results.keys())
+                    "platforms_posted": list(posting_results.keys()),
+                    "is_placeholder": is_placeholder
                 }
             )
 
             return {
-                "success": True,
+                "success": not is_placeholder,  # Mark as failed if using placeholder
                 "brand": brand,
                 "content": {
                     "topic": content.topic,
@@ -141,7 +155,8 @@ class DailyVideoGenerator:
                 },
                 "video_url": video_url,
                 "posting_results": posting_results,
-                "video_id": video_record.get("id")
+                "video_id": video_record.get("id"),
+                "is_placeholder": is_placeholder
             }
 
         except Exception as e:
