@@ -22,6 +22,7 @@ jobs:
         run: pip install python-dotenv requests
 
       - name: Check Configuration
+        id: config-check
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -158,3 +159,42 @@ jobs:
               else:
                   print("   ⚠️ URL may not be a Make.com webhook")
           EOF
+
+      - name: Write Summary
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          echo "## 🔧 Configuration Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          if [ -n "$GEMINI_API_KEY" ]; then echo "| GEMINI_API_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| GEMINI_API_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$PEXELS_API_KEY" ]; then echo "| PEXELS_API_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| PEXELS_API_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$CREATOMATE_API_KEY" ]; then echo "| CREATOMATE_API_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| CREATOMATE_API_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$SUPABASE_URL" ]; then echo "| SUPABASE_URL | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| SUPABASE_URL | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$SUPABASE_KEY" ]; then echo "| SUPABASE_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| SUPABASE_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$YOUTUBE_REFRESH_TOKEN" ]; then echo "| YOUTUBE_REFRESH_TOKEN | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| YOUTUBE_REFRESH_TOKEN | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then echo "| MAKE_COM_PINTEREST_WEBHOOK | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| MAKE_COM_PINTEREST_WEBHOOK | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Pinterest Posting Requirements" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "❌ **CREATOMATE_API_KEY is NOT SET** - Videos cannot be rendered, only placeholder URLs will be used" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -z "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "❌ **MAKE_COM_PINTEREST_WEBHOOK is NOT SET** - Pinterest posting is disabled" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -n "$CREATOMATE_API_KEY" ] && [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "✅ Both CREATOMATE_API_KEY and MAKE_COM_PINTEREST_WEBHOOK are configured" >> $GITHUB_STEP_SUMMARY
+          fi
