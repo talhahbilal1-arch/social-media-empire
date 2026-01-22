@@ -288,6 +288,9 @@ class PinterestClient:
         link: Optional[str] = None
     ) -> dict:
         """Create a Pinterest pin via Make.com webhook."""
+        import logging
+        logger = logging.getLogger(__name__)
+
         payload = {
             "board_id": board_id,
             "title": title,
@@ -295,7 +298,14 @@ class PinterestClient:
             "media_url": media_url,
             "link": link
         }
-        response = requests.post(self.webhook_url, json=payload)
+
+        logger.info(f"Pinterest webhook: Sending to {self.webhook_url[:50]}...")
+        logger.info(f"Pinterest payload: board_id={board_id}, title={title[:30]}..., media_url={media_url[:50]}...")
+
+        response = requests.post(self.webhook_url, json=payload, timeout=30)
+
+        logger.info(f"Pinterest webhook response: status={response.status_code}, body={response.text[:200] if response.text else 'empty'}")
+
         response.raise_for_status()
         return response.json() if response.text else {"status": "success"}
 
@@ -307,6 +317,9 @@ class PinterestClient:
         link: Optional[str] = None
     ) -> dict:
         """Create a Pinterest Idea Pin via Make.com webhook."""
+        import logging
+        logger = logging.getLogger(__name__)
+
         payload = {
             "type": "idea_pin",
             "board_id": board_id,
@@ -314,6 +327,16 @@ class PinterestClient:
             "pages": pages,  # List of {media_url, description} dicts
             "link": link
         }
-        response = requests.post(self.webhook_url, json=payload)
+
+        logger.info(f"Pinterest Idea Pin webhook: Sending to {self.webhook_url[:50]}...")
+        logger.info(f"Pinterest payload: type=idea_pin, board_id={board_id}, title={title[:30]}...")
+        if pages and len(pages) > 0:
+            logger.info(f"Pinterest payload: pages[0].media_url={pages[0].get('media_url', 'N/A')[:80]}...")
+
+        response = requests.post(self.webhook_url, json=payload, timeout=30)
+
+        logger.info(f"Pinterest webhook response: status={response.status_code}")
+        logger.info(f"Pinterest webhook response body: {response.text[:500] if response.text else 'empty'}")
+
         response.raise_for_status()
         return response.json() if response.text else {"status": "success"}
