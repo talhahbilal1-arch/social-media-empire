@@ -42,6 +42,50 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check critical configuration
+        env:
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          echo "=============================================="
+          echo "CONFIGURATION CHECK"
+          echo "=============================================="
+
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "❌ ERROR: CREATOMATE_API_KEY is NOT SET"
+            echo "   Videos cannot be rendered - only placeholder URLs will be used"
+            echo "   Nothing will be posted to Pinterest!"
+            echo ""
+            echo "CREATOMATE_NOT_SET=true" >> config_status.txt
+          else
+            echo "✅ CREATOMATE_API_KEY is configured"
+            echo "CREATOMATE_NOT_SET=false" >> config_status.txt
+          fi
+
+          if [ -z "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "❌ ERROR: MAKE_COM_PINTEREST_WEBHOOK is NOT SET"
+            echo "   Pinterest posting is disabled!"
+            echo "PINTEREST_NOT_SET=true" >> config_status.txt
+          else
+            echo "✅ MAKE_COM_PINTEREST_WEBHOOK is configured"
+            echo "PINTEREST_NOT_SET=false" >> config_status.txt
+          fi
+
+          echo "=============================================="
+
+          # Write to summary
+          echo "## ⚙️ Configuration Status" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "❌ **CREATOMATE_API_KEY**: NOT SET - Videos cannot be rendered!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **CREATOMATE_API_KEY**: Configured" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -z "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "❌ **MAKE_COM_PINTEREST_WEBHOOK**: NOT SET - Pinterest posting disabled!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **MAKE_COM_PINTEREST_WEBHOOK**: Configured" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Run health check
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
