@@ -127,12 +127,24 @@ class CrossPlatformPoster:
     ) -> dict:
         """Post to YouTube Shorts."""
         try:
+            # Check if YouTube is configured
+            if not self.youtube_poster.is_configured():
+                return {"success": False, "error": "YouTube not configured. Set YouTube OAuth credentials."}
+
             result = self.youtube_poster.upload_short(
                 video_url=video_url,
                 title=title[:100],  # YouTube title limit
                 description=f"{description}\n\n{' '.join(hashtags)}",
                 tags=hashtags
             )
+
+            # Check if the YouTube upload actually succeeded
+            if not result.get("success", False):
+                return {
+                    "success": False,
+                    "error": result.get("error", "YouTube upload failed with unknown error")
+                }
+
             return {
                 "success": True,
                 "platform_id": result.get("id"),
@@ -151,19 +163,38 @@ class CrossPlatformPoster:
     ) -> dict:
         """Post to Pinterest as Idea Pin."""
         try:
+            # Check if Pinterest is configured
+            if not self.pinterest_poster.is_configured():
+                logger.error("Pinterest posting failed: MAKE_COM_PINTEREST_WEBHOOK not configured")
+                return {"success": False, "error": "Pinterest not configured. Set MAKE_COM_PINTEREST_WEBHOOK."}
+
             board_id = brand_config.get("pinterest_board_id", "default")
+            logger.info(f"Posting to Pinterest board: {board_id}")
+
             result = self.pinterest_poster.create_video_idea_pin(
                 board_id=board_id,
                 title=title[:100],
                 description=f"{description}\n\n{' '.join(hashtags)}",
                 video_url=video_url
             )
+
+            # Check if the Pinterest posting actually succeeded
+            if not result.get("success", False):
+                error_msg = result.get("error", "Pinterest posting failed with unknown error")
+                logger.error(f"Pinterest posting failed: {error_msg}")
+                return {
+                    "success": False,
+                    "error": error_msg
+                }
+
+            logger.info(f"Pinterest posting succeeded: {result.get('id', 'pending')}")
             return {
                 "success": True,
                 "platform_id": result.get("id"),
                 "url": result.get("url", "")
             }
         except Exception as e:
+            logger.error(f"Pinterest posting exception: {e}")
             return {"success": False, "error": str(e)}
 
     def _post_to_tiktok(

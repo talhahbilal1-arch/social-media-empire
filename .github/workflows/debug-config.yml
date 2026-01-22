@@ -1,0 +1,200 @@
+name: Debug Configuration
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+  workflow_dispatch:
+
+jobs:
+  check-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install python-dotenv requests
+
+      - name: Check Configuration
+        id: config-check
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          python << 'EOF'
+          import os
+
+          print("=" * 60)
+          print("CONFIGURATION STATUS CHECK")
+          print("=" * 60)
+
+          secrets = {
+              "GEMINI_API_KEY": os.environ.get("GEMINI_API_KEY", ""),
+              "PEXELS_API_KEY": os.environ.get("PEXELS_API_KEY", ""),
+              "CREATOMATE_API_KEY": os.environ.get("CREATOMATE_API_KEY", ""),
+              "SUPABASE_URL": os.environ.get("SUPABASE_URL", ""),
+              "SUPABASE_KEY": os.environ.get("SUPABASE_KEY", ""),
+              "YOUTUBE_CLIENT_ID": os.environ.get("YOUTUBE_CLIENT_ID", ""),
+              "YOUTUBE_CLIENT_SECRET": os.environ.get("YOUTUBE_CLIENT_SECRET", ""),
+              "YOUTUBE_REFRESH_TOKEN": os.environ.get("YOUTUBE_REFRESH_TOKEN", ""),
+              "MAKE_COM_PINTEREST_WEBHOOK": os.environ.get("MAKE_COM_PINTEREST_WEBHOOK", ""),
+          }
+
+          print("\n📋 Secret Configuration:")
+          print("-" * 40)
+          for name, value in secrets.items():
+              if value:
+                  # Show first 4 and last 4 chars only for security
+                  masked = value[:4] + "..." + value[-4:] if len(value) > 12 else "****"
+                  print(f"✅ {name}: CONFIGURED ({masked})")
+              else:
+                  print(f"❌ {name}: NOT SET")
+
+          print("\n" + "=" * 60)
+          print("CRITICAL FOR PINTEREST POSTING:")
+          print("=" * 60)
+
+          if not secrets["CREATOMATE_API_KEY"]:
+              print("❌ CREATOMATE_API_KEY is NOT SET!")
+              print("   → Videos cannot be rendered")
+              print("   → Placeholder URLs will be used")
+              print("   → Nothing will be posted to Pinterest")
+          else:
+              print("✅ CREATOMATE_API_KEY is set")
+
+          if not secrets["MAKE_COM_PINTEREST_WEBHOOK"]:
+              print("❌ MAKE_COM_PINTEREST_WEBHOOK is NOT SET!")
+              print("   → Pinterest posting is disabled")
+          else:
+              print("✅ MAKE_COM_PINTEREST_WEBHOOK is set")
+              # Test webhook URL format
+              webhook = secrets["MAKE_COM_PINTEREST_WEBHOOK"]
+              if webhook.startswith("https://hook."):
+                  print("   → Webhook URL format looks correct")
+              else:
+                  print("   ⚠️ Webhook URL format may be incorrect")
+                  print(f"   → Expected: https://hook.make.com/... or https://hook.eu1.make.com/...")
+
+          print("\n" + "=" * 60)
+          EOF
+
+      - name: Test Creatomate Connection
+        env:
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+        run: |
+          python << 'EOF'
+          import os
+          import requests
+
+          api_key = os.environ.get("CREATOMATE_API_KEY", "")
+
+          print("\n📹 CREATOMATE API TEST:")
+          print("-" * 40)
+
+          if not api_key:
+              print("❌ Cannot test - CREATOMATE_API_KEY not set")
+          else:
+              try:
+                  response = requests.get(
+                      "https://api.creatomate.com/v1/templates",
+                      headers={"Authorization": f"Bearer {api_key}"},
+                      timeout=10
+                  )
+                  if response.status_code == 200:
+                      templates = response.json()
+                      print(f"✅ Creatomate API connected successfully")
+                      print(f"   → Found {len(templates)} templates")
+
+                      # Check for expected template
+                      expected_id = "1be9bec1-93d3-40b4-811b-e9ba235112fb"
+                      found = any(t.get("id") == expected_id for t in templates)
+                      if found:
+                          print(f"   ✅ Expected template {expected_id[:8]}... found")
+                      else:
+                          print(f"   ❌ Expected template {expected_id[:8]}... NOT FOUND")
+                          print(f"   → Available templates: {[t.get('id')[:8] + '...' for t in templates[:5]]}")
+                  else:
+                      print(f"❌ Creatomate API error: {response.status_code}")
+                      print(f"   → Response: {response.text[:200]}")
+              except Exception as e:
+                  print(f"❌ Creatomate connection failed: {e}")
+          EOF
+
+      - name: Test Pinterest Webhook
+        env:
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          python << 'EOF'
+          import os
+          import requests
+
+          webhook = os.environ.get("MAKE_COM_PINTEREST_WEBHOOK", "")
+
+          print("\n📌 PINTEREST WEBHOOK TEST:")
+          print("-" * 40)
+
+          if not webhook:
+              print("❌ Cannot test - MAKE_COM_PINTEREST_WEBHOOK not set")
+          else:
+              print(f"✅ Webhook URL is set")
+              print(f"   → URL starts with: {webhook[:30]}...")
+
+              # Don't actually call the webhook to avoid creating posts
+              # Just verify the URL format
+              if "hook.make.com" in webhook or "hook.eu1.make.com" in webhook or "hook.us1.make.com" in webhook:
+                  print("   ✅ URL format appears to be a valid Make.com webhook")
+              else:
+                  print("   ⚠️ URL may not be a Make.com webhook")
+          EOF
+
+      - name: Write Summary
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          echo "## 🔧 Configuration Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          if [ -n "$GEMINI_API_KEY" ]; then echo "| GEMINI_API_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| GEMINI_API_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$PEXELS_API_KEY" ]; then echo "| PEXELS_API_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| PEXELS_API_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$CREATOMATE_API_KEY" ]; then echo "| CREATOMATE_API_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| CREATOMATE_API_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$SUPABASE_URL" ]; then echo "| SUPABASE_URL | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| SUPABASE_URL | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$SUPABASE_KEY" ]; then echo "| SUPABASE_KEY | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| SUPABASE_KEY | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$YOUTUBE_REFRESH_TOKEN" ]; then echo "| YOUTUBE_REFRESH_TOKEN | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| YOUTUBE_REFRESH_TOKEN | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then echo "| MAKE_COM_PINTEREST_WEBHOOK | ✅ Set |" >> $GITHUB_STEP_SUMMARY; else echo "| MAKE_COM_PINTEREST_WEBHOOK | ❌ **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎯 Pinterest Posting Requirements" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "❌ **CREATOMATE_API_KEY is NOT SET** - Videos cannot be rendered, only placeholder URLs will be used" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -z "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "❌ **MAKE_COM_PINTEREST_WEBHOOK is NOT SET** - Pinterest posting is disabled" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -n "$CREATOMATE_API_KEY" ] && [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "✅ Both CREATOMATE_API_KEY and MAKE_COM_PINTEREST_WEBHOOK are configured" >> $GITHUB_STEP_SUMMARY
+          fi
