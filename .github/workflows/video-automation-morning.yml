@@ -4,6 +4,9 @@ on:
   schedule:
     # 6 AM PST = 2 PM UTC (during PST) or 1 PM UTC (during PDT)
     - cron: '0 14 * * *'
+  push:
+    branches:
+      - 'claude/**'
   workflow_dispatch:
     inputs:
       brand:
