@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 3 of 8 (Core Video Composition)
-Plan: 2 of TBD in current phase
+Plan: 3 of TBD in current phase
 Status: In progress
-Last activity: 2026-01-23 — Completed 03-02-PLAN.md
+Last activity: 2026-01-23 — Completed 03-03-PLAN.md
 
-Progress: [██░░░░░░░░] ~32%
+Progress: [███░░░░░░░] ~37%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 1.9 min
-- Total execution time: 0.2 hours
+- Total plans completed: 7
+- Average duration: 2.5 min
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [██░░░░░░░░] ~32%
 |-------|-------|-------|----------|
 | 01-environment-foundation | 2 | 3 min | 1.5 min |
 | 02-brand-configuration-system | 2 | 193s | 96s |
-| 03-core-video-composition | 2 | 341s | 170s |
+| 03-core-video-composition | 3 | 587s | 195s |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (82s), 02-02 (111s), 03-01 (131s), 03-02 (210s)
-- Trend: Steady pace with environment setup overhead
+- Last 5 plans: 02-02 (111s), 03-01 (131s), 03-02 (210s), 03-03 (246s)
+- Trend: Increasing complexity as video composition features develop
 
 *Updated after each plan completion*
 
@@ -66,6 +66,10 @@ Recent decisions affecting current work:
 - 120px safe zone margin uniformly applied to avoid mobile UI elements (03-02)
 - Auto-text wrapping with method='caption' for width constraints (03-02)
 - Brand color mapping: primary=stroke, secondary=text for visual contrast (03-02)
+- Use dataclasses for timing data (WordTiming, SentenceTiming) for type safety (03-03)
+- Convert edge-tts milliseconds to seconds for consistency with MoviePy timing (03-03)
+- Parse SubMaker.offset and SubMaker.subs arrays (not cues - API correction) (03-03)
+- Sentence duration calculated from first word start to last word end (03-03)
 
 ### Pending Todos
 
@@ -92,9 +96,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 03-02-PLAN.md (Text Overlay System)
+Stopped at: Completed 03-03-PLAN.md (Audio-Text Synchronization)
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-23 after completing 03-02-PLAN.md*
+*Last updated: 2026-01-23 after completing 03-03-PLAN.md*
