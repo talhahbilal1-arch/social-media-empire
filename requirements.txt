@@ -3,7 +3,7 @@ moviepy==2.2.1
 pillow==11.0.0
 
 # AI Integration
-google-genai==1.60.0
+google-genai==1.47.0
 
 # Text-to-Speech
 edge-tts==7.2.7
@@ -13,7 +13,7 @@ supabase==2.27.2
 
 # Configuration & Environment
 python-dotenv==1.0.1
-pydantic==2.10.1
+pydantic==2.12.5
 pydantic-settings==2.7.0
 pydantic-extra-types==2.10.1
 pyyaml==6.0.2
