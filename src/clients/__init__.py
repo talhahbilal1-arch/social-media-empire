@@ -1,5 +1,6 @@
 """External API clients for third-party integrations."""
 from src.clients.base import BaseClient
 from src.clients.gemini import GeminiClient
+from src.clients.tts import TTSClient, TTSResult
 
-__all__ = ["BaseClient", "GeminiClient"]
+__all__ = ["BaseClient", "GeminiClient", "TTSClient", "TTSResult"]
