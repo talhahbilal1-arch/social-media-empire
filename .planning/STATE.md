@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 4 of 8 (API Client Layer)
-Plan: 0 of TBD in current phase
-Status: Planning
-Last activity: 2026-01-23 — Completed Phase 3
+Plan: 1 of 5 in current phase
+Status: In progress
+Last activity: 2026-01-23 — Completed 04-01-PLAN.md
 
-Progress: [████░░░░░░] ~37.5%
+Progress: [████░░░░░░] ~40.9%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 4.8 min
-- Total execution time: 0.6 hours
+- Total plans completed: 9
+- Average duration: 5.0 min
+- Total execution time: 0.75 hours
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [████░░░░░░] ~37.5%
 | 01-environment-foundation | 2 | 3 min | 1.5 min |
 | 02-brand-configuration-system | 2 | 193s | 96s |
 | 03-core-video-composition | 4 | 1348s | 337s |
+| 04-api-client-layer | 1 | 299s | 299s |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (131s), 03-02 (210s), 03-03 (246s), 03-04 (761s)
-- Trend: Plan 03-04 significantly longer due to integration testing and bug fixes
+- Last 5 plans: 03-02 (210s), 03-03 (246s), 03-04 (761s), 04-01 (299s)
+- Trend: 04-01 faster than 03-04, but included dependency resolution work
 
 *Updated after each plan completion*
 
@@ -75,6 +76,10 @@ Recent decisions affecting current work:
 - MoviePy 2.x API: Use cropped()/resized() instead of crop()/resize() (03-04)
 - Edge-TTS fallback: Synthetic audio when service unavailable for test resilience (03-04)
 - Memory threshold 5x for test environment due to temp file overhead (03-04)
+- google-genai 1.47.0 max version for Python 3.9 compatibility (04-01)
+- pydantic 2.12.5 required for supabase 2.27.2 realtime dependency (04-01)
+- Retry only on 429/5xx errors, fail immediately on 4xx client errors for BaseClient (04-01)
+- Singleton settings instance pattern for consistent config access (04-01)
 
 ### Pending Todos
 
@@ -88,10 +93,12 @@ None yet.
 - Virtual environment must be created and dependencies installed
 - Run `python scripts/validate_environment.py` to verify setup
 
-**Dependency Version Constraints (03-02):**
-- Python 3.9 compatibility required downgrading several packages
-- pillow 12.x requires Python 3.10+, using 11.0.0
-- Consider migrating to Python 3.11 as specified in .python-version
+**Dependency Version Constraints (04-01):**
+- Python 3.9.6 in use, but .python-version specifies 3.11
+- google-genai limited to 1.47.0 (1.48.0+ requires Python 3.10+)
+- pillow limited to 11.0.0 (12.x requires Python 3.10+)
+- Many packages have newer versions available with Python 3.10+
+- **Recommendation:** Upgrade to Python 3.11 for access to latest package versions
 
 **Edge-TTS Service Reliability (03-04):**
 - Microsoft's edge-tts service returns 403 intermittently
@@ -111,9 +118,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed Phase 3 - Core Video Composition verified and complete
+Stopped at: Completed 04-01-PLAN.md - API Client Layer Foundation
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-23 after completing 03-04-PLAN.md*
+*Last updated: 2026-01-23 after completing 04-01-PLAN.md*
