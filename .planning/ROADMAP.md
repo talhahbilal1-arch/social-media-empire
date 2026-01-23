@@ -13,7 +13,7 @@ This roadmap transforms the social media video automation concept into a product
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Environment & Foundation** - Setup Python 3.11, MoviePy 2.0, FFmpeg, project structure
-- [ ] **Phase 2: Brand Configuration System** - Three brand configs with colors, voices, CTAs in YAML
+- [x] **Phase 2: Brand Configuration System** - Three brand configs with colors, voices, CTAs in YAML
 - [ ] **Phase 3: Core Video Composition** - MoviePy pipeline: background + text overlays + audio → vertical MP4
 - [ ] **Phase 4: API Client Layer** - Gemini, Pexels, Edge-TTS, Supabase clients with retry logic
 - [ ] **Phase 5: Content Generation Services** - Script, Video, Audio services with file-based caching
@@ -51,8 +51,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md - Create BrandConfig Pydantic model with color validation
-- [ ] 02-02-PLAN.md - Create three brand YAML configs and BrandLoader utility
+- [x] 02-01-PLAN.md - Create BrandConfig Pydantic model with color validation
+- [x] 02-02-PLAN.md - Create three brand YAML configs and BrandLoader utility
 
 ### Phase 3: Core Video Composition
 **Goal**: Working video compositing engine producing 1080x1920 vertical MP4s with synced audio
@@ -152,7 +152,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Environment & Foundation | 2/2 | Complete | 2026-01-23 |
-| 2. Brand Configuration System | 0/2 | Planning complete | - |
+| 2. Brand Configuration System | 2/2 | Complete | 2026-01-23 |
 | 3. Core Video Composition | 0/TBD | Not started | - |
 | 4. API Client Layer | 0/TBD | Not started | - |
 | 5. Content Generation Services | 0/TBD | Not started | - |

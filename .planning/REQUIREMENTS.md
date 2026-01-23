@@ -37,11 +37,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Brand Configuration
 
-- [ ] **BRAND-01**: Menopause Planner brand configured (sage green/dusty rose, Etsy CTA)
-- [ ] **BRAND-02**: Daily Deal Darling brand configured (coral/teal, dailydealdarling.com CTA)
-- [ ] **BRAND-03**: Fitness Made Easy brand configured (blue/lime, TBD CTA)
-- [ ] **BRAND-04**: Each brand has distinct TTS voice selection
-- [ ] **BRAND-05**: Brand configs stored as editable YAML files
+- [x] **BRAND-01**: Menopause Planner brand configured (sage green/dusty rose, Etsy CTA)
+- [x] **BRAND-02**: Daily Deal Darling brand configured (coral/teal, dailydealdarling.com CTA)
+- [x] **BRAND-03**: Fitness Made Easy brand configured (blue/lime, TBD CTA)
+- [x] **BRAND-04**: Each brand has distinct TTS voice selection
+- [x] **BRAND-05**: Brand configs stored as editable YAML files
 
 ### CLI Interface
 
@@ -115,11 +115,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | COMP-04 | Phase 3 | Pending |
 | COMP-05 | Phase 3 | Pending |
 | COMP-06 | Phase 3 | Pending |
-| BRAND-01 | Phase 2 | Pending |
-| BRAND-02 | Phase 2 | Pending |
-| BRAND-03 | Phase 2 | Pending |
-| BRAND-04 | Phase 2 | Pending |
-| BRAND-05 | Phase 2 | Pending |
+| BRAND-01 | Phase 2 | Complete |
+| BRAND-02 | Phase 2 | Complete |
+| BRAND-03 | Phase 2 | Complete |
+| BRAND-04 | Phase 2 | Complete |
+| BRAND-05 | Phase 2 | Complete |
 | CLI-01 | Phase 7 | Pending |
 | CLI-02 | Phase 7 | Pending |
 | CLI-03 | Phase 7 | Pending |
