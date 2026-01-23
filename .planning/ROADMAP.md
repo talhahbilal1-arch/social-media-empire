@@ -64,10 +64,13 @@ Plans:
   3. Text overlays sync to audio timing within 100ms accuracy throughout 60-second duration
   4. Audio track plays continuously without drift at video end
   5. Memory cleanup verified across 10 consecutive video generations without leak
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 03-01-PLAN.md - Create VideoCompositor class with 16:9 to 9:16 aspect ratio conversion
+- [ ] 03-02-PLAN.md - Create text overlay system with safe zone positioning and brand colors
+- [ ] 03-03-PLAN.md - Create audio-text synchronization using edge-tts word boundaries
+- [ ] 03-04-PLAN.md - Wire composition pipeline and verify all success criteria
 
 ### Phase 4: API Client Layer
 **Goal**: Working API clients for all external services with error handling and retry logic
@@ -153,7 +156,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 |-------|----------------|--------|-----------|
 | 1. Environment & Foundation | 2/2 | Complete | 2026-01-23 |
 | 2. Brand Configuration System | 2/2 | Complete | 2026-01-23 |
-| 3. Core Video Composition | 0/TBD | Not started | - |
+| 3. Core Video Composition | 0/4 | Planned | - |
 | 4. API Client Layer | 0/TBD | Not started | - |
 | 5. Content Generation Services | 0/TBD | Not started | - |
 | 6. Pipeline Orchestration | 0/TBD | Not started | - |
@@ -162,4 +165,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 2 planning*
+*Last updated: 2026-01-23 after Phase 3 planning*
