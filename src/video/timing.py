@@ -32,3 +32,28 @@ class SentenceTiming:
     def end(self) -> float:
         """End time in seconds."""
         return self.start + self.duration
+
+
+def extract_word_timings(submaker: edge_tts.SubMaker) -> List[WordTiming]:
+    """Extract word-level timing from edge-tts SubMaker.
+
+    Args:
+        submaker: SubMaker instance that has been fed WordBoundary events
+
+    Returns:
+        List of WordTiming objects with start/end in seconds
+
+    Note:
+        SubMaker stores timing in offset (list of (start, end) tuples in milliseconds)
+        and text in subs (list of words). We convert to seconds for consistency.
+    """
+    word_timings = []
+
+    for text, (start_ms, end_ms) in zip(submaker.subs, submaker.offset):
+        word_timings.append(WordTiming(
+            text=text,
+            start=start_ms / 1000.0,  # Convert milliseconds to seconds
+            end=end_ms / 1000.0
+        ))
+
+    return word_timings
