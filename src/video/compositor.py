@@ -67,18 +67,18 @@ class VideoCompositor:
             # Video is wider (most common for 16:9) - crop sides
             new_width = int(clip.h * target_aspect)
             x1 = int((clip.w - new_width) / 2)
-            cropped = clip.crop(x1=x1, y1=0, width=new_width, height=clip.h)
+            cropped = clip.cropped(x1=x1, y1=0, width=new_width, height=clip.h)
         else:
             # Video is taller - crop top and bottom
             new_height = int(clip.w / target_aspect)
             y1 = int((clip.h - new_height) / 2)
-            cropped = clip.crop(x1=0, y1=y1, width=clip.w, height=new_height)
+            cropped = clip.cropped(x1=0, y1=y1, width=clip.w, height=new_height)
 
         # Track cropped clip
         self.clips_to_close.append(cropped)
 
         # Resize to exact target dimensions
-        resized = cropped.resize((VIDEO_WIDTH, VIDEO_HEIGHT))
+        resized = cropped.resized((VIDEO_WIDTH, VIDEO_HEIGHT))
         self.clips_to_close.append(resized)
 
         # Assert even dimensions (required for some codecs)
@@ -124,6 +124,8 @@ class VideoCompositor:
 
         # Match video duration exactly to audio to prevent drift
         bg_clip = bg_clip.with_duration(audio_clip.duration)
+        # Track the duration-modified clip (with_duration returns a new clip)
+        self.clips_to_close.append(bg_clip)
 
         # Create text overlays for each sentence
         text_clips = []
