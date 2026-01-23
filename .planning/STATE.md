@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 3 of 8 (Core Video Composition)
-Plan: 1 of TBD in current phase
+Plan: 2 of TBD in current phase
 Status: In progress
-Last activity: 2026-01-23 — Completed 03-01-PLAN.md
+Last activity: 2026-01-23 — Completed 03-02-PLAN.md
 
-Progress: [██░░░░░░░░] ~30%
+Progress: [██░░░░░░░░] ~32%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 1.6 min
+- Total plans completed: 6
+- Average duration: 1.9 min
 - Total execution time: 0.2 hours
 
 **By Phase:**
@@ -29,11 +29,11 @@ Progress: [██░░░░░░░░] ~30%
 |-------|-------|-------|----------|
 | 01-environment-foundation | 2 | 3 min | 1.5 min |
 | 02-brand-configuration-system | 2 | 193s | 96s |
-| 03-core-video-composition | 1 | 131s | 131s |
+| 03-core-video-composition | 2 | 341s | 170s |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (1min), 02-01 (82s), 02-02 (111s), 03-01 (131s)
-- Trend: Excellent pace
+- Last 5 plans: 02-01 (82s), 02-02 (111s), 03-01 (131s), 03-02 (210s)
+- Trend: Steady pace with environment setup overhead
 
 *Updated after each plan completion*
 
@@ -62,6 +62,10 @@ Recent decisions affecting current work:
 - Center-crop algorithm over letterboxing for 16:9 to 9:16 conversion (03-01)
 - Clip tracking list for memory management to prevent leaks in batch processing (03-01)
 - Target FPS set to 24 for consistent playback across platforms (03-01)
+- Absolute (x, y) tuple coordinates over string positions for text placement to avoid MoviePy 2.x bugs (03-02)
+- 120px safe zone margin uniformly applied to avoid mobile UI elements (03-02)
+- Auto-text wrapping with method='caption' for width constraints (03-02)
+- Brand color mapping: primary=stroke, secondary=text for visual contrast (03-02)
 
 ### Pending Todos
 
@@ -70,10 +74,15 @@ None yet.
 ### Blockers/Concerns
 
 **Environment Setup Required (01-02):**
-- Python 3.11 must be installed and activated
+- Python 3.11 must be installed and activated (currently using Python 3.9)
 - FFmpeg with libx264 codec must be installed
 - Virtual environment must be created and dependencies installed
 - Run `python scripts/validate_environment.py` to verify setup
+
+**Dependency Version Constraints (03-02):**
+- Python 3.9 compatibility required downgrading several packages
+- pillow 12.x requires Python 3.10+, using 11.0.0
+- Consider migrating to Python 3.11 as specified in .python-version
 
 **Research Flags from Planning:**
 - Phase 5: Cache eviction strategy (LRU vs FIFO, size limits, TTL)
@@ -83,9 +92,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 03-01-PLAN.md (Core Video Composition)
+Stopped at: Completed 03-02-PLAN.md (Text Overlay System)
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-23 after completing 03-01-PLAN.md*
+*Last updated: 2026-01-23 after completing 03-02-PLAN.md*
