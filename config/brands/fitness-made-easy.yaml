@@ -1,0 +1,11 @@
+name: Fitness Made Easy
+slug: fitness-made-easy
+colors:
+  primary: "#3498DB"      # Blue
+  secondary: "#2ECC71"    # Lime green
+  accent: "#F39C12"       # Orange
+tts_voice: en-US-SaraNeural  # Energetic, motivational female voice
+cta_text: Start your fitness journey
+cta_url: https://example.com/fitness  # TBD - placeholder
+description: Simple fitness tips for busy women
+target_audience: Busy women seeking practical fitness advice

@@ -1,0 +1,11 @@
+name: Daily Deal Darling
+slug: daily-deal-darling
+colors:
+  primary: "#FF6B6B"      # Coral
+  secondary: "#4ECDC4"    # Teal
+  accent: "#FFE66D"       # Yellow
+tts_voice: en-US-AriaNeural  # Enthusiastic, friendly female voice
+cta_text: Visit dailydealdarling.com
+cta_url: https://dailydealdarling.com
+description: Your guide to the best deals and recommendations
+target_audience: Women 25-55
