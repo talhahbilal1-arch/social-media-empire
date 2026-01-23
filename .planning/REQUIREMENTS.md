@@ -32,7 +32,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **COMP-02**: Output is 1080x1920 (9:16 vertical) MP4
 - [ ] **COMP-03**: Video length is content-driven (15-60 seconds based on script)
 - [ ] **COMP-04**: Text overlays appear as sentence blocks synced to audio timing
-- [ ] **COMP-05**: Text positioned within safe zones (250px buffer from edges)
+- [ ] **COMP-05**: Text positioned within safe zones (120px buffer from edges)
 - [ ] **COMP-06**: Text uses brand-specific color palette
 
 ### Brand Configuration
