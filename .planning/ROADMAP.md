@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Environment & Foundation** - Setup Python 3.11, MoviePy 2.0, FFmpeg, project structure
 - [x] **Phase 2: Brand Configuration System** - Three brand configs with colors, voices, CTAs in YAML
 - [x] **Phase 3: Core Video Composition** - MoviePy pipeline: background + text overlays + audio → vertical MP4
-- [ ] **Phase 4: API Client Layer** - Gemini, Pexels, Edge-TTS, Supabase clients with retry logic
+- [x] **Phase 4: API Client Layer** - Gemini, Pexels, Edge-TTS, Supabase clients with retry logic
 - [ ] **Phase 5: Content Generation Services** - Script, Video, Audio services with file-based caching
 - [ ] **Phase 6: Pipeline Orchestration** - VideoGenerator coordinates services with error recovery
 - [ ] **Phase 7: CLI Interface** - Command-line interface with batch processing and progress display
@@ -82,10 +82,14 @@ Plans:
   3. TTSClient generates audio files from text using Edge-TTS with configurable voices
   4. SupabaseClient uploads videos and returns public URLs with resumable upload for large files
   5. All clients log API call metadata (duration, status, errors) for debugging
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] TBD during planning
+- [x] 04-01-PLAN.md - Update dependencies, create Settings module and BaseClient with retry logic
+- [x] 04-02-PLAN.md - Create GeminiClient with rate limit handling
+- [x] 04-03-PLAN.md - Create PexelsClient with streaming downloads
+- [x] 04-04-PLAN.md - Create TTSClient with word timing extraction
+- [x] 04-05-PLAN.md - Create SupabaseClient with TUS resumable uploads
 
 ### Phase 5: Content Generation Services
 **Goal**: Script, video, and audio generation services with file-based caching to prevent quota exhaustion
@@ -157,7 +161,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 1. Environment & Foundation | 2/2 | Complete | 2026-01-23 |
 | 2. Brand Configuration System | 2/2 | Complete | 2026-01-23 |
 | 3. Core Video Composition | 4/4 | Complete | 2026-01-23 |
-| 4. API Client Layer | 0/TBD | Not started | - |
+| 4. API Client Layer | 5/5 | Complete | 2026-01-23 |
 | 5. Content Generation Services | 0/TBD | Not started | - |
 | 6. Pipeline Orchestration | 0/TBD | Not started | - |
 | 7. CLI Interface | 0/TBD | Not started | - |
@@ -165,4 +169,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 3 complete*
+*Last updated: 2026-01-23 after Phase 4 complete*
