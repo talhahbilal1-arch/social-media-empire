@@ -83,6 +83,11 @@ Recent decisions affecting current work:
 - gemini-2.0-flash-exp as default model for text generation (fast, free tier eligible) (04-02)
 - 8 retries with 5 min max window to handle Gemini free tier 5 RPM limit (04-02)
 - Error string analysis ("429", "rate", "quota") for retry decisions over exception types (04-02)
+- Use requests for streaming downloads instead of httpx (simpler API for stream=True) (04-03)
+- Pexels plain API key auth (not Bearer format) for correct header formatting (04-03)
+- Filter videos by duration (10-60s default) during search to reduce irrelevant results (04-03)
+- Progress logging every 5MB during large file downloads for visibility (04-03)
+- Rate limit warning threshold at 10 remaining to prevent quota exhaustion (04-03)
 
 ### Pending Todos
 
@@ -121,9 +126,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 04-02-PLAN.md - Gemini Text Generation Client
+Stopped at: Completed 04-03-PLAN.md - Pexels Video Search Client
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-23 after completing 04-02-PLAN.md*
+*Last updated: 2026-01-23 after completing 04-03-PLAN.md*
