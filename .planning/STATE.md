@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 4 of 8 (API Client Layer)
-Plan: 3 of 5 in current phase
-Status: In progress
-Last activity: 2026-01-23 — Completed 04-03-PLAN.md
+Plan: 5 of 5 in current phase
+Status: Phase complete
+Last activity: 2026-01-23 — Completed 04-05-PLAN.md
 
-Progress: [█████░░░░░] ~50.0%
+Progress: [██████████] 100.0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 4.2 min
-- Total execution time: 0.76 hours
+- Total plans completed: 13
+- Average duration: 3.9 min
+- Total execution time: 0.83 hours
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [█████░░░░░] ~50.0%
 | 01-environment-foundation | 2 | 3 min | 1.5 min |
 | 02-brand-configuration-system | 2 | 193s | 96s |
 | 03-core-video-composition | 4 | 1348s | 337s |
-| 04-api-client-layer | 3 | 555s | 185s |
+| 04-api-client-layer | 5 | 848s | 170s |
 
 **Recent Trend:**
-- Last 5 plans: 03-04 (761s), 04-01 (299s), 04-02 (107s), 04-03 (149s)
-- Trend: Phase 4 plans fast (simple client wrappers), 04-03 slightly slower than 04-02
+- Last 5 plans: 04-02 (107s), 04-03 (149s), 04-04 (125s), 04-05 (168s)
+- Trend: Phase 4 consistently fast, all API client wrappers completed
 
 *Updated after each plan completion*
 
@@ -88,6 +88,10 @@ Recent decisions affecting current work:
 - Filter videos by duration (10-60s default) during search to reduce irrelevant results (04-03)
 - Progress logging every 5MB during large file downloads for visibility (04-03)
 - Rate limit warning threshold at 10 remaining to prevent quota exhaustion (04-03)
+- Edge-TTS timing converted from 100-nanosecond units to seconds for MoviePy compatibility (04-04)
+- WordTiming dataclass uses text field (not word) for word content - critical for TTS integration (04-04)
+- asyncio.run() sync wrapper pattern for edge-tts to simplify caller code (04-04)
+- Simple linear backoff (2/4/6 seconds) for Edge-TTS retry instead of exponential (04-04)
 
 ### Pending Todos
 
@@ -126,9 +130,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 04-03-PLAN.md - Pexels Video Search Client
+Stopped at: Completed 04-04-PLAN.md - TTS Client with Word Timing
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-23 after completing 04-03-PLAN.md*
+*Last updated: 2026-01-23 after completing 04-04-PLAN.md*
