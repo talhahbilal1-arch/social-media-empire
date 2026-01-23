@@ -92,6 +92,10 @@ Recent decisions affecting current work:
 - WordTiming dataclass uses text field (not word) for word content - critical for TTS integration (04-04)
 - asyncio.run() sync wrapper pattern for edge-tts to simplify caller code (04-04)
 - Simple linear backoff (2/4/6 seconds) for Edge-TTS retry instead of exponential (04-04)
+- 6MB threshold for TUS vs standard upload for Supabase storage (04-05)
+- Auto-detect MIME type from file extension to prevent video upload failures (04-05)
+- Upsert enabled by default for Supabase uploads (overwrites existing files) (04-05)
+- 5MB chunk size for TUS resumable uploads (recommended by Supabase) (04-05)
 
 ### Pending Todos
 
