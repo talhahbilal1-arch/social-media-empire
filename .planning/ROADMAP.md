@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Environment & Foundation** - Setup Python 3.11, MoviePy 2.0, FFmpeg, project structure
 - [x] **Phase 2: Brand Configuration System** - Three brand configs with colors, voices, CTAs in YAML
-- [ ] **Phase 3: Core Video Composition** - MoviePy pipeline: background + text overlays + audio → vertical MP4
+- [x] **Phase 3: Core Video Composition** - MoviePy pipeline: background + text overlays + audio → vertical MP4
 - [ ] **Phase 4: API Client Layer** - Gemini, Pexels, Edge-TTS, Supabase clients with retry logic
 - [ ] **Phase 5: Content Generation Services** - Script, Video, Audio services with file-based caching
 - [ ] **Phase 6: Pipeline Orchestration** - VideoGenerator coordinates services with error recovery
@@ -67,10 +67,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 03-01-PLAN.md - Create VideoCompositor class with 16:9 to 9:16 aspect ratio conversion
-- [ ] 03-02-PLAN.md - Create text overlay system with safe zone positioning and brand colors
-- [ ] 03-03-PLAN.md - Create audio-text synchronization using edge-tts word boundaries
-- [ ] 03-04-PLAN.md - Wire composition pipeline and verify all success criteria
+- [x] 03-01-PLAN.md - Create VideoCompositor class with 16:9 to 9:16 aspect ratio conversion
+- [x] 03-02-PLAN.md - Create text overlay system with safe zone positioning and brand colors
+- [x] 03-03-PLAN.md - Create audio-text synchronization using edge-tts word boundaries
+- [x] 03-04-PLAN.md - Wire composition pipeline and verify all success criteria
 
 ### Phase 4: API Client Layer
 **Goal**: Working API clients for all external services with error handling and retry logic
@@ -156,7 +156,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 |-------|----------------|--------|-----------|
 | 1. Environment & Foundation | 2/2 | Complete | 2026-01-23 |
 | 2. Brand Configuration System | 2/2 | Complete | 2026-01-23 |
-| 3. Core Video Composition | 0/4 | Planned | - |
+| 3. Core Video Composition | 4/4 | Complete | 2026-01-23 |
 | 4. API Client Layer | 0/TBD | Not started | - |
 | 5. Content Generation Services | 0/TBD | Not started | - |
 | 6. Pipeline Orchestration | 0/TBD | Not started | - |
@@ -165,4 +165,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 3 planning*
+*Last updated: 2026-01-23 after Phase 3 complete*
