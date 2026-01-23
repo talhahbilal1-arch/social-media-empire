@@ -35,8 +35,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Create project folder structure, requirements.txt, .gitignore, .env.example
-- [ ] 01-02-PLAN.md - Create environment validation script and MoviePy test video generation
+- [x] 01-01-PLAN.md - Create project folder structure, requirements.txt, .gitignore, .env.example
+- [x] 01-02-PLAN.md - Create environment validation script and MoviePy test video generation
 
 ### Phase 2: Brand Configuration System
 **Goal**: Three brands configured with distinct visual identities, voices, and CTAs
@@ -48,10 +48,11 @@ Plans:
   3. Fitness Made Easy brand loads from YAML with blue/lime colors and TBD CTA
   4. Each brand specifies distinct TTS voice selection
   5. CLI can load any brand by name and access all configuration properties
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 02-01-PLAN.md - Create BrandConfig Pydantic model with color validation
+- [ ] 02-02-PLAN.md - Create three brand YAML configs and BrandLoader utility
 
 ### Phase 3: Core Video Composition
 **Goal**: Working video compositing engine producing 1080x1920 vertical MP4s with synced audio
@@ -151,7 +152,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Environment & Foundation | 2/2 | Complete | 2026-01-23 |
-| 2. Brand Configuration System | 0/TBD | Not started | - |
+| 2. Brand Configuration System | 0/2 | Planning complete | - |
 | 3. Core Video Composition | 0/TBD | Not started | - |
 | 4. API Client Layer | 0/TBD | Not started | - |
 | 5. Content Generation Services | 0/TBD | Not started | - |
@@ -161,4 +162,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 1 planning*
+*Last updated: 2026-01-23 after Phase 2 planning*
