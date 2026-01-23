@@ -43,6 +43,52 @@ class VideoCompositor:
         self.brand_config = brand_config
         self.clips_to_close: list = []
 
+    def convert_to_vertical(self, video_path: str) -> VideoFileClip:
+        """Convert 16:9 video to 9:16 by center cropping.
+
+        Args:
+            video_path: Path to input video file
+
+        Returns:
+            VideoFileClip resized to 1080x1920 (9:16)
+        """
+        # Load video and track for cleanup
+        clip = VideoFileClip(video_path)
+        self.clips_to_close.append(clip)
+
+        # Calculate aspect ratios
+        target_aspect = VIDEO_WIDTH / VIDEO_HEIGHT  # 0.5625 (9:16)
+        current_aspect = clip.w / clip.h
+
+        # Center crop based on aspect ratio difference
+        if current_aspect > target_aspect:
+            # Video is wider (most common for 16:9) - crop sides
+            new_width = int(clip.h * target_aspect)
+            x1 = int((clip.w - new_width) / 2)
+            cropped = clip.crop(x1=x1, y1=0, width=new_width, height=clip.h)
+        else:
+            # Video is taller - crop top and bottom
+            new_height = int(clip.w / target_aspect)
+            y1 = int((clip.h - new_height) / 2)
+            cropped = clip.crop(x1=0, y1=y1, width=clip.w, height=new_height)
+
+        # Track cropped clip
+        self.clips_to_close.append(cropped)
+
+        # Resize to exact target dimensions
+        resized = cropped.resize((VIDEO_WIDTH, VIDEO_HEIGHT))
+        self.clips_to_close.append(resized)
+
+        # Assert even dimensions (required for some codecs)
+        assert resized.w % 2 == 0 and resized.h % 2 == 0, \
+            f"Dimensions must be even: {resized.w}x{resized.h}"
+
+        # Set target FPS
+        final = resized.with_fps(TARGET_FPS)
+        self.clips_to_close.append(final)
+
+        return final
+
     def cleanup(self) -> None:
         """Close all tracked clips to prevent memory leaks.
 
