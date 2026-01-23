@@ -7,11 +7,13 @@ This module implements the VideoCompositor class which handles:
 """
 
 import gc
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
-from moviepy import VideoFileClip
+from moviepy import VideoFileClip, AudioFileClip, CompositeVideoClip
 
 from src.models.brand import BrandConfig
+from src.video.text_overlay import create_text_overlay
+from src.video.timing import SentenceTiming
 
 if TYPE_CHECKING:
     pass
@@ -88,6 +90,70 @@ class VideoCompositor:
         self.clips_to_close.append(final)
 
         return final
+
+    def compose_video(
+        self,
+        video_path: str,
+        audio_path: str,
+        sentence_timings: List[SentenceTiming],
+        output_path: str,
+        text_position: str = "center"
+    ) -> None:
+        """Compose final video with background, text overlays, and audio.
+
+        Args:
+            video_path: Path to stock video (any aspect ratio)
+            audio_path: Path to TTS audio file
+            sentence_timings: List of SentenceTiming from timing module
+            output_path: Where to write the final MP4
+            text_position: Default position for text ("top", "center", "bottom")
+
+        Raises:
+            FileNotFoundError: If video or audio files don't exist
+            RuntimeError: If composition fails
+
+        Note:
+            Call cleanup() after this method completes to release memory.
+        """
+        # Convert stock video to vertical
+        bg_clip = self.convert_to_vertical(video_path)
+
+        # Load audio
+        audio_clip = AudioFileClip(audio_path)
+        self.clips_to_close.append(audio_clip)
+
+        # Match video duration exactly to audio to prevent drift
+        bg_clip = bg_clip.with_duration(audio_clip.duration)
+
+        # Create text overlays for each sentence
+        text_clips = []
+        for timing in sentence_timings:
+            txt_clip = create_text_overlay(
+                text=timing.text,
+                start_time=timing.start,
+                duration=timing.duration,
+                brand_config=self.brand_config,
+                position=text_position
+            )
+            self.clips_to_close.append(txt_clip)
+            text_clips.append(txt_clip)
+
+        # Compose all layers - background first, then text on top
+        video = CompositeVideoClip([bg_clip] + text_clips)
+        video = video.with_audio(audio_clip)
+        self.clips_to_close.append(video)
+
+        # Export with optimized settings
+        video.write_videofile(
+            output_path,
+            codec='libx264',
+            audio_codec='aac',
+            fps=TARGET_FPS,
+            preset='medium',
+            ffmpeg_params=['-crf', '23'],
+            threads=4,
+            logger=None  # Suppress progress bar in production
+        )
 
     def cleanup(self) -> None:
         """Close all tracked clips to prevent memory leaks.
