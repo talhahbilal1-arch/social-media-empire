@@ -1,0 +1,22 @@
+# Video Processing
+moviepy==2.2.1
+pillow==12.1.0
+
+# AI Integration
+openai==1.61.1
+anthropic==0.49.0
+
+# Text-to-Speech
+edge-tts==6.1.18
+
+# Storage & Database
+supabase==2.13.2
+
+# Configuration & Environment
+python-dotenv==1.0.1
+pydantic==2.10.6
+pydantic-settings==2.7.2
+
+# Utilities
+requests==2.32.3
+python-dateutil==2.9.0
