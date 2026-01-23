@@ -12,7 +12,7 @@ This roadmap transforms the social media video automation concept into a product
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Environment & Foundation** - Setup Python 3.11, MoviePy 2.0, FFmpeg, project structure
+- [x] **Phase 1: Environment & Foundation** - Setup Python 3.11, MoviePy 2.0, FFmpeg, project structure
 - [ ] **Phase 2: Brand Configuration System** - Three brand configs with colors, voices, CTAs in YAML
 - [ ] **Phase 3: Core Video Composition** - MoviePy pipeline: background + text overlays + audio → vertical MP4
 - [ ] **Phase 4: API Client Layer** - Gemini, Pexels, Edge-TTS, Supabase clients with retry logic
@@ -32,10 +32,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. FFmpeg with libx264 codec can encode test video successfully
   3. MoviePy TextClip can render text overlays without ImageMagick errors
   4. Project structure created with folders for output, cache, configs, services
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 01-01-PLAN.md - Create project folder structure, requirements.txt, .gitignore, .env.example
+- [ ] 01-02-PLAN.md - Create environment validation script and MoviePy test video generation
 
 ### Phase 2: Brand Configuration System
 **Goal**: Three brands configured with distinct visual identities, voices, and CTAs
@@ -149,7 +150,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Environment & Foundation | 0/TBD | Not started | - |
+| 1. Environment & Foundation | 2/2 | Complete | 2026-01-23 |
 | 2. Brand Configuration System | 0/TBD | Not started | - |
 | 3. Core Video Composition | 0/TBD | Not started | - |
 | 4. API Client Layer | 0/TBD | Not started | - |
@@ -160,4 +161,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after initial creation*
+*Last updated: 2026-01-23 after Phase 1 planning*
