@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 4 of 8 (API Client Layer)
-Plan: 1 of 5 in current phase
+Plan: 3 of 5 in current phase
 Status: In progress
-Last activity: 2026-01-23 — Completed 04-01-PLAN.md
+Last activity: 2026-01-23 — Completed 04-03-PLAN.md
 
-Progress: [████░░░░░░] ~40.9%
+Progress: [█████░░░░░] ~50.0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 5.0 min
-- Total execution time: 0.75 hours
+- Total plans completed: 11
+- Average duration: 4.2 min
+- Total execution time: 0.76 hours
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [████░░░░░░] ~40.9%
 | 01-environment-foundation | 2 | 3 min | 1.5 min |
 | 02-brand-configuration-system | 2 | 193s | 96s |
 | 03-core-video-composition | 4 | 1348s | 337s |
-| 04-api-client-layer | 1 | 299s | 299s |
+| 04-api-client-layer | 3 | 555s | 185s |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (210s), 03-03 (246s), 03-04 (761s), 04-01 (299s)
-- Trend: 04-01 faster than 03-04, but included dependency resolution work
+- Last 5 plans: 03-04 (761s), 04-01 (299s), 04-02 (107s), 04-03 (149s)
+- Trend: Phase 4 plans fast (simple client wrappers), 04-03 slightly slower than 04-02
 
 *Updated after each plan completion*
 
@@ -80,6 +80,9 @@ Recent decisions affecting current work:
 - pydantic 2.12.5 required for supabase 2.27.2 realtime dependency (04-01)
 - Retry only on 429/5xx errors, fail immediately on 4xx client errors for BaseClient (04-01)
 - Singleton settings instance pattern for consistent config access (04-01)
+- gemini-2.0-flash-exp as default model for text generation (fast, free tier eligible) (04-02)
+- 8 retries with 5 min max window to handle Gemini free tier 5 RPM limit (04-02)
+- Error string analysis ("429", "rate", "quota") for retry decisions over exception types (04-02)
 
 ### Pending Todos
 
@@ -118,9 +121,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 04-01-PLAN.md - API Client Layer Foundation
+Stopped at: Completed 04-02-PLAN.md - Gemini Text Generation Client
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-23 after completing 04-01-PLAN.md*
+*Last updated: 2026-01-23 after completing 04-02-PLAN.md*
