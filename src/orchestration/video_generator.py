@@ -40,6 +40,7 @@ class GenerationResult:
         public_url: Public URL of uploaded video (if upload enabled and successful)
         error: Error message if generation failed
         duration_ms: Time taken for generation in milliseconds
+        script: The generated script text (for social media posting)
     """
 
     success: bool = False
@@ -47,6 +48,7 @@ class GenerationResult:
     public_url: Optional[str] = None
     error: Optional[str] = None
     duration_ms: float = 0.0
+    script: Optional[str] = None
 
 
 @dataclass
@@ -321,7 +323,8 @@ class VideoGenerator:
                 success=True,
                 video_path=output_path,
                 public_url=public_url,
-                duration_ms=duration_ms
+                duration_ms=duration_ms,
+                script=script.voiceover
             )
 
         except Exception as e:

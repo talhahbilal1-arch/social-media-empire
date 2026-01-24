@@ -2,9 +2,10 @@ name: Generate Videos
 
 on:
   schedule:
-    # Run twice daily: 08:00 UTC and 20:00 UTC
-    - cron: '0 8 * * *'
-    - cron: '0 20 * * *'
+    # Run three times daily for maximum content output
+    - cron: '0 8 * * *'   # 08:00 UTC - Morning batch
+    - cron: '0 14 * * *'  # 14:00 UTC - Afternoon batch
+    - cron: '0 20 * * *'  # 20:00 UTC - Evening batch
   workflow_dispatch:
     inputs:
       brand:
@@ -17,11 +18,26 @@ on:
         required: false
         default: 1
         type: number
+      post:
+        description: 'Post to social platforms after generation'
+        required: false
+        default: true
+        type: boolean
+      post_pinterest:
+        description: 'Post to Pinterest only'
+        required: false
+        default: false
+        type: boolean
+      post_youtube:
+        description: 'Post to YouTube Shorts only'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45  # Increased for posting time
 
     steps:
       - name: Checkout repository
@@ -55,13 +71,42 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Generate videos
+      - name: Generate and post videos
         env:
+          # Core API keys
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          # YouTube OAuth credentials
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          # Make.com webhook for Pinterest
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
+          # Determine posting flags
+          POST_FLAGS=""
+          if [ "${{ github.event.inputs.post }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            POST_FLAGS="--post"
+          elif [ "${{ github.event.inputs.post_pinterest }}" = "true" ]; then
+            POST_FLAGS="--post-pinterest"
+          elif [ "${{ github.event.inputs.post_youtube }}" = "true" ]; then
+            POST_FLAGS="--post-youtube"
+          fi
+
           python cli.py \
             --brand "${{ github.event.inputs.brand || 'all' }}" \
-            --count "${{ github.event.inputs.count || '1' }}"
+            --count "${{ github.event.inputs.count || '1' }}" \
+            $POST_FLAGS
+
+      - name: Upload artifacts (for debugging)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-generation-logs
+          path: |
+            output/
+            *.log
+          retention-days: 7

@@ -18,6 +18,15 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
 
+    # YouTube OAuth credentials (for Shorts uploads)
+    YOUTUBE_API_KEY: str = ""
+    YOUTUBE_CLIENT_ID: str = ""
+    YOUTUBE_CLIENT_SECRET: str = ""
+    YOUTUBE_REFRESH_TOKEN: str = ""
+
+    # Make.com webhook (for Pinterest posting)
+    MAKE_WEBHOOK_URL: str = ""
+
     # Application settings
     DEFAULT_BRAND: str = "menopause"
     MAX_CACHE_SIZE_GB: int = 5
@@ -26,6 +35,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Allow extra environment variables
 
     def validate_api_keys(self, required: Optional[list[str]] = None) -> None:
         """Validate required API keys are present.
