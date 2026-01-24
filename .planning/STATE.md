@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Generate engaging, brand-consistent short-form video content automatically without manual intervention or ongoing costs.
-**Current focus:** Phase 4 - API Client Layer
+**Current focus:** Phase 5 - Content Generation Services
 
 ## Current Position
 
-Phase: 4 of 8 (API Client Layer)
-Plan: 5 of 5 in current phase
-Status: Phase complete
-Last activity: 2026-01-23 — Completed 04-05-PLAN.md
+Phase: 5 of 8 (Content Generation Services)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-01-24 - Completed 05-01-PLAN.md
 
-Progress: [██████████] 100.0%
+Progress: [███████░░░] 70.0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 3.9 min
-- Total execution time: 0.83 hours
+- Total plans completed: 14
+- Average duration: 3.7 min
+- Total execution time: 0.87 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [██████████] 100.0%
 | 02-brand-configuration-system | 2 | 193s | 96s |
 | 03-core-video-composition | 4 | 1348s | 337s |
 | 04-api-client-layer | 5 | 848s | 170s |
+| 05-content-generation-services | 1 | 152s | 152s |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (107s), 04-03 (149s), 04-04 (125s), 04-05 (168s)
-- Trend: Phase 4 consistently fast, all API client wrappers completed
+- Last 5 plans: 04-03 (149s), 04-04 (125s), 04-05 (168s), 05-01 (152s)
+- Trend: Content models and cache foundation completed efficiently
 
 *Updated after each plan completion*
 
@@ -96,6 +97,9 @@ Recent decisions affecting current work:
 - Auto-detect MIME type from file extension to prevent video upload failures (04-05)
 - Upsert enabled by default for Supabase uploads (overwrites existing files) (04-05)
 - 5MB chunk size for TUS resumable uploads (recommended by Supabase) (04-05)
+- Dataclass to_dict/from_dict pattern for JSON serialization (05-01)
+- 16-char SHA256 prefix for cache hash keys (sufficient collision space, short filenames) (05-01)
+- v1 version prefix in cache hash for future invalidation without manual cleanup (05-01)
 
 ### Pending Todos
 
@@ -133,10 +137,10 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-23
-Stopped at: Completed 04-04-PLAN.md - TTS Client with Word Timing
+Last session: 2026-01-24
+Stopped at: Completed 05-01-PLAN.md - Content Models and Cache Utility
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-23 after completing 04-04-PLAN.md*
+*Last updated: 2026-01-24 after completing 05-01-PLAN.md*
