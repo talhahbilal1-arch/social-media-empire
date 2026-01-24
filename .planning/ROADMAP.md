@@ -101,10 +101,13 @@ Plans:
   3. AudioSynthesizer generates TTS audio with brand-specific voices and caches by script hash
   4. Cache hit prevents API call (verified by monitoring API request logs)
   5. Generated content adapts to brand voice and tone (wellness/deals/fitness distinct)
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 05-01-PLAN.md - Create content data models (Script, AudioResult, GeneratedContent) and FileCache utility
+- [ ] 05-02-PLAN.md - Create ScriptGenerator with brand-specific prompts and Gemini integration
+- [ ] 05-03-PLAN.md - Create VideoFetcher with Pexels caching and duration matching
+- [ ] 05-04-PLAN.md - Create AudioSynthesizer with TTS caching and brand voice selection
 
 ### Phase 6: Pipeline Orchestration
 **Goal**: VideoGenerator coordinates full pipeline with per-video error recovery and temp file cleanup
@@ -162,11 +165,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 2. Brand Configuration System | 2/2 | Complete | 2026-01-23 |
 | 3. Core Video Composition | 4/4 | Complete | 2026-01-23 |
 | 4. API Client Layer | 5/5 | Complete | 2026-01-23 |
-| 5. Content Generation Services | 0/TBD | Not started | - |
+| 5. Content Generation Services | 0/4 | Planned | - |
 | 6. Pipeline Orchestration | 0/TBD | Not started | - |
 | 7. CLI Interface | 0/TBD | Not started | - |
 | 8. GitHub Actions Automation | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 4 complete*
+*Last updated: 2026-01-23 after Phase 5 planning complete*
