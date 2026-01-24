@@ -257,33 +257,29 @@ class VideoGenerator:
                 extra={"duration_ms": audio_result.duration_ms}
             )
 
-            # Step 4: Create sentence timings
-            self.logger.info("[4/6] Creating sentence timings")
+            # Step 4: Prepare word timings for karaoke captions
+            self.logger.info("[4/6] Preparing word timings for captions")
             step_start = time.time()
-            sentences = self._split_into_sentences(script.voiceover)
-            sentence_timings: List[SentenceTiming] = group_words_into_sentences(
-                audio_result.word_timings,
-                sentences
-            )
+            word_timings = audio_result.word_timings
             self.logger.info(
-                f"Sentence timings created in {(time.time() - step_start)*1000:.0f}ms",
-                extra={"sentence_count": len(sentence_timings)}
+                f"Word timings ready in {(time.time() - step_start)*1000:.0f}ms",
+                extra={"word_count": len(word_timings)}
             )
 
-            # Step 5: Compose video
-            self.logger.info("[5/6] Composing video")
+            # Step 5: Compose video with karaoke captions
+            self.logger.info("[5/6] Composing video with karaoke captions")
             step_start = time.time()
 
             # Generate output path
             output_filename = self._generate_output_filename(brand_config.slug)
             output_path = self.output_dir / output_filename
 
-            # Create compositor and compose
+            # Create compositor and compose with word-level timings
             compositor = VideoCompositor(brand_config)
             compositor.compose_video(
                 video_path=str(stock_video_path),
                 audio_path=str(audio_result.audio_path),
-                sentence_timings=sentence_timings,
+                word_timings=word_timings,
                 output_path=str(output_path)
             )
             self.logger.info(

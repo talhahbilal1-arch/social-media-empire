@@ -1,19 +1,19 @@
-"""Core video composition engine for aspect ratio conversion and overlay rendering.
+"""Core video composition engine with karaoke-style captions.
 
 This module implements the VideoCompositor class which handles:
 - 16:9 to 9:16 aspect ratio conversion via center-cropping
+- Karaoke-style word-by-word caption highlighting
 - Clip tracking for memory management
-- Brand-specific styling and overlays
 """
 
 import gc
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 
 from moviepy import VideoFileClip, AudioFileClip, CompositeVideoClip
 
 from src.models.brand import BrandConfig
-from src.video.text_overlay import create_caption
-from src.video.timing import SentenceTiming
+from src.video.text_overlay import create_karaoke_captions, KaraokeConfig
+from src.video.timing import WordTiming, SentenceTiming
 
 if TYPE_CHECKING:
     pass
@@ -22,9 +22,6 @@ if TYPE_CHECKING:
 VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
 
-# Safe zone margin to avoid text cutoff on platforms
-SAFE_ZONE_MARGIN = 120
-
 # Target frame rate for consistent playback
 TARGET_FPS = 24
 
@@ -32,8 +29,8 @@ TARGET_FPS = 24
 class VideoCompositor:
     """Compositor for creating vertical format social media videos.
 
-    Handles aspect ratio conversion, text overlays, audio composition,
-    and memory management for MoviePy clips.
+    Handles aspect ratio conversion, karaoke-style captions,
+    audio composition, and memory management for MoviePy clips.
     """
 
     def __init__(self, brand_config: BrandConfig) -> None:
@@ -95,18 +92,18 @@ class VideoCompositor:
         self,
         video_path: str,
         audio_path: str,
-        sentence_timings: List[SentenceTiming],
+        word_timings: List[WordTiming],
         output_path: str,
-        text_position: str = "center"
+        sentence_timings: Optional[List[SentenceTiming]] = None  # Kept for compatibility
     ) -> None:
-        """Compose final video with background, text overlays, and audio.
+        """Compose final video with background, karaoke captions, and audio.
 
         Args:
             video_path: Path to stock video (any aspect ratio)
             audio_path: Path to TTS audio file
-            sentence_timings: List of SentenceTiming from timing module
+            word_timings: List of WordTiming for karaoke-style captions
             output_path: Where to write the final MP4
-            text_position: Default position for text ("top", "center", "bottom")
+            sentence_timings: Deprecated, kept for compatibility
 
         Raises:
             FileNotFoundError: If video or audio files don't exist
@@ -124,25 +121,20 @@ class VideoCompositor:
 
         # Match video duration exactly to audio to prevent drift
         bg_clip = bg_clip.with_duration(audio_clip.duration)
-        # Track the duration-modified clip (with_duration returns a new clip)
         self.clips_to_close.append(bg_clip)
 
-        # Create caption overlays for each sentence (background + text)
-        text_clips = []
-        for timing in sentence_timings:
-            caption_clips = create_caption(
-                text=timing.text,
-                start_time=timing.start,
-                duration=timing.duration,
-                brand_config=self.brand_config
-            )
-            # caption_clips is [bg_clip, txt_clip]
-            for clip in caption_clips:
-                self.clips_to_close.append(clip)
-                text_clips.append(clip)
+        # Create karaoke-style caption clips
+        caption_clips = create_karaoke_captions(
+            word_timings=word_timings,
+            brand_config=self.brand_config
+        )
 
-        # Compose all layers - background first, then text on top
-        video = CompositeVideoClip([bg_clip] + text_clips)
+        # Track all caption clips for cleanup
+        for clip in caption_clips:
+            self.clips_to_close.append(clip)
+
+        # Compose all layers - background first, then captions on top
+        video = CompositeVideoClip([bg_clip] + caption_clips)
         video = video.with_audio(audio_clip)
         self.clips_to_close.append(video)
 

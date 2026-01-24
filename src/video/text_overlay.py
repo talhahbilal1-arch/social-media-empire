@@ -1,152 +1,260 @@
-"""Text overlay system with caption-style subtitles synced to audio.
+"""Karaoke-style caption system with word-by-word highlighting.
 
-This module provides functionality to create readable captions/subtitles
-positioned at the bottom of vertical videos, synced with TTS audio timing.
+Creates large, bold captions in the center of the video where each word
+changes from yellow to white as it's being spoken.
 """
 
-from typing import Literal, Optional, List
+from typing import List, Optional
 from dataclasses import dataclass
-from moviepy import TextClip, ColorClip, CompositeVideoClip
+from moviepy import TextClip, CompositeVideoClip
 from src.models.brand import BrandConfig
+from src.video.timing import WordTiming
 
 
-# Video dimensions (1080x1920 portrait for TikTok/Instagram/YouTube Shorts)
+# Video dimensions (1080x1920 portrait)
 VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
-SAFE_ZONE_MARGIN = 120  # 120px from edges per roadmap requirements
-
-# Caption positioning - bottom area for subtitle-style display
-CAPTION_BOTTOM_MARGIN = 200  # Distance from bottom edge
-CAPTION_PADDING = 20  # Padding inside background box
 
 
 @dataclass
-class CaptionConfig:
-    """Configuration for caption appearance."""
-    font_size: int = 56  # Slightly smaller for subtitle readability
-    stroke_width: int = 4  # Thicker stroke for contrast
-    text_align: str = 'center'
-    bg_color: str = 'black'  # Background box color
-    bg_opacity: float = 0.7  # Semi-transparent background
-    text_color: str = 'white'  # White text for readability
-    stroke_color: str = 'black'  # Black stroke for contrast
+class KaraokeConfig:
+    """Configuration for karaoke-style captions."""
+    font_size: int = 80  # Large text
+    font: str = "Helvetica"  # System font that works on macOS
+    highlight_color: str = "yellow"  # Current word color
+    spoken_color: str = "white"  # Already spoken words
+    unspoken_color: str = "white"  # Words not yet spoken (dimmer)
+    stroke_color: str = "black"  # Outline for readability
+    stroke_width: int = 5  # Thick outline for bold look
+    words_per_line: int = 4  # Words to show at once
+    line_spacing: int = 20  # Space between lines
 
 
-PositionType = Literal["top", "center", "bottom"]
-
-
-def create_caption(
-    text: str,
-    start_time: float,
-    duration: float,
+def create_karaoke_captions(
+    word_timings: List[WordTiming],
     brand_config: BrandConfig,
-    config: Optional[CaptionConfig] = None
-) -> List:
-    """Create a caption with semi-transparent background at the bottom of the screen.
+    config: Optional[KaraokeConfig] = None
+) -> List[TextClip]:
+    """Create karaoke-style captions with word-by-word highlighting.
+
+    Each word appears in yellow when being spoken, then turns white.
+    Text is displayed in the center of the video.
 
     Args:
-        text: Text content to display as caption
-        start_time: When the caption appears (seconds)
-        duration: How long the caption is visible (seconds)
-        brand_config: Brand configuration (used for fallback colors)
-        config: Optional override for caption styling
+        word_timings: List of WordTiming with start/end times for each word
+        brand_config: Brand configuration (for potential color overrides)
+        config: Optional karaoke styling configuration
 
     Returns:
-        List of clips [background_clip, text_clip] for compositing
+        List of TextClip objects to be composited onto the video
     """
-    config = config or CaptionConfig()
+    config = config or KaraokeConfig()
+    clips = []
 
-    # Create text clip with high contrast colors
-    txt_clip = TextClip(
-        text=text,
-        font_size=config.font_size,
-        color=config.text_color,
-        stroke_color=config.stroke_color,
-        stroke_width=config.stroke_width,
-        method='caption',
-        size=(VIDEO_WIDTH - 2 * SAFE_ZONE_MARGIN - 2 * CAPTION_PADDING, None),
-        text_align=config.text_align,
-        margin=(5, 5)
-    )
+    if not word_timings:
+        return clips
 
-    # Calculate background box dimensions
-    bg_width = VIDEO_WIDTH - 2 * SAFE_ZONE_MARGIN + 20
-    bg_height = txt_clip.h + 2 * CAPTION_PADDING
+    # Group words into chunks for display
+    chunks = []
+    for i in range(0, len(word_timings), config.words_per_line):
+        chunk = word_timings[i:i + config.words_per_line]
+        chunks.append(chunk)
 
-    # Calculate Y position (bottom of screen, above safe zone)
-    y_pos = VIDEO_HEIGHT - CAPTION_BOTTOM_MARGIN - bg_height
-    x_pos = (VIDEO_WIDTH - bg_width) // 2
+    # For each chunk, create the caption display
+    for chunk_idx, chunk in enumerate(chunks):
+        if not chunk:
+            continue
 
-    # Create semi-transparent background
-    bg_clip = ColorClip(
-        size=(bg_width, bg_height),
-        color=(0, 0, 0)  # Black
-    )
-    bg_clip = bg_clip.with_opacity(config.bg_opacity)
-    bg_clip = bg_clip.with_position((x_pos, y_pos))
-    bg_clip = bg_clip.with_start(start_time)
-    bg_clip = bg_clip.with_duration(duration)
+        # Calculate chunk timing
+        chunk_start = chunk[0].start
+        chunk_end = chunk[-1].end
 
-    # Position text centered within background
-    text_x = x_pos + (bg_width - txt_clip.w) // 2
-    text_y = y_pos + CAPTION_PADDING
-    txt_clip = txt_clip.with_position((text_x, text_y))
-    txt_clip = txt_clip.with_start(start_time)
-    txt_clip = txt_clip.with_duration(duration)
+        # Get all words in this chunk as text
+        chunk_words = [w.text for w in chunk]
+        full_text = " ".join(chunk_words)
 
-    return [bg_clip, txt_clip]
+        # Create base text (all white) that shows for entire chunk duration
+        base_clip = TextClip(
+            text=full_text,
+            font_size=config.font_size,
+            font=config.font,
+            color=config.spoken_color,
+            stroke_color=config.stroke_color,
+            stroke_width=config.stroke_width,
+            method='caption',
+            size=(VIDEO_WIDTH - 160, None),  # Width with margins
+            text_align='center'
+        )
+
+        # Position in center of screen
+        x_pos = (VIDEO_WIDTH - base_clip.w) // 2
+        y_pos = (VIDEO_HEIGHT - base_clip.h) // 2
+
+        base_clip = base_clip.with_position((x_pos, y_pos))
+        base_clip = base_clip.with_start(chunk_start)
+        base_clip = base_clip.with_duration(chunk_end - chunk_start)
+        clips.append(base_clip)
+
+        # For each word in the chunk, create a yellow highlight that shows during that word
+        for word_idx, word_timing in enumerate(chunk):
+            # Build text with only this word highlighted
+            # We need to create a clip that shows just this word in yellow
+            # positioned exactly where it appears in the full text
+
+            # Create the highlighted word clip
+            highlight_clip = TextClip(
+                text=word_timing.text,
+                font_size=config.font_size,
+                font=config.font,
+                color=config.highlight_color,
+                stroke_color=config.stroke_color,
+                stroke_width=config.stroke_width,
+                method='label',
+                text_align='center'
+            )
+
+            # Calculate horizontal position of this word within the chunk
+            # Get width of words before this one
+            words_before = chunk_words[:word_idx]
+            if words_before:
+                prefix_text = " ".join(words_before) + " "
+                prefix_clip = TextClip(
+                    text=prefix_text,
+                    font_size=config.font_size,
+                    font=config.font,
+                    color=config.spoken_color,
+                    method='label'
+                )
+                prefix_width = prefix_clip.w
+                prefix_clip.close()
+            else:
+                prefix_width = 0
+
+            # Position highlight over the word
+            # The base_clip is centered, so we need to calculate from its left edge
+            word_x = x_pos + prefix_width + (base_clip.w - base_clip.w) // 2
+
+            # For caption method, text starts from left of the clip
+            # We need to account for centering
+            text_start_x = x_pos
+            word_x = text_start_x + prefix_width
+
+            highlight_clip = highlight_clip.with_position((word_x, y_pos))
+            highlight_clip = highlight_clip.with_start(word_timing.start)
+            highlight_clip = highlight_clip.with_duration(word_timing.end - word_timing.start)
+            clips.append(highlight_clip)
+
+    return clips
 
 
-def create_text_overlay(
-    text: str,
-    start_time: float,
-    duration: float,
+def create_simple_karaoke(
+    word_timings: List[WordTiming],
     brand_config: BrandConfig,
-    position: PositionType = "bottom",
-    config: Optional[CaptionConfig] = None
-) -> TextClip:
-    """Create a text overlay clip - now defaults to caption style at bottom.
+    config: Optional[KaraokeConfig] = None
+) -> List[TextClip]:
+    """Simplified karaoke - show each word one at a time, yellow while speaking.
+
+    This is a simpler approach that shows words individually as they're spoken.
 
     Args:
-        text: Text content to display
-        start_time: When the text appears (seconds)
-        duration: How long the text is visible (seconds)
-        brand_config: Brand configuration for colors
-        position: Vertical position - "top", "center", or "bottom" (default: bottom)
-        config: Optional override for text styling
+        word_timings: List of WordTiming with start/end times for each word
+        brand_config: Brand configuration
+        config: Optional styling configuration
 
     Returns:
-        TextClip positioned as readable caption
+        List of TextClip objects
     """
-    config = config or CaptionConfig()
+    config = config or KaraokeConfig()
+    clips = []
 
-    # Create text with high-contrast subtitle styling
-    txt_clip = TextClip(
-        text=text,
-        font_size=config.font_size,
-        color=config.text_color,
-        stroke_color=config.stroke_color,
-        stroke_width=config.stroke_width,
-        method='caption',
-        size=(VIDEO_WIDTH - 2 * SAFE_ZONE_MARGIN, None),
-        text_align=config.text_align,
-        margin=(5, 5)
-    )
+    # Group into phrases of N words
+    phrase_size = config.words_per_line
 
-    # Calculate absolute Y position based on position parameter
-    if position == "top":
-        y_pos = SAFE_ZONE_MARGIN
-    elif position == "bottom":
-        # Position at bottom with margin for mobile UI
-        y_pos = VIDEO_HEIGHT - CAPTION_BOTTOM_MARGIN - txt_clip.h
-    else:  # center
-        y_pos = (VIDEO_HEIGHT - txt_clip.h) / 2
+    for i in range(0, len(word_timings), phrase_size):
+        phrase_words = word_timings[i:i + phrase_size]
+        if not phrase_words:
+            continue
 
-    x_pos = SAFE_ZONE_MARGIN
+        phrase_start = phrase_words[0].start
+        phrase_end = phrase_words[-1].end
+        phrase_text = " ".join([w.text for w in phrase_words])
 
-    # Apply position and timing
-    txt_clip = txt_clip.with_position((x_pos, y_pos))
-    txt_clip = txt_clip.with_start(start_time)
-    txt_clip = txt_clip.with_duration(duration)
+        # Create the phrase with ALL words in white (base layer)
+        white_clip = TextClip(
+            text=phrase_text,
+            font_size=config.font_size,
+            font=config.font,
+            color=config.spoken_color,
+            stroke_color=config.stroke_color,
+            stroke_width=config.stroke_width,
+            method='caption',
+            size=(VIDEO_WIDTH - 200, None),
+            text_align='center'
+        )
 
-    return txt_clip
+        # Center position
+        x_pos = (VIDEO_WIDTH - white_clip.w) // 2
+        y_pos = (VIDEO_HEIGHT - white_clip.h) // 2
+
+        white_clip = white_clip.with_position((x_pos, y_pos))
+        white_clip = white_clip.with_start(phrase_start)
+        white_clip = white_clip.with_duration(phrase_end - phrase_start)
+        clips.append(white_clip)
+
+        # Now create yellow highlights for each word as it's spoken
+        for j, word_timing in enumerate(phrase_words):
+            # Build the phrase with current word in yellow, others transparent
+            words_before = [w.text for w in phrase_words[:j]]
+            words_after = [w.text for w in phrase_words[j+1:]]
+
+            # Create a version with just this word visible (in yellow)
+            # Position it precisely over where the word appears
+
+            # Measure prefix width
+            if words_before:
+                prefix = " ".join(words_before) + " "
+                prefix_clip = TextClip(
+                    text=prefix,
+                    font_size=config.font_size,
+                    font=config.font,
+                    method='label'
+                )
+                prefix_w = prefix_clip.w
+                prefix_clip.close()
+            else:
+                prefix_w = 0
+
+            # Create yellow word
+            yellow_word = TextClip(
+                text=word_timing.text,
+                font_size=config.font_size,
+                font=config.font,
+                color=config.highlight_color,
+                stroke_color=config.stroke_color,
+                stroke_width=config.stroke_width,
+                method='label'
+            )
+
+            # Position it over the word location
+            word_x = x_pos + prefix_w
+            yellow_word = yellow_word.with_position((word_x, y_pos))
+            yellow_word = yellow_word.with_start(word_timing.start)
+            yellow_word = yellow_word.with_duration(word_timing.end - word_timing.start)
+            clips.append(yellow_word)
+
+    return clips
+
+
+# Keep backward compatibility
+def create_text_overlay(*args, **kwargs):
+    """Deprecated - use create_karaoke_captions instead."""
+    return []
+
+
+def create_caption(*args, **kwargs):
+    """Deprecated - use create_karaoke_captions instead."""
+    return []
+
+
+# Export config class with old name for compatibility
+CaptionConfig = KaraokeConfig
