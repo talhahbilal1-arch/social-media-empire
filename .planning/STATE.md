@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Generate engaging, brand-consistent short-form video content automatically without manual intervention or ongoing costs.
-**Current focus:** Phase 5 - Content Generation Services
+**Current focus:** Phase 6 - Pipeline Orchestration
 
 ## Current Position
 
