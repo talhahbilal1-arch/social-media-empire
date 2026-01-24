@@ -2,13 +2,14 @@
 
 This module provides:
 - VideoCompositor: Main class for compositing videos
+- create_caption: Factory for creating caption clips with backgrounds
 - create_text_overlay: Factory for creating text clips
-- TextOverlayConfig: Configuration for text styling
+- CaptionConfig: Configuration for caption styling
 - Timing utilities: For audio-text synchronization
 """
 
 from src.video.compositor import VideoCompositor
-from src.video.text_overlay import create_text_overlay, TextOverlayConfig
+from src.video.text_overlay import create_text_overlay, create_caption, CaptionConfig
 from src.video.timing import (
     WordTiming,
     SentenceTiming,
@@ -19,7 +20,8 @@ from src.video.timing import (
 __all__ = [
     "VideoCompositor",
     "create_text_overlay",
-    "TextOverlayConfig",
+    "create_caption",
+    "CaptionConfig",
     "WordTiming",
     "SentenceTiming",
     "extract_word_timings",

@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, List
 from moviepy import VideoFileClip, AudioFileClip, CompositeVideoClip
 
 from src.models.brand import BrandConfig
-from src.video.text_overlay import create_text_overlay
+from src.video.text_overlay import create_caption
 from src.video.timing import SentenceTiming
 
 if TYPE_CHECKING:
@@ -127,18 +127,19 @@ class VideoCompositor:
         # Track the duration-modified clip (with_duration returns a new clip)
         self.clips_to_close.append(bg_clip)
 
-        # Create text overlays for each sentence
+        # Create caption overlays for each sentence (background + text)
         text_clips = []
         for timing in sentence_timings:
-            txt_clip = create_text_overlay(
+            caption_clips = create_caption(
                 text=timing.text,
                 start_time=timing.start,
                 duration=timing.duration,
-                brand_config=self.brand_config,
-                position=text_position
+                brand_config=self.brand_config
             )
-            self.clips_to_close.append(txt_clip)
-            text_clips.append(txt_clip)
+            # caption_clips is [bg_clip, txt_clip]
+            for clip in caption_clips:
+                self.clips_to_close.append(clip)
+                text_clips.append(clip)
 
         # Compose all layers - background first, then text on top
         video = CompositeVideoClip([bg_clip] + text_clips)
