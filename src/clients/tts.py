@@ -34,7 +34,7 @@ class TTSClient:
     BRAND_VOICES = {
         "menopause": "en-US-JennyNeural",
         "daily_deal": "en-US-AriaNeural",
-        "fitness": "en-US-SaraNeural",
+        "fitness": "en-US-EmmaNeural",  # Changed from SaraNeural (unavailable)
     }
 
     # Default voice if brand not found
