@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 
 ## Current Position
 
-Phase: 5 of 8 (Content Generation Services)
-Plan: 4 of 4 in current phase
+Phase: 6 of 8 (Pipeline Orchestration)
+Plan: 1 of 1 in current phase
 Status: Phase complete
-Last activity: 2026-01-24 - Completed 05-02-PLAN.md
+Last activity: 2026-01-24 - Completed 06-01-PLAN.md
 
-Progress: [████████░░] 85.0%
+Progress: [█████████░] 90.0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 17
-- Average duration: 3.4 min
-- Total execution time: 1.19 hours
+- Total plans completed: 18
+- Average duration: 3.6 min
+- Total execution time: 1.28 hours
 
 **By Phase:**
 
@@ -32,10 +32,11 @@ Progress: [████████░░] 85.0%
 | 03-core-video-composition | 4 | 1348s | 337s |
 | 04-api-client-layer | 5 | 848s | 170s |
 | 05-content-generation-services | 4 | 1391s | 348s |
+| 06-pipeline-orchestration | 1 | 624s | 624s |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (152s), 05-04 (17min), 05-03 (103s), 05-02 (116s)
-- Trend: Phase 5 complete - all content generation services implemented
+- Last 5 plans: 05-04 (17min), 05-03 (103s), 05-02 (116s), 06-01 (624s)
+- Trend: Phase 6 complete - VideoGenerator orchestrates full pipeline
 
 *Updated after each plan completion*
 
@@ -110,6 +111,10 @@ Recent decisions affecting current work:
 - Cache key format: brand_slug + topic_seed + date for daily freshness (05-02)
 - VOICEOVER/SEARCH_TERMS markers for simple regex-free Gemini response parsing (05-02)
 - Fallback search terms ['lifestyle', 'nature', 'wellness'] when parsing fails (05-02)
+- Compositor cleanup in finally block ensures cleanup runs even on exceptions (06-01)
+- gc.collect() after each video prevents memory accumulation in batch processing (06-01)
+- Lazy SupabaseClient initialization avoids credential errors during testing (06-01)
+- Sentence splitting via regex on `. ` `! ` `? ` preserves punctuation naturally (06-01)
 
 ### Pending Todos
 
@@ -148,9 +153,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-24
-Stopped at: Completed 05-02-PLAN.md - ScriptGenerator Service (Phase 5 complete)
+Stopped at: Completed 06-01-PLAN.md - VideoGenerator Pipeline Orchestration (Phase 6 complete)
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-24 after completing 05-02-PLAN.md*
+*Last updated: 2026-01-24 after completing 06-01-PLAN.md*
