@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: API Client Layer** - Gemini, Pexels, Edge-TTS, Supabase clients with retry logic
 - [x] **Phase 5: Content Generation Services** - Script, Video, Audio services with file-based caching
 - [x] **Phase 6: Pipeline Orchestration** - VideoGenerator coordinates services with error recovery
-- [ ] **Phase 7: CLI Interface** - Command-line interface with batch processing and progress display
+- [x] **Phase 7: CLI Interface** - Command-line interface with batch processing and progress display
 - [ ] **Phase 8: GitHub Actions Automation** - Scheduled workflow running 2x daily with secrets management
 
 ## Phase Details
@@ -134,10 +134,10 @@ Plans:
   3. CLI shows progress during generation with status for each video
   4. CLI displays summary table showing success/failure counts per brand
   5. CLI exits with appropriate status code (0 for all success, 1 for any failures)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD during planning
+- [x] 07-01-PLAN.md - Create CLI with argument parsing, progress display, and summary table
 
 ### Phase 8: GitHub Actions Automation
 **Goal**: Scheduled workflow running 2x daily with zero-touch operation
@@ -167,9 +167,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. API Client Layer | 5/5 | Complete | 2026-01-23 |
 | 5. Content Generation Services | 4/4 | Complete | 2026-01-23 |
 | 6. Pipeline Orchestration | 1/1 | Complete | 2026-01-23 |
-| 7. CLI Interface | 0/TBD | Not started | - |
+| 7. CLI Interface | 1/1 | Complete | 2026-01-23 |
 | 8. GitHub Actions Automation | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 6 planning*
+*Last updated: 2026-01-23 after Phase 7 planning*
