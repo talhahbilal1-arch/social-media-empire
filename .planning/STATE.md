@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Generate engaging, brand-consistent short-form video content automatically without manual intervention or ongoing costs.
-**Current focus:** Phase 6 - Pipeline Orchestration
+**Current focus:** Phase 7 - CLI Interface
 
 ## Current Position
 
-Phase: 6 of 8 (Pipeline Orchestration)
+Phase: 7 of 8 (CLI Interface)
 Plan: 1 of 1 in current phase
 Status: Phase complete
-Last activity: 2026-01-24 - Completed 06-01-PLAN.md
+Last activity: 2026-01-24 - Completed 07-01-PLAN.md
 
-Progress: [█████████░] 90.0%
+Progress: [█████████░] 95.0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 18
-- Average duration: 3.6 min
-- Total execution time: 1.28 hours
+- Total plans completed: 19
+- Average duration: 3.5 min
+- Total execution time: 1.33 hours
 
 **By Phase:**
 
@@ -33,10 +33,11 @@ Progress: [█████████░] 90.0%
 | 04-api-client-layer | 5 | 848s | 170s |
 | 05-content-generation-services | 4 | 1391s | 348s |
 | 06-pipeline-orchestration | 1 | 624s | 624s |
+| 07-cli-interface | 1 | 210s | 210s |
 
 **Recent Trend:**
-- Last 5 plans: 05-04 (17min), 05-03 (103s), 05-02 (116s), 06-01 (624s)
-- Trend: Phase 6 complete - VideoGenerator orchestrates full pipeline
+- Last 5 plans: 05-03 (103s), 05-02 (116s), 06-01 (624s), 07-01 (210s)
+- Trend: Phase 7 complete - CLI provides user-facing interface for video generation
 
 *Updated after each plan completion*
 
@@ -115,6 +116,9 @@ Recent decisions affecting current work:
 - gc.collect() after each video prevents memory accumulation in batch processing (06-01)
 - Lazy SupabaseClient initialization avoids credential errors during testing (06-01)
 - Sentence splitting via regex on `. ` `! ` `? ` preserves punctuation naturally (06-01)
+- Exit code 0 for all success, 1 for any failure follows Unix convention (07-01)
+- Fixed-width columns with pipe separators for summary table alignment (07-01)
+- Runtime list_brands() for "all" brand expansion over hardcoded list (07-01)
 
 ### Pending Todos
 
@@ -153,9 +157,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-24
-Stopped at: Completed 06-01-PLAN.md - VideoGenerator Pipeline Orchestration (Phase 6 complete)
+Stopped at: Completed 07-01-PLAN.md - CLI Interface (Phase 7 complete)
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-24 after completing 06-01-PLAN.md*
+*Last updated: 2026-01-24 after completing 07-01-PLAN.md*
