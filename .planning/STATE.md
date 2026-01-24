@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 5 of 8 (Content Generation Services)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-24 - Completed 05-01-PLAN.md
+Last activity: 2026-01-24 - Completed 05-04-PLAN.md
 
-Progress: [███████░░░] 70.0%
+Progress: [████████░░] 75.0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
+- Total plans completed: 15
 - Average duration: 3.7 min
-- Total execution time: 0.87 hours
+- Total execution time: 1.15 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [███████░░░] 70.0%
 | 02-brand-configuration-system | 2 | 193s | 96s |
 | 03-core-video-composition | 4 | 1348s | 337s |
 | 04-api-client-layer | 5 | 848s | 170s |
-| 05-content-generation-services | 1 | 152s | 152s |
+| 05-content-generation-services | 2 | 1172s | 586s |
 
 **Recent Trend:**
-- Last 5 plans: 04-03 (149s), 04-04 (125s), 04-05 (168s), 05-01 (152s)
-- Trend: Content models and cache foundation completed efficiently
+- Last 5 plans: 04-04 (125s), 04-05 (168s), 05-01 (152s), 05-04 (17min)
+- Trend: Audio synthesizer service with caching layer completed
 
 *Updated after each plan completion*
 
@@ -100,6 +100,9 @@ Recent decisions affecting current work:
 - Dataclass to_dict/from_dict pattern for JSON serialization (05-01)
 - 16-char SHA256 prefix for cache hash keys (sufficient collision space, short filenames) (05-01)
 - v1 version prefix in cache hash for future invalidation without manual cleanup (05-01)
+- Separate audio file cache (mp3) from metadata cache (JSON) for efficient validation (05-04)
+- Cache key = SHA256(voice + script_text)[:16] for voice-specific caching (05-04)
+- Store word timings as dicts in metadata cache for JSON serialization (05-04)
 
 ### Pending Todos
 
@@ -138,9 +141,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-24
-Stopped at: Completed 05-01-PLAN.md - Content Models and Cache Utility
+Stopped at: Completed 05-04-PLAN.md - Audio Synthesizer Service
 Resume file: None
 
 ---
 *State initialized: 2026-01-22*
-*Last updated: 2026-01-24 after completing 05-01-PLAN.md*
+*Last updated: 2026-01-24 after completing 05-04-PLAN.md*
