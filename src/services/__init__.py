@@ -1,4 +1,5 @@
 """Services layer for business logic and orchestration."""
 from src.services.audio_synthesizer import AudioSynthesizer
+from src.services.video_fetcher import VideoFetcher
 
-__all__ = ["AudioSynthesizer"]
+__all__ = ["AudioSynthesizer", "VideoFetcher"]
