@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Core Video Composition** - MoviePy pipeline: background + text overlays + audio → vertical MP4
 - [x] **Phase 4: API Client Layer** - Gemini, Pexels, Edge-TTS, Supabase clients with retry logic
 - [x] **Phase 5: Content Generation Services** - Script, Video, Audio services with file-based caching
-- [ ] **Phase 6: Pipeline Orchestration** - VideoGenerator coordinates services with error recovery
+- [x] **Phase 6: Pipeline Orchestration** - VideoGenerator coordinates services with error recovery
 - [ ] **Phase 7: CLI Interface** - Command-line interface with batch processing and progress display
 - [ ] **Phase 8: GitHub Actions Automation** - Scheduled workflow running 2x daily with secrets management
 
@@ -119,10 +119,10 @@ Plans:
   3. Temp files cleaned up after each video regardless of success or failure
   4. Batch of 5 videos completes with mixed success/failure and reports final counts
   5. Memory returns to baseline between videos in batch (no progressive leak)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD during planning
+- [x] 06-01-PLAN.md - Create VideoGenerator with single/batch generation and error recovery
 
 ### Phase 7: CLI Interface
 **Goal**: Command-line interface enabling batch video generation for specified brands
@@ -166,10 +166,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 3. Core Video Composition | 4/4 | Complete | 2026-01-23 |
 | 4. API Client Layer | 5/5 | Complete | 2026-01-23 |
 | 5. Content Generation Services | 4/4 | Complete | 2026-01-23 |
-| 6. Pipeline Orchestration | 0/TBD | Not started | - |
+| 6. Pipeline Orchestration | 1/1 | Complete | 2026-01-23 |
 | 7. CLI Interface | 0/TBD | Not started | - |
 | 8. GitHub Actions Automation | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 5 complete*
+*Last updated: 2026-01-23 after Phase 6 planning*
