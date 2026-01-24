@@ -69,7 +69,9 @@ class TTSClient:
         Returns:
             TTSClient configured for brand voice
         """
-        voice = cls.BRAND_VOICES.get(brand_name.lower(), cls.DEFAULT_VOICE)
+        # Normalize slug: "menopause-planner" -> "menopause" to match BRAND_VOICES keys
+        normalized = brand_name.lower().split("-")[0].replace("_", "")
+        voice = cls.BRAND_VOICES.get(normalized, cls.DEFAULT_VOICE)
         return cls(voice=voice, **kwargs)
 
     async def _generate_async(

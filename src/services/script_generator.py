@@ -227,7 +227,9 @@ SEARCH_TERMS:
         )
 
         # Get brand voice configuration
-        voice = self.BRAND_VOICES.get(brand_config.slug, self.DEFAULT_VOICE)
+        # Normalize slug: "menopause-planner" -> "menopause" to match BRAND_VOICES keys
+        normalized_slug = brand_config.slug.split("-")[0].replace("_", "")
+        voice = self.BRAND_VOICES.get(normalized_slug, self.DEFAULT_VOICE)
 
         # Generate topic
         topic_prompt = self._build_topic_prompt(brand_config, voice)
