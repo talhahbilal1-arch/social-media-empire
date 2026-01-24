@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Content Generation Services** - Script, Video, Audio services with file-based caching
 - [x] **Phase 6: Pipeline Orchestration** - VideoGenerator coordinates services with error recovery
 - [x] **Phase 7: CLI Interface** - Command-line interface with batch processing and progress display
-- [ ] **Phase 8: GitHub Actions Automation** - Scheduled workflow running 2x daily with secrets management
+- [x] **Phase 8: GitHub Actions Automation** - Scheduled workflow running 2x daily with secrets management
 
 ## Phase Details
 
@@ -149,10 +149,10 @@ Plans:
   3. API keys loaded from GitHub Secrets without hardcoding
   4. Workflow completes successfully and uploads videos to Supabase
   5. Manual workflow dispatch triggers video generation on demand
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD during planning
+- [x] 08-01-PLAN.md - Create GitHub Actions workflow with cron schedule and secrets
 
 ## Progress
 
@@ -168,8 +168,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. Content Generation Services | 4/4 | Complete | 2026-01-23 |
 | 6. Pipeline Orchestration | 1/1 | Complete | 2026-01-23 |
 | 7. CLI Interface | 1/1 | Complete | 2026-01-23 |
-| 8. GitHub Actions Automation | 0/TBD | Not started | - |
+| 8. GitHub Actions Automation | 1/1 | Complete | 2026-01-23 |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after Phase 7 planning*
+*Last updated: 2026-01-23 after Phase 8 planning*
