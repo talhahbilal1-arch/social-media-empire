@@ -57,7 +57,7 @@ EMOJI_MAP = {
 class KaraokeConfig:
     """Configuration for karaoke-style captions."""
     font_size: int = 80  # Large bold text
-    font: str = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"  # Heavy bold
+    font: str = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf  # Heavy bold
     base_color: str = "white"  # Bright white for non-highlighted words
     highlight_color: str = "#00FFFF"  # Neon cyan for current word
     alt_highlight: str = "#FFFF00"  # Electric yellow (alternate)
