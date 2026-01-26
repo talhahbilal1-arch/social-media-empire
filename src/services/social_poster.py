@@ -17,6 +17,7 @@ from datetime import datetime
 from supabase import create_client, Client
 
 from src.clients.youtube_shorts import YouTubeShortsClient, create_youtube_client
+from src.clients.late_api import LateAPIClient, create_late_client
 
 
 @dataclass
@@ -66,13 +67,13 @@ class SocialPoster:
 
     def __init__(
         self,
-        make_webhook_url: Optional[str] = None,
+        late_client: Optional[LateAPIClient] = None,
         supabase_url: Optional[str] = None,
         supabase_key: Optional[str] = None,
         youtube_client: Optional[YouTubeShortsClient] = None
     ):
         """Initialize social poster with platform credentials."""
-        self.make_webhook_url = make_webhook_url or os.getenv('MAKE_WEBHOOK_URL')
+        self.late_client = late_client or create_late_client()
         self.supabase_url = supabase_url or os.getenv('SUPABASE_URL')
         self.supabase_key = supabase_key or os.getenv('SUPABASE_KEY')
         self.youtube_client = youtube_client or create_youtube_client()
