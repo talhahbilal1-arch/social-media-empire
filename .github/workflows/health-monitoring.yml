@@ -49,7 +49,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+         LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
         run: |
           if [ "${{ github.event.inputs.full_check }}" == "true" ] || [ "${{ github.event_name }}" == "schedule" ]; then
             python -m monitoring.health_checker --full --json > health_check.json
