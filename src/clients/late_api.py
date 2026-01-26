@@ -136,9 +136,7 @@ class LateAPIClient(BaseClient):
         if description:
             # Pinterest uses description for the pin text
             # Late API combines content + description
-            payload["content"] = f"{title}
-
-{description}"
+            payload["content"] = f"{title}\n\n{description}"
 
         if link:
             payload["platformSettings"] = {
