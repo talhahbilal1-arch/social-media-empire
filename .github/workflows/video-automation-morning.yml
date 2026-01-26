@@ -45,6 +45,7 @@ jobs:
       - name: Check critical configuration
         env:
           CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
         run: |
           echo "=============================================="
@@ -54,36 +55,39 @@ jobs:
           if [ -z "$CREATOMATE_API_KEY" ]; then
             echo "❌ ERROR: CREATOMATE_API_KEY is NOT SET"
             echo "   Videos cannot be rendered - only placeholder URLs will be used"
-            echo "   Nothing will be posted to Pinterest!"
             echo ""
-            echo "CREATOMATE_NOT_SET=true" >> config_status.txt
           else
             echo "✅ CREATOMATE_API_KEY is configured"
-            echo "CREATOMATE_NOT_SET=false" >> config_status.txt
           fi
 
-          if [ -z "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
-            echo "❌ ERROR: MAKE_COM_PINTEREST_WEBHOOK is NOT SET"
-            echo "   Pinterest posting is disabled!"
-            echo "PINTEREST_NOT_SET=true" >> config_status.txt
+          # Late API is preferred for Pinterest video posting
+          if [ -n "$LATE_API_KEY" ]; then
+            echo "✅ LATE_API_KEY is configured (preferred for Pinterest)"
+          elif [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "⚠️  LATE_API_KEY not set, using Make.com webhook fallback"
           else
-            echo "✅ MAKE_COM_PINTEREST_WEBHOOK is configured"
-            echo "PINTEREST_NOT_SET=false" >> config_status.txt
+            echo "❌ ERROR: No Pinterest posting configured!"
+            echo "   Set LATE_API_KEY (preferred) or MAKE_COM_PINTEREST_WEBHOOK"
           fi
 
           echo "=============================================="
 
           # Write to summary
-          echo "## ⚙️ Configuration Status" >> $GITHUB_STEP_SUMMARY
+          echo "## Configuration Status" >> $GITHUB_STEP_SUMMARY
           if [ -z "$CREATOMATE_API_KEY" ]; then
-            echo "❌ **CREATOMATE_API_KEY**: NOT SET - Videos cannot be rendered!" >> $GITHUB_STEP_SUMMARY
+            echo "- CREATOMATE_API_KEY: NOT SET" >> $GITHUB_STEP_SUMMARY
           else
-            echo "✅ **CREATOMATE_API_KEY**: Configured" >> $GITHUB_STEP_SUMMARY
+            echo "- CREATOMATE_API_KEY: Configured" >> $GITHUB_STEP_SUMMARY
           fi
-          if [ -z "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
-            echo "❌ **MAKE_COM_PINTEREST_WEBHOOK**: NOT SET - Pinterest posting disabled!" >> $GITHUB_STEP_SUMMARY
+          if [ -n "$LATE_API_KEY" ]; then
+            echo "- LATE_API_KEY: Configured (preferred for Pinterest)" >> $GITHUB_STEP_SUMMARY
           else
-            echo "✅ **MAKE_COM_PINTEREST_WEBHOOK**: Configured" >> $GITHUB_STEP_SUMMARY
+            echo "- LATE_API_KEY: Not set" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "- MAKE_COM_PINTEREST_WEBHOOK: Configured (fallback)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- MAKE_COM_PINTEREST_WEBHOOK: Not set" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Run health check
@@ -109,6 +113,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
         run: |
           ARGS="--slot morning"

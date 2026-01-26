@@ -1,11 +1,19 @@
-"""Pinterest Idea Pin creation via Make.com webhook."""
+"""Pinterest Idea Pin creation via Late API (preferred) or Make.com webhook (fallback)."""
 
 import logging
+import os
 from typing import Optional
 from dataclasses import dataclass
 
 from utils.config import get_config
 from utils.api_clients import PinterestClient
+
+# Try to import Late API client
+try:
+    from src.clients.late_api import LateAPIClient, create_late_client
+    LATE_API_AVAILABLE = True
+except ImportError:
+    LATE_API_AVAILABLE = False
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,16 +21,36 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class PinterestIdeaPinCreator:
-    """Creates Pinterest Idea Pins via Make.com webhook integration."""
+    """Creates Pinterest Idea Pins via Late API (preferred) or Make.com webhook (fallback).
+
+    Late API handles Pinterest's complex video upload workflow properly, while
+    Make.com webhooks have issues with video pins (error 235 "Sorry, this image is broken").
+    """
 
     pinterest_client: PinterestClient = None
+    late_client: "LateAPIClient" = None
 
     def __post_init__(self):
         config = get_config()
+
+        # Try Late API first (preferred for video pins)
+        if self.late_client is None and LATE_API_AVAILABLE:
+            late_api_key = os.getenv('LATE_API_KEY')
+            if late_api_key:
+                try:
+                    self.late_client = LateAPIClient(api_key=late_api_key)
+                    logger.info("Pinterest posting using Late API")
+                except Exception as e:
+                    logger.warning(f"Failed to initialize Late API client: {e}")
+                    self.late_client = None
+
+        # Fallback to Make.com webhook
         if self.pinterest_client is None and config.make_com_pinterest_webhook:
             self.pinterest_client = PinterestClient(
                 webhook_url=config.make_com_pinterest_webhook
             )
+            if self.late_client is None:
+                logger.info("Pinterest posting using Make.com webhook (fallback)")
 
     def create_video_idea_pin(
         self,
@@ -34,6 +62,9 @@ class PinterestIdeaPinCreator:
     ) -> dict:
         """Create a video-based Idea Pin.
 
+        Uses Late API if available (handles video uploads properly), otherwise
+        falls back to Make.com webhook.
+
         Args:
             board_id: Pinterest board ID or name
             title: Pin title (max 100 characters)
@@ -44,10 +75,84 @@ class PinterestIdeaPinCreator:
         Returns:
             Result dict with success status and pin details
         """
-        if not self.pinterest_client:
-            raise ValueError("Pinterest client not configured. Set MAKE_COM_PINTEREST_WEBHOOK.")
+        # Try Late API first (preferred for video pins)
+        if self.late_client is not None:
+            return self._create_via_late_api(
+                board_id=board_id,
+                title=title,
+                description=description,
+                video_url=video_url,
+                link=link
+            )
 
-        logger.info(f"Creating Pinterest Idea Pin: {title[:50]}...")
+        # Fallback to Make.com webhook
+        if self.pinterest_client is not None:
+            return self._create_via_webhook(
+                board_id=board_id,
+                title=title,
+                description=description,
+                video_url=video_url,
+                link=link
+            )
+
+        raise ValueError("Pinterest not configured. Set LATE_API_KEY or MAKE_COM_PINTEREST_WEBHOOK.")
+
+    def _create_via_late_api(
+        self,
+        board_id: str,
+        title: str,
+        description: str,
+        video_url: str,
+        link: Optional[str] = None
+    ) -> dict:
+        """Create video pin via Late API."""
+        logger.info(f"Creating Pinterest video pin via Late API: {title[:50]}...")
+
+        try:
+            result = self.late_client.create_pinterest_video_pin(
+                video_url=video_url,
+                title=title[:100],
+                description=description[:500],
+                link=link,
+                board_id=board_id,
+                publish_now=True
+            )
+
+            if result.success:
+                logger.info(f"Pinterest video pin created successfully via Late API")
+                return {
+                    "success": True,
+                    "id": result.post_id or "pending",
+                    "url": result.platform_post_url or "",
+                    "status": "created",
+                    "method": "late_api"
+                }
+            else:
+                logger.error(f"Late API failed: {result.error}")
+                return {
+                    "success": False,
+                    "error": result.error,
+                    "method": "late_api"
+                }
+
+        except Exception as e:
+            logger.error(f"Failed to create Pinterest video pin via Late API: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "method": "late_api"
+            }
+
+    def _create_via_webhook(
+        self,
+        board_id: str,
+        title: str,
+        description: str,
+        video_url: str,
+        link: Optional[str] = None
+    ) -> dict:
+        """Create video pin via Make.com webhook (fallback)."""
+        logger.info(f"Creating Pinterest Idea Pin via Make.com: {title[:50]}...")
 
         try:
             # Create single-page video Idea Pin
@@ -65,19 +170,21 @@ class PinterestIdeaPinCreator:
                 link=link
             )
 
-            logger.info(f"Pinterest Idea Pin created successfully")
+            logger.info(f"Pinterest Idea Pin created successfully via Make.com")
             return {
                 "success": True,
                 "id": result.get("id", "pending"),
                 "url": result.get("url", ""),
-                "status": result.get("status", "created")
+                "status": result.get("status", "created"),
+                "method": "webhook"
             }
 
         except Exception as e:
-            logger.error(f"Failed to create Pinterest Idea Pin: {e}")
+            logger.error(f"Failed to create Pinterest Idea Pin via Make.com: {e}")
             return {
                 "success": False,
-                "error": str(e)
+                "error": str(e),
+                "method": "webhook"
             }
 
     def create_multi_page_idea_pin(
@@ -210,4 +317,12 @@ class PinterestIdeaPinCreator:
 
     def is_configured(self) -> bool:
         """Check if Pinterest posting is configured."""
-        return self.pinterest_client is not None
+        return self.late_client is not None or self.pinterest_client is not None
+
+    def get_posting_method(self) -> str:
+        """Get the current posting method being used."""
+        if self.late_client is not None:
+            return "late_api"
+        elif self.pinterest_client is not None:
+            return "webhook"
+        return "not_configured"
