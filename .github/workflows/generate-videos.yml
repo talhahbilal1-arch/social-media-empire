@@ -83,8 +83,8 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-          # Make.com webhook for Pinterest
-          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          # Late API for Pinterest video posting
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
         run: |
           # Determine posting flags
           POST_FLAGS=""
