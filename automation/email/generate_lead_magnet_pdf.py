@@ -586,10 +586,10 @@ def generate_pdf(output_path: str = "smart_shopper_guide.pdf"):
 
     # Stats - with proper spacing between numbers and labels
     stats = [["$2,847", "6", "15"], ["Avg. Yearly Savings", "Power Strategies", "Top Products"]]
-    stats_table = Table(stats, colWidths=[page_width/3]*3, rowHeights=[45, 25])
+    stats_table = Table(stats, colWidths=[page_width/3]*3, rowHeights=[50, 22])
     stats_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('VALIGN', (0, 0), (-1, 0), 'BOTTOM'),  # Numbers at bottom of cell
+        ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),   # Numbers centered in taller cell
         ('VALIGN', (0, 1), (-1, 1), 'TOP'),      # Labels at top of cell
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, 0), 28),
@@ -598,8 +598,8 @@ def generate_pdf(output_path: str = "smart_shopper_guide.pdf"):
         ('TEXTCOLOR', (2, 0), (2, 0), C.GREEN),
         ('FONTSIZE', (0, 1), (-1, 1), 9),
         ('TEXTCOLOR', (0, 1), (-1, 1), C.GRAY),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 2),   # Small gap below numbers
-        ('TOPPADDING', (0, 1), (-1, 1), 2),      # Small gap above labels
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),  # Push numbers up from bottom
+        ('TOPPADDING', (0, 1), (-1, 1), 6),      # Gap above labels
     ]))
     elements.append(stats_table)
 
