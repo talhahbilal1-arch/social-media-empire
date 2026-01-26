@@ -165,8 +165,8 @@ class CrossPlatformPoster:
         try:
             # Check if Pinterest is configured
             if not self.pinterest_poster.is_configured():
-                logger.error("Pinterest posting failed: MAKE_COM_PINTEREST_WEBHOOK not configured")
-                return {"success": False, "error": "Pinterest not configured. Set MAKE_COM_PINTEREST_WEBHOOK."}
+                logger.error("Pinterest posting failed: No Pinterest posting method configured")
+                return {"success": False, "error": "Pinterest not configured. Set LATE_API_KEY (preferred) or MAKE_COM_PINTEREST_WEBHOOK."}
 
             board_id = brand_config.get("pinterest_board_id", "default")
             logger.info(f"Posting to Pinterest board: {board_id}")
@@ -298,11 +298,15 @@ class CrossPlatformPoster:
 
     def get_platform_status(self) -> dict[str, bool]:
         """Check which platforms are configured and available."""
+        import os
         config = get_config()
+
+        # Pinterest can use Late API (preferred) or Make.com webhook
+        pinterest_configured = bool(os.getenv('LATE_API_KEY')) or bool(config.make_com_pinterest_webhook)
 
         return {
             "youtube_shorts": bool(config.youtube_refresh_token),
-            "pinterest": bool(config.make_com_pinterest_webhook),
+            "pinterest": pinterest_configured,
             "tiktok": bool(config.make_com_pinterest_webhook),  # Shares webhook
             "instagram_reels": bool(config.make_com_pinterest_webhook)  # Shares webhook
         }
