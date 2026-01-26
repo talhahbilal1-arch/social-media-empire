@@ -155,12 +155,10 @@ class SocialPoster:
         Returns:
             PostResult with success status and any errors
         """
-        if not self.make_webhook_url:
-            return PostResult(
+        if not self.late_client:            return PostResult(
                 platform='pinterest',
                 success=False,
-                error='Make.com webhook URL not configured'
-            )
+                error='Late API client not configured (LATE_API_KEY missing)'            )
 
         # Build description with hashtags
         hashtags = metadata.hashtags or self.BRAND_HASHTAGS.get(metadata.brand, [])
