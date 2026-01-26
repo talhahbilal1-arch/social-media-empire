@@ -4,6 +4,7 @@ from src.clients.gemini import GeminiClient
 from src.clients.pexels import PexelsClient
 from src.clients.tts import TTSClient, TTSResult
 from src.clients.storage import SupabaseClient, UploadResult
+from src.clients.late_api import LateAPIClient, LatePostResult, create_late_client
 
 __all__ = [
     "BaseClient",
@@ -12,5 +13,8 @@ __all__ = [
     "TTSClient",
     "TTSResult",
     "SupabaseClient",
-    "UploadResult"
+    "UploadResult",
+        "LateAPIClient",
+        "LatePostResult",
+        "create_late_client"
 ]
