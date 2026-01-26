@@ -1,0 +1,32 @@
+<!-- Deal Card Template
+Variables:
+  {{ASIN}} - Amazon Standard Identification Number
+  {{TITLE}} - Product title
+  {{DEAL_PRICE}} - Current deal price
+  {{ORIGINAL_PRICE}} - Original/list price
+  {{DISCOUNT}} - Discount percentage (number)
+  {{BADGE_COLOR}} - Color for discount badge
+  {{IMAGE_URL}} - Product image URL
+  {{CATEGORY}} - Product category
+  {{AFFILIATE_URL}} - Full affiliate link
+-->
+
+<div class="product-card">
+  <span class="product-badge" style="background: {{BADGE_COLOR}};">{{DISCOUNT}}% OFF</span>
+  <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+    <img src="{{IMAGE_URL}}" alt="{{TITLE}}" style="object-fit: contain;">
+  </div>
+  <div class="product-content">
+    <span class="product-category">{{CATEGORY}}</span>
+    <h4 class="product-title">{{TITLE}}</h4>
+    <div class="product-rating">
+      <div class="stars">★★★★★</div>
+      <span class="rating-count">Verified Deal</span>
+    </div>
+    <div class="product-price">
+      <span class="price-current">${{DEAL_PRICE}}</span>
+      <span class="price-original">${{ORIGINAL_PRICE}}</span>
+    </div>
+    <a href="{{AFFILIATE_URL}}" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">Grab This Deal →</a>
+  </div>
+</div>
