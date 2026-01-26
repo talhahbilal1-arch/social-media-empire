@@ -410,8 +410,11 @@ class ProductCard(Flowable):
         c.setFont("Helvetica-Bold", 10)
         c.drawCentredString(self.width/2, btn_y + 9, "Shop on Amazon →")
 
-        # Make entire card clickable
-        c.linkURL(self.affiliate_url, (0, 0, self.width, self.height))
+        # Make the button clickable - use relative=1 for flowable coordinates
+        c.linkURL(self.affiliate_url, (btn_x, btn_y, btn_x + btn_w, btn_y + btn_h), relative=1)
+
+        # Also make the entire card clickable as a fallback
+        c.linkURL(self.affiliate_url, (0, 0, self.width, self.height), relative=1)
 
 
 class StrategyCard(Flowable):
@@ -581,18 +584,22 @@ def generate_pdf(output_path: str = "smart_shopper_guide.pdf"):
 
     elements.append(Spacer(1, 0.35*inch))
 
-    # Stats
+    # Stats - with proper spacing between numbers and labels
     stats = [["$2,847", "6", "15"], ["Avg. Yearly Savings", "Power Strategies", "Top Products"]]
-    stats_table = Table(stats, colWidths=[page_width/3]*3, rowHeights=[32, 18])
+    stats_table = Table(stats, colWidths=[page_width/3]*3, rowHeights=[45, 25])
     stats_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, 0), 'BOTTOM'),  # Numbers at bottom of cell
+        ('VALIGN', (0, 1), (-1, 1), 'TOP'),      # Labels at top of cell
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 26),
+        ('FONTSIZE', (0, 0), (-1, 0), 28),
         ('TEXTCOLOR', (0, 0), (0, 0), C.CORAL),
         ('TEXTCOLOR', (1, 0), (1, 0), C.NAVY),
         ('TEXTCOLOR', (2, 0), (2, 0), C.GREEN),
         ('FONTSIZE', (0, 1), (-1, 1), 9),
         ('TEXTCOLOR', (0, 1), (-1, 1), C.GRAY),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 2),   # Small gap below numbers
+        ('TOPPADDING', (0, 1), (-1, 1), 2),      # Small gap above labels
     ]))
     elements.append(stats_table)
 
