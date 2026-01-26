@@ -533,24 +533,25 @@
     <!-- Newsletter Section -->
     <section class="newsletter">
       <div class="container">
-        <h2>Get the Best Deals in Your Inbox</h2>
-        <p>Join 10,000+ smart shoppers. Get weekly deals, new product alerts, and exclusive discounts.</p>
-        <form class="newsletter-form" action="#" method="POST">
-          <input type="email" class="newsletter-input" placeholder="Enter your email" required>
-          <button type="submit" class="btn btn-primary btn-lg">Subscribe Free</button>
+        <h2>🎁 Get Our Free Shopping Guide + Weekly Deals</h2>
+        <p>Join 10,000+ smart shoppers! Get our <strong>50 Ways to Save on Beauty, Home & Decor</strong> guide instantly, plus weekly curated deals.</p>
+        <form class="newsletter-form" action="https://app.convertkit.com/forms/YOUR_FORM_ID/subscriptions" method="POST">
+          <input type="text" name="fields[first_name]" class="newsletter-input" placeholder="First Name" required style="margin-right: 8px;">
+          <input type="email" name="email_address" class="newsletter-input" placeholder="Email Address" required>
+          <button type="submit" class="btn btn-primary btn-lg">Get Free Guide →</button>
         </form>
         <div class="newsletter-perks">
           <div class="perk">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Weekly deal roundups
+            Free PDF guide (50 tips + products)
           </div>
           <div class="perk">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Early access to sales
+            Weekly deal roundups (Tuesdays)
           </div>
           <div class="perk">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            No spam, ever
+            No spam, unsubscribe anytime
           </div>
         </div>
       </div>
@@ -690,6 +691,226 @@
         mobileCTA.classList.remove('visible');
       }
     });
+  </script>
+
+  <!-- Lead Magnet Popup Modal -->
+  <div id="lead-magnet-popup" class="popup-overlay">
+    <div class="popup-content">
+      <button class="popup-close" onclick="closePopup()" aria-label="Close popup">&times;</button>
+      <div class="popup-body">
+        <div class="popup-icon">🎁</div>
+        <h2>Wait! Don't Miss Out on Savings</h2>
+        <p class="popup-subtitle">Get our <strong>FREE guide</strong> with 50 ways to save on beauty, home & decor — plus weekly deals sent to your inbox!</p>
+        <form action="https://app.convertkit.com/forms/YOUR_FORM_ID/subscriptions" method="POST" class="popup-form">
+          <input type="text" name="fields[first_name]" placeholder="First Name" required>
+          <input type="email" name="email_address" placeholder="Email Address" required>
+          <button type="submit" class="btn btn-primary btn-lg popup-btn">Send Me the Free Guide →</button>
+        </form>
+        <p class="popup-trust">🔒 Join 10,000+ smart shoppers. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Popup Overlay */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .popup-overlay.active {
+      display: flex;
+    }
+
+    /* Popup Content */
+    .popup-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      animation: popupSlide 0.3s ease-out;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes popupSlide {
+      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Close Button */
+    .popup-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #f0f0f0;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: all 0.2s;
+    }
+
+    .popup-close:hover {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    /* Popup Body */
+    .popup-body {
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .popup-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .popup-body h2 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--color-text);
+      margin-bottom: 12px;
+    }
+
+    .popup-subtitle {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* Popup Form */
+    .popup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .popup-form input {
+      padding: 14px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .popup-form input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    .popup-btn {
+      padding: 16px 24px;
+      font-size: 1.1rem;
+      margin-top: 8px;
+    }
+
+    .popup-trust {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 16px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 480px) {
+      .popup-body {
+        padding: 32px 20px;
+      }
+
+      .popup-body h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+
+  <script>
+    // Lead Magnet Popup Logic
+    (function() {
+      const POPUP_DELAY = 5000; // 5 seconds
+      const SCROLL_THRESHOLD = 0.5; // 50% scroll
+      const DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+      let popupShown = false;
+      const popup = document.getElementById('lead-magnet-popup');
+
+      function showPopup() {
+        if (popupShown) return;
+
+        // Check if dismissed recently
+        const dismissedAt = localStorage.getItem('popupDismissed');
+        if (dismissedAt && (Date.now() - parseInt(dismissedAt)) < DISMISS_DURATION) {
+          return;
+        }
+
+        popup.classList.add('active');
+        popupShown = true;
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+      }
+
+      window.closePopup = function() {
+        popup.classList.remove('active');
+        document.body.style.overflow = '';
+        localStorage.setItem('popupDismissed', Date.now().toString());
+      };
+
+      // Trigger after delay
+      setTimeout(showPopup, POPUP_DELAY);
+
+      // Trigger on scroll
+      window.addEventListener('scroll', function() {
+        const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+        if (scrollPercent > SCROLL_THRESHOLD) {
+          showPopup();
+        }
+      });
+
+      // Close on overlay click
+      popup.addEventListener('click', function(e) {
+        if (e.target === popup) {
+          closePopup();
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && popup.classList.contains('active')) {
+          closePopup();
+        }
+      });
+
+      // Handle form submission success message
+      const popupForm = popup.querySelector('.popup-form');
+      popupForm.addEventListener('submit', function(e) {
+        // ConvertKit will handle the submission
+        // Show success state after brief delay
+        setTimeout(function() {
+          popup.querySelector('.popup-body').innerHTML = `
+            <div class="popup-icon">✅</div>
+            <h2>You're In!</h2>
+            <p class="popup-subtitle">Check your inbox for your free guide.<br>Your first weekly deals email arrives Tuesday!</p>
+            <button onclick="closePopup()" class="btn btn-primary">Start Shopping →</button>
+          `;
+        }, 1000);
+      });
+    })();
   </script>
 </body>
 </html>
