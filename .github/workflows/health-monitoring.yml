@@ -4,7 +4,7 @@ on:
   schedule:
     # Run every 4 hours
     - cron: '0 */4 * * *'
-  workflow_dispatch:
+    workflow_dispatch:
     inputs:
       full_check:
         description: 'Run full health check (all services)'
