@@ -5,7 +5,7 @@ on:
     # 6 AM PST = 2 PM UTC (during PST) or 1 PM UTC (during PDT)
     - cron: '0 14 * * *'
   workflow_dispatch:
-    inputs:
+    inputs
       brand:
         description: 'Specific brand to generate for (optional)'
         required: false
@@ -62,7 +62,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
         run: |
           ARGS="--slot morning"
           if [ "${{ github.event.inputs.brand }}" != "" ]; then
