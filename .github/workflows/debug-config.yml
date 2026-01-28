@@ -152,6 +152,62 @@ jobs:
                   print("   URL may not be a Make.com webhook")
           EOF
 
+      - name: RESULT-LATE_API_KEY-IS-SET
+        if: steps.check-secrets.outputs.late_api == 'true'
+        run: echo "LATE_API_KEY is configured"
+
+      - name: RESULT-LATE_API_KEY-NOT-SET
+        if: steps.check-secrets.outputs.late_api == 'false'
+        run: echo "LATE_API_KEY is NOT configured"
+
+      - name: RESULT-MAKE_WEBHOOK-IS-SET
+        if: steps.check-secrets.outputs.make_webhook == 'true'
+        run: echo "MAKE_COM_PINTEREST_WEBHOOK is configured"
+
+      - name: RESULT-MAKE_WEBHOOK-NOT-SET
+        if: steps.check-secrets.outputs.make_webhook == 'false'
+        run: echo "MAKE_COM_PINTEREST_WEBHOOK is NOT configured"
+
+      - name: RESULT-CREATOMATE-IS-SET
+        if: steps.check-secrets.outputs.creatomate == 'true'
+        run: echo "CREATOMATE_API_KEY is configured"
+
+      - name: RESULT-CREATOMATE-NOT-SET
+        if: steps.check-secrets.outputs.creatomate == 'false'
+        run: echo "CREATOMATE_API_KEY is NOT configured"
+
+      - name: RESULT-GEMINI-IS-SET
+        if: steps.check-secrets.outputs.gemini == 'true'
+        run: echo "GEMINI_API_KEY is configured"
+
+      - name: RESULT-GEMINI-NOT-SET
+        if: steps.check-secrets.outputs.gemini == 'false'
+        run: echo "GEMINI_API_KEY is NOT configured"
+
+      - name: RESULT-PEXELS-IS-SET
+        if: steps.check-secrets.outputs.pexels == 'true'
+        run: echo "PEXELS_API_KEY is configured"
+
+      - name: RESULT-PEXELS-NOT-SET
+        if: steps.check-secrets.outputs.pexels == 'false'
+        run: echo "PEXELS_API_KEY is NOT configured"
+
+      - name: RESULT-PINTEREST-READY
+        if: steps.check-secrets.outputs.pinterest_ready == 'true'
+        run: echo "Pinterest posting is ready"
+
+      - name: RESULT-PINTEREST-NOT-READY
+        if: steps.check-secrets.outputs.pinterest_ready == 'false'
+        run: echo "Pinterest posting is NOT ready"
+
+      - name: RESULT-VIDEO-PIPELINE-READY
+        if: steps.check-secrets.outputs.video_ready == 'true'
+        run: echo "Full video pipeline is ready"
+
+      - name: RESULT-VIDEO-PIPELINE-NOT-READY
+        if: steps.check-secrets.outputs.video_ready == 'false'
+        run: echo "Full video pipeline is NOT ready"
+
       - name: Write Summary
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
