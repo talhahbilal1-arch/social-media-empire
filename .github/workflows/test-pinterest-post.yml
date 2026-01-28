@@ -141,42 +141,135 @@ jobs:
               test_video_url = "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"
               write_summary(f"- Using fallback test video: {test_video_url}")
 
-          # Step 3: Try posting to Pinterest
-          write_summary("\n## Pinterest Posting Test\n")
+          # Step 3: List accounts and boards via Late API (diagnostic)
+          write_summary("\n## Late API Account Discovery\n")
 
           test_title = "Wellness Tips for Your Best Day"
           test_description = "Quick wellness tips to boost your energy and feel amazing! #wellness #health #selfcare #tips #lifestyle"
-          test_board = "daily-deal-darling-tips"
+
+          if late_api_key:
+              try:
+                  import httpx
+
+                  late_headers = {"Authorization": f"Bearer {late_api_key}"}
+                  late_base = "https://getlate.dev/api/v1"
+
+                  # List all accounts
+                  write_summary("### Accounts\n")
+                  acct_resp = httpx.get(f"{late_base}/accounts", headers=late_headers, timeout=30)
+                  write_summary(f"- GET /accounts status: {acct_resp.status_code}")
+                  acct_data = acct_resp.json()
+                  write_summary(f"- Response: {json.dumps(acct_data, indent=2)[:1500]}")
+
+                  # Find Pinterest account
+                  pinterest_account_id = None
+                  accounts = acct_data if isinstance(acct_data, list) else acct_data.get('accounts', acct_data.get('data', []))
+                  for acct in accounts:
+                      write_summary(f"- Account: platform={acct.get('platform')}, id={acct.get('_id', acct.get('id'))}, username={acct.get('username')}")
+                      if acct.get('platform') == 'pinterest':
+                          pinterest_account_id = acct.get('_id', acct.get('id'))
+
+                  if pinterest_account_id:
+                      write_summary(f"\n**Pinterest Account ID: {pinterest_account_id}**\n")
+
+                      # List boards
+                      write_summary("### Boards\n")
+                      try:
+                          boards_resp = httpx.get(f"{late_base}/accounts/{pinterest_account_id}/boards", headers=late_headers, timeout=30)
+                          write_summary(f"- GET /accounts/{pinterest_account_id}/boards status: {boards_resp.status_code}")
+                          boards_data = boards_resp.json()
+                          write_summary(f"- Response: {json.dumps(boards_data, indent=2)[:2000]}")
+                      except Exception as e:
+                          write_summary(f"- Boards listing error: {e}")
+                  else:
+                      write_summary("\n**No Pinterest account found in Late API**\n")
+              except Exception as e:
+                  write_summary(f"Account discovery error: {e}")
+                  import traceback
+                  write_summary(f"```\n{traceback.format_exc()}\n```")
+
+          # Step 4: Try posting to Pinterest
+          write_summary("\n## Pinterest Posting Test\n")
 
           write_summary(f"- Title: {test_title}")
-          write_summary(f"- Board: {test_board}")
           write_summary(f"- Video URL: {test_video_url[:80]}...")
 
-          # Method 1: Late API
+          # Method 1: Late API (try WITHOUT board_id first - let Late use default)
           if late_api_key:
-              write_summary("\n### Attempting Late API...\n")
+              write_summary("\n### Attempting Late API (no board_id)...\n")
               try:
-                  from src.clients.late_api import LateAPIClient
-                  client = LateAPIClient(api_key=late_api_key)
+                  import httpx
 
-                  result = client.create_pinterest_video_pin(
-                      video_url=test_video_url,
-                      title=test_title,
-                      description=test_description,
-                      link="https://dailydealdarling.com",
-                      board_id=test_board,
-                      publish_now=True
-                  )
+                  late_headers = {"Authorization": f"Bearer {late_api_key}", "Content-Type": "application/json"}
+                  late_base = "https://getlate.dev/api/v1"
 
-                  if result.success:
-                      write_summary(f"**SUCCESS via Late API!**")
-                      write_summary(f"- Post ID: {result.post_id}")
-                      write_summary(f"- URL: {result.platform_post_url or 'pending'}")
-                      write_summary(f"- Raw: {json.dumps(result.raw_response, indent=2)[:500]}")
+                  # Find Pinterest account ID
+                  acct_resp = httpx.get(f"{late_base}/accounts", headers=late_headers, timeout=30)
+                  accounts = acct_resp.json()
+                  if isinstance(accounts, list):
+                      acct_list = accounts
+                  else:
+                      acct_list = accounts.get('accounts', accounts.get('data', []))
+
+                  pinterest_id = None
+                  for acct in acct_list:
+                      if acct.get('platform') == 'pinterest':
+                          pinterest_id = acct.get('_id', acct.get('id'))
+                          break
+
+                  if not pinterest_id:
+                      write_summary("**No Pinterest account in Late API - cannot post**")
+                      save_and_exit(1)
+
+                  # Build payload WITHOUT board_id
+                  payload = {
+                      "content": f"{test_title}\n\n{test_description}",
+                      "platforms": [
+                          {
+                              "platform": "pinterest",
+                              "accountId": pinterest_id
+                          }
+                      ],
+                      "mediaUrls": [test_video_url],
+                      "platformSettings": {
+                          "pinterest": {
+                              "link": "https://dailydealdarling.com"
+                          }
+                      }
+                  }
+
+                  write_summary(f"- Payload: {json.dumps(payload, indent=2)[:1000]}")
+
+                  # Post
+                  post_resp = httpx.post(f"{late_base}/posts", headers=late_headers, json=payload, timeout=120)
+                  write_summary(f"- POST /posts status: {post_resp.status_code}")
+                  post_data = post_resp.json()
+                  write_summary(f"- Full response: {json.dumps(post_data, indent=2)[:2000]}")
+
+                  # Check result
+                  post = post_data.get('post', post_data)
+                  status = post.get('status', '')
+                  write_summary(f"- Post status: {status}")
+
+                  if status in ['published', 'queued', 'processing', 'scheduled']:
+                      write_summary(f"\n**SUCCESS via Late API!**")
+                      write_summary(f"- Post ID: {post.get('_id', post.get('id'))}")
+                      platforms = post.get('platforms', [])
+                      for p in platforms:
+                          if p.get('platform') == 'pinterest':
+                              write_summary(f"- Pinterest URL: {p.get('platformPostUrl', 'pending')}")
                       save_and_exit(0)
                   else:
-                      write_summary(f"**Late API failed**: {result.error}")
-                      write_summary(f"- Raw: {json.dumps(result.raw_response, indent=2)[:500]}")
+                      error_msg = post.get('error') or post.get('message') or f"Unexpected status: {status}"
+                      write_summary(f"\n**Late API failed**: {error_msg}")
+                      # Look for more details in the response
+                      errors = post.get('errors', [])
+                      if errors:
+                          write_summary(f"- Errors array: {json.dumps(errors, indent=2)[:500]}")
+                      platforms = post.get('platforms', [])
+                      for p in platforms:
+                          write_summary(f"- Platform result: {json.dumps(p, indent=2)[:500]}")
+
               except Exception as e:
                   write_summary(f"**Late API exception**: {e}")
                   import traceback
