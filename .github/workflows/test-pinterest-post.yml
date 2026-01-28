@@ -240,17 +240,29 @@ jobs:
             echo "error_type=success" >> $GITHUB_OUTPUT
           elif grep -q "No module named" pinterest-test-results.txt; then
             echo "error_type=import_error" >> $GITHUB_OUTPUT
-          elif grep -q "No Pinterest account" pinterest-test-results.txt; then
+          elif grep -q "No Pinterest account connected" pinterest-test-results.txt; then
             echo "error_type=no_pinterest_account" >> $GITHUB_OUTPUT
-          elif grep -q "NOT SET" pinterest-test-results.txt && grep -q "LATE_API_KEY" pinterest-test-results.txt; then
+          elif grep -q "FAILURE: No Pinterest credentials configured" pinterest-test-results.txt; then
             echo "error_type=no_credentials" >> $GITHUB_OUTPUT
-          elif grep -q "HTTPStatusError\|status_code\|401\|403\|404" pinterest-test-results.txt; then
+          elif grep -q "Neither Late API nor Make.com" pinterest-test-results.txt; then
+            echo "error_type=both_methods_failed" >> $GITHUB_OUTPUT
+          elif grep -q "Late API failed" pinterest-test-results.txt; then
+            echo "error_type=late_api_failed" >> $GITHUB_OUTPUT
+          elif grep -q "Late API exception" pinterest-test-results.txt; then
+            echo "error_type=late_api_exception" >> $GITHUB_OUTPUT
+          elif grep -q "Make.com webhook failed" pinterest-test-results.txt; then
+            echo "error_type=webhook_failed" >> $GITHUB_OUTPUT
+          elif grep -q "HTTPStatusError\|401\|403\|404" pinterest-test-results.txt; then
             echo "error_type=api_http_error" >> $GITHUB_OUTPUT
           elif grep -q "ConnectionError\|TimeoutException\|ConnectError" pinterest-test-results.txt; then
             echo "error_type=connection_error" >> $GITHUB_OUTPUT
           else
             echo "error_type=unknown_error" >> $GITHUB_OUTPUT
           fi
+
+          # Also extract last few lines for context
+          echo "---LAST-LINES---"
+          tail -5 pinterest-test-results.txt 2>/dev/null || echo "no file"
 
       - name: DIAGNOSIS-SUCCESS-pin-posted
         if: always() && steps.diagnose.outputs.error_type == 'success'
@@ -267,6 +279,22 @@ jobs:
       - name: DIAGNOSIS-no-credentials-configured
         if: always() && steps.diagnose.outputs.error_type == 'no_credentials'
         run: echo "Neither LATE_API_KEY nor MAKE_COM_PINTEREST_WEBHOOK is set"
+
+      - name: DIAGNOSIS-both-methods-failed
+        if: always() && steps.diagnose.outputs.error_type == 'both_methods_failed'
+        run: echo "Both Late API and Make.com webhook attempted but failed"
+
+      - name: DIAGNOSIS-late-api-returned-failure
+        if: always() && steps.diagnose.outputs.error_type == 'late_api_failed'
+        run: echo "Late API call succeeded but returned a failure response"
+
+      - name: DIAGNOSIS-late-api-threw-exception
+        if: always() && steps.diagnose.outputs.error_type == 'late_api_exception'
+        run: echo "Late API call threw an exception (network, auth, or code error)"
+
+      - name: DIAGNOSIS-webhook-failed
+        if: always() && steps.diagnose.outputs.error_type == 'webhook_failed'
+        run: echo "Make.com webhook call failed"
 
       - name: DIAGNOSIS-api-http-error
         if: always() && steps.diagnose.outputs.error_type == 'api_http_error'
