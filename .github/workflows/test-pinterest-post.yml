@@ -230,6 +230,62 @@ jobs:
           echo ""
           echo "Test step outcome: ${{ steps.pinterest-test.outcome }}"
 
+      - name: Diagnose error type
+        id: diagnose
+        if: always()
+        run: |
+          if [ ! -f pinterest-test-results.txt ]; then
+            echo "error_type=no_results_file" >> $GITHUB_OUTPUT
+          elif grep -q "SUCCESS" pinterest-test-results.txt; then
+            echo "error_type=success" >> $GITHUB_OUTPUT
+          elif grep -q "No module named" pinterest-test-results.txt; then
+            echo "error_type=import_error" >> $GITHUB_OUTPUT
+          elif grep -q "No Pinterest account" pinterest-test-results.txt; then
+            echo "error_type=no_pinterest_account" >> $GITHUB_OUTPUT
+          elif grep -q "NOT SET" pinterest-test-results.txt && grep -q "LATE_API_KEY" pinterest-test-results.txt; then
+            echo "error_type=no_credentials" >> $GITHUB_OUTPUT
+          elif grep -q "HTTPStatusError\|status_code\|401\|403\|404" pinterest-test-results.txt; then
+            echo "error_type=api_http_error" >> $GITHUB_OUTPUT
+          elif grep -q "ConnectionError\|TimeoutException\|ConnectError" pinterest-test-results.txt; then
+            echo "error_type=connection_error" >> $GITHUB_OUTPUT
+          else
+            echo "error_type=unknown_error" >> $GITHUB_OUTPUT
+          fi
+
+      - name: DIAGNOSIS-SUCCESS-pin-posted
+        if: always() && steps.diagnose.outputs.error_type == 'success'
+        run: echo "Pinterest pin was posted successfully!"
+
+      - name: DIAGNOSIS-import-error-missing-module
+        if: always() && steps.diagnose.outputs.error_type == 'import_error'
+        run: echo "Import error - a Python module is missing"
+
+      - name: DIAGNOSIS-no-pinterest-account-in-late-api
+        if: always() && steps.diagnose.outputs.error_type == 'no_pinterest_account'
+        run: echo "Late API has no Pinterest account connected"
+
+      - name: DIAGNOSIS-no-credentials-configured
+        if: always() && steps.diagnose.outputs.error_type == 'no_credentials'
+        run: echo "Neither LATE_API_KEY nor MAKE_COM_PINTEREST_WEBHOOK is set"
+
+      - name: DIAGNOSIS-api-http-error
+        if: always() && steps.diagnose.outputs.error_type == 'api_http_error'
+        run: echo "HTTP error from API call"
+
+      - name: DIAGNOSIS-connection-error
+        if: always() && steps.diagnose.outputs.error_type == 'connection_error'
+        run: echo "Network connection error"
+
+      - name: DIAGNOSIS-unknown-error
+        if: always() && steps.diagnose.outputs.error_type == 'unknown_error'
+        run: |
+          echo "Unknown error type. Results file content:"
+          cat pinterest-test-results.txt 2>/dev/null || echo "File not found"
+
+      - name: DIAGNOSIS-no-results-file
+        if: always() && steps.diagnose.outputs.error_type == 'no_results_file'
+        run: echo "No results file - script crashed before writing output"
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
