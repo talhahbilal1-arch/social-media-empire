@@ -390,14 +390,15 @@ jobs:
         if: always() && steps.diagnose.outputs.error_type == 'late_api_failed'
         run: |
           echo "Late API call succeeded but returned a failure response"
-          # Extract the actual error from the results file
-          ERROR_MSG=$(grep "Late API failed" pinterest-test-results.txt 2>/dev/null | head -1)
-          RAW_MSG=$(grep -A20 "^- Raw:" pinterest-test-results.txt 2>/dev/null | head -20)
-          echo "::error::LATE_API_FAILURE: ${ERROR_MSG}"
-          echo "::error::LATE_API_RAW: ${RAW_MSG}"
-          # Print the full results file so it appears in annotations
-          echo "--- Full results ---"
-          cat pinterest-test-results.txt 2>/dev/null || echo "No results file"
+          echo "--- Full results file (line by line as annotations) ---"
+          LINE_NUM=0
+          while IFS= read -r line; do
+            LINE_NUM=$((LINE_NUM + 1))
+            # Write each non-empty line as a notice annotation
+            if [ -n "$line" ]; then
+              echo "::notice::RESULT_LINE_${LINE_NUM}: ${line}"
+            fi
+          done < pinterest-test-results.txt 2>/dev/null || echo "No results file"
 
       - name: DIAGNOSIS-late-api-threw-exception
         if: always() && steps.diagnose.outputs.error_type == 'late_api_exception'
