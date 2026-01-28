@@ -49,6 +49,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
         run: |
           if [ "${{ github.event.inputs.full_check }}" == "true" ] || [ "${{ github.event_name }}" == "schedule" ]; then
@@ -110,7 +111,7 @@ jobs:
   alert-on-unhealthy:
     runs-on: ubuntu-latest
     needs: health-check
-    if: needs.health-check.outputs.status == 'unhealthy'
+    if: always() && (needs.health-check.result == 'failure' || needs.health-check.outputs.status == 'unhealthy')
 
     steps:
       - name: Checkout repository

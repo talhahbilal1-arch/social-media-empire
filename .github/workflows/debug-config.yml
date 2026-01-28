@@ -32,6 +32,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
         run: |
           python << 'EOF'
@@ -50,6 +51,7 @@ jobs:
               "YOUTUBE_CLIENT_ID": os.environ.get("YOUTUBE_CLIENT_ID", ""),
               "YOUTUBE_CLIENT_SECRET": os.environ.get("YOUTUBE_CLIENT_SECRET", ""),
               "YOUTUBE_REFRESH_TOKEN": os.environ.get("YOUTUBE_REFRESH_TOKEN", ""),
+              "LATE_API_KEY": os.environ.get("LATE_API_KEY", ""),
               "MAKE_COM_PINTEREST_WEBHOOK": os.environ.get("MAKE_COM_PINTEREST_WEBHOOK", ""),
           }
 
@@ -75,18 +77,18 @@ jobs:
           else:
               print("✅ CREATOMATE_API_KEY is set")
 
-          if not secrets["MAKE_COM_PINTEREST_WEBHOOK"]:
-              print("❌ MAKE_COM_PINTEREST_WEBHOOK is NOT SET!")
-              print("   → Pinterest posting is disabled")
-          else:
-              print("✅ MAKE_COM_PINTEREST_WEBHOOK is set")
-              # Test webhook URL format
+          if secrets["LATE_API_KEY"]:
+              print("✅ LATE_API_KEY is set (preferred for Pinterest)")
+          elif secrets["MAKE_COM_PINTEREST_WEBHOOK"]:
+              print("⚠️  LATE_API_KEY not set, using Make.com webhook fallback")
               webhook = secrets["MAKE_COM_PINTEREST_WEBHOOK"]
               if webhook.startswith("https://hook."):
                   print("   → Webhook URL format looks correct")
               else:
                   print("   ⚠️ Webhook URL format may be incorrect")
-                  print(f"   → Expected: https://hook.make.com/... or https://hook.eu1.make.com/...")
+          else:
+              print("❌ No Pinterest posting configured!")
+              print("   → Set LATE_API_KEY (preferred) or MAKE_COM_PINTEREST_WEBHOOK")
 
           print("\n" + "=" * 60)
           EOF
