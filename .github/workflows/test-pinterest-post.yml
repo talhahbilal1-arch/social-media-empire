@@ -370,8 +370,17 @@ jobs:
       - name: ERRDETAIL-other-exception
         if: always() && steps.extract-error.outputs.detail == 'other'
         run: |
-          echo "Other exception type. Full results:"
-          cat pinterest-test-results.txt 2>/dev/null || echo "No file"
+          echo "Other exception type. Writing error as annotations..."
+          # Extract the exception line and write it as a GitHub annotation
+          EXCEPTION_LINE=$(grep "Late API exception" pinterest-test-results.txt 2>/dev/null | head -1)
+          echo "::error::PINTEREST_ERROR: ${EXCEPTION_LINE}"
+          # Also write any lines between "Late API exception" and "```" (the traceback)
+          TRACEBACK=$(sed -n '/Late API exception/,/```/{p}' pinterest-test-results.txt 2>/dev/null | head -20)
+          echo "::error::TRACEBACK: ${TRACEBACK}"
+          # Also check for any other error indicators
+          grep -i "error\|exception\|failed\|traceback" pinterest-test-results.txt 2>/dev/null | while read line; do
+            echo "::error::DETAIL: ${line}"
+          done
 
       - name: DIAGNOSIS-webhook-failed
         if: always() && steps.diagnose.outputs.error_type == 'webhook_failed'
