@@ -160,7 +160,7 @@
   </header>
 
   <!-- Article Header -->
-  <section class="article-header">
+  <section class="article-header article-header--bg" style="background-image: url('https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
     <div class="container container--narrow">
       <span class="article-header__category">Nutrition</span>
       <h1 class="article-header__title">Nutrition Fundamentals for Men with Slowing Metabolisms</h1>
@@ -547,8 +547,8 @@
         <div class="cta__content">
           <h2 class="cta__title">The Weekly System</h2>
           <p class="cta__text">One email per week. No fluff. Just actionable insights on training, nutrition, and the psychology of building a body that lasts. Unsubscribe anytime.</p>
-          <form class="signup-form" action="#" method="POST">
-            <input type="email" class="signup-form__input" placeholder="Enter your email" required>
+          <form class="signup-form" action="https://app.convertkit.com/forms/8946984/subscriptions" method="post" data-sv-form="8946984" data-ck-form="lead-magnet" data-uid="" data-format="inline" data-version="5">
+            <input type="email" name="email_address" class="signup-form__input" placeholder="Enter your email" required>
             <button type="submit" class="btn btn--primary">Subscribe</button>
           </form>
         </div>
@@ -589,11 +589,80 @@
     </div>
   </footer>
 
+
+  <!-- Email Popup Modal -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-modal">
+      <button class="popup-close" id="popupClose" aria-label="Close popup">&times;</button>
+      <div class="popup-content">
+        <h2>Get the 5-Day Density Training Starter Guide</h2>
+        <p>Free PDF + weekly training insights for men over 35. No spam. Unsubscribe anytime.</p>
+        <form class="signup-form" action="https://app.convertkit.com/forms/8946984/subscriptions" method="post" data-sv-form="8946984" data-ck-form="lead-magnet" data-uid="" data-format="inline" data-version="5">
+          <input type="email" name="email_address" class="signup-form__input" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn--primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Mobile Nav Script -->
   <script>
     document.getElementById('navToggle').addEventListener('click', function() {
       document.getElementById('nav').classList.toggle('nav--open');
     });
   </script>
+  <!-- Popup Script -->
+  <script>
+  (function() {
+    var popupOverlay = document.getElementById('popupOverlay');
+    var popupClose = document.getElementById('popupClose');
+    var popupShown = false;
+
+    function showPopup() {
+      if (popupShown) return;
+      if (sessionStorage.getItem('popupDismissed')) return;
+      popupShown = true;
+      popupOverlay.classList.add('active');
+    }
+
+    function closePopup() {
+      popupOverlay.classList.remove('active');
+      sessionStorage.setItem('popupDismissed', 'true');
+    }
+
+    popupClose.addEventListener('click', closePopup);
+
+    popupOverlay.addEventListener('click', function(e) {
+      if (e.target === popupOverlay) closePopup();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePopup();
+    });
+
+    setTimeout(showPopup, 30000);
+
+    window.addEventListener('scroll', function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (docHeight > 0 && (scrollTop / docHeight) >= 0.6) {
+        showPopup();
+      }
+    });
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mouseout', function(e) {
+        if (e.clientY <= 0) {
+          showPopup();
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- ConvertKit -->
+  <script async data-uid="" src="https://fitover35.ck.page/8946984/index.js"></script>
+
+  <script src="../js/convertkit.js"></script>
 </body>
 </html>

@@ -40,7 +40,7 @@
     </div>
   </header>
 
-  <section class="page-header">
+  <section class="page-header page-header--bg" style="background-image: url('https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
     <div class="container">
       <span class="article__category">Recovery</span>
       <h1 class="page-header__title">How to Train Around Injuries Without Losing Progress</h1>
@@ -470,8 +470,8 @@
         <div class="article__cta">
           <h3>Get More Training Insights</h3>
           <p>One email per week with actionable training insights. No fluff. Unsubscribe anytime.</p>
-          <form class="signup-form" action="#" method="POST">
-            <input type="email" class="signup-form__input" placeholder="Enter your email" required>
+          <form class="signup-form" action="https://app.convertkit.com/forms/8946984/subscriptions" method="post" data-sv-form="8946984" data-ck-form="lead-magnet" data-uid="" data-format="inline" data-version="5">
+            <input type="email" name="email_address" class="signup-form__input" placeholder="Enter your email" required>
             <button type="submit" class="btn btn--primary">Subscribe</button>
           </form>
         </div>
@@ -516,5 +516,73 @@
       document.getElementById('nav').classList.toggle('nav--open');
     });
   </script>
+
+  <!-- Email Popup Modal -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-modal">
+      <button class="popup-close" id="popupClose" aria-label="Close popup">&times;</button>
+      <div class="popup-content">
+        <h2>Get the 5-Day Density Training Starter Guide</h2>
+        <p>Free PDF + weekly training insights for men over 35. No spam. Unsubscribe anytime.</p>
+        <form class="signup-form" action="https://app.convertkit.com/forms/8946984/subscriptions" method="post" data-sv-form="8946984" data-ck-form="lead-magnet" data-uid="" data-format="inline" data-version="5">
+          <input type="email" name="email_address" class="signup-form__input" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn--primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup Script -->
+  <script>
+  (function() {
+    var popupOverlay = document.getElementById('popupOverlay');
+    var popupClose = document.getElementById('popupClose');
+    var popupShown = false;
+
+    function showPopup() {
+      if (popupShown) return;
+      if (sessionStorage.getItem('popupDismissed')) return;
+      popupShown = true;
+      popupOverlay.classList.add('active');
+    }
+
+    function closePopup() {
+      popupOverlay.classList.remove('active');
+      sessionStorage.setItem('popupDismissed', 'true');
+    }
+
+    popupClose.addEventListener('click', closePopup);
+
+    popupOverlay.addEventListener('click', function(e) {
+      if (e.target === popupOverlay) closePopup();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePopup();
+    });
+
+    setTimeout(showPopup, 30000);
+
+    window.addEventListener('scroll', function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (docHeight > 0 && (scrollTop / docHeight) >= 0.6) {
+        showPopup();
+      }
+    });
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mouseout', function(e) {
+        if (e.clientY <= 0) {
+          showPopup();
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- ConvertKit -->
+  <script async data-uid="" src="https://fitover35.ck.page/8946984/index.js"></script>
+  <script src="../js/convertkit.js"></script>
 </body>
 </html>

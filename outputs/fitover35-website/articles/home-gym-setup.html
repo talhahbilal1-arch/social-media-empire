@@ -40,7 +40,7 @@
     </div>
   </header>
 
-  <section class="page-header">
+  <section class="page-header page-header--bg" style="background-image: url('https://images.pexels.com/photos/4164761/pexels-photo-4164761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
     <div class="container">
       <span class="article__category">Equipment</span>
       <h1 class="page-header__title">Home Gym Setup Guide: Everything You Need, Nothing You Don't</h1>
@@ -325,11 +325,50 @@
 
         <p>Build accordingly.</p>
 
+        <h2>Recommended Equipment</h2>
+
+        <div class="product-grid">
+          <div class="product-card">
+            <h3 class="product-card__name">Adjustable Dumbbells (Bowflex SelectTech 552)</h3>
+            <p class="product-card__description">The single most important home gym purchase. Replaces an entire weight rack with one compact unit adjustable from 5 to 52.5 lbs.</p>
+            <a href="https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20" class="product-card__cta" target="_blank" rel="nofollow noopener">Check Price on Amazon</a>
+          </div>
+          <div class="product-card">
+            <h3 class="product-card__name">Power Rack (Fitness Reality 810XLT)</h3>
+            <p class="product-card__description">A solid squat rack that enables barbell squats, bench press, and rack pulls without taking over your entire garage.</p>
+            <a href="https://www.amazon.com/dp/B01N4I8FOY?tag=fitover35-20" class="product-card__cta" target="_blank" rel="nofollow noopener">Check Price on Amazon</a>
+          </div>
+          <div class="product-card">
+            <h3 class="product-card__name">Flat/Incline Bench (REP Fitness AB-3000)</h3>
+            <p class="product-card__description">A versatile adjustable bench that opens up pressing angles, supported rows, and dozens of other movements.</p>
+            <a href="https://www.amazon.com/dp/B07BHMBFN5?tag=fitover35-20" class="product-card__cta" target="_blank" rel="nofollow noopener">Check Price on Amazon</a>
+          </div>
+          <div class="product-card">
+            <h3 class="product-card__name">Resistance Bands Set</h3>
+            <p class="product-card__description">Adds accommodating resistance to any movement and enables joint-friendly prehab work. Essential and travel-friendly.</p>
+            <a href="https://www.amazon.com/dp/B07149Y4GT?tag=fitover35-20" class="product-card__cta" target="_blank" rel="nofollow noopener">Check Price on Amazon</a>
+          </div>
+          <div class="product-card">
+            <h3 class="product-card__name">Doorway Pull-Up Bar</h3>
+            <p class="product-card__description">Non-negotiable for upper body pulling. Mounts and dismounts in seconds with no permanent installation required.</p>
+            <a href="https://www.amazon.com/dp/B001EJMS6K?tag=fitover35-20" class="product-card__cta" target="_blank" rel="nofollow noopener">Check Price on Amazon</a>
+          </div>
+          <div class="product-card">
+            <h3 class="product-card__name">Barbell + Weight Set</h3>
+            <p class="product-card__description">Opens up deadlifts, barbell rows, floor presses, and the full range of compound movements for serious strength training.</p>
+            <a href="https://www.amazon.com/dp/B001K4OPY2?tag=fitover35-20" class="product-card__cta" target="_blank" rel="nofollow noopener">Check Price on Amazon</a>
+          </div>
+        </div>
+
+        <div class="affiliate-disclosure">
+          <p>Some links on this page are affiliate links. If you purchase through these links, we may earn a small commission at no extra cost to you. We only recommend products we genuinely believe in.</p>
+        </div>
+
         <div class="article__cta">
           <h3>Get More Equipment Guides</h3>
           <p>One email per week with actionable training insights. No fluff. Unsubscribe anytime.</p>
-          <form class="signup-form" action="#" method="POST">
-            <input type="email" class="signup-form__input" placeholder="Enter your email" required>
+          <form class="signup-form" action="https://app.convertkit.com/forms/8946984/subscriptions" method="post" data-sv-form="8946984" data-ck-form="lead-magnet" data-uid="" data-format="inline" data-version="5">
+            <input type="email" name="email_address" class="signup-form__input" placeholder="Enter your email" required>
             <button type="submit" class="btn btn--primary">Subscribe</button>
           </form>
         </div>
@@ -374,5 +413,73 @@
       document.getElementById('nav').classList.toggle('nav--open');
     });
   </script>
+
+  <!-- Email Popup Modal -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-modal">
+      <button class="popup-close" id="popupClose" aria-label="Close popup">&times;</button>
+      <div class="popup-content">
+        <h2>Get the 5-Day Density Training Starter Guide</h2>
+        <p>Free PDF + weekly training insights for men over 35. No spam. Unsubscribe anytime.</p>
+        <form class="signup-form" action="https://app.convertkit.com/forms/8946984/subscriptions" method="post" data-sv-form="8946984" data-ck-form="lead-magnet" data-uid="" data-format="inline" data-version="5">
+          <input type="email" name="email_address" class="signup-form__input" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn--primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup Script -->
+  <script>
+  (function() {
+    var popupOverlay = document.getElementById('popupOverlay');
+    var popupClose = document.getElementById('popupClose');
+    var popupShown = false;
+
+    function showPopup() {
+      if (popupShown) return;
+      if (sessionStorage.getItem('popupDismissed')) return;
+      popupShown = true;
+      popupOverlay.classList.add('active');
+    }
+
+    function closePopup() {
+      popupOverlay.classList.remove('active');
+      sessionStorage.setItem('popupDismissed', 'true');
+    }
+
+    popupClose.addEventListener('click', closePopup);
+
+    popupOverlay.addEventListener('click', function(e) {
+      if (e.target === popupOverlay) closePopup();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePopup();
+    });
+
+    setTimeout(showPopup, 30000);
+
+    window.addEventListener('scroll', function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (docHeight > 0 && (scrollTop / docHeight) >= 0.6) {
+        showPopup();
+      }
+    });
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mouseout', function(e) {
+        if (e.clientY <= 0) {
+          showPopup();
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- ConvertKit -->
+  <script async data-uid="" src="https://fitover35.ck.page/8946984/index.js"></script>
+  <script src="../js/convertkit.js"></script>
 </body>
 </html>
