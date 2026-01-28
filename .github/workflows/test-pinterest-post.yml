@@ -238,21 +238,21 @@ jobs:
                       write_summary("**No Pinterest account in Late API - cannot post**")
                       save_and_exit(1)
 
-                  # Build payload WITHOUT board_id
+                  # Build payload using Late API docs format:
+                  # - mediaItems (not mediaUrls) with type and url
+                  # - platformSpecificData inside platform object (not top-level platformSettings)
                   payload = {
                       "content": f"{test_title}\n\n{test_description}",
                       "platforms": [
                           {
                               "platform": "pinterest",
-                              "accountId": pinterest_id
+                              "accountId": pinterest_id,
+                              "platformSpecificData": {
+                                  "link": "https://dailydealdarling.com"
+                              }
                           }
                       ],
-                      "mediaUrls": [test_video_url],
-                      "platformSettings": {
-                          "pinterest": {
-                              "link": "https://dailydealdarling.com"
-                          }
-                      }
+                      "mediaItems": [{"type": "video", "url": test_video_url}],
                   }
 
                   write_summary(f"- Payload: {json.dumps(payload, indent=2)[:1000]}")

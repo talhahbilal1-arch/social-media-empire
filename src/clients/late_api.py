@@ -120,38 +120,30 @@ class LateAPIClient(BaseClient):
                 error="No Pinterest account connected to Late API"
             )
 
-        # Build the request payload
-        payload: Dict[str, Any] = {
-            "content": title,  # Late uses 'content' for the text
-            "platforms": [
-                {
-                    "platform": "pinterest",
-                    "accountId": account_id
-                }
-            ],
-            "mediaUrls": [video_url],  # Late handles video upload from URL
+        # Build the request payload per Late API docs:
+        # https://docs.getlate.dev/core/posts
+        platform_data: Dict[str, Any] = {
+            "platform": "pinterest",
+            "accountId": account_id
         }
 
-        # Add optional fields
-        if description:
-            # Pinterest uses description for the pin text
-            # Late API combines content + description
-            payload["content"] = f"{title}\n\n{description}"
-
+        # Pinterest-specific settings go in platformSpecificData
+        platform_specific: Dict[str, Any] = {}
         if link:
-            payload["platformSettings"] = {
-                "pinterest": {
-                    "link": link
-                }
-            }
-            if board_id:
-                payload["platformSettings"]["pinterest"]["boardId"] = board_id
-        elif board_id:
-            payload["platformSettings"] = {
-                "pinterest": {
-                    "boardId": board_id
-                }
-            }
+            platform_specific["link"] = link
+        if board_id:
+            platform_specific["boardId"] = board_id
+        if platform_specific:
+            platform_data["platformSpecificData"] = platform_specific
+
+        # Content for the pin
+        content = f"{title}\n\n{description}" if description else title
+
+        payload: Dict[str, Any] = {
+            "content": content,
+            "platforms": [platform_data],
+            "mediaItems": [{"type": "video", "url": video_url}],
+        }
 
         # Set status based on publish_now
         if not publish_now:
