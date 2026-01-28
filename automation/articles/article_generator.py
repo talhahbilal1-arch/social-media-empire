@@ -426,7 +426,7 @@ def main():
     else:
         slug = args.keyword.lower().replace(' ', '-').replace('?', '')
         slug = ''.join(c for c in slug if c.isalnum() or c == '-')[:50]
-        output_path = Path(f"articles/drafts/{slug}.html")
+        output_path = Path(f"dailydealdarling_website/articles/{slug}.html")
 
     # Ensure directory exists
     output_path.parent.mkdir(parents=True, exist_ok=True)

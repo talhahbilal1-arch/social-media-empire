@@ -1,0 +1,200 @@
+name: Generate FitOver35 Article
+
+on:
+  schedule:
+    - cron: '0 7 * * 1-5'  # Monday-Friday at 7 AM UTC
+  workflow_dispatch:
+    inputs:
+      keyword:
+        description: 'Target keyword (optional - auto-select if empty)'
+        type: string
+        required: false
+      category:
+        description: 'Article category'
+        type: choice
+        options:
+          - auto
+          - strength_training
+          - nutrition
+          - recovery
+          - mindset
+          - equipment
+          - health
+          - programs
+          - lifestyle
+        default: auto
+
+env:
+  AUTO_PUBLISH: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    outputs:
+      article_path: ${{ steps.generate.outputs.article_path }}
+      keyword: ${{ steps.keyword.outputs.keyword }}
+      category: ${{ steps.keyword.outputs.category }}
+      title: ${{ steps.generate.outputs.title }}
+      excerpt: ${{ steps.generate.outputs.excerpt }}
+      read_time: ${{ steps.generate.outputs.read_time }}
+      hero_image: ${{ steps.generate.outputs.hero_image }}
+      slug: ${{ steps.keyword.outputs.slug }}
+      filename: ${{ steps.keyword.outputs.filename }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install google-generativeai requests
+
+      - name: Select keyword
+        id: keyword
+        run: |
+          if [ -n "${{ github.event.inputs.keyword }}" ]; then
+            KEYWORD="${{ github.event.inputs.keyword }}"
+            CATEGORY="${{ github.event.inputs.category }}"
+            if [ "$CATEGORY" = "auto" ]; then
+              CATEGORY="strength_training"
+            fi
+            # Generate slug
+            SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-60)
+            FILENAME="${SLUG}.html"
+            echo "keyword=$KEYWORD" >> $GITHUB_OUTPUT
+            echo "category=$CATEGORY" >> $GITHUB_OUTPUT
+            echo "slug=$SLUG" >> $GITHUB_OUTPUT
+            echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+          else
+            # Auto-select from keyword list
+            python automation/articles/fitover35_keywords.py \
+              --mark-used \
+              --state-file fitover35_keyword_state.json
+          fi
+          echo "Selected keyword: $(cat $GITHUB_OUTPUT | grep keyword | head -1)"
+
+      - name: Generate article
+        id: generate
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: |
+          KEYWORD="${{ steps.keyword.outputs.keyword }}"
+          CATEGORY="${{ steps.keyword.outputs.category }}"
+          SLUG="${{ steps.keyword.outputs.slug }}"
+          FILENAME="${{ steps.keyword.outputs.filename }}"
+
+          echo "Generating article for: $KEYWORD"
+          echo "Category: $CATEGORY"
+          echo "Output: outputs/fitover35-website/articles/$FILENAME"
+
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning::GEMINI_API_KEY not set, creating placeholder"
+            mkdir -p outputs/fitover35-website/articles
+            echo "<html><body><h1>Placeholder: $KEYWORD</h1></body></html>" > "outputs/fitover35-website/articles/$FILENAME"
+            echo "article_path=outputs/fitover35-website/articles/$FILENAME" >> $GITHUB_OUTPUT
+            echo "title=$KEYWORD" >> $GITHUB_OUTPUT
+            echo "excerpt=Placeholder article" >> $GITHUB_OUTPUT
+            echo "read_time=5" >> $GITHUB_OUTPUT
+            echo "hero_image=https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg" >> $GITHUB_OUTPUT
+          else
+            python automation/articles/fitover35_article_generator.py \
+              --keyword "$KEYWORD" \
+              --category "$CATEGORY" \
+              --output "outputs/fitover35-website/articles/$FILENAME"
+          fi
+
+      - name: Update blog listing
+        run: |
+          TITLE="${{ steps.generate.outputs.title }}"
+          CATEGORY="${{ steps.generate.outputs.category }}"
+          EXCERPT="${{ steps.generate.outputs.excerpt }}"
+          READ_TIME="${{ steps.generate.outputs.read_time }}"
+          HERO_IMAGE="${{ steps.generate.outputs.hero_image }}"
+          FILENAME="${{ steps.keyword.outputs.filename }}"
+
+          echo "Updating blog.html with: $TITLE"
+
+          python automation/articles/update_blog_index.py \
+            --brand fitover35 \
+            --article-path "articles/$FILENAME" \
+            --title "$TITLE" \
+            --category "$CATEGORY" \
+            --excerpt "$EXCERPT" \
+            --read-time "$READ_TIME" \
+            --image-url "$HERO_IMAGE"
+
+      - name: Upload article artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fitover35-article-${{ github.run_number }}
+          path: outputs/fitover35-website/articles/
+          retention-days: 30
+
+      - name: Commit and push
+        run: |
+          git config user.name "FitOver35 Bot"
+          git config user.email "bot@fitover35.com"
+
+          # Stage the new article and updated blog listing
+          git add outputs/fitover35-website/articles/
+          git add outputs/fitover35-website/blog.html
+          git add fitover35_keyword_state.json || true
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            TITLE="${{ steps.generate.outputs.title }}"
+            git commit -m "Publish FitOver35 article: ${TITLE}"
+            git push
+            echo "Committed and pushed new article"
+          fi
+
+      - name: Create tracking issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          KEYWORD="${{ steps.keyword.outputs.keyword }}"
+          TITLE="${{ steps.generate.outputs.title }}"
+          CATEGORY="${{ steps.generate.outputs.category }}"
+          FILENAME="${{ steps.keyword.outputs.filename }}"
+          READ_TIME="${{ steps.generate.outputs.read_time }}"
+
+          gh issue create \
+            --title "FitOver35 Article Published: ${TITLE}" \
+            --body "A new FitOver35 article has been auto-published.
+
+          **Keyword:** ${KEYWORD}
+          **Category:** ${CATEGORY}
+          **Read Time:** ${READ_TIME} min
+          **File:** outputs/fitover35-website/articles/${FILENAME}
+          **Generated:** $(date -u)
+          **Workflow Run:** [#${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Review Checklist
+          - [ ] Content accuracy verified
+          - [ ] Affiliate links working
+          - [ ] Hero image appropriate
+          - [ ] FAQ section relevant
+          - [ ] Internal links correct
+          - [ ] Blog listing updated
+          " \
+            --label "fitover35,article-published"
+
+      - name: Summary
+        run: |
+          echo "## FitOver35 Article Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Title:** ${{ steps.generate.outputs.title }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Keyword:** ${{ steps.keyword.outputs.keyword }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Category:** ${{ steps.generate.outputs.category }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Read Time:** ${{ steps.generate.outputs.read_time }} min" >> $GITHUB_STEP_SUMMARY
+          echo "**File:** outputs/fitover35-website/articles/${{ steps.keyword.outputs.filename }}" >> $GITHUB_STEP_SUMMARY

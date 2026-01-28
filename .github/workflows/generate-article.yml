@@ -1,8 +1,8 @@
-name: Generate Daily Article
+name: Generate Daily Deal Darling Article
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+    - cron: '0 6 * * 1-5'  # Monday-Friday at 6 AM UTC
   workflow_dispatch:
     inputs:
       keyword:
@@ -25,16 +25,12 @@ on:
       publish:
         description: 'Publish immediately (false = draft only)'
         type: boolean
-        default: false
+        default: true
 
 jobs:
-  generate:
+  generate-and-publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    outputs:
-      article_path: ${{ steps.generate.outputs.article_path }}
-      keyword: ${{ steps.keyword.outputs.keyword }}
+    timeout-minutes: 25
 
     steps:
       - name: Checkout repository
@@ -59,14 +55,20 @@ jobs:
             if [ "$CATEGORY" = "auto" ]; then
               CATEGORY="general"
             fi
+            SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-50)
+            FILENAME="${SLUG}.html"
           else
             # Auto-select from keyword list
             RESULT=$(python automation/articles/keyword_selector.py --mark-used 2>&1)
             KEYWORD=$(echo "$RESULT" | grep "Selected keyword:" | cut -d: -f2- | xargs)
             CATEGORY=$(echo "$RESULT" | grep "Category:" | cut -d: -f2 | xargs)
+            SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-50)
+            FILENAME="${SLUG}.html"
           fi
           echo "keyword=$KEYWORD" >> $GITHUB_OUTPUT
           echo "category=$CATEGORY" >> $GITHUB_OUTPUT
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
           echo "Selected keyword: $KEYWORD"
           echo "Category: $CATEGORY"
 
@@ -75,106 +77,150 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          KEYWORD="${{ steps.keyword.outputs.keyword }}"
+          CATEGORY="${{ steps.keyword.outputs.category }}"
+          FILENAME="${{ steps.keyword.outputs.filename }}"
+
           if [ -z "$GEMINI_API_KEY" ]; then
-            echo "GEMINI_API_KEY not set, creating placeholder"
-            mkdir -p articles/drafts
-            echo "<html><body><h1>Placeholder: ${{ steps.keyword.outputs.keyword }}</h1></body></html>" > articles/drafts/placeholder.html
-            echo "article_path=articles/drafts/placeholder.html" >> $GITHUB_OUTPUT
+            echo "::warning::GEMINI_API_KEY not set, creating placeholder"
+            mkdir -p dailydealdarling_website/articles
+            echo "<html><body><h1>Placeholder: $KEYWORD</h1></body></html>" > "dailydealdarling_website/articles/$FILENAME"
+            echo "article_path=dailydealdarling_website/articles/$FILENAME" >> $GITHUB_OUTPUT
+            echo "title=$KEYWORD" >> $GITHUB_OUTPUT
+            echo "excerpt=Placeholder article" >> $GITHUB_OUTPUT
+            echo "read_time=5" >> $GITHUB_OUTPUT
           else
             python automation/articles/article_generator.py \
-              --keyword "${{ steps.keyword.outputs.keyword }}" \
-              --category "${{ steps.keyword.outputs.category }}"
+              --keyword "$KEYWORD" \
+              --category "$CATEGORY" \
+              --output "dailydealdarling_website/articles/$FILENAME"
 
-            # Find the generated file
-            ARTICLE_FILE=$(ls -t articles/drafts/*.html 2>/dev/null | head -1)
-            if [ -n "$ARTICLE_FILE" ]; then
-              echo "article_path=$ARTICLE_FILE" >> $GITHUB_OUTPUT
-            fi
+            # Extract title from generated HTML
+            TITLE=$(grep -o '<title>[^<]*</title>' "dailydealdarling_website/articles/$FILENAME" 2>/dev/null | sed 's/<[^>]*>//g' | sed 's/ | Daily Deal Darling//' || echo "$KEYWORD")
+            EXCERPT=$(grep -o '<meta name="description" content="[^"]*"' "dailydealdarling_website/articles/$FILENAME" 2>/dev/null | sed 's/.*content="//;s/"//' || echo "Expert buying guide for $KEYWORD")
+
+            # Count words for read time
+            WORD_COUNT=$(sed 's/<[^>]*>//g' "dailydealdarling_website/articles/$FILENAME" 2>/dev/null | wc -w | xargs)
+            READ_TIME=$((WORD_COUNT / 200))
+            if [ "$READ_TIME" -lt 3 ]; then READ_TIME=5; fi
+
+            echo "article_path=dailydealdarling_website/articles/$FILENAME" >> $GITHUB_OUTPUT
+            echo "title=$TITLE" >> $GITHUB_OUTPUT
+            echo "excerpt=$EXCERPT" >> $GITHUB_OUTPUT
+            echo "read_time=$READ_TIME" >> $GITHUB_OUTPUT
           fi
 
-      - name: Upload draft for review
+      - name: Determine if should publish
+        id: should_publish
+        run: |
+          # Auto-publish for scheduled runs, check input for manual runs
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "publish=true" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.inputs.publish }}" = "true" ]; then
+            echo "publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "publish=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update blog listing
+        if: steps.should_publish.outputs.publish == 'true'
+        run: |
+          TITLE="${{ steps.generate.outputs.title }}"
+          CATEGORY="${{ steps.keyword.outputs.category }}"
+          EXCERPT="${{ steps.generate.outputs.excerpt }}"
+          READ_TIME="${{ steps.generate.outputs.read_time }}"
+          FILENAME="${{ steps.keyword.outputs.filename }}"
+
+          # Use a Pexels fallback image for blog listing
+          IMAGE_URL="https://images.pexels.com/photos/5632398/pexels-photo-5632398.jpeg?auto=compress&cs=tinysrgb&w=600"
+
+          echo "Updating blog.html with: $TITLE"
+
+          python automation/articles/update_blog_index.py \
+            --brand dailydealdarling \
+            --article-path "articles/$FILENAME" \
+            --title "$TITLE" \
+            --category "${CATEGORY^}" \
+            --excerpt "$EXCERPT" \
+            --read-time "$READ_TIME" \
+            --image-url "$IMAGE_URL"
+
+      - name: Upload article artifact
         uses: actions/upload-artifact@v4
         with:
-          name: article-draft-${{ github.run_number }}
-          path: articles/drafts/
+          name: ddd-article-${{ github.run_number }}
+          path: dailydealdarling_website/articles/
           retention-days: 7
 
-      - name: Create review issue
-        if: github.event.inputs.publish != 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh issue create \
-            --title "📝 Review Article: ${{ steps.keyword.outputs.keyword }}" \
-            --body "A new article has been generated and needs review.
-
-          **Keyword:** ${{ steps.keyword.outputs.keyword }}
-          **Category:** ${{ steps.keyword.outputs.category }}
-          **Generated:** $(date)
-
-          ### To Review:
-          1. Download the article from [workflow artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          2. Review content for accuracy and quality
-          3. If approved, run the publish workflow
-
-          ### Quick Publish:
-          If the article looks good, you can publish it by running:
-          \`\`\`
-          gh workflow run generate-article.yml -f keyword='${{ steps.keyword.outputs.keyword }}' -f publish=true
-          \`\`\`
-          " \
-            --label "article-review"
-
-  publish:
-    runs-on: ubuntu-latest
-    needs: generate
-    if: github.event.inputs.publish == 'true'
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download draft
-        uses: actions/download-artifact@v4
-        with:
-          name: article-draft-${{ github.run_number }}
-          path: articles/drafts/
-
-      - name: Move to articles folder
-        run: |
-          # Move draft to main articles folder
-          for file in articles/drafts/*.html; do
-            if [ -f "$file" ] && [ "$file" != "articles/drafts/placeholder.html" ]; then
-              mv "$file" articles/
-              echo "Published: $(basename $file)"
-            fi
-          done
-
-      - name: Update sitemap
-        run: |
-          # Add new article to sitemap
-          NEW_ARTICLES=$(ls -t articles/*.html | head -3)
-          echo "New articles to add to sitemap:"
-          echo "$NEW_ARTICLES"
-          # TODO: Run sitemap update script
-          # python automation/articles/update_sitemap.py
-
       - name: Commit and push
+        if: steps.should_publish.outputs.publish == 'true'
         run: |
           git config user.name "Daily Deal Bot"
           git config user.email "bot@dailydealdarling.com"
 
-          if git diff --quiet articles/; then
-            echo "No new articles to commit"
+          git add dailydealdarling_website/articles/
+          git add dailydealdarling_website/blog.html
+          git add keyword_state.json || true
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
           else
-            git add articles/ sitemap.xml
-            git commit -m "📝 Publish article: ${{ needs.generate.outputs.keyword }}"
+            KEYWORD="${{ steps.keyword.outputs.keyword }}"
+            git commit -m "Publish DDD article: ${KEYWORD}"
             git push
+            echo "Committed and pushed new article"
           fi
+
+      - name: Create tracking issue
+        if: steps.should_publish.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          KEYWORD="${{ steps.keyword.outputs.keyword }}"
+          TITLE="${{ steps.generate.outputs.title }}"
+          CATEGORY="${{ steps.keyword.outputs.category }}"
+          FILENAME="${{ steps.keyword.outputs.filename }}"
+
+          gh issue create \
+            --title "DDD Article Published: ${TITLE}" \
+            --body "A new Daily Deal Darling article has been auto-published.
+
+          **Keyword:** ${KEYWORD}
+          **Category:** ${CATEGORY}
+          **File:** dailydealdarling_website/articles/${FILENAME}
+          **Generated:** $(date -u)
+          **Workflow Run:** [#${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Review Checklist
+          - [ ] Content accuracy verified
+          - [ ] Affiliate links working
+          - [ ] Product recommendations relevant
+          - [ ] Blog listing updated
+          " \
+            --label "dailydealdarling,article-published"
+
+      - name: Create review issue (draft mode)
+        if: steps.should_publish.outputs.publish != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Review DDD Article: ${{ steps.keyword.outputs.keyword }}" \
+            --body "A new article has been generated and needs review.
+
+          **Keyword:** ${{ steps.keyword.outputs.keyword }}
+          **Category:** ${{ steps.keyword.outputs.category }}
+          **Generated:** $(date -u)
+
+          Download the article from [workflow artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          " \
+            --label "article-review"
 
       - name: Summary
         run: |
-          echo "## Article Published" >> $GITHUB_STEP_SUMMARY
+          echo "## Daily Deal Darling Article" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Keyword:** ${{ needs.generate.outputs.keyword }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Path:** ${{ needs.generate.outputs.article_path }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Keyword:** ${{ steps.keyword.outputs.keyword }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Category:** ${{ steps.keyword.outputs.category }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Published:** ${{ steps.should_publish.outputs.publish }}" >> $GITHUB_STEP_SUMMARY
+          echo "**File:** ${{ steps.generate.outputs.article_path }}" >> $GITHUB_STEP_SUMMARY
