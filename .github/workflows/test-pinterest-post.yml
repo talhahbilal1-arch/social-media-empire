@@ -45,6 +45,7 @@ jobs:
           logger = logging.getLogger("pinterest_test")
 
           summary_file = os.environ.get("GITHUB_STEP_SUMMARY", "")
+          output_file = os.environ.get("GITHUB_OUTPUT", "")
           summary_lines = []
 
           def write_summary(text):
@@ -54,6 +55,15 @@ jobs:
                   try:
                       with open(summary_file, "a") as f:
                           f.write(text + "\n")
+                  except Exception:
+                      pass
+
+          def write_output(key, value):
+              """Write a key=value pair to GITHUB_OUTPUT for use in subsequent steps."""
+              if output_file:
+                  try:
+                      with open(output_file, "a") as f:
+                          f.write(f"{key}={value}\n")
                   except Exception:
                       pass
 
@@ -171,6 +181,8 @@ jobs:
 
                   if pinterest_account_id:
                       write_summary(f"\n**Pinterest Account ID: {pinterest_account_id}**\n")
+                      write_output("pinterest_account_found", "true")
+                      write_output("pinterest_account_id", pinterest_account_id)
 
                       # List boards
                       write_summary("### Boards\n")
@@ -178,11 +190,16 @@ jobs:
                           boards_resp = httpx.get(f"{late_base}/accounts/{pinterest_account_id}/boards", headers=late_headers, timeout=30)
                           write_summary(f"- GET /accounts/{pinterest_account_id}/boards status: {boards_resp.status_code}")
                           boards_data = boards_resp.json()
+                          boards_json = json.dumps(boards_data)
                           write_summary(f"- Response: {json.dumps(boards_data, indent=2)[:2000]}")
+                          write_output("boards_status", str(boards_resp.status_code))
+                          write_output("boards_response", boards_json[:500])
                       except Exception as e:
                           write_summary(f"- Boards listing error: {e}")
+                          write_output("boards_error", str(e)[:200])
                   else:
                       write_summary("\n**No Pinterest account found in Late API**\n")
+                      write_output("pinterest_account_found", "false")
               except Exception as e:
                   write_summary(f"Account discovery error: {e}")
                   import traceback
@@ -244,12 +261,28 @@ jobs:
                   post_resp = httpx.post(f"{late_base}/posts", headers=late_headers, json=payload, timeout=120)
                   write_summary(f"- POST /posts status: {post_resp.status_code}")
                   post_data = post_resp.json()
+                  post_json_compact = json.dumps(post_data, separators=(',', ':'))
                   write_summary(f"- Full response: {json.dumps(post_data, indent=2)[:2000]}")
+                  write_output("post_http_status", str(post_resp.status_code))
+                  write_output("post_response", post_json_compact[:500])
 
                   # Check result
                   post = post_data.get('post', post_data)
                   status = post.get('status', '')
                   write_summary(f"- Post status: {status}")
+                  write_output("post_status", status)
+                  # Capture error message
+                  post_error = post.get('error') or post.get('message') or ''
+                  if post_error:
+                      write_output("post_error", str(post_error)[:300])
+                  # Capture platform-specific errors
+                  for p in post.get('platforms', []):
+                      if p.get('platform') == 'pinterest':
+                          p_status = p.get('status', '')
+                          p_error = p.get('error') or p.get('message') or ''
+                          write_output("pinterest_platform_status", p_status)
+                          if p_error:
+                              write_output("pinterest_platform_error", str(p_error)[:300])
 
                   if status in ['published', 'queued', 'processing', 'scheduled']:
                       write_summary(f"\n**SUCCESS via Late API!**")
@@ -506,6 +539,51 @@ jobs:
       - name: DIAGNOSIS-no-results-file
         if: always() && steps.diagnose.outputs.error_type == 'no_results_file'
         run: echo "No results file - script crashed before writing output"
+
+      # Surface key Late API response data via step names (visible in API)
+      - name: LATE-ACCOUNT-FOUND
+        if: always() && steps.pinterest-test.outputs.pinterest_account_found == 'true'
+        run: echo "Pinterest account found in Late API with ID ${{ steps.pinterest-test.outputs.pinterest_account_id }}"
+
+      - name: LATE-ACCOUNT-NOT-FOUND
+        if: always() && steps.pinterest-test.outputs.pinterest_account_found == 'false'
+        run: echo "No Pinterest account found in Late API"
+
+      - name: LATE-POST-HTTP-STATUS
+        if: always() && steps.pinterest-test.outputs.post_http_status != ''
+        run: echo "HTTP status ${{ steps.pinterest-test.outputs.post_http_status }}"
+
+      - name: LATE-POST-STATUS-VALUE
+        if: always() && steps.pinterest-test.outputs.post_status != ''
+        run: |
+          echo "Post status: ${{ steps.pinterest-test.outputs.post_status }}"
+          echo "::error::LATE_POST_STATUS: ${{ steps.pinterest-test.outputs.post_status }}"
+
+      - name: LATE-POST-ERROR
+        if: always() && steps.pinterest-test.outputs.post_error != ''
+        run: |
+          echo "Post error: ${{ steps.pinterest-test.outputs.post_error }}"
+          echo "::error::LATE_POST_ERROR: ${{ steps.pinterest-test.outputs.post_error }}"
+
+      - name: LATE-PINTEREST-PLATFORM-ERROR
+        if: always() && steps.pinterest-test.outputs.pinterest_platform_error != ''
+        run: |
+          echo "Pinterest platform error: ${{ steps.pinterest-test.outputs.pinterest_platform_error }}"
+          echo "::error::PINTEREST_PLATFORM_ERROR: ${{ steps.pinterest-test.outputs.pinterest_platform_error }}"
+
+      - name: LATE-POST-RESPONSE-JSON
+        if: always() && steps.pinterest-test.outputs.post_response != ''
+        run: |
+          echo "Post response JSON:"
+          echo "${{ steps.pinterest-test.outputs.post_response }}"
+          echo "::error::LATE_RESPONSE_JSON: ${{ steps.pinterest-test.outputs.post_response }}"
+
+      - name: LATE-BOARDS-RESPONSE
+        if: always() && steps.pinterest-test.outputs.boards_response != ''
+        run: |
+          echo "Boards response:"
+          echo "${{ steps.pinterest-test.outputs.boards_response }}"
+          echo "::error::BOARDS_RESPONSE: ${{ steps.pinterest-test.outputs.boards_response }}"
 
       - name: Upload test results
         if: always()
