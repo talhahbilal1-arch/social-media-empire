@@ -24,6 +24,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Test Pinterest posting directly
+        id: pinterest-test
+        continue-on-error: true
         env:
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
@@ -66,10 +68,15 @@ jobs:
           write_summary(f"- MAKE_COM_PINTEREST_WEBHOOK: {'SET (' + make_webhook[:20] + '...)' if make_webhook else 'NOT SET'}")
           write_summary(f"- CREATOMATE_API_KEY: {'SET' if creatomate_key else 'NOT SET'}")
 
+          def save_and_exit(code):
+              with open("pinterest-test-results.txt", "w") as f:
+                  f.write("\n".join(summary_lines))
+              sys.exit(code)
+
           if not late_api_key and not make_webhook:
               write_summary("\n**FAILURE**: Neither LATE_API_KEY nor MAKE_COM_PINTEREST_WEBHOOK is configured.")
               write_summary("Cannot post to Pinterest without at least one of these.")
-              sys.exit(1)
+              save_and_exit(1)
 
           # Step 2: Use a real Pexels video as test content
           write_summary("\n## Fetching Test Video\n")
@@ -139,7 +146,7 @@ jobs:
                       write_summary(f"- Post ID: {result.post_id}")
                       write_summary(f"- URL: {result.platform_post_url or 'pending'}")
                       write_summary(f"- Raw: {json.dumps(result.raw_response, indent=2)[:500]}")
-                      sys.exit(0)
+                      save_and_exit(0)
                   else:
                       write_summary(f"**Late API failed**: {result.error}")
                       write_summary(f"- Raw: {json.dumps(result.raw_response, indent=2)[:500]}")
@@ -170,7 +177,7 @@ jobs:
 
                   if resp.status_code == 200:
                       write_summary(f"\n**SUCCESS via Make.com webhook!**")
-                      sys.exit(0)
+                      save_and_exit(0)
                   else:
                       write_summary(f"\n**Make.com webhook failed with status {resp.status_code}**")
               except Exception as e:
@@ -178,5 +185,33 @@ jobs:
 
           write_summary("\n## FINAL RESULT: FAILED\n")
           write_summary("Neither Late API nor Make.com webhook succeeded in posting to Pinterest.")
-          sys.exit(1)
+
+          save_and_exit(1)
           PYEOF
+
+      - name: Save test results
+        if: always()
+        run: |
+          echo "=== Pinterest Test Results ==="
+          if [ -f pinterest-test-results.txt ]; then
+            cat pinterest-test-results.txt
+          else
+            echo "No results file found - test may have crashed before writing output"
+          fi
+          echo ""
+          echo "Test step outcome: ${{ steps.pinterest-test.outcome }}"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinterest-test-results
+          path: pinterest-test-results.txt
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Fail if test failed
+        if: steps.pinterest-test.outcome == 'failure'
+        run: |
+          echo "Pinterest posting test FAILED"
+          exit 1
