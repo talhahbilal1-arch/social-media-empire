@@ -242,20 +242,20 @@ jobs:
             echo "error_type=import_error" >> $GITHUB_OUTPUT
           elif grep -q "No Pinterest account connected" pinterest-test-results.txt; then
             echo "error_type=no_pinterest_account" >> $GITHUB_OUTPUT
-          elif grep -q "FAILURE: No Pinterest credentials configured" pinterest-test-results.txt; then
-            echo "error_type=no_credentials" >> $GITHUB_OUTPUT
-          elif grep -q "Neither Late API nor Make.com" pinterest-test-results.txt; then
-            echo "error_type=both_methods_failed" >> $GITHUB_OUTPUT
           elif grep -q "Late API failed" pinterest-test-results.txt; then
             echo "error_type=late_api_failed" >> $GITHUB_OUTPUT
           elif grep -q "Late API exception" pinterest-test-results.txt; then
             echo "error_type=late_api_exception" >> $GITHUB_OUTPUT
           elif grep -q "Make.com webhook failed" pinterest-test-results.txt; then
             echo "error_type=webhook_failed" >> $GITHUB_OUTPUT
+          elif grep -q "FAILURE: No Pinterest credentials configured" pinterest-test-results.txt; then
+            echo "error_type=no_credentials" >> $GITHUB_OUTPUT
           elif grep -q "HTTPStatusError\|401\|403\|404" pinterest-test-results.txt; then
             echo "error_type=api_http_error" >> $GITHUB_OUTPUT
           elif grep -q "ConnectionError\|TimeoutException\|ConnectError" pinterest-test-results.txt; then
             echo "error_type=connection_error" >> $GITHUB_OUTPUT
+          elif grep -q "Neither Late API nor Make.com" pinterest-test-results.txt; then
+            echo "error_type=both_methods_failed" >> $GITHUB_OUTPUT
           else
             echo "error_type=unknown_error" >> $GITHUB_OUTPUT
           fi
