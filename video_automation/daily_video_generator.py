@@ -278,7 +278,8 @@ def main():
     parser = argparse.ArgumentParser(description="Generate and post videos")
     parser.add_argument("--brand", help="Specific brand to generate for")
     parser.add_argument("--topic", help="Specific topic for the video")
-    parser.add_argument("--slot", choices=["morning", "noon", "evening"],
+    parser.add_argument("--slot",
+                       choices=["morning", "midmorning", "noon", "afternoon", "evening"],
                        help="Time slot for scheduled generation")
     parser.add_argument("--dry-run", action="store_true",
                        help="Generate but don't post")
@@ -306,13 +307,55 @@ def main():
         config = get_config()
         results = generator.run_scheduled_generation(dry_run=args.dry_run)
 
-    # Print summary
+    # Print detailed summary
+    import sys
+    print("\n" + "=" * 60)
+    print("VIDEO GENERATION SUMMARY")
+    print("=" * 60)
+
+    any_success = False
+    any_posted = False
+
     for result in results:
         brand = result.get("brand", "unknown")
-        if result.get("success"):
-            print(f"\u2713 {brand}: {result.get('content', {}).get('topic', 'N/A')}")
+        if result.get("is_placeholder"):
+            print(f"  PLACEHOLDER {brand}: Video rendering failed (Creatomate)")
+            print(f"    -> No platforms were posted to")
+        elif result.get("success"):
+            any_success = True
+            print(f"  RENDERED {brand}: {result.get('content', {}).get('topic', 'N/A')}")
+            posting = result.get("posting_results", {})
+            if posting:
+                for platform, pres in posting.items():
+                    status = "OK" if pres.get("success") else f"FAILED: {pres.get('error', '?')}"
+                    print(f"    -> {platform}: {status}")
+                    if pres.get("success"):
+                        any_posted = True
+            else:
+                print(f"    -> No posting results (dry run or skipped)")
         else:
-            print(f"\u2717 {brand}: {result.get('error', 'Unknown error')}")
+            print(f"  ERROR {brand}: {result.get('error', 'Unknown error')}")
+
+    total = len(results)
+    rendered = sum(1 for r in results if r.get("success"))
+    placeholders = sum(1 for r in results if r.get("is_placeholder"))
+    errors = sum(1 for r in results if not r.get("success") and not r.get("is_placeholder"))
+
+    print(f"\nResults: {rendered} rendered, {placeholders} placeholder, {errors} errors out of {total} total")
+
+    if not any_success:
+        print("\nFAILED: No videos were successfully rendered.")
+        if placeholders > 0:
+            print("CAUSE: Creatomate video rendering failed for all brands.")
+            print("ACTION: Check that CREATOMATE_API_KEY is configured and the template ID is valid.")
+        sys.exit(1)
+
+    if not any_posted and not args.dry_run:
+        print("\nWARNING: Videos were rendered but NONE were posted to any platform.")
+        print("ACTION: Check platform credentials (LATE_API_KEY, MAKE_COM_PINTEREST_WEBHOOK, YouTube OAuth)")
+        sys.exit(1)
+
+    print(f"\nDone: {rendered}/{total} videos processed successfully")
 
 
 if __name__ == "__main__":
