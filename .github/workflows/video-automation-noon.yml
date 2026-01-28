@@ -1,21 +1,21 @@
 name: Video Automation - Noon (12 PM PST)
 
 on:
-   schedule:
-     # 12 PM PST = 8 PM UTC (during PST) or 7 PM UTC (during PDT)
-     - cron: '0 20 * * *'
-       workflow_dispatch:
-       inputs:
-         brand:
-           description: 'Specific brand to generate for (optional)'
-           required: false
-           type: string
-         dry_run:
-           description: 'Generate but do not post'
-           required: false
-           type: boolean
-           default: false
- 
+  schedule:
+    # 12 PM PST = 8 PM UTC (during PST) or 7 PM UTC (during PDT)
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Specific brand to generate for (optional)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Generate but do not post'
+        required: false
+        type: boolean
+        default: false
+
 env:
   PYTHON_VERSION: '3.11'
 
@@ -60,7 +60,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-      LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
         run: |
           ARGS="--slot noon"
           if [ "${{ github.event.inputs.brand }}" != "" ]; then

@@ -4,18 +4,18 @@ on:
   schedule:
     # 6 PM PST = 2 AM UTC next day (during PST) or 1 AM UTC next day (during PDT)
     - cron: '0 2 * * *'
-      workflow_dispatch:
-      inputs:
-        brand:
-          description: 'Specific brand to generate for (optional)'
-          required: false
-          type: string
-        dry_run:
-          description: 'Generate but do not post'
-          required: false
-          type: boolean
-          default: false
-  
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Specific brand to generate for (optional)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Generate but do not post'
+        required: false
+        type: boolean
+        default: false
+
 env:
   PYTHON_VERSION: '3.11'
 
@@ -60,8 +60,8 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-             LATE_API_KEY: ${{ secrets.LATE_API_KEY}} 
-                   run: |
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+        run: |
           ARGS="--slot evening"
           if [ "${{ github.event.inputs.brand }}" != "" ]; then
             ARGS="--brand ${{ github.event.inputs.brand }}"
