@@ -260,7 +260,16 @@ jobs:
             echo "error_type=unknown_error" >> $GITHUB_OUTPUT
           fi
 
-          # Also extract last few lines for context
+          # Extract the actual error message for the Late API exception case
+          if grep -q "Late API exception" pinterest-test-results.txt 2>/dev/null; then
+            ERROR_LINE=$(grep "Late API exception" pinterest-test-results.txt | head -1)
+            echo "late_error=${ERROR_LINE}" >> $GITHUB_OUTPUT
+          fi
+          # Also extract any traceback info
+          if grep -q "Error\|error\|Traceback\|Exception" pinterest-test-results.txt 2>/dev/null; then
+            TRACEBACK=$(grep -A2 "Late API exception\|Traceback\|Error" pinterest-test-results.txt | head -10 | tr '\n' ' | ')
+            echo "traceback=${TRACEBACK}" >> $GITHUB_OUTPUT
+          fi
           echo "---LAST-LINES---"
           tail -5 pinterest-test-results.txt 2>/dev/null || echo "no file"
 
@@ -290,7 +299,79 @@ jobs:
 
       - name: DIAGNOSIS-late-api-threw-exception
         if: always() && steps.diagnose.outputs.error_type == 'late_api_exception'
-        run: echo "Late API call threw an exception (network, auth, or code error)"
+        run: |
+          echo "Late API call threw an exception"
+          echo "Error: ${{ steps.diagnose.outputs.late_error }}"
+          echo "Traceback: ${{ steps.diagnose.outputs.traceback }}"
+
+      - name: Extract exception details
+        id: extract-error
+        if: always() && steps.diagnose.outputs.error_type == 'late_api_exception'
+        run: |
+          # Parse the exception type from the results
+          if grep -q "Client error '4" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=http_4xx_error" >> $GITHUB_OUTPUT
+          elif grep -q "Client error '401" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=unauthorized_401" >> $GITHUB_OUTPUT
+          elif grep -q "Server error '5" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=server_5xx_error" >> $GITHUB_OUTPUT
+          elif grep -q "ConnectError\|ConnectionError" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=connection_error" >> $GITHUB_OUTPUT
+          elif grep -q "TimeoutException\|ReadTimeout" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=timeout" >> $GITHUB_OUTPUT
+          elif grep -q "JSONDecodeError" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=json_decode_error" >> $GITHUB_OUTPUT
+          elif grep -q "ValueError" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=value_error" >> $GITHUB_OUTPUT
+          elif grep -q "KeyError" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=key_error" >> $GITHUB_OUTPUT
+          elif grep -q "AttributeError" pinterest-test-results.txt 2>/dev/null; then
+            echo "detail=attribute_error" >> $GITHUB_OUTPUT
+          else
+            echo "detail=other" >> $GITHUB_OUTPUT
+          fi
+
+      - name: ERRDETAIL-http-4xx-client-error
+        if: always() && steps.extract-error.outputs.detail == 'http_4xx_error'
+        run: echo "Late API returned HTTP 4xx client error"
+
+      - name: ERRDETAIL-unauthorized-401
+        if: always() && steps.extract-error.outputs.detail == 'unauthorized_401'
+        run: echo "Late API returned 401 Unauthorized"
+
+      - name: ERRDETAIL-server-5xx-error
+        if: always() && steps.extract-error.outputs.detail == 'server_5xx_error'
+        run: echo "Late API returned HTTP 5xx server error"
+
+      - name: ERRDETAIL-connection-error
+        if: always() && steps.extract-error.outputs.detail == 'connection_error'
+        run: echo "Cannot connect to Late API server"
+
+      - name: ERRDETAIL-timeout
+        if: always() && steps.extract-error.outputs.detail == 'timeout'
+        run: echo "Late API request timed out"
+
+      - name: ERRDETAIL-json-decode-error
+        if: always() && steps.extract-error.outputs.detail == 'json_decode_error'
+        run: echo "Late API returned invalid JSON"
+
+      - name: ERRDETAIL-value-error
+        if: always() && steps.extract-error.outputs.detail == 'value_error'
+        run: echo "ValueError in Late API client"
+
+      - name: ERRDETAIL-key-error
+        if: always() && steps.extract-error.outputs.detail == 'key_error'
+        run: echo "KeyError - unexpected API response format"
+
+      - name: ERRDETAIL-attribute-error
+        if: always() && steps.extract-error.outputs.detail == 'attribute_error'
+        run: echo "AttributeError in Late API client"
+
+      - name: ERRDETAIL-other-exception
+        if: always() && steps.extract-error.outputs.detail == 'other'
+        run: |
+          echo "Other exception type. Full results:"
+          cat pinterest-test-results.txt 2>/dev/null || echo "No file"
 
       - name: DIAGNOSIS-webhook-failed
         if: always() && steps.diagnose.outputs.error_type == 'webhook_failed'
