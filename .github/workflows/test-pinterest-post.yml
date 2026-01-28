@@ -1,0 +1,182 @@
+name: Test Pinterest Post (Direct)
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+  workflow_dispatch:
+
+jobs:
+  test-pinterest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Test Pinterest posting directly
+        env:
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python << 'PYEOF'
+          import os
+          import sys
+          import json
+          import logging
+
+          logging.basicConfig(level=logging.DEBUG)
+          logger = logging.getLogger("pinterest_test")
+
+          summary_file = os.environ.get("GITHUB_STEP_SUMMARY", "")
+
+          def write_summary(text):
+              print(text)
+              if summary_file:
+                  try:
+                      with open(summary_file, "a") as f:
+                          f.write(text + "\n")
+                  except Exception:
+                      pass
+
+          write_summary("# Pinterest Direct Test\n")
+
+          # Step 1: Check which Pinterest method is available
+          write_summary("## Configuration Check\n")
+
+          late_api_key = os.environ.get("LATE_API_KEY", "")
+          make_webhook = os.environ.get("MAKE_COM_PINTEREST_WEBHOOK", "")
+          creatomate_key = os.environ.get("CREATOMATE_API_KEY", "")
+
+          write_summary(f"- LATE_API_KEY: {'SET (' + late_api_key[:4] + '...)' if late_api_key else 'NOT SET'}")
+          write_summary(f"- MAKE_COM_PINTEREST_WEBHOOK: {'SET (' + make_webhook[:20] + '...)' if make_webhook else 'NOT SET'}")
+          write_summary(f"- CREATOMATE_API_KEY: {'SET' if creatomate_key else 'NOT SET'}")
+
+          if not late_api_key and not make_webhook:
+              write_summary("\n**FAILURE**: Neither LATE_API_KEY nor MAKE_COM_PINTEREST_WEBHOOK is configured.")
+              write_summary("Cannot post to Pinterest without at least one of these.")
+              sys.exit(1)
+
+          # Step 2: Use a real Pexels video as test content
+          write_summary("\n## Fetching Test Video\n")
+
+          pexels_key = os.environ.get("PEXELS_API_KEY", "")
+          test_video_url = None
+
+          if pexels_key:
+              import requests
+              try:
+                  resp = requests.get(
+                      "https://api.pexels.com/videos/search",
+                      headers={"Authorization": pexels_key},
+                      params={"query": "wellness tips", "per_page": 1, "orientation": "portrait"},
+                      timeout=10
+                  )
+                  if resp.status_code == 200:
+                      videos = resp.json().get("videos", [])
+                      if videos:
+                          files = videos[0].get("video_files", [])
+                          for f in files:
+                              if f.get("quality") == "hd":
+                                  test_video_url = f.get("link")
+                                  break
+                          if not test_video_url and files:
+                              test_video_url = files[0].get("link")
+                      write_summary(f"- Pexels video found: {test_video_url[:80] if test_video_url else 'None'}...")
+                  else:
+                      write_summary(f"- Pexels API returned status {resp.status_code}")
+              except Exception as e:
+                  write_summary(f"- Pexels API error: {e}")
+
+          if not test_video_url:
+              # Fallback to a known public domain test video
+              test_video_url = "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"
+              write_summary(f"- Using fallback test video: {test_video_url}")
+
+          # Step 3: Try posting to Pinterest
+          write_summary("\n## Pinterest Posting Test\n")
+
+          test_title = "Wellness Tips for Your Best Day"
+          test_description = "Quick wellness tips to boost your energy and feel amazing! #wellness #health #selfcare #tips #lifestyle"
+          test_board = "daily-deal-darling-tips"
+
+          write_summary(f"- Title: {test_title}")
+          write_summary(f"- Board: {test_board}")
+          write_summary(f"- Video URL: {test_video_url[:80]}...")
+
+          # Method 1: Late API
+          if late_api_key:
+              write_summary("\n### Attempting Late API...\n")
+              try:
+                  from src.clients.late_api import LateAPIClient
+                  client = LateAPIClient(api_key=late_api_key)
+
+                  result = client.create_pinterest_video_pin(
+                      video_url=test_video_url,
+                      title=test_title,
+                      description=test_description,
+                      link="https://dailydealdarling.com",
+                      board_id=test_board,
+                      publish_now=True
+                  )
+
+                  if result.success:
+                      write_summary(f"**SUCCESS via Late API!**")
+                      write_summary(f"- Post ID: {result.post_id}")
+                      write_summary(f"- URL: {result.platform_post_url or 'pending'}")
+                      write_summary(f"- Raw: {json.dumps(result.raw_response, indent=2)[:500]}")
+                      sys.exit(0)
+                  else:
+                      write_summary(f"**Late API failed**: {result.error}")
+                      write_summary(f"- Raw: {json.dumps(result.raw_response, indent=2)[:500]}")
+              except Exception as e:
+                  write_summary(f"**Late API exception**: {e}")
+                  import traceback
+                  write_summary(f"```\n{traceback.format_exc()}\n```")
+
+          # Method 2: Make.com webhook
+          if make_webhook:
+              write_summary("\n### Attempting Make.com Webhook...\n")
+              try:
+                  import requests
+                  payload = {
+                      "type": "video_pin",
+                      "board_id": test_board,
+                      "title": test_title,
+                      "description": test_description,
+                      "video_url": test_video_url,
+                      "media_url": test_video_url,
+                      "link": "https://dailydealdarling.com",
+                  }
+
+                  write_summary(f"- Sending to: {make_webhook[:50]}...")
+                  resp = requests.post(make_webhook, json=payload, timeout=30)
+                  write_summary(f"- Response status: {resp.status_code}")
+                  write_summary(f"- Response body: {resp.text[:500]}")
+
+                  if resp.status_code == 200:
+                      write_summary(f"\n**SUCCESS via Make.com webhook!**")
+                      sys.exit(0)
+                  else:
+                      write_summary(f"\n**Make.com webhook failed with status {resp.status_code}**")
+              except Exception as e:
+                  write_summary(f"**Make.com webhook exception**: {e}")
+
+          write_summary("\n## FINAL RESULT: FAILED\n")
+          write_summary("Neither Late API nor Make.com webhook succeeded in posting to Pinterest.")
+          sys.exit(1)
+          PYEOF
