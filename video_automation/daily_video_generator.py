@@ -1,5 +1,6 @@
 """Main orchestrator for daily video generation."""
 
+import os
 import logging
 from datetime import datetime, timezone
 from typing import Optional
@@ -307,11 +308,19 @@ def main():
         config = get_config()
         results = generator.run_scheduled_generation(dry_run=args.dry_run)
 
-    # Print detailed summary
+    # Print detailed summary and write to GitHub Step Summary if available
     import sys
-    print("\n" + "=" * 60)
-    print("VIDEO GENERATION SUMMARY")
-    print("=" * 60)
+    summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
+    summary_lines = []
+
+    def output(line=""):
+        print(line)
+        summary_lines.append(line)
+
+    output("")
+    output("=" * 60)
+    output("VIDEO GENERATION SUMMARY")
+    output("=" * 60)
 
     any_success = False
     any_posted = False
@@ -319,43 +328,55 @@ def main():
     for result in results:
         brand = result.get("brand", "unknown")
         if result.get("is_placeholder"):
-            print(f"  PLACEHOLDER {brand}: Video rendering failed (Creatomate)")
-            print(f"    -> No platforms were posted to")
+            output(f"  PLACEHOLDER {brand}: Video rendering failed (Creatomate)")
+            output(f"    -> No platforms were posted to")
         elif result.get("success"):
             any_success = True
-            print(f"  RENDERED {brand}: {result.get('content', {}).get('topic', 'N/A')}")
+            output(f"  RENDERED {brand}: {result.get('content', {}).get('topic', 'N/A')}")
             posting = result.get("posting_results", {})
             if posting:
                 for platform, pres in posting.items():
                     status = "OK" if pres.get("success") else f"FAILED: {pres.get('error', '?')}"
-                    print(f"    -> {platform}: {status}")
+                    output(f"    -> {platform}: {status}")
                     if pres.get("success"):
                         any_posted = True
             else:
-                print(f"    -> No posting results (dry run or skipped)")
+                output(f"    -> No posting results (dry run or skipped)")
         else:
-            print(f"  ERROR {brand}: {result.get('error', 'Unknown error')}")
+            output(f"  ERROR {brand}: {result.get('error', 'Unknown error')}")
 
     total = len(results)
     rendered = sum(1 for r in results if r.get("success"))
     placeholders = sum(1 for r in results if r.get("is_placeholder"))
     errors = sum(1 for r in results if not r.get("success") and not r.get("is_placeholder"))
 
-    print(f"\nResults: {rendered} rendered, {placeholders} placeholder, {errors} errors out of {total} total")
+    output(f"\nResults: {rendered} rendered, {placeholders} placeholder, {errors} errors out of {total} total")
+
+    # Write summary to GitHub Step Summary for visibility
+    if summary_file:
+        try:
+            with open(summary_file, "a") as f:
+                f.write("## Video Generation Results\n\n")
+                f.write("```\n")
+                for line in summary_lines:
+                    f.write(line + "\n")
+                f.write("```\n")
+        except Exception:
+            pass
 
     if not any_success:
-        print("\nFAILED: No videos were successfully rendered.")
+        output("\nFAILED: No videos were successfully rendered.")
         if placeholders > 0:
-            print("CAUSE: Creatomate video rendering failed for all brands.")
-            print("ACTION: Check that CREATOMATE_API_KEY is configured and the template ID is valid.")
+            output("CAUSE: Creatomate video rendering failed for all brands.")
+            output("ACTION: Check that CREATOMATE_API_KEY is configured and the template ID is valid.")
         sys.exit(1)
 
     if not any_posted and not args.dry_run:
-        print("\nWARNING: Videos were rendered but NONE were posted to any platform.")
-        print("ACTION: Check platform credentials (LATE_API_KEY, MAKE_COM_PINTEREST_WEBHOOK, YouTube OAuth)")
+        output("\nWARNING: Videos were rendered but NONE were posted to any platform.")
+        output("ACTION: Check platform credentials (LATE_API_KEY, MAKE_COM_PINTEREST_WEBHOOK, YouTube OAuth)")
         sys.exit(1)
 
-    print(f"\nDone: {rendered}/{total} videos processed successfully")
+    output(f"\nDone: {rendered}/{total} videos processed successfully")
 
 
 if __name__ == "__main__":
