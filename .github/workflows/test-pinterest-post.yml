@@ -45,9 +45,11 @@ jobs:
           logger = logging.getLogger("pinterest_test")
 
           summary_file = os.environ.get("GITHUB_STEP_SUMMARY", "")
+          summary_lines = []
 
           def write_summary(text):
               print(text)
+              summary_lines.append(text)
               if summary_file:
                   try:
                       with open(summary_file, "a") as f:
@@ -55,33 +57,58 @@ jobs:
                   except Exception:
                       pass
 
-          write_summary("# Pinterest Direct Test\n")
-
-          # Step 1: Check which Pinterest method is available
-          write_summary("## Configuration Check\n")
-
-          late_api_key = os.environ.get("LATE_API_KEY", "")
-          make_webhook = os.environ.get("MAKE_COM_PINTEREST_WEBHOOK", "")
-          creatomate_key = os.environ.get("CREATOMATE_API_KEY", "")
-
-          write_summary(f"- LATE_API_KEY: {'SET (' + late_api_key[:4] + '...)' if late_api_key else 'NOT SET'}")
-          write_summary(f"- MAKE_COM_PINTEREST_WEBHOOK: {'SET (' + make_webhook[:20] + '...)' if make_webhook else 'NOT SET'}")
-          write_summary(f"- CREATOMATE_API_KEY: {'SET' if creatomate_key else 'NOT SET'}")
-
           def save_and_exit(code):
               with open("pinterest-test-results.txt", "w") as f:
                   f.write("\n".join(summary_lines))
               sys.exit(code)
 
+          write_summary("# Pinterest Direct Test\n")
+
+          # Step 1: Check ALL secrets configuration
+          write_summary("## Configuration Check\n")
+
+          late_api_key = os.environ.get("LATE_API_KEY", "")
+          make_webhook = os.environ.get("MAKE_COM_PINTEREST_WEBHOOK", "")
+          creatomate_key = os.environ.get("CREATOMATE_API_KEY", "")
+          gemini_key = os.environ.get("GEMINI_API_KEY", "")
+          pexels_key = os.environ.get("PEXELS_API_KEY", "")
+          supabase_url = os.environ.get("SUPABASE_URL", "")
+          supabase_key = os.environ.get("SUPABASE_KEY", "")
+
+          secrets_status = {
+              "LATE_API_KEY": late_api_key,
+              "MAKE_COM_PINTEREST_WEBHOOK": make_webhook,
+              "CREATOMATE_API_KEY": creatomate_key,
+              "GEMINI_API_KEY": gemini_key,
+              "PEXELS_API_KEY": pexels_key,
+              "SUPABASE_URL": supabase_url,
+              "SUPABASE_KEY": supabase_key,
+          }
+
+          write_summary("| Secret | Status |")
+          write_summary("|--------|--------|")
+          for name, value in secrets_status.items():
+              if value:
+                  masked = value[:4] + "..." + value[-4:] if len(value) > 12 else "****"
+                  write_summary(f"| {name} | SET ({masked}) |")
+              else:
+                  write_summary(f"| {name} | **NOT SET** |")
+
+          write_summary("")
+
           if not late_api_key and not make_webhook:
-              write_summary("\n**FAILURE**: Neither LATE_API_KEY nor MAKE_COM_PINTEREST_WEBHOOK is configured.")
-              write_summary("Cannot post to Pinterest without at least one of these.")
+              write_summary("## FAILURE: No Pinterest credentials configured\n")
+              write_summary("Neither LATE_API_KEY nor MAKE_COM_PINTEREST_WEBHOOK is set.")
+              write_summary("")
+              write_summary("**To fix:** Add at least one of these as a GitHub repository secret:")
+              write_summary("1. Go to https://github.com/talhahbilal1-arch/social-media-empire/settings/secrets/actions")
+              write_summary("2. Add LATE_API_KEY (get from https://getlate.dev)")
+              write_summary("3. OR add MAKE_COM_PINTEREST_WEBHOOK (from your Make.com scenario)")
               save_and_exit(1)
 
           # Step 2: Use a real Pexels video as test content
-          write_summary("\n## Fetching Test Video\n")
+          write_summary("## Fetching Test Video\n")
 
-          pexels_key = os.environ.get("PEXELS_API_KEY", "")
           test_video_url = None
 
           if pexels_key:
@@ -182,6 +209,8 @@ jobs:
                       write_summary(f"\n**Make.com webhook failed with status {resp.status_code}**")
               except Exception as e:
                   write_summary(f"**Make.com webhook exception**: {e}")
+                  import traceback
+                  write_summary(f"```\n{traceback.format_exc()}\n```")
 
           write_summary("\n## FINAL RESULT: FAILED\n")
           write_summary("Neither Late API nor Make.com webhook succeeded in posting to Pinterest.")
