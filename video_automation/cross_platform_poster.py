@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # posting_slots: Which time slots to post at (morning, midmorning, noon, afternoon, evening)
 BRAND_PLATFORM_CONFIG = {
     "daily_deal_darling": {
-        "pinterest_account_id": None,  # TODO: Set after connecting to Late API
+        "pinterest_account_id": None,  # No dedicated Pinterest account (free plan limit: 2 profiles)
         "pinterest_board_id": "beauty-fashion-home",
         "youtube_playlist_id": None,
         "tiktok_account": "dailydealdarling",
@@ -30,7 +30,7 @@ BRAND_PLATFORM_CONFIG = {
         "enabled": True
     },
     "fitnessmadeasy": {
-        "pinterest_account_id": None,  # TODO: Set after connecting to Late API
+        "pinterest_account_id": "697b5a4977637c5c857cc81b",  # Late API: Fitness Made Easy Pinterest
         "pinterest_board_id": "fitness-tips",
         "youtube_playlist_id": None,
         "tiktok_account": "fitnessmadeasy",
@@ -41,7 +41,7 @@ BRAND_PLATFORM_CONFIG = {
         "enabled": True
     },
     "menopause_planner": {
-        "pinterest_account_id": None,  # Uses default Pinterest account
+        "pinterest_account_id": "6977152e77637c5c857c808b",  # Late API: TheMenopausePlanner Pinterest
         "pinterest_board_id": "menopause-wellness-tips",
         "youtube_playlist_id": None,
         "tiktok_account": "menopauseplanner",
