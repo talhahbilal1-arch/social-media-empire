@@ -52,6 +52,48 @@ class PinterestIdeaPinCreator:
             if self.late_client is None:
                 logger.info("Pinterest posting using Make.com webhook (fallback)")
 
+        # Cache for additional Late API clients (for multi-account support)
+        self._late_clients_cache = {}
+
+    def _get_late_client(self, api_key_env: Optional[str] = None) -> Optional["LateAPIClient"]:
+        """Get the appropriate Late API client for the given API key environment variable.
+
+        Args:
+            api_key_env: Environment variable name for the API key (e.g., 'LATE_API_KEY', 'LATE_API_KEY_2')
+
+        Returns:
+            LateAPIClient instance or None if not available
+        """
+        if not LATE_API_AVAILABLE:
+            return None
+
+        # Default to LATE_API_KEY if not specified
+        if api_key_env is None:
+            api_key_env = "LATE_API_KEY"
+
+        # Return default client for primary API key
+        if api_key_env == "LATE_API_KEY" and self.late_client is not None:
+            return self.late_client
+
+        # Check cache for secondary clients
+        if api_key_env in self._late_clients_cache:
+            return self._late_clients_cache[api_key_env]
+
+        # Try to create a new client for the specified API key
+        api_key = os.getenv(api_key_env)
+        if api_key:
+            try:
+                client = LateAPIClient(api_key=api_key)
+                self._late_clients_cache[api_key_env] = client
+                logger.info(f"Created Late API client for {api_key_env}")
+                return client
+            except Exception as e:
+                logger.warning(f"Failed to create Late API client for {api_key_env}: {e}")
+                return None
+
+        logger.warning(f"API key not found for {api_key_env}")
+        return None
+
     def create_video_idea_pin(
         self,
         board_id: str,
@@ -59,7 +101,8 @@ class PinterestIdeaPinCreator:
         description: str,
         video_url: str,
         link: Optional[str] = None,
-        pinterest_account_id: Optional[str] = None
+        pinterest_account_id: Optional[str] = None,
+        api_key_env: Optional[str] = None
     ) -> dict:
         """Create a video-based Idea Pin.
 
@@ -73,19 +116,24 @@ class PinterestIdeaPinCreator:
             video_url: URL of the video to pin
             link: Optional destination link
             pinterest_account_id: Late API Pinterest account ID (for multi-account support)
+            api_key_env: Environment variable name for the API key (for multi-account support)
 
         Returns:
             Result dict with success status and pin details
         """
+        # Determine which Late API client to use
+        late_client = self._get_late_client(api_key_env)
+
         # Try Late API first (preferred for video pins)
-        if self.late_client is not None:
+        if late_client is not None:
             return self._create_via_late_api(
                 board_id=board_id,
                 title=title,
                 description=description,
                 video_url=video_url,
                 link=link,
-                account_id=pinterest_account_id
+                account_id=pinterest_account_id,
+                late_client=late_client
             )
 
         # Fallback to Make.com webhook
@@ -107,15 +155,21 @@ class PinterestIdeaPinCreator:
         description: str,
         video_url: str,
         link: Optional[str] = None,
-        account_id: Optional[str] = None
+        account_id: Optional[str] = None,
+        late_client: Optional["LateAPIClient"] = None
     ) -> dict:
         """Create video pin via Late API."""
         logger.info(f"Creating Pinterest video pin via Late API: {title[:50]}...")
         if account_id:
             logger.info(f"Using specific Pinterest account: {account_id}")
 
+        # Use provided client or fall back to default
+        client = late_client or self.late_client
+        if client is None:
+            return {"success": False, "error": "No Late API client available", "method": "late_api"}
+
         try:
-            result = self.late_client.create_pinterest_video_pin(
+            result = client.create_pinterest_video_pin(
                 video_url=video_url,
                 title=title[:100],
                 description=description[:500],

@@ -19,8 +19,9 @@ logger = logging.getLogger(__name__)
 # posting_slots: Which time slots to post at (morning, midmorning, noon, afternoon, evening)
 BRAND_PLATFORM_CONFIG = {
     "daily_deal_darling": {
-        "pinterest_account_id": None,  # No dedicated Pinterest account (free plan limit: 2 profiles)
-        "pinterest_board_id": "beauty-fashion-home",
+        "pinterest_account_id": "697ba20193a320156c4220b4",  # Late API: @DailyDealDarlin Pinterest (Account 2)
+        "late_api_key_env": "LATE_API_KEY_2",  # Uses second Late API account
+        "pinterest_board_id": "daily-deal-darling-amazon-finds",
         "youtube_playlist_id": None,
         "tiktok_account": "dailydealdarling",
         "instagram_account": "dailydealdarling",
@@ -31,6 +32,7 @@ BRAND_PLATFORM_CONFIG = {
     },
     "fitnessmadeasy": {
         "pinterest_account_id": "697b5a4977637c5c857cc81b",  # Late API: Fitness Made Easy Pinterest
+        "late_api_key_env": "LATE_API_KEY",  # Uses primary Late API account
         "pinterest_board_id": "fitness-tips",
         "youtube_playlist_id": None,
         "tiktok_account": "fitnessmadeasy",
@@ -42,6 +44,7 @@ BRAND_PLATFORM_CONFIG = {
     },
     "menopause_planner": {
         "pinterest_account_id": "6977152e77637c5c857c808b",  # Late API: TheMenopausePlanner Pinterest
+        "late_api_key_env": "LATE_API_KEY",  # Uses primary Late API account
         "pinterest_board_id": "menopause-wellness-tips",
         "youtube_playlist_id": None,
         "tiktok_account": "menopauseplanner",
@@ -227,7 +230,8 @@ class CrossPlatformPoster:
             board_id = brand_config.get("pinterest_board_id", "default")
             account_id = brand_config.get("pinterest_account_id")  # Optional: specific Late API account
             link_url = brand_config.get("link_url")  # Brand-specific destination link
-            logger.info(f"Posting to Pinterest board: {board_id}" + (f" (account: {account_id})" if account_id else ""))
+            api_key_env = brand_config.get("late_api_key_env", "LATE_API_KEY")  # Which API key to use
+            logger.info(f"Posting to Pinterest board: {board_id}" + (f" (account: {account_id}, api_key: {api_key_env})" if account_id else ""))
 
             result = self.pinterest_poster.create_video_idea_pin(
                 board_id=board_id,
@@ -235,7 +239,8 @@ class CrossPlatformPoster:
                 description=f"{description}\n\n{' '.join(hashtags)}",
                 video_url=video_url,
                 link=link_url,
-                pinterest_account_id=account_id
+                pinterest_account_id=account_id,
+                api_key_env=api_key_env
             )
 
             # Check if the Pinterest posting actually succeeded
