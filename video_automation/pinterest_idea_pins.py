@@ -58,7 +58,8 @@ class PinterestIdeaPinCreator:
         title: str,
         description: str,
         video_url: str,
-        link: Optional[str] = None
+        link: Optional[str] = None,
+        pinterest_account_id: Optional[str] = None
     ) -> dict:
         """Create a video-based Idea Pin.
 
@@ -71,6 +72,7 @@ class PinterestIdeaPinCreator:
             description: Pin description
             video_url: URL of the video to pin
             link: Optional destination link
+            pinterest_account_id: Late API Pinterest account ID (for multi-account support)
 
         Returns:
             Result dict with success status and pin details
@@ -82,7 +84,8 @@ class PinterestIdeaPinCreator:
                 title=title,
                 description=description,
                 video_url=video_url,
-                link=link
+                link=link,
+                account_id=pinterest_account_id
             )
 
         # Fallback to Make.com webhook
@@ -103,10 +106,13 @@ class PinterestIdeaPinCreator:
         title: str,
         description: str,
         video_url: str,
-        link: Optional[str] = None
+        link: Optional[str] = None,
+        account_id: Optional[str] = None
     ) -> dict:
         """Create video pin via Late API."""
         logger.info(f"Creating Pinterest video pin via Late API: {title[:50]}...")
+        if account_id:
+            logger.info(f"Using specific Pinterest account: {account_id}")
 
         try:
             result = self.late_client.create_pinterest_video_pin(
@@ -115,7 +121,8 @@ class PinterestIdeaPinCreator:
                 description=description[:500],
                 link=link,
                 board_id=board_id,
-                publish_now=True
+                publish_now=True,
+                account_id=account_id
             )
 
             if result.success:

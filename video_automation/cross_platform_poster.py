@@ -13,30 +13,48 @@ logger = logging.getLogger(__name__)
 
 
 # Brand to board/channel mappings
+# pinterest_account_id: Late API account ID (get from Late API dashboard after connecting accounts)
+# Set to None to use the default/first Pinterest account
 BRAND_PLATFORM_CONFIG = {
     "daily_deal_darling": {
-        "pinterest_board_id": "daily-deal-darling-tips",
+        "pinterest_account_id": None,  # TODO: Set after connecting to Late API
+        "pinterest_board_id": "beauty-fashion-home",
         "youtube_playlist_id": None,
         "tiktok_account": "dailydealdarling",
-        "instagram_account": "dailydealdarling"
+        "instagram_account": "dailydealdarling",
+        "link_url": "https://dailydealdarling.com"
+    },
+    "fitnessmadeasy": {
+        "pinterest_account_id": None,  # TODO: Set after connecting to Late API
+        "pinterest_board_id": "fitness-tips",
+        "youtube_playlist_id": None,
+        "tiktok_account": "fitnessmadeasy",
+        "instagram_account": "fitnessmadeasy",
+        "link_url": "https://fitnessmadeasy.com"
     },
     "menopause_planner": {
+        "pinterest_account_id": None,  # Uses default Pinterest account
         "pinterest_board_id": "menopause-wellness-tips",
         "youtube_playlist_id": None,
         "tiktok_account": "menopauseplanner",
-        "instagram_account": "menopauseplanner"
+        "instagram_account": "menopauseplanner",
+        "link_url": "https://menopauseplanner.com"
     },
     "nurse_planner": {
+        "pinterest_account_id": None,  # Uses default Pinterest account
         "pinterest_board_id": "nurse-life-tips",
         "youtube_playlist_id": None,
         "tiktok_account": "nurseplanner",
-        "instagram_account": "nurseplanner"
+        "instagram_account": "nurseplanner",
+        "link_url": "https://nurseplanner.com"
     },
     "adhd_planner": {
+        "pinterest_account_id": None,  # Uses default Pinterest account
         "pinterest_board_id": "adhd-productivity-tips",
         "youtube_playlist_id": None,
         "tiktok_account": "adhdplanner",
-        "instagram_account": "adhdplanner"
+        "instagram_account": "adhdplanner",
+        "link_url": "https://adhdplanner.com"
     }
 }
 
@@ -169,13 +187,17 @@ class CrossPlatformPoster:
                 return {"success": False, "error": "Pinterest not configured. Set LATE_API_KEY (preferred) or MAKE_COM_PINTEREST_WEBHOOK."}
 
             board_id = brand_config.get("pinterest_board_id", "default")
-            logger.info(f"Posting to Pinterest board: {board_id}")
+            account_id = brand_config.get("pinterest_account_id")  # Optional: specific Late API account
+            link_url = brand_config.get("link_url")  # Brand-specific destination link
+            logger.info(f"Posting to Pinterest board: {board_id}" + (f" (account: {account_id})" if account_id else ""))
 
             result = self.pinterest_poster.create_video_idea_pin(
                 board_id=board_id,
                 title=title[:100],
                 description=f"{description}\n\n{' '.join(hashtags)}",
-                video_url=video_url
+                video_url=video_url,
+                link=link_url,
+                pinterest_account_id=account_id
             )
 
             # Check if the Pinterest posting actually succeeded

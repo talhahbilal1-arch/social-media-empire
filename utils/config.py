@@ -40,6 +40,7 @@ class Config:
     # Brands configuration
     brands: list = field(default_factory=lambda: [
         "daily_deal_darling",
+        "fitnessmadeasy",
         "menopause_planner",
         "nurse_planner",
         "adhd_planner"
