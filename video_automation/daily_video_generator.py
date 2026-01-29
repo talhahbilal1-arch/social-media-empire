@@ -10,7 +10,7 @@ from utils.config import get_config
 from database.supabase_client import get_supabase_client
 from .video_content_generator import VideoContentGenerator, VideoContent
 from .video_templates import VideoTemplateManager
-from .cross_platform_poster import CrossPlatformPoster
+from .cross_platform_poster import CrossPlatformPoster, get_brands_for_slot
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -213,10 +213,10 @@ class DailyVideoGenerator:
         time_slot: str = "morning",
         dry_run: bool = False
     ) -> list[dict]:
-        """Run scheduled video generation for all brands.
+        """Run scheduled video generation for brands configured for this time slot.
 
         Args:
-            time_slot: One of 'morning', 'noon', 'evening'
+            time_slot: One of 'morning', 'midmorning', 'noon', 'afternoon', 'evening'
             dry_run: If True, generate but don't post
 
         Returns:
@@ -225,9 +225,17 @@ class DailyVideoGenerator:
         config = get_config()
         results = []
 
-        logger.info(f"Running scheduled generation for {time_slot} slot")
+        # Get brands that should post at this time slot
+        brands_to_generate = get_brands_for_slot(time_slot)
 
-        for brand in config.brands:
+        if not brands_to_generate:
+            logger.info(f"No brands scheduled for {time_slot} slot")
+            return results
+
+        logger.info(f"Running scheduled generation for {time_slot} slot")
+        logger.info(f"Brands to generate: {brands_to_generate}")
+
+        for brand in brands_to_generate:
             result = self.generate_and_post(
                 brand=brand,
                 platforms=config.platforms,

@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 # Brand to board/channel mappings
 # pinterest_account_id: Late API account ID (get from Late API dashboard after connecting accounts)
 # Set to None to use the default/first Pinterest account
+# videos_per_day: Number of videos to post per day for this brand
+# posting_slots: Which time slots to post at (morning, midmorning, noon, afternoon, evening)
 BRAND_PLATFORM_CONFIG = {
     "daily_deal_darling": {
         "pinterest_account_id": None,  # TODO: Set after connecting to Late API
@@ -22,7 +24,10 @@ BRAND_PLATFORM_CONFIG = {
         "youtube_playlist_id": None,
         "tiktok_account": "dailydealdarling",
         "instagram_account": "dailydealdarling",
-        "link_url": "https://dailydealdarling.com"
+        "link_url": "https://dailydealdarling.com",
+        "videos_per_day": 3,
+        "posting_slots": ["morning", "noon", "evening"],
+        "enabled": True
     },
     "fitnessmadeasy": {
         "pinterest_account_id": None,  # TODO: Set after connecting to Late API
@@ -30,7 +35,10 @@ BRAND_PLATFORM_CONFIG = {
         "youtube_playlist_id": None,
         "tiktok_account": "fitnessmadeasy",
         "instagram_account": "fitnessmadeasy",
-        "link_url": "https://fitnessmadeasy.com"
+        "link_url": "https://fitnessmadeasy.com",
+        "videos_per_day": 6,
+        "posting_slots": ["morning", "midmorning", "noon", "afternoon", "evening", "morning"],  # 6 slots, morning gets 2
+        "enabled": True
     },
     "menopause_planner": {
         "pinterest_account_id": None,  # Uses default Pinterest account
@@ -38,7 +46,10 @@ BRAND_PLATFORM_CONFIG = {
         "youtube_playlist_id": None,
         "tiktok_account": "menopauseplanner",
         "instagram_account": "menopauseplanner",
-        "link_url": "https://menopauseplanner.com"
+        "link_url": "https://menopauseplanner.com",
+        "videos_per_day": 3,
+        "posting_slots": ["morning", "noon", "evening"],
+        "enabled": True
     },
     "nurse_planner": {
         "pinterest_account_id": None,  # Uses default Pinterest account
@@ -46,7 +57,10 @@ BRAND_PLATFORM_CONFIG = {
         "youtube_playlist_id": None,
         "tiktok_account": "nurseplanner",
         "instagram_account": "nurseplanner",
-        "link_url": "https://nurseplanner.com"
+        "link_url": "https://nurseplanner.com",
+        "videos_per_day": 0,
+        "posting_slots": [],
+        "enabled": False  # Disabled for now
     },
     "adhd_planner": {
         "pinterest_account_id": None,  # Uses default Pinterest account
@@ -54,9 +68,33 @@ BRAND_PLATFORM_CONFIG = {
         "youtube_playlist_id": None,
         "tiktok_account": "adhdplanner",
         "instagram_account": "adhdplanner",
-        "link_url": "https://adhdplanner.com"
+        "link_url": "https://adhdplanner.com",
+        "videos_per_day": 0,
+        "posting_slots": [],
+        "enabled": False  # Disabled for now
     }
 }
+
+
+def get_brands_for_slot(time_slot: str) -> list[str]:
+    """Get list of brands that should post during this time slot.
+
+    Args:
+        time_slot: One of 'morning', 'midmorning', 'noon', 'afternoon', 'evening'
+
+    Returns:
+        List of brand names to generate videos for
+    """
+    brands = []
+    for brand, config in BRAND_PLATFORM_CONFIG.items():
+        if not config.get("enabled", True):
+            continue
+        slots = config.get("posting_slots", [])
+        # Count how many times this slot appears (for brands posting multiple times per slot)
+        slot_count = slots.count(time_slot)
+        for _ in range(slot_count):
+            brands.append(brand)
+    return brands
 
 
 @dataclass
