@@ -19,21 +19,21 @@ logger = logging.getLogger(__name__)
 # posting_slots: Which time slots to post at (morning, midmorning, noon, afternoon, evening)
 BRAND_PLATFORM_CONFIG = {
     "daily_deal_darling": {
-        "pinterest_account_id": "697ba20193a320156c4220b4",  # Late API: @DailyDealDarlin Pinterest (Account 2)
-        "late_api_key_env": "LATE_API_KEY_2",  # Uses second Late API account
-        "pinterest_board_id": "daily-deal-darling-amazon-finds",
+        "pinterest_account_id": "697ba20193a320156c4220b4",  # Late API: DailyDealDarlin Pinterest
+        "late_api_key_env": "LATE_API_KEY_2",  # DailyDealDarlin Late account
+        "pinterest_board_id": "874683627569021288",  # Daily Deal Darling • Amazon Finds board
         "youtube_playlist_id": None,
         "tiktok_account": "dailydealdarling",
         "instagram_account": "dailydealdarling",
         "link_url": "https://dailydealdarling.com",
         "videos_per_day": 3,
         "posting_slots": ["morning", "noon", "evening"],
-        "enabled": True
+        "enabled": True  # Now enabled with Pinterest connected
     },
     "fitnessmadeasy": {
-        "pinterest_account_id": "697b5a4977637c5c857cc81b",  # Late API: Fitness Made Easy Pinterest
-        "late_api_key_env": "LATE_API_KEY",  # Uses primary Late API account
-        "pinterest_board_id": "fitness-tips",
+        "pinterest_account_id": "697bb4b893a320156c4221ab",  # Late API: 1uy77rvyo4c0mmr Pinterest (fitness account)
+        "late_api_key_env": "LATE_API_KEY_3",  # Third Late account (new)
+        "pinterest_board_id": "756745612325868912",  # Fitness Goods board (numeric ID required)
         "youtube_playlist_id": None,
         "tiktok_account": "fitnessmadeasy",
         "instagram_account": "fitnessmadeasy",
@@ -43,13 +43,13 @@ BRAND_PLATFORM_CONFIG = {
         "enabled": True
     },
     "menopause_planner": {
-        "pinterest_account_id": "6977152e77637c5c857c808b",  # Late API: TheMenopausePlanner Pinterest
-        "late_api_key_env": "LATE_API_KEY",  # Uses primary Late API account
-        "pinterest_board_id": "menopause-wellness-tips",
+        "pinterest_account_id": "697c329393a320156c422e6d",  # Late API: TheMenopausePlanner Pinterest
+        "late_api_key_env": "LATE_API_KEY_4",  # New Late account for menopause
+        "pinterest_board_id": "1076993767079887530",  # Menopause Wellness Tips board (numeric ID required)
         "youtube_playlist_id": None,
         "tiktok_account": "menopauseplanner",
         "instagram_account": "menopauseplanner",
-        "link_url": "https://menopauseplanner.com",
+        "link_url": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle",  # Etsy listing
         "videos_per_day": 3,
         "posting_slots": ["morning", "noon", "evening"],
         "enabled": True

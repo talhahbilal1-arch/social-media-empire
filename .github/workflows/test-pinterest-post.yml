@@ -156,6 +156,7 @@ jobs:
 
           test_title = "Wellness Tips for Your Best Day"
           test_description = "Quick wellness tips to boost your energy and feel amazing! #wellness #health #selfcare #tips #lifestyle"
+          test_board = "default"  # Board ID for Make.com webhook (Late API discovers boards automatically)
 
           if late_api_key:
               try:

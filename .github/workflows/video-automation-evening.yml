@@ -61,6 +61,9 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
         run: |
           ARGS="--slot evening"

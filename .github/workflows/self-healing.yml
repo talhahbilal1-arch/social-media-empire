@@ -69,7 +69,10 @@ jobs:
               print(f'Error checking videos: {e}')
               needs_video_retry = 'false'
 
-          print(f'::set-output name=needs_video_retry::{needs_video_retry}')
+          # Write output to GITHUB_OUTPUT file
+          import os as _os
+          with open(_os.environ['GITHUB_OUTPUT'], 'a') as _f:
+              _f.write(f'needs_video_retry={needs_video_retry}\n')
 
           # Check if YouTube token needs refresh
           try:
@@ -88,11 +91,13 @@ jobs:
               print(f'Token check error: {e}')
               needs_token_refresh = 'true'
 
-          print(f'::set-output name=needs_token_refresh::{needs_token_refresh}')
+          with open(_os.environ['GITHUB_OUTPUT'], 'a') as _f:
+              _f.write(f'needs_token_refresh={needs_token_refresh}\n')
 
           # Check if cleanup is needed (old data)
           needs_cleanup = 'true'  # Always run cleanup on schedule
-          print(f'::set-output name=needs_cleanup::{needs_cleanup}')
+          with open(_os.environ['GITHUB_OUTPUT'], 'a') as _f:
+              _f.write(f'needs_cleanup={needs_cleanup}\n')
           "
 
   retry-failed-videos:
