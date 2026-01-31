@@ -178,12 +178,21 @@ print(f'Total videos to generate: {len(brands)}')
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
         run: |
           python -c "
-          import resend
           import os
-          resend.api_key = os.environ['RESEND_API_KEY']
+          import sys
+
+          resend_key = os.environ.get('RESEND_API_KEY', '')
+          alert_email = os.environ.get('ALERT_EMAIL', '')
+
+          if not resend_key or not alert_email:
+              print('WARNING: Email alerting not configured (missing RESEND_API_KEY or ALERT_EMAIL)')
+              sys.exit(0)
+
+          import resend
+          resend.api_key = resend_key
           resend.Emails.send({
               'from': 'alerts@socialmediaempire.com',
-              'to': [os.environ['ALERT_EMAIL']],
+              'to': [alert_email],
               'subject': '🚨 Morning Video Generation Failed',
               'html': '''
               <h1>Video Generation Failed</h1>
@@ -191,4 +200,5 @@ print(f'Total videos to generate: {len(brands)}')
               <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View workflow run</a></p>
               '''
           })
+          print('Alert sent successfully')
           "
