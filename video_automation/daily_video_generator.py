@@ -81,20 +81,31 @@ class DailyVideoGenerator:
             render_result = self._render_video(brand, content, background_url)
 
             video_url = render_result.get("url", "")
-            is_placeholder = "placeholder.video" in video_url or render_result.get("status") == "placeholder"
+            render_status = render_result.get("status", "")
+            is_placeholder = "placeholder.video" in video_url or render_status == "placeholder"
+            is_pexels_fallback = render_status == "pexels_fallback"
 
             if is_placeholder:
                 logger.error(f"Video rendering failed - using placeholder URL. Cannot post to platforms.")
                 logger.error(f"Check that CREATOMATE_API_KEY is configured correctly.")
+            elif is_pexels_fallback:
+                logger.info(f"Using Pexels video fallback - will post directly to platforms.")
 
             # Step 4: Log to database
+            if is_placeholder:
+                db_status = "placeholder"
+            elif is_pexels_fallback:
+                db_status = "pexels_fallback"
+            else:
+                db_status = "rendered"
+
             video_record = db.log_video_creation(
                 brand=brand,
                 platform="all",
                 video_url=video_url,
                 title=content.hook,
                 description=self._format_description(content),
-                status="placeholder" if is_placeholder else "rendered"
+                status=db_status
             )
 
             # Step 5: Post to platforms (skip if using placeholder video)
@@ -142,12 +153,13 @@ class DailyVideoGenerator:
                     "topic": content.topic,
                     "hook": content.hook,
                     "platforms_posted": list(posting_results.keys()),
-                    "is_placeholder": is_placeholder
+                    "is_placeholder": is_placeholder,
+                    "is_pexels_fallback": is_pexels_fallback
                 }
             )
 
             return {
-                "success": not is_placeholder,  # Mark as failed if using placeholder
+                "success": not is_placeholder,  # Mark as success if rendered or pexels fallback
                 "brand": brand,
                 "content": {
                     "topic": content.topic,
@@ -157,7 +169,8 @@ class DailyVideoGenerator:
                 "video_url": video_url,
                 "posting_results": posting_results,
                 "video_id": video_record.get("id"),
-                "is_placeholder": is_placeholder
+                "is_placeholder": is_placeholder,
+                "is_pexels_fallback": is_pexels_fallback
             }
 
         except Exception as e:
@@ -179,7 +192,7 @@ class DailyVideoGenerator:
         content: VideoContent,
         background_url: Optional[str]
     ) -> dict:
-        """Render video using template manager."""
+        """Render video using template manager, with fallback to Pexels video."""
         try:
             content_dict = {
                 "hook": content.hook,
@@ -195,8 +208,19 @@ class DailyVideoGenerator:
             )
             return result
         except Exception as e:
-            logger.warning(f"Creatomate render failed: {e}, using placeholder")
-            # Return placeholder for development/testing
+            logger.warning(f"Creatomate render failed: {e}")
+
+            # Fallback: Use Pexels background video directly if available
+            # This allows posting to work even without Creatomate
+            if background_url and "pexels" in background_url.lower():
+                logger.info(f"Using Pexels video directly as fallback: {background_url[:80]}...")
+                return {
+                    "url": background_url,
+                    "status": "pexels_fallback"
+                }
+
+            # No fallback available - return placeholder
+            logger.warning("No Pexels fallback available, using placeholder")
             return {
                 "url": f"https://placeholder.video/{brand}/{content.topic.replace(' ', '-')}.mp4",
                 "status": "placeholder"
@@ -340,7 +364,11 @@ def main():
             output(f"    -> No platforms were posted to")
         elif result.get("success"):
             any_success = True
-            output(f"  RENDERED {brand}: {result.get('content', {}).get('topic', 'N/A')}")
+            # Show different status for Pexels fallback vs fully rendered
+            if result.get("is_pexels_fallback"):
+                output(f"  PEXELS {brand}: {result.get('content', {}).get('topic', 'N/A')} (Pexels fallback)")
+            else:
+                output(f"  RENDERED {brand}: {result.get('content', {}).get('topic', 'N/A')}")
             posting = result.get("posting_results", {})
             if posting:
                 for platform, pres in posting.items():
@@ -354,11 +382,12 @@ def main():
             output(f"  ERROR {brand}: {result.get('error', 'Unknown error')}")
 
     total = len(results)
-    rendered = sum(1 for r in results if r.get("success"))
+    rendered = sum(1 for r in results if r.get("success") and not r.get("is_pexels_fallback"))
+    pexels_fallback = sum(1 for r in results if r.get("is_pexels_fallback"))
     placeholders = sum(1 for r in results if r.get("is_placeholder"))
     errors = sum(1 for r in results if not r.get("success") and not r.get("is_placeholder"))
 
-    output(f"\nResults: {rendered} rendered, {placeholders} placeholder, {errors} errors out of {total} total")
+    output(f"\nResults: {rendered} rendered, {pexels_fallback} pexels fallback, {placeholders} placeholder, {errors} errors out of {total} total")
 
     # Write summary to GitHub Step Summary for visibility
     if summary_file:
