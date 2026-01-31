@@ -119,6 +119,21 @@ jobs:
           LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
         run: |
+          set -e
+          echo "=== LATE API KEYS STATUS ==="
+          [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: ✅" || echo "LATE_API_KEY: ❌"
+          [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: ✅" || echo "LATE_API_KEY_2: ❌"
+          [ -n "$LATE_API_KEY_3" ] && echo "LATE_API_KEY_3: ✅" || echo "LATE_API_KEY_3: ❌"
+          [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: ✅" || echo "LATE_API_KEY_4: ❌"
+          echo ""
+          echo "=== BRAND SLOT CONFIGURATION ==="
+          python3 -c "
+from video_automation.cross_platform_poster import get_brands_for_slot
+brands = get_brands_for_slot('morning')
+print(f'Brands for morning slot: {brands}')
+print(f'Total videos to generate: {len(brands)}')
+"
+          echo ""
           ARGS="--slot morning"
           if [ "${{ github.event.inputs.brand }}" != "" ]; then
             ARGS="--brand ${{ github.event.inputs.brand }}"
@@ -126,6 +141,8 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
             ARGS="$ARGS --dry-run"
           fi
+          echo "=== RUNNING VIDEO GENERATOR ==="
+          echo "Args: $ARGS"
           python -m video_automation.daily_video_generator $ARGS
 
       - name: Upload artifacts
