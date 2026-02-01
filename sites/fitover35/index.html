@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit Over 35 | Fitness & Health Tips for Men 35+</title>
+    <meta name="description" content="Build muscle, burn fat, and boost testosterone with science-backed workouts and nutrition tips designed specifically for men over 35.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Fit Over 35 - Your Best Shape After 35">
+    <meta property="og:description" content="Fitness tips, workouts, and nutrition advice for men 35+">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fitover35.com">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+        }
+
+        /* Navigation */
+        nav {
+            background: #0d47a1;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #64b5f6;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #64b5f6;
+        }
+
+        .nav-cta {
+            background: #ff6f00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: #ff8f00;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #1976d2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            background: #ff6f00;
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .hero-cta:hover {
+            background: #ff8f00;
+            transform: translateY(-3px);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: #1a1a1a;
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #64b5f6;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 80px 20px;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            color: #0d47a1;
+        }
+
+        /* Workouts Section */
+        .workouts {
+            background: #f5f5f5;
+        }
+
+        .workout-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .workout-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .workout-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .workout-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .workout-card-content {
+            padding: 25px;
+        }
+
+        .workout-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #0d47a1;
+        }
+
+        .workout-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .workout-link {
+            color: #1565c0;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Nutrition Section */
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .nutrition-card {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .nutrition-image {
+            width: 150px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .nutrition-content {
+            padding: 25px;
+            flex: 1;
+        }
+
+        .nutrition-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #0d47a1;
+        }
+
+        /* Gear Section */
+        .gear {
+            background: #0d47a1;
+            color: white;
+        }
+
+        .gear .section-title {
+            color: white;
+        }
+
+        .gear-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .gear-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .gear-card:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .gear-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .gear-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .gear-card p {
+            opacity: 0.8;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .gear-link {
+            display: inline-block;
+            background: #ff6f00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Articles Section */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .article-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .article-content {
+            padding: 25px;
+        }
+
+        .article-category {
+            color: #1565c0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .article-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+        }
+
+        .article-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: #f5f5f5;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-stars {
+            color: #ff6f00;
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #1565c0;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            color: #0d47a1;
+        }
+
+        .author-info p {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .newsletter p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .newsletter-form button {
+            background: #0d47a1;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            background: #1565c0;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 60px 20px 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #64b5f6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #64b5f6;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .stats-bar {
+                gap: 30px;
+            }
+
+            .nutrition-card {
+                flex-direction: column;
+            }
+
+            .nutrition-image {
+                width: 100%;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">FIT<span>OVER35</span></a>
+            <ul class="nav-links">
+                <li><a href="#workouts">Workouts</a></li>
+                <li><a href="#nutrition">Nutrition</a></li>
+                <li><a href="#gear">Gear</a></li>
+                <li><a href="#articles">Articles</a></li>
+            </ul>
+            <a href="#newsletter" class="nav-cta">Get Free Guide</a>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your Best Shape After 35 Starts Here</h1>
+            <p>Build muscle, torch fat, and boost your energy with science-backed workouts and nutrition designed specifically for men over 35.</p>
+            <a href="#newsletter" class="hero-cta">Get Your Free 12-Week Program</a>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number">15,000+</div>
+            <div class="stat-label">Men Transformed</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">18 lbs</div>
+            <div class="stat-label">Avg Fat Loss</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Week Program</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">4.9/5</div>
+            <div class="stat-label">User Rating</div>
+        </div>
+    </div>
+
+    <!-- Workouts Section -->
+    <section class="workouts" id="workouts">
+        <div class="section-container">
+            <h2 class="section-title">Workout Programs</h2>
+            <div class="workout-grid">
+                <div class="workout-card">
+                    <div class="workout-image" style="background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c149a?w=400&h=300&fit=crop');"></div>
+                    <div class="workout-card-content">
+                        <h3>Strength Training Fundamentals</h3>
+                        <p>Master the compound movements that build real strength and muscle after 35.</p>
+                        <a href="articles/strength-training.html" class="workout-link">Start Training →</a>
+                    </div>
+                </div>
+                <div class="workout-card">
+                    <div class="workout-image" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop');"></div>
+                    <div class="workout-card-content">
+                        <h3>HIIT for Maximum Fat Loss</h3>
+                        <p>High-intensity intervals designed to boost metabolism and burn stubborn belly fat.</p>
+                        <a href="articles/hiit-fat-loss.html" class="workout-link">Burn Fat Now →</a>
+                    </div>
+                </div>
+                <div class="workout-card">
+                    <div class="workout-image" style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop');"></div>
+                    <div class="workout-card-content">
+                        <h3>The 3-Day Full Body Split</h3>
+                        <p>Perfect for busy professionals - maximum results with minimum time in the gym.</p>
+                        <a href="articles/3-day-split.html" class="workout-link">View Program →</a>
+                    </div>
+                </div>
+                <div class="workout-card">
+                    <div class="workout-image" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop');"></div>
+                    <div class="workout-card-content">
+                        <h3>Mobility & Recovery Guide</h3>
+                        <p>Stay injury-free and recover faster with targeted mobility work for men 35+.</p>
+                        <a href="articles/mobility-recovery.html" class="workout-link">Improve Mobility →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nutrition Section -->
+    <section class="nutrition" id="nutrition">
+        <div class="section-container">
+            <h2 class="section-title">Nutrition Guides</h2>
+            <div class="nutrition-grid">
+                <div class="nutrition-card">
+                    <div class="nutrition-image" style="background-image: url('https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=300&h=200&fit=crop');"></div>
+                    <div class="nutrition-content">
+                        <h3>Complete Protein Guide for Men Over 35</h3>
+                        <p>How much protein you actually need and the best sources for building muscle.</p>
+                        <a href="articles/protein-guide.html" class="workout-link">Read Guide →</a>
+                    </div>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-image" style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=200&fit=crop');"></div>
+                    <div class="nutrition-content">
+                        <h3>10 Ways to Boost Testosterone Naturally</h3>
+                        <p>Science-backed strategies to optimize your hormones without supplements.</p>
+                        <a href="articles/boost-testosterone.html" class="workout-link">Boost T-Levels →</a>
+                    </div>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-image" style="background-image: url('https://images.unsplash.com/photo-1547592180-85f173990554?w=300&h=200&fit=crop');"></div>
+                    <div class="nutrition-content">
+                        <h3>The Ultimate Meal Prep Guide</h3>
+                        <p>Prep a week of muscle-building meals in under 2 hours on Sunday.</p>
+                        <a href="articles/meal-prep.html" class="workout-link">Start Prepping →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gear Section -->
+    <section class="gear" id="gear">
+        <div class="section-container">
+            <h2 class="section-title">Recommended Gear</h2>
+            <div class="gear-grid">
+                <div class="gear-card">
+                    <div class="gear-icon">🏋️</div>
+                    <h3>Bowflex SelectTech 552 Dumbbells</h3>
+                    <p>Replace 15 sets of weights with one compact set. Perfect for home gyms.</p>
+                    <a href="https://amzn.to/bowflex552" class="gear-link" target="_blank">Check Price</a>
+                </div>
+                <div class="gear-card">
+                    <div class="gear-icon">💪</div>
+                    <h3>FITFORT Resistance Bands Set</h3>
+                    <p>5 resistance levels for progressive training anywhere. Great for travel.</p>
+                    <a href="https://amzn.to/fitfort-bands" class="gear-link" target="_blank">Check Price</a>
+                </div>
+                <div class="gear-card">
+                    <div class="gear-icon">🔵</div>
+                    <h3>TriggerPoint GRID Foam Roller</h3>
+                    <p>Essential for recovery and mobility work. Used by pros worldwide.</p>
+                    <a href="https://amzn.to/triggerpoint" class="gear-link" target="_blank">Check Price</a>
+                </div>
+                <div class="gear-card">
+                    <div class="gear-icon">🥤</div>
+                    <h3>Optimum Nutrition Gold Standard Whey</h3>
+                    <p>The gold standard in protein supplements. 24g protein per scoop.</p>
+                    <a href="https://amzn.to/on-whey" class="gear-link" target="_blank">Check Price</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section class="articles" id="articles">
+        <div class="section-container">
+            <h2 class="section-title">Latest Articles</h2>
+            <div class="articles-grid">
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=250&fit=crop');"></div>
+                    <div class="article-content">
+                        <div class="article-category">Workouts</div>
+                        <h3>The 5 Compound Lifts Every Man Should Master</h3>
+                        <p>These foundational movements are the key to building functional strength and muscle.</p>
+                        <a href="articles/compound-lifts.html" class="workout-link">Read More →</a>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop');"></div>
+                    <div class="article-content">
+                        <div class="article-category">Nutrition</div>
+                        <h3>10 Ways to Boost Testosterone Naturally After 35</h3>
+                        <p>Optimize your hormones with these science-backed lifestyle changes.</p>
+                        <a href="articles/boost-testosterone.html" class="workout-link">Read More →</a>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=400&h=250&fit=crop');"></div>
+                    <div class="article-content">
+                        <div class="article-category">Gear</div>
+                        <h3>Best Home Gym Equipment for Men Over 35</h3>
+                        <p>Build a complete home gym without breaking the bank.</p>
+                        <a href="articles/home-gym-equipment.html" class="workout-link">Read More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="section-container">
+            <h2 class="section-title">Success Stories</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I'm 44 and in the best shape of my life. Lost 32 pounds and my energy is through the roof. This program understands what we need at this age."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <h4>Mike Richardson</h4>
+                            <p>Age 44, Lost 32 lbs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Finally a fitness resource that doesn't treat me like I'm 25 anymore. The recovery protocols and age-specific advice made all the difference."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DS</div>
+                        <div class="author-info">
+                            <h4>David Simmons</h4>
+                            <p>Age 39, Gained 12 lbs muscle</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"At 52, I thought my best days were behind me. This program proved me wrong. Stronger, leaner, and more energetic than my 30s."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JT</div>
+                        <div class="author-info">
+                            <h4>James Thompson</h4>
+                            <p>Age 52, Transformed at 50+</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter" id="newsletter">
+        <div class="section-container">
+            <h2>Get Your Free 12-Week Transformation Program</h2>
+            <p>Join 15,000+ men who are building their best bodies after 35</p>
+            <form class="newsletter-form" action="#" method="post">
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <button type="submit">Get Free Access</button>
+            </form>
+            <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">No spam. Unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>FIT OVER 35</h4>
+                <p style="color: #888; line-height: 1.7;">Helping men build strength, burn fat, and optimize their health after 35.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Workouts</h4>
+                <ul>
+                    <li><a href="articles/strength-training.html">Strength Training</a></li>
+                    <li><a href="articles/hiit-fat-loss.html">HIIT Workouts</a></li>
+                    <li><a href="articles/3-day-split.html">3-Day Split</a></li>
+                    <li><a href="articles/mobility-recovery.html">Mobility & Recovery</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Nutrition</h4>
+                <ul>
+                    <li><a href="articles/protein-guide.html">Protein Guide</a></li>
+                    <li><a href="articles/boost-testosterone.html">Boost Testosterone</a></li>
+                    <li><a href="articles/meal-prep.html">Meal Prep</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>About</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Fit Over 35. All rights reserved. | Results may vary. Consult a physician before starting any exercise program.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '60px';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.background = '#0d47a1';
+            navLinks.style.padding = '20px';
+        });
+    </script>
+</body>
+</html>
