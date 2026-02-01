@@ -60,12 +60,7 @@ jobs:
           [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: ✅" || echo "LATE_API_KEY_4: ❌"
           echo ""
           echo "=== BRAND SLOT CONFIGURATION ==="
-          python3 -c "
-from video_automation.cross_platform_poster import get_brands_for_slot
-brands = get_brands_for_slot('afternoon')
-print(f'Brands for afternoon slot: {brands}')
-print(f'Total videos to generate: {len(brands)}')
-"
+          python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('afternoon'); print(f'Brands for afternoon slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
           echo ""
           if [ -n "${{ inputs.brand }}" ]; then
             python -m video_automation.daily_video_generator --brand "${{ inputs.brand }}" --slot afternoon ${{ inputs.dry_run && '--dry-run' || '' }}

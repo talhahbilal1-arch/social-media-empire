@@ -127,12 +127,7 @@ jobs:
           [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: ✅" || echo "LATE_API_KEY_4: ❌"
           echo ""
           echo "=== BRAND SLOT CONFIGURATION ==="
-          python3 -c "
-from video_automation.cross_platform_poster import get_brands_for_slot
-brands = get_brands_for_slot('morning')
-print(f'Brands for morning slot: {brands}')
-print(f'Total videos to generate: {len(brands)}')
-"
+          python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('morning'); print(f'Brands for morning slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
           echo ""
           ARGS="--slot morning"
           if [ "${{ github.event.inputs.brand }}" != "" ]; then
