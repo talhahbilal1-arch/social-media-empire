@@ -29,6 +29,20 @@ BRAND_TEMPLATES = {
         },
         "logo_url": "https://dailydealdarling.com/logo.png"
     },
+    "fitnessmadeasy": {
+        "template_id": CREATOMATE_TEMPLATE_ID,
+        "colors": {
+            "primary": "#4CAF50",  # Green
+            "secondary": "#81C784",  # Light green
+            "text": "#FFFFFF",
+            "background": "#1B5E20"
+        },
+        "fonts": {
+            "heading": "Oswald Bold",
+            "body": "Roboto"
+        },
+        "logo_url": None
+    },
     "menopause_planner": {
         "template_id": CREATOMATE_TEMPLATE_ID,
         "colors": {

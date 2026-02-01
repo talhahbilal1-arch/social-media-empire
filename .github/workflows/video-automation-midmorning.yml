@@ -17,6 +17,7 @@ on:
         default: false
 
 env:
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
   PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
   CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
@@ -26,6 +27,9 @@ env:
   YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
   YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
   LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+  LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+  LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+  LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
 
 jobs:
   generate-videos:
@@ -47,6 +51,16 @@ jobs:
 
       - name: Run video generation (Mid-Morning slot)
         run: |
+          set -e
+          echo "=== LATE API KEYS STATUS ==="
+          [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: ✅" || echo "LATE_API_KEY: ❌"
+          [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: ✅" || echo "LATE_API_KEY_2: ❌"
+          [ -n "$LATE_API_KEY_3" ] && echo "LATE_API_KEY_3: ✅" || echo "LATE_API_KEY_3: ❌"
+          [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: ✅" || echo "LATE_API_KEY_4: ❌"
+          echo ""
+          echo "=== BRAND SLOT CONFIGURATION ==="
+          python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('midmorning'); print(f'Brands for midmorning slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
+          echo ""
           if [ -n "${{ inputs.brand }}" ]; then
             python -m video_automation.daily_video_generator --brand "${{ inputs.brand }}" --slot midmorning ${{ inputs.dry_run && '--dry-run' || '' }}
           else

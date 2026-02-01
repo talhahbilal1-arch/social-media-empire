@@ -65,7 +65,7 @@ class LateAPIClient(BaseClient):
         self._pinterest_account_id: Optional[str] = None
 
     def get_pinterest_account_id(self) -> Optional[str]:
-        """Get the connected Pinterest account ID.
+        """Get the first connected Pinterest account ID.
 
         Returns:
             Pinterest account ID if connected, None otherwise
@@ -77,10 +77,11 @@ class LateAPIClient(BaseClient):
             response = self._request("GET", "/accounts")
             accounts = response.json()
 
-            # Find Pinterest account
-            for account in accounts.get('accounts', []):
+            # Handle different response formats
+            accounts_list = accounts if isinstance(accounts, list) else accounts.get('accounts', accounts.get('data', []))
+            for account in accounts_list:
                 if account.get('platform') == 'pinterest':
-                    self._pinterest_account_id = account.get('_id')
+                    self._pinterest_account_id = account.get('_id', account.get('id'))
                     self.logger.info(f"Found Pinterest account: {account.get('username')}")
                     return self._pinterest_account_id
 
@@ -91,6 +92,38 @@ class LateAPIClient(BaseClient):
             self.logger.error(f"Failed to get accounts: {e}")
             return None
 
+    def list_pinterest_accounts(self) -> List[Dict[str, Any]]:
+        """List all connected Pinterest accounts.
+
+        Returns:
+            List of Pinterest account objects with _id, username, etc.
+        """
+        try:
+            response = self._request("GET", "/accounts")
+            accounts = response.json()
+
+            # Handle different response formats
+            accounts_list = accounts if isinstance(accounts, list) else accounts.get('accounts', accounts.get('data', []))
+
+            # Filter to Pinterest accounts only
+            pinterest_accounts = [
+                {
+                    'id': acct.get('_id', acct.get('id')),
+                    'username': acct.get('username'),
+                    'platform': 'pinterest',
+                    'name': acct.get('name', acct.get('username'))
+                }
+                for acct in accounts_list
+                if acct.get('platform') == 'pinterest'
+            ]
+
+            self.logger.info(f"Found {len(pinterest_accounts)} Pinterest accounts")
+            return pinterest_accounts
+
+        except Exception as e:
+            self.logger.error(f"Failed to list Pinterest accounts: {e}")
+            return []
+
     def create_pinterest_video_pin(
         self,
         video_url: str,
@@ -98,7 +131,8 @@ class LateAPIClient(BaseClient):
         description: str,
         link: Optional[str] = None,
         board_id: Optional[str] = None,
-        publish_now: bool = True
+        publish_now: bool = True,
+        account_id: Optional[str] = None
     ) -> LatePostResult:
         """Create a Pinterest video pin via Late API.
 
@@ -109,49 +143,44 @@ class LateAPIClient(BaseClient):
             link: Destination URL when pin is clicked
             board_id: Pinterest board ID (uses default if not specified)
             publish_now: If True, publish immediately; if False, create as draft
+            account_id: Specific Late API Pinterest account ID (optional, auto-detects if not specified)
 
         Returns:
             LatePostResult with success status and pin URL
         """
-        account_id = self.get_pinterest_account_id()
+        # Use provided account_id or auto-detect
+        if not account_id:
+            account_id = self.get_pinterest_account_id()
         if not account_id:
             return LatePostResult(
                 success=False,
                 error="No Pinterest account connected to Late API"
             )
 
-        # Build the request payload
-        payload: Dict[str, Any] = {
-            "content": title,  # Late uses 'content' for the text
-            "platforms": [
-                {
-                    "platform": "pinterest",
-                    "accountId": account_id
-                }
-            ],
-            "mediaUrls": [video_url],  # Late handles video upload from URL
+        # Build the request payload per Late API docs:
+        # https://docs.getlate.dev/core/posts
+        platform_data: Dict[str, Any] = {
+            "platform": "pinterest",
+            "accountId": account_id
         }
 
-        # Add optional fields
-        if description:
-            # Pinterest uses description for the pin text
-            # Late API combines content + description
-            payload["content"] = f"{title}\n\n{description}"
-
+        # Pinterest-specific settings go in platformSpecificData
+        platform_specific: Dict[str, Any] = {}
         if link:
-            payload["platformSettings"] = {
-                "pinterest": {
-                    "link": link
-                }
-            }
-            if board_id:
-                payload["platformSettings"]["pinterest"]["boardId"] = board_id
-        elif board_id:
-            payload["platformSettings"] = {
-                "pinterest": {
-                    "boardId": board_id
-                }
-            }
+            platform_specific["link"] = link
+        if board_id:
+            platform_specific["boardId"] = board_id
+        if platform_specific:
+            platform_data["platformSpecificData"] = platform_specific
+
+        # Content for the pin
+        content = f"{title}\n\n{description}" if description else title
+
+        payload: Dict[str, Any] = {
+            "content": content,
+            "platforms": [platform_data],
+            "mediaItems": [{"type": "video", "url": video_url}],
+        }
 
         # Set status based on publish_now
         if not publish_now:

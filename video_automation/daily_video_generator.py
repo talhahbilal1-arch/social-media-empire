@@ -1,5 +1,6 @@
 """Main orchestrator for daily video generation."""
 
+import os
 import logging
 from datetime import datetime, timezone
 from typing import Optional
@@ -9,7 +10,7 @@ from utils.config import get_config
 from database.supabase_client import get_supabase_client
 from .video_content_generator import VideoContentGenerator, VideoContent
 from .video_templates import VideoTemplateManager
-from .cross_platform_poster import CrossPlatformPoster
+from .cross_platform_poster import CrossPlatformPoster, get_brands_for_slot
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -80,20 +81,36 @@ class DailyVideoGenerator:
             render_result = self._render_video(brand, content, background_url)
 
             video_url = render_result.get("url", "")
+            render_status = render_result.get("status", "")
+            is_placeholder = "placeholder.video" in video_url or render_status == "placeholder"
+            is_pexels_fallback = render_status == "pexels_fallback"
+
+            if is_placeholder:
+                logger.error(f"Video rendering failed - using placeholder URL. Cannot post to platforms.")
+                logger.error(f"Check that CREATOMATE_API_KEY is configured correctly.")
+            elif is_pexels_fallback:
+                logger.info(f"Using Pexels video fallback - will post directly to platforms.")
 
             # Step 4: Log to database
+            if is_placeholder:
+                db_status = "placeholder"
+            elif is_pexels_fallback:
+                db_status = "pexels_fallback"
+            else:
+                db_status = "rendered"
+
             video_record = db.log_video_creation(
                 brand=brand,
                 platform="all",
                 video_url=video_url,
                 title=content.hook,
                 description=self._format_description(content),
-                status="rendered"
+                status=db_status
             )
 
-            # Step 5: Post to platforms
+            # Step 5: Post to platforms (skip if using placeholder video)
             posting_results = {}
-            if not dry_run and video_url:
+            if not dry_run and video_url and not is_placeholder:
                 logger.info(f"Posting to platforms: {platforms}")
                 posting_results = self.platform_poster.post_to_all(
                     video_url=video_url,
@@ -119,6 +136,14 @@ class DailyVideoGenerator:
                             context={"brand": brand, "platform": platform}
                         )
 
+            # Log error if placeholder was used
+            if is_placeholder:
+                db.log_error(
+                    error_type="render_failure",
+                    error_message="Creatomate rendering failed - video not posted",
+                    context={"brand": brand, "topic": content.topic}
+                )
+
             # Log analytics
             db.log_analytics_event(
                 event_type="video_created",
@@ -127,12 +152,14 @@ class DailyVideoGenerator:
                 data={
                     "topic": content.topic,
                     "hook": content.hook,
-                    "platforms_posted": list(posting_results.keys())
+                    "platforms_posted": list(posting_results.keys()),
+                    "is_placeholder": is_placeholder,
+                    "is_pexels_fallback": is_pexels_fallback
                 }
             )
 
             return {
-                "success": True,
+                "success": not is_placeholder,  # Mark as success if rendered or pexels fallback
                 "brand": brand,
                 "content": {
                     "topic": content.topic,
@@ -141,7 +168,9 @@ class DailyVideoGenerator:
                 },
                 "video_url": video_url,
                 "posting_results": posting_results,
-                "video_id": video_record.get("id")
+                "video_id": video_record.get("id"),
+                "is_placeholder": is_placeholder,
+                "is_pexels_fallback": is_pexels_fallback
             }
 
         except Exception as e:
@@ -163,7 +192,7 @@ class DailyVideoGenerator:
         content: VideoContent,
         background_url: Optional[str]
     ) -> dict:
-        """Render video using template manager."""
+        """Render video using template manager, with fallback to Pexels video."""
         try:
             content_dict = {
                 "hook": content.hook,
@@ -179,8 +208,19 @@ class DailyVideoGenerator:
             )
             return result
         except Exception as e:
-            logger.warning(f"Creatomate render failed: {e}, using placeholder")
-            # Return placeholder for development/testing
+            logger.warning(f"Creatomate render failed: {e}")
+
+            # Fallback: Use Pexels background video directly if available
+            # This allows posting to work even without Creatomate
+            if background_url and "pexels" in background_url.lower():
+                logger.info(f"Using Pexels video directly as fallback: {background_url[:80]}...")
+                return {
+                    "url": background_url,
+                    "status": "pexels_fallback"
+                }
+
+            # No fallback available - return placeholder
+            logger.warning("No Pexels fallback available, using placeholder")
             return {
                 "url": f"https://placeholder.video/{brand}/{content.topic.replace(' ', '-')}.mp4",
                 "status": "placeholder"
@@ -197,10 +237,10 @@ class DailyVideoGenerator:
         time_slot: str = "morning",
         dry_run: bool = False
     ) -> list[dict]:
-        """Run scheduled video generation for all brands.
+        """Run scheduled video generation for brands configured for this time slot.
 
         Args:
-            time_slot: One of 'morning', 'noon', 'evening'
+            time_slot: One of 'morning', 'midmorning', 'noon', 'afternoon', 'evening'
             dry_run: If True, generate but don't post
 
         Returns:
@@ -209,9 +249,17 @@ class DailyVideoGenerator:
         config = get_config()
         results = []
 
-        logger.info(f"Running scheduled generation for {time_slot} slot")
+        # Get brands that should post at this time slot
+        brands_to_generate = get_brands_for_slot(time_slot)
 
-        for brand in config.brands:
+        if not brands_to_generate:
+            logger.info(f"No brands scheduled for {time_slot} slot")
+            return results
+
+        logger.info(f"Running scheduled generation for {time_slot} slot")
+        logger.info(f"Brands to generate: {brands_to_generate}")
+
+        for brand in brands_to_generate:
             result = self.generate_and_post(
                 brand=brand,
                 platforms=config.platforms,
@@ -263,7 +311,8 @@ def main():
     parser = argparse.ArgumentParser(description="Generate and post videos")
     parser.add_argument("--brand", help="Specific brand to generate for")
     parser.add_argument("--topic", help="Specific topic for the video")
-    parser.add_argument("--slot", choices=["morning", "noon", "evening"],
+    parser.add_argument("--slot",
+                       choices=["morning", "midmorning", "noon", "afternoon", "evening"],
                        help="Time slot for scheduled generation")
     parser.add_argument("--dry-run", action="store_true",
                        help="Generate but don't post")
@@ -291,13 +340,80 @@ def main():
         config = get_config()
         results = generator.run_scheduled_generation(dry_run=args.dry_run)
 
-    # Print summary
+    # Print detailed summary and write to GitHub Step Summary if available
+    import sys
+    summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
+    summary_lines = []
+
+    def output(line=""):
+        print(line)
+        summary_lines.append(line)
+
+    output("")
+    output("=" * 60)
+    output("VIDEO GENERATION SUMMARY")
+    output("=" * 60)
+
+    any_success = False
+    any_posted = False
+
     for result in results:
         brand = result.get("brand", "unknown")
-        if result.get("success"):
-            print(f"\u2713 {brand}: {result.get('content', {}).get('topic', 'N/A')}")
+        if result.get("is_placeholder"):
+            output(f"  PLACEHOLDER {brand}: Video rendering failed (Creatomate)")
+            output(f"    -> No platforms were posted to")
+        elif result.get("success"):
+            any_success = True
+            # Show different status for Pexels fallback vs fully rendered
+            if result.get("is_pexels_fallback"):
+                output(f"  PEXELS {brand}: {result.get('content', {}).get('topic', 'N/A')} (Pexels fallback)")
+            else:
+                output(f"  RENDERED {brand}: {result.get('content', {}).get('topic', 'N/A')}")
+            posting = result.get("posting_results", {})
+            if posting:
+                for platform, pres in posting.items():
+                    status = "OK" if pres.get("success") else f"FAILED: {pres.get('error', '?')}"
+                    output(f"    -> {platform}: {status}")
+                    if pres.get("success"):
+                        any_posted = True
+            else:
+                output(f"    -> No posting results (dry run or skipped)")
         else:
-            print(f"\u2717 {brand}: {result.get('error', 'Unknown error')}")
+            output(f"  ERROR {brand}: {result.get('error', 'Unknown error')}")
+
+    total = len(results)
+    rendered = sum(1 for r in results if r.get("success") and not r.get("is_pexels_fallback"))
+    pexels_fallback = sum(1 for r in results if r.get("is_pexels_fallback"))
+    placeholders = sum(1 for r in results if r.get("is_placeholder"))
+    errors = sum(1 for r in results if not r.get("success") and not r.get("is_placeholder"))
+
+    output(f"\nResults: {rendered} rendered, {pexels_fallback} pexels fallback, {placeholders} placeholder, {errors} errors out of {total} total")
+
+    # Write summary to GitHub Step Summary for visibility
+    if summary_file:
+        try:
+            with open(summary_file, "a") as f:
+                f.write("## Video Generation Results\n\n")
+                f.write("```\n")
+                for line in summary_lines:
+                    f.write(line + "\n")
+                f.write("```\n")
+        except Exception:
+            pass
+
+    if not any_success:
+        output("\nFAILED: No videos were successfully rendered.")
+        if placeholders > 0:
+            output("CAUSE: Creatomate video rendering failed for all brands.")
+            output("ACTION: Check that CREATOMATE_API_KEY is configured and the template ID is valid.")
+        sys.exit(1)
+
+    if not any_posted and not args.dry_run:
+        output("\nWARNING: Videos were rendered but NONE were posted to any platform.")
+        output("ACTION: Check platform credentials (LATE_API_KEY, MAKE_COM_PINTEREST_WEBHOOK, YouTube OAuth)")
+        sys.exit(1)
+
+    output(f"\nDone: {rendered}/{total} videos processed successfully")
 
 
 if __name__ == "__main__":

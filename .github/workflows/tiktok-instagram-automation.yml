@@ -73,7 +73,7 @@ jobs:
         continue-on-error: true
 
       - name: Post to TikTok via Make.com
-        if: inputs.platform == 'both' || inputs.platform == 'tiktok'
+        if: github.event.inputs.platform == 'both' || github.event.inputs.platform == 'tiktok'
         run: |
           python -c "
           import requests
@@ -95,7 +95,7 @@ jobs:
         continue-on-error: true
 
       - name: Post to Instagram via Make.com
-        if: inputs.platform == 'both' || inputs.platform == 'instagram'
+        if: github.event.inputs.platform == 'both' || github.event.inputs.platform == 'instagram'
         run: |
           python -c "
           import requests

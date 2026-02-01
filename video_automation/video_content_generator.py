@@ -13,15 +13,28 @@ from utils.api_clients import GeminiClient, PexelsClient
 BRAND_CONFIG = {
     "daily_deal_darling": {
         "name": "Daily Deal Darling",
-        "niche": "lifestyle deals, beauty finds, home organization",
-        "tone": "friendly, excited, relatable",
-        "audience": "budget-conscious women 25-45",
-        "hashtags": ["#deals", "#amazonfinds", "#budgetfriendly", "#lifehacks", "#musthaves"],
+        "niche": "beauty tips, fashion finds, home decor ideas for women",
+        "tone": "friendly, excited, relatable, feminine",
+        "audience": "women 25-45 interested in beauty, fashion, and home decor",
+        "hashtags": ["#beautytips", "#fashionfinds", "#homedecor", "#womenslifestyle", "#beautydeals"],
         "cta_styles": [
             "Link in bio for all my favorite finds!",
-            "Follow for daily deals you don't want to miss!",
+            "Follow for daily beauty and fashion tips!",
             "Save this for later!",
             "Comment LINK and I'll send it to you!"
+        ]
+    },
+    "fitnessmadeasy": {
+        "name": "Fitness Made Easy",
+        "niche": "fitness tips, health hacks, workout routines for men over 35",
+        "tone": "motivational, practical, no-nonsense, masculine",
+        "audience": "men 35+ looking to improve fitness and health",
+        "hashtags": ["#mensfitness", "#over35fitness", "#healthylifestyle", "#workoutmotivation", "#fitover40"],
+        "cta_styles": [
+            "Follow for more fitness tips that actually work!",
+            "Save this for your next workout!",
+            "Link in bio for the full routine!",
+            "Drop a 💪 if you're trying this!"
         ]
     },
     "menopause_planner": {
@@ -232,7 +245,8 @@ Make it conversational, engaging, and valuable. The hook must create curiosity o
         """Determine the best Pexels search query for background."""
         # Brand-specific background preferences
         brand_backgrounds = {
-            "daily_deal_darling": ["aesthetic lifestyle", "cozy home", "beauty products", "shopping"],
+            "daily_deal_darling": ["beauty aesthetic", "fashion flatlay", "home decor", "feminine lifestyle"],
+            "fitnessmadeasy": ["gym workout", "man exercising", "fitness motivation", "healthy lifestyle man"],
             "menopause_planner": ["calm wellness", "mature woman", "self care", "peaceful nature"],
             "nurse_planner": ["healthcare", "hospital", "medical professional", "coffee break"],
             "adhd_planner": ["organized desk", "planner", "productivity", "colorful workspace"]

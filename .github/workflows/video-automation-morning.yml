@@ -4,6 +4,9 @@ on:
   schedule:
     # 6 AM PST = 2 PM UTC (during PST) or 1 PM UTC (during PDT)
     - cron: '0 14 * * *'
+  push:
+    branches:
+      - 'claude/**'
   workflow_dispatch:
     inputs:
       brand:
@@ -39,6 +42,48 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check critical configuration
+        env:
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+        run: |
+          echo "=============================================="
+          echo "CONFIGURATION CHECK"
+          echo "=============================================="
+
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "❌ ERROR: CREATOMATE_API_KEY is NOT SET"
+            echo "   Videos cannot be rendered - only placeholder URLs will be used"
+            echo ""
+          else
+            echo "✅ CREATOMATE_API_KEY is configured"
+          fi
+
+          # Late API is preferred for Pinterest video posting
+          if [ -n "$LATE_API_KEY" ]; then
+            echo "✅ LATE_API_KEY is configured (preferred for Pinterest)"
+            echo "⚠️  LATE_API_KEY not set, using Make.com webhook fallback"
+          else
+            echo "❌ ERROR: No Pinterest posting configured!"
+          fi
+
+          echo "=============================================="
+
+          # Write to summary
+          echo "## Configuration Status" >> $GITHUB_STEP_SUMMARY
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "- CREATOMATE_API_KEY: NOT SET" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- CREATOMATE_API_KEY: Configured" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -n "$LATE_API_KEY" ]; then
+            echo "- LATE_API_KEY: Configured (preferred for Pinterest)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- LATE_API_KEY: Not set" >> $GITHUB_STEP_SUMMARY
+          fi
+          else
+          fi
+
       - name: Run health check
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -63,7 +108,20 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
         run: |
+          set -e
+          echo "=== LATE API KEYS STATUS ==="
+          [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: ✅" || echo "LATE_API_KEY: ❌"
+          [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: ✅" || echo "LATE_API_KEY_2: ❌"
+          [ -n "$LATE_API_KEY_3" ] && echo "LATE_API_KEY_3: ✅" || echo "LATE_API_KEY_3: ❌"
+          [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: ✅" || echo "LATE_API_KEY_4: ❌"
+          echo ""
+          echo "=== BRAND SLOT CONFIGURATION ==="
+          python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('morning'); print(f'Brands for morning slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
+          echo ""
           ARGS="--slot morning"
           if [ "${{ github.event.inputs.brand }}" != "" ]; then
             ARGS="--brand ${{ github.event.inputs.brand }}"
@@ -71,6 +129,8 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
             ARGS="$ARGS --dry-run"
           fi
+          echo "=== RUNNING VIDEO GENERATOR ==="
+          echo "Args: $ARGS"
           python -m video_automation.daily_video_generator $ARGS
 
       - name: Upload artifacts
@@ -106,12 +166,21 @@ jobs:
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
         run: |
           python -c "
-          import resend
           import os
-          resend.api_key = os.environ['RESEND_API_KEY']
+          import sys
+
+          resend_key = os.environ.get('RESEND_API_KEY', '')
+          alert_email = os.environ.get('ALERT_EMAIL', '')
+
+          if not resend_key or not alert_email:
+              print('WARNING: Email alerting not configured (missing RESEND_API_KEY or ALERT_EMAIL)')
+              sys.exit(0)
+
+          import resend
+          resend.api_key = resend_key
           resend.Emails.send({
               'from': 'alerts@socialmediaempire.com',
-              'to': [os.environ['ALERT_EMAIL']],
+              'to': [alert_email],
               'subject': '🚨 Morning Video Generation Failed',
               'html': '''
               <h1>Video Generation Failed</h1>
@@ -119,4 +188,5 @@ jobs:
               <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View workflow run</a></p>
               '''
           })
+          print('Alert sent successfully')
           "

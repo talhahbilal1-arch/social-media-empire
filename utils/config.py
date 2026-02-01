@@ -37,12 +37,12 @@ class Config:
     # Notifications
     alert_email: str = ""
 
-    # Brands configuration
+    # Brands configuration (active Pinterest brands)
+    # Note: per-brand video counts and posting slots are in cross_platform_poster.py
     brands: list = field(default_factory=lambda: [
-        "daily_deal_darling",
-        "menopause_planner",
-        "nurse_planner",
-        "adhd_planner"
+        "daily_deal_darling",   # Women's beauty, fashion, home decor - 3 videos/day
+        "fitnessmadeasy",       # Men's fitness/health 35+ - 6 videos/day
+        "menopause_planner",    # Women's menopause wellness - 3 videos/day
     ])
 
     # Platforms configuration

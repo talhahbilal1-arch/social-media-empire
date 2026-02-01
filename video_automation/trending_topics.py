@@ -27,6 +27,18 @@ EVERGREEN_TOPICS = {
         "Coupon organization",
         "Budget meal planning deals"
     ],
+    "fitnessmadeasy": [
+        "Muscle building over 35",
+        "Best protein sources for men",
+        "Home gym essentials",
+        "Morning workout routines",
+        "Recovery and stretching tips",
+        "Supplements that actually work",
+        "Training around injuries",
+        "Discipline vs motivation",
+        "Time-efficient workouts",
+        "Nutrition fundamentals for gains"
+    ],
     "menopause_planner": [
         "Hot flash triggers to avoid",
         "Best foods for hormone balance",
@@ -80,6 +92,20 @@ SEASONAL_TOPICS = {
         10: ["Halloween deals", "Early holiday shopping"],
         11: ["Black Friday strategy", "Cyber Monday prep", "Holiday gift guides"],
         12: ["Last-minute gift deals", "After Christmas sales"]
+    },
+    "fitnessmadeasy": {
+        1: ["New Year fitness goals", "Winter bulk season tips", "Home workout essentials"],
+        2: ["Valentine's fitness gifts", "Heart health workouts"],
+        3: ["Spring cut season prep", "Outdoor workout transition"],
+        4: ["Spring shred tips", "Bodyweight basics"],
+        5: ["Summer body prep", "Outdoor training"],
+        6: ["Beach body final push", "Summer hydration tips"],
+        7: ["Mid-year fitness check", "Summer workout safety"],
+        8: ["Fall bulk prep", "Back to gym routine"],
+        9: ["Fall fitness reset", "New program timing"],
+        10: ["Pre-holiday fitness strategy", "Maintain during holidays"],
+        11: ["Holiday workout survival", "Black Friday gym deals"],
+        12: ["Year-end fitness review", "New Year goal setting"]
     },
     "menopause_planner": {
         1: ["New Year health goals", "Winter self-care"],

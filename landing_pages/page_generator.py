@@ -121,6 +121,35 @@ LANDING_PAGE_CONFIG = {
         },
         "cta_button": "DOWNLOAD FREE SHEETS",
         "footer_text": "Your brain is different, not broken. Let's build systems that work for YOU."
+    },
+    "fitnessmadeasy": {
+        "name": "Fit Over 35",
+        "tagline": "Build Strength. Burn Fat. Feel Unstoppable.",
+        "hero_headline": "FREE 12-Week Workout Program for Men 35+",
+        "hero_subheadline": "Build muscle, torch fat, and boost testosterone with science-backed workouts designed for your body",
+        "primary_color": "#1565C0",
+        "secondary_color": "#BBDEFB",
+        "accent_color": "#1976D2",
+        "benefits": [
+            {"icon": "💪", "title": "Build Real Strength", "description": "Compound movements and progressive overload designed for the male body over 35"},
+            {"icon": "🔥", "title": "Burn Stubborn Fat", "description": "Strategic HIIT and metabolic conditioning that works with your hormones, not against them"},
+            {"icon": "⚡", "title": "Boost Testosterone", "description": "Exercise protocols proven to naturally increase T-levels and energy"}
+        ],
+        "social_proof": {
+            "testimonials": [
+                {"name": "Mike R., 42", "text": "Lost 30 lbs and my energy is through the roof. Wish I found this years ago!", "rating": 5},
+                {"name": "David S., 38", "text": "Finally a program that understands recovery matters more as you age", "rating": 5},
+                {"name": "James T., 45", "text": "Stronger at 45 than I was at 25. This program is the real deal.", "rating": 5}
+            ],
+            "stats": ["15,000+ Men Transformed", "Avg. 18 lbs Fat Lost", "No Equipment Required Options"]
+        },
+        "lead_magnet": {
+            "title": "12-Week Transformation Program",
+            "description": "The complete workout system built specifically for men over 35",
+            "features": ["3-day and 5-day workout splits", "Exercise video library", "Nutrition guidelines for men", "Progress tracking sheets"]
+        },
+        "cta_button": "GET YOUR FREE PROGRAM",
+        "footer_text": "Age is just a number. Your best shape is still ahead of you."
     }
 }
 

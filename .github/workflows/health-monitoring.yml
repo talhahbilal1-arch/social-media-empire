@@ -110,7 +110,7 @@ jobs:
   alert-on-unhealthy:
     runs-on: ubuntu-latest
     needs: health-check
-    if: needs.health-check.outputs.status == 'unhealthy'
+    if: always() && (needs.health-check.result == 'failure' || needs.health-check.outputs.status == 'unhealthy')
 
     steps:
       - name: Checkout repository
@@ -130,17 +130,33 @@ jobs:
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
         run: |
           python -c "
-          import resend
           import os
+          import sys
 
-          resend.api_key = os.environ['RESEND_API_KEY']
+          resend_key = os.environ.get('RESEND_API_KEY', '')
+          alert_email = os.environ.get('ALERT_EMAIL', '')
+
+          # Check if email alerting is configured
+          if not resend_key:
+              print('WARNING: RESEND_API_KEY not configured - skipping email alert')
+              print('To enable email alerts, add RESEND_API_KEY to repository secrets')
+              sys.exit(0)
+
+          if not alert_email:
+              print('WARNING: ALERT_EMAIL not configured - skipping email alert')
+              print('To enable email alerts, add ALERT_EMAIL to repository secrets')
+              sys.exit(0)
+
+          # Send the alert
+          import resend
+          resend.api_key = resend_key
 
           healthy = '${{ needs.health-check.outputs.healthy }}'
           total = '${{ needs.health-check.outputs.total }}'
 
           resend.Emails.send({
               'from': 'alerts@socialmediaempire.com',
-              'to': [os.environ['ALERT_EMAIL']],
+              'to': [alert_email],
               'subject': '🚨 System Health Alert - Services Unhealthy',
               'html': f'''
               <h1>System Health Alert</h1>
