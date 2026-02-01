@@ -37,7 +37,7 @@ BRAND_PLATFORM_CONFIG = {
         "youtube_playlist_id": None,
         "tiktok_account": "fitnessmadeasy",
         "instagram_account": "fitnessmadeasy",
-        "link_url": "https://fitnessmadeasy.com",
+        "link_url": "https://fitover35.com",
         "videos_per_day": 6,
         "posting_slots": ["morning", "midmorning", "noon", "afternoon", "evening", "morning"],  # 6 slots, morning gets 2
         "enabled": True
