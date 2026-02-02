@@ -3,6 +3,7 @@ name: Auto Merge to Main
 on:
   push:
     branches:
+      - 'claude/check-github-automation-*'
       - 'claude/merge-to-main-*'
   workflow_dispatch:
 
@@ -11,33 +12,27 @@ permissions:
   pull-requests: write
 
 jobs:
-  create-pr:
+  merge:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
+          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: auto-merge-pr
-          base: main
-          title: "Update fitover35.com with male-focused images"
-          body: |
-            This PR updates all fitness images on fitover35.com to show only male athletes.
-            
-            Changes:
-            - Replaced hero background image
-            - Updated all article images
-            - Updated blog listing images
-            - Added CNAME and Netlify config
-          delete-branch: true
-          
-      - name: Auto-merge PR
-        if: success()
+      
+      - name: Configure Git
         run: |
-          gh pr merge --auto --merge
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      
+      - name: Fetch and merge
+        run: |
+          git fetch origin ${{ github.ref_name }}
+          git merge origin/${{ github.ref_name }} --no-edit -m "Merge ${{ github.ref_name }}"
+          
+      - name: Push changes
+        run: |
+          git push origin main
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
