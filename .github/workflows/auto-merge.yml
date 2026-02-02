@@ -6,22 +6,38 @@ on:
       - 'claude/merge-to-main-*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  merge:
+  create-pr:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Configure Git
+          branch: auto-merge-pr
+          base: main
+          title: "Update fitover35.com with male-focused images"
+          body: |
+            This PR updates all fitness images on fitover35.com to show only male athletes.
+            
+            Changes:
+            - Replaced hero background image
+            - Updated all article images
+            - Updated blog listing images
+            - Added CNAME and Netlify config
+          delete-branch: true
+          
+      - name: Auto-merge PR
+        if: success()
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-      
-      - name: Merge to main
-        run: |
-          git checkout main
-          git merge origin/${{ github.ref_name }} --no-edit
-          git push origin main
+          gh pr merge --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
