@@ -104,7 +104,7 @@ jobs:
             echo "title=$KEYWORD" >> $GITHUB_OUTPUT
             echo "excerpt=Placeholder article" >> $GITHUB_OUTPUT
             echo "read_time=5" >> $GITHUB_OUTPUT
-            echo "hero_image=https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg" >> $GITHUB_OUTPUT
+            echo "hero_image=https://images.pexels.com/photos/4720788/pexels-photo-4720788.jpeg" >> $GITHUB_OUTPUT
           else
             python automation/articles/fitover35_article_generator.py \
               --keyword "$KEYWORD" \
