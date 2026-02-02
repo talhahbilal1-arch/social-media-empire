@@ -233,16 +233,16 @@ def fetch_pexels_image(query: str, api_key: Optional[str] = None) -> Optional[st
     return None
 
 
-# Fallback images by category
+# Fallback images by category - ALL VERIFIED MALE-ONLY IMAGES
 FALLBACK_IMAGES = {
-    "strength_training": "https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "nutrition": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "recovery": "https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "mindset": "https://images.pexels.com/photos/2294361/pexels-photo-2294361.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "equipment": "https://images.pexels.com/photos/4164761/pexels-photo-4164761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "health": "https://images.pexels.com/photos/3622614/pexels-photo-3622614.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "programs": "https://images.pexels.com/photos/2261477/pexels-photo-2261477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "lifestyle": "https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "strength_training": "https://images.pexels.com/photos/4720788/pexels-photo-4720788.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Man lifting barbell
+    "nutrition": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Food/nutrition
+    "recovery": "https://images.pexels.com/photos/6456300/pexels-photo-6456300.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Man with dumbbells
+    "mindset": "https://images.pexels.com/photos/3837757/pexels-photo-3837757.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Man focused training
+    "equipment": "https://images.pexels.com/photos/4164761/pexels-photo-4164761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Home gym equipment
+    "health": "https://images.pexels.com/photos/3622614/pexels-photo-3622614.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Supplements
+    "programs": "https://images.pexels.com/photos/4720788/pexels-photo-4720788.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Man lifting barbell
+    "lifestyle": "https://images.pexels.com/photos/6456300/pexels-photo-6456300.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",  # Man with dumbbells
 }
 
 
