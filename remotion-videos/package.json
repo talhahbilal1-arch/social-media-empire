@@ -1,0 +1,36 @@
+{
+  "name": "remotion-videos",
+  "version": "1.0.0",
+  "description": "Social media video generator using Remotion",
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion bundle",
+    "render": "remotion render",
+    "render:daily-deal": "remotion render DailyDealDarling out/daily-deal-darling.mp4",
+    "render:fitness": "remotion render FitnessMadeEasy out/fitness-made-easy.mp4",
+    "render:menopause": "remotion render MenopausePlanner out/menopause-planner.mp4",
+    "render:all": "npm run render:daily-deal && npm run render:fitness && npm run render:menopause",
+    "render:slideshow:daily-deal": "remotion render Slideshow-DailyDealDarling out/daily-deal-darling.mp4",
+    "render:slideshow:fitness": "remotion render Slideshow-FitOver35 out/fitness-made-easy.mp4",
+    "render:slideshow:menopause": "remotion render Slideshow-MenopausePlanner out/menopause-planner.mp4",
+    "render:slideshow:all": "npm run render:slideshow:daily-deal && npm run render:slideshow:fitness && npm run render:slideshow:menopause"
+  },
+  "keywords": [
+    "remotion",
+    "video",
+    "social-media"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@remotion/bundler": "^4.0.414",
+    "@remotion/cli": "^4.0.414",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remotion": "^4.0.414"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.27",
+    "typescript": "^5.9.3"
+  }
+}
