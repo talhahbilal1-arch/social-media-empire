@@ -2,15 +2,18 @@ name: Fit Over 35 Blog Automation
 
 on:
   schedule:
-    # Run every Monday and Thursday at 9 AM UTC (generates ~2-3 articles each run = 5/week)
+    # Run Monday through Friday at 9 AM UTC (1 article per day = 5/week)
     - cron: '0 9 * * 1'   # Monday
+    - cron: '0 9 * * 2'   # Tuesday
+    - cron: '0 9 * * 3'   # Wednesday
     - cron: '0 9 * * 4'   # Thursday
+    - cron: '0 9 * * 5'   # Friday
   workflow_dispatch:
     inputs:
       num_articles:
         description: 'Number of articles to generate'
         required: false
-        default: '3'
+        default: '1'
 
 env:
   PYTHON_VERSION: '3.11'
