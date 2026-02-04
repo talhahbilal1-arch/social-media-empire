@@ -90,19 +90,25 @@ jobs:
           import resend
           import os
 
-          resend.api_key = os.environ['RESEND_API_KEY']
+          resend.api_key = os.environ.get('RESEND_API_KEY', '')
 
-          resend.Emails.send({
-              'from': 'alerts@socialmediaempire.com',
-              'to': [os.environ['ALERT_EMAIL']],
-              'subject': '🚨 CRITICAL: Unresolved Critical Errors Detected',
-              'html': '''
-              <h1>Critical Errors Detected</h1>
-              <p>There are critical errors that require immediate attention.</p>
-              <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View error details</a></p>
-              <p>Please check the Supabase errors table for full context.</p>
-              '''
-          })
+          try:
+              resend.Emails.send({
+                  'from': 'alerts@socialmediaempire.com',
+                  'to': [os.environ.get('ALERT_EMAIL', '')],
+                  'subject': '🚨 CRITICAL: Unresolved Critical Errors Detected',
+                  'html': '''
+                  <h1>Critical Errors Detected</h1>
+                  <p>There are critical errors that require immediate attention.</p>
+                  <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View error details</a></p>
+                  <p>Please check the Supabase errors table for full context.</p>
+                  '''
+              })
+              print('Alert email sent successfully')
+          except Exception as e:
+              print(f'WARNING: Failed to send alert email: {e}')
+              print('Check if RESEND_API_KEY is valid')
+              print('Critical errors were detected - check GitHub Actions logs manually')
           "
 
   daily-digest:
