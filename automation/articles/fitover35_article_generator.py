@@ -258,7 +258,7 @@ class FitOver35ArticleGenerator:
             raise ValueError("GEMINI_API_KEY not set")
 
         genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel('gemini-2.0-flash')
         self.pexels_key = pexels_key or os.getenv("PEXELS_API_KEY")
 
     def _call_gemini(self, prompt: str) -> str:
