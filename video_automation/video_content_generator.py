@@ -9,71 +9,143 @@ from utils.config import get_config
 from utils.api_clients import GeminiClient, PexelsClient
 
 
-# Brand-specific content configurations
+# Brand-specific content configurations (optimized for conversions)
 BRAND_CONFIG = {
     "daily_deal_darling": {
         "name": "Daily Deal Darling",
         "niche": "beauty tips, fashion finds, home decor ideas for women",
-        "tone": "friendly, excited, relatable, feminine",
+        "tone": "friendly, excited, relatable, feminine, urgent",
         "audience": "women 25-45 interested in beauty, fashion, and home decor",
-        "hashtags": ["#beautytips", "#fashionfinds", "#homedecor", "#womenslifestyle", "#beautydeals"],
+        "hashtags": ["#beautytips", "#fashionfinds", "#homedecor", "#amazonfind", "#tiktokshop", "#amazonmusthaves", "#dealsoftheday"],
+        "lead_magnet": "FREE guide: 50 Hidden Gems Under $25",
         "cta_styles": [
-            "Link in bio for all my favorite finds!",
-            "Follow for daily beauty and fashion tips!",
-            "Save this for later!",
-            "Comment LINK and I'll send it to you!"
+            "🔗 Link in bio for the full list + my FREE $25 finds guide!",
+            "Get my FREE deals guide - link in bio! 🎁",
+            "Want more? Grab my free guide in bio! 📥",
+            "Comment 'DEALS' for the link + free shopping guide!",
+            "Follow + tap the link for exclusive deals sent to your inbox!",
+            "💌 Free guide in bio - my secret Amazon finds list!"
+        ],
+        "urgency_hooks": [
+            "🚨 Price just DROPPED on this viral find...",
+            "This $__ product is going viral and here's why...",
+            "STOP scrolling - this deal ends TODAY...",
+            "I almost didn't share this because it keeps selling out...",
+            "POV: You find out this cult favorite is now under $__...",
+            "This Amazon find has 50,000+ 5-star reviews and costs less than lunch..."
+        ],
+        "email_hooks": [
+            "I share deals like this every week in my free email - link in bio!",
+            "My email subscribers got this first - join them (free) link in bio!",
+            "This was in last week's deals email. Get on the list - bio link!"
         ]
     },
     "fitnessmadeasy": {
         "name": "Fitness Made Easy",
         "niche": "fitness tips, health hacks, workout routines for men over 35",
-        "tone": "motivational, practical, no-nonsense, masculine",
+        "tone": "motivational, practical, no-nonsense, masculine, results-focused",
         "audience": "men 35+ looking to improve fitness and health",
-        "hashtags": ["#mensfitness", "#over35fitness", "#healthylifestyle", "#workoutmotivation", "#fitover40"],
+        "hashtags": ["#mensfitness", "#over35fitness", "#healthylifestyle", "#workoutmotivation", "#fitover40", "#fitover35", "#homeworkout"],
+        "lead_magnet": "FREE 30-Day Workout Plan for Men 35+",
         "cta_styles": [
-            "Follow for more fitness tips that actually work!",
-            "Save this for your next workout!",
-            "Link in bio for the full routine!",
-            "Drop a 💪 if you're trying this!"
+            "🔗 Link in bio for the full workout + FREE 30-day plan!",
+            "Get my FREE workout plan - link in bio! 💪",
+            "Want the complete routine? Free guide in bio!",
+            "Comment 'PLAN' and I'll send you the free workout!",
+            "Follow + grab the free plan - link in bio!"
+        ],
+        "urgency_hooks": [
+            "If you're over 35 and not doing THIS, you're leaving gains on the table...",
+            "Why most men over 35 FAIL at fitness (and the simple fix)...",
+            "This exercise burns more fat than 30 min of cardio...",
+            "I wish I knew this at 35 - would've saved me years...",
+            "The #1 mistake keeping you from seeing results after 35..."
+        ],
+        "email_hooks": [
+            "Full workout plan in my free guide - link in bio!",
+            "I send out new workouts every week - join free in bio!",
+            "This is from my email newsletter - get on the list (free) link in bio!"
         ]
     },
     "menopause_planner": {
         "name": "Menopause Planner",
         "niche": "menopause wellness, hormone health, midlife thriving",
-        "tone": "supportive, knowledgeable, empowering",
+        "tone": "supportive, knowledgeable, empowering, understanding",
         "audience": "women 45-60 experiencing perimenopause/menopause",
-        "hashtags": ["#menopause", "#perimenopause", "#midlifewellness", "#hormonehealth", "#over50"],
+        "hashtags": ["#menopause", "#perimenopause", "#midlifewellness", "#hormonehealth", "#over50", "#menopausesupport", "#hotflashhelp"],
+        "lead_magnet": "FREE Menopause Symptom Tracker + Relief Guide",
         "cta_styles": [
-            "Get your free menopause symptom tracker - link in bio!",
-            "Follow for more menopause tips that actually work!",
-            "Save this for your next hot flash!",
-            "Share with someone who needs this!"
+            "🔗 Link in bio for the FREE symptom tracker!",
+            "Get my FREE menopause relief guide - link in bio!",
+            "Comment 'RELIEF' for the free guide!",
+            "Free symptom tracker in bio - it's a game changer!",
+            "Follow + grab your free guide - link in bio!"
+        ],
+        "urgency_hooks": [
+            "This symptom trick worked when NOTHING else did...",
+            "If hot flashes are ruining your sleep, try THIS tonight...",
+            "The supplement my doctor FINALLY agreed actually works...",
+            "Why this midlife symptom is actually a warning sign...",
+            "3 foods making your menopause symptoms WORSE..."
+        ],
+        "email_hooks": [
+            "I share tips like this in my weekly email - free to join, link in bio!",
+            "My email subscribers got this tip first - join them free!",
+            "More relief tips in my free newsletter - bio link!"
         ]
     },
     "nurse_planner": {
         "name": "Nurse Planner",
         "niche": "nurse lifestyle, healthcare organization, self-care for nurses",
-        "tone": "understanding, practical, encouraging",
+        "tone": "understanding, practical, encouraging, relatable",
         "audience": "nurses and healthcare workers",
-        "hashtags": ["#nurselife", "#nursesofinstagram", "#healthcareworker", "#nursetips", "#rn"],
+        "hashtags": ["#nurselife", "#nursesofinstagram", "#healthcareworker", "#nursetips", "#rn", "#nurseproblems", "#shiftworker"],
+        "lead_magnet": "FREE Shift Survival Planner + Self-Care Checklist",
         "cta_styles": [
-            "Grab your free shift planner - link in bio!",
-            "Follow for more nurse life hacks!",
-            "Tag a nurse friend who needs this!",
-            "Save for your next shift!"
+            "🔗 Link in bio for the FREE shift planner!",
+            "Get my FREE nurse survival guide - link in bio!",
+            "Comment 'NURSE' for the free planner!",
+            "Free shift planner in bio - made for us by us!",
+            "Tag a nurse who NEEDS this + follow for more!"
+        ],
+        "urgency_hooks": [
+            "If 12-hour shifts are burning you out, you need THIS...",
+            "The boundary I set that saved my nursing career...",
+            "Why this simple habit made my shifts 10x easier...",
+            "Things I wish I knew my first year as a nurse...",
+            "The self-care hack every nurse should know..."
+        ],
+        "email_hooks": [
+            "More nurse life tips in my free weekly email - bio link!",
+            "I send shift survival tips every week - join free in bio!",
+            "This was in last week's nurse newsletter. Get on the list!"
         ]
     },
     "adhd_planner": {
         "name": "ADHD Planner",
         "niche": "ADHD management, productivity, executive function support",
-        "tone": "understanding, non-judgmental, practical",
+        "tone": "understanding, non-judgmental, practical, encouraging",
         "audience": "adults with ADHD seeking organization strategies",
-        "hashtags": ["#adhd", "#adhdtips", "#adultadhd", "#adhdbrain", "#executivefunction"],
+        "hashtags": ["#adhd", "#adhdtips", "#adultadhd", "#adhdbrain", "#executivefunction", "#adhdhacks", "#adhdlife"],
+        "lead_magnet": "FREE ADHD-Friendly Daily Planner + Focus Guide",
         "cta_styles": [
-            "Get your free ADHD-friendly planner - link in bio!",
-            "Follow for more ADHD hacks that actually work!",
-            "Save this before you forget!",
-            "Share with your ADHD bestie!"
+            "🔗 Link in bio for the FREE ADHD planner!",
+            "Get my FREE focus guide - link in bio!",
+            "Comment 'FOCUS' for the free planner!",
+            "Free ADHD-friendly planner in bio - it actually works!",
+            "Save this before you forget! + grab the free guide in bio!"
+        ],
+        "urgency_hooks": [
+            "The ADHD hack that finally helps me actually START tasks...",
+            "If your brain refuses to start, try this trick...",
+            "Why traditional planners DON'T work for ADHD brains...",
+            "This 2-minute trick breaks through ADHD paralysis...",
+            "The focus method that actually works for ADHD..."
+        ],
+        "email_hooks": [
+            "More ADHD hacks in my free weekly email - bio link!",
+            "I send new productivity tips every week - join free!",
+            "My email list gets these tips first - join free in bio!"
         ]
     }
 }
@@ -165,22 +237,40 @@ Return ONLY the topic as a single line, no explanation."""
         content_type: str
     ) -> dict:
         """Generate a video script using Gemini."""
+        # Get urgency hooks and email hooks for this brand
+        urgency_hooks = brand_config.get('urgency_hooks', [])
+        email_hooks = brand_config.get('email_hooks', [])
+        lead_magnet = brand_config.get('lead_magnet', 'free guide')
+
         prompt = f"""Create a 30-second vertical video script for {brand_config['name']}.
 
 Topic: {topic}
 Tone: {brand_config['tone']}
 Audience: {brand_config['audience']}
+Lead Magnet to Promote: {lead_magnet}
+
+IMPORTANT - This video should drive viewers to:
+1. Follow the account
+2. Click the link in bio
+3. Sign up for the free guide/email list
 
 Return JSON with:
 {{
-    "hook": "Attention-grabbing opening line (must stop the scroll, 2-4 seconds to read)",
-    "body": ["Point 1 (short)", "Point 2 (short)", "Point 3 (short)"],
-    "cta": "Call to action",
-    "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5"],
+    "hook": "URGENT, scroll-stopping opening line that creates FOMO or curiosity (2-4 seconds). Start with 'Stop scrolling if...' or 'POV:' or a surprising fact/number. Make them NEED to watch.",
+    "body": ["Point 1 - the main value/tip (short, punchy)", "Point 2 - supporting detail or 'the best part is...'", "Point 3 - social proof or result ('thousands of people use this')"],
+    "cta": "Strong call to action mentioning the FREE guide in bio. Create urgency.",
+    "email_hook": "Brief mention of the email list benefit",
+    "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5", "#tag6", "#tag7"],
     "music_mood": "upbeat/calm/motivational/energetic"
 }}
 
-Make it conversational, engaging, and valuable. The hook must create curiosity or urgency.
+EXAMPLE HOOKS THAT CONVERT:
+- "{urgency_hooks[0] if urgency_hooks else 'This product changed everything...'}"
+- "I almost didn't share this because it keeps selling out..."
+- "The internet doesn't want you to know about this..."
+
+Make it conversational, engaging, and valuable. The hook must stop the scroll IMMEDIATELY.
+The CTA should mention the FREE guide or link in bio at least twice.
 """
 
         response = self.gemini_client.generate_content(prompt, max_tokens=500)
@@ -191,35 +281,42 @@ Make it conversational, engaging, and valuable. The hook must create curiosity o
                 response = response.split("```json")[1].split("```")[0]
             elif "```" in response:
                 response = response.split("```")[1].split("```")[0]
-            return json.loads(response.strip())
+            result = json.loads(response.strip())
+            # Ensure email_hook exists
+            if 'email_hook' not in result:
+                result['email_hook'] = random.choice(brand_config.get('email_hooks', ['Join free in bio!']))
+            return result
         except json.JSONDecodeError:
-            # Fallback script
+            # Fallback script with conversion focus
+            lead_magnet = brand_config.get('lead_magnet', 'free guide')
             return {
-                "hook": f"You need to know this about {topic}!",
+                "hook": f"Stop scrolling if you've been struggling with {topic}...",
                 "body": [
-                    f"Here's the truth about {topic}",
-                    "Most people don't realize this",
-                    "Try this instead"
+                    f"Here's what nobody tells you about {topic}",
+                    "This simple trick changed everything for me",
+                    "Thousands of people are already doing this"
                 ],
-                "cta": random.choice(brand_config["cta_styles"]),
-                "hashtags": brand_config["hashtags"][:5],
+                "cta": f"Get my {lead_magnet} - link in bio! 🔗",
+                "email_hook": random.choice(brand_config.get('email_hooks', ['More tips in my free email - bio!'])),
+                "hashtags": brand_config["hashtags"][:7],
                 "music_mood": "upbeat"
             }
 
     def _create_text_overlays(self, script: dict) -> list[dict]:
-        """Create text overlay configurations for video."""
+        """Create text overlay configurations for video with conversion focus."""
         overlays = []
 
-        # Hook overlay (0-4 seconds)
+        # Hook overlay (0-4 seconds) - MUST stop the scroll
         overlays.append({
             "text": script.get("hook", ""),
             "start_time": 0,
             "end_time": 4,
             "position": "center",
-            "style": "hook"
+            "style": "hook",
+            "animation": "zoom_in"
         })
 
-        # Body points (4-24 seconds, ~6 seconds each)
+        # Body points (4-22 seconds, ~6 seconds each)
         body_points = script.get("body", [])
         for i, point in enumerate(body_points[:3]):
             overlays.append({
@@ -230,13 +327,25 @@ Make it conversational, engaging, and valuable. The hook must create curiosity o
                 "style": "body"
             })
 
-        # CTA overlay (24-30 seconds)
+        # CTA overlay with email hook (22-26 seconds)
         overlays.append({
             "text": script.get("cta", "Follow for more!"),
-            "start_time": 24,
-            "end_time": 30,
+            "start_time": 22,
+            "end_time": 26,
             "position": "center",
-            "style": "cta"
+            "style": "cta",
+            "animation": "bounce"
+        })
+
+        # Email hook / Follow reminder (26-30 seconds)
+        email_hook = script.get("email_hook", "Free guide in bio! 🔗")
+        overlays.append({
+            "text": f"👆 {email_hook}",
+            "start_time": 26,
+            "end_time": 30,
+            "position": "bottom",
+            "style": "email_cta",
+            "animation": "pulse"
         })
 
         return overlays
