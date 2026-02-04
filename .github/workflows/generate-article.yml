@@ -182,6 +182,7 @@ jobs:
 
       - name: Create tracking issue
         if: steps.should_publish.outputs.publish == 'true'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -189,6 +190,10 @@ jobs:
           TITLE="${{ steps.generate.outputs.title }}"
           CATEGORY="${{ steps.keyword.outputs.category }}"
           FILENAME="${{ steps.keyword.outputs.filename }}"
+
+          # Create labels if they don't exist
+          gh label create "dailydealdarling" --color "e91e8c" --description "Daily Deal Darling articles" 2>/dev/null || true
+          gh label create "article-published" --color "0e8a16" --description "Auto-published article" 2>/dev/null || true
 
           gh issue create \
             --title "DDD Article Published: ${TITLE}" \
@@ -206,13 +211,17 @@ jobs:
           - [ ] Product recommendations relevant
           - [ ] Blog listing updated
           " \
-            --label "dailydealdarling,article-published"
+            --label "dailydealdarling,article-published" || echo "Issue creation skipped"
 
       - name: Create review issue (draft mode)
         if: steps.should_publish.outputs.publish != 'true'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Create label if it doesn't exist
+          gh label create "article-review" --color "d93f0b" --description "Article needs review" 2>/dev/null || true
+
           gh issue create \
             --title "Review DDD Article: ${{ steps.keyword.outputs.keyword }}" \
             --body "A new article has been generated and needs review.
@@ -223,7 +232,7 @@ jobs:
 
           Download the article from [workflow artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
           " \
-            --label "article-review"
+            --label "article-review" || echo "Issue creation skipped"
 
       - name: Summary
         run: |
