@@ -277,16 +277,29 @@ class DailyDealDarlingArticleGenerator:
 
     def _parse_json(self, text: str) -> dict:
         """Extract and parse JSON from Gemini response."""
-        # Try to find JSON in the response
-        # First try: look for ```json blocks
-        json_block = re.search(r'```json\s*([\s\S]*?)\s*```', text)
+        # Clean the text first
+        text = text.strip()
+
+        # First try: look for ```json blocks (greedy match)
+        json_block = re.search(r'```json\s*([\s\S]+?)\s*```', text)
         if json_block:
             try:
                 return json.loads(json_block.group(1))
-            except json.JSONDecodeError:
-                pass
+            except json.JSONDecodeError as e:
+                logger.warning(f"JSON decode error in ```json block: {e}")
 
-        # Second try: find the outermost JSON object or array
+        # Second try: if the whole text starts with ```json, strip the markers
+        if text.startswith('```json'):
+            clean = text[7:]  # Remove ```json
+            if clean.endswith('```'):
+                clean = clean[:-3]
+            clean = clean.strip()
+            try:
+                return json.loads(clean)
+            except json.JSONDecodeError as e:
+                logger.warning(f"JSON decode error after stripping markers: {e}")
+
+        # Third try: find the outermost JSON object or array
         for pattern in [r'\{[\s\S]*\}', r'\[[\s\S]*\]']:
             json_match = re.search(pattern, text)
             if json_match:
@@ -294,6 +307,25 @@ class DailyDealDarlingArticleGenerator:
                     return json.loads(json_match.group())
                 except json.JSONDecodeError:
                     continue
+
+        # Fourth try: maybe Gemini didn't add the closing ```
+        if '```json' in text:
+            start = text.find('```json') + 7
+            # Find the first { after ```json
+            brace_start = text.find('{', start)
+            if brace_start != -1:
+                # Find matching closing brace
+                depth = 0
+                for i, c in enumerate(text[brace_start:], brace_start):
+                    if c == '{':
+                        depth += 1
+                    elif c == '}':
+                        depth -= 1
+                        if depth == 0:
+                            try:
+                                return json.loads(text[brace_start:i+1])
+                            except json.JSONDecodeError:
+                                break
 
         raise ValueError(f"No valid JSON found in response: {text[:200]}...")
 
