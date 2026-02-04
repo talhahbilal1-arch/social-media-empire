@@ -1,0 +1,417 @@
+{
+  "name": "TikTok Video Renderer",
+  "description": "Watches for script_ready status, generates audio via ElevenLabs, creates video via HeyGen",
+  "flow": [
+    {
+      "id": 1,
+      "module": "supabase:WatchRecords",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "connection": "{{connection.supabase}}",
+        "table": "tiktok_queue",
+        "filter": "status=eq.script_ready",
+        "order": "created_at.asc",
+        "limit": 1
+      },
+      "metadata": {
+        "designer": {"x": 0, "y": 0},
+        "restore": {},
+        "parameters": [
+          {
+            "name": "connection",
+            "type": "connection",
+            "label": "Supabase Connection"
+          }
+        ],
+        "note": "ALTERNATIVE: Use HTTP module with polling every 5 minutes to check for new records"
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:SetVariables",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "variables": [
+          {
+            "name": "queue_id",
+            "value": "{{1.id}}"
+          },
+          {
+            "name": "script",
+            "value": "{{1.script}}"
+          },
+          {
+            "name": "voice_prompt",
+            "value": "{{1.voice_prompt}}"
+          },
+          {
+            "name": "video_prompt",
+            "value": "{{1.video_prompt}}"
+          },
+          {
+            "name": "elevenlabs_voice_id",
+            "value": "EXAVITQu4vr4xnSDxMaL"
+          },
+          {
+            "name": "heygen_avatar_id",
+            "value": "josh_lite3_20230714"
+          },
+          {
+            "name": "heygen_template_id",
+            "value": "{{connection.heygen_template_id}}"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {"x": 220, "y": 0}
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/{{2.elevenlabs_voice_id}}",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "xi-api-key",
+            "value": "{{connection.elevenlabs_api_key}}"
+          },
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "Accept",
+            "value": "audio/mpeg"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": false,
+        "contentType": "application/json",
+        "body": "{\n  \"text\": \"{{replace(2.script; \"\\\"\"; \"\\\\\\\"\")}}\",\n  \"model_id\": \"eleven_turbo_v2_5\",\n  \"voice_settings\": {\n    \"stability\": 0.5,\n    \"similarity_boost\": 0.75,\n    \"style\": 0.5,\n    \"use_speaker_boost\": true\n  }\n}"
+      },
+      "metadata": {
+        "designer": {"x": 440, "y": 0},
+        "restore": {},
+        "note": "ElevenLabs TTS - Returns audio/mpeg binary"
+      }
+    },
+    {
+      "id": 4,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true
+      },
+      "mapper": {
+        "url": "https://api.elevenlabs.io/v1/audio/upload",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "xi-api-key",
+            "value": "{{connection.elevenlabs_api_key}}"
+          }
+        ],
+        "bodyType": "multipart_form_data",
+        "fields": [
+          {
+            "name": "audio",
+            "value": "{{3.data}}"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {"x": 660, "y": 0},
+        "note": "Upload audio to get hosted URL (alternative: use Cloudinary or S3)"
+      }
+    },
+    {
+      "id": 5,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{2.queue_id}}",
+        "method": "PATCH",
+        "headers": [
+          {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+          {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "body": "{\n  \"audio_url\": \"{{4.data.audio_url}}\",\n  \"status\": \"audio_ready\",\n  \"audio_generated_at\": \"{{formatDate(now; \"YYYY-MM-DDTHH:mm:ss.SSSZ\")}}\"\n}"
+      },
+      "metadata": {
+        "designer": {"x": 880, "y": 0}
+      }
+    },
+    {
+      "id": 6,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "https://api.heygen.com/v2/video/generate",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "X-Api-Key",
+            "value": "{{connection.heygen_api_key}}"
+          },
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "body": "{\n  \"video_inputs\": [\n    {\n      \"character\": {\n        \"type\": \"avatar\",\n        \"avatar_id\": \"{{2.heygen_avatar_id}}\",\n        \"avatar_style\": \"normal\"\n      },\n      \"voice\": {\n        \"type\": \"audio\",\n        \"audio_url\": \"{{4.data.audio_url}}\"\n      },\n      \"background\": {\n        \"type\": \"color\",\n        \"value\": \"#FFFFFF\"\n      }\n    }\n  ],\n  \"dimension\": {\n    \"width\": 1080,\n    \"height\": 1920\n  },\n  \"aspect_ratio\": \"9:16\",\n  \"test\": false,\n  \"caption\": false\n}"
+      },
+      "metadata": {
+        "designer": {"x": 1100, "y": 0},
+        "note": "HeyGen video generation - returns video_id for polling"
+      }
+    },
+    {
+      "id": 7,
+      "module": "builtin:Sleep",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "timeout": 60
+      },
+      "metadata": {
+        "designer": {"x": 1320, "y": 0},
+        "note": "Wait for HeyGen to process (typically 30-120 seconds)"
+      }
+    },
+    {
+      "id": 8,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "https://api.heygen.com/v1/video_status.get?video_id={{6.data.data.video_id}}",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "X-Api-Key",
+            "value": "{{connection.heygen_api_key}}"
+          }
+        ],
+        "parseResponse": true
+      },
+      "metadata": {
+        "designer": {"x": 1540, "y": 0},
+        "note": "Poll HeyGen status until completed"
+      }
+    },
+    {
+      "id": 9,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": {
+        "designer": {"x": 1760, "y": 0}
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 10,
+              "module": "builtin:Sleep",
+              "version": 1,
+              "mapper": {"timeout": 30},
+              "metadata": {"designer": {"x": 1980, "y": -150}}
+            },
+            {
+              "id": 11,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": true},
+              "mapper": {
+                "url": "https://api.heygen.com/v1/video_status.get?video_id={{6.data.data.video_id}}",
+                "method": "GET",
+                "headers": [{"name": "X-Api-Key", "value": "{{connection.heygen_api_key}}"}],
+                "parseResponse": true
+              },
+              "metadata": {
+                "designer": {"x": 2200, "y": -150},
+                "note": "Retry status check"
+              }
+            }
+          ],
+          "label": "Processing - Wait and Retry",
+          "filter": {
+            "name": "Still processing",
+            "conditions": [[{"a": "{{8.data.data.status}}", "b": "processing", "o": "text:equal"}]]
+          }
+        },
+        {
+          "flow": [
+            {
+              "id": 12,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": true},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{2.queue_id}}",
+                "method": "PATCH",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "contentType": "application/json",
+                "body": "{\n  \"video_url\": \"{{8.data.data.video_url}}\",\n  \"heygen_template_id\": \"{{6.data.data.video_id}}\",\n  \"video_duration_seconds\": {{8.data.data.duration}},\n  \"status\": \"video_ready\",\n  \"video_generated_at\": \"{{formatDate(now; \"YYYY-MM-DDTHH:mm:ss.SSSZ\")}}\"\n}"
+              },
+              "metadata": {"designer": {"x": 1980, "y": 150}}
+            },
+            {
+              "id": 13,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/analytics",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"event_type\": \"tiktok_video_rendered\",\n  \"brand\": \"tiktok_fitness\",\n  \"platform\": \"tiktok\",\n  \"data\": {\n    \"queue_id\": \"{{2.queue_id}}\",\n    \"video_url\": \"{{8.data.data.video_url}}\",\n    \"duration\": {{8.data.data.duration}},\n    \"heygen_video_id\": \"{{6.data.data.video_id}}\"\n  }\n}"
+              },
+              "metadata": {"designer": {"x": 2200, "y": 150}}
+            }
+          ],
+          "label": "Completed - Update Status",
+          "filter": {
+            "name": "Video ready",
+            "conditions": [[{"a": "{{8.data.data.status}}", "b": "completed", "o": "text:equal"}]]
+          }
+        },
+        {
+          "flow": [
+            {
+              "id": 14,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{2.queue_id}}",
+                "method": "PATCH",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"status\": \"failed\",\n  \"error_message\": \"HeyGen rendering failed: {{8.data.data.error}}\",\n  \"retry_count\": {{add(1.retry_count; 1)}}\n}"
+              },
+              "metadata": {"designer": {"x": 1980, "y": 350}}
+            },
+            {
+              "id": 15,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/errors",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"error_type\": \"heygen_render_failed\",\n  \"error_message\": \"{{8.data.data.error}}\",\n  \"context\": {\n    \"queue_id\": \"{{2.queue_id}}\",\n    \"heygen_video_id\": \"{{6.data.data.video_id}}\",\n    \"scenario\": \"video_renderer\"\n  }\n}"
+              },
+              "metadata": {"designer": {"x": 2200, "y": 350}}
+            }
+          ],
+          "label": "Failed - Log Error",
+          "filter": {
+            "name": "Render failed",
+            "conditions": [[{"a": "{{8.data.data.status}}", "b": "failed", "o": "text:equal"}]]
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "sequential": true,
+      "confidential": false
+    }
+  },
+  "connections": {
+    "supabase_url": {
+      "label": "Supabase Project URL",
+      "type": "text",
+      "required": true
+    },
+    "supabase_service_key": {
+      "label": "Supabase Service Role Key",
+      "type": "text",
+      "required": true
+    },
+    "elevenlabs_api_key": {
+      "label": "ElevenLabs API Key",
+      "type": "text",
+      "required": true,
+      "help": "Get from elevenlabs.io → Profile → API Key"
+    },
+    "heygen_api_key": {
+      "label": "HeyGen API Key",
+      "type": "text",
+      "required": true,
+      "help": "Get from app.heygen.com → Settings → API"
+    },
+    "heygen_template_id": {
+      "label": "HeyGen Template ID (Optional)",
+      "type": "text",
+      "required": false,
+      "help": "Pre-made template ID for consistent branding"
+    }
+  },
+  "notes": {
+    "audio_hosting": "ElevenLabs audio must be hosted publicly for HeyGen. Options: 1) ElevenLabs built-in hosting, 2) Upload to Cloudinary/S3, 3) Use Make.com data store",
+    "heygen_polling": "HeyGen video generation is async. This scenario polls for completion. For production, consider using HeyGen webhooks instead.",
+    "voice_selection": "Default voice 'EXAVITQu4vr4xnSDxMaL' is 'Sarah' - friendly American female. Change for different niches.",
+    "avatar_selection": "Default avatar 'josh_lite3_20230714' is a faceless/background avatar. For talking head, use specific avatar IDs from HeyGen dashboard."
+  }
+}
