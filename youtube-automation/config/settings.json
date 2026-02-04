@@ -1,0 +1,37 @@
+{
+  "channel": {
+    "name": "Your Channel Name",
+    "niche": "Men's fitness 35+",
+    "posting_schedule": {
+      "timezone": "America/Los_Angeles",
+      "post_time": "12:00",
+      "frequency": "daily"
+    }
+  },
+  "video": {
+    "max_duration_seconds": 59,
+    "aspect_ratio": "9:16",
+    "resolution": "1080x1920"
+  },
+  "voice": {
+    "model_id": "eleven_monolingual_v1",
+    "stability": 0.5,
+    "similarity_boost": 0.75,
+    "style": 0.4,
+    "use_speaker_boost": true
+  },
+  "avatar": {
+    "driver_url": "bank://lively",
+    "crop_type": "wide",
+    "background_color": "#000000",
+    "fluent": true,
+    "pad_audio": 0.5,
+    "stitch": true
+  },
+  "youtube": {
+    "default_privacy": "public",
+    "default_hashtags": ["fitness", "menover40", "health", "workout", "testosterone"],
+    "title_max_length": 60,
+    "description_template": "In this video, I share quick tips for men over 35 looking to optimize their health and fitness.\n\n🔔 Subscribe for daily tips!\n\n"
+  }
+}

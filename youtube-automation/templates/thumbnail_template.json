@@ -1,0 +1,72 @@
+{
+  "name": "YouTube Shorts Thumbnail",
+  "description": "Template for generating thumbnail overlays",
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "styles": {
+    "primary": {
+      "background_color": "#000000",
+      "text_color": "#FFFFFF",
+      "accent_color": "#FF0000",
+      "font_family": "Impact",
+      "font_weight": "bold"
+    },
+    "minimal": {
+      "background_color": "#1a1a1a",
+      "text_color": "#FFFFFF",
+      "accent_color": "#00FF00",
+      "font_family": "Helvetica Neue",
+      "font_weight": "bold"
+    },
+    "energetic": {
+      "background_color": "#FF4500",
+      "text_color": "#FFFFFF",
+      "accent_color": "#FFFF00",
+      "font_family": "Arial Black",
+      "font_weight": "bold"
+    }
+  },
+  "text_elements": {
+    "headline": {
+      "position": "top",
+      "max_characters": 20,
+      "font_size": 120,
+      "text_transform": "uppercase",
+      "stroke_width": 4,
+      "stroke_color": "#000000"
+    },
+    "subheadline": {
+      "position": "bottom",
+      "max_characters": 30,
+      "font_size": 60,
+      "text_transform": "none",
+      "stroke_width": 2,
+      "stroke_color": "#000000"
+    }
+  },
+  "avatar_placement": {
+    "position": "center",
+    "size_percent": 70,
+    "y_offset": 100
+  },
+  "examples": [
+    {
+      "headline": "ZINC MYTH",
+      "subheadline": "What research says",
+      "style": "primary"
+    },
+    {
+      "headline": "SLEEP HACK",
+      "subheadline": "Boost testosterone naturally",
+      "style": "minimal"
+    },
+    {
+      "headline": "STOP THIS",
+      "subheadline": "Killing your gains",
+      "style": "energetic"
+    }
+  ]
+}

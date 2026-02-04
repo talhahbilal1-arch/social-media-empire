@@ -1,0 +1,557 @@
+{
+  "name": "YouTube Shorts Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "notes": "Runs daily at 8 AM to process pending scripts"
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "sheetId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_SHEETS_ID }}"
+        },
+        "sheetName": "Scripts",
+        "options": {
+          "outputFormat": "firstMatch",
+          "filters": {
+            "conditions": [
+              {
+                "column": "status",
+                "condition": "equals",
+                "value": "pending"
+              }
+            ]
+          }
+        }
+      },
+      "id": "get-script",
+      "name": "Get Next Script",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [220, 0],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_CRED_ID",
+          "name": "Google Sheets"
+        }
+      },
+      "notes": "Fetches the first script with status='pending'"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.script_text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "check-script",
+      "name": "Has Script?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "sheetId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_SHEETS_ID }}"
+        },
+        "sheetName": "Scripts",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "processing"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "valueRenderMode": "UNFORMATTED_VALUE",
+          "locationDefine": "specify",
+          "location": "=row={{ $('Get Next Script').item.json.row_number }}"
+        }
+      },
+      "id": "mark-processing",
+      "name": "Mark as Processing",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [660, -100],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_CRED_ID",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.elevenlabs.io/v1/text-to-speech/{{ $env.ELEVENLABS_VOICE_ID }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($('Get Next Script').item.json.script_text) }},\n  \"model_id\": \"eleven_monolingual_v1\",\n  \"voice_settings\": {\n    \"stability\": 0.5,\n    \"similarity_boost\": 0.75,\n    \"style\": 0.4,\n    \"use_speaker_boost\": true\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "generate-audio",
+      "name": "Generate Audio (ElevenLabs)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -100],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_ELEVENLABS_CRED_ID",
+          "name": "ElevenLabs API"
+        }
+      },
+      "notes": "Generates voiceover audio from script text"
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_DRIVE_FOLDER_ID }}"
+        },
+        "name": "=audio_{{ $('Get Next Script').item.json.row_id }}_{{ $now.format('yyyyMMdd_HHmmss') }}.mp3",
+        "options": {}
+      },
+      "id": "upload-audio",
+      "name": "Upload Audio to Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [1100, -100],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YOUR_GOOGLE_DRIVE_CRED_ID",
+          "name": "Google Drive"
+        }
+      },
+      "notes": "Stores audio in Google Drive for D-ID to access"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.d-id.com/talks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source_url\": \"{{ $env.DID_AVATAR_IMAGE_URL }}\",\n  \"script\": {\n    \"type\": \"audio\",\n    \"audio_url\": \"{{ $json.webViewLink.replace('/view', '/uc?export=download') }}\"\n  },\n  \"config\": {\n    \"fluent\": true,\n    \"pad_audio\": 0.5,\n    \"stitch\": true\n  }\n}",
+        "options": {}
+      },
+      "id": "create-video",
+      "name": "Create Avatar Video (D-ID)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, -100],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_DID_CRED_ID",
+          "name": "D-ID API"
+        }
+      },
+      "notes": "Creates talking avatar video from audio + image"
+    },
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "seconds"
+      },
+      "id": "initial-wait",
+      "name": "Initial Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1540, -100],
+      "notes": "Wait 10 seconds before first status check"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.d-id.com/talks/{{ $('Create Avatar Video (D-ID)').item.json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "check-video-status",
+      "name": "Check Video Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, -100],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_DID_CRED_ID",
+          "name": "D-ID API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "is-done",
+      "name": "Video Ready?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1980, -100]
+    },
+    {
+      "parameters": {
+        "amount": 15,
+        "unit": "seconds"
+      },
+      "id": "poll-wait",
+      "name": "Wait & Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1980, 100],
+      "notes": "Wait 15 seconds before checking again"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.getlate.dev/v1/posts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"platforms\": [\n    {\n      \"platform\": \"youtube\",\n      \"accountId\": \"{{ $env.LATE_YOUTUBE_ACCOUNT_ID }}\",\n      \"platformSpecificData\": {\n        \"privacyStatus\": \"public\",\n        \"title\": {{ JSON.stringify($('Get Next Script').item.json.title) }},\n        \"description\": {{ JSON.stringify($('Get Next Script').item.json.description + '\\n\\n' + $('Get Next Script').item.json.hashtags) }}\n      }\n    }\n  ],\n  \"content\": {{ JSON.stringify($('Get Next Script').item.json.title) }},\n  \"mediaItems\": [\n    {\n      \"type\": \"video\",\n      \"url\": \"{{ $json.result_url }}\"\n    }\n  ],\n  \"scheduledFor\": \"{{ $now.plus({days: 1}).setZone('America/Los_Angeles').set({hour: 12, minute: 0, second: 0, millisecond: 0}).toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "upload-youtube",
+      "name": "Upload to YouTube (Late.dev)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2200, -200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_LATE_CRED_ID",
+          "name": "Late.dev API"
+        }
+      },
+      "notes": "Schedules video for 12 PM PST next day"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "sheetId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_SHEETS_ID }}"
+        },
+        "sheetName": "Scripts",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "published",
+            "published_date": "={{ $now.toISO() }}",
+            "youtube_post_id": "={{ $('Upload to YouTube (Late.dev)').item.json.id }}",
+            "video_url": "={{ $('Check Video Status').item.json.result_url }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "valueRenderMode": "UNFORMATTED_VALUE",
+          "locationDefine": "specify",
+          "location": "=row={{ $('Get Next Script').item.json.row_number }}"
+        }
+      },
+      "id": "update-sheet",
+      "name": "Mark as Published",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [2420, -200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_CRED_ID",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "text": "=✅ YouTube Short Published!\n\n*Title:* {{ $('Get Next Script').item.json.title }}\n*Scheduled:* Tomorrow 12 PM PST\n*Post ID:* {{ $('Upload to YouTube (Late.dev)').item.json.id }}"
+      },
+      "id": "slack-success",
+      "name": "Slack Success Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [2640, -200],
+      "credentials": {
+        "slackWebhookApi": {
+          "id": "YOUR_SLACK_CRED_ID",
+          "name": "Slack Webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "youtube-automation-manual",
+        "options": {}
+      },
+      "id": "manual-trigger",
+      "name": "Manual Trigger (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 200],
+      "notes": "Use this to manually trigger the workflow"
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "text": "=⚠️ No pending scripts found!\n\nAdd new scripts to the Google Sheet with status='pending'"
+      },
+      "id": "slack-no-script",
+      "name": "Slack No Script Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [660, 100],
+      "credentials": {
+        "slackWebhookApi": {
+          "id": "YOUR_SLACK_CRED_ID",
+          "name": "Slack Webhook"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Next Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "Get Next Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Next Script": {
+      "main": [
+        [
+          {
+            "node": "Has Script?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Script?": {
+      "main": [
+        [
+          {
+            "node": "Mark as Processing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack No Script Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Processing": {
+      "main": [
+        [
+          {
+            "node": "Generate Audio (ElevenLabs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Audio (ElevenLabs)": {
+      "main": [
+        [
+          {
+            "node": "Upload Audio to Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Audio to Drive": {
+      "main": [
+        [
+          {
+            "node": "Create Avatar Video (D-ID)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Avatar Video (D-ID)": {
+      "main": [
+        [
+          {
+            "node": "Initial Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Initial Wait": {
+      "main": [
+        [
+          {
+            "node": "Check Video Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Video Status": {
+      "main": [
+        [
+          {
+            "node": "Video Ready?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video Ready?": {
+      "main": [
+        [
+          {
+            "node": "Upload to YouTube (Late.dev)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait & Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait & Retry": {
+      "main": [
+        [
+          {
+            "node": "Check Video Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to YouTube (Late.dev)": {
+      "main": [
+        [
+          {
+            "node": "Mark as Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Published": {
+      "main": [
+        [
+          {
+            "node": "Slack Success Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "youtube-automation"
+    }
+  ],
+  "pinData": {}
+}
