@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-AFFILIATE_TAG = "dailydealdarling1-20"
+AFFILIATE_TAG = "dailydealdarl-20"
 CONVERTKIT_FORM_ID = os.getenv("CONVERTKIT_DDD_FORM_ID", "5641382")
 SITE_URL = "https://dailydealdarling.com"
 SITE_NAME = "Daily Deal Darling"

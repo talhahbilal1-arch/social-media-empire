@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find the perfect gift with our quick quiz. Get personalized gift recommendations based on recipient, budget, and occasion.">
+  <title>Gift Finder Quiz - Find the Perfect Gift | Daily Deal Darling</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .quiz-container { max-width: 700px; margin: 0 auto; padding: calc(70px + 3rem) 1.5rem 3rem; min-height: 100vh; }
+    .quiz-header { text-align: center; margin-bottom: 2rem; }
+    .quiz-options { display: grid; gap: 1rem; }
+    .quiz-option { padding: 1.25rem 1.5rem; border: 2px solid #e0e0e0; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; background: white; text-align: left; }
+    .quiz-option:hover { border-color: var(--color-primary-light); background: var(--color-bg-warm); }
+    .quiz-option.selected { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .quiz-option h4 { font-size: 1rem; margin-bottom: 0.25rem; }
+    .quiz-btn { background: var(--color-primary); color: white; padding: 14px 32px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 2rem; width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav container">
+      <a href="../index.html" class="logo">Daily Deal Darling</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../articles/best-amazon-products-2026.html">Best Products</a></li>
+        <li><a href="skincare-routine.html">Quizzes</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="quiz-container">
+    <div class="quiz-header">
+      <h1 style="font-family: var(--font-heading); font-size: 2rem;">Gift Finder Quiz</h1>
+      <p style="color: #666;">Answer a few questions to find the perfect gift!</p>
+    </div>
+
+    <div id="quiz-content">
+      <div class="quiz-question">
+        <h2>Who are you shopping for?</h2>
+        <p>Select the recipient type</p>
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="this.classList.toggle('selected')">
+          <h4>👩 Her</h4>
+          <p>Wife, girlfriend, mom, sister, or friend</p>
+        </div>
+        <div class="quiz-option" onclick="this.classList.toggle('selected')">
+          <h4>👨 Him</h4>
+          <p>Husband, boyfriend, dad, brother, or friend</p>
+        </div>
+        <div class="quiz-option" onclick="this.classList.toggle('selected')">
+          <h4>👶 Kids</h4>
+          <p>Children or teenagers</p>
+        </div>
+        <div class="quiz-option" onclick="this.classList.toggle('selected')">
+          <h4>🏠 Home</h4>
+          <p>Housewarming or home décor gifts</p>
+        </div>
+      </div>
+      <button class="quiz-btn" onclick="showResults()">See Gift Ideas →</button>
+    </div>
+
+    <div id="quiz-results" style="display: none; text-align: center;">
+      <h2 style="margin-bottom: 1rem;">Your Personalized Gift Guide</h2>
+      <p style="margin-bottom: 2rem;">Based on your selections, here are our top picks:</p>
+      <a href="../articles/best-amazon-products-2026.html" class="btn btn-primary">View Gift Recommendations</a>
+      <br><br>
+      <a href="../index.html" style="color: var(--color-primary);">← Back to Home</a>
+    </div>
+  </main>
+
+  <script>
+    function showResults() {
+      document.getElementById('quiz-content').style.display = 'none';
+      document.getElementById('quiz-results').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
