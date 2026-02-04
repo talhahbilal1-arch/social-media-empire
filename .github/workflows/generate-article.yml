@@ -17,15 +17,21 @@ on:
           - skincare
           - kitchen
           - organization
-          - fitness
+          - beauty
           - wellness
           - tech
           - budget
+          - seasonal
+          - haircare
         default: auto
       publish:
         description: 'Publish immediately (false = draft only)'
         type: boolean
         default: true
+
+permissions:
+  contents: write
+  issues: write
 
 jobs:
   generate-and-publish:
@@ -53,13 +59,13 @@ jobs:
             KEYWORD="${{ github.event.inputs.keyword }}"
             CATEGORY="${{ github.event.inputs.category }}"
             if [ "$CATEGORY" = "auto" ]; then
-              CATEGORY="general"
+              CATEGORY="budget"
             fi
             SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-50)
             FILENAME="${SLUG}.html"
           else
-            # Auto-select from keyword list
-            RESULT=$(python automation/articles/keyword_selector.py --mark-used 2>&1)
+            # Auto-select from enhanced keyword list
+            RESULT=$(python automation/articles/dailydealdarling_keywords.py --mark-used 2>&1)
             KEYWORD=$(echo "$RESULT" | grep "Selected keyword:" | cut -d: -f2- | xargs)
             CATEGORY=$(echo "$RESULT" | grep "Category:" | cut -d: -f2 | xargs)
             SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-50)
@@ -76,6 +82,8 @@ jobs:
         id: generate
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CONVERTKIT_DDD_FORM_ID: ${{ secrets.CONVERTKIT_DDD_FORM_ID }}
         run: |
           KEYWORD="${{ steps.keyword.outputs.keyword }}"
           CATEGORY="${{ steps.keyword.outputs.category }}"
@@ -90,7 +98,8 @@ jobs:
             echo "excerpt=Placeholder article" >> $GITHUB_OUTPUT
             echo "read_time=5" >> $GITHUB_OUTPUT
           else
-            python automation/articles/article_generator.py \
+            # Use enhanced Daily Deal Darling article generator
+            python automation/articles/dailydealdarling_article_generator.py \
               --keyword "$KEYWORD" \
               --category "$CATEGORY" \
               --output "dailydealdarling_website/articles/$FILENAME"
@@ -160,7 +169,7 @@ jobs:
 
           git add dailydealdarling_website/articles/
           git add dailydealdarling_website/blog.html
-          git add keyword_state.json || true
+          git add dailydealdarling_keyword_state.json || true
 
           if git diff --staged --quiet; then
             echo "No changes to commit"

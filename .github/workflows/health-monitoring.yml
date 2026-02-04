@@ -154,17 +154,22 @@ jobs:
           healthy = '${{ needs.health-check.outputs.healthy }}'
           total = '${{ needs.health-check.outputs.total }}'
 
-          resend.Emails.send({
-              'from': 'alerts@socialmediaempire.com',
-              'to': [alert_email],
-              'subject': '🚨 System Health Alert - Services Unhealthy',
-              'html': f'''
-              <h1>System Health Alert</h1>
-              <p>The system health check has detected issues.</p>
-              <p><strong>Status:</strong> UNHEALTHY</p>
-              <p><strong>Services:</strong> {healthy}/{total} healthy</p>
-              <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View details</a></p>
-              '''
-          })
-          print('Alert sent successfully')
+          try:
+              resend.Emails.send({
+                  'from': 'alerts@socialmediaempire.com',
+                  'to': [alert_email],
+                  'subject': '🚨 System Health Alert - Services Unhealthy',
+                  'html': f'''
+                  <h1>System Health Alert</h1>
+                  <p>The system health check has detected issues.</p>
+                  <p><strong>Status:</strong> UNHEALTHY</p>
+                  <p><strong>Services:</strong> {healthy}/{total} healthy</p>
+                  <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View details</a></p>
+                  '''
+              })
+              print('Alert sent successfully')
+          except Exception as e:
+              print(f'WARNING: Failed to send email alert: {e}')
+              print('Check if RESEND_API_KEY is valid in GitHub Secrets')
+              sys.exit(0)  # Exit gracefully to not fail the workflow
           "

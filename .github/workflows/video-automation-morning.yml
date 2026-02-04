@@ -62,9 +62,8 @@ jobs:
           # Late API is preferred for Pinterest video posting
           if [ -n "$LATE_API_KEY" ]; then
             echo "✅ LATE_API_KEY is configured (preferred for Pinterest)"
-            echo "⚠️  LATE_API_KEY not set, using Make.com webhook fallback"
           else
-            echo "❌ ERROR: No Pinterest posting configured!"
+            echo "⚠️ LATE_API_KEY not set, using Make.com webhook fallback"
           fi
 
           echo "=============================================="
@@ -80,8 +79,6 @@ jobs:
             echo "- LATE_API_KEY: Configured (preferred for Pinterest)" >> $GITHUB_STEP_SUMMARY
           else
             echo "- LATE_API_KEY: Not set" >> $GITHUB_STEP_SUMMARY
-          fi
-          else
           fi
 
       - name: Run health check
