@@ -1,8 +1,8 @@
-# CHANGES-SUMMARY — Quality Pivot v2
+# CHANGES-SUMMARY — Quality Pivot v2 + Trending Discovery
 
-**Branch:** `quality-pivot-v2`
+**Branch:** `quality-pivot-v2` (merged) + `trending-discovery`
 **Date:** 2026-02-05
-**Purpose:** Transform over-engineered, $0-revenue system into quality content machine across 3 Pinterest brands
+**Purpose:** Transform over-engineered, $0-revenue system into quality content machine across 3 Pinterest brands, then add weekly trending topic discovery and article-per-pin generation
 
 ---
 
@@ -263,11 +263,161 @@ The SQL file is also saved at `database/content_history_schema.sql`.
 7. **Migrate fitover35 article generation** from Gemini to Claude API
 
 ### Cost Projection
-| Item | Before | After |
+| Item | Before | After (with trending discovery) |
 |------|--------|-------|
-| Claude API (Sonnet 4.5) | $0 | $5-12/mo |
+| Claude API (Sonnet 4.5) | $0 | $15-30/mo |
 | Gemini API | $5-10/mo | $0 (removed) |
 | Creatomate renders | $45-90/mo | $20-40/mo |
 | Make.com | $16/mo | $16/mo |
 | Other | ~$10/mo | ~$10/mo |
-| **TOTAL** | **$76-126/mo** | **$51-78/mo** |
+| **TOTAL** | **$76-126/mo** | **$61-96/mo** |
+
+---
+
+## 10. Trending Discovery System (Branch: `trending-discovery`)
+
+### How the Weekly Cycle Works
+
+```
+Sunday 10 PM PST (weekly-discovery.yml):
+  1. DISCOVER — Find what's trending in each niche this week
+     - Google Trends API (pytrends) — rising/surging search terms
+     - Pinterest trend analysis via Claude — what's popular on Pinterest now
+     - Web trend synthesis via Claude — news, seasonal, viral content
+     - Claude filters, deduplicates, ranks → selects top 5 topics per brand
+
+  2. PLAN — Build a 7-day content calendar per brand
+     - Maps each trending topic to specific daily pin assignments
+     - Assigns pin types (static, infographic, carousel), boards, title ideas
+     - Each pin gets an article_slug for its destination URL
+     - Stored in Supabase weekly_calendar table as JSONB
+
+  3. GENERATE ARTICLES — Create SEO articles for every trending topic
+     - Each article: 1,200-1,800 words, SEO-optimized, with brand voice
+     - Includes email capture CTA, 2-3 affiliate product recommendations
+     - Published as Markdown files to brand website directories
+     - Committed + pushed to GitHub for deployment
+
+Monday-Sunday (content-engine.yml, 3x daily):
+  4. EXECUTE — Content engine pulls from weekly calendar
+     - generate_pin_from_calendar() reads today's assignments from Supabase
+     - Each pin links to its matching article (not homepage)
+     - Falls back to random topic selection if no calendar exists
+     - All uniqueness checks still apply
+
+Next Sunday (before new discovery):
+  5. REVIEW — Check last week's performance
+     - Which topics got posted, which didn't
+     - Future: Pinterest analytics integration for click data
+     - Feeds insights into next week's topic selection
+```
+
+### New Files Created
+| File | Purpose |
+|------|---------|
+| `video_automation/trend_discovery.py` | Trend discovery engine: Google Trends + Pinterest + web analysis via Claude. Fallback evergreen topics. Weekly calendar builder. |
+| `video_automation/article_generator.py` | SEO article generator for each trending topic. Includes affiliate CTAs, email capture, image placeholders. |
+| `database/weekly_calendar_schema.sql` | New Supabase tables: `weekly_calendar`, `generated_articles` + new columns on `content_history` |
+| `.github/workflows/weekly-discovery.yml` | Sunday 10 PM PST workflow: discover trends, generate articles, commit + push |
+
+### Files Modified
+| File | Change |
+|------|--------|
+| `video_automation/content_brain.py` | Added `generate_pin_from_calendar()` function — reads weekly calendar from Supabase, generates calendar-driven pins with article destination URLs, falls back to random if no calendar |
+| `.github/workflows/content-engine.yml` | Updated to call `generate_pin_from_calendar()` first, falls back to `generate_pin_content()` if calendar exhausted |
+| `requirements.txt` | Added `pytrends>=4.9.0` for Google Trends API |
+
+### New Supabase Tables (run AFTER content_history_schema.sql)
+
+Run `database/weekly_calendar_schema.sql` in **Supabase Dashboard → SQL Editor**:
+
+```sql
+-- Weekly content calendars built from trend discovery
+CREATE TABLE IF NOT EXISTS weekly_calendar (
+    id BIGSERIAL PRIMARY KEY,
+    brand TEXT NOT NULL,
+    week_starting DATE NOT NULL,
+    calendar_data JSONB NOT NULL,
+    trends_data JSONB,
+    performance_review JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_weekly_calendar_brand ON weekly_calendar(brand);
+CREATE INDEX IF NOT EXISTS idx_weekly_calendar_week ON weekly_calendar(week_starting DESC);
+
+-- Generated articles for trending topics
+CREATE TABLE IF NOT EXISTS generated_articles (
+    id BIGSERIAL PRIMARY KEY,
+    brand TEXT NOT NULL,
+    slug TEXT NOT NULL,
+    trending_topic TEXT,
+    content_preview TEXT,
+    word_count INTEGER,
+    published_url TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_articles_brand ON generated_articles(brand);
+CREATE INDEX IF NOT EXISTS idx_articles_slug ON generated_articles(slug);
+
+-- Add trending topic tracking to content_history
+ALTER TABLE content_history ADD COLUMN IF NOT EXISTS trending_topic TEXT;
+ALTER TABLE content_history ADD COLUMN IF NOT EXISTS week_calendar_id BIGINT;
+```
+
+### New Dependencies
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `pytrends` | >=4.9.0 | Google Trends API wrapper for trending topic discovery |
+
+No new GitHub Secrets are needed beyond what's already configured.
+
+### How to Manually Trigger Trend Discovery
+
+1. Go to **GitHub Actions** → **Weekly Trend Discovery + Content Planning**
+2. Click **Run workflow** → **Run workflow** (uses `workflow_dispatch`)
+3. This will discover trends, build calendars, and generate articles for all 3 brands
+4. Check the workflow logs to see which trending topics were selected
+
+### Updated Workflow Schedule
+
+| Workflow | Schedule | Purpose |
+|----------|----------|---------|
+| `weekly-discovery.yml` | **Sunday 10 PM PST** | Discover trends, plan week, generate articles |
+| `content-engine.yml` | 8 AM, 1 PM, 6 PM PST | Generate + post pins (now calendar-aware) |
+| `fitness-articles.yml` | 11 PM PST Mon-Fri | SEO articles |
+| `system-health.yml` | Every 6 hours | Health check + self-healing |
+| `weekly-maintenance.yml` | Sunday 9 AM PST | Summary + cleanup |
+| `emergency-alert.yml` | Midnight PST | Dead man's switch |
+
+### Graceful Degradation
+
+The system never stops posting, even if trend discovery completely fails:
+
+1. **Google Trends fails** → Pinterest + web analysis via Claude still work
+2. **All trend sources fail** → Evergreen fallback topics are used (hardcoded per brand)
+3. **Calendar build fails** → Content engine falls back to random topic selection from `content_brain.py` topic banks
+4. **Article generation fails for a topic** → Pin still posts, just links to homepage instead of article
+5. **Weekly discovery workflow doesn't run** → Content engine continues with random topics (same as before this change)
+
+### Claude API Cost Increase
+
+The weekly discovery adds ~$8-18/month in Claude API calls:
+
+| Component | Calls/Week | Est. Cost/Week |
+|-----------|-----------|----------------|
+| Trend discovery (3 brands x 3 sources) | 9 calls | $0.50-1.00 |
+| Trend ranking + filtering (3 brands) | 3 calls | $0.30-0.60 |
+| Calendar building (3 brands) | 3 calls | $0.30-0.60 |
+| Article generation (~12-15 articles) | 12-15 calls | $3.00-6.00 |
+| **Weekly total** | ~30 calls | **$4.10-8.20** |
+| **Monthly total** | ~120 calls | **$16-33** |
+
+### Owner Manual Steps for Trending Discovery
+
+1. **Run `weekly_calendar_schema.sql`** in Supabase SQL Editor (required before first run)
+2. **Manually trigger** the weekly-discovery workflow once to verify it works
+3. **Check Supabase** `weekly_calendar` table to confirm calendars were created
+4. **Check article output directories** (`outputs/fitover35-website/articles/`, etc.) for generated articles
+5. **Configure Menopause Planner landing page** — articles are generated but need a website to host them

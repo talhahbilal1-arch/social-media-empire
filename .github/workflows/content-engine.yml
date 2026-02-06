@@ -89,7 +89,7 @@ jobs:
           from datetime import datetime
 
           sys.path.insert(0, '.')
-          from video_automation.content_brain import generate_pin_content, log_pin_to_history
+          from video_automation.content_brain import generate_pin_content, generate_pin_from_calendar, log_pin_to_history
           from video_automation.image_selector import get_unique_pexels_image
 
           dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
@@ -105,8 +105,11 @@ jobs:
               brand = brand.strip()
               print(f'\n=== Generating pin for {brand} ===')
               try:
-                  # Step 1: Generate content via Claude
-                  pin_data = generate_pin_content(brand, db.client)
+                  # Step 1: Generate content via Claude (calendar-aware with fallback)
+                  pin_data = generate_pin_from_calendar(brand, db.client)
+                  if pin_data is None:
+                      print(f'  Calendar exhausted for today, using random topic')
+                      pin_data = generate_pin_content(brand, db.client)
                   print(f'  Title: {pin_data[\"title\"]}')
                   print(f'  Board: {pin_data[\"board\"]}')
                   print(f'  Style: {pin_data[\"visual_style\"]}')

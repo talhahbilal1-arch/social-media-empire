@@ -589,6 +589,178 @@ def log_pin_to_history(pin_data, supabase_client):
         logger.error(f"Failed to log pin to history: {e}")
 
 
+def generate_pin_from_calendar(brand_key, supabase_client):
+    """Generate a pin based on today's assignment from the weekly calendar.
+
+    Falls back to the original random topic selection if no calendar exists.
+    """
+    today = datetime.utcnow().strftime('%A')  # "Monday", "Tuesday", etc.
+    today_date = datetime.utcnow().strftime('%Y-%m-%d')
+
+    # Get the current week's calendar
+    try:
+        calendar_result = supabase_client.table('weekly_calendar') \
+            .select('calendar_data') \
+            .eq('brand', brand_key) \
+            .order('created_at', desc=True) \
+            .limit(1) \
+            .execute()
+    except Exception:
+        calendar_result = None
+
+    if not calendar_result or not calendar_result.data:
+        print(f"No weekly calendar found for {brand_key}. Using random topic selection.")
+        return generate_pin_content(brand_key, supabase_client)
+
+    cal_raw = calendar_result.data[0]['calendar_data']
+    calendar = json.loads(cal_raw) if isinstance(cal_raw, str) else cal_raw
+
+    # Find today's pin assignments
+    today_pins = []
+    for day in calendar.get('days', []):
+        if day.get('day', '').lower() == today.lower():
+            today_pins = day.get('pins', [])
+            break
+
+    if not today_pins:
+        print(f"No pins scheduled for {today} in {brand_key} calendar. Using random topic.")
+        return generate_pin_content(brand_key, supabase_client)
+
+    # Find which pin slot to fill (check what's already been posted today)
+    try:
+        today_posts = supabase_client.table('content_history') \
+            .select('trending_topic') \
+            .eq('brand', brand_key) \
+            .gte('created_at', today_date + 'T00:00:00Z') \
+            .execute()
+        posted_count = len(today_posts.data) if today_posts.data else 0
+    except Exception:
+        posted_count = 0
+
+    if posted_count >= len(today_pins):
+        print(f"All {len(today_pins)} pins for {today} already posted for {brand_key}.")
+        return None  # All done for today
+
+    # Get the next unposted pin assignment
+    pin_assignment = today_pins[posted_count]
+
+    # Build the destination URL with the matching article
+    article_slug = pin_assignment.get('article_slug', '')
+    config = BRAND_CONFIGS[brand_key]
+    base_url = config['destination_base_url']
+
+    if article_slug and base_url != 'NEEDS_LANDING_PAGE':
+        destination_url = f"{base_url}/articles/{article_slug}/"
+    elif base_url == 'NEEDS_LANDING_PAGE':
+        destination_url = "https://linktr.ee/menopauseplanner"
+    else:
+        destination_url = base_url
+
+    # Get recent pins for uniqueness check
+    try:
+        recent = supabase_client.table('content_history') \
+            .select('title, description, image_query, visual_style') \
+            .eq('brand', brand_key) \
+            .order('created_at', desc=True) \
+            .limit(20) \
+            .execute()
+        recent_data = recent.data or []
+    except Exception:
+        recent_data = []
+
+    recent_titles = [r.get('title', '') for r in recent_data]
+
+    # Select visual style (rotate)
+    recent_styles = [r.get('visual_style', '') for r in recent_data[:4]]
+    available_styles = [s for s in PIN_VISUAL_STYLES if s['name'] not in recent_styles]
+    if not available_styles:
+        available_styles = PIN_VISUAL_STYLES
+    selected_style = random.choice(available_styles)
+
+    # Select SEO keywords
+    selected_keywords = random.sample(config['seo_keywords'], min(5, len(config['seo_keywords'])))
+
+    # Select description opener (rotate)
+    recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
+    available_openers = [o for o in DESCRIPTION_OPENERS if o not in recent_openers]
+    if not available_openers:
+        available_openers = DESCRIPTION_OPENERS
+    selected_opener = random.choice(available_openers)
+
+    # Call Claude with the specific calendar assignment
+    prompt = f"""You are creating a Pinterest pin for "{config['name']}".
+
+YOUR VOICE: {config['voice']}
+
+THIS PIN'S ASSIGNMENT FROM THE WEEKLY CALENDAR:
+- Trending Topic: {pin_assignment.get('trending_topic', 'general')}
+- Suggested Title: {pin_assignment.get('title', 'create your own')}
+- Description Concept: {pin_assignment.get('description_concept', '')}
+- Pin Type: {pin_assignment.get('pin_type', 'static_image')}
+- Target Board: {pin_assignment.get('board', config['pinterest_boards'][0])}
+
+The suggested title is a starting point. Improve it or create a different angle on the same trending topic. It must create a curiosity gap.
+
+DESCRIPTION MUST OPEN WITH THIS STYLE: {selected_opener}
+VISUAL STYLE FOR THIS PIN: {selected_style['name']} — {selected_style['description']}
+SEO KEYWORDS TO INCLUDE (3-5 naturally): {', '.join(selected_keywords)}
+DESTINATION URL: {destination_url}
+
+RECENTLY USED TITLES (yours must be completely different):
+{chr(10).join(recent_titles[:10]) if recent_titles else 'None yet'}
+
+RULES:
+1. Title creates a CURIOSITY GAP — viewer must click to get the answer (max 100 chars)
+2. Description is 150-300 chars, conversational, keyword-rich, ends with soft CTA
+3. Image search query is SPECIFIC and DETAILED (not generic stock photo terms)
+4. Text overlay is 3-8 words, large readable font
+5. Everything must feel human-written, not AI-generated
+6. NO generic phrases: "unlock", "transform", "game-changer", "must-have"
+
+OUTPUT ONLY THIS JSON:
+{{
+    "title": "...",
+    "description": "...",
+    "image_search_query": "...",
+    "text_overlay": "...",
+    "alt_text": "..."
+}}"""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=800,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    content = response.content[0].text.strip()
+
+    try:
+        pin_data = json.loads(content)
+    except json.JSONDecodeError:
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        if json_match:
+            pin_data = json.loads(json_match.group())
+        else:
+            print(f"Calendar pin parse error, falling back to random topic.")
+            return generate_pin_content(brand_key, supabase_client)
+
+    # Add metadata
+    pin_data['brand'] = brand_key
+    pin_data['topic'] = pin_assignment.get('trending_topic', '')
+    pin_data['trending_topic'] = pin_assignment.get('trending_topic', '')
+    pin_data['category'] = 'trending'
+    pin_data['angle_framework'] = pin_assignment.get('title', '')
+    pin_data['visual_style'] = selected_style['name']
+    pin_data['creatomate_template'] = selected_style['creatomate_template']
+    pin_data['board'] = pin_assignment.get('board', config['pinterest_boards'][0])
+    pin_data['description_opener'] = selected_opener
+    pin_data['destination_url'] = destination_url
+    pin_data['keywords_used'] = selected_keywords
+    pin_data['calendar_driven'] = True
+
+    return pin_data
+
+
 def build_destination_url(base_url, brand, posting_method, campaign="pins"):
     """Build destination URL with UTM tracking parameters."""
     if base_url == "NEEDS_LANDING_PAGE":
