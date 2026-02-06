@@ -103,7 +103,7 @@ jobs:
           try:
               key = os.environ.get('LATE_API_KEY_3') or os.environ.get('LATE_API_KEY', '')
               if key:
-                  resp = requests.get('https://api.late.app/v1/accounts',
+                  resp = requests.get('https://getlate.dev/api/v1/accounts',
                                     headers={'Authorization': f'Bearer {key}'}, timeout=10)
                   resp.raise_for_status()
                   print('Late API: OK')

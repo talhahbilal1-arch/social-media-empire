@@ -142,7 +142,7 @@ jobs:
                       board_id = os.environ.get('PINTEREST_FITNESS_BOARD_ID', '')
 
                       post_resp = requests.post(
-                          'https://api.late.app/v1/pins',
+                          'https://getlate.dev/api/v1/pins',
                           headers={'Authorization': f'Bearer {late_key}'},
                           json={
                               'account_id': account_id,

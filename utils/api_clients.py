@@ -4,7 +4,10 @@ import json
 import requests
 from typing import Optional, Any
 from dataclasses import dataclass
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 
 
 @dataclass
