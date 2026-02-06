@@ -1,12 +1,15 @@
-"""AI-powered content generation for video scripts using Gemini."""
+"""AI-powered content generation for video scripts using Claude API."""
 
 import json
+import os
 import random
 from typing import Optional
 from dataclasses import dataclass, field
 
+import anthropic
+
 from utils.config import get_config
-from utils.api_clients import GeminiClient, PexelsClient
+from utils.api_clients import PexelsClient
 
 
 # Brand-specific content configurations (optimized for conversions)
@@ -19,15 +22,15 @@ BRAND_CONFIG = {
         "hashtags": ["#beautytips", "#fashionfinds", "#homedecor", "#amazonfind", "#tiktokshop", "#amazonmusthaves", "#dealsoftheday"],
         "lead_magnet": "FREE guide: 50 Hidden Gems Under $25",
         "cta_styles": [
-            "🔗 Link in bio for the full list + my FREE $25 finds guide!",
-            "Get my FREE deals guide - link in bio! 🎁",
-            "Want more? Grab my free guide in bio! 📥",
+            "Link in bio for the full list + my FREE $25 finds guide!",
+            "Get my FREE deals guide - link in bio!",
+            "Want more? Grab my free guide in bio!",
             "Comment 'DEALS' for the link + free shopping guide!",
             "Follow + tap the link for exclusive deals sent to your inbox!",
-            "💌 Free guide in bio - my secret Amazon finds list!"
+            "Free guide in bio - my secret Amazon finds list!"
         ],
         "urgency_hooks": [
-            "🚨 Price just DROPPED on this viral find...",
+            "Price just DROPPED on this viral find...",
             "This $__ product is going viral and here's why...",
             "STOP scrolling - this deal ends TODAY...",
             "I almost didn't share this because it keeps selling out...",
@@ -48,8 +51,8 @@ BRAND_CONFIG = {
         "hashtags": ["#mensfitness", "#over35fitness", "#healthylifestyle", "#workoutmotivation", "#fitover40", "#fitover35", "#homeworkout"],
         "lead_magnet": "FREE 30-Day Workout Plan for Men 35+",
         "cta_styles": [
-            "🔗 Link in bio for the full workout + FREE 30-day plan!",
-            "Get my FREE workout plan - link in bio! 💪",
+            "Link in bio for the full workout + FREE 30-day plan!",
+            "Get my FREE workout plan - link in bio!",
             "Want the complete routine? Free guide in bio!",
             "Comment 'PLAN' and I'll send you the free workout!",
             "Follow + grab the free plan - link in bio!"
@@ -75,7 +78,7 @@ BRAND_CONFIG = {
         "hashtags": ["#menopause", "#perimenopause", "#midlifewellness", "#hormonehealth", "#over50", "#menopausesupport", "#hotflashhelp"],
         "lead_magnet": "FREE Menopause Symptom Tracker + Relief Guide",
         "cta_styles": [
-            "🔗 Link in bio for the FREE symptom tracker!",
+            "Link in bio for the FREE symptom tracker!",
             "Get my FREE menopause relief guide - link in bio!",
             "Comment 'RELIEF' for the free guide!",
             "Free symptom tracker in bio - it's a game changer!",
@@ -102,7 +105,7 @@ BRAND_CONFIG = {
         "hashtags": ["#nurselife", "#nursesofinstagram", "#healthcareworker", "#nursetips", "#rn", "#nurseproblems", "#shiftworker"],
         "lead_magnet": "FREE Shift Survival Planner + Self-Care Checklist",
         "cta_styles": [
-            "🔗 Link in bio for the FREE shift planner!",
+            "Link in bio for the FREE shift planner!",
             "Get my FREE nurse survival guide - link in bio!",
             "Comment 'NURSE' for the free planner!",
             "Free shift planner in bio - made for us by us!",
@@ -129,7 +132,7 @@ BRAND_CONFIG = {
         "hashtags": ["#adhd", "#adhdtips", "#adultadhd", "#adhdbrain", "#executivefunction", "#adhdhacks", "#adhdlife"],
         "lead_magnet": "FREE ADHD-Friendly Daily Planner + Focus Guide",
         "cta_styles": [
-            "🔗 Link in bio for the FREE ADHD planner!",
+            "Link in bio for the FREE ADHD planner!",
             "Get my FREE focus guide - link in bio!",
             "Comment 'FOCUS' for the free planner!",
             "Free ADHD-friendly planner in bio - it actually works!",
@@ -163,22 +166,33 @@ class VideoContent:
     music_mood: str
     background_query: str  # For Pexels search
     text_overlays: list[dict]
-    duration_seconds: int = 30
+    duration_seconds: int = 15  # Pinterest optimal is 6-15s
 
 
 @dataclass
 class VideoContentGenerator:
-    """Generates video content using AI and stock media."""
+    """Generates video content using Claude API and stock media."""
 
-    gemini_client: GeminiClient = field(default=None)
+    claude_client: anthropic.Anthropic = field(default=None)
     pexels_client: PexelsClient = field(default=None)
 
     def __post_init__(self):
         config = get_config()
-        if self.gemini_client is None:
-            self.gemini_client = GeminiClient(api_key=config.gemini_api_key)
+        if self.claude_client is None:
+            self.claude_client = anthropic.Anthropic(
+                api_key=os.environ.get('ANTHROPIC_API_KEY', config.anthropic_api_key if hasattr(config, 'anthropic_api_key') else '')
+            )
         if self.pexels_client is None:
             self.pexels_client = PexelsClient(api_key=config.pexels_api_key)
+
+    def _call_claude(self, prompt: str, max_tokens: int = 500) -> str:
+        """Call Claude API and return text response."""
+        response = self.claude_client.messages.create(
+            model="claude-sonnet-4-5-20250514",
+            max_tokens=max_tokens,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.content[0].text.strip()
 
     def generate_content(
         self,
@@ -193,7 +207,7 @@ class VideoContentGenerator:
         if not topic:
             topic = self._generate_topic(brand, content_type)
 
-        # Generate script using Gemini
+        # Generate script using Claude
         script = self._generate_script(brand, brand_config, topic, content_type)
 
         # Create text overlays from script
@@ -212,11 +226,11 @@ class VideoContentGenerator:
             music_mood=script.get("music_mood", "upbeat"),
             background_query=bg_query,
             text_overlays=overlays,
-            duration_seconds=30
+            duration_seconds=15
         )
 
     def _generate_topic(self, brand: str, content_type: str) -> str:
-        """Generate a topic using AI based on brand and content type."""
+        """Generate a topic using Claude based on brand and content type."""
         brand_config = BRAND_CONFIG.get(brand, BRAND_CONFIG["daily_deal_darling"])
 
         prompt = f"""Generate ONE specific, engaging video topic for {brand_config['name']}.
@@ -226,7 +240,7 @@ Content type: {content_type}
 
 Return ONLY the topic as a single line, no explanation."""
 
-        topic = self.gemini_client.generate_content(prompt, max_tokens=100)
+        topic = self._call_claude(prompt, max_tokens=100)
         return topic.strip().strip('"').strip("'")
 
     def _generate_script(
@@ -236,13 +250,13 @@ Return ONLY the topic as a single line, no explanation."""
         topic: str,
         content_type: str
     ) -> dict:
-        """Generate a video script using Gemini."""
-        # Get urgency hooks and email hooks for this brand
+        """Generate a video script using Claude API."""
         urgency_hooks = brand_config.get('urgency_hooks', [])
         email_hooks = brand_config.get('email_hooks', [])
         lead_magnet = brand_config.get('lead_magnet', 'free guide')
 
-        prompt = f"""Create a 30-second vertical video script for {brand_config['name']}.
+        prompt = f"""Create a 15-second vertical video script for Pinterest for {brand_config['name']}.
+Structure: Hook (0-3s), 2 key points (3-11s), CTA (11-15s). Keep text SHORT — max 8 words per overlay. Pinterest users scroll fast.
 
 Topic: {topic}
 Tone: {brand_config['tone']}
@@ -256,24 +270,23 @@ IMPORTANT - This video should drive viewers to:
 
 Return JSON with:
 {{
-    "hook": "URGENT, scroll-stopping opening line that creates FOMO or curiosity (2-4 seconds). Start with 'Stop scrolling if...' or 'POV:' or a surprising fact/number. Make them NEED to watch.",
-    "body": ["Point 1 - the main value/tip (short, punchy)", "Point 2 - supporting detail or 'the best part is...'", "Point 3 - social proof or result ('thousands of people use this')"],
-    "cta": "Strong call to action mentioning the FREE guide in bio. Create urgency.",
-    "email_hook": "Brief mention of the email list benefit",
-    "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5", "#tag6", "#tag7"],
+    "hook": "URGENT, scroll-stopping opening line (max 8 words, 0-3 seconds). Start with a surprising fact or create FOMO.",
+    "body": ["Key point 1 (max 8 words)", "Key point 2 (max 8 words)"],
+    "cta": "Short CTA mentioning FREE guide in bio (max 8 words, 11-15s)",
+    "background_query": "Specific Pexels search query relevant to {brand_config['niche']} and this topic",
+    "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5"],
     "music_mood": "upbeat/calm/motivational/energetic"
 }}
 
 EXAMPLE HOOKS THAT CONVERT:
-- "{urgency_hooks[0] if urgency_hooks else 'This product changed everything...'}"
-- "I almost didn't share this because it keeps selling out..."
-- "The internet doesn't want you to know about this..."
+- "{urgency_hooks[0] if urgency_hooks else 'This changed everything...'}"
+- "I almost didn't share this..."
 
-Make it conversational, engaging, and valuable. The hook must stop the scroll IMMEDIATELY.
-The CTA should mention the FREE guide or link in bio at least twice.
+Keep EVERYTHING short and punchy — this is a 15-second video. Max 8 words per text overlay.
+The background_query MUST be specifically relevant to {brand_config['niche']} — no off-brand imagery.
 """
 
-        response = self.gemini_client.generate_content(prompt, max_tokens=500)
+        response = self._call_claude(prompt, max_tokens=500)
 
         try:
             # Handle markdown code blocks
@@ -290,61 +303,52 @@ The CTA should mention the FREE guide or link in bio at least twice.
             # Fallback script with conversion focus
             lead_magnet = brand_config.get('lead_magnet', 'free guide')
             return {
-                "hook": f"Stop scrolling if you've been struggling with {topic}...",
+                "hook": f"Stop scrolling — {topic[:30]}...",
                 "body": [
-                    f"Here's what nobody tells you about {topic}",
-                    "This simple trick changed everything for me",
-                    "Thousands of people are already doing this"
+                    f"Here's what works for {topic[:20]}",
+                    "This simple trick changed everything"
                 ],
-                "cta": f"Get my {lead_magnet} - link in bio! 🔗",
+                "cta": f"Free guide — link in bio!",
+                "background_query": f"{brand_config['niche'].split(',')[0]} lifestyle",
                 "email_hook": random.choice(brand_config.get('email_hooks', ['More tips in my free email - bio!'])),
-                "hashtags": brand_config["hashtags"][:7],
+                "hashtags": brand_config["hashtags"][:5],
                 "music_mood": "upbeat"
             }
 
     def _create_text_overlays(self, script: dict) -> list[dict]:
-        """Create text overlay configurations for video with conversion focus."""
+        """Create text overlay configurations for 15-second Pinterest video."""
         overlays = []
 
-        # Hook overlay (0-4 seconds) - MUST stop the scroll
+        # Hook overlay (0-3s) - scroll stopper
         overlays.append({
             "text": script.get("hook", ""),
             "start_time": 0,
-            "end_time": 4,
+            "end_time": 3,
             "position": "center",
-            "style": "hook",
-            "animation": "zoom_in"
+            "style": "bold_large",
+            "animation": "fade_in"
         })
 
-        # Body points (4-22 seconds, ~6 seconds each)
-        body_points = script.get("body", [])
-        for i, point in enumerate(body_points[:3]):
+        # Body points (3-11s, ~4s each for 2 points)
+        body_points = script.get("body", [])[:2]  # Max 2 points for 15s
+        for i, point in enumerate(body_points):
+            start = 3 + (i * 4)
             overlays.append({
                 "text": point,
-                "start_time": 4 + (i * 6),
-                "end_time": 10 + (i * 6),
+                "start_time": start,
+                "end_time": start + 4,
                 "position": "center",
-                "style": "body"
+                "style": "medium",
+                "animation": "slide_up"
             })
 
-        # CTA overlay with email hook (22-26 seconds)
+        # CTA overlay (11-15s)
         overlays.append({
-            "text": script.get("cta", "Follow for more!"),
-            "start_time": 22,
-            "end_time": 26,
-            "position": "center",
-            "style": "cta",
-            "animation": "bounce"
-        })
-
-        # Email hook / Follow reminder (26-30 seconds)
-        email_hook = script.get("email_hook", "Free guide in bio! 🔗")
-        overlays.append({
-            "text": f"👆 {email_hook}",
-            "start_time": 26,
-            "end_time": 30,
+            "text": script.get("cta", "Learn more! Link in bio"),
+            "start_time": 11,
+            "end_time": 15,
             "position": "bottom",
-            "style": "email_cta",
+            "style": "cta_bold",
             "animation": "pulse"
         })
 

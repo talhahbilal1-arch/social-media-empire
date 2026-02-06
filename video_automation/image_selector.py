@@ -1,7 +1,8 @@
 """Unique image fetching for Pinterest pins.
 
 Selects Pexels images that haven't been used by the brand recently,
-ensuring visual variety across pins.
+ensuring visual variety across pins. Includes brand-specific guardrails
+to prevent off-brand imagery.
 """
 
 import requests
@@ -10,6 +11,84 @@ import os
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+# Brand-specific image validation rules
+BRAND_IMAGE_RULES = {
+    "fitness": {
+        "name": "Fitness Made Easy",
+        "allowed_themes": [
+            "fitness", "gym", "workout", "exercise", "muscle", "protein",
+            "healthy food", "meal prep", "running", "weightlifting", "stretching",
+            "yoga", "active lifestyle", "sports nutrition", "home workout",
+            "dumbbell", "resistance band", "athletic", "training", "cardio"
+        ],
+        "blocked_terms": [
+            "bedroom", "furniture", "decor", "fashion", "beauty", "makeup",
+            "skincare", "menopause", "hot flash", "deal", "sale", "discount",
+            "coupon", "baby", "wedding", "party", "christmas", "holiday"
+        ],
+        "fallback_query": "fitness workout healthy lifestyle"
+    },
+    "deals": {
+        "name": "Daily Deal Darling",
+        "allowed_themes": [
+            "beauty products", "skincare", "home organization", "kitchen gadgets",
+            "self care", "cozy home", "lifestyle products", "women accessories",
+            "home decor modern", "bath products", "candles", "planner",
+            "desk organization", "gift ideas", "shopping", "unboxing"
+        ],
+        "blocked_terms": [
+            "gym", "weightlifting", "bodybuilding", "menopause", "hormone",
+            "hot flash", "supplement", "protein powder", "dumbbell",
+            "barbell", "crossfit", "medical", "prescription"
+        ],
+        "fallback_query": "lifestyle products women aesthetic"
+    },
+    "menopause": {
+        "name": "The Menopause Planner",
+        "allowed_themes": [
+            "wellness", "self care", "calm", "meditation", "herbal tea",
+            "journaling", "planner", "midlife wellness", "women health",
+            "relaxation", "sleep", "comfort", "natural remedies",
+            "yoga mature women", "peaceful lifestyle", "wellness journal"
+        ],
+        "blocked_terms": [
+            "gym", "bodybuilding", "heavy weights", "fashion", "party",
+            "nightclub", "young woman", "teen", "baby", "pregnancy",
+            "deal", "sale", "discount", "coupon", "unboxing"
+        ],
+        "fallback_query": "wellness self care calm lifestyle"
+    }
+}
+
+
+def validate_image_query(query, brand):
+    """Validate and sanitize image search query for brand relevance.
+
+    Returns sanitized query or fallback if query is off-brand.
+    """
+    rules = BRAND_IMAGE_RULES.get(brand)
+    if not rules:
+        return query  # Unknown brand, pass through
+
+    query_lower = query.lower()
+
+    # Check for blocked terms
+    for blocked in rules["blocked_terms"]:
+        if blocked in query_lower:
+            logger.warning(f"Blocked term '{blocked}' found in query '{query}' for brand '{brand}'. Using fallback.")
+            return rules["fallback_query"]
+
+    # Check if query has at least one allowed theme word
+    has_relevant_term = any(theme in query_lower for theme in rules["allowed_themes"])
+
+    if not has_relevant_term:
+        logger.warning(f"Query '{query}' has no relevant terms for brand '{brand}'. Appending brand context.")
+        context_word = random.choice(rules["allowed_themes"][:5])
+        return f"{query} {context_word}"
+
+    return query
 
 
 def get_unique_pexels_image(search_query, brand, supabase_client):
@@ -23,6 +102,9 @@ def get_unique_pexels_image(search_query, brand, supabase_client):
     Returns:
         Dict with id, url, photographer, alt
     """
+    # Validate query against brand guardrails before making API call
+    search_query = validate_image_query(search_query, brand)
+
     api_key = os.environ.get('PEXELS_API_KEY', '')
     if not api_key:
         raise ValueError("PEXELS_API_KEY not set")
