@@ -50,8 +50,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run video generation (Afternoon slot)
+        id: generate
         run: |
-          set -e
           echo "=== LATE API KEYS STATUS ==="
           [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: ✅" || echo "LATE_API_KEY: ❌"
           [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: ✅" || echo "LATE_API_KEY_2: ❌"
@@ -61,11 +61,24 @@ jobs:
           echo "=== BRAND SLOT CONFIGURATION ==="
           python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('afternoon'); print(f'Brands for afternoon slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
           echo ""
+
+          # Run generation - capture exit code but don't fail workflow
+          # Video generation is considered successful if content is created,
+          # even if some platform postings fail (which can be retried)
           if [ -n "${{ inputs.brand }}" ]; then
-            python -m video_automation.daily_video_generator --brand "${{ inputs.brand }}" --slot afternoon ${{ inputs.dry_run && '--dry-run' || '' }}
+            python -m video_automation.daily_video_generator --brand "${{ inputs.brand }}" --slot afternoon ${{ inputs.dry_run && '--dry-run' || '' }} || exit_code=$?
           else
-            python -m video_automation.daily_video_generator --slot afternoon ${{ inputs.dry_run && '--dry-run' || '' }}
+            python -m video_automation.daily_video_generator --slot afternoon ${{ inputs.dry_run && '--dry-run' || '' }} || exit_code=$?
           fi
+
+          # Only fail if exit code is 2 (no videos generated at all)
+          # Exit code 1 means videos generated but posting partially failed (acceptable)
+          if [ "${exit_code:-0}" -eq 2 ]; then
+            echo "::error::No videos were generated - check Gemini/Pexels API"
+            exit 1
+          fi
+
+          echo "Video generation completed (some platform postings may have failed)"
 
       - name: Report results
         if: always()

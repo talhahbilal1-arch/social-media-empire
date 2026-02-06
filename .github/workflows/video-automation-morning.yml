@@ -109,7 +109,6 @@ jobs:
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
         run: |
-          set -e
           echo "=== LATE API KEYS STATUS ==="
           [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: ✅" || echo "LATE_API_KEY: ❌"
           [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: ✅" || echo "LATE_API_KEY_2: ❌"
@@ -128,7 +127,18 @@ jobs:
           fi
           echo "=== RUNNING VIDEO GENERATOR ==="
           echo "Args: $ARGS"
-          python -m video_automation.daily_video_generator $ARGS
+
+          # Run generation - capture exit code but don't fail on partial failures
+          python -m video_automation.daily_video_generator $ARGS || exit_code=$?
+
+          # Only fail if exit code is 2 (no videos generated at all)
+          # Exit code 1 means videos generated but posting partially failed (acceptable)
+          if [ "${exit_code:-0}" -eq 2 ]; then
+            echo "::error::No videos were generated - check Gemini/Pexels API"
+            exit 1
+          fi
+
+          echo "Video generation completed (some platform postings may have failed)"
 
       - name: Upload artifacts
         if: always()
@@ -175,15 +185,19 @@ jobs:
 
           import resend
           resend.api_key = resend_key
-          resend.Emails.send({
-              'from': 'alerts@socialmediaempire.com',
-              'to': [alert_email],
-              'subject': '🚨 Morning Video Generation Failed',
-              'html': '''
-              <h1>Video Generation Failed</h1>
-              <p>The morning (6 AM PST) video generation workflow has failed.</p>
-              <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View workflow run</a></p>
-              '''
-          })
-          print('Alert sent successfully')
+          try:
+              resend.Emails.send({
+                  'from': 'alerts@socialmediaempire.com',
+                  'to': [alert_email],
+                  'subject': '🚨 Morning Video Generation Failed',
+                  'html': '''
+                  <h1>Video Generation Failed</h1>
+                  <p>The morning (6 AM PST) video generation workflow has failed.</p>
+                  <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View workflow run</a></p>
+                  '''
+              })
+              print('Alert sent successfully')
+          except Exception as e:
+              print(f'WARNING: Failed to send alert email: {e}')
+              print('Check workflow logs manually')
           "

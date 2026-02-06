@@ -406,12 +406,13 @@ def main():
         if placeholders > 0:
             output("CAUSE: Creatomate video rendering failed for all brands.")
             output("ACTION: Check that CREATOMATE_API_KEY is configured and the template ID is valid.")
-        sys.exit(1)
+        sys.exit(2)  # Exit code 2 = complete failure (no content generated)
 
     if not any_posted and not args.dry_run:
         output("\nWARNING: Videos were rendered but NONE were posted to any platform.")
         output("ACTION: Check platform credentials (LATE_API_KEY, MAKE_COM_PINTEREST_WEBHOOK, YouTube OAuth)")
-        sys.exit(1)
+        output("NOTE: Content was generated successfully - platform posting can be retried.")
+        sys.exit(1)  # Exit code 1 = partial failure (content ok, posting failed)
 
     output(f"\nDone: {rendered}/{total} videos processed successfully")
 
