@@ -31,6 +31,9 @@ resend>=2.0.0
 # Retry logic
 backoff>=2.2.0
 
+# Trend Discovery
+pytrends>=4.9.0
+
 # Utilities
 requests>=2.31.0
 python-dateutil==2.9.0
