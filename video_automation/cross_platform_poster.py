@@ -1,6 +1,7 @@
 """Cross-platform video posting orchestrator."""
 
 import logging
+import os
 from typing import Optional
 from dataclasses import dataclass, field
 
@@ -17,64 +18,66 @@ logger = logging.getLogger(__name__)
 # Set to None to use the default/first Pinterest account
 # videos_per_day: Number of videos to post per day for this brand
 # posting_slots: Which time slots to post at (morning, midmorning, noon, afternoon, evening)
+# All Pinterest account/board IDs loaded from environment variables (GitHub Secrets).
+# See CHANGES-SUMMARY.md for the full list of required secrets.
 BRAND_PLATFORM_CONFIG = {
     "daily_deal_darling": {
-        "pinterest_account_id": "697ba20193a320156c4220b4",  # Late API: DailyDealDarlin Pinterest
-        "late_api_key_env": "LATE_API_KEY_2",  # DailyDealDarlin Late account
-        "pinterest_board_id": "874683627569021288",  # Daily Deal Darling • Amazon Finds board
+        "pinterest_account_id": os.environ.get("PINTEREST_DEALS_ACCOUNT_ID", ""),
+        "late_api_key_env": "LATE_API_KEY_2",
+        "pinterest_board_id": os.environ.get("PINTEREST_DEALS_BOARD_ID", ""),
         "youtube_playlist_id": None,
         "tiktok_account": "dailydealdarling",
         "instagram_account": "dailydealdarling",
         "link_url": "https://dailydealdarling.com",
-        "videos_per_day": 3,
-        "posting_slots": ["morning", "noon", "evening"],
-        "enabled": True  # Now enabled with Pinterest connected
+        "videos_per_day": 2,
+        "posting_slots": ["morning", "afternoon"],
+        "enabled": True
     },
     "fitnessmadeasy": {
-        "pinterest_account_id": "697bb4b893a320156c4221ab",  # Late API: 1uy77rvyo4c0mmr Pinterest (fitness account)
-        "late_api_key_env": "LATE_API_KEY_3",  # Third Late account (new)
-        "pinterest_board_id": "756745612325868912",  # Fitness Goods board (numeric ID required)
+        "pinterest_account_id": os.environ.get("PINTEREST_FITNESS_ACCOUNT_ID", ""),
+        "late_api_key_env": "LATE_API_KEY_3",
+        "pinterest_board_id": os.environ.get("PINTEREST_FITNESS_BOARD_ID", ""),
         "youtube_playlist_id": None,
         "tiktok_account": "fitnessmadeasy",
         "instagram_account": "fitnessmadeasy",
         "link_url": "https://fitover35.com",
-        "videos_per_day": 6,
-        "posting_slots": ["morning", "midmorning", "noon", "afternoon", "evening", "morning"],  # 6 slots, morning gets 2
+        "videos_per_day": 3,
+        "posting_slots": ["morning", "afternoon", "evening"],
         "enabled": True
     },
     "menopause_planner": {
-        "pinterest_account_id": "697c329393a320156c422e6d",  # Late API: TheMenopausePlanner Pinterest
-        "late_api_key_env": "LATE_API_KEY_4",  # New Late account for menopause
-        "pinterest_board_id": "1076993767079887530",  # Menopause Wellness Tips board (numeric ID required)
+        "pinterest_account_id": os.environ.get("PINTEREST_MENOPAUSE_ACCOUNT_ID", ""),
+        "late_api_key_env": "LATE_API_KEY_4",
+        "pinterest_board_id": os.environ.get("PINTEREST_MENOPAUSE_BOARD_ID", ""),
         "youtube_playlist_id": None,
         "tiktok_account": "menopauseplanner",
         "instagram_account": "menopauseplanner",
-        "link_url": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle",  # Etsy listing
-        "videos_per_day": 3,
-        "posting_slots": ["morning", "noon", "evening"],
+        "link_url": "https://linktr.ee/menopauseplanner",
+        "videos_per_day": 2,
+        "posting_slots": ["morning", "evening"],
         "enabled": True
     },
     "nurse_planner": {
-        "pinterest_account_id": None,  # Uses default Pinterest account
-        "pinterest_board_id": "nurse-life-tips",
+        "pinterest_account_id": None,
+        "pinterest_board_id": "",
         "youtube_playlist_id": None,
         "tiktok_account": "nurseplanner",
         "instagram_account": "nurseplanner",
         "link_url": "https://nurseplanner.com",
         "videos_per_day": 0,
         "posting_slots": [],
-        "enabled": False  # Disabled for now
+        "enabled": False
     },
     "adhd_planner": {
-        "pinterest_account_id": None,  # Uses default Pinterest account
-        "pinterest_board_id": "adhd-productivity-tips",
+        "pinterest_account_id": None,
+        "pinterest_board_id": "",
         "youtube_playlist_id": None,
         "tiktok_account": "adhdplanner",
         "instagram_account": "adhdplanner",
         "link_url": "https://adhdplanner.com",
         "videos_per_day": 0,
         "posting_slots": [],
-        "enabled": False  # Disabled for now
+        "enabled": False
     }
 }
 
