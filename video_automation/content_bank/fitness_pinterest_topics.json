@@ -1,0 +1,108 @@
+{
+  "description": "Pinterest-optimized fitness topics for Fitness Made Easy / FitOver35. Organized by category with Pinterest SEO keywords.",
+  "categories": {
+    "fat_loss": {
+      "description": "Fat loss content for men over 35",
+      "topics": [
+        "5 exercises that burn more fat than running for men over 35",
+        "How to lose belly fat after 35 without starving yourself",
+        "The fat loss mistake 90% of men over 35 make",
+        "30-minute fat burning workout you can do at home",
+        "Why your metabolism slowed down after 35 and how to fix it",
+        "HIIT vs steady-state cardio for men over 35",
+        "The simple nutrition rule that melts stubborn belly fat",
+        "How to lose 10 pounds in 30 days after 35",
+        "Morning routine that kickstarts fat burning all day",
+        "The one exercise that targets belly fat directly"
+      ],
+      "pinterest_keywords": ["fat loss over 35", "belly fat men", "weight loss men", "burn fat workout", "lose belly fat"]
+    },
+    "muscle_building": {
+      "description": "Muscle building for men with declining testosterone",
+      "topics": [
+        "The 3 best compound exercises for men over 35",
+        "How to build muscle after 35 with limited equipment",
+        "Why you need more protein after 35 and exactly how much",
+        "The training split that works best for busy men over 35",
+        "5 muscle building mistakes men over 35 make",
+        "Best dumbbell workout for men over 35 at home",
+        "How to build chest and arms after 35",
+        "Progressive overload explained for men over 35",
+        "How to build muscle with just resistance bands",
+        "The 4-day workout split for maximum muscle after 35"
+      ],
+      "pinterest_keywords": ["build muscle over 35", "men workout plan", "strength training men", "muscle building tips", "home workout men"]
+    },
+    "nutrition": {
+      "description": "Practical nutrition for men with slowing metabolisms",
+      "topics": [
+        "High protein meals for men over 35 that take 10 minutes",
+        "The meal prep system that saves 5 hours per week",
+        "Best protein powder for men over 35 (science-backed)",
+        "5 supplements every man over 35 should take",
+        "How much protein do you really need after 35",
+        "Simple meal plan for men who want to lose fat and build muscle",
+        "The one food that kills testosterone after 35",
+        "Best pre-workout snack for men over 35",
+        "Creatine for men over 35: everything you need to know",
+        "How to eat healthy on a budget for men over 35"
+      ],
+      "pinterest_keywords": ["meal prep men", "high protein meals", "supplements men over 35", "nutrition tips men", "healthy eating men"]
+    },
+    "recovery": {
+      "description": "Recovery and injury prevention for aging bodies",
+      "topics": [
+        "The 10-minute stretching routine every man over 35 needs",
+        "How to fix lower back pain from sitting all day",
+        "Foam rolling routine that speeds recovery by 50%",
+        "Why sleep is the #1 muscle builder after 35",
+        "How to train around knee pain after 35",
+        "The morning mobility routine that changes everything",
+        "Best recovery tools for men over 35 under $50",
+        "How to fix shoulder pain and keep training",
+        "Active recovery day routine for men over 35",
+        "Why you need rest days more after 35"
+      ],
+      "pinterest_keywords": ["stretching routine men", "recovery workout", "foam rolling", "mobility exercises", "injury prevention"]
+    },
+    "home_gym": {
+      "description": "Home gym setup and equipment recommendations",
+      "topics": [
+        "Complete home gym setup under $500",
+        "The only 5 pieces of equipment you need for a home gym",
+        "Best adjustable dumbbells for home gym 2026",
+        "Home workout vs gym: which builds more muscle",
+        "Resistance band workout that replaces the gym",
+        "How to set up a garage gym on a budget",
+        "Best home gym equipment for small spaces",
+        "Full body workout with just dumbbells at home",
+        "Top 3 gym machines worth buying for home",
+        "Minimalist home gym essentials for men over 35"
+      ],
+      "pinterest_keywords": ["home gym setup", "home workout equipment", "garage gym", "best dumbbells", "home gym ideas"]
+    },
+    "testosterone": {
+      "description": "Natural testosterone optimization",
+      "topics": [
+        "5 natural ways to boost testosterone after 35",
+        "The exercise that increases testosterone the most",
+        "Foods that naturally boost testosterone levels",
+        "How sleep affects your testosterone after 35",
+        "Signs your testosterone is low and what to do about it",
+        "The supplement that actually boosts testosterone (science-backed)",
+        "Morning habits that optimize testosterone naturally",
+        "How alcohol destroys your testosterone after 35",
+        "The testosterone-boosting workout routine",
+        "Stress and testosterone: the connection men over 35 need to know"
+      ],
+      "pinterest_keywords": ["boost testosterone naturally", "testosterone men over 35", "low testosterone", "testosterone foods", "testosterone workout"]
+    }
+  },
+  "pin_description_template": "{topic}\n\nScience-backed fitness tips for men over 35. Get your FREE 7-Day Fat Loss Kickstart at fitover35.com\n\n{keywords}",
+  "pin_title_max_length": 100,
+  "destination_urls": {
+    "default": "https://fitover35.com/blog.html",
+    "product": "https://fitover35.com/products.html",
+    "article_base": "https://fitover35.com/articles/"
+  }
+}

@@ -37,20 +37,16 @@ class Config:
     # Notifications
     alert_email: str = ""
 
-    # Brands configuration (active Pinterest brands)
-    # Note: per-brand video counts and posting slots are in cross_platform_poster.py
+    # Brands configuration — PIVOTED to fitness-only (2026-02-05)
+    # Previous brands (daily_deal_darling, menopause_planner) archived
     brands: list = field(default_factory=lambda: [
-        "daily_deal_darling",   # Women's beauty, fashion, home decor - 3 videos/day
-        "fitnessmadeasy",       # Men's fitness/health 35+ - 6 videos/day
-        "menopause_planner",    # Women's menopause wellness - 3 videos/day
+        "fitnessmadeasy",       # Men's fitness/health 35+ - PRIMARY BRAND
     ])
 
-    # Platforms configuration
+    # Platforms configuration — Pinterest is primary traffic driver
     platforms: list = field(default_factory=lambda: [
-        "youtube_shorts",
         "pinterest",
-        "tiktok",
-        "instagram_reels"
+        "youtube_shorts",
     ])
 
     # Schedule configuration (PST times)

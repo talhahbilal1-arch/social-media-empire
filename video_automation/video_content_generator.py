@@ -42,30 +42,35 @@ BRAND_CONFIG = {
     },
     "fitnessmadeasy": {
         "name": "Fitness Made Easy",
-        "niche": "fitness tips, health hacks, workout routines for men over 35",
+        "niche": "fat loss, muscle building, workout routines, supplements, nutrition for men over 35",
         "tone": "motivational, practical, no-nonsense, masculine, results-focused",
-        "audience": "men 35+ looking to improve fitness and health",
-        "hashtags": ["#mensfitness", "#over35fitness", "#healthylifestyle", "#workoutmotivation", "#fitover40", "#fitover35", "#homeworkout"],
-        "lead_magnet": "FREE 30-Day Workout Plan for Men 35+",
+        "audience": "men 35+ looking to lose belly fat, build muscle, and get fit",
+        "hashtags": ["#fitover35", "#mensfitness", "#over35fitness", "#fatloss", "#musclebuilding", "#homeworkout", "#mealprep"],
+        "lead_magnet": "FREE 7-Day Fat Loss Kickstart Guide",
         "cta_styles": [
-            "🔗 Link in bio for the full workout + FREE 30-day plan!",
-            "Get my FREE workout plan - link in bio! 💪",
-            "Want the complete routine? Free guide in bio!",
-            "Comment 'PLAN' and I'll send you the free workout!",
-            "Follow + grab the free plan - link in bio!"
+            "🔗 Free 7-Day Fat Loss Kickstart in bio - start today!",
+            "Get the FREE fat loss guide at fitover35.com 💪",
+            "Want the complete plan? Free at fitover35.com!",
+            "Link in bio for the full workout + FREE kickstart guide!",
+            "Follow + get the free 7-day plan at fitover35.com!"
         ],
         "urgency_hooks": [
             "If you're over 35 and not doing THIS, you're leaving gains on the table...",
-            "Why most men over 35 FAIL at fitness (and the simple fix)...",
+            "Why most men over 35 FAIL at fat loss (and the simple fix)...",
             "This exercise burns more fat than 30 min of cardio...",
             "I wish I knew this at 35 - would've saved me years...",
-            "The #1 mistake keeping you from seeing results after 35..."
+            "The #1 mistake keeping you from seeing results after 35...",
+            "Stop doing crunches. This is what actually burns belly fat after 35...",
+            "3 foods killing your progress after 35 (most men eat these daily)...",
+            "This 20-minute workout changed everything for men over 35..."
         ],
         "email_hooks": [
-            "Full workout plan in my free guide - link in bio!",
-            "I send out new workouts every week - join free in bio!",
-            "This is from my email newsletter - get on the list (free) link in bio!"
-        ]
+            "Free 7-Day Fat Loss guide at fitover35.com - start today!",
+            "I send new workouts every week - join free at fitover35.com!",
+            "This is from my email newsletter - sign up free at fitover35.com!"
+        ],
+        "destination_url": "https://fitover35.com",
+        "product_url": "https://fitover35.com/products.html"
     },
     "menopause_planner": {
         "name": "Menopause Planner",
@@ -242,35 +247,43 @@ Return ONLY the topic as a single line, no explanation."""
         email_hooks = brand_config.get('email_hooks', [])
         lead_magnet = brand_config.get('lead_magnet', 'free guide')
 
+        # Get destination URL if available (for Pinterest SEO)
+        destination_url = brand_config.get('destination_url', '')
+        product_url = brand_config.get('product_url', '')
+
         prompt = f"""Create a 30-second vertical video script for {brand_config['name']}.
 
 Topic: {topic}
 Tone: {brand_config['tone']}
 Audience: {brand_config['audience']}
 Lead Magnet to Promote: {lead_magnet}
+Website: {destination_url}
 
 IMPORTANT - This video should drive viewers to:
-1. Follow the account
-2. Click the link in bio
-3. Sign up for the free guide/email list
+1. Visit {destination_url} for the free guide
+2. Follow the account for more tips
+3. Click the link in bio
 
 Return JSON with:
 {{
-    "hook": "URGENT, scroll-stopping opening line that creates FOMO or curiosity (2-4 seconds). Start with 'Stop scrolling if...' or 'POV:' or a surprising fact/number. Make them NEED to watch.",
-    "body": ["Point 1 - the main value/tip (short, punchy)", "Point 2 - supporting detail or 'the best part is...'", "Point 3 - social proof or result ('thousands of people use this')"],
-    "cta": "Strong call to action mentioning the FREE guide in bio. Create urgency.",
-    "email_hook": "Brief mention of the email list benefit",
-    "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5", "#tag6", "#tag7"],
+    "hook": "URGENT, scroll-stopping opening line that creates FOMO or curiosity (2-4 seconds). Start with a surprising fact, 'POV:', or a relatable problem. Make them NEED to watch.",
+    "body": ["Point 1 - the main actionable tip (short, punchy)", "Point 2 - why it works or 'the best part is...'", "Point 3 - result or proof ('studies show...' or 'I lost X pounds doing this')"],
+    "cta": "Strong call to action mentioning {destination_url} and the FREE guide. Create urgency.",
+    "email_hook": "Brief mention of the free guide at {destination_url}",
+    "pin_title": "A Pinterest-SEO-optimized title under 100 characters with keywords like 'men over 35', 'fat loss', 'workout', 'muscle building'",
+    "pin_description": "A keyword-rich Pinterest description (2-3 sentences) that includes relevant search terms. Mention the free guide at {destination_url}",
+    "hashtags": ["#fitover35", "#mensfitness", "#tag3", "#tag4", "#tag5", "#tag6", "#tag7"],
     "music_mood": "upbeat/calm/motivational/energetic"
 }}
 
 EXAMPLE HOOKS THAT CONVERT:
-- "{urgency_hooks[0] if urgency_hooks else 'This product changed everything...'}"
-- "I almost didn't share this because it keeps selling out..."
-- "The internet doesn't want you to know about this..."
+- "{urgency_hooks[0] if urgency_hooks else 'This changed everything...'}"
+- "Stop doing crunches. Here's what actually works after 35..."
+- "I lost 20 lbs after 35 by doing this ONE thing differently..."
 
 Make it conversational, engaging, and valuable. The hook must stop the scroll IMMEDIATELY.
-The CTA should mention the FREE guide or link in bio at least twice.
+The CTA should mention fitover35.com and the FREE guide.
+The pin_title and pin_description must be optimized for Pinterest search (include keywords people search for).
 """
 
         response = self.gemini_client.generate_content(prompt, max_tokens=500)

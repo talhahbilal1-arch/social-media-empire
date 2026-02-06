@@ -1,0 +1,136 @@
+name: TikTok & Instagram Automation
+
+on:
+  schedule:
+    # Run 4 times daily at optimal posting times
+    # 7 AM PST (15:00 UTC), 11 AM PST (19:00 UTC), 4 PM PST (00:00 UTC), 8 PM PST (04:00 UTC)
+    - cron: '0 15 * * *'
+    - cron: '0 19 * * *'
+    - cron: '0 0 * * *'
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to post to'
+        required: false
+        type: choice
+        options:
+          - both
+          - tiktok
+          - instagram
+        default: both
+      brand:
+        description: 'Specific brand (optional)'
+        required: false
+        type: string
+
+env:
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+  CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  MAKE_COM_TIKTOK_WEBHOOK: ${{ secrets.MAKE_COM_TIKTOK_WEBHOOK }}
+  MAKE_COM_INSTAGRAM_WEBHOOK: ${{ secrets.MAKE_COM_INSTAGRAM_WEBHOOK }}
+
+jobs:
+  post-to-platforms:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Get latest rendered video
+        id: get-video
+        run: |
+          python -c "
+          from database.supabase_client import get_supabase_client
+          db = get_supabase_client()
+
+          # Get most recent unposted video
+          result = db.client.table('videos').select('*').eq('status', 'rendered').order('created_at', desc=True).limit(1).execute()
+
+          if result.data:
+              video = result.data[0]
+              print(f\"VIDEO_URL={video.get('video_url', '')}\")
+              print(f\"VIDEO_ID={video.get('id', '')}\")
+              print(f\"BRAND={video.get('brand', '')}\")
+              print(f\"TITLE={video.get('title', '')}\")
+          else:
+              print('No videos to post')
+          "
+        continue-on-error: true
+
+      - name: Post to TikTok via Make.com
+        if: github.event.inputs.platform == 'both' || github.event.inputs.platform == 'tiktok'
+        run: |
+          python -c "
+          import requests
+          import os
+
+          webhook = os.environ.get('MAKE_COM_TIKTOK_WEBHOOK')
+          if webhook:
+              payload = {
+                  'platform': 'tiktok',
+                  'video_url': '${{ steps.get-video.outputs.VIDEO_URL }}',
+                  'caption': '${{ steps.get-video.outputs.TITLE }}',
+                  'brand': '${{ steps.get-video.outputs.BRAND }}'
+              }
+              response = requests.post(webhook, json=payload, timeout=30)
+              print(f'TikTok webhook response: {response.status_code}')
+          else:
+              print('TikTok webhook not configured')
+          "
+        continue-on-error: true
+
+      - name: Post to Instagram via Make.com
+        if: github.event.inputs.platform == 'both' || github.event.inputs.platform == 'instagram'
+        run: |
+          python -c "
+          import requests
+          import os
+
+          webhook = os.environ.get('MAKE_COM_INSTAGRAM_WEBHOOK')
+          if webhook:
+              payload = {
+                  'platform': 'instagram',
+                  'video_url': '${{ steps.get-video.outputs.VIDEO_URL }}',
+                  'caption': '${{ steps.get-video.outputs.TITLE }}',
+                  'brand': '${{ steps.get-video.outputs.BRAND }}'
+              }
+              response = requests.post(webhook, json=payload, timeout=30)
+              print(f'Instagram webhook response: {response.status_code}')
+          else:
+              print('Instagram webhook not configured')
+          "
+        continue-on-error: true
+
+      - name: Update video status
+        run: |
+          python -c "
+          from database.supabase_client import get_supabase_client
+
+          video_id = '${{ steps.get-video.outputs.VIDEO_ID }}'
+          if video_id:
+              db = get_supabase_client()
+              db.update_video_status(video_id, 'posted_social')
+              print(f'Updated video {video_id} status')
+          "
+        continue-on-error: true
+
+      - name: Report results
+        if: always()
+        run: |
+          echo "TikTok/Instagram posting completed"
+          echo "Time: $(date)"

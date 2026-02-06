@@ -1,0 +1,250 @@
+name: Debug Configuration
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+  workflow_dispatch:
+
+jobs:
+  check-config:
+    runs-on: ubuntu-latest
+    outputs:
+      gemini: ${{ steps.check-secrets.outputs.gemini }}
+      pexels: ${{ steps.check-secrets.outputs.pexels }}
+      creatomate: ${{ steps.check-secrets.outputs.creatomate }}
+      supabase_url: ${{ steps.check-secrets.outputs.supabase_url }}
+      supabase_key: ${{ steps.check-secrets.outputs.supabase_key }}
+      youtube: ${{ steps.check-secrets.outputs.youtube }}
+      late_api: ${{ steps.check-secrets.outputs.late_api }}
+      make_webhook: ${{ steps.check-secrets.outputs.make_webhook }}
+      pinterest_ready: ${{ steps.check-secrets.outputs.pinterest_ready }}
+      video_ready: ${{ steps.check-secrets.outputs.video_ready }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install python-dotenv requests
+
+      - name: Check secrets and set outputs
+        id: check-secrets
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          # Set outputs for each secret (true/false)
+          echo "gemini=$( [ -n "$GEMINI_API_KEY" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+          echo "pexels=$( [ -n "$PEXELS_API_KEY" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+          echo "creatomate=$( [ -n "$CREATOMATE_API_KEY" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+          echo "supabase_url=$( [ -n "$SUPABASE_URL" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+          echo "supabase_key=$( [ -n "$SUPABASE_KEY" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+          echo "youtube=$( [ -n "$YOUTUBE_REFRESH_TOKEN" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+          echo "late_api=$( [ -n "$LATE_API_KEY" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+          echo "make_webhook=$( [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ] && echo true || echo false )" >> $GITHUB_OUTPUT
+
+          # Composite checks
+          PINTEREST_READY=false
+          if [ -n "$LATE_API_KEY" ] || [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            PINTEREST_READY=true
+          fi
+          echo "pinterest_ready=$PINTEREST_READY" >> $GITHUB_OUTPUT
+
+          VIDEO_READY=false
+          if [ -n "$CREATOMATE_API_KEY" ] && [ -n "$GEMINI_API_KEY" ]; then
+            VIDEO_READY=true
+          fi
+          echo "video_ready=$VIDEO_READY" >> $GITHUB_OUTPUT
+
+          # Print summary
+          echo "============================================================"
+          echo "CONFIGURATION STATUS CHECK"
+          echo "============================================================"
+          echo ""
+          echo "GEMINI_API_KEY:             $( [ -n "$GEMINI_API_KEY" ] && echo 'SET' || echo 'NOT SET' )"
+          echo "PEXELS_API_KEY:             $( [ -n "$PEXELS_API_KEY" ] && echo 'SET' || echo 'NOT SET' )"
+          echo "CREATOMATE_API_KEY:         $( [ -n "$CREATOMATE_API_KEY" ] && echo 'SET' || echo 'NOT SET' )"
+          echo "SUPABASE_URL:               $( [ -n "$SUPABASE_URL" ] && echo 'SET' || echo 'NOT SET' )"
+          echo "SUPABASE_KEY:               $( [ -n "$SUPABASE_KEY" ] && echo 'SET' || echo 'NOT SET' )"
+          echo "YOUTUBE_REFRESH_TOKEN:      $( [ -n "$YOUTUBE_REFRESH_TOKEN" ] && echo 'SET' || echo 'NOT SET' )"
+          echo "LATE_API_KEY:               $( [ -n "$LATE_API_KEY" ] && echo 'SET' || echo 'NOT SET' )"
+          echo "MAKE_COM_PINTEREST_WEBHOOK: $( [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ] && echo 'SET' || echo 'NOT SET' )"
+          echo ""
+          echo "Pinterest ready: $PINTEREST_READY"
+          echo "Video pipeline ready: $VIDEO_READY"
+          echo "============================================================"
+
+      - name: Test Creatomate Connection
+        env:
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+        run: |
+          python << 'EOF'
+          import os
+          import requests
+
+          api_key = os.environ.get("CREATOMATE_API_KEY", "")
+
+          print("\nCREATOMATE API TEST:")
+          print("-" * 40)
+
+          if not api_key:
+              print("Cannot test - CREATOMATE_API_KEY not set")
+          else:
+              try:
+                  response = requests.get(
+                      "https://api.creatomate.com/v1/templates",
+                      headers={"Authorization": f"Bearer {api_key}"},
+                      timeout=10
+                  )
+                  if response.status_code == 200:
+                      templates = response.json()
+                      print(f"Creatomate API connected successfully")
+                      print(f"   Found {len(templates)} templates")
+
+                      expected_id = "1be9bec1-93d3-40b4-811b-e9ba235112fb"
+                      found = any(t.get("id") == expected_id for t in templates)
+                      if found:
+                          print(f"   Expected template {expected_id[:8]}... found")
+                      else:
+                          print(f"   Expected template {expected_id[:8]}... NOT FOUND")
+                          print(f"   Available templates: {[t.get('id')[:8] + '...' for t in templates[:5]]}")
+                  else:
+                      print(f"Creatomate API error: {response.status_code}")
+                      print(f"   Response: {response.text[:200]}")
+              except Exception as e:
+                  print(f"Creatomate connection failed: {e}")
+          EOF
+
+      - name: Test Pinterest Webhook
+        env:
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          python << 'EOF'
+          import os
+
+          webhook = os.environ.get("MAKE_COM_PINTEREST_WEBHOOK", "")
+
+          print("\nPINTEREST WEBHOOK TEST:")
+          print("-" * 40)
+
+          if not webhook:
+              print("Cannot test - MAKE_COM_PINTEREST_WEBHOOK not set")
+          else:
+              print(f"Webhook URL is set")
+              print(f"   URL starts with: {webhook[:30]}...")
+
+              if "hook.make.com" in webhook or "hook.eu1.make.com" in webhook or "hook.us1.make.com" in webhook:
+                  print("   URL format appears to be a valid Make.com webhook")
+              else:
+                  print("   URL may not be a Make.com webhook")
+          EOF
+
+      - name: RESULT-LATE_API_KEY-IS-SET
+        if: steps.check-secrets.outputs.late_api == 'true'
+        run: echo "LATE_API_KEY is configured"
+
+      - name: RESULT-LATE_API_KEY-NOT-SET
+        if: steps.check-secrets.outputs.late_api == 'false'
+        run: echo "LATE_API_KEY is NOT configured"
+
+      - name: RESULT-MAKE_WEBHOOK-IS-SET
+        if: steps.check-secrets.outputs.make_webhook == 'true'
+        run: echo "MAKE_COM_PINTEREST_WEBHOOK is configured"
+
+      - name: RESULT-MAKE_WEBHOOK-NOT-SET
+        if: steps.check-secrets.outputs.make_webhook == 'false'
+        run: echo "MAKE_COM_PINTEREST_WEBHOOK is NOT configured"
+
+      - name: RESULT-CREATOMATE-IS-SET
+        if: steps.check-secrets.outputs.creatomate == 'true'
+        run: echo "CREATOMATE_API_KEY is configured"
+
+      - name: RESULT-CREATOMATE-NOT-SET
+        if: steps.check-secrets.outputs.creatomate == 'false'
+        run: echo "CREATOMATE_API_KEY is NOT configured"
+
+      - name: RESULT-GEMINI-IS-SET
+        if: steps.check-secrets.outputs.gemini == 'true'
+        run: echo "GEMINI_API_KEY is configured"
+
+      - name: RESULT-GEMINI-NOT-SET
+        if: steps.check-secrets.outputs.gemini == 'false'
+        run: echo "GEMINI_API_KEY is NOT configured"
+
+      - name: RESULT-PEXELS-IS-SET
+        if: steps.check-secrets.outputs.pexels == 'true'
+        run: echo "PEXELS_API_KEY is configured"
+
+      - name: RESULT-PEXELS-NOT-SET
+        if: steps.check-secrets.outputs.pexels == 'false'
+        run: echo "PEXELS_API_KEY is NOT configured"
+
+      - name: RESULT-PINTEREST-READY
+        if: steps.check-secrets.outputs.pinterest_ready == 'true'
+        run: echo "Pinterest posting is ready"
+
+      - name: RESULT-PINTEREST-NOT-READY
+        if: steps.check-secrets.outputs.pinterest_ready == 'false'
+        run: echo "Pinterest posting is NOT ready"
+
+      - name: RESULT-VIDEO-PIPELINE-READY
+        if: steps.check-secrets.outputs.video_ready == 'true'
+        run: echo "Full video pipeline is ready"
+
+      - name: RESULT-VIDEO-PIPELINE-NOT-READY
+        if: steps.check-secrets.outputs.video_ready == 'false'
+        run: echo "Full video pipeline is NOT ready"
+
+      - name: Write Summary
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+        run: |
+          echo "## Configuration Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          if [ -n "$GEMINI_API_KEY" ]; then echo "| GEMINI_API_KEY | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| GEMINI_API_KEY | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$PEXELS_API_KEY" ]; then echo "| PEXELS_API_KEY | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| PEXELS_API_KEY | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$CREATOMATE_API_KEY" ]; then echo "| CREATOMATE_API_KEY | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| CREATOMATE_API_KEY | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$SUPABASE_URL" ]; then echo "| SUPABASE_URL | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| SUPABASE_URL | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$SUPABASE_KEY" ]; then echo "| SUPABASE_KEY | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| SUPABASE_KEY | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$YOUTUBE_REFRESH_TOKEN" ]; then echo "| YOUTUBE_REFRESH_TOKEN | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| YOUTUBE_REFRESH_TOKEN | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$LATE_API_KEY" ]; then echo "| LATE_API_KEY | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| LATE_API_KEY | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+          if [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; then echo "| MAKE_COM_PINTEREST_WEBHOOK | Set |" >> $GITHUB_STEP_SUMMARY; else echo "| MAKE_COM_PINTEREST_WEBHOOK | **NOT SET** |" >> $GITHUB_STEP_SUMMARY; fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Pinterest Posting Requirements" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "**CREATOMATE_API_KEY is NOT SET** - Videos cannot be rendered, only placeholder URLs will be used" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -z "$LATE_API_KEY" ] && [ -z "$MAKE_COM_PINTEREST_WEBHOOK" ]; then
+            echo "**No Pinterest posting method configured** - Set LATE_API_KEY or MAKE_COM_PINTEREST_WEBHOOK" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -n "$CREATOMATE_API_KEY" ] && { [ -n "$LATE_API_KEY" ] || [ -n "$MAKE_COM_PINTEREST_WEBHOOK" ]; }; then
+            echo "Pipeline is ready for Pinterest posting" >> $GITHUB_STEP_SUMMARY
+          fi

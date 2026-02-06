@@ -2,8 +2,8 @@ name: Workflow Guardian
 
 on:
   schedule:
-    # Run every 30 minutes to catch failures quickly
-    - cron: '*/30 * * * *'
+    # Run every 6 hours (reduced from 30min — was overkill for $0 revenue system)
+    - cron: '0 */6 * * *'
   workflow_dispatch:
     inputs:
       action:

@@ -14,6 +14,12 @@ logger = logging.getLogger(__name__)
 
 # Brand email configurations
 BRAND_EMAIL_CONFIG = {
+    "fitnessmadeasy": {
+        "from_name": "FitOver35",
+        "from_email": "hello@fitover35.com",
+        "reply_to": "hello@fitover35.com",
+        "footer": "You're receiving this because you signed up for FitOver35 fitness tips. Unsubscribe anytime."
+    },
     "daily_deal_darling": {
         "from_name": "Daily Deal Darling",
         "from_email": "hello@dailydealdarling.com",

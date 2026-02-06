@@ -1,0 +1,104 @@
+name: Verify Affiliate Links
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  workflow_dispatch:
+    inputs:
+      force_check:
+        description: 'Force check all links'
+        type: boolean
+        default: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Extract ASINs from HTML
+        run: |
+          python automation/links/extract_asins.py \
+            --source index.html articles/ \
+            --output asins.json
+
+      - name: Verify ASINs
+        id: verify
+        env:
+          RAINFOREST_API_KEY: ${{ secrets.RAINFOREST_API_KEY }}
+        run: |
+          if [ -z "$RAINFOREST_API_KEY" ]; then
+            echo "RAINFOREST_API_KEY not set, running dry-run"
+            python automation/links/verify_asins.py \
+              --input asins.json \
+              --output verification_report.json \
+              --dry-run
+          else
+            python automation/links/verify_asins.py \
+              --input asins.json \
+              --output verification_report.json
+          fi
+        continue-on-error: true
+
+      - name: Check for failures
+        id: check
+        run: |
+          if [ -f verification_report.json ]; then
+            INVALID=$(python -c "import json; r=json.load(open('verification_report.json')); print(r['summary']['invalid'])")
+            ERRORS=$(python -c "import json; r=json.load(open('verification_report.json')); print(r['summary']['errors'])")
+            echo "invalid=$INVALID" >> $GITHUB_OUTPUT
+            echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+          else
+            echo "invalid=0" >> $GITHUB_OUTPUT
+            echo "errors=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub issue for broken links
+        if: steps.check.outputs.invalid > 0 || steps.check.outputs.errors > 0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f github_issue_body.md ]; then
+            gh issue create \
+              --title "🔗 Broken Affiliate Links Detected - $(date +%Y-%m-%d)" \
+              --body-file github_issue_body.md \
+              --label "bug,affiliate-links"
+          fi
+
+      - name: Upload verification report
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-verification-${{ github.run_number }}
+          path: |
+            asins.json
+            verification_report.json
+            github_issue_body.md
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## Link Verification Summary" >> $GITHUB_STEP_SUMMARY
+          if [ -f verification_report.json ]; then
+            python -c "
+          import json
+          r = json.load(open('verification_report.json'))
+          s = r['summary']
+          print(f'- **Total ASINs:** {s[\"total\"]}')
+          print(f'- **Valid:** {s[\"valid\"]} ✅')
+          print(f'- **Invalid:** {s[\"invalid\"]} ❌')
+          print(f'- **Errors:** {s[\"errors\"]} ⚠️')
+          " >> $GITHUB_STEP_SUMMARY
+          fi
