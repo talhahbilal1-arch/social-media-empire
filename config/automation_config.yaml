@@ -5,7 +5,7 @@
 # Amazon Product Data
 # ============================================
 amazon:
-  affiliate_tag: "dailydealdarling1-20"
+  affiliate_tag: "dailydealdarl-20"
   marketplace: "US"
 
   # API Configuration (Rainforest API)
