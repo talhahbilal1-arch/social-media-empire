@@ -71,8 +71,13 @@ jobs:
           from video_automation.article_generator import generate_articles_for_weekly_calendar, publish_article_to_website
 
           for brand in ['fitness', 'deals', 'menopause']:
-              result = db.client.table('weekly_calendar').select('calendar_data, trends_data') \
-                  .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
+              try:
+                  result = db.client.table('weekly_calendar').select('calendar_data, trends_data') \
+                      .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
+              except Exception as e:
+                  print(f'Cannot read weekly_calendar table for {brand}: {e}')
+                  print('Run database/weekly_calendar_schema.sql in Supabase first.')
+                  continue
 
               if not result.data:
                   print(f'No calendar for {brand}, skipping articles')
@@ -124,8 +129,12 @@ jobs:
           print('=' * 40)
 
           for brand in ['fitness', 'deals', 'menopause']:
-              result = db.client.table('weekly_calendar').select('trends_data') \
-                  .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
+              try:
+                  result = db.client.table('weekly_calendar').select('trends_data') \
+                      .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
+              except Exception as e:
+                  print(f'\n{brand.upper()}: Table not found (run weekly_calendar_schema.sql)')
+                  continue
 
               if result.data:
                   trends = result.data[0].get('trends_data')
