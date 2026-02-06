@@ -137,7 +137,10 @@ jobs:
                   # Step 4: Post via appropriate method
                   if brand == 'fitness':
                       # Post via Late API (POST /posts endpoint)
-                      late_key = os.environ.get('LATE_API_KEY_3') or os.environ.get('LATE_API_KEY')
+                      # Try LATE_API_KEY first (original key), fall back to LATE_API_KEY_3
+                      late_key = os.environ.get('LATE_API_KEY') or os.environ.get('LATE_API_KEY_3')
+                      late_key_source = 'LATE_API_KEY' if os.environ.get('LATE_API_KEY') else 'LATE_API_KEY_3'
+                      print(f'  Using API key: {late_key_source} ({late_key[:8]}...)')
                       account_id = os.environ.get('PINTEREST_FITNESS_ACCOUNT_ID', '')
                       board_id = os.environ.get('PINTEREST_FITNESS_BOARD_ID', '')
 
@@ -178,12 +181,28 @@ jobs:
                           'mediaItems': [{'type': 'image', 'url': pin_data['image_url']}],
                       }
 
+                      print(f'  Late API payload: {json.dumps(post_payload, indent=2)[:500]}')
                       post_resp = requests.post(
                           'https://getlate.dev/api/v1/posts',
                           headers={'Authorization': f'Bearer {late_key}', 'Content-Type': 'application/json'},
                           json=post_payload,
                           timeout=30
                       )
+                      if post_resp.status_code >= 400:
+                          print(f'  Late API error {post_resp.status_code}: {post_resp.text[:500]}')
+                          # If first key fails with 403, try the other key
+                          if post_resp.status_code == 403:
+                              alt_key = os.environ.get('LATE_API_KEY_3') if late_key_source == 'LATE_API_KEY' else os.environ.get('LATE_API_KEY')
+                              if alt_key and alt_key != late_key:
+                                  print(f'  Retrying with alternate key...')
+                                  post_resp = requests.post(
+                                      'https://getlate.dev/api/v1/posts',
+                                      headers={'Authorization': f'Bearer {alt_key}', 'Content-Type': 'application/json'},
+                                      json=post_payload,
+                                      timeout=30
+                                  )
+                                  if post_resp.status_code >= 400:
+                                      print(f'  Alternate key also failed {post_resp.status_code}: {post_resp.text[:500]}')
                       post_resp.raise_for_status()
                       post_result = post_resp.json()
                       post_obj = post_result.get('post', post_result)
