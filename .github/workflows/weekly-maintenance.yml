@@ -1,0 +1,181 @@
+name: Weekly Maintenance
+
+on:
+  schedule:
+    # Sunday 9 AM PST (5 PM UTC)
+    - cron: '0 17 * * 0'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        type: choice
+        options:
+          - full
+          - summary_only
+          - cleanup_only
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  weekly-summary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate weekly summary
+        id: summary
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+        run: |
+          python -c "
+          import json
+          import os
+          import sys
+          from datetime import datetime, timedelta
+
+          sys.path.insert(0, '.')
+          from database.supabase_client import get_supabase_client
+
+          db = get_supabase_client()
+          today = datetime.now()
+          week_ago = today - timedelta(days=7)
+
+          summary = {
+              'period': f'{week_ago.strftime(\"%b %d\")} - {today.strftime(\"%b %d, %Y\")}',
+              'generated_at': today.isoformat(),
+              'pins': {'total': 0, 'by_brand': {}},
+              'errors': {'total': 0, 'resolved': 0, 'unresolved': 0},
+              'email': {'total_subscribers': 0}
+          }
+
+          # Get pin stats from content_history
+          try:
+              pins = db.client.table('content_history').select('brand') \
+                  .gte('created_at', week_ago.isoformat()).execute()
+              pin_list = pins.data or []
+              summary['pins']['total'] = len(pin_list)
+              for p in pin_list:
+                  brand = p.get('brand', 'unknown')
+                  summary['pins']['by_brand'][brand] = summary['pins']['by_brand'].get(brand, 0) + 1
+          except Exception as e:
+              print(f'Error getting pin stats: {e}')
+
+          # Get error stats
+          try:
+              errors = db.client.table('errors').select('*') \
+                  .gte('created_at', week_ago.isoformat()).execute()
+              error_list = errors.data or []
+              summary['errors']['total'] = len(error_list)
+              summary['errors']['resolved'] = len([e for e in error_list if e.get('resolved')])
+              summary['errors']['unresolved'] = len([e for e in error_list if not e.get('resolved')])
+          except Exception as e:
+              print(f'Error getting error stats: {e}')
+
+          # Get ConvertKit subscriber count
+          try:
+              import requests
+              ck_key = os.environ.get('CONVERTKIT_API_KEY')
+              if ck_key:
+                  resp = requests.get(f'https://api.convertkit.com/v3/subscribers?api_key={ck_key}', timeout=10)
+                  if resp.status_code == 200:
+                      summary['email']['total_subscribers'] = resp.json().get('total_subscribers', 0)
+          except Exception as e:
+              print(f'Error getting subscriber count: {e}')
+
+          # Target check
+          target_pins = 49  # 7/day * 7 days
+          actual_pins = summary['pins']['total']
+          health = 'ON TRACK' if actual_pins >= target_pins * 0.8 else 'BELOW TARGET'
+
+          print(f'Weekly Summary: {summary[\"period\"]}')
+          print(f'  Pins posted: {actual_pins}/{target_pins} target ({health})')
+          for brand, count in summary['pins']['by_brand'].items():
+              print(f'    {brand}: {count}')
+          print(f'  Errors: {summary[\"errors\"][\"total\"]} ({summary[\"errors\"][\"unresolved\"]} unresolved)')
+          print(f'  Subscribers: {summary[\"email\"][\"total_subscribers\"]}')
+
+          with open('weekly_summary.json', 'w') as f:
+              json.dump(summary, f, indent=2)
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'pins_total={actual_pins}\n')
+              f.write(f'health={health}\n')
+          "
+
+      - name: Send weekly email
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          python -c "
+          import os
+          import json
+
+          resend_key = os.environ.get('RESEND_API_KEY', '')
+          alert_email = os.environ.get('ALERT_EMAIL', '')
+
+          if not resend_key or not alert_email:
+              print('Email not configured - skipping')
+              exit(0)
+
+          with open('weekly_summary.json', 'r') as f:
+              s = json.load(f)
+
+          import resend
+          resend.api_key = resend_key
+
+          pins = s.get('pins', {})
+          errors = s.get('errors', {})
+
+          brand_rows = ''
+          for brand, count in pins.get('by_brand', {}).items():
+              brand_rows += f'<tr><td style=\"padding:8px;border-bottom:1px solid #eee\">{brand}</td><td style=\"padding:8px;text-align:center\">{count}</td></tr>'
+
+          html = f'''
+          <div style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto\">
+            <h1>Weekly Summary</h1>
+            <p>{s.get('period', 'This Week')}</p>
+            <h2>Pins Posted: {pins.get('total', 0)}</h2>
+            <table style=\"width:100%;border-collapse:collapse\">{brand_rows}</table>
+            <h2>Errors</h2>
+            <p>Total: {errors.get('total',0)} | Resolved: {errors.get('resolved',0)} | Unresolved: {errors.get('unresolved',0)}</p>
+            <h2>Subscribers</h2>
+            <p>{s.get('email',{}).get('total_subscribers','N/A')}</p>
+          </div>
+          '''
+
+          try:
+              resend.Emails.send({
+                  'from': 'reports@socialmediaempire.com',
+                  'to': [alert_email],
+                  'subject': f'Weekly: {pins.get(\"total\",0)} pins posted | {errors.get(\"unresolved\",0)} issues',
+                  'html': html
+              })
+              print('Weekly email sent')
+          except Exception as e:
+              print(f'Failed to send: {e}')
+          "
+
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-summary-${{ github.run_number }}
+          path: weekly_summary.json
+          retention-days: 90
