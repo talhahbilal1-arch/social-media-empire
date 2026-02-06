@@ -136,27 +136,60 @@ jobs:
 
                   # Step 4: Post via appropriate method
                   if brand == 'fitness':
-                      # Post via Late API
+                      # Post via Late API (POST /posts endpoint)
                       late_key = os.environ.get('LATE_API_KEY_3') or os.environ.get('LATE_API_KEY')
                       account_id = os.environ.get('PINTEREST_FITNESS_ACCOUNT_ID', '')
                       board_id = os.environ.get('PINTEREST_FITNESS_BOARD_ID', '')
 
-                      post_resp = requests.post(
-                          'https://getlate.dev/api/v1/pins',
-                          headers={'Authorization': f'Bearer {late_key}'},
-                          json={
-                              'account_id': account_id,
-                              'board_id': board_id,
-                              'title': pin_data['title'],
-                              'description': pin_data['description'],
+                      # Auto-detect account ID if not set
+                      if not account_id:
+                          acct_resp = requests.get(
+                              'https://getlate.dev/api/v1/accounts',
+                              headers={'Authorization': f'Bearer {late_key}'},
+                              timeout=15
+                          )
+                          acct_resp.raise_for_status()
+                          accounts = acct_resp.json()
+                          if isinstance(accounts, dict):
+                              accounts = accounts.get('accounts', accounts.get('data', []))
+                          for acct in accounts:
+                              if acct.get('platform') == 'pinterest':
+                                  account_id = acct.get('_id') or acct.get('id')
+                                  break
+                          if not account_id:
+                              raise Exception('No Pinterest account found in Late API')
+                          print(f'  Auto-detected Pinterest account: {account_id}')
+
+                      # Build payload per Late API docs (POST /posts)
+                      content_text = f\"{pin_data['title']}\\n\\n{pin_data['description']}\"
+                      platform_data = {
+                          'platform': 'pinterest',
+                          'accountId': account_id,
+                          'platformSpecificData': {
                               'link': pin_data['destination_url'],
-                              'image_url': pin_data['image_url'],
-                          },
+                          }
+                      }
+                      if board_id:
+                          platform_data['platformSpecificData']['boardId'] = board_id
+
+                      post_payload = {
+                          'content': content_text,
+                          'platforms': [platform_data],
+                          'mediaItems': [{'type': 'image', 'url': pin_data['image_url']}],
+                      }
+
+                      post_resp = requests.post(
+                          'https://getlate.dev/api/v1/posts',
+                          headers={'Authorization': f'Bearer {late_key}', 'Content-Type': 'application/json'},
+                          json=post_payload,
                           timeout=30
                       )
                       post_resp.raise_for_status()
+                      post_result = post_resp.json()
+                      post_obj = post_result.get('post', post_result)
                       pin_data['posting_method'] = 'late_api'
-                      print(f'  Posted via Late API: {post_resp.status_code}')
+                      pin_data['late_post_id'] = post_obj.get('_id', '')
+                      print(f'  Posted via Late API: {post_resp.status_code} | Post ID: {post_obj.get(\"_id\", \"unknown\")}')
 
                   elif brand == 'deals':
                       # Post via Make.com Scenario 1 webhook
