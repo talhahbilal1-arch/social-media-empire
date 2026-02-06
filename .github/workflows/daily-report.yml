@@ -1,6 +1,7 @@
 name: Daily Report
 
 on:
+  # Daily report now only generates data for weekly summary - no daily emails
   schedule:
     # Run at 9 PM PST (5 AM UTC next day) to summarize the day
     - cron: '0 5 * * *'
@@ -11,10 +12,10 @@ on:
         required: false
         type: string
       send_email:
-        description: 'Send report via email'
+        description: 'Send report via email (disabled by default - use weekly summary)'
         required: false
         type: boolean
-        default: true
+        default: false
 
 env:
   PYTHON_VERSION: '3.11'
@@ -54,8 +55,8 @@ jobs:
             ARGS="--date ${{ github.event.inputs.date }}"
           fi
 
-          # Always send on schedule, or based on input for manual runs
-          if [ "${{ github.event_name }}" == "schedule" ] || [ "${{ github.event.inputs.send_email }}" == "true" ]; then
+          # Only send email if manually requested (weekly summary handles regular emails now)
+          if [ "${{ github.event.inputs.send_email }}" == "true" ]; then
             ARGS="$ARGS --send"
           fi
 

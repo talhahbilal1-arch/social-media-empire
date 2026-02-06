@@ -106,54 +106,5 @@ jobs:
             health_check.json
           retention-days: 7
 
-  notify-on-failure:
-    runs-on: ubuntu-latest
-    needs: generate-videos
-    if: failure()
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: pip install resend
-
-      - name: Send failure notification
-        env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
-        run: |
-          python -c "
-          import os
-          import sys
-
-          resend_key = os.environ.get('RESEND_API_KEY', '')
-          alert_email = os.environ.get('ALERT_EMAIL', '')
-
-          if not resend_key or not alert_email:
-              print('WARNING: Email alerting not configured (missing RESEND_API_KEY or ALERT_EMAIL)')
-              sys.exit(0)
-
-          import resend
-          resend.api_key = resend_key
-          try:
-              resend.Emails.send({
-                  'from': 'alerts@socialmediaempire.com',
-                  'to': [alert_email],
-                  'subject': '🚨 Evening Video Generation Failed',
-                  'html': '''
-                  <h1>Video Generation Failed</h1>
-                  <p>The evening (6 PM PST) video generation workflow has failed.</p>
-                  <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View workflow run</a></p>
-                  '''
-              })
-              print('Alert sent successfully')
-          except Exception as e:
-              print(f'WARNING: Failed to send alert email: {e}')
-              print('Check workflow logs manually')
-          "
+  # Email notifications disabled - self-healing handles failures
+  # Weekly summary includes video generation stats

@@ -107,69 +107,16 @@ jobs:
       healthy: ${{ steps.health.outputs.healthy }}
       total: ${{ steps.health.outputs.total }}
 
-  alert-on-unhealthy:
+  # Email alerts disabled - self-healing handles issues automatically
+  # Weekly summary will report on overall health
+  trigger-self-healing:
     runs-on: ubuntu-latest
     needs: health-check
-    if: always() && (needs.health-check.result == 'failure' || needs.health-check.outputs.status == 'unhealthy')
+    if: needs.health-check.outputs.status == 'unhealthy'
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: pip install resend
-
-      - name: Send alert
-        env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+      - name: Trigger self-healing
         run: |
-          python -c "
-          import os
-          import sys
-
-          resend_key = os.environ.get('RESEND_API_KEY', '')
-          alert_email = os.environ.get('ALERT_EMAIL', '')
-
-          # Check if email alerting is configured
-          if not resend_key:
-              print('WARNING: RESEND_API_KEY not configured - skipping email alert')
-              print('To enable email alerts, add RESEND_API_KEY to repository secrets')
-              sys.exit(0)
-
-          if not alert_email:
-              print('WARNING: ALERT_EMAIL not configured - skipping email alert')
-              print('To enable email alerts, add ALERT_EMAIL to repository secrets')
-              sys.exit(0)
-
-          # Send the alert
-          import resend
-          resend.api_key = resend_key
-
-          healthy = '${{ needs.health-check.outputs.healthy }}'
-          total = '${{ needs.health-check.outputs.total }}'
-
-          try:
-              resend.Emails.send({
-                  'from': 'alerts@socialmediaempire.com',
-                  'to': [alert_email],
-                  'subject': '🚨 System Health Alert - Services Unhealthy',
-                  'html': f'''
-                  <h1>System Health Alert</h1>
-                  <p>The system health check has detected issues.</p>
-                  <p><strong>Status:</strong> UNHEALTHY</p>
-                  <p><strong>Services:</strong> {healthy}/{total} healthy</p>
-                  <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View details</a></p>
-                  '''
-              })
-              print('Alert sent successfully')
-          except Exception as e:
-              print(f'WARNING: Failed to send email alert: {e}')
-              print('Check if RESEND_API_KEY is valid in GitHub Secrets')
-              sys.exit(0)  # Exit gracefully to not fail the workflow
-          "
+          echo "System unhealthy - self-healing will run on next scheduled interval"
+          echo "No email notification - issues are handled automatically"
+          echo "Check weekly summary for health trends"

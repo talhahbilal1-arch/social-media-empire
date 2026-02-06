@@ -1,19 +1,22 @@
-name: Error Alerts
+name: Error Monitoring
 
 on:
   schedule:
-    # Check for errors every hour
-    - cron: '0 * * * *'
+    # Check for errors every 4 hours (reduced from hourly)
+    - cron: '0 */4 * * *'
   workflow_dispatch:
     inputs:
       send_digest:
-        description: 'Send error digest email'
+        description: 'Send error digest email (manual only)'
         required: false
         type: boolean
         default: false
 
 env:
   PYTHON_VERSION: '3.11'
+
+# Note: Email notifications disabled - errors are handled by self-healing
+# Weekly summary will include error statistics
 
 jobs:
   check-errors:
@@ -35,7 +38,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Check for critical errors
+      - name: Check for errors
         id: errors
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -43,11 +46,13 @@ jobs:
         run: |
           python -c "
           import json
+          import os
           from monitoring.error_reporter import ErrorReporter
 
           reporter = ErrorReporter()
           summary = reporter.get_error_summary()
 
+          print('Error Summary:')
           print(json.dumps(summary, indent=2))
 
           # Output for workflow
@@ -55,21 +60,24 @@ jobs:
           high = summary.get('by_severity', {}).get('high', 0)
           total = summary.get('total_unresolved', 0)
 
-          # Write outputs to GITHUB_OUTPUT file
-          import os
+          # Write outputs
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f'critical={critical}\n')
               f.write(f'high={high}\n')
               f.write(f'total={total}\n')
 
-          # Fail if critical errors exist
+          # Log status (no email, just logging)
           if critical > 0:
-              print('::error::Critical errors detected!')
-              exit(1)
+              print(f'::warning::Found {critical} critical errors - self-healing will address')
+          if high > 0:
+              print(f'::notice::Found {high} high-priority errors')
+          if total > 0:
+              print(f'Total unresolved errors: {total}')
+          else:
+              print('No unresolved errors!')
           "
-        continue-on-error: true
 
-      - name: Send digest if requested
+      - name: Send digest if manually requested
         if: github.event.inputs.send_digest == 'true'
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -77,66 +85,15 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
         run: |
-          python -m monitoring.error_reporter --digest
+          python -m monitoring.error_reporter --digest || echo "Digest sending skipped or failed"
 
-      - name: Alert on critical errors
-        if: steps.errors.outcome == 'failure'
-        env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+      - name: Create summary
         run: |
-          pip install resend
-          python -c "
-          import resend
-          import os
-
-          resend.api_key = os.environ.get('RESEND_API_KEY', '')
-
-          try:
-              resend.Emails.send({
-                  'from': 'alerts@socialmediaempire.com',
-                  'to': [os.environ.get('ALERT_EMAIL', '')],
-                  'subject': '🚨 CRITICAL: Unresolved Critical Errors Detected',
-                  'html': '''
-                  <h1>Critical Errors Detected</h1>
-                  <p>There are critical errors that require immediate attention.</p>
-                  <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View error details</a></p>
-                  <p>Please check the Supabase errors table for full context.</p>
-                  '''
-              })
-              print('Alert email sent successfully')
-          except Exception as e:
-              print(f'WARNING: Failed to send alert email: {e}')
-              print('Check if RESEND_API_KEY is valid')
-              print('Critical errors were detected - check GitHub Actions logs manually')
-          "
-
-  daily-digest:
-    runs-on: ubuntu-latest
-    # Run at 8 AM PST daily
-    if: github.event_name == 'schedule' && github.event.schedule == '0 16 * * *'
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Send daily error digest
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
-        run: |
-          python -m monitoring.error_reporter --digest
+          echo "## Error Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Critical Errors: ${{ steps.errors.outputs.critical }}" >> $GITHUB_STEP_SUMMARY
+          echo "- High Priority: ${{ steps.errors.outputs.high }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Total Unresolved: ${{ steps.errors.outputs.total }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Self-healing runs every 4 hours to automatically fix issues._" >> $GITHUB_STEP_SUMMARY
+          echo "_Weekly summary email includes error trends._" >> $GITHUB_STEP_SUMMARY

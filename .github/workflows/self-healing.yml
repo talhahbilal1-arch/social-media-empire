@@ -386,6 +386,50 @@ jobs:
     timeout-minutes: 5
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Log healing activity to database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -c "
+          from database.supabase_client import get_supabase_client
+
+          try:
+              db = get_supabase_client()
+              db.log_analytics_event(
+                  event_type='self_healing',
+                  brand='system',
+                  platform='all',
+                  data={
+                      'video_retry_needed': '${{ needs.diagnose.outputs.needs_video_retry }}' == 'true',
+                      'token_refresh_needed': '${{ needs.diagnose.outputs.needs_token_refresh }}' == 'true',
+                      'cleanup_needed': '${{ needs.diagnose.outputs.needs_cleanup }}' == 'true',
+                      'retry_result': '${{ needs.retry-failed-videos.result || \"skipped\" }}',
+                      'cleanup_result': '${{ needs.cleanup-old-data.result || \"skipped\" }}',
+                      'credentials_result': '${{ needs.check-credentials.result || \"skipped\" }}',
+                      'videos_retried': 1 if '${{ needs.diagnose.outputs.needs_video_retry }}' == 'true' else 0,
+                      'issues_fixed': sum([
+                          1 if '${{ needs.retry-failed-videos.result }}' == 'success' else 0,
+                          1 if '${{ needs.cleanup-old-data.result }}' == 'success' else 0
+                      ])
+                  }
+              )
+              print('Self-healing activity logged to database')
+          except Exception as e:
+              print(f'Failed to log healing activity: {e}')
+          "
+
       - name: Create healing summary
         run: |
           echo "## Self-Healing Summary" >> $GITHUB_STEP_SUMMARY
@@ -399,3 +443,5 @@ jobs:
           echo "- Retry Videos: ${{ needs.retry-failed-videos.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
           echo "- Cleanup: ${{ needs.cleanup-old-data.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
           echo "- Check Credentials: ${{ needs.check-credentials.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_No email notifications - activity logged for weekly summary._" >> $GITHUB_STEP_SUMMARY
