@@ -549,7 +549,7 @@ def build_weekly_calendar(weekly_trends, brand_key, supabase_client):
 
     response = client.messages.create(
         model="claude-sonnet-4-5-20250929",
-        max_tokens=3000,
+        max_tokens=6000,
         messages=[{
             "role": "user",
             "content": f"""Create a detailed 7-day Pinterest content calendar for the {brand_key} brand.
@@ -607,15 +607,19 @@ Return ONLY this JSON:
         calendar = json.loads(content)
 
         # Store the calendar in Supabase
-        supabase_client.table('weekly_calendar').insert({
-            'brand': brand_key,
-            'week_starting': calendar.get('week_starting', week_start_str),
-            'calendar_data': json.dumps(calendar),
-            'trends_data': json.dumps(weekly_trends),
-            'created_at': datetime.utcnow().isoformat()
-        }).execute()
+        try:
+            supabase_client.table('weekly_calendar').insert({
+                'brand': brand_key,
+                'week_starting': calendar.get('week_starting', week_start_str),
+                'calendar_data': json.dumps(calendar),
+                'trends_data': json.dumps(weekly_trends),
+                'created_at': datetime.utcnow().isoformat()
+            }).execute()
+            print(f"Weekly calendar for {brand_key} saved to Supabase")
+        except Exception as e:
+            logger.error(f"Failed to save calendar to Supabase (table may not exist): {e}")
+            print(f"WARNING: Calendar generated but not saved to Supabase. Run weekly_calendar_schema.sql first.")
 
-        print(f"Weekly calendar for {brand_key} saved to Supabase")
         return calendar
 
     except (json.JSONDecodeError, KeyError) as e:
@@ -684,7 +688,12 @@ def run_weekly_discovery(supabase_client):
 
         # Step 3: Build the weekly calendar
         print("\n--- Building weekly content calendar ---")
-        calendar = build_weekly_calendar(trends, brand_key, supabase_client)
+        try:
+            calendar = build_weekly_calendar(trends, brand_key, supabase_client)
+        except Exception as e:
+            logger.error(f"Calendar build failed for {brand_key}: {e}")
+            print(f"ERROR building calendar for {brand_key}: {e}")
+            calendar = None
 
         results[brand_key] = {
             'trends': trends,
