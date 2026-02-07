@@ -74,6 +74,9 @@ jobs:
           git diff --staged --quiet || git commit -m "content: auto-generated $(date +%Y-%m-%d)"
           git push
 
+      - name: Ping search engines
+        run: node scripts/ping-google.js
+
       - name: Summary
         run: |
           TOOLS=$(cat content/tools.json | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).length))")
@@ -82,3 +85,4 @@ jobs:
           echo "- Total tools: $TOOLS" >> $GITHUB_STEP_SUMMARY
           echo "- Total comparisons: $COMPS" >> $GITHUB_STEP_SUMMARY
           echo "- Deployed to: https://toolpilot-hub.netlify.app" >> $GITHUB_STEP_SUMMARY
+          echo "- Search engines pinged for re-crawl" >> $GITHUB_STEP_SUMMARY

@@ -1,9 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import googleConfig from '../config/google.json'
 
 const SITE_NAME = 'ToolPilot'
 const SITE_TAGLINE = 'Find the Perfect AI Tool'
 const SITE_URL = 'https://toolpilot-hub.netlify.app'
+
+// Google config — auto-activates when real values are pasted into config/google.json
+const GSC_TAG = googleConfig.search_console.verification_tag
+const GA4_ID = googleConfig.analytics.ga4_measurement_id
+const hasGSC = GSC_TAG && !GSC_TAG.startsWith('PASTE')
+const hasGA4 = GA4_ID && !GA4_ID.startsWith('PASTE')
 
 export default function Layout({ children, title, description, canonical, ogType, structuredData }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - ${SITE_TAGLINE}`
@@ -18,6 +25,7 @@ export default function Layout({ children, title, description, canonical, ogType
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href={canonicalUrl} />
+        {hasGSC && <meta name="google-site-verification" content={GSC_TAG} />}
         <meta property="og:title" content={fullTitle} />
         <meta property="og:description" content={metaDesc} />
         <meta property="og:type" content={ogType || 'website'} />
@@ -29,6 +37,12 @@ export default function Layout({ children, title, description, canonical, ogType
         <meta name="twitter:description" content={metaDesc} />
         <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
         <meta name="robots" content="index, follow" />
+        {hasGA4 && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`} />
+            <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_ID}');` }} />
+          </>
+        )}
       </Head>
       {structuredData && (
         <script
