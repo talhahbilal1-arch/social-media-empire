@@ -1,0 +1,150 @@
+{
+  "last_updated": "2026-02-06",
+  "site_url": "https://toolpilot-hub.netlify.app",
+  "netlify_site_id": "616e7bf4-fe47-495b-b13e-934e51546d4c",
+  "account_email": "talhahbilal1@gmail.com",
+  "programs": {
+    "writesonic": {
+      "status": "pending_approval",
+      "signup_date": "2026-02-06",
+      "platform": "Writesonic Direct (affiliates.writesonic.com)",
+      "affiliate_url": null,
+      "commission": "30% recurring",
+      "dashboard_url": "https://affiliates.writesonic.com/home",
+      "notes": "Signup completed. Application pending review. Will receive email when approved. Login: talhahbilal1@gmail.com / ToolPilot2026!Aff"
+    },
+    "jasper": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "30% recurring",
+      "signup_page": "https://www.jasper.ai/partners",
+      "notes": "High priority. Check /partners or /affiliates page."
+    },
+    "copy-ai": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "30% recurring (first year)",
+      "signup_page": "https://www.copy.ai/affiliates",
+      "notes": "High priority. Likely uses PartnerStack."
+    },
+    "scalenut": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "20-30% recurring",
+      "signup_page": "https://www.scalenut.com/affiliate-program",
+      "notes": "Medium priority."
+    },
+    "elevenlabs": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "~20% recurring",
+      "signup_page": "https://elevenlabs.io/affiliates",
+      "notes": "High priority. Fast-growing AI audio."
+    },
+    "canva": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "Up to $36/new Pro sub",
+      "signup_page": "https://www.canva.com/affiliates/",
+      "notes": "Medium priority. One-time bounty via Impact.com."
+    },
+    "grammarly": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "$25/free signup",
+      "signup_page": "https://www.grammarly.com/affiliates",
+      "notes": "Medium priority. High conversion. Via ShareASale or Impact."
+    },
+    "synthesia": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "20-25% recurring",
+      "signup_page": "https://www.synthesia.io/affiliates",
+      "notes": "Low priority."
+    },
+    "descript": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "15-20% recurring",
+      "signup_page": "https://www.descript.com/affiliates",
+      "notes": "Low priority."
+    },
+    "chatgpt": {
+      "status": "no_program",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": null,
+      "notes": "OpenAI does not currently offer a public affiliate program. Link goes direct to chat.openai.com."
+    },
+    "claude": {
+      "status": "no_program",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": null,
+      "notes": "Anthropic does not currently offer a public affiliate program. Link goes direct to claude.ai."
+    },
+    "midjourney": {
+      "status": "no_program",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": null,
+      "notes": "Midjourney does not currently offer a public affiliate program."
+    },
+    "cursor": {
+      "status": "no_program",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": null,
+      "notes": "Cursor does not currently offer a public affiliate program."
+    },
+    "notion-ai": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "Unknown",
+      "signup_page": "https://www.notion.so/affiliates",
+      "notes": "Low priority. Check if Notion has an affiliate program."
+    },
+    "perplexity": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "Unknown",
+      "signup_page": null,
+      "notes": "Low priority. Check if Perplexity has an affiliate program."
+    },
+    "runway": {
+      "status": "not_started",
+      "signup_date": null,
+      "platform": null,
+      "affiliate_url": null,
+      "commission": "Unknown",
+      "signup_page": null,
+      "notes": "Low priority. Check if Runway has an affiliate program."
+    }
+  },
+  "tools_json_update_needed": true,
+  "instructions": "After getting approved affiliate URLs, update content/tools.json affiliate_url fields, rebuild with 'npm run build', commit and push to revenue-site branch."
+}
