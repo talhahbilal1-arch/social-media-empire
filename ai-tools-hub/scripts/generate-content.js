@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 /**
- * Content Generation Script
- * Uses Claude API to generate additional AI tool reviews and comparisons.
- * Run: ANTHROPIC_API_KEY=xxx node scripts/generate-content.js
+ * ToolPilot Content Generation Script
+ * Reads from content-calendar.json, picks the next pending item,
+ * generates content via Claude API, and writes to the appropriate data file.
+ *
+ * Usage:
+ *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js
+ *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js --type comparison
+ *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js --type review --count 3
+ *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js --topic "github-copilot"
  */
 
 const fs = require('fs')
@@ -12,25 +18,26 @@ const https = require('https')
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const TOOLS_FILE = path.join(__dirname, '..', 'content', 'tools.json')
 const COMPARISONS_FILE = path.join(__dirname, '..', 'content', 'comparisons.json')
+const CALENDAR_FILE = path.join(__dirname, '..', 'config', 'content-calendar.json')
 
-const ADDITIONAL_TOOLS = [
-  { name: 'GitHub Copilot', slug: 'github-copilot', category: 'coding' },
-  { name: 'Surfer SEO', slug: 'surfer-seo', category: 'seo' },
-  { name: 'Otter.ai', slug: 'otter-ai', category: 'productivity' },
-  { name: 'Stable Diffusion', slug: 'stable-diffusion', category: 'image' },
-  { name: 'Luma AI', slug: 'luma-ai', category: 'video' },
-  { name: 'Murf AI', slug: 'murf-ai', category: 'audio' },
-  { name: 'Pictory', slug: 'pictory', category: 'video' },
-  { name: 'Tome', slug: 'tome', category: 'productivity' },
-  { name: 'Beautiful.ai', slug: 'beautiful-ai', category: 'design' },
-  { name: 'Kling AI', slug: 'kling-ai', category: 'video' },
-]
+// Parse CLI args
+const args = process.argv.slice(2)
+function getArg(name) {
+  const idx = args.indexOf(`--${name}`)
+  return idx !== -1 && args[idx + 1] ? args[idx + 1] : null
+}
 
-async function callClaude(prompt) {
+const requestedType = getArg('type') || 'auto'
+const requestedTopic = getArg('topic') || ''
+const maxCount = parseInt(getArg('count') || '1', 10)
+
+// ---------- Claude API ----------
+
+async function callClaude(prompt, maxTokens = 3000) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify({
       model: 'claude-sonnet-4-5-20250929',
-      max_tokens: 2000,
+      max_tokens: maxTokens,
       messages: [{ role: 'user', content: prompt }]
     })
 
@@ -55,10 +62,10 @@ async function callClaude(prompt) {
           if (parsed.content && parsed.content[0]) {
             resolve(parsed.content[0].text)
           } else {
-            reject(new Error(`Unexpected response: ${body.substring(0, 200)}`))
+            reject(new Error(`Unexpected API response: ${body.substring(0, 300)}`))
           }
         } catch (e) {
-          reject(e)
+          reject(new Error(`Failed to parse API response: ${e.message}`))
         }
       })
     })
@@ -69,88 +76,243 @@ async function callClaude(prompt) {
   })
 }
 
-async function generateToolReview(toolName, category) {
+function extractJson(text) {
+  // Try to extract JSON object or array from Claude's response
+  const objMatch = text.match(/\{[\s\S]*\}/)
+  if (objMatch) return JSON.parse(objMatch[0])
+  const arrMatch = text.match(/\[[\s\S]*\]/)
+  if (arrMatch) return JSON.parse(arrMatch[0])
+  throw new Error('Could not extract JSON from response')
+}
+
+// ---------- Review Generation ----------
+
+async function generateReview(toolName, category) {
   const slug = toolName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')
 
   const prompt = `Generate a JSON object for an AI tool review of "${toolName}" in the "${category}" category.
+
+IMPORTANT RULES:
+- Use REAL, ACCURATE information about ${toolName}
+- Pricing should reflect actual current rates
+- Be HONEST in pros and cons — credibility matters
+- Every field must have substantive, specific content (no generic filler)
+- The description should explain what makes this tool notable, not just what it does
+
 Return ONLY valid JSON (no markdown, no explanation) matching this exact structure:
 {
   "slug": "${slug}",
   "name": "${toolName}",
-  "tagline": "short tagline under 80 chars",
-  "description": "2-3 sentence description of what the tool does and why it's notable",
+  "tagline": "short tagline under 80 chars — be specific, not generic",
+  "description": "2-3 sentences. What the tool does, who it's for, and what makes it stand out.",
   "category": "${category}",
-  "categories": ["${category}", "other relevant categories from: writing, coding, image, video, marketing, productivity, audio, seo, research, design"],
+  "categories": ["${category}", "add 1-2 other relevant categories from: writing, coding, image, video, marketing, productivity, audio, seo, research, design"],
   "pricing": {
-    "free_tier": true/false,
-    "starting_price": number or null,
+    "free_tier": true or false,
+    "starting_price": number or null (for custom pricing),
     "currency": "USD",
     "billing": "monthly",
-    "plans": [{"name": "Plan Name", "price": number/null, "features": ["feature1", "feature2"]}]
+    "plans": [
+      {"name": "Plan Name", "price": number or null, "features": ["3-4 specific features"]}
+    ]
   },
-  "rating": number between 4.0 and 5.0,
-  "review_count": realistic number,
-  "affiliate_url": "https://website.com",
-  "website": "https://website.com",
-  "features": ["feature1", "feature2", "feature3", "feature4", "feature5", "feature6"],
-  "pros": ["pro1", "pro2", "pro3", "pro4"],
-  "cons": ["con1", "con2", "con3"],
-  "best_for": ["use case 1", "use case 2", "use case 3"],
+  "rating": number between 4.0 and 4.9 (realistic, not everything is 4.8+),
+  "review_count": realistic number based on the tool's actual popularity,
+  "affiliate_url": "https://actual-website-url.com",
+  "website": "https://actual-website-url.com",
+  "features": ["6-8 specific features of this tool"],
+  "pros": ["4-5 honest pros"],
+  "cons": ["3-4 honest cons — every tool has real weaknesses"],
+  "best_for": ["3-4 specific use cases"],
   "logo": "/logos/${slug}.svg",
-  "founded": year number,
-  "company": "Company Name"
+  "founded": year (real founding year),
+  "company": "Actual Company Name"
+}`
+
+  console.log(`  Calling Claude API for ${toolName} review...`)
+  const response = await callClaude(prompt)
+  return extractJson(response)
 }
 
-Use real, accurate information about ${toolName}. Pricing should reflect current 2026 rates.`
+// ---------- Comparison Generation ----------
 
-  const response = await callClaude(prompt)
+async function generateComparison(tool1Name, tool2Name, tool1Data, tool2Data) {
+  const slug = `${tool1Name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-vs-${tool2Name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`.replace(/-+/g, '-')
 
-  // Extract JSON from response
-  const jsonMatch = response.match(/\{[\s\S]*\}/)
-  if (!jsonMatch) {
-    throw new Error(`Could not extract JSON for ${toolName}`)
+  // Build context from existing tool data if available
+  let context = ''
+  if (tool1Data) {
+    context += `\n${tool1Name} data: Rating ${tool1Data.rating}/5, ${tool1Data.pricing.free_tier ? 'has free tier' : 'no free tier'}, starting at $${tool1Data.pricing.starting_price || 'custom'}/mo. Features: ${tool1Data.features.slice(0, 4).join(', ')}.`
+  }
+  if (tool2Data) {
+    context += `\n${tool2Name} data: Rating ${tool2Data.rating}/5, ${tool2Data.pricing.free_tier ? 'has free tier' : 'no free tier'}, starting at $${tool2Data.pricing.starting_price || 'custom'}/mo. Features: ${tool2Data.features.slice(0, 4).join(', ')}.`
   }
 
-  return JSON.parse(jsonMatch[0])
+  const prompt = `Generate a JSON comparison of "${tool1Name}" vs "${tool2Name}" for an AI tools review site.
+${context}
+
+IMPORTANT RULES:
+- Be HONEST and balanced — don't always pick the more popular tool
+- Each comparison point needs specific, insightful notes (not vague statements)
+- The verdict should help someone make a real decision
+- Use "tie" when tools are genuinely equal on a feature
+
+Return ONLY valid JSON matching this structure:
+{
+  "slug": "${slug}",
+  "title": "${tool1Name} vs ${tool2Name}: Which Is Better in 2026?",
+  "meta_description": "150-160 char description comparing ${tool1Name} and ${tool2Name}. Include primary keyword and value prop.",
+  "tools": ["${tool1Data ? tool1Data.slug : tool1Name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}", "${tool2Data ? tool2Data.slug : tool2Name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}"],
+  "category": "the most relevant category",
+  "keywords": ["${tool1Name.toLowerCase()} vs ${tool2Name.toLowerCase()}", "2-3 more relevant search terms"],
+  "verdict": "2-3 sentences. Clear recommendation: who should pick which tool and why. Be specific.",
+  "comparison_points": [
+    {
+      "feature": "Feature Name (e.g., Writing Quality, Ease of Use, Pricing, etc.)",
+      "tool1_score": number 3.0-5.0,
+      "tool2_score": number 3.0-5.0,
+      "winner": "tool1_slug" or "tool2_slug" or "tie",
+      "notes": "Specific explanation of why one wins. Reference actual features."
+    }
+  ]
 }
+
+Include 6-8 comparison points covering: core quality, ease of use, features, pricing, integrations, support, and 1-2 category-specific aspects. Use the actual tool slugs for the winner field.`
+
+  console.log(`  Calling Claude API for ${tool1Name} vs ${tool2Name}...`)
+  const response = await callClaude(prompt, 4000)
+  return extractJson(response)
+}
+
+// ---------- Calendar Logic ----------
+
+function getNextItem(calendar, type) {
+  const pending = calendar.items
+    .filter(item => item.status === 'pending')
+    .filter(item => type === 'auto' || item.type === type)
+    .sort((a, b) => {
+      // Sort by priority (high > medium > low), then by id
+      const priorityOrder = { high: 0, medium: 1, low: 2 }
+      const pDiff = (priorityOrder[a.priority] || 2) - (priorityOrder[b.priority] || 2)
+      return pDiff !== 0 ? pDiff : a.id - b.id
+    })
+
+  if (requestedTopic) {
+    return pending.find(item => item.slug === requestedTopic) || null
+  }
+
+  return pending[0] || null
+}
+
+function markPublished(calendar, itemId) {
+  const item = calendar.items.find(i => i.id === itemId)
+  if (item) {
+    item.status = 'published'
+    item.published_date = new Date().toISOString().split('T')[0]
+  }
+  calendar.last_updated = new Date().toISOString().split('T')[0]
+  fs.writeFileSync(CALENDAR_FILE, JSON.stringify(calendar, null, 2))
+}
+
+// ---------- Main ----------
 
 async function main() {
   if (!ANTHROPIC_API_KEY) {
-    console.error('ANTHROPIC_API_KEY is required')
+    console.error('Error: ANTHROPIC_API_KEY environment variable is required')
     process.exit(1)
   }
 
+  const calendar = JSON.parse(fs.readFileSync(CALENDAR_FILE, 'utf8'))
   const existingTools = JSON.parse(fs.readFileSync(TOOLS_FILE, 'utf8'))
-  const existingSlugs = new Set(existingTools.map(t => t.slug))
+  const existingComparisons = JSON.parse(fs.readFileSync(COMPARISONS_FILE, 'utf8'))
+  const toolSlugs = new Set(existingTools.map(t => t.slug))
+  const compSlugs = new Set(existingComparisons.map(c => c.slug))
 
-  const newTools = ADDITIONAL_TOOLS.filter(t => !existingSlugs.has(t.slug))
+  let generated = 0
 
-  if (newTools.length === 0) {
-    console.log('All tools already exist. Nothing to generate.')
-    return
-  }
+  for (let i = 0; i < maxCount; i++) {
+    const item = getNextItem(calendar, requestedType)
 
-  console.log(`Generating ${newTools.length} new tool reviews...`)
+    if (!item) {
+      console.log('No more pending items in the calendar.')
+      break
+    }
 
-  for (const tool of newTools) {
+    console.log(`\n[${i + 1}/${maxCount}] Generating: ${item.type} — ${item.slug} (priority: ${item.priority})`)
+
     try {
-      console.log(`  Generating review for ${tool.name}...`)
-      const review = await generateToolReview(tool.name, tool.category)
-      existingTools.push(review)
-      console.log(`  Done: ${tool.name} (${review.rating}/5)`)
+      if (item.type === 'review') {
+        if (toolSlugs.has(item.slug)) {
+          console.log(`  Skipping — ${item.slug} already exists in tools.json`)
+          markPublished(calendar, item.id)
+          continue
+        }
 
-      // Write after each tool to preserve progress
-      fs.writeFileSync(TOOLS_FILE, JSON.stringify(existingTools, null, 2))
+        const review = await generateReview(item.tool_name, item.category)
+        existingTools.push(review)
+        fs.writeFileSync(TOOLS_FILE, JSON.stringify(existingTools, null, 2))
+        toolSlugs.add(item.slug)
+        console.log(`  Done: ${review.name} (${review.rating}/5)`)
 
-      // Rate limit: wait 2 seconds between API calls
-      await new Promise(r => setTimeout(r, 2000))
+      } else if (item.type === 'comparison') {
+        if (compSlugs.has(item.slug)) {
+          console.log(`  Skipping — ${item.slug} already exists in comparisons.json`)
+          markPublished(calendar, item.id)
+          continue
+        }
+
+        // Resolve tool names
+        const toolNames = item.tool_names || item.tools.map(slug => {
+          const t = existingTools.find(t => t.slug === slug)
+          return t ? t.name : slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+        })
+        const tool1Data = existingTools.find(t => t.slug === item.tools[0]) || null
+        const tool2Data = existingTools.find(t => t.slug === (item.tools[1] || '')) || null
+
+        const comparison = await generateComparison(toolNames[0], toolNames[1], tool1Data, tool2Data)
+        existingComparisons.push(comparison)
+        fs.writeFileSync(COMPARISONS_FILE, JSON.stringify(existingComparisons, null, 2))
+        compSlugs.add(item.slug)
+        console.log(`  Done: ${comparison.title}`)
+
+      } else if (item.type === 'listicle') {
+        // Listicles are logged as TODO — they need a page template
+        console.log(`  Skipping listicle "${item.slug}" — listicle page template not yet implemented`)
+        // Don't mark as published
+        continue
+      }
+
+      markPublished(calendar, item.id)
+      generated++
+
+      // Rate limit between API calls
+      if (i < maxCount - 1) {
+        console.log('  Waiting 3s (rate limit)...')
+        await new Promise(r => setTimeout(r, 3000))
+      }
+
     } catch (err) {
-      console.error(`  Error generating ${tool.name}: ${err.message}`)
+      console.error(`  Error generating ${item.slug}: ${err.message}`)
     }
   }
 
-  console.log(`\nTotal tools: ${existingTools.length}`)
-  console.log('Content generation complete!')
+  // Regenerate sitemap if content was added
+  if (generated > 0) {
+    console.log('\nRegenerating sitemap...')
+    require('./generate-sitemap.js')
+    console.log('\nRegenerating Pinterest pins...')
+    require('./generate-pins.js')
+  }
+
+  console.log(`\n=== Summary ===`)
+  console.log(`Generated: ${generated} items`)
+  console.log(`Total tools: ${existingTools.length}`)
+  console.log(`Total comparisons: ${existingComparisons.length}`)
+  const remaining = calendar.items.filter(i => i.status === 'pending').length
+  console.log(`Calendar items remaining: ${remaining}`)
 }
 
-main().catch(console.error)
+main().catch(err => {
+  console.error('Fatal error:', err.message)
+  process.exit(1)
+})

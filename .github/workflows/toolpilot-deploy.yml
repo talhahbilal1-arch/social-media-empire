@@ -2,7 +2,7 @@ name: ToolPilot Deploy
 
 on:
   push:
-    branches: [revenue-site]
+    branches: [main, revenue-site]
     paths:
       - 'ai-tools-hub/**'
   workflow_dispatch:
