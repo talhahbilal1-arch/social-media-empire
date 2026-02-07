@@ -1,0 +1,398 @@
+{
+  "name": "TikTok Analytics & Cross-Post Monitor",
+  "description": "Weekly: fetch TikTok analytics, update Supabase, optimize prompts, cross-post top performers to YT/Pinterest",
+  "flow": [
+    {
+      "id": 1,
+      "module": "builtin:BasicScheduler",
+      "version": 1,
+      "parameters": {
+        "time": {
+          "type": "custom",
+          "timezone": "America/Los_Angeles",
+          "days": ["monday", "thursday"],
+          "times": [{"hour": 9, "minute": 0}]
+        }
+      },
+      "metadata": {
+        "designer": {"x": 0, "y": 0},
+        "note": "Run twice weekly for analytics updates"
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {"handleErrors": true},
+      "mapper": {
+        "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?status=eq.posted&posted_at=gte.{{formatDate(addDays(now; -7); \"YYYY-MM-DD\")}}",
+        "method": "GET",
+        "headers": [
+          {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+          {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"}
+        ],
+        "parseResponse": true
+      },
+      "metadata": {
+        "designer": {"x": 220, "y": 0},
+        "note": "Get posts from last 7 days"
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicIterator",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "array": "{{2.data}}"
+      },
+      "metadata": {
+        "designer": {"x": 440, "y": 0}
+      }
+    },
+    {
+      "id": 4,
+      "module": "tiktok:GetVideoInfo",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "connection": "{{connection.tiktok}}",
+        "video_ids": ["{{3.tiktok_post_id}}"],
+        "fields": ["id", "create_time", "cover_image_url", "share_url", "video_description", "duration", "height", "width", "title", "embed_html", "embed_link", "like_count", "comment_count", "share_count", "view_count"]
+      },
+      "metadata": {
+        "designer": {"x": 660, "y": 0},
+        "note": "TikTok API: Get video analytics"
+      }
+    },
+    {
+      "id": 5,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {"handleErrors": true},
+      "mapper": {
+        "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{3.id}}",
+        "method": "PATCH",
+        "headers": [
+          {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+          {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "body": "{\n  \"views\": {{4.data.videos[0].view_count}},\n  \"likes\": {{4.data.videos[0].like_count}},\n  \"comments\": {{4.data.videos[0].comment_count}},\n  \"shares\": {{4.data.videos[0].share_count}},\n  \"estimated_earnings\": {{round(multiply(divide(4.data.videos[0].view_count; 1000); 0.25); 2)}}\n}"
+      },
+      "metadata": {
+        "designer": {"x": 880, "y": 0},
+        "note": "Update queue with latest metrics"
+      }
+    },
+    {
+      "id": 6,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {"handleErrors": false},
+      "mapper": {
+        "url": "{{connection.supabase_url}}/rest/v1/tiktok_analytics",
+        "method": "POST",
+        "headers": [
+          {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+          {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "body": "{\n  \"tiktok_queue_id\": \"{{3.id}}\",\n  \"tiktok_post_id\": \"{{3.tiktok_post_id}}\",\n  \"views\": {{4.data.videos[0].view_count}},\n  \"likes\": {{4.data.videos[0].like_count}},\n  \"comments\": {{4.data.videos[0].comment_count}},\n  \"shares\": {{4.data.videos[0].share_count}},\n  \"engagement_rate\": {{if(4.data.videos[0].view_count > 0; round(multiply(divide(add(add(4.data.videos[0].like_count; 4.data.videos[0].comment_count); 4.data.videos[0].share_count); 4.data.videos[0].view_count); 100); 2); 0)}},\n  \"creativity_program_earnings\": {{round(multiply(divide(4.data.videos[0].view_count; 1000); 0.25); 4)}}\n}"
+      },
+      "metadata": {
+        "designer": {"x": 1100, "y": 0},
+        "note": "Store analytics snapshot"
+      }
+    },
+    {
+      "id": 7,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": {
+        "designer": {"x": 1320, "y": 0}
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 8,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": true},
+              "mapper": {
+                "url": "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
+                "method": "POST",
+                "headers": [
+                  {"name": "Authorization", "value": "Bearer {{connection.youtube_access_token}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"snippet\": {\n    \"title\": \"{{3.topic}}\",\n    \"description\": \"{{3.caption}}\\n\\n#shorts {{join(3.hashtags; \" \")}}\",\n    \"tags\": {{3.hashtags}},\n    \"categoryId\": \"26\"\n  },\n  \"status\": {\n    \"privacyStatus\": \"public\",\n    \"selfDeclaredMadeForKids\": false\n  }\n}"
+              },
+              "metadata": {
+                "designer": {"x": 1540, "y": -200},
+                "note": "YouTube Shorts cross-post"
+              }
+            },
+            {
+              "id": 9,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{3.id}}",
+                "method": "PATCH",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"cross_posted_youtube\": true,\n  \"youtube_url\": \"{{8.headers.location}}\"\n}"
+              },
+              "metadata": {"designer": {"x": 1760, "y": -200}}
+            }
+          ],
+          "label": "High Performer - Cross-post to YouTube",
+          "filter": {
+            "name": "Views > 10K and not yet cross-posted",
+            "conditions": [
+              [
+                {"a": "{{4.data.videos[0].view_count}}", "b": "10000", "o": "number:greater"},
+                {"a": "{{3.cross_posted_youtube}}", "b": "false", "o": "boolean:equal"}
+              ]
+            ]
+          }
+        },
+        {
+          "flow": [
+            {
+              "id": 10,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": true},
+              "mapper": {
+                "url": "{{connection.make_pinterest_webhook}}",
+                "method": "POST",
+                "headers": [{"name": "Content-Type", "value": "application/json"}],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"type\": \"idea_pin\",\n  \"board_id\": \"fitness-tips\",\n  \"title\": \"{{3.topic}}\",\n  \"pages\": [\n    {\n      \"media_url\": \"{{3.video_url}}\",\n      \"description\": \"{{3.caption}}\"\n    }\n  ],\n  \"link\": \"https://www.amazon.com/dp/{{3.affiliate_products[0].asin}}?tag={{3.amazon_tag}}\"\n}"
+              },
+              "metadata": {
+                "designer": {"x": 1540, "y": 0},
+                "note": "Pinterest cross-post via existing webhook"
+              }
+            },
+            {
+              "id": 11,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{3.id}}",
+                "method": "PATCH",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"cross_posted_pinterest\": true\n}"
+              },
+              "metadata": {"designer": {"x": 1760, "y": 0}}
+            }
+          ],
+          "label": "Good Performer - Cross-post to Pinterest",
+          "filter": {
+            "name": "Views > 5K and not yet cross-posted",
+            "conditions": [
+              [
+                {"a": "{{4.data.videos[0].view_count}}", "b": "5000", "o": "number:greater"},
+                {"a": "{{3.cross_posted_pinterest}}", "b": "false", "o": "boolean:equal"}
+              ]
+            ]
+          }
+        },
+        {
+          "flow": [
+            {
+              "id": 12,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": true},
+              "mapper": {
+                "url": "https://api.anthropic.com/v1/messages",
+                "method": "POST",
+                "headers": [
+                  {"name": "x-api-key", "value": "{{connection.anthropic_api_key}}"},
+                  {"name": "anthropic-version", "value": "2023-06-01"},
+                  {"name": "content-type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 500,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Analyze this high-performing TikTok content:\\n\\nTopic: {{3.topic}}\\nViews: {{4.data.videos[0].view_count}}\\nLikes: {{4.data.videos[0].like_count}}\\nEngagement Rate: {{if(4.data.videos[0].view_count > 0; round(multiply(divide(add(add(4.data.videos[0].like_count; 4.data.videos[0].comment_count); 4.data.videos[0].share_count); 4.data.videos[0].view_count); 100); 2); 0)}}%\\n\\nWhat made this content successful? Provide 3 actionable insights for creating more content like this. Keep response under 200 words. Return as JSON:\\n{\\n  \\\"success_factors\\\": [\\\"factor1\\\", \\\"factor2\\\", \\\"factor3\\\"],\\n  \\\"recommended_topics\\\": [\\\"topic1\\\", \\\"topic2\\\"],\\n  \\\"hook_improvement\\\": \\\"...\\\",\\n  \\\"optimal_video_length\\\": \\\"...\\\"\\n}\"\n    }\n  ]\n}"
+              },
+              "metadata": {
+                "designer": {"x": 1540, "y": 200},
+                "note": "AI analysis of top performers"
+              }
+            },
+            {
+              "id": 13,
+              "module": "json:ParseJSON",
+              "version": 1,
+              "mapper": {
+                "json": "{{12.data.content[0].text}}"
+              },
+              "metadata": {"designer": {"x": 1760, "y": 200}}
+            },
+            {
+              "id": 14,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/tiktok_prompts",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"prompt_type\": \"script\",\n  \"prompt_text\": \"Create content similar to: {{3.topic}}. Success factors: {{join(13.success_factors; \", \")}}. Hook style: {{13.hook_improvement}}\",\n  \"average_views\": {{4.data.videos[0].view_count}},\n  \"average_engagement\": {{if(4.data.videos[0].view_count > 0; round(multiply(divide(add(add(4.data.videos[0].like_count; 4.data.videos[0].comment_count); 4.data.videos[0].share_count); 4.data.videos[0].view_count); 100); 2); 0)}}\n}"
+              },
+              "metadata": {
+                "designer": {"x": 1980, "y": 200},
+                "note": "Store optimized prompts for future content"
+              }
+            }
+          ],
+          "label": "Viral Content - Analyze and Optimize Prompts",
+          "filter": {
+            "name": "Views > 50K - Viral threshold",
+            "conditions": [
+              [{"a": "{{4.data.videos[0].view_count}}", "b": "50000", "o": "number:greater"}]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "module": "builtin:BasicAggregator",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "sourceModule": 6,
+        "aggregatedFields": {
+          "total_views": "{{sum(5.views)}}",
+          "total_earnings": "{{sum(5.estimated_earnings)}}",
+          "post_count": "{{length(2.data)}}"
+        }
+      },
+      "metadata": {
+        "designer": {"x": 1320, "y": 300}
+      }
+    },
+    {
+      "id": 16,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {"handleErrors": false},
+      "mapper": {
+        "url": "{{connection.supabase_url}}/rest/v1/analytics",
+        "method": "POST",
+        "headers": [
+          {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+          {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "body": "{\n  \"event_type\": \"tiktok_weekly_summary\",\n  \"brand\": \"tiktok_fitness\",\n  \"platform\": \"tiktok\",\n  \"data\": {\n    \"week_ending\": \"{{formatDate(now; \"YYYY-MM-DD\")}}\",\n    \"total_posts\": {{15.post_count}},\n    \"total_views\": {{15.total_views}},\n    \"estimated_earnings\": {{15.total_earnings}},\n    \"avg_views_per_post\": {{if(15.post_count > 0; round(divide(15.total_views; 15.post_count); 0); 0)}}\n  }\n}"
+      },
+      "metadata": {
+        "designer": {"x": 1540, "y": 300},
+        "note": "Weekly summary analytics"
+      }
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 5,
+      "maxErrors": 10,
+      "autoCommit": true,
+      "sequential": false,
+      "confidential": false
+    }
+  },
+  "connections": {
+    "supabase_url": {
+      "label": "Supabase Project URL",
+      "type": "text",
+      "required": true
+    },
+    "supabase_service_key": {
+      "label": "Supabase Service Role Key",
+      "type": "text",
+      "required": true
+    },
+    "tiktok": {
+      "label": "TikTok Connection",
+      "type": "oauth",
+      "required": true
+    },
+    "anthropic_api_key": {
+      "label": "Anthropic API Key",
+      "type": "text",
+      "required": true
+    },
+    "youtube_access_token": {
+      "label": "YouTube OAuth Access Token",
+      "type": "text",
+      "required": false,
+      "help": "For YouTube Shorts cross-posting"
+    },
+    "make_pinterest_webhook": {
+      "label": "Pinterest Webhook URL",
+      "type": "text",
+      "required": false,
+      "help": "Existing Pinterest posting webhook from Social Media Empire"
+    }
+  },
+  "cross_posting_thresholds": {
+    "youtube_shorts": {
+      "min_views": 10000,
+      "description": "Cross-post to YouTube Shorts when video exceeds 10K views"
+    },
+    "pinterest": {
+      "min_views": 5000,
+      "description": "Cross-post to Pinterest when video exceeds 5K views"
+    },
+    "viral_analysis": {
+      "min_views": 50000,
+      "description": "Trigger AI analysis and prompt optimization for viral content"
+    }
+  },
+  "notes": {
+    "tiktok_analytics": "TikTok API returns analytics for videos. Requires 'video.list' scope.",
+    "youtube_cross_post": "YouTube Shorts: videos under 60s with vertical aspect ratio auto-qualify",
+    "earnings_calculation": "Conservative estimate: $0.25 per 1K views from TikTok Creativity Program",
+    "prompt_optimization": "AI analyzes viral content to generate improved prompts for future content generation"
+  }
+}
