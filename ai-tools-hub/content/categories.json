@@ -1,0 +1,102 @@
+[
+  {
+    "slug": "writing",
+    "name": "AI Writing Tools",
+    "description": "AI-powered writing assistants for blog posts, marketing copy, emails, and creative content. Compare the best AI writers and find the perfect tool for your needs.",
+    "icon": "pencil",
+    "meta_title": "Best AI Writing Tools 2026 - Compare Top AI Writers",
+    "meta_description": "Compare the best AI writing tools in 2026. Detailed reviews of ChatGPT, Claude, Jasper, Writesonic & more with pricing, features, and honest pros/cons.",
+    "keywords": ["ai writing tools", "best ai writer", "ai content generator", "ai copywriting tool"],
+    "color": "blue"
+  },
+  {
+    "slug": "coding",
+    "name": "AI Coding Tools",
+    "description": "AI-powered code editors, copilots, and development tools that help you write better code faster. From autocomplete to full code generation.",
+    "icon": "code",
+    "meta_title": "Best AI Coding Tools 2026 - AI Code Editors & Copilots",
+    "meta_description": "Find the best AI coding tools in 2026. Compare Cursor, GitHub Copilot, and more AI code assistants with features, pricing, and developer reviews.",
+    "keywords": ["ai coding tools", "ai code editor", "ai programming assistant", "ai copilot"],
+    "color": "green"
+  },
+  {
+    "slug": "image",
+    "name": "AI Image Generators",
+    "description": "Create stunning images from text prompts with AI. Compare Midjourney, DALL-E, Stable Diffusion, and other leading AI image generation tools.",
+    "icon": "image",
+    "meta_title": "Best AI Image Generators 2026 - Compare AI Art Tools",
+    "meta_description": "Compare the best AI image generators in 2026. Midjourney vs DALL-E vs Stable Diffusion - detailed comparisons with examples, pricing, and quality ratings.",
+    "keywords": ["ai image generator", "ai art generator", "text to image ai", "best ai art tool"],
+    "color": "purple"
+  },
+  {
+    "slug": "video",
+    "name": "AI Video Tools",
+    "description": "AI-powered video creation, editing, and generation tools. Create professional videos without cameras, studios, or complex editing software.",
+    "icon": "video",
+    "meta_title": "Best AI Video Tools 2026 - AI Video Generators & Editors",
+    "meta_description": "Compare the best AI video tools in 2026. Reviews of Runway, Synthesia, Descript, and more AI video generators and editors with pricing and features.",
+    "keywords": ["ai video generator", "ai video editor", "text to video ai", "ai video maker"],
+    "color": "red"
+  },
+  {
+    "slug": "marketing",
+    "name": "AI Marketing Tools",
+    "description": "AI tools built for marketing teams. Generate ads, social posts, email campaigns, and marketing strategies with the power of artificial intelligence.",
+    "icon": "megaphone",
+    "meta_title": "Best AI Marketing Tools 2026 - AI for Marketers",
+    "meta_description": "Discover the best AI marketing tools in 2026. Compare Jasper, Copy.ai, and more AI platforms for ads, social media, email, and content marketing.",
+    "keywords": ["ai marketing tools", "ai for marketing", "ai ad generator", "ai social media tool"],
+    "color": "orange"
+  },
+  {
+    "slug": "productivity",
+    "name": "AI Productivity Tools",
+    "description": "Boost your workflow with AI-powered productivity tools. From smart note-taking to automated scheduling, these tools help you get more done.",
+    "icon": "lightning",
+    "meta_title": "Best AI Productivity Tools 2026 - Work Smarter with AI",
+    "meta_description": "Find the best AI productivity tools in 2026. Compare Notion AI, Otter.ai, and other AI tools that help you work smarter and automate tedious tasks.",
+    "keywords": ["ai productivity tools", "ai work tools", "ai automation tools", "ai assistant"],
+    "color": "teal"
+  },
+  {
+    "slug": "audio",
+    "name": "AI Audio & Voice Tools",
+    "description": "AI-powered text-to-speech, voice cloning, music generation, and audio editing tools. Create lifelike voiceovers and audio content with AI.",
+    "icon": "microphone",
+    "meta_title": "Best AI Audio & Voice Tools 2026 - AI Text-to-Speech & More",
+    "meta_description": "Compare the best AI audio tools in 2026. ElevenLabs, Murf, and more AI voice generators for text-to-speech, voice cloning, and audio production.",
+    "keywords": ["ai voice generator", "ai text to speech", "ai voice cloning", "ai audio tools"],
+    "color": "indigo"
+  },
+  {
+    "slug": "seo",
+    "name": "AI SEO Tools",
+    "description": "AI-powered SEO tools for keyword research, content optimization, and search engine ranking. Get more organic traffic with AI-driven SEO strategies.",
+    "icon": "search",
+    "meta_title": "Best AI SEO Tools 2026 - AI-Powered Search Optimization",
+    "meta_description": "Compare the best AI SEO tools in 2026. Scalenut, Surfer SEO, and more AI platforms for keyword research, content optimization, and ranking higher.",
+    "keywords": ["ai seo tools", "ai content optimization", "ai keyword research", "ai seo platform"],
+    "color": "yellow"
+  },
+  {
+    "slug": "research",
+    "name": "AI Research Tools",
+    "description": "AI tools for research, fact-checking, and knowledge discovery. Find answers faster with AI-powered search and analysis platforms.",
+    "icon": "magnifier",
+    "meta_title": "Best AI Research Tools 2026 - AI-Powered Search & Analysis",
+    "meta_description": "Compare the best AI research tools in 2026. Perplexity, Elicit, and more AI platforms for academic research, fact-checking, and knowledge discovery.",
+    "keywords": ["ai research tools", "ai search engine", "ai fact checker", "ai analysis tool"],
+    "color": "cyan"
+  },
+  {
+    "slug": "design",
+    "name": "AI Design Tools",
+    "description": "AI-powered graphic design, UI/UX, and creative tools. Create professional designs, logos, and visual content without design expertise.",
+    "icon": "palette",
+    "meta_title": "Best AI Design Tools 2026 - AI Graphic Design & Creative",
+    "meta_description": "Compare the best AI design tools in 2026. Canva AI, Figma AI, and more AI-powered platforms for graphic design, UI/UX, and visual creation.",
+    "keywords": ["ai design tools", "ai graphic design", "ai logo maker", "ai ui design"],
+    "color": "pink"
+  }
+]

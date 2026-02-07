@@ -1,0 +1,490 @@
+[
+  {
+    "slug": "chatgpt",
+    "name": "ChatGPT",
+    "tagline": "The most popular AI assistant for writing, coding, and research",
+    "description": "ChatGPT by OpenAI is the world's most widely-used AI chatbot, capable of writing, analysis, coding, math, and creative tasks. With GPT-4o and the Plus plan, it offers image generation, file analysis, web browsing, and custom GPTs.",
+    "category": "writing",
+    "categories": ["writing", "coding", "research", "productivity"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 20,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["GPT-4o mini", "Limited messages", "Basic features"]},
+        {"name": "Plus", "price": 20, "features": ["GPT-4o", "DALL-E 3", "Advanced analysis", "Custom GPTs", "Priority access"]},
+        {"name": "Team", "price": 25, "features": ["Everything in Plus", "Team workspace", "Admin controls", "Higher limits"]},
+        {"name": "Enterprise", "price": null, "features": ["Unlimited access", "Advanced security", "Custom deployment"]}
+      ]
+    },
+    "rating": 4.7,
+    "review_count": 12500,
+    "affiliate_url": "https://chat.openai.com",
+    "website": "https://chat.openai.com",
+    "features": ["Text generation", "Code writing", "Image generation", "File analysis", "Web browsing", "Custom GPTs", "Voice mode", "Canvas editing"],
+    "pros": ["Most versatile AI assistant", "Huge plugin ecosystem", "Great at coding and writing", "Regular model updates", "Voice and image capabilities"],
+    "cons": ["Can hallucinate facts", "Free tier has usage limits", "No real-time data on free plan", "Occasional slow responses during peak"],
+    "best_for": ["General-purpose AI tasks", "Content writing", "Code assistance", "Research and analysis"],
+    "logo": "/logos/chatgpt.svg",
+    "founded": 2022,
+    "company": "OpenAI"
+  },
+  {
+    "slug": "claude",
+    "name": "Claude",
+    "tagline": "The thoughtful AI assistant known for accuracy and nuance",
+    "description": "Claude by Anthropic is an advanced AI assistant excelling at nuanced writing, analysis, coding, and complex reasoning. Known for being more careful and accurate than competitors, Claude offers extended context windows up to 200K tokens and strong performance on benchmarks.",
+    "category": "writing",
+    "categories": ["writing", "coding", "research", "productivity"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 20,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["Claude Sonnet", "Limited messages", "Basic features"]},
+        {"name": "Pro", "price": 20, "features": ["Claude Opus", "Priority access", "More usage", "Projects", "Extended thinking"]},
+        {"name": "Team", "price": 30, "features": ["Everything in Pro", "Team workspace", "Admin controls"]},
+        {"name": "Enterprise", "price": null, "features": ["Custom limits", "SSO", "Advanced security"]}
+      ]
+    },
+    "rating": 4.8,
+    "review_count": 8200,
+    "affiliate_url": "https://claude.ai",
+    "website": "https://claude.ai",
+    "features": ["Extended context (200K tokens)", "Code generation", "Document analysis", "Artifacts/Canvas", "Project organization", "Vision capabilities", "Extended thinking", "Computer use"],
+    "pros": ["Most accurate and nuanced responses", "200K context window", "Excellent at long-form writing", "Strong coding abilities", "Careful about harmful content"],
+    "cons": ["Smaller plugin ecosystem than ChatGPT", "No image generation", "Usage limits on free tier", "Newer platform, smaller community"],
+    "best_for": ["Long-form writing", "Document analysis", "Nuanced research", "Code review"],
+    "logo": "/logos/claude.svg",
+    "founded": 2023,
+    "company": "Anthropic"
+  },
+  {
+    "slug": "jasper",
+    "name": "Jasper",
+    "tagline": "AI marketing copilot for enterprise content teams",
+    "description": "Jasper is an AI-powered marketing platform designed specifically for marketing teams. It offers brand voice consistency, campaign management, and AI-generated marketing copy across all channels including ads, social media, email, and blog content.",
+    "category": "marketing",
+    "categories": ["writing", "marketing"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 39,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Creator", "price": 39, "features": ["1 seat", "Brand voice", "SEO mode", "AI editor"]},
+        {"name": "Pro", "price": 59, "features": ["1 seat", "Everything in Creator", "AI image generation", "Campaigns", "Analytics"]},
+        {"name": "Business", "price": null, "features": ["Custom seats", "API access", "Custom workflows", "SSO"]}
+      ]
+    },
+    "rating": 4.5,
+    "review_count": 6800,
+    "affiliate_url": "https://www.jasper.ai?fpr=toolpilot",
+    "website": "https://www.jasper.ai",
+    "features": ["Brand voice consistency", "Marketing campaigns", "Blog post generator", "Ad copy generator", "Social media posts", "Email marketing", "SEO optimization", "Team collaboration"],
+    "pros": ["Purpose-built for marketing teams", "Brand voice training", "50+ content templates", "Campaign management", "Good team features"],
+    "cons": ["Expensive for individuals", "Output quality varies", "Learning curve for advanced features", "No free plan anymore"],
+    "best_for": ["Marketing teams", "Brand-consistent content", "Ad copy at scale", "Content agencies"],
+    "logo": "/logos/jasper.svg",
+    "founded": 2021,
+    "company": "Jasper AI"
+  },
+  {
+    "slug": "midjourney",
+    "name": "Midjourney",
+    "tagline": "The gold standard for AI image generation",
+    "description": "Midjourney is the leading AI image generation tool, known for producing stunning, artistic images from text prompts. It operates through Discord and a web interface, offering the highest-quality AI art generation available.",
+    "category": "image",
+    "categories": ["image", "design"],
+    "pricing": {
+      "free_tier": false,
+      "starting_price": 10,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Basic", "price": 10, "features": ["200 images/month", "3 concurrent jobs", "General commercial terms"]},
+        {"name": "Standard", "price": 30, "features": ["15hrs fast generation", "Unlimited relaxed", "Stealth mode"]},
+        {"name": "Pro", "price": 60, "features": ["30hrs fast generation", "12 concurrent jobs", "Stealth mode"]},
+        {"name": "Mega", "price": 120, "features": ["60hrs fast generation", "12 concurrent jobs", "Stealth mode"]}
+      ]
+    },
+    "rating": 4.9,
+    "review_count": 15000,
+    "affiliate_url": "https://www.midjourney.com",
+    "website": "https://www.midjourney.com",
+    "features": ["Text-to-image generation", "Image variation", "Upscaling", "Style mixing", "Image blending", "Pan and zoom", "Describe (reverse prompt)", "Custom styles"],
+    "pros": ["Best image quality overall", "Stunning artistic outputs", "Active community", "Consistent style quality", "Regular model improvements"],
+    "cons": ["No free tier", "Discord-based (learning curve)", "Limited editing capabilities", "No API access for Basic plan"],
+    "best_for": ["Artists and designers", "Marketing visuals", "Concept art", "Social media content"],
+    "logo": "/logos/midjourney.svg",
+    "founded": 2022,
+    "company": "Midjourney Inc."
+  },
+  {
+    "slug": "cursor",
+    "name": "Cursor",
+    "tagline": "The AI-first code editor that writes code with you",
+    "description": "Cursor is an AI-powered code editor built on VS Code that integrates AI deeply into the coding workflow. It offers AI-powered autocomplete, chat, code generation, and multi-file editing capabilities that dramatically speed up software development.",
+    "category": "coding",
+    "categories": ["coding", "productivity"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 20,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Hobby", "price": 0, "features": ["2000 completions/month", "50 slow requests", "Basic features"]},
+        {"name": "Pro", "price": 20, "features": ["Unlimited completions", "500 fast requests", "All models", "Priority support"]},
+        {"name": "Business", "price": 40, "features": ["Everything in Pro", "Admin dashboard", "SAML SSO", "Centralized billing"]}
+      ]
+    },
+    "rating": 4.8,
+    "review_count": 9500,
+    "affiliate_url": "https://cursor.com",
+    "website": "https://cursor.com",
+    "features": ["AI autocomplete", "Chat with codebase", "Multi-file editing", "Error detection", "Code generation", "Codebase search", "Terminal integration", "VS Code extension support"],
+    "pros": ["Revolutionary coding experience", "Works with your entire codebase", "Multi-file edits", "Fast and responsive", "VS Code compatible"],
+    "cons": ["Subscription required for heavy use", "Large codebase indexing takes time", "Occasional incorrect suggestions", "Battery drain on laptops"],
+    "best_for": ["Software developers", "Full-stack engineering", "Rapid prototyping", "Code refactoring"],
+    "logo": "/logos/cursor.svg",
+    "founded": 2023,
+    "company": "Anysphere"
+  },
+  {
+    "slug": "writesonic",
+    "name": "Writesonic",
+    "tagline": "AI writing and SEO platform for content marketers",
+    "description": "Writesonic is an AI content platform that helps marketers create SEO-optimized blog posts, ads, product descriptions, and more. It includes Chatsonic (AI chat), Botsonic (chatbot builder), and an AI article writer with built-in SEO tools.",
+    "category": "writing",
+    "categories": ["writing", "marketing", "seo"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 16,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["10K words/month", "Basic templates", "Chatsonic access"]},
+        {"name": "Individual", "price": 16, "features": ["Unlimited words", "All templates", "SEO tools", "Brand voice"]},
+        {"name": "Team", "price": 33, "features": ["3 seats", "Everything in Individual", "Team workspace", "Priority support"]},
+        {"name": "Enterprise", "price": null, "features": ["Custom seats", "API access", "Custom models", "SSO"]}
+      ]
+    },
+    "rating": 4.4,
+    "review_count": 5200,
+    "affiliate_url": "https://writesonic.com?ref=toolpilot",
+    "website": "https://writesonic.com",
+    "features": ["AI article writer", "SEO optimization", "Brand voice", "Chatsonic chatbot", "Botsonic builder", "100+ templates", "Bulk generation", "API access"],
+    "pros": ["Affordable pricing", "30% lifetime recurring affiliate commission", "Built-in SEO tools", "Good for blog content", "Chatbot builder included"],
+    "cons": ["Quality varies by template", "UI can be overwhelming", "Free tier is limited", "Some features feel basic"],
+    "best_for": ["Blog content creation", "SEO content at scale", "Small business marketing", "Affiliate marketers"],
+    "logo": "/logos/writesonic.svg",
+    "founded": 2021,
+    "company": "Writesonic Inc."
+  },
+  {
+    "slug": "copy-ai",
+    "name": "Copy.ai",
+    "tagline": "AI-powered GTM platform for sales and marketing teams",
+    "description": "Copy.ai has evolved from a simple AI copywriting tool into a comprehensive go-to-market (GTM) AI platform. It helps sales and marketing teams automate workflows, generate content, enrich leads, and streamline the entire GTM process.",
+    "category": "marketing",
+    "categories": ["writing", "marketing", "sales"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 36,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["2000 words/month", "1 seat", "Basic templates"]},
+        {"name": "Starter", "price": 36, "features": ["Unlimited words", "5 seats", "Brand voice", "90+ copywriting tools"]},
+        {"name": "Advanced", "price": 186, "features": ["Everything in Starter", "GTM AI workflows", "Lead enrichment", "API access"]},
+        {"name": "Enterprise", "price": null, "features": ["Custom everything", "Dedicated CSM", "Custom integrations"]}
+      ]
+    },
+    "rating": 4.3,
+    "review_count": 4800,
+    "affiliate_url": "https://www.copy.ai?ref=toolpilot",
+    "website": "https://www.copy.ai",
+    "features": ["AI copywriting", "GTM workflows", "Lead enrichment", "Sales email automation", "Content templates", "Brand voice", "Team collaboration", "Workflow automation"],
+    "pros": ["Good free tier", "90+ content templates", "GTM workflow automation", "Sales-focused features", "Easy to learn"],
+    "cons": ["Advanced plan is expensive", "Quality inconsistent for long-form", "Limited customization on lower plans", "UI feels cluttered"],
+    "best_for": ["Sales teams", "Marketing copy", "Lead generation", "GTM automation"],
+    "logo": "/logos/copyai.svg",
+    "founded": 2020,
+    "company": "Copy.ai"
+  },
+  {
+    "slug": "synthesia",
+    "name": "Synthesia",
+    "tagline": "Create professional AI videos with virtual presenters",
+    "description": "Synthesia is the leading AI video creation platform that generates professional videos with realistic AI avatars. It supports 140+ languages and is used for training, marketing, and corporate communications without cameras or studios.",
+    "category": "video",
+    "categories": ["video", "marketing"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 18,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["3 minutes/month", "Limited avatars", "Watermarked"]},
+        {"name": "Starter", "price": 18, "features": ["10 minutes/month", "90+ avatars", "No watermark"]},
+        {"name": "Creator", "price": 64, "features": ["30 minutes/month", "All avatars", "Custom avatars", "Brand kit"]},
+        {"name": "Enterprise", "price": null, "features": ["Unlimited minutes", "Custom everything", "API access"]}
+      ]
+    },
+    "rating": 4.6,
+    "review_count": 7800,
+    "affiliate_url": "https://www.synthesia.io?ref=toolpilot",
+    "website": "https://www.synthesia.io",
+    "features": ["AI avatars", "Text-to-video", "140+ languages", "Screen recording", "Custom avatars", "Brand kit", "Template library", "Team collaboration"],
+    "pros": ["Professional quality videos", "No camera or studio needed", "140+ language support", "Great for training content", "Easy to use"],
+    "cons": ["Avatar lip-sync can look unnatural", "Limited free tier", "Expensive for heavy use", "Rendering can be slow"],
+    "best_for": ["Corporate training", "Marketing videos", "Explainer videos", "Multilingual content"],
+    "logo": "/logos/synthesia.svg",
+    "founded": 2017,
+    "company": "Synthesia Ltd."
+  },
+  {
+    "slug": "grammarly",
+    "name": "Grammarly",
+    "tagline": "AI writing assistant for error-free, clear communication",
+    "description": "Grammarly is the world's most popular AI writing assistant, checking grammar, spelling, punctuation, clarity, and tone across virtually every platform. Its AI-powered suggestions help millions write more effectively in emails, documents, and social media.",
+    "category": "writing",
+    "categories": ["writing", "productivity"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 12,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["Grammar & spelling", "Tone detection", "Basic suggestions"]},
+        {"name": "Premium", "price": 12, "features": ["Full writing suggestions", "Tone adjustments", "Plagiarism detection", "Full-sentence rewrites"]},
+        {"name": "Business", "price": 15, "features": ["Everything in Premium", "Brand tones", "Style guides", "Analytics dashboard", "Admin controls"]}
+      ]
+    },
+    "rating": 4.7,
+    "review_count": 22000,
+    "affiliate_url": "https://www.grammarly.com",
+    "website": "https://www.grammarly.com",
+    "features": ["Grammar checking", "Spelling correction", "Tone detection", "Clarity suggestions", "Plagiarism detection", "GrammarlyGO AI", "Browser extension", "Desktop app"],
+    "pros": ["Works everywhere (browser, desktop, mobile)", "Excellent grammar correction", "Helpful tone suggestions", "Good free tier", "AI writing assistance"],
+    "cons": ["Premium needed for full features", "Can be overly aggressive with suggestions", "Privacy concerns with text processing", "Annual billing preferred"],
+    "best_for": ["Business professionals", "Students", "Non-native English speakers", "Email communication"],
+    "logo": "/logos/grammarly.svg",
+    "founded": 2009,
+    "company": "Grammarly Inc."
+  },
+  {
+    "slug": "notion-ai",
+    "name": "Notion AI",
+    "tagline": "AI-powered workspace for notes, docs, and project management",
+    "description": "Notion AI integrates artificial intelligence directly into the popular Notion workspace, enabling users to write, summarize, brainstorm, translate, and extract insights from their notes and documents without leaving the platform.",
+    "category": "productivity",
+    "categories": ["productivity", "writing"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 8,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["Basic Notion", "Limited AI usage", "Personal use"]},
+        {"name": "Plus", "price": 8, "features": ["Notion workspace", "Limited AI", "File uploads", "30-day history"]},
+        {"name": "Plus + AI", "price": 18, "features": ["Everything in Plus", "Unlimited AI", "AI writing", "AI autofill"]},
+        {"name": "Business + AI", "price": 28, "features": ["Everything in Plus + AI", "SAML SSO", "Advanced permissions"]}
+      ]
+    },
+    "rating": 4.6,
+    "review_count": 11000,
+    "affiliate_url": "https://www.notion.so",
+    "website": "https://www.notion.so",
+    "features": ["AI writing assistant", "Document summarization", "Action item extraction", "Translation", "Brainstorming", "Q&A on your docs", "Database autofill", "Project management"],
+    "pros": ["Seamless workspace integration", "Great for team knowledge bases", "Powerful database features", "AI works on your existing docs", "Free tier available"],
+    "cons": ["AI is an add-on cost", "Can be complex for simple note-taking", "Performance with large workspaces", "Learning curve"],
+    "best_for": ["Team collaboration", "Knowledge management", "Project documentation", "Personal productivity"],
+    "logo": "/logos/notion.svg",
+    "founded": 2013,
+    "company": "Notion Labs"
+  },
+  {
+    "slug": "elevenlabs",
+    "name": "ElevenLabs",
+    "tagline": "The most realistic AI voice generation platform",
+    "description": "ElevenLabs produces the most realistic AI-generated speech and voice cloning available. Used by content creators, audiobook publishers, and developers to create lifelike voiceovers in 29+ languages with emotional range and natural intonation.",
+    "category": "audio",
+    "categories": ["audio", "video"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 5,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["10K characters/month", "3 custom voices", "Basic quality"]},
+        {"name": "Starter", "price": 5, "features": ["30K characters/month", "10 custom voices", "Commercial license"]},
+        {"name": "Creator", "price": 22, "features": ["100K characters/month", "30 custom voices", "Professional voice cloning"]},
+        {"name": "Pro", "price": 99, "features": ["500K characters/month", "160 custom voices", "API access", "Priority support"]}
+      ]
+    },
+    "rating": 4.8,
+    "review_count": 6500,
+    "affiliate_url": "https://elevenlabs.io?ref=toolpilot",
+    "website": "https://elevenlabs.io",
+    "features": ["Text-to-speech", "Voice cloning", "29+ languages", "Emotion control", "Voice library", "API access", "Audio dubbing", "Sound effects"],
+    "pros": ["Most realistic AI voices", "Excellent voice cloning", "29+ language support", "Affordable entry price", "Great API"],
+    "cons": ["Character limits on lower plans", "Voice cloning requires good samples", "Some voices sound robotic", "Processing time varies"],
+    "best_for": ["Content creators", "Audiobook production", "Video narration", "App developers"],
+    "logo": "/logos/elevenlabs.svg",
+    "founded": 2022,
+    "company": "ElevenLabs Inc."
+  },
+  {
+    "slug": "canva",
+    "name": "Canva",
+    "tagline": "Design anything with AI-powered visual creation tools",
+    "description": "Canva is the world's leading online design platform, now supercharged with AI features including Magic Design, text-to-image, background removal, and AI-powered presentations. It makes professional design accessible to everyone.",
+    "category": "design",
+    "categories": ["design", "image", "marketing"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 13,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["250K templates", "5GB storage", "Basic AI features"]},
+        {"name": "Pro", "price": 13, "features": ["All templates", "100GB storage", "Magic Design AI", "Brand Kit", "Background remover"]},
+        {"name": "Teams", "price": 10, "features": ["Everything in Pro", "Team management", "Brand controls", "Approval workflows"]}
+      ]
+    },
+    "rating": 4.7,
+    "review_count": 25000,
+    "affiliate_url": "https://partner.canva.com/toolpilot",
+    "website": "https://www.canva.com",
+    "features": ["Magic Design AI", "Text-to-image", "Background removal", "Brand Kit", "Video editing", "Presentation maker", "Social media templates", "Print on demand"],
+    "pros": ["Incredibly easy to use", "Massive template library", "Great free tier", "AI features throughout", "Works for every design need"],
+    "cons": ["Advanced features require Pro", "Can feel limiting for pros", "Team plan pricing structure", "Export quality limitations"],
+    "best_for": ["Social media managers", "Small business owners", "Non-designers", "Marketing teams"],
+    "logo": "/logos/canva.svg",
+    "founded": 2013,
+    "company": "Canva Pty Ltd"
+  },
+  {
+    "slug": "descript",
+    "name": "Descript",
+    "tagline": "Edit video and podcasts as easily as editing a document",
+    "description": "Descript revolutionizes video and podcast editing by letting you edit media like a text document. Features include AI transcription, filler word removal, eye contact correction, green screen, and AI voice cloning for overdub.",
+    "category": "video",
+    "categories": ["video", "audio", "productivity"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 24,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["1 hour transcription", "Basic editing", "720p export"]},
+        {"name": "Hobbyist", "price": 24, "features": ["10 hours transcription", "AI tools", "4K export", "Filler word removal"]},
+        {"name": "Business", "price": 33, "features": ["30 hours transcription", "All AI features", "Team features", "Brand kit"]}
+      ]
+    },
+    "rating": 4.5,
+    "review_count": 5800,
+    "affiliate_url": "https://www.descript.com?ref=toolpilot",
+    "website": "https://www.descript.com",
+    "features": ["Text-based editing", "AI transcription", "Filler word removal", "Eye contact correction", "AI green screen", "Voice cloning (Overdub)", "Screen recording", "Clip finder"],
+    "pros": ["Revolutionary editing approach", "Excellent transcription", "Filler word removal is magic", "Eye contact correction", "Intuitive UI"],
+    "cons": ["Rendering can be slow", "Complex projects can lag", "Learning curve for advanced features", "Subscription required"],
+    "best_for": ["Podcasters", "YouTubers", "Content creators", "Video editors"],
+    "logo": "/logos/descript.svg",
+    "founded": 2017,
+    "company": "Descript Inc."
+  },
+  {
+    "slug": "runway",
+    "name": "Runway",
+    "tagline": "Next-generation AI video generation and editing",
+    "description": "Runway is a pioneering AI creative platform offering text-to-video generation (Gen-3 Alpha), image-to-video, video editing with AI, and a suite of creative AI tools used by filmmakers, agencies, and content creators worldwide.",
+    "category": "video",
+    "categories": ["video", "image"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 12,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["125 credits", "3 projects", "720p exports"]},
+        {"name": "Standard", "price": 12, "features": ["625 credits/month", "Unlimited projects", "4K upscaling"]},
+        {"name": "Pro", "price": 28, "features": ["2250 credits/month", "Unlimited projects", "Custom AI training"]},
+        {"name": "Unlimited", "price": 76, "features": ["Unlimited Gen-3 Alpha", "All features", "Priority rendering"]}
+      ]
+    },
+    "rating": 4.6,
+    "review_count": 7200,
+    "affiliate_url": "https://runwayml.com?ref=toolpilot",
+    "website": "https://runwayml.com",
+    "features": ["Text-to-video (Gen-3)", "Image-to-video", "Video inpainting", "Motion brush", "Background removal", "Color grading", "Super slow motion", "AI training"],
+    "pros": ["Leading text-to-video technology", "Professional-grade tools", "Regular model updates", "Creative freedom", "Web-based (no install)"],
+    "cons": ["Credits run out fast", "Gen-3 quality varies", "Expensive for heavy use", "Rendering wait times"],
+    "best_for": ["Filmmakers", "Creative agencies", "Social media content", "Concept visualization"],
+    "logo": "/logos/runway.svg",
+    "founded": 2018,
+    "company": "Runway AI Inc."
+  },
+  {
+    "slug": "perplexity",
+    "name": "Perplexity",
+    "tagline": "AI-powered search engine that cites its sources",
+    "description": "Perplexity is an AI search engine that provides direct, sourced answers to questions instead of traditional link lists. It combines large language models with real-time web search to deliver accurate, cited responses for research and knowledge work.",
+    "category": "research",
+    "categories": ["research", "productivity"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 20,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Free", "price": 0, "features": ["Unlimited quick searches", "5 Pro searches/day", "Basic models"]},
+        {"name": "Pro", "price": 20, "features": ["600+ Pro searches/day", "All models (GPT-4, Claude)", "File analysis", "Image generation"]}
+      ]
+    },
+    "rating": 4.7,
+    "review_count": 8900,
+    "affiliate_url": "https://perplexity.ai",
+    "website": "https://perplexity.ai",
+    "features": ["AI-powered search", "Source citations", "Follow-up questions", "Collections", "File analysis", "Image generation", "API access", "Chrome extension"],
+    "pros": ["Always cites sources", "Real-time information", "Excellent for research", "Clean interface", "Good free tier"],
+    "cons": ["Pro searches are limited", "Can miss nuanced context", "Not a full chatbot replacement", "Sources sometimes unreliable"],
+    "best_for": ["Researchers", "Students", "Journalists", "Fact-checking"],
+    "logo": "/logos/perplexity.svg",
+    "founded": 2022,
+    "company": "Perplexity AI"
+  },
+  {
+    "slug": "scalenut",
+    "name": "Scalenut",
+    "tagline": "AI-powered SEO content platform for organic growth",
+    "description": "Scalenut combines AI content creation with deep SEO intelligence to help marketers create content that ranks. Its Cruise Mode can generate a full SEO-optimized blog post in minutes, complete with keyword optimization and NLP analysis.",
+    "category": "seo",
+    "categories": ["writing", "seo", "marketing"],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 39,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {"name": "Essential", "price": 39, "features": ["100K AI words", "5 SEO reports", "Cruise Mode", "NLP optimization"]},
+        {"name": "Growth", "price": 79, "features": ["Unlimited AI words", "30 SEO reports", "Keyword planner", "SERP analysis"]},
+        {"name": "Pro", "price": 149, "features": ["Everything in Growth", "75 SEO reports", "Advanced analytics", "Priority support"]}
+      ]
+    },
+    "rating": 4.4,
+    "review_count": 3200,
+    "affiliate_url": "https://www.scalenut.com?ref=toolpilot",
+    "website": "https://www.scalenut.com",
+    "features": ["Cruise Mode (auto blog)", "SEO content optimizer", "SERP analysis", "NLP terms", "Keyword planner", "Content brief builder", "AI templates", "Fact-check mode"],
+    "pros": ["Excellent SEO integration", "Cruise Mode is fast", "NLP optimization scores", "30-50% recurring affiliate commission", "Good value for features"],
+    "cons": ["UI feels dated", "SEO reports limited on lower plans", "Learning curve", "Smaller community"],
+    "best_for": ["SEO content writers", "Content marketers", "Blog owners", "Digital agencies"],
+    "logo": "/logos/scalenut.svg",
+    "founded": 2020,
+    "company": "Scalenut"
+  }
+]
