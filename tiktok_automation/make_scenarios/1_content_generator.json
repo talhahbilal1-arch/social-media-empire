@@ -1,0 +1,275 @@
+{
+  "name": "TikTok Content Generator",
+  "description": "Daily cron generates fitness/beauty scripts via Claude API and saves to Supabase",
+  "flow": [
+    {
+      "id": 1,
+      "module": "builtin:BasicScheduler",
+      "version": 1,
+      "parameters": {
+        "time": {
+          "type": "custom",
+          "timezone": "America/Los_Angeles",
+          "days": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+          "times": [
+            {"hour": 5, "minute": 0},
+            {"hour": 9, "minute": 0},
+            {"hour": 14, "minute": 0}
+          ]
+        }
+      },
+      "metadata": {
+        "designer": {"x": 0, "y": 0},
+        "restore": {},
+        "expect": []
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:SetVariables",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "variables": [
+          {
+            "name": "batch_size",
+            "value": "3"
+          },
+          {
+            "name": "niche_focus",
+            "value": "fitness_beauty_lifestyle"
+          },
+          {
+            "name": "target_audience",
+            "value": "U.S. women aged 25-44 interested in quick workouts, beauty hacks, and lifestyle tips"
+          },
+          {
+            "name": "content_categories",
+            "value": "[\"quick_workout\", \"beauty_hack\", \"wellness_tip\", \"amazon_find\", \"lifestyle_hack\"]"
+          },
+          {
+            "name": "amazon_affiliate_tag",
+            "value": "fitnessquick-20"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {"x": 220, "y": 0}
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicRepeater",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "repeats": "{{2.batch_size}}"
+      },
+      "metadata": {
+        "designer": {"x": 440, "y": 0}
+      }
+    },
+    {
+      "id": 4,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "https://api.anthropic.com/v1/messages",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "x-api-key",
+            "value": "{{connection.anthropic_api_key}}"
+          },
+          {
+            "name": "anthropic-version",
+            "value": "2023-06-01"
+          },
+          {
+            "name": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "body": "{\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 1500,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Create a viral TikTok short video script for the {{2.niche_focus}} niche.\\n\\nTARGET AUDIENCE: {{2.target_audience}}\\n\\nCATEGORY: Pick one randomly: {{2.content_categories}}\\n\\nREQUIREMENTS:\\n1. Hook (first 3 seconds) - Must stop the scroll, create curiosity\\n2. Problem/Pain point - Relatable struggle\\n3. Solution/Tips - 2-3 actionable points\\n4. CTA - Subtle, engagement-focused\\n5. Duration: 20-45 seconds when spoken\\n\\nGenerate:\\n1. TOPIC: Catchy, specific topic (max 100 chars)\\n2. SCRIPT: Natural, conversational voiceover script (no stage directions)\\n3. VOICE_PROMPT: ElevenLabs voice direction (tone, pace, emotion)\\n4. VIDEO_PROMPT: HeyGen scene description (backgrounds, b-roll suggestions)\\n5. CAPTION: TikTok caption with emoji hooks (max 150 chars)\\n6. HASHTAGS: 7 relevant hashtags including #fyp\\n7. AFFILIATE_PRODUCT: One relevant Amazon product with estimated ASIN\\n\\nReturn ONLY valid JSON:\\n{\\n  \\\"topic\\\": \\\"...\\\",\\n  \\\"script\\\": \\\"...\\\",\\n  \\\"voice_prompt\\\": \\\"Speak with [tone], [pace], [emotion]\\\",\\n  \\\"video_prompt\\\": \\\"...\\\",\\n  \\\"caption\\\": \\\"...\\\",\\n  \\\"hashtags\\\": [\\\"#tag1\\\", ...],\\n  \\\"affiliate_product\\\": {\\n    \\\"name\\\": \\\"...\\\",\\n    \\\"asin\\\": \\\"B0...\\\",\\n    \\\"estimated_price\\\": 19.99\\n  }\\n}\"\n    }\n  ]\n}"
+      },
+      "metadata": {
+        "designer": {"x": 660, "y": 0},
+        "restore": {
+          "expect": {
+            "method": {"label": "POST"}
+          }
+        },
+        "expect": [
+          {"name": "url", "type": "url", "label": "URL", "required": true},
+          {"name": "method", "type": "select", "label": "Method", "required": true}
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "module": "json:ParseJSON",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "json": "{{4.data.content[0].text}}"
+      },
+      "metadata": {
+        "designer": {"x": 880, "y": 0}
+      }
+    },
+    {
+      "id": 6,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "apikey",
+            "value": "{{connection.supabase_service_key}}"
+          },
+          {
+            "name": "Authorization",
+            "value": "Bearer {{connection.supabase_service_key}}"
+          },
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "Prefer",
+            "value": "return=representation"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "body": "{\n  \"topic\": \"{{5.topic}}\",\n  \"script\": \"{{5.script}}\",\n  \"voice_prompt\": \"{{5.voice_prompt}}\",\n  \"video_prompt\": \"{{5.video_prompt}}\",\n  \"caption\": \"{{5.caption}}\",\n  \"hashtags\": {{5.hashtags}},\n  \"affiliate_products\": [{{5.affiliate_product}}],\n  \"amazon_tag\": \"{{2.amazon_affiliate_tag}}\",\n  \"status\": \"script_ready\",\n  \"script_generated_at\": \"{{formatDate(now; \"YYYY-MM-DDTHH:mm:ss.SSSZ\")}}\"\n}"
+      },
+      "metadata": {
+        "designer": {"x": 1100, "y": 0}
+      }
+    },
+    {
+      "id": 7,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": {
+        "designer": {"x": 1320, "y": 0}
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 8,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {
+                "handleErrors": false
+              },
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/analytics",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "contentType": "application/json",
+                "body": "{\n  \"event_type\": \"tiktok_script_generated\",\n  \"brand\": \"tiktok_fitness\",\n  \"platform\": \"tiktok\",\n  \"data\": {\n    \"topic\": \"{{5.topic}}\",\n    \"queue_id\": \"{{6.data[0].id}}\",\n    \"batch_index\": {{3.i}},\n    \"category\": \"{{2.niche_focus}}\"\n  }\n}"
+              },
+              "metadata": {
+                "designer": {"x": 1540, "y": -150}
+              }
+            }
+          ],
+          "label": "Success - Log Analytics"
+        },
+        {
+          "flow": [
+            {
+              "id": 9,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {
+                "handleErrors": false
+              },
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/errors",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "contentType": "application/json",
+                "body": "{\n  \"error_type\": \"tiktok_generation_failed\",\n  \"error_message\": \"{{4.error.message}}\",\n  \"context\": {\n    \"scenario\": \"content_generator\",\n    \"batch_index\": {{3.i}},\n    \"api_response\": \"{{4.statusCode}}\"\n  }\n}"
+              },
+              "metadata": {
+                "designer": {"x": 1540, "y": 150}
+              },
+              "filter": {
+                "name": "Error occurred",
+                "conditions": [[{"a": "{{4.statusCode}}", "b": "200", "o": "number:notequal"}]]
+              }
+            }
+          ],
+          "label": "Error - Log and Alert"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false
+    }
+  },
+  "connections": {
+    "anthropic_api_key": {
+      "label": "Anthropic API Key",
+      "type": "text",
+      "required": true,
+      "help": "Get from console.anthropic.com → API Keys"
+    },
+    "supabase_url": {
+      "label": "Supabase Project URL",
+      "type": "text",
+      "required": true,
+      "help": "e.g., https://xxxxx.supabase.co"
+    },
+    "supabase_service_key": {
+      "label": "Supabase Service Role Key",
+      "type": "text",
+      "required": true,
+      "help": "Settings → API → service_role key (NOT anon key)"
+    }
+  }
+}
