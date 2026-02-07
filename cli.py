@@ -223,6 +223,26 @@ def determine_platforms(args: argparse.Namespace) -> Optional[List[str]]:
     return platforms if platforms else None
 
 
+# Only these brands are allowed to post to YouTube.
+# Other brands post to Pinterest only.
+YOUTUBE_ALLOWED_BRANDS = ['fitness-made-easy']
+
+
+def filter_platforms_for_brand(platforms: List[str], brand_slug: str) -> List[str]:
+    """Filter platforms based on brand. Only allowed brands post to YouTube.
+
+    Args:
+        platforms: Full list of requested platforms
+        brand_slug: Brand being posted for
+
+    Returns:
+        Filtered list of platforms appropriate for this brand
+    """
+    if brand_slug not in YOUTUBE_ALLOWED_BRANDS:
+        return [p for p in platforms if p != 'youtube']
+    return platforms
+
+
 def post_video_to_platforms(
     video_path: str,
     brand_slug: str,
@@ -318,7 +338,12 @@ def main(args: List[str] = None) -> int:
 
             # Post to platforms if video generated successfully
             if result.success and platforms and poster:
-                print(f"    Posting to: {', '.join(platforms)}...")
+                # Filter platforms per brand (only fitness posts to YouTube)
+                brand_platforms = filter_platforms_for_brand(platforms, brand_slug)
+                if not brand_platforms:
+                    print(f"    No platforms enabled for {brand_slug}, skipping post")
+                    continue
+                print(f"    Posting to: {', '.join(brand_platforms)}...")
 
                 # Get video path from result
                 video_path = str(result.video_path) if result.video_path else None
@@ -326,12 +351,12 @@ def main(args: List[str] = None) -> int:
 
                 if video_path:
                     platform_results = post_video_to_platforms(
-                        video_path, brand_slug, script, platforms, poster
+                        video_path, brand_slug, script, brand_platforms, poster
                     )
 
                     # Track results
                     if brand_slug not in post_results:
-                        post_results[brand_slug] = {p: 0 for p in platforms}
+                        post_results[brand_slug] = {p: 0 for p in brand_platforms}
                         post_results[brand_slug]['supabase'] = 0
 
                     for platform, success in platform_results.items():
