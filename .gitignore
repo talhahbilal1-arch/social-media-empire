@@ -61,6 +61,22 @@ logs/
 # Local Netlify folder
 .netlify
 
+# Node
+node_modules/
+package-lock.json
+
+# AI tool configs
+.agent/
+.agents/
+.claude/
+.gemini/
+
+# Misc local files
+Documents:Claude:/
+Etsy Planners./
+ai-tools-hub/
+*.patch
+
 # Python
 __pycache__/
 *.py[cod]

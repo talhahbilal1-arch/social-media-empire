@@ -1,0 +1,12 @@
+{
+  "videos": {
+    "daily_deal_darling": "/Users/homefolder/Desktop/social-media-empire/remotion-videos/public/assets/videos/daily-deal-darling-bg.mp4",
+    "fitnessmadeasy": "/Users/homefolder/Desktop/social-media-empire/remotion-videos/public/assets/videos/fitness-made-easy-bg.mp4",
+    "menopause_planner": "/Users/homefolder/Desktop/social-media-empire/remotion-videos/public/assets/videos/menopause-planner-bg.mp4"
+  },
+  "audio": {
+    "daily_deal_darling": "/Users/homefolder/Desktop/social-media-empire/remotion-videos/public/assets/audio/daily-deal-darling-voice.mp3",
+    "fitnessmadeasy": "/Users/homefolder/Desktop/social-media-empire/remotion-videos/public/assets/audio/fitness-made-easy-voice.mp3",
+    "menopause_planner": "/Users/homefolder/Desktop/social-media-empire/remotion-videos/public/assets/audio/menopause-planner-voice.mp3"
+  }
+}
