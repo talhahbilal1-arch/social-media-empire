@@ -19,6 +19,9 @@ on:
         type: string
         required: false
 
+permissions:
+  contents: write
+
 env:
   PYTHON_VERSION: '3.11'
 
@@ -67,6 +70,7 @@ jobs:
         id: generate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: |
           KEYWORD="${{ steps.keyword.outputs.keyword }}"
@@ -76,20 +80,10 @@ jobs:
 
           echo "Generating FitOver35 article for: $KEYWORD"
 
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::warning::ANTHROPIC_API_KEY not set, falling back to Gemini"
-            # Fall back to existing generator if Claude not available
-            GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" \
-            python automation/articles/fitover35_article_generator.py \
-              --keyword "$KEYWORD" \
-              --category "$CATEGORY" \
-              --output "outputs/fitover35-website/articles/$FILENAME"
-          else
-            python automation/articles/fitover35_article_generator.py \
-              --keyword "$KEYWORD" \
-              --category "$CATEGORY" \
-              --output "outputs/fitover35-website/articles/$FILENAME"
-          fi
+          python automation/articles/fitover35_article_generator.py \
+            --keyword "$KEYWORD" \
+            --category "$CATEGORY" \
+            --output "outputs/fitover35-website/articles/$FILENAME"
 
       - name: Update blog listing
         run: |

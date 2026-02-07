@@ -78,8 +78,10 @@ jobs:
                   result = db.client.table('weekly_calendar').select('calendar_data, trends_data') \
                       .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
               except Exception as e:
-                  print(f'Cannot read weekly_calendar table for {brand}: {e}')
-                  print('Run database/weekly_calendar_schema.sql in Supabase first.')
+                  if 'PGRST205' in str(e) or 'schema cache' in str(e):
+                      print(f'Supabase schema cache stale for weekly_calendar — restart project from dashboard')
+                  else:
+                      print(f'Cannot read weekly_calendar table for {brand}: {e}')
                   continue
 
               if not result.data:
@@ -122,7 +124,7 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           python -c "
-          import sys, json
+          import sys, json, requests, os
           sys.path.insert(0, '.')
 
           from database.supabase_client import get_supabase_client
@@ -136,7 +138,10 @@ jobs:
                   result = db.client.table('weekly_calendar').select('trends_data') \
                       .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
               except Exception as e:
-                  print(f'\n{brand.upper()}: Table not found (run weekly_calendar_schema.sql)')
+                  if 'PGRST205' in str(e) or 'schema cache' in str(e):
+                      print(f'\n{brand.upper()}: Supabase schema cache stale — restart project from dashboard Settings > General')
+                  else:
+                      print(f'\n{brand.upper()}: Error reading weekly_calendar: {e}')
                   continue
 
               if result.data:
