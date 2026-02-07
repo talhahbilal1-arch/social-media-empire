@@ -188,7 +188,7 @@ class VideoContentGenerator:
     def _call_claude(self, prompt: str, max_tokens: int = 500) -> str:
         """Call Claude API and return text response."""
         response = self.claude_client.messages.create(
-            model="claude-sonnet-4-5-20250514",
+            model="claude-sonnet-4-5-20250929",
             max_tokens=max_tokens,
             messages=[{"role": "user", "content": prompt}]
         )
