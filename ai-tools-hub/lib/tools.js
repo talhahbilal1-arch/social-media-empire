@@ -1,6 +1,7 @@
 import tools from '../content/tools.json'
 import categories from '../content/categories.json'
 import comparisons from '../content/comparisons.json'
+import affiliateConfig from '../config/affiliate-links.json'
 
 export function getAllTools() {
   return tools
@@ -54,4 +55,27 @@ export function generateStarRating(rating) {
   const fullStars = Math.floor(rating)
   const hasHalf = rating % 1 >= 0.3
   return { fullStars, hasHalf, emptyStars: 5 - fullStars - (hasHalf ? 1 : 0) }
+}
+
+/**
+ * Get the affiliate URL for a tool with UTM tracking parameters.
+ * Uses config/affiliate-links.json for real affiliate URLs,
+ * falls back to the tool's affiliate_url from tools.json.
+ */
+export function getAffiliateUrl(slug, campaign) {
+  const config = affiliateConfig.tools[slug]
+  const tool = getToolBySlug(slug)
+
+  // Priority: config affiliate_url (if set) > tool.affiliate_url > config fallback
+  let url = tool?.affiliate_url || ''
+  if (config && config.affiliate_url !== 'PASTE_LINK_HERE') {
+    url = config.affiliate_url
+  } else if (config) {
+    url = config.fallback_url
+  }
+
+  // Append UTM parameters for tracking
+  const utm = campaign || 'review'
+  const separator = url.includes('?') ? '&' : '?'
+  return `${url}${separator}utm_source=toolpilot&utm_medium=${utm}&utm_campaign=${slug}`
 }

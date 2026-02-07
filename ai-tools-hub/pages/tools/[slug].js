@@ -1,7 +1,8 @@
 import Layout from '../../components/Layout'
 import StarRating from '../../components/StarRating'
+import AffiliateLink, { AffiliateDisclosure } from '../../components/AffiliateLink'
 import Link from 'next/link'
-import { getAllTools, getToolBySlug, formatPrice, getAllComparisons } from '../../lib/tools'
+import { getAllTools, getToolBySlug, formatPrice, getAllComparisons, getAffiliateUrl } from '../../lib/tools'
 
 export default function ToolPage({ tool, relatedComparisons }) {
   if (!tool) return null
@@ -43,20 +44,20 @@ export default function ToolPage({ tool, relatedComparisons }) {
                 <span className="text-sm text-gray-500">Starting at</span>
                 <p className="text-3xl font-bold text-gray-900">{formatPrice(tool.pricing.starting_price)}</p>
               </div>
-              <a
-                href={tool.affiliate_url}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
+              <AffiliateLink
+                href={tool.affiliateUrlWithUtm}
+                tool={tool.slug}
                 className="btn-primary"
               >
                 Try {tool.name} Free &rarr;
-              </a>
+              </AffiliateLink>
             </div>
           </div>
         </div>
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <AffiliateDisclosure />
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
@@ -178,19 +179,18 @@ export default function ToolPage({ tool, relatedComparisons }) {
                 </div>
               </dl>
 
-              <a
-                href={tool.affiliate_url}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
+              <AffiliateLink
+                href={tool.affiliateUrlWithUtm}
+                tool={tool.slug}
                 className="btn-primary w-full justify-center mt-6"
               >
                 Try {tool.name} &rarr;
-              </a>
+              </AffiliateLink>
 
               <a
                 href={tool.website}
                 target="_blank"
-                rel="noopener noreferrer nofollow"
+                rel="noopener noreferrer"
                 className="btn-secondary w-full justify-center mt-2 text-sm"
               >
                 Visit Website
@@ -258,7 +258,13 @@ export async function getStaticProps({ params }) {
   const allComparisons = getAllComparisons()
   const relatedComparisons = allComparisons.filter(c => c.tools.includes(params.slug))
 
+  // Pre-compute affiliate URL with UTM tracking
+  const affiliateUrlWithUtm = getAffiliateUrl(params.slug, 'review')
+
   return {
-    props: { tool, relatedComparisons },
+    props: {
+      tool: { ...tool, affiliateUrlWithUtm },
+      relatedComparisons,
+    },
   }
 }

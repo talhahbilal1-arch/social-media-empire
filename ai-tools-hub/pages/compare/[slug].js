@@ -1,8 +1,9 @@
 import Layout from '../../components/Layout'
 import ComparisonTable from '../../components/ComparisonTable'
 import StarRating from '../../components/StarRating'
+import AffiliateLink, { AffiliateDisclosure } from '../../components/AffiliateLink'
 import Link from 'next/link'
-import { getAllComparisons, getComparisonBySlug, getToolBySlug, formatPrice } from '../../lib/tools'
+import { getAllComparisons, getComparisonBySlug, getToolBySlug, formatPrice, getAffiliateUrl } from '../../lib/tools'
 
 export default function ComparisonPage({ comparison, tool1, tool2 }) {
   if (!comparison || !tool1 || !tool2) return null
@@ -61,6 +62,8 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-12">
+        <AffiliateDisclosure />
+
         {/* Verdict */}
         <section className="bg-green-50 border border-green-200 rounded-xl p-6 md:p-8">
           <h2 className="text-xl font-bold text-gray-900 mb-3">Our Verdict</h2>
@@ -122,14 +125,13 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
                     ))}
                   </tbody>
                 </table>
-                <a
-                  href={tool.affiliate_url}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
+                <AffiliateLink
+                  href={tool.affiliateUrlWithUtm}
+                  tool={tool.slug}
                   className="btn-primary w-full justify-center mt-4"
                 >
                   Try {tool.name} &rarr;
-                </a>
+                </AffiliateLink>
               </div>
             ))}
           </div>
@@ -177,7 +179,11 @@ export async function getStaticProps({ params }) {
   const tool1 = getToolBySlug(comparison.tools[0])
   const tool2 = getToolBySlug(comparison.tools[1])
 
+  // Pre-compute affiliate URLs with UTM tracking
+  const tool1WithUtm = { ...tool1, affiliateUrlWithUtm: getAffiliateUrl(tool1.slug, 'comparison') }
+  const tool2WithUtm = { ...tool2, affiliateUrlWithUtm: getAffiliateUrl(tool2.slug, 'comparison') }
+
   return {
-    props: { comparison, tool1, tool2 },
+    props: { comparison, tool1: tool1WithUtm, tool2: tool2WithUtm },
   }
 }

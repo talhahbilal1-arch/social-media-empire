@@ -86,7 +86,7 @@ export default function Layout({ children, title, description, canonical }) {
                   ToolPilot helps you find the perfect AI tool for your needs with honest reviews and detailed comparisons.
                 </p>
                 <p className="text-gray-500 text-xs">
-                  Affiliate disclosure: We may earn commissions from qualifying purchases through links on this site.
+                  Affiliate disclosure: Some links on this site are affiliate links. If you purchase through these links, we may earn a commission at no additional cost to you. This does not influence our reviews or recommendations.
                 </p>
               </div>
             </div>

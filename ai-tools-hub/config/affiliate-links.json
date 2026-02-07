@@ -1,0 +1,118 @@
+{
+  "tools": {
+    "chatgpt": {
+      "name": "ChatGPT",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "OpenAI",
+      "commission": "TBD",
+      "fallback_url": "https://chat.openai.com"
+    },
+    "claude": {
+      "name": "Claude",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Anthropic",
+      "commission": "TBD",
+      "fallback_url": "https://claude.ai"
+    },
+    "jasper": {
+      "name": "Jasper",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Jasper",
+      "commission": "30% recurring",
+      "fallback_url": "https://www.jasper.ai"
+    },
+    "writesonic": {
+      "name": "Writesonic",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Writesonic",
+      "commission": "30% recurring",
+      "fallback_url": "https://writesonic.com"
+    },
+    "grammarly": {
+      "name": "Grammarly",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Grammarly",
+      "commission": "$25/signup",
+      "fallback_url": "https://www.grammarly.com"
+    },
+    "notion-ai": {
+      "name": "Notion AI",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Notion",
+      "commission": "TBD",
+      "fallback_url": "https://www.notion.so"
+    },
+    "copy-ai": {
+      "name": "Copy.ai",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Copy.ai",
+      "commission": "30% recurring",
+      "fallback_url": "https://www.copy.ai"
+    },
+    "scalenut": {
+      "name": "Scalenut",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Scalenut",
+      "commission": "20-30% recurring",
+      "fallback_url": "https://www.scalenut.com"
+    },
+    "cursor": {
+      "name": "Cursor",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Cursor",
+      "commission": "TBD",
+      "fallback_url": "https://cursor.com"
+    },
+    "midjourney": {
+      "name": "Midjourney",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Midjourney",
+      "commission": "TBD",
+      "fallback_url": "https://www.midjourney.com"
+    },
+    "canva": {
+      "name": "Canva",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Canva",
+      "commission": "$36/new Pro sub",
+      "fallback_url": "https://www.canva.com"
+    },
+    "runway": {
+      "name": "Runway",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Runway",
+      "commission": "TBD",
+      "fallback_url": "https://runwayml.com"
+    },
+    "elevenlabs": {
+      "name": "ElevenLabs",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "ElevenLabs",
+      "commission": "~20% recurring",
+      "fallback_url": "https://elevenlabs.io"
+    },
+    "synthesia": {
+      "name": "Synthesia",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Synthesia",
+      "commission": "20-25% recurring",
+      "fallback_url": "https://www.synthesia.io"
+    },
+    "descript": {
+      "name": "Descript",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Descript",
+      "commission": "15-20% recurring",
+      "fallback_url": "https://www.descript.com"
+    },
+    "perplexity": {
+      "name": "Perplexity",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Perplexity",
+      "commission": "TBD",
+      "fallback_url": "https://perplexity.ai"
+    }
+  },
+  "default_disclosure": "This page contains affiliate links. We may earn a commission at no extra cost to you when you purchase through our links.",
+  "last_updated": "2026-02-06"
+}
