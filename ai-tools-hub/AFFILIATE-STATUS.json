@@ -1,8 +1,13 @@
 {
-  "last_updated": "2026-02-06",
+  "last_updated": "2026-02-07",
   "site_url": "https://toolpilot-hub.netlify.app",
   "netlify_site_id": "616e7bf4-fe47-495b-b13e-934e51546d4c",
   "account_email": "talhahbilal1@gmail.com",
+  "partnerstack_account": {
+    "email": "talhahbilal1@gmail.com",
+    "username": "talhahbilal1",
+    "dashboard": "https://dash.partnerstack.com"
+  },
   "programs": {
     "writesonic": {
       "status": "pending_approval",
@@ -14,76 +19,76 @@
       "notes": "Signup completed. Application pending review. Will receive email when approved. Login: talhahbilal1@gmail.com / ToolPilot2026!Aff"
     },
     "jasper": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "unavailable",
+      "signup_date": "2026-02-06",
+      "platform": "impact.com",
       "affiliate_url": null,
       "commission": "30% recurring",
       "signup_page": "https://www.jasper.ai/partners",
-      "notes": "High priority. Check /partners or /affiliates page."
+      "notes": "Jasper affiliate program page exists on impact.com but signup was not accessible. Program may be invite-only or paused."
     },
     "copy-ai": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "unavailable",
+      "signup_date": "2026-02-06",
+      "platform": "PartnerStack",
       "affiliate_url": null,
       "commission": "30% recurring (first year)",
       "signup_page": "https://www.copy.ai/affiliates",
-      "notes": "High priority. Likely uses PartnerStack."
+      "notes": "Copy.ai not found on PartnerStack marketplace. Program may have been discontinued or moved."
     },
     "scalenut": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "unavailable",
+      "signup_date": "2026-02-06",
+      "platform": "FirstPromoter",
       "affiliate_url": null,
       "commission": "20-30% recurring",
       "signup_page": "https://www.scalenut.com/affiliate-program",
-      "notes": "Medium priority."
+      "notes": "Scalenut affiliate program (FirstPromoter) is closed to new signups."
     },
     "elevenlabs": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "pending_approval",
+      "signup_date": "2026-02-06",
+      "platform": "PartnerStack",
       "affiliate_url": null,
       "commission": "~20% recurring",
-      "signup_page": "https://elevenlabs.io/affiliates",
-      "notes": "High priority. Fast-growing AI audio."
+      "dashboard_url": "https://dash.partnerstack.com/marketplace/all/details/elevenlabsinc",
+      "notes": "Application submitted via PartnerStack. Pending Network approval."
     },
     "canva": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "unavailable",
+      "signup_date": "2026-02-06",
+      "platform": "Canva",
       "affiliate_url": null,
       "commission": "Up to $36/new Pro sub",
       "signup_page": "https://www.canva.com/affiliates/",
-      "notes": "Medium priority. One-time bounty via Impact.com."
+      "notes": "Canva affiliate program has been sunset. Replaced by invite-only 'Canvassador' program for content creators."
     },
     "grammarly": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "needs_manual_signup",
+      "signup_date": "2026-02-06",
+      "platform": "impact.com",
       "affiliate_url": null,
       "commission": "$25/free signup",
-      "signup_page": "https://www.grammarly.com/affiliates",
-      "notes": "Medium priority. High conversion. Via ShareASale or Impact."
+      "signup_page": "https://app.impact.com/campaign-promo-signup/Grammarly.brand",
+      "notes": "Impact.com signup form has anti-fraud detection that blocks automated submissions. Must be completed manually in browser. Use credentials: username talhahbilal1, email talhahbilal1@gmail.com, password ToolPilot2026!Aff."
     },
     "synthesia": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "needs_manual_signup",
+      "signup_date": "2026-02-07",
+      "platform": "HubSpot form (direct)",
       "affiliate_url": null,
       "commission": "20-25% recurring",
-      "signup_page": "https://www.synthesia.io/affiliates",
-      "notes": "Low priority."
+      "signup_page": "https://share.hsforms.com/1y8Uy9y0RRvWwomvWwK01Tg4x8k3",
+      "notes": "HubSpot form requires a business email (Gmail rejected). Form is pre-filled and ready - just change email to a non-Gmail work email and click Submit."
     },
     "descript": {
-      "status": "not_started",
-      "signup_date": null,
-      "platform": null,
+      "status": "pending_approval",
+      "signup_date": "2026-02-07",
+      "platform": "PartnerStack",
       "affiliate_url": null,
       "commission": "15-20% recurring",
-      "signup_page": "https://www.descript.com/affiliates",
-      "notes": "Low priority."
+      "dashboard_url": "https://dash.partnerstack.com/descriptinc/application",
+      "notes": "Application submitted via PartnerStack. Review can take up to 30 days. Updates sent to talhahbilal1@gmail.com."
     },
     "chatgpt": {
       "status": "no_program",
@@ -145,6 +150,21 @@
       "notes": "Low priority. Check if Runway has an affiliate program."
     }
   },
+  "summary": {
+    "pending_approval": 3,
+    "needs_manual_signup": 2,
+    "unavailable": 3,
+    "no_program": 4,
+    "not_started": 3,
+    "approved": 0
+  },
   "tools_json_update_needed": true,
-  "instructions": "After getting approved affiliate URLs, update content/tools.json affiliate_url fields, rebuild with 'npm run build', commit and push to revenue-site branch."
+  "instructions": "After getting approved affiliate URLs, update content/tools.json affiliate_url fields, rebuild with 'npm run build', commit and push to revenue-site branch.",
+  "next_steps": [
+    "Check email for ElevenLabs, Descript, Writesonic approvals",
+    "Complete Grammarly signup manually on impact.com",
+    "Complete Synthesia signup with a business email (not Gmail)",
+    "Once approved, update config/affiliate-links.json with real affiliate URLs",
+    "Rebuild site: cd ai-tools-hub && npm run build"
+  ]
 }
