@@ -14,7 +14,18 @@ import anthropic
 
 logger = logging.getLogger(__name__)
 
-client = anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY', ''))
+_client = None
+
+
+def _get_client():
+    """Lazy-initialize the Anthropic client to prevent import-time failures."""
+    global _client
+    if _client is None:
+        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        if not api_key:
+            raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
+        _client = anthropic.Anthropic(api_key=api_key)
+    return _client
 
 # Load affiliate config
 AFFILIATE_CONFIG_PATH = os.path.join(
@@ -46,7 +57,7 @@ def generate_article_for_trend(brand_key, trending_topic, article_slug, supabase
         "menopause": "FREE Menopause Symptom Tracker & Relief Guide"
     }
 
-    response = client.messages.create(
+    response = _get_client().messages.create(
         model="claude-sonnet-4-5-20250929",
         max_tokens=4000,
         messages=[{
@@ -122,6 +133,9 @@ keywords: ["keyword1", "keyword2", "keyword3"]
     return article_content
 
 
+MAX_ARTICLES_PER_BRAND = 3  # Limit per run to prevent workflow timeout
+
+
 def generate_articles_for_weekly_calendar(calendar, brand_key, supabase_client):
     """Generate articles for all unique trending topics in the weekly calendar."""
     if not calendar or 'days' not in calendar:
@@ -136,6 +150,11 @@ def generate_articles_for_weekly_calendar(calendar, brand_key, supabase_client):
             topic_name = pin.get('trending_topic', '')
             if slug and slug not in articles_needed:
                 articles_needed[slug] = topic_name
+
+    total = len(articles_needed)
+    if total > MAX_ARTICLES_PER_BRAND:
+        print(f"Limiting {brand_key} from {total} to {MAX_ARTICLES_PER_BRAND} articles per run")
+        articles_needed = dict(list(articles_needed.items())[:MAX_ARTICLES_PER_BRAND])
 
     print(f"Generating {len(articles_needed)} articles for {brand_key}")
 

@@ -17,7 +17,18 @@ from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
-client = anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY', ''))
+_client = None
+
+
+def _get_client():
+    """Lazy-initialize the Anthropic client to prevent import-time failures."""
+    global _client
+    if _client is None:
+        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        if not api_key:
+            raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
+        _client = anthropic.Anthropic(api_key=api_key)
+    return _client
 
 # ═══════════════════════════════════════════════════════════════
 # BRAND CONFIGURATIONS
@@ -532,7 +543,7 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
     "alt_text": "Brief accessible description of what the pin image should show"
 }}"""
 
-    response = client.messages.create(
+    response = _get_client().messages.create(
         model="claude-sonnet-4-5-20250929",
         max_tokens=800,
         messages=[{"role": "user", "content": prompt}]
@@ -726,7 +737,7 @@ OUTPUT ONLY THIS JSON:
     "alt_text": "..."
 }}"""
 
-    response = client.messages.create(
+    response = _get_client().messages.create(
         model="claude-sonnet-4-5-20250929",
         max_tokens=800,
         messages=[{"role": "user", "content": prompt}]

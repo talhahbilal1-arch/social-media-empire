@@ -22,7 +22,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
+
+try:
+    import anthropic as _anthropic
+except ImportError:
+    _anthropic = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -252,23 +260,53 @@ class FitOver35ArticleGenerator:
     """Generate SEO-optimized fitness articles using Gemini AI."""
 
     def __init__(self, api_key: Optional[str] = None, pexels_key: Optional[str] = None):
-        """Initialize with API keys."""
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-        if not self.api_key:
-            raise ValueError("GEMINI_API_KEY not set")
-
-        genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-2.0-flash')
+        """Initialize with API keys. Falls back to Anthropic if Gemini unavailable."""
         self.pexels_key = pexels_key or os.getenv("PEXELS_API_KEY")
+        gemini_key = api_key or os.getenv("GEMINI_API_KEY")
+        anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+
+        if gemini_key and genai:
+            genai.configure(api_key=gemini_key)
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
+            self.backend = 'gemini'
+            logger.info("Using Gemini backend for article generation")
+        elif anthropic_key and _anthropic:
+            self._anthropic_client = _anthropic.Anthropic(api_key=anthropic_key)
+            self.backend = 'anthropic'
+            logger.info("GEMINI_API_KEY not set, using Anthropic backend")
+        else:
+            raise ValueError(
+                "Neither GEMINI_API_KEY nor ANTHROPIC_API_KEY is set. "
+                "At least one AI API key is required for article generation."
+            )
 
     def _call_gemini(self, prompt: str) -> str:
-        """Make a Gemini API call with retry."""
+        """Make an AI API call with retry. Dispatches to Gemini or Anthropic."""
+        if self.backend == 'anthropic':
+            return self._call_anthropic(prompt)
         for attempt in range(3):
             try:
                 response = self.model.generate_content(prompt)
                 return response.text
             except Exception as e:
                 logger.error(f"Gemini API error (attempt {attempt + 1}): {e}")
+                if attempt == 2:
+                    raise
+                import time
+                time.sleep(2 ** attempt)
+
+    def _call_anthropic(self, prompt: str) -> str:
+        """Make an Anthropic API call with retry."""
+        for attempt in range(3):
+            try:
+                response = self._anthropic_client.messages.create(
+                    model="claude-sonnet-4-5-20250929",
+                    max_tokens=4000,
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                return response.content[0].text
+            except Exception as e:
+                logger.error(f"Anthropic API error (attempt {attempt + 1}): {e}")
                 if attempt == 2:
                     raise
                 import time

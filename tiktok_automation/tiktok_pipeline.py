@@ -88,11 +88,12 @@ def generate_script(client: anthropic.Anthropic, category: Optional[str] = None)
     return data
 
 
-def generate_audio(script_text: str) -> bytes:
-    """Generate TTS audio via ElevenLabs API."""
+def generate_audio(script_text: str) -> Optional[bytes]:
+    """Generate TTS audio via ElevenLabs API. Returns None if key not set."""
     api_key = os.environ.get("ELEVENLABS_API_KEY", "")
     if not api_key:
-        raise ValueError("ELEVENLABS_API_KEY not set")
+        logger.warning("ELEVENLABS_API_KEY not set — skipping audio generation")
+        return None
 
     response = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVENLABS_VOICE_ID}",
@@ -209,34 +210,48 @@ def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]
 
 def run_pipeline(category: Optional[str] = None) -> dict:
     """Run the full TikTok content pipeline for one video."""
-    claude_client = anthropic.Anthropic(
-        api_key=os.environ.get("ANTHROPIC_API_KEY", "")
-    )
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        raise ValueError("ANTHROPIC_API_KEY not set — cannot generate scripts")
+
+    claude_client = anthropic.Anthropic(api_key=api_key)
 
     # Step 1: Generate script
     script = generate_script(claude_client, category)
 
-    # Step 2: Generate audio
-    audio_data = generate_audio(script["script"])
+    # Step 2: Generate audio (optional — skipped if ELEVENLABS_API_KEY not set)
+    audio_url = None
+    try:
+        audio_data = generate_audio(script["script"])
+        if audio_data:
+            timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+            filename = f"{timestamp}-{script['category']}.mp3"
+            audio_url = upload_audio(audio_data, filename)
+    except Exception as e:
+        logger.warning(f"Audio generation/upload failed (non-fatal): {e}")
 
-    # Step 3: Upload audio
-    timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
-    filename = f"{timestamp}-{script['category']}.mp3"
-    audio_url = upload_audio(audio_data, filename)
-
-    # Step 4: Find stock video
+    # Step 3: Find stock video
     video_url = find_stock_video(script["category"])
 
-    # Step 5: Save to Supabase
-    record = save_to_supabase(script, audio_url, video_url)
-
-    return {
-        "id": record["id"],
-        "topic": record["topic"],
-        "status": record["status"],
-        "audio_url": audio_url,
-        "video_url": video_url,
-    }
+    # Step 4: Save to Supabase
+    try:
+        record = save_to_supabase(script, audio_url, video_url)
+        return {
+            "id": record["id"],
+            "topic": record["topic"],
+            "status": record["status"],
+            "audio_url": audio_url,
+            "video_url": video_url,
+        }
+    except Exception as e:
+        logger.warning(f"Supabase save failed: {e}")
+        return {
+            "id": "local",
+            "topic": script["topic"],
+            "status": "script_only",
+            "audio_url": audio_url,
+            "video_url": video_url,
+        }
 
 
 def main():
