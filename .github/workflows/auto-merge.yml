@@ -5,6 +5,7 @@ on:
     branches:
       - 'claude/check-github-automation-*'
       - 'claude/merge-to-main-*'
+      - 'claude/check-workflow-status-*'
   workflow_dispatch:
 
 permissions:
