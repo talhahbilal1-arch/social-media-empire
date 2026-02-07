@@ -2,15 +2,67 @@ import Layout from '../../components/Layout'
 import StarRating from '../../components/StarRating'
 import AffiliateLink, { AffiliateDisclosure } from '../../components/AffiliateLink'
 import Link from 'next/link'
-import { getAllTools, getToolBySlug, formatPrice, getAllComparisons, getAffiliateUrl } from '../../lib/tools'
+import { getAllTools, getToolBySlug, getToolsByCategory, formatPrice, getAllComparisons, getAffiliateUrl } from '../../lib/tools'
 
-export default function ToolPage({ tool, relatedComparisons }) {
+const SITE_URL = 'https://toolpilot-hub.netlify.app'
+
+export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
   if (!tool) return null
+
+  const canonicalUrl = `${SITE_URL}/tools/${tool.slug}/`
+
+  // Combined structured data: SoftwareApplication + Review + BreadcrumbList
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": tool.name,
+      "description": tool.description,
+      "applicationCategory": "AI Tool",
+      "operatingSystem": "Web",
+      "url": tool.website,
+      "offers": {
+        "@type": "AggregateOffer",
+        "lowPrice": tool.pricing.starting_price || 0,
+        "priceCurrency": "USD",
+        "offerCount": tool.pricing.plans.length
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": tool.rating,
+        "reviewCount": tool.review_count,
+        "bestRating": 5
+      },
+      "review": {
+        "@type": "Review",
+        "author": { "@type": "Organization", "name": "ToolPilot" },
+        "datePublished": "2026-02-06",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": tool.rating,
+          "bestRating": 5
+        },
+        "reviewBody": `${tool.name} review: ${tool.tagline}. ${tool.description}`
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+        { "@type": "ListItem", "position": 2, "name": tool.category.charAt(0).toUpperCase() + tool.category.slice(1), "item": `${SITE_URL}/category/${tool.category}/` },
+        { "@type": "ListItem", "position": 3, "name": tool.name }
+      ]
+    }
+  ]
 
   return (
     <Layout
-      title={`${tool.name} Review 2026 - Pricing, Features & Alternatives`}
+      title={`${tool.name} Review 2026: Pricing, Features & Alternatives`}
       description={`${tool.name} review: ${tool.tagline}. Compare pricing, features, pros and cons. Is ${tool.name} worth it in 2026?`}
+      canonical={canonicalUrl}
+      ogType="article"
+      structuredData={structuredData}
     >
       {/* Breadcrumb */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -216,31 +268,24 @@ export default function ToolPage({ tool, relatedComparisons }) {
         </div>
       </div>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": tool.name,
-            "description": tool.description,
-            "applicationCategory": "AI Tool",
-            "operatingSystem": "Web",
-            "offers": {
-              "@type": "Offer",
-              "price": tool.pricing.starting_price || 0,
-              "priceCurrency": "USD"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": tool.rating,
-              "reviewCount": tool.review_count,
-              "bestRating": 5
-            }
-          })
-        }}
-      />
+      {/* Related Tools */}
+      {relatedTools.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Tools You Might Like</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {relatedTools.map(related => (
+              <Link key={related.slug} href={`/tools/${related.slug}/`} className="card hover:border-primary-300">
+                <h3 className="font-bold text-gray-900">{related.name}</h3>
+                <p className="text-sm text-gray-600 mt-1 line-clamp-2">{related.tagline}</p>
+                <div className="flex items-center justify-between mt-3">
+                  <span className="text-sm font-medium text-primary-600">{related.rating}/5</span>
+                  <span className="text-sm text-gray-500">{formatPrice(related.pricing.starting_price)}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </Layout>
   )
 }
@@ -261,10 +306,17 @@ export async function getStaticProps({ params }) {
   // Pre-compute affiliate URL with UTM tracking
   const affiliateUrlWithUtm = getAffiliateUrl(params.slug, 'review')
 
+  // Related tools: same category, excluding self, top 3 by rating
+  const relatedTools = getToolsByCategory(tool.category)
+    .filter(t => t.slug !== params.slug)
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 3)
+
   return {
     props: {
       tool: { ...tool, affiliateUrlWithUtm },
       relatedComparisons,
+      relatedTools,
     },
   }
 }

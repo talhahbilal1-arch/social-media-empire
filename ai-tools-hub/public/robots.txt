@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
 Sitemap: https://toolpilot-hub.netlify.app/sitemap.xml

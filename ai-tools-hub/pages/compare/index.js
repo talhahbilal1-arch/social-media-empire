@@ -7,6 +7,7 @@ export default function ComparePage({ comparisons }) {
     <Layout
       title="AI Tool Comparisons - Side-by-Side Reviews"
       description="Compare the best AI tools side-by-side. ChatGPT vs Claude, Jasper vs Writesonic, Midjourney vs Runway, and more detailed comparisons."
+      canonical="https://toolpilot-hub.netlify.app/compare/"
     >
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">

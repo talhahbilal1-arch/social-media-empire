@@ -3,10 +3,12 @@ import Link from 'next/link'
 
 const SITE_NAME = 'ToolPilot'
 const SITE_TAGLINE = 'Find the Perfect AI Tool'
+const SITE_URL = 'https://toolpilot-hub.netlify.app'
 
-export default function Layout({ children, title, description, canonical }) {
+export default function Layout({ children, title, description, canonical, ogType, structuredData }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - ${SITE_TAGLINE}`
   const metaDesc = description || 'Compare the best AI tools in 2026. Honest reviews, pricing comparisons, and expert recommendations for AI writing, coding, image, video, and marketing tools.'
+  const canonicalUrl = canonical || SITE_URL
 
   return (
     <>
@@ -15,15 +17,25 @@ export default function Layout({ children, title, description, canonical }) {
         <meta name="description" content={metaDesc} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-        {canonical && <link rel="canonical" href={canonical} />}
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={fullTitle} />
         <meta property="og:description" content={metaDesc} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType || 'website'} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={fullTitle} />
         <meta name="twitter:description" content={metaDesc} />
+        <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
         <meta name="robots" content="index, follow" />
       </Head>
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
 
       <div className="min-h-screen flex flex-col">
         <header className="bg-white border-b border-gray-200 sticky top-0 z-50">

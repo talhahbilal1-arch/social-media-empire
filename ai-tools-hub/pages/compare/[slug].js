@@ -5,6 +5,8 @@ import AffiliateLink, { AffiliateDisclosure } from '../../components/AffiliateLi
 import Link from 'next/link'
 import { getAllComparisons, getComparisonBySlug, getToolBySlug, formatPrice, getAffiliateUrl } from '../../lib/tools'
 
+const SITE_URL = 'https://toolpilot-hub.netlify.app'
+
 export default function ComparisonPage({ comparison, tool1, tool2 }) {
   if (!comparison || !tool1 || !tool2) return null
 
@@ -12,10 +14,37 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
   const tool2Wins = comparison.comparison_points.filter(p => p.winner === comparison.tools[1]).length
   const ties = comparison.comparison_points.filter(p => p.winner === 'tie').length
 
+  const canonicalUrl = `${SITE_URL}/compare/${comparison.slug}/`
+
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": comparison.title,
+      "description": comparison.meta_description,
+      "datePublished": "2026-02-06",
+      "dateModified": "2026-02-06",
+      "author": { "@type": "Organization", "name": "ToolPilot" },
+      "publisher": { "@type": "Organization", "name": "ToolPilot" }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+        { "@type": "ListItem", "position": 2, "name": "Compare", "item": `${SITE_URL}/compare/` },
+        { "@type": "ListItem", "position": 3, "name": `${tool1.name} vs ${tool2.name}` }
+      ]
+    }
+  ]
+
   return (
     <Layout
-      title={comparison.title}
+      title={`${tool1.name} vs ${tool2.name} (2026): Which Is Better?`}
       description={comparison.meta_description}
+      canonical={canonicalUrl}
+      ogType="article"
+      structuredData={structuredData}
     >
       {/* Breadcrumb */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -148,20 +177,6 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
         </section>
       </div>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": comparison.title,
-            "description": comparison.meta_description,
-            "datePublished": "2026-02-06",
-            "dateModified": "2026-02-06"
-          })
-        }}
-      />
     </Layout>
   )
 }

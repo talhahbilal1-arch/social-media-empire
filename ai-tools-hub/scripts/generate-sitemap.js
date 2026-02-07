@@ -14,27 +14,32 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
   <url>
     <loc>${SITE_URL}/</loc>
     <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>${SITE_URL}/compare/</loc>
     <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+${comparisons.map(c => `  <url>
+    <loc>${SITE_URL}/compare/${c.slug}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>`).join('\n')}
 ${tools.map(t => `  <url>
     <loc>${SITE_URL}/tools/${t.slug}/</loc>
     <lastmod>${today}</lastmod>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>`).join('\n')}
 ${categories.map(c => `  <url>
     <loc>${SITE_URL}/category/${c.slug}/</loc>
     <lastmod>${today}</lastmod>
-    <priority>0.8</priority>
-  </url>`).join('\n')}
-${comparisons.map(c => `  <url>
-    <loc>${SITE_URL}/compare/${c.slug}/</loc>
-    <lastmod>${today}</lastmod>
-    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>`).join('\n')}
 </urlset>`
 
@@ -44,6 +49,7 @@ console.log(`Sitemap generated with ${tools.length + categories.length + compari
 
 const robots = `User-agent: *
 Allow: /
+Disallow: /api/
 
 Sitemap: ${SITE_URL}/sitemap.xml`
 

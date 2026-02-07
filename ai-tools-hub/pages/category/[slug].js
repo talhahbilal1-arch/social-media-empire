@@ -3,13 +3,27 @@ import ToolCard from '../../components/ToolCard'
 import Link from 'next/link'
 import { getAllCategories, getCategoryBySlug, getToolsByCategory } from '../../lib/tools'
 
+const SITE_URL = 'https://toolpilot-hub.netlify.app'
+
 export default function CategoryPage({ category, tools }) {
   if (!category) return null
+
+  const canonicalUrl = `${SITE_URL}/category/${category.slug}/`
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+      { "@type": "ListItem", "position": 2, "name": category.name }
+    ]
+  }
 
   return (
     <Layout
       title={category.meta_title}
       description={category.meta_description}
+      canonical={canonicalUrl}
+      structuredData={structuredData}
     >
       {/* Breadcrumb */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
