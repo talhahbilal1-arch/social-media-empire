@@ -1,0 +1,65 @@
+name: ToolPilot Weekly Report
+
+on:
+  schedule:
+    # Every Sunday at 8AM UTC (12AM PST)
+    - cron: '0 8 * * 0'
+  workflow_dispatch:
+    inputs:
+      skip_live:
+        description: 'Skip live URL checks (offline mode)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  health-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ai-tools-hub
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run health check
+        id: health
+        run: |
+          SKIP_FLAG=""
+          if [ "${{ github.event.inputs.skip_live }}" = "true" ]; then
+            SKIP_FLAG="--skip-live"
+          fi
+
+          # Run text report for logs
+          node scripts/site-health-check.js $SKIP_FLAG || true
+
+          # Run JSON report for email
+          node scripts/site-health-check.js --json $SKIP_FLAG > /tmp/report.json || true
+
+          # Extract key metrics for summary
+          TOTAL=$(node -e "const r=require('/tmp/report.json'); console.log(r.content.totalPages)")
+          HEALTH=$(node -e "const r=require('/tmp/report.json'); console.log(r.overallHealth)")
+          echo "total_pages=$TOTAL" >> $GITHUB_OUTPUT
+          echo "health=$HEALTH" >> $GITHUB_OUTPUT
+
+      - name: Send email report
+        if: env.RESEND_API_KEY != '' && env.ALERT_EMAIL != ''
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: cat /tmp/report.json | node scripts/send-report-email.js
+
+      - name: Job summary
+        run: |
+          echo "### ToolPilot Weekly Health Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Health:** ${{ steps.health.outputs.health }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total pages:** ${{ steps.health.outputs.total_pages }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Site:** https://toolpilot-hub.netlify.app" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Full report printed in step logs above." >> $GITHUB_STEP_SUMMARY

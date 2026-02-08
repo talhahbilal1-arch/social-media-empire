@@ -74,7 +74,6 @@ package-lock.json
 # Misc local files
 Documents:Claude:/
 Etsy Planners./
-ai-tools-hub/
 *.patch
 
 # Python
