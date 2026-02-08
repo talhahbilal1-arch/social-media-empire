@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Care Planner for Menopause</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#A5A58D;--rose:#DDBEA9;--cream:#FAF7F0;--taupe:#A39384;--deep:#6B705C}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#333;background:var(--cream);line-height:1.5}
+.pg{width:8.5in;min-height:11in;margin:0 auto;padding:.75in;background:#fff;position:relative}
+.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,var(--sage),var(--rose))}
+.cover h1{font-size:2.3em;color:#fff;margin-bottom:.3em}
+.cover h2{font-size:1.1em;color:var(--deep);font-weight:400;margin-bottom:2em}
+.cover .sub{color:#fff;font-size:.95em;border-top:2px solid #fff;padding-top:1em;width:60%}
+.hdr{background:var(--deep);color:#fff;text-align:center;padding:.4em;font-size:1.1em;margin-bottom:.5em;border-radius:4px}
+.shdr{background:var(--sage);color:#fff;padding:.25em .5em;font-size:.9em;margin:.4em 0 .3em;border-radius:3px;display:inline-block}
+h3{color:var(--deep);margin:.5em 0 .25em;font-size:.95em}
+p{font-size:.83em;margin-bottom:.3em}
+.note{background:var(--cream);border-left:3px solid var(--sage);padding:.3em .5em;font-size:.78em;margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin-bottom:.4em;font-size:.78em}
+th{background:var(--sage);color:#fff;padding:5px 4px;text-align:left;font-weight:600;font-size:.76em}
+td{border:1px solid #ddd;padding:5px 4px;height:26px}
+tr:nth-child(even) td{background:var(--cream)}
+.box{border:1px solid var(--sage);border-radius:4px;padding:.4em;min-height:.9in;margin-bottom:.35em}
+.box-sm{border:1px solid var(--rose);border-radius:4px;padding:.35em;min-height:.5in;margin-bottom:.25em}
+.box-label{font-size:.76em;color:var(--taupe);font-weight:600;margin-bottom:.15em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.35em}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3em}
+.cl{list-style:none;font-size:.8em}
+.cl li{margin-bottom:.15em}
+.cl li::before{content:"\2610 ";color:var(--sage)}
+.cols2{columns:2;column-gap:.8em}
+.cols3{columns:3;column-gap:.6em}
+.ft{text-align:center;color:var(--taupe);font-size:.7em;position:absolute;bottom:.4in;left:0;right:0}
+.cat{background:var(--rose);color:var(--deep);padding:.2em .5em;border-radius:3px;font-weight:600;font-size:.82em;margin:.4em 0 .2em;display:inline-block}
+.lines{border-bottom:1px solid #e0ddd8;height:24px;margin-bottom:1px}
+.wb{border:1px solid var(--sage);border-radius:4px;padding:.4em;margin-bottom:.4em}
+.wb-title{background:var(--deep);color:#fff;padding:.2em .5em;border-radius:3px;font-weight:600;font-size:.82em;margin-bottom:.3em}
+.scale{display:flex;gap:3px;font-size:.75em;margin:.2em 0}
+.scale span{width:20px;height:20px;border:1px solid var(--sage);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:var(--taupe)}
+.grat-line{border-bottom:1px dashed var(--rose);padding:.3em 0;font-size:.8em}
+@media print{
+  body{background:#fff}
+  .pg{page-break-after:always;margin:0;box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pg:last-child{page-break-after:avoid}
+}
+@media screen{.pg{margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:4px}}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: Cover -->
+<div class="pg cover">
+<div style="font-size:3em;margin-bottom:.3em">&#9829;</div>
+<h1>Self-Care Planner</h1>
+<h2>Nourish Yourself Through the Transition</h2>
+<div class="sub">A Complete Self-Care System<br>for Women in Menopause</div>
+<p style="color:#fff;margin-top:3em;font-size:.85em">Name: ___________________________<br><br>Started: _______________</p>
+</div>
+
+<!-- PAGE 2: Self-Care Assessment -->
+<div class="pg">
+<div class="hdr">Self-Care Assessment</div>
+<p>Before planning your self-care, honestly assess where you are right now. Rate each area from 1 (neglected) to 10 (thriving).</p>
+
+<table>
+<tr><th>Area</th><th>Rating (1-10)</th><th>What's Working</th><th>What Needs Attention</th></tr>
+<tr><td><strong>Physical Health</strong><br><span style="font-size:.75em">Exercise, nutrition, sleep, medical care</span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Emotional Wellbeing</strong><br><span style="font-size:.75em">Mood, stress management, joy, processing feelings</span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Mental Health</strong><br><span style="font-size:.75em">Brain stimulation, learning, creativity, focus</span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Social Connection</strong><br><span style="font-size:.75em">Friendships, family, community, intimacy</span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Spiritual / Purpose</strong><br><span style="font-size:.75em">Meaning, values, meditation, nature, faith</span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Rest &amp; Recovery</strong><br><span style="font-size:.75em">Sleep quality, downtime, saying no, boundaries</span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Environment</strong><br><span style="font-size:.75em">Home comfort, workspace, decluttering, beauty</span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Professional / Financial</strong><br><span style="font-size:.75em">Career satisfaction, money stress, work-life balance</span></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>My Top 3 Self-Care Priorities</h3>
+<div class="box" style="min-height:1.2in"><div class="box-label">Based on my assessment, the areas that need the most attention are:</div><p style="margin-top:.2em">1.<br><br>2.<br><br>3.</p></div>
+
+<h3>My Self-Care Non-Negotiables</h3>
+<div class="box-sm"><div class="box-label">Three things I commit to doing every single day, no matter what:</div></div>
+<div class="ft">Self-Care Planner &mdash; Assessment</div>
+</div>
+
+<!-- PAGES 3-6: 4 Weekly Planners -->
+<div class="pg">
+<div class="hdr">Week 1 &mdash; Self-Care Planner</div>
+<p style="font-size:.8em;margin-bottom:.3em">Week of: _______________ Focus Area: _______________</p>
+<table>
+<tr><th>Day</th><th>Morning Self-Care</th><th>Afternoon Self-Care</th><th>Evening Self-Care</th></tr>
+<tr><td><strong>Monday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Tuesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Wednesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Thursday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Friday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Saturday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Sunday</strong></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Self-Care Goals</h3>
+<ul class="cl">
+<li>Body: ________________________________________________</li>
+<li>Mind: ________________________________________________</li>
+<li>Spirit: ________________________________________________</li>
+<li>Social: ________________________________________________</li>
+</ul>
+<h3>End-of-Week Check-In</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">What I actually did for myself this week:</div></div>
+<div class="box-sm"><div class="box-label">How I feel compared to last week:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">What I want to do differently next week:</div></div>
+<div class="ft">Self-Care Planner &mdash; Week 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 2 &mdash; Self-Care Planner</div>
+<p style="font-size:.8em;margin-bottom:.3em">Week of: _______________ Focus Area: _______________</p>
+<table>
+<tr><th>Day</th><th>Morning Self-Care</th><th>Afternoon Self-Care</th><th>Evening Self-Care</th></tr>
+<tr><td><strong>Monday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Tuesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Wednesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Thursday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Friday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Saturday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Sunday</strong></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Self-Care Goals</h3>
+<ul class="cl">
+<li>Body: ________________________________________________</li>
+<li>Mind: ________________________________________________</li>
+<li>Spirit: ________________________________________________</li>
+<li>Social: ________________________________________________</li>
+</ul>
+<h3>End-of-Week Check-In</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">What I actually did for myself this week:</div></div>
+<div class="box-sm"><div class="box-label">How I feel compared to last week:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">What I want to do differently next week:</div></div>
+<div class="ft">Self-Care Planner &mdash; Week 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 3 &mdash; Self-Care Planner</div>
+<p style="font-size:.8em;margin-bottom:.3em">Week of: _______________ Focus Area: _______________</p>
+<table>
+<tr><th>Day</th><th>Morning Self-Care</th><th>Afternoon Self-Care</th><th>Evening Self-Care</th></tr>
+<tr><td><strong>Monday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Tuesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Wednesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Thursday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Friday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Saturday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Sunday</strong></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Self-Care Goals</h3>
+<ul class="cl">
+<li>Body: ________________________________________________</li>
+<li>Mind: ________________________________________________</li>
+<li>Spirit: ________________________________________________</li>
+<li>Social: ________________________________________________</li>
+</ul>
+<h3>End-of-Week Check-In</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">What I actually did for myself this week:</div></div>
+<div class="box-sm"><div class="box-label">How I feel compared to last week:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">What I want to do differently next week:</div></div>
+<div class="ft">Self-Care Planner &mdash; Week 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 4 &mdash; Self-Care Planner</div>
+<p style="font-size:.8em;margin-bottom:.3em">Week of: _______________ Focus Area: _______________</p>
+<table>
+<tr><th>Day</th><th>Morning Self-Care</th><th>Afternoon Self-Care</th><th>Evening Self-Care</th></tr>
+<tr><td><strong>Monday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Tuesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Wednesday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Thursday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Friday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Saturday</strong></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Sunday</strong></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Self-Care Goals</h3>
+<ul class="cl">
+<li>Body: ________________________________________________</li>
+<li>Mind: ________________________________________________</li>
+<li>Spirit: ________________________________________________</li>
+<li>Social: ________________________________________________</li>
+</ul>
+<h3>End-of-Week Check-In</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">What I actually did for myself this week:</div></div>
+<div class="box-sm"><div class="box-label">How I feel compared to last week:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">What I want to do differently next week:</div></div>
+<div class="ft">Self-Care Planner &mdash; Week 4</div>
+</div>
+
+<!-- PAGE 7: Activity Ideas -->
+<div class="pg">
+<div class="hdr">60+ Self-Care Activity Ideas</div>
+<p style="font-size:.82em;margin-bottom:.4em">Check off activities as you try them. Star your favorites to build into your routine.</p>
+
+<div class="cat">Body Care</div>
+<ul class="cl cols2">
+<li>30-minute walk in nature</li>
+<li>Gentle yoga or stretching</li>
+<li>Warm Epsom salt bath</li>
+<li>Strength training session</li>
+<li>Swimming or water aerobics</li>
+<li>Foam rolling or self-massage</li>
+<li>Dance to favorite music</li>
+<li>Cook a nutrient-rich meal</li>
+<li>Dry brushing before shower</li>
+<li>Try a new healthy recipe</li>
+<li>Drink 8 glasses of water</li>
+<li>Get a professional massage</li>
+</ul>
+
+<div class="cat">Mind Care</div>
+<ul class="cl cols2">
+<li>Read for 30 minutes</li>
+<li>Complete a puzzle or crossword</li>
+<li>Learn something new online</li>
+<li>Listen to a podcast</li>
+<li>Write in this journal</li>
+<li>Organize one drawer or shelf</li>
+<li>Create a vision board</li>
+<li>Try adult coloring</li>
+<li>Write a letter to someone</li>
+<li>Declutter one room</li>
+<li>Plan a future trip</li>
+<li>Practice a new language</li>
+</ul>
+
+<div class="cat">Spirit Care</div>
+<ul class="cl cols2">
+<li>10-minute meditation</li>
+<li>Watch the sunrise or sunset</li>
+<li>Spend time in a garden</li>
+<li>Practice deep breathing</li>
+<li>Write down affirmations</li>
+<li>Sit quietly with tea</li>
+<li>Visit a place that inspires you</li>
+<li>Practice gratitude journaling</li>
+<li>Spend time near water</li>
+<li>Try a guided visualization</li>
+<li>Light candles and reflect</li>
+<li>Forest bathing / nature walk</li>
+</ul>
+
+<div class="cat">Social Care</div>
+<ul class="cl cols2">
+<li>Call a friend you miss</li>
+<li>Schedule a coffee date</li>
+<li>Join a class or group</li>
+<li>Volunteer for a cause</li>
+<li>Have a meaningful conversation</li>
+<li>Write a thank-you note</li>
+<li>Plan a girls' night</li>
+<li>Ask for help (yes, this counts)</li>
+<li>Set a boundary with someone</li>
+<li>Join an online community</li>
+<li>Hug someone you love</li>
+<li>Share how you really feel</li>
+</ul>
+
+<div class="cat">Quick 5-Minute Resets</div>
+<ul class="cl cols2">
+<li>Step outside and breathe</li>
+<li>Stretch at your desk</li>
+<li>Splash cold water on face</li>
+<li>Listen to one favorite song</li>
+<li>Write 3 things you're grateful for</li>
+<li>Drink a glass of cold water</li>
+<li>Close eyes and count to 50</li>
+<li>Apply lotion mindfully</li>
+</ul>
+
+<div class="cat">Weekend Self-Care</div>
+<ul class="cl cols2">
+<li>Sleep in without guilt</li>
+<li>Farmers market visit</li>
+<li>At-home spa morning</li>
+<li>Long walk or hike</li>
+<li>Brunch with a friend</li>
+<li>Movie or show marathon</li>
+<li>Try a new hobby</li>
+<li>Full digital detox day</li>
+</ul>
+<div class="ft">Self-Care Planner &mdash; Activity Ideas</div>
+</div>
+
+<!-- PAGE 8: Stress Management Toolkit -->
+<div class="pg">
+<div class="hdr">Stress Management Toolkit</div>
+<p style="font-size:.83em;margin-bottom:.4em">Menopause can amplify stress responses. Here are 5 evidence-based techniques to build into your daily life.</p>
+
+<div class="wb">
+<div class="wb-title">1. Box Breathing (4-4-4-4)</div>
+<p style="font-size:.82em"><strong>When:</strong> Anxiety, hot flashes, before sleep, stressful moments</p>
+<p style="font-size:.82em"><strong>How:</strong> Inhale 4 counts &rarr; Hold 4 counts &rarr; Exhale 4 counts &rarr; Hold 4 counts. Repeat 4-8 cycles.</p>
+<p style="font-size:.82em"><strong>Why it works:</strong> Activates your parasympathetic nervous system, lowering cortisol and calming your body's stress response.</p>
+<div class="box-sm"><div class="box-label">My experience trying this:</div></div>
+</div>
+
+<div class="wb">
+<div class="wb-title">2. Progressive Muscle Relaxation</div>
+<p style="font-size:.82em"><strong>When:</strong> Before bed, tension headaches, jaw clenching, body pain</p>
+<p style="font-size:.82em"><strong>How:</strong> Tense each muscle group for 5 seconds, then release for 10. Start at your feet, work up to your face. Takes 10-15 minutes.</p>
+<p style="font-size:.82em"><strong>Why it works:</strong> Teaches your body to recognize and release tension you may be holding unconsciously.</p>
+<div class="box-sm"><div class="box-label">My experience trying this:</div></div>
+</div>
+
+<div class="wb">
+<div class="wb-title">3. The 5-4-3-2-1 Grounding Technique</div>
+<p style="font-size:.82em"><strong>When:</strong> Anxiety attacks, brain fog, feeling overwhelmed, dissociation</p>
+<p style="font-size:.82em"><strong>How:</strong> Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste.</p>
+<p style="font-size:.82em"><strong>Why it works:</strong> Brings you into the present moment and interrupts spiraling thought patterns.</p>
+<div class="box-sm"><div class="box-label">My experience trying this:</div></div>
+</div>
+
+<div class="wb">
+<div class="wb-title">4. Journaling Brain Dump</div>
+<p style="font-size:.82em"><strong>When:</strong> Racing thoughts, inability to sleep, emotional overwhelm</p>
+<p style="font-size:.82em"><strong>How:</strong> Set a timer for 10 minutes. Write everything in your head without stopping, editing, or judging. Then close the book.</p>
+<p style="font-size:.82em"><strong>Why it works:</strong> Externalizes worries so your brain can stop cycling through them.</p>
+<div class="box-sm"><div class="box-label">My experience trying this:</div></div>
+</div>
+
+<div class="wb">
+<div class="wb-title">5. Cold Water Reset</div>
+<p style="font-size:.82em"><strong>When:</strong> Hot flashes, anger, panic, needing a quick reset</p>
+<p style="font-size:.82em"><strong>How:</strong> Hold ice cubes or run cold water on your wrists and inner forearms for 30-60 seconds. Or splash cold water on your face.</p>
+<p style="font-size:.82em"><strong>Why it works:</strong> Triggers the dive reflex, which slows heart rate and redirects blood flow, providing rapid calm.</p>
+<div class="box-sm"><div class="box-label">My experience trying this:</div></div>
+</div>
+<div class="ft">Self-Care Planner &mdash; Stress Management</div>
+</div>
+
+<!-- PAGES 9-11: 3 Boundary-Setting Worksheets -->
+<div class="pg">
+<div class="hdr">Boundary-Setting Worksheet 1</div>
+<p style="font-size:.83em;margin-bottom:.3em">Healthy boundaries protect your energy. During menopause, boundary-setting isn't selfish -- it's survival.</p>
+
+<h3>Boundary Audit: Where Am I Overextended?</h3>
+<table>
+<tr><th>Area of Life</th><th>Where I Give Too Much</th><th>How It Drains Me</th><th>What I Need Instead</th></tr>
+<tr><td>Work</td><td></td><td></td><td></td></tr>
+<tr><td>Family</td><td></td><td></td><td></td></tr>
+<tr><td>Friends</td><td></td><td></td><td></td></tr>
+<tr><td>Partner</td><td></td><td></td><td></td></tr>
+<tr><td>Community / Volunteering</td><td></td><td></td><td></td></tr>
+<tr><td>Digital / Social Media</td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>My Boundary Statement Practice</h3>
+<p style="font-size:.82em">Write out the actual words you'll use. Practice saying them aloud.</p>
+<div class="box" style="min-height:.8in"><div class="box-label">Situation: Someone asks me to take on more than I can handle</div><p style="font-size:.82em;margin-top:.2em">"I _______________________________________________"</p></div>
+<div class="box" style="min-height:.8in"><div class="box-label">Situation: I need rest but feel guilty</div><p style="font-size:.82em;margin-top:.2em">Permission I give myself: _______________________________________________</p></div>
+<div class="box" style="min-height:.8in"><div class="box-label">Situation: Someone dismisses my symptoms or experience</div><p style="font-size:.82em;margin-top:.2em">"I _______________________________________________"</p></div>
+
+<div class="note"><strong>Remember:</strong> "No" is a complete sentence. You don't owe anyone an explanation for protecting your health and energy.</div>
+<div class="ft">Self-Care Planner &mdash; Boundaries 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Boundary-Setting Worksheet 2</div>
+
+<h3>Energy Inventory: People &amp; Activities</h3>
+<table>
+<tr><th>Person / Activity</th><th>Energizes Me</th><th>Drains Me</th><th>Neutral</th><th>Action Needed</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Things I Am Releasing</h3>
+<div class="box" style="min-height:1in"><div class="box-label">Obligations, expectations, or habits that no longer serve me:</div></div>
+
+<h3>Things I Am Welcoming In</h3>
+<div class="box" style="min-height:1in"><div class="box-label">New priorities, activities, or relationships I want to nurture:</div></div>
+
+<h3>My Boundary Mantra</h3>
+<div class="box-sm" style="text-align:center;font-size:1em;padding:.5em;font-style:italic"></div>
+<div class="ft">Self-Care Planner &mdash; Boundaries 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Boundary-Setting Worksheet 3</div>
+
+<h3>Saying No: Practice Scenarios</h3>
+<p style="font-size:.82em;margin-bottom:.3em">For each scenario, write what you would actually say. Be kind but firm.</p>
+
+<div class="wb">
+<div class="wb-title">Scenario 1: A friend wants to make plans but you need rest</div>
+<div class="lines"></div><div class="lines"></div>
+</div>
+<div class="wb">
+<div class="wb-title">Scenario 2: Your boss asks you to stay late, but you're exhausted</div>
+<div class="lines"></div><div class="lines"></div>
+</div>
+<div class="wb">
+<div class="wb-title">Scenario 3: Family expects you to host a holiday but you can't this year</div>
+<div class="lines"></div><div class="lines"></div>
+</div>
+<div class="wb">
+<div class="wb-title">Scenario 4: Someone gives unsolicited advice about your symptoms</div>
+<div class="lines"></div><div class="lines"></div>
+</div>
+<div class="wb">
+<div class="wb-title">Scenario 5: You need to ask your partner for more support</div>
+<div class="lines"></div><div class="lines"></div>
+</div>
+
+<h3>Boundary Success Log</h3>
+<table>
+<tr><th>Date</th><th>Boundary I Set</th><th>How It Went</th><th>How I Felt After</th></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="ft">Self-Care Planner &mdash; Boundaries 3</div>
+</div>
+
+<!-- PAGES 12-15: 4 Gratitude Journal Pages -->
+<div class="pg">
+<div class="hdr">Gratitude Journal &mdash; Week 1</div>
+<p style="font-size:.82em;margin-bottom:.3em">Research shows gratitude practice reduces cortisol by up to 23%. Write 3 things daily.</p>
+<table>
+<tr><th>Day</th><th>I'm Grateful For...</th><th>Because...</th></tr>
+<tr><td><strong>Mon</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Tue</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Wed</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Thu</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Fri</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sat</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sun</strong></td><td style="height:40px"></td><td></td></tr>
+</table>
+<h3>Weekly Gratitude Reflection</h3>
+<div class="box"><div class="box-label">What pattern do I notice in what I'm grateful for?</div></div>
+<div class="box"><div class="box-label">One thing about my body I appreciate this week:</div></div>
+<div class="ft">Self-Care Planner &mdash; Gratitude Week 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Gratitude Journal &mdash; Week 2</div>
+<table>
+<tr><th>Day</th><th>I'm Grateful For...</th><th>Because...</th></tr>
+<tr><td><strong>Mon</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Tue</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Wed</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Thu</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Fri</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sat</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sun</strong></td><td style="height:40px"></td><td></td></tr>
+</table>
+<h3>Weekly Gratitude Reflection</h3>
+<div class="box"><div class="box-label">A person I'm grateful for and why:</div></div>
+<div class="box"><div class="box-label">Something difficult that taught me something valuable:</div></div>
+<div class="ft">Self-Care Planner &mdash; Gratitude Week 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Gratitude Journal &mdash; Week 3</div>
+<table>
+<tr><th>Day</th><th>I'm Grateful For...</th><th>Because...</th></tr>
+<tr><td><strong>Mon</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Tue</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Wed</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Thu</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Fri</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sat</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sun</strong></td><td style="height:40px"></td><td></td></tr>
+</table>
+<h3>Weekly Gratitude Reflection</h3>
+<div class="box"><div class="box-label">A small pleasure I want to notice more often:</div></div>
+<div class="box"><div class="box-label">Something about this season of life I can appreciate:</div></div>
+<div class="ft">Self-Care Planner &mdash; Gratitude Week 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Gratitude Journal &mdash; Week 4</div>
+<table>
+<tr><th>Day</th><th>I'm Grateful For...</th><th>Because...</th></tr>
+<tr><td><strong>Mon</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Tue</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Wed</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Thu</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Fri</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sat</strong></td><td style="height:40px"></td><td></td></tr>
+<tr><td><strong>Sun</strong></td><td style="height:40px"></td><td></td></tr>
+</table>
+<h3>Weekly Gratitude Reflection</h3>
+<div class="box"><div class="box-label">How has daily gratitude practice affected my mood this month?</div></div>
+<div class="box"><div class="box-label">A strength I've discovered in myself through this transition:</div></div>
+<div class="ft">Self-Care Planner &mdash; Gratitude Week 4</div>
+</div>
+
+<!-- PAGE 16: Monthly Review -->
+<div class="pg">
+<div class="hdr">Monthly Self-Care Review</div>
+<p style="font-size:.82em">Month: _______________ Date: _______________</p>
+
+<h3>Self-Care Assessment Re-Score</h3>
+<table>
+<tr><th>Area</th><th>Start Rating</th><th>End Rating</th><th>Change (+/-)</th></tr>
+<tr><td>Physical Health</td><td></td><td></td><td></td></tr>
+<tr><td>Emotional Wellbeing</td><td></td><td></td><td></td></tr>
+<tr><td>Mental Health</td><td></td><td></td><td></td></tr>
+<tr><td>Social Connection</td><td></td><td></td><td></td></tr>
+<tr><td>Spiritual / Purpose</td><td></td><td></td><td></td></tr>
+<tr><td>Rest &amp; Recovery</td><td></td><td></td><td></td></tr>
+<tr><td>Environment</td><td></td><td></td><td></td></tr>
+<tr><td>Professional / Financial</td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Wins This Month</h3>
+<div class="box"><div class="box-label">Self-care habits I maintained, boundaries I set, moments I'm proud of:</div></div>
+
+<h3>Challenges</h3>
+<div class="box"><div class="box-label">Where I struggled and what got in the way:</div></div>
+
+<h3>Favorite Self-Care Activities</h3>
+<div class="box-sm"><div class="box-label">Top 3 things that made the biggest difference in how I felt:</div></div>
+
+<h3>Next Month's Focus</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Area to improve:</div></div>
+<div class="box-sm"><div class="box-label">New activity to try:</div></div>
+</div>
+
+<div class="note"><strong>Progress, not perfection.</strong> If you showed up for yourself even once this month more than you did last month, that counts. You are building a sustainable self-care practice, one small act at a time.</div>
+<div class="ft">Self-Care Planner &mdash; Monthly Review</div>
+</div>
+
+</body>
+</html>
