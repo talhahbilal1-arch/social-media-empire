@@ -64,13 +64,14 @@
       "notes": "Canva affiliate program has been sunset. Replaced by invite-only 'Canvassador' program for content creators."
     },
     "grammarly": {
-      "status": "needs_manual_signup",
-      "signup_date": "2026-02-06",
+      "status": "needs_phone_verification",
+      "signup_date": "2026-02-07",
       "platform": "impact.com",
       "affiliate_url": null,
       "commission": "$25/free signup",
       "signup_page": "https://app.impact.com/campaign-promo-signup/Grammarly.brand",
-      "notes": "Impact.com signup form has anti-fraud detection that blocks automated submissions. Must be completed manually in browser. Use credentials: username talhahbilal1, email talhahbilal1@gmail.com, password ToolPilot2026!Aff."
+      "dashboard_url": "https://app.impact.com/campaign-promo-signup/Grammarly.brand?execution=e3s1#/?viewkey=signUpPhoneVerifyConfirm",
+      "notes": "Account created on impact.com (username: talhahbilal1, email: talhahbilal1@gmail.com, password: ToolPilot2026!Aff). Stuck at phone verification - needs real phone number. Go to signup page, re-do signup with real phone number, or start fresh at the signup URL."
     },
     "synthesia": {
       "status": "needs_manual_signup",
@@ -152,7 +153,8 @@
   },
   "summary": {
     "pending_approval": 3,
-    "needs_manual_signup": 2,
+    "needs_phone_verification": 1,
+    "needs_manual_signup": 1,
     "unavailable": 3,
     "no_program": 4,
     "not_started": 3,
@@ -162,7 +164,7 @@
   "instructions": "After getting approved affiliate URLs, update content/tools.json affiliate_url fields, rebuild with 'npm run build', commit and push to revenue-site branch.",
   "next_steps": [
     "Check email for ElevenLabs, Descript, Writesonic approvals",
-    "Complete Grammarly signup manually on impact.com",
+    "Complete Grammarly phone verification - redo signup with real phone number at impact.com",
     "Complete Synthesia signup with a business email (not Gmail)",
     "Once approved, update config/affiliate-links.json with real affiliate URLs",
     "Rebuild site: cd ai-tools-hub && npm run build"
