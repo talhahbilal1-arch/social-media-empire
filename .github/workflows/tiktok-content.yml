@@ -37,8 +37,8 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_TIKTOK_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_TIKTOK_KEY }}
         run: |
           COUNT="${{ github.event.inputs.count || '1' }}"
           CATEGORY="${{ github.event.inputs.category }}"

@@ -43,6 +43,13 @@ PEXELS_SEARCH_MAP = {
 ELEVENLABS_VOICE_ID = "EXAVITQu4vr4xnSDxMaL"  # Sarah - friendly female
 
 
+def _supabase_creds() -> tuple:
+    """Return (url, key) for the TikTok Supabase project."""
+    url = os.environ.get("SUPABASE_TIKTOK_URL") or os.environ.get("SUPABASE_URL", "")
+    key = os.environ.get("SUPABASE_TIKTOK_KEY") or os.environ.get("SUPABASE_KEY", "")
+    return url, key
+
+
 def generate_script(client: anthropic.Anthropic, category: Optional[str] = None) -> dict:
     """Generate a TikTok script via Claude API."""
     if category is None:
@@ -120,8 +127,7 @@ def generate_audio(script_text: str) -> Optional[bytes]:
 
 def upload_audio(audio_data: bytes, filename: str) -> str:
     """Upload audio to Supabase Storage and return public URL."""
-    supabase_url = os.environ.get("SUPABASE_URL", "")
-    supabase_key = os.environ.get("SUPABASE_KEY", "")
+    supabase_url, supabase_key = _supabase_creds()
 
     response = requests.post(
         f"{supabase_url}/storage/v1/object/tiktok-media/audio/{filename}",
@@ -168,8 +174,7 @@ def find_stock_video(category: str) -> Optional[str]:
 
 def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]) -> dict:
     """Insert the complete record into Supabase tiktok_queue."""
-    supabase_url = os.environ.get("SUPABASE_URL", "")
-    supabase_key = os.environ.get("SUPABASE_KEY", "")
+    supabase_url, supabase_key = _supabase_creds()
 
     status = "video_ready" if video_url else "audio_ready"
 
