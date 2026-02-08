@@ -1,0 +1,87 @@
+/* ============================================
+   Fit Over 35 - Subdomain Theme Variables
+   Dark, masculine design with accent colors
+   ============================================ */
+
+/* Shared FO35 brand tokens */
+.fo35-theme {
+  --font-heading: 'Oswald', 'Impact', sans-serif;
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bg-header: rgba(38,50,56,0.97);
+  --bg-footer: #1A2328;
+  --text-heading: #F5F5F5;
+  --text-primary: #E0E0E0;
+  --text-secondary: #B0BEC5;
+  --text-muted: #78909C;
+  --border: #37474F;
+  --bg-card: #2C3E47;
+}
+
+/* workouts.fitover35.com — Electric blue accents */
+.fo35-theme.theme-workouts {
+  --accent: #2196F3;
+  --accent-dark: #1976D2;
+  --bg-primary: #1C2A30;
+  --bg-highlight: rgba(33,150,243,0.1);
+}
+
+/* nutrition.fitover35.com — Green accents */
+.fo35-theme.theme-nutrition {
+  --accent: #4CAF50;
+  --accent-dark: #388E3C;
+  --bg-primary: #1C2A30;
+  --bg-highlight: rgba(76,175,80,0.1);
+}
+
+/* recovery.fitover35.com — Purple accents */
+.fo35-theme.theme-recovery {
+  --accent: #9C27B0;
+  --accent-dark: #7B1FA2;
+  --bg-primary: #1C2A30;
+  --bg-highlight: rgba(156,39,176,0.1);
+}
+
+/* mindset.fitover35.com — Gold accents */
+.fo35-theme.theme-mindset {
+  --accent: #FFD700;
+  --accent-dark: #FFC107;
+  --bg-primary: #1C2A30;
+  --bg-highlight: rgba(255,215,0,0.1);
+}
+
+/* homegym.fitover35.com — Orange accents */
+.fo35-theme.theme-homegym {
+  --accent: #FF5722;
+  --accent-dark: #E64A19;
+  --bg-primary: #1C2A30;
+  --bg-highlight: rgba(255,87,34,0.1);
+}
+
+/* Dark mode specific overrides */
+.fo35-theme a:hover {
+  color: var(--accent);
+}
+
+.fo35-theme .site-nav a {
+  color: var(--text-muted);
+}
+
+.fo35-theme .site-nav a:hover,
+.fo35-theme .site-nav a.active {
+  color: var(--accent);
+}
+
+.fo35-theme .email-popup {
+  background: #263238;
+  color: var(--text-primary);
+}
+
+.fo35-theme .email-popup input {
+  background: #37474F;
+  border-color: #455A64;
+  color: var(--text-primary);
+}
+
+.fo35-theme .email-popup .close-popup {
+  color: var(--text-muted);
+}

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO Meta Tags — Replace {{PLACEHOLDERS}} -->
+  <title>{{POST_TITLE}} | {{BRAND_NAME}}</title>
+  <meta name="description" content="{{META_DESCRIPTION}}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{CANONICAL_URL}}">
+
+  <!-- Open Graph / Pinterest -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{POST_TITLE}}">
+  <meta property="og:description" content="{{META_DESCRIPTION}}">
+  <meta property="og:image" content="{{FEATURED_IMAGE_URL}}">
+  <meta property="og:url" content="{{CANONICAL_URL}}">
+  <meta property="og:site_name" content="{{BRAND_NAME}}">
+  <meta property="article:published_time" content="{{PUBLISH_DATE}}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{POST_TITLE}}">
+  <meta name="twitter:description" content="{{META_DESCRIPTION}}">
+  <meta name="twitter:image" content="{{FEATURED_IMAGE_URL}}">
+
+  <!-- Pinterest specific -->
+  <meta name="pinterest-rich-pin" content="true">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- DDD uses Playfair Display + Inter; FO35 uses Oswald + Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/shared/css/base-styles.css">
+  <link rel="stylesheet" href="/shared/css/{{THEME_FILE}}">
+
+  <!-- JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{POST_TITLE}}",
+    "description": "{{META_DESCRIPTION}}",
+    "image": "{{FEATURED_IMAGE_URL}}",
+    "datePublished": "{{PUBLISH_DATE}}",
+    "dateModified": "{{PUBLISH_DATE}}",
+    "author": {
+      "@type": "Organization",
+      "name": "{{BRAND_NAME}}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{BRAND_NAME}}",
+      "url": "{{SITE_ROOT_URL}}"
+    },
+    "mainEntityOfPage": "{{CANONICAL_URL}}"
+  }
+  </script>
+</head>
+<body class="{{THEME_CLASS}}">
+  <div class="site-wrapper">
+
+    <!-- Header -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a href="/" class="site-logo">{{LOGO_HTML}}</a>
+          <button class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">&#9776;</button>
+          <nav>
+            <ul class="site-nav">
+              {{NAV_LINKS}}
+              <!-- Example:
+              <li><a href="https://home.dailydealdarling.com">Home</a></li>
+              <li><a href="https://beauty.dailydealdarling.com">Beauty</a></li>
+              <li><a href="https://kitchen.dailydealdarling.com">Kitchen</a></li>
+              <li><a href="https://selfcare.dailydealdarling.com" class="active">Self-Care</a></li>
+              <li><a href="https://mom.dailydealdarling.com">Mom Life</a></li>
+              -->
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="{{SITE_ROOT_URL}}">Home</a>
+        <span>&rsaquo;</span>
+        <a href="/">{{SUBDOMAIN_NAME}}</a>
+        <span>&rsaquo;</span>
+        {{POST_TITLE_SHORT}}
+      </div>
+    </div>
+
+    <!-- Featured Image (hidden behind breadcrumb per pinning strategy) -->
+    <div class="container">
+      <div class="featured-image-wrapper pin-image-wrapper">
+        <img
+          src="{{FEATURED_IMAGE_URL}}"
+          alt="{{POST_TITLE}}"
+          data-pin-description="{{POST_TITLE}} | {{BRAND_NAME}}"
+          loading="eager"
+          width="1000"
+          height="1500"
+        >
+        <button class="pin-it-btn" aria-label="Pin this image">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+          Save
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <div class="content-layout">
+
+        <main class="main-content">
+          <!-- Article Header -->
+          <div class="article-header">
+            <h1>{{POST_TITLE}}</h1>
+            <div class="article-meta">
+              <span>{{PUBLISH_DATE_DISPLAY}}</span>
+              <span>&bull;</span>
+              <span>{{READ_TIME}} min read</span>
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <div class="article-intro">
+            {{INTRODUCTION}}
+          </div>
+
+          <!-- Listicle Items -->
+
+          <!-- ITEM 1 -->
+          <div class="listicle-item">
+            <h2><span class="listicle-number">1</span> {{ITEM_1_HEADING}}</h2>
+            <div class="listicle-item-content">
+              {{ITEM_1_CONTENT}}
+            </div>
+            <div class="pin-image-wrapper">
+              <img
+                src="{{ITEM_1_IMAGE_URL}}"
+                alt="{{ITEM_1_HEADING}}"
+                data-pin-description="{{ITEM_1_HEADING}} - {{POST_TITLE}} | {{BRAND_NAME}}"
+                loading="lazy"
+                width="1000"
+                height="1500"
+              >
+              <button class="pin-it-btn" aria-label="Pin this image">
+                <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                Save
+              </button>
+            </div>
+            <!-- Optional: Amazon Product Recommendation -->
+            <!--
+            <div class="product-recommendation">
+              <div>
+                <div class="product-badge">Recommended</div>
+                <div class="product-name">{{ITEM_1_PRODUCT_NAME}}</div>
+                <a href="https://www.amazon.com/s?k={{ITEM_1_PRODUCT_SEARCH}}&tag={{AMAZON_TAG}}" class="product-link" target="_blank" rel="nofollow noopener">
+                  Check price on Amazon &rarr;
+                </a>
+              </div>
+            </div>
+            -->
+          </div>
+
+          <!-- ITEM 2 -->
+          <div class="listicle-item">
+            <h2><span class="listicle-number">2</span> {{ITEM_2_HEADING}}</h2>
+            <div class="listicle-item-content">
+              {{ITEM_2_CONTENT}}
+            </div>
+            <div class="pin-image-wrapper">
+              <img
+                src="{{ITEM_2_IMAGE_URL}}"
+                alt="{{ITEM_2_HEADING}}"
+                data-pin-description="{{ITEM_2_HEADING}} - {{POST_TITLE}} | {{BRAND_NAME}}"
+                loading="lazy"
+                width="1000"
+                height="1500"
+              >
+            </div>
+          </div>
+
+          <!-- ITEM 3 -->
+          <div class="listicle-item">
+            <h2><span class="listicle-number">3</span> {{ITEM_3_HEADING}}</h2>
+            <div class="listicle-item-content">
+              {{ITEM_3_CONTENT}}
+            </div>
+            <div class="pin-image-wrapper">
+              <img
+                src="{{ITEM_3_IMAGE_URL}}"
+                alt="{{ITEM_3_HEADING}}"
+                data-pin-description="{{ITEM_3_HEADING}} - {{POST_TITLE}} | {{BRAND_NAME}}"
+                loading="lazy"
+                width="1000"
+                height="1500"
+              >
+            </div>
+          </div>
+
+          <!-- ITEM 4 -->
+          <div class="listicle-item">
+            <h2><span class="listicle-number">4</span> {{ITEM_4_HEADING}}</h2>
+            <div class="listicle-item-content">
+              {{ITEM_4_CONTENT}}
+            </div>
+            <div class="pin-image-wrapper">
+              <img
+                src="{{ITEM_4_IMAGE_URL}}"
+                alt="{{ITEM_4_HEADING}}"
+                data-pin-description="{{ITEM_4_HEADING}} - {{POST_TITLE}} | {{BRAND_NAME}}"
+                loading="lazy"
+                width="1000"
+                height="1500"
+              >
+            </div>
+          </div>
+
+          <!-- ITEM 5 -->
+          <div class="listicle-item">
+            <h2><span class="listicle-number">5</span> {{ITEM_5_HEADING}}</h2>
+            <div class="listicle-item-content">
+              {{ITEM_5_CONTENT}}
+            </div>
+            <div class="pin-image-wrapper">
+              <img
+                src="{{ITEM_5_IMAGE_URL}}"
+                alt="{{ITEM_5_HEADING}}"
+                data-pin-description="{{ITEM_5_HEADING}} - {{POST_TITLE}} | {{BRAND_NAME}}"
+                loading="lazy"
+                width="1000"
+                height="1500"
+              >
+            </div>
+          </div>
+
+          <!-- ITEM 6 -->
+          <div class="listicle-item">
+            <h2><span class="listicle-number">6</span> {{ITEM_6_HEADING}}</h2>
+            <div class="listicle-item-content">
+              {{ITEM_6_CONTENT}}
+            </div>
+            <div class="pin-image-wrapper">
+              <img
+                src="{{ITEM_6_IMAGE_URL}}"
+                alt="{{ITEM_6_HEADING}}"
+                data-pin-description="{{ITEM_6_HEADING}} - {{POST_TITLE}} | {{BRAND_NAME}}"
+                loading="lazy"
+                width="1000"
+                height="1500"
+              >
+            </div>
+          </div>
+
+          <!-- ITEM 7 -->
+          <div class="listicle-item">
+            <h2><span class="listicle-number">7</span> {{ITEM_7_HEADING}}</h2>
+            <div class="listicle-item-content">
+              {{ITEM_7_CONTENT}}
+            </div>
+            <div class="pin-image-wrapper">
+              <img
+                src="{{ITEM_7_IMAGE_URL}}"
+                alt="{{ITEM_7_HEADING}}"
+                data-pin-description="{{ITEM_7_HEADING}} - {{POST_TITLE}} | {{BRAND_NAME}}"
+                loading="lazy"
+                width="1000"
+                height="1500"
+              >
+            </div>
+          </div>
+
+          <!-- Conclusion -->
+          <div class="article-conclusion">
+            <h2>Final Thoughts</h2>
+            {{CONCLUSION}}
+            <a href="{{CTA_URL}}" class="cta-btn">{{CTA_TEXT}} &rarr;</a>
+          </div>
+
+          <!-- Share Buttons -->
+          <div class="share-bar">
+            <button class="share-btn pinterest" onclick="window.open('https://www.pinterest.com/pin/create/button/?url='+encodeURIComponent(location.href)+'&media={{FEATURED_IMAGE_URL}}&description={{POST_TITLE}}','pinterest','width=750,height=550')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.3.3 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+              Pin It
+            </button>
+            <button class="share-btn facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook','width=600,height=400')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Share
+            </button>
+            <button class="share-btn twitter" onclick="window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(document.title)+'&url='+encodeURIComponent(location.href),'twitter','width=600,height=400')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              Tweet
+            </button>
+          </div>
+
+          <!-- Related Posts -->
+          <div class="related-posts">
+            <h3>You Might Also Like</h3>
+            <div class="related-grid">
+              {{RELATED_POSTS}}
+              <!-- Example:
+              <a href="/posts/another-post.html" class="related-card">
+                <img src="IMAGE_URL" alt="Post Title" loading="lazy">
+                <div class="card-content">
+                  <div class="card-title">Post Title Here</div>
+                </div>
+              </a>
+              -->
+            </div>
+          </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <!-- Cross-Subdomain Links -->
+          <div class="sidebar-section">
+            <h3>Explore More</h3>
+            <ul class="sidebar-links">
+              {{SUBDOMAIN_LINKS}}
+              <!-- Example for DDD:
+              <li><a href="https://home.dailydealdarling.com">&#127968; Home Organization</a></li>
+              <li><a href="https://beauty.dailydealdarling.com">&#128132; Beauty Tips</a></li>
+              <li><a href="https://kitchen.dailydealdarling.com">&#127859; Kitchen Hacks</a></li>
+              <li><a href="https://selfcare.dailydealdarling.com">&#128588; Self-Care</a></li>
+              <li><a href="https://mom.dailydealdarling.com">&#128106; Mom Life</a></li>
+              -->
+            </ul>
+          </div>
+
+          <!-- Popular Posts -->
+          <div class="sidebar-section">
+            <h3>Popular Posts</h3>
+            <ul class="sidebar-links">
+              {{POPULAR_POSTS}}
+            </ul>
+          </div>
+
+          <!-- Email Signup -->
+          <div class="sidebar-section" style="background: var(--bg-highlight); border-color: var(--accent);">
+            <h3>Get Weekly Tips</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Join {{SUBSCRIBER_COUNT}}+ readers getting our best tips delivered every week.</p>
+            <input type="email" placeholder="Your email" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:0.5rem;font-size:0.9rem;">
+            <button class="cta-btn" style="width:100%;text-align:center;justify-content:center;margin-top:0;">Subscribe Free</button>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-about">
+            <h4>{{BRAND_NAME}}</h4>
+            <p>{{BRAND_TAGLINE}}</p>
+          </div>
+          <div class="footer-links">
+            <h4>Categories</h4>
+            <ul>
+              {{FOOTER_CATEGORY_LINKS}}
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h4>Follow Us</h4>
+            <ul>
+              <li><a href="{{PINTEREST_URL}}" target="_blank" rel="noopener">Pinterest</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; {{YEAR}} {{BRAND_NAME}}. All rights reserved. | <a href="/privacy">Privacy</a> | <a href="/disclosure">Affiliate Disclosure</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Email Sticky Bar -->
+    <div class="email-sticky-bar">
+      <p>Get our best tips every week!</p>
+      <input type="email" placeholder="Enter your email">
+      <button type="submit">Subscribe</button>
+      <button class="close-bar" aria-label="Close">&times;</button>
+    </div>
+
+    <!-- Email Popup -->
+    <div class="email-popup-overlay">
+      <div class="email-popup">
+        <button class="close-popup" aria-label="Close">&times;</button>
+        <h3>Don't Miss Out!</h3>
+        <p>Get the best {{SUBDOMAIN_TOPIC}} tips delivered to your inbox every week.</p>
+        <input type="email" placeholder="Your email address">
+        <button class="submit-btn">Get Free Tips</button>
+        <p style="font-size:0.75rem;color:#999;margin-top:0.75rem;margin-bottom:0;">No spam. Unsubscribe anytime.</p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/shared/js/mobile-menu.js"></script>
+    <script src="/shared/js/pinterest-buttons.js"></script>
+    <script src="/shared/js/email-capture.js"></script>
+  </div>
+</body>
+</html>
