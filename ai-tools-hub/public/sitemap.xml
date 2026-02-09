@@ -2,199 +2,205 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://toolpilot-hub.netlify.app/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/compare/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/compare/chatgpt-vs-claude/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/compare/jasper-vs-writesonic/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/compare/midjourney-vs-runway/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/compare/cursor-vs-chatgpt/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/compare/grammarly-vs-chatgpt/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://toolpilot-hub.netlify.app/compare/notion-ai-vs-chatgpt/</loc>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/chatgpt/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/claude/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/jasper/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/midjourney/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/cursor/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/writesonic/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/copy-ai/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/synthesia/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/grammarly/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/notion-ai/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/elevenlabs/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/canva/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/descript/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/runway/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/perplexity/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/tools/scalenut/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/writing/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/coding/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/image/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/video/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/marketing/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/productivity/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/audio/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/seo/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/research/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://toolpilot-hub.netlify.app/category/design/</loc>
-    <lastmod>2026-02-07</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

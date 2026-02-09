@@ -1,45 +1,433 @@
 {
-  "last_updated": "2026-02-06",
+  "last_updated": "2026-02-09",
   "items": [
-    {"id": 1, "type": "comparison", "priority": "high", "status": "published", "slug": "chatgpt-vs-claude", "tools": ["chatgpt", "claude"], "keyword": "chatgpt vs claude"},
-    {"id": 2, "type": "comparison", "priority": "high", "status": "published", "slug": "jasper-vs-writesonic", "tools": ["jasper", "writesonic"], "keyword": "jasper vs writesonic"},
-    {"id": 3, "type": "comparison", "priority": "high", "status": "published", "slug": "midjourney-vs-runway", "tools": ["midjourney", "runway"], "keyword": "midjourney vs runway"},
-    {"id": 4, "type": "comparison", "priority": "high", "status": "published", "slug": "cursor-vs-chatgpt", "tools": ["cursor", "chatgpt"], "keyword": "cursor vs chatgpt"},
-    {"id": 5, "type": "comparison", "priority": "high", "status": "published", "slug": "grammarly-vs-chatgpt", "tools": ["grammarly", "chatgpt"], "keyword": "grammarly vs chatgpt"},
-
-    {"id": 10, "type": "comparison", "priority": "high", "status": "pending", "slug": "claude-vs-gemini", "tools": ["claude"], "tool_names": ["Claude", "Gemini"], "keyword": "claude vs gemini 2026"},
-    {"id": 11, "type": "comparison", "priority": "high", "status": "pending", "slug": "jasper-vs-copy-ai", "tools": ["jasper", "copy-ai"], "keyword": "jasper vs copy.ai"},
-    {"id": 12, "type": "comparison", "priority": "high", "status": "pending", "slug": "chatgpt-vs-gemini", "tools": ["chatgpt"], "tool_names": ["ChatGPT", "Gemini"], "keyword": "chatgpt vs gemini 2026"},
-    {"id": 13, "type": "comparison", "priority": "high", "status": "pending", "slug": "elevenlabs-vs-murf", "tools": ["elevenlabs"], "tool_names": ["ElevenLabs", "Murf AI"], "keyword": "elevenlabs vs murf ai"},
-    {"id": 14, "type": "comparison", "priority": "high", "status": "pending", "slug": "grammarly-vs-jasper", "tools": ["grammarly", "jasper"], "keyword": "grammarly vs jasper"},
-    {"id": 15, "type": "comparison", "priority": "high", "status": "pending", "slug": "midjourney-vs-canva-ai", "tools": ["midjourney", "canva"], "keyword": "midjourney vs canva ai"},
-    {"id": 16, "type": "comparison", "priority": "high", "status": "pending", "slug": "cursor-vs-github-copilot", "tools": ["cursor"], "tool_names": ["Cursor", "GitHub Copilot"], "keyword": "cursor vs github copilot"},
-    {"id": 17, "type": "comparison", "priority": "medium", "status": "pending", "slug": "notion-ai-vs-chatgpt", "tools": ["notion-ai", "chatgpt"], "keyword": "notion ai vs chatgpt"},
-    {"id": 18, "type": "comparison", "priority": "medium", "status": "pending", "slug": "runway-vs-descript", "tools": ["runway", "descript"], "keyword": "runway vs descript"},
-    {"id": 19, "type": "comparison", "priority": "medium", "status": "pending", "slug": "writesonic-vs-copy-ai", "tools": ["writesonic", "copy-ai"], "keyword": "writesonic vs copy.ai"},
-    {"id": 20, "type": "comparison", "priority": "medium", "status": "pending", "slug": "synthesia-vs-runway", "tools": ["synthesia", "runway"], "keyword": "synthesia vs runway"},
-
-    {"id": 30, "type": "review", "priority": "high", "status": "pending", "slug": "github-copilot", "tool_name": "GitHub Copilot", "category": "coding", "keyword": "github copilot review 2026"},
-    {"id": 31, "type": "review", "priority": "high", "status": "pending", "slug": "gemini", "tool_name": "Google Gemini", "category": "research", "keyword": "gemini review 2026"},
-    {"id": 32, "type": "review", "priority": "medium", "status": "pending", "slug": "surfer-seo", "tool_name": "Surfer SEO", "category": "seo", "keyword": "surfer seo review 2026"},
-    {"id": 33, "type": "review", "priority": "medium", "status": "pending", "slug": "otter-ai", "tool_name": "Otter.ai", "category": "productivity", "keyword": "otter ai review 2026"},
-    {"id": 34, "type": "review", "priority": "medium", "status": "pending", "slug": "stable-diffusion", "tool_name": "Stable Diffusion", "category": "image", "keyword": "stable diffusion review 2026"},
-    {"id": 35, "type": "review", "priority": "medium", "status": "pending", "slug": "luma-ai", "tool_name": "Luma AI", "category": "video", "keyword": "luma ai review 2026"},
-    {"id": 36, "type": "review", "priority": "low", "status": "pending", "slug": "murf-ai", "tool_name": "Murf AI", "category": "audio", "keyword": "murf ai review 2026"},
-    {"id": 37, "type": "review", "priority": "low", "status": "pending", "slug": "pictory", "tool_name": "Pictory", "category": "video", "keyword": "pictory review 2026"},
-    {"id": 38, "type": "review", "priority": "low", "status": "pending", "slug": "tome", "tool_name": "Tome", "category": "productivity", "keyword": "tome ai review 2026"},
-    {"id": 39, "type": "review", "priority": "low", "status": "pending", "slug": "beautiful-ai", "tool_name": "Beautiful.ai", "category": "design", "keyword": "beautiful ai review 2026"},
-    {"id": 40, "type": "review", "priority": "low", "status": "pending", "slug": "kling-ai", "tool_name": "Kling AI", "category": "video", "keyword": "kling ai review 2026"},
-
-    {"id": 50, "type": "listicle", "priority": "high", "status": "pending", "slug": "best-ai-writing-tools", "keyword": "best ai writing tools 2026", "title": "10 Best AI Writing Tools in 2026", "tool_slugs": ["chatgpt", "claude", "jasper", "writesonic", "copy-ai", "grammarly", "notion-ai"]},
-    {"id": 51, "type": "listicle", "priority": "high", "status": "pending", "slug": "best-ai-coding-tools", "keyword": "best ai coding tools 2026", "title": "8 Best AI Coding Tools in 2026", "tool_slugs": ["cursor", "chatgpt", "claude"]},
-    {"id": 52, "type": "listicle", "priority": "high", "status": "pending", "slug": "best-ai-image-generators", "keyword": "best ai image generators 2026", "title": "7 Best AI Image Generators in 2026", "tool_slugs": ["midjourney", "canva"]},
-    {"id": 53, "type": "listicle", "priority": "high", "status": "pending", "slug": "best-ai-video-tools", "keyword": "best ai video tools 2026", "title": "8 Best AI Video Tools in 2026", "tool_slugs": ["runway", "synthesia", "descript"]},
-    {"id": 54, "type": "listicle", "priority": "high", "status": "pending", "slug": "best-free-ai-tools", "keyword": "best free ai tools 2026", "title": "12 Best Free AI Tools in 2026"},
-    {"id": 55, "type": "listicle", "priority": "medium", "status": "pending", "slug": "best-ai-tools-small-business", "keyword": "best ai tools for small business", "title": "10 Best AI Tools for Small Business in 2026"},
-    {"id": 56, "type": "listicle", "priority": "medium", "status": "pending", "slug": "best-ai-tools-content-creators", "keyword": "best ai tools for content creators", "title": "9 Best AI Tools for Content Creators in 2026"},
-    {"id": 57, "type": "listicle", "priority": "medium", "status": "pending", "slug": "best-ai-tools-marketers", "keyword": "best ai tools for marketers 2026", "title": "10 Best AI Tools for Marketers in 2026"},
-    {"id": 58, "type": "listicle", "priority": "medium", "status": "pending", "slug": "best-ai-seo-tools", "keyword": "best ai seo tools 2026", "title": "7 Best AI SEO Tools in 2026"},
-    {"id": 59, "type": "listicle", "priority": "low", "status": "pending", "slug": "best-ai-audio-tools", "keyword": "best ai audio tools 2026", "title": "6 Best AI Audio & Voice Tools in 2026"}
+    {
+      "id": 1,
+      "type": "comparison",
+      "priority": "high",
+      "status": "published",
+      "slug": "chatgpt-vs-claude",
+      "tools": [
+        "chatgpt",
+        "claude"
+      ],
+      "keyword": "chatgpt vs claude"
+    },
+    {
+      "id": 2,
+      "type": "comparison",
+      "priority": "high",
+      "status": "published",
+      "slug": "jasper-vs-writesonic",
+      "tools": [
+        "jasper",
+        "writesonic"
+      ],
+      "keyword": "jasper vs writesonic"
+    },
+    {
+      "id": 3,
+      "type": "comparison",
+      "priority": "high",
+      "status": "published",
+      "slug": "midjourney-vs-runway",
+      "tools": [
+        "midjourney",
+        "runway"
+      ],
+      "keyword": "midjourney vs runway"
+    },
+    {
+      "id": 4,
+      "type": "comparison",
+      "priority": "high",
+      "status": "published",
+      "slug": "cursor-vs-chatgpt",
+      "tools": [
+        "cursor",
+        "chatgpt"
+      ],
+      "keyword": "cursor vs chatgpt"
+    },
+    {
+      "id": 5,
+      "type": "comparison",
+      "priority": "high",
+      "status": "published",
+      "slug": "grammarly-vs-chatgpt",
+      "tools": [
+        "grammarly",
+        "chatgpt"
+      ],
+      "keyword": "grammarly vs chatgpt"
+    },
+    {
+      "id": 10,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "claude-vs-gemini",
+      "tools": [
+        "claude"
+      ],
+      "tool_names": [
+        "Claude",
+        "Gemini"
+      ],
+      "keyword": "claude vs gemini 2026"
+    },
+    {
+      "id": 11,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "jasper-vs-copy-ai",
+      "tools": [
+        "jasper",
+        "copy-ai"
+      ],
+      "keyword": "jasper vs copy.ai"
+    },
+    {
+      "id": 12,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "chatgpt-vs-gemini",
+      "tools": [
+        "chatgpt"
+      ],
+      "tool_names": [
+        "ChatGPT",
+        "Gemini"
+      ],
+      "keyword": "chatgpt vs gemini 2026"
+    },
+    {
+      "id": 13,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "elevenlabs-vs-murf",
+      "tools": [
+        "elevenlabs"
+      ],
+      "tool_names": [
+        "ElevenLabs",
+        "Murf AI"
+      ],
+      "keyword": "elevenlabs vs murf ai"
+    },
+    {
+      "id": 14,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "grammarly-vs-jasper",
+      "tools": [
+        "grammarly",
+        "jasper"
+      ],
+      "keyword": "grammarly vs jasper"
+    },
+    {
+      "id": 15,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "midjourney-vs-canva-ai",
+      "tools": [
+        "midjourney",
+        "canva"
+      ],
+      "keyword": "midjourney vs canva ai"
+    },
+    {
+      "id": 16,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "cursor-vs-github-copilot",
+      "tools": [
+        "cursor"
+      ],
+      "tool_names": [
+        "Cursor",
+        "GitHub Copilot"
+      ],
+      "keyword": "cursor vs github copilot"
+    },
+    {
+      "id": 17,
+      "type": "comparison",
+      "priority": "medium",
+      "status": "published",
+      "slug": "notion-ai-vs-chatgpt",
+      "tools": [
+        "notion-ai",
+        "chatgpt"
+      ],
+      "keyword": "notion ai vs chatgpt",
+      "published_date": "2026-02-09"
+    },
+    {
+      "id": 18,
+      "type": "comparison",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "runway-vs-descript",
+      "tools": [
+        "runway",
+        "descript"
+      ],
+      "keyword": "runway vs descript"
+    },
+    {
+      "id": 19,
+      "type": "comparison",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "writesonic-vs-copy-ai",
+      "tools": [
+        "writesonic",
+        "copy-ai"
+      ],
+      "keyword": "writesonic vs copy.ai"
+    },
+    {
+      "id": 20,
+      "type": "comparison",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "synthesia-vs-runway",
+      "tools": [
+        "synthesia",
+        "runway"
+      ],
+      "keyword": "synthesia vs runway"
+    },
+    {
+      "id": 30,
+      "type": "review",
+      "priority": "high",
+      "status": "pending",
+      "slug": "github-copilot",
+      "tool_name": "GitHub Copilot",
+      "category": "coding",
+      "keyword": "github copilot review 2026"
+    },
+    {
+      "id": 31,
+      "type": "review",
+      "priority": "high",
+      "status": "pending",
+      "slug": "gemini",
+      "tool_name": "Google Gemini",
+      "category": "research",
+      "keyword": "gemini review 2026"
+    },
+    {
+      "id": 32,
+      "type": "review",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "surfer-seo",
+      "tool_name": "Surfer SEO",
+      "category": "seo",
+      "keyword": "surfer seo review 2026"
+    },
+    {
+      "id": 33,
+      "type": "review",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "otter-ai",
+      "tool_name": "Otter.ai",
+      "category": "productivity",
+      "keyword": "otter ai review 2026"
+    },
+    {
+      "id": 34,
+      "type": "review",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "stable-diffusion",
+      "tool_name": "Stable Diffusion",
+      "category": "image",
+      "keyword": "stable diffusion review 2026"
+    },
+    {
+      "id": 35,
+      "type": "review",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "luma-ai",
+      "tool_name": "Luma AI",
+      "category": "video",
+      "keyword": "luma ai review 2026"
+    },
+    {
+      "id": 36,
+      "type": "review",
+      "priority": "low",
+      "status": "pending",
+      "slug": "murf-ai",
+      "tool_name": "Murf AI",
+      "category": "audio",
+      "keyword": "murf ai review 2026"
+    },
+    {
+      "id": 37,
+      "type": "review",
+      "priority": "low",
+      "status": "pending",
+      "slug": "pictory",
+      "tool_name": "Pictory",
+      "category": "video",
+      "keyword": "pictory review 2026"
+    },
+    {
+      "id": 38,
+      "type": "review",
+      "priority": "low",
+      "status": "pending",
+      "slug": "tome",
+      "tool_name": "Tome",
+      "category": "productivity",
+      "keyword": "tome ai review 2026"
+    },
+    {
+      "id": 39,
+      "type": "review",
+      "priority": "low",
+      "status": "pending",
+      "slug": "beautiful-ai",
+      "tool_name": "Beautiful.ai",
+      "category": "design",
+      "keyword": "beautiful ai review 2026"
+    },
+    {
+      "id": 40,
+      "type": "review",
+      "priority": "low",
+      "status": "pending",
+      "slug": "kling-ai",
+      "tool_name": "Kling AI",
+      "category": "video",
+      "keyword": "kling ai review 2026"
+    },
+    {
+      "id": 50,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-ai-writing-tools",
+      "keyword": "best ai writing tools 2026",
+      "title": "10 Best AI Writing Tools in 2026",
+      "tool_slugs": [
+        "chatgpt",
+        "claude",
+        "jasper",
+        "writesonic",
+        "copy-ai",
+        "grammarly",
+        "notion-ai"
+      ]
+    },
+    {
+      "id": 51,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-ai-coding-tools",
+      "keyword": "best ai coding tools 2026",
+      "title": "8 Best AI Coding Tools in 2026",
+      "tool_slugs": [
+        "cursor",
+        "chatgpt",
+        "claude"
+      ]
+    },
+    {
+      "id": 52,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-ai-image-generators",
+      "keyword": "best ai image generators 2026",
+      "title": "7 Best AI Image Generators in 2026",
+      "tool_slugs": [
+        "midjourney",
+        "canva"
+      ]
+    },
+    {
+      "id": 53,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-ai-video-tools",
+      "keyword": "best ai video tools 2026",
+      "title": "8 Best AI Video Tools in 2026",
+      "tool_slugs": [
+        "runway",
+        "synthesia",
+        "descript"
+      ]
+    },
+    {
+      "id": 54,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-free-ai-tools",
+      "keyword": "best free ai tools 2026",
+      "title": "12 Best Free AI Tools in 2026"
+    },
+    {
+      "id": 55,
+      "type": "listicle",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "best-ai-tools-small-business",
+      "keyword": "best ai tools for small business",
+      "title": "10 Best AI Tools for Small Business in 2026"
+    },
+    {
+      "id": 56,
+      "type": "listicle",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "best-ai-tools-content-creators",
+      "keyword": "best ai tools for content creators",
+      "title": "9 Best AI Tools for Content Creators in 2026"
+    },
+    {
+      "id": 57,
+      "type": "listicle",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "best-ai-tools-marketers",
+      "keyword": "best ai tools for marketers 2026",
+      "title": "10 Best AI Tools for Marketers in 2026"
+    },
+    {
+      "id": 58,
+      "type": "listicle",
+      "priority": "medium",
+      "status": "pending",
+      "slug": "best-ai-seo-tools",
+      "keyword": "best ai seo tools 2026",
+      "title": "7 Best AI SEO Tools in 2026"
+    },
+    {
+      "id": 59,
+      "type": "listicle",
+      "priority": "low",
+      "status": "pending",
+      "slug": "best-ai-audio-tools",
+      "keyword": "best ai audio tools 2026",
+      "title": "6 Best AI Audio & Voice Tools in 2026"
+    }
   ]
 }
