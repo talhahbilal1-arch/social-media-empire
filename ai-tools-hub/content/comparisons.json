@@ -380,5 +380,80 @@
         "notes": "Notion AI benefits from Notion's built-in collaboration—teams can use AI assistance on shared documents with real-time editing, comments, and permissions. ChatGPT's Team plan offers shared workspace features, but it's not designed around collaborative document creation like Notion's environment."
       }
     ]
+  },
+  {
+    "slug": "runway-vs-descript",
+    "title": "Runway vs Descript: Which Is Better in 2026?",
+    "meta_description": "Runway vs Descript compared: AI video generation vs text-based editing. See pricing, features, and which tool fits your video workflow best.",
+    "tools": [
+      "runway",
+      "descript"
+    ],
+    "category": "video-editing",
+    "keywords": [
+      "runway vs descript",
+      "ai video editing tools",
+      "text to video vs text based editing",
+      "gen-3 vs descript"
+    ],
+    "verdict": "Choose Runway if you need to generate videos from scratch or enhance existing footage with AI effects like inpainting and motion brush—it's purpose-built for creative video synthesis at half the cost. Pick Descript if you're editing recorded content (podcasts, interviews, presentations) where transcript-based editing and cleanup features like filler word removal will dramatically speed up your workflow.",
+    "comparison_points": [
+      {
+        "feature": "Core Use Case",
+        "tool1_score": 4.7,
+        "tool2_score": 4.6,
+        "winner": "tie",
+        "notes": "These tools solve fundamentally different problems. Runway excels at generative AI video creation (text-to-video, image-to-video) for creative projects. Descript dominates in post-production editing of recorded content through its text-based interface. Neither is 'better'—they're for different workflows."
+      },
+      {
+        "feature": "Ease of Use",
+        "tool1_score": 4.2,
+        "tool2_score": 4.8,
+        "winner": "descript",
+        "notes": "Descript's text-based editing is intuitive for anyone who can edit a document—just delete words from the transcript to cut video. Runway requires understanding of generative AI concepts, prompt engineering, and traditional video editing tools, creating a steeper learning curve."
+      },
+      {
+        "feature": "AI Innovation",
+        "tool1_score": 4.9,
+        "tool2_score": 4.3,
+        "winner": "runway",
+        "notes": "Runway's Gen-3 text-to-video and specialized features like video inpainting and motion brush represent cutting-edge generative AI. Descript's AI is more utilitarian (transcription, eye contact correction) and focused on productivity rather than creative generation."
+      },
+      {
+        "feature": "Pricing Value",
+        "tool1_score": 4.7,
+        "tool2_score": 4,
+        "winner": "runway",
+        "notes": "Runway starts at $12/mo compared to Descript's $24/mo, offering better value for generative features. Both have free tiers, but Runway's lower entry point makes advanced AI video capabilities more accessible, especially for individual creators."
+      },
+      {
+        "feature": "Speed & Workflow Efficiency",
+        "tool1_score": 3.8,
+        "tool2_score": 4.8,
+        "winner": "descript",
+        "notes": "Descript's filler word removal and text-based editing can cut editing time by 70% for recorded content—just click to remove 'ums' and 'ahs' instantly. Runway's generative processes require rendering time and iteration, making it slower for quick turnarounds but powerful for creative work."
+      },
+      {
+        "feature": "Feature Breadth",
+        "tool1_score": 4.4,
+        "tool2_score": 4.5,
+        "winner": "descript",
+        "notes": "Descript offers a complete editing suite (transcription, overdub, screen recording, multi-track editing, eye contact fix) making it a one-stop solution. Runway focuses deeply on AI video generation and enhancement but lacks traditional editing tools like multi-track timelines or audio cleanup."
+      },
+      {
+        "feature": "Output Quality",
+        "tool1_score": 4.5,
+        "tool2_score": 4.6,
+        "winner": "tie",
+        "notes": "Both deliver excellent results in their domains. Runway's Gen-3 produces impressive AI-generated footage with good coherence. Descript's transcription accuracy (95%+) and seamless edits are industry-leading. Quality depends entirely on whether you need generation or editing."
+      },
+      {
+        "feature": "Collaboration Features",
+        "tool1_score": 3.9,
+        "tool2_score": 4.7,
+        "winner": "descript",
+        "notes": "Descript includes robust team collaboration with comments, version history, and shared workspaces—essential for podcast teams and video production crews. Runway's collaboration features are more limited, focusing primarily on individual creator workflows."
+      }
+    ]
   }
 ]

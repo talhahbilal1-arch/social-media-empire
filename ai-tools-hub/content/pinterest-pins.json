@@ -722,5 +722,19 @@
       "2026"
     ],
     "board_suggestion": "AI Tool Comparisons"
+  },
+  {
+    "type": "comparison",
+    "title": "Runway vs Descript: Which Is Better in 2026?",
+    "description": "Choose Runway if you need to generate videos from scratch or enhance existing footage with AI effects like inpainting and motion brush—it's purpose-built for creative video synthesis at half the cost. Pick Descript if you're editing recorded content (podcasts, interviews, presentations) where transcript-based editing and cleanup features like filler word removal will dramatically speed up your workflow.",
+    "link": "https://toolpilot-hub.netlify.app/compare/runway-vs-descript/",
+    "keywords": [
+      "Runway",
+      "Descript",
+      "comparison",
+      "vs",
+      "2026"
+    ],
+    "board_suggestion": "AI Tool Comparisons"
   }
 ]
