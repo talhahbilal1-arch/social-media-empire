@@ -8,7 +8,7 @@ Each article includes: value content, email capture CTA, affiliate product recom
 import os
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 import anthropic
 
@@ -105,7 +105,7 @@ OUTPUT FORMAT — Return as Markdown with frontmatter:
 title: "Article Title Here"
 slug: "{article_slug}"
 meta_description: "155 char meta description"
-date: "{datetime.utcnow().strftime('%Y-%m-%d')}"
+date: "{datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
 brand: "{brand_key}"
 trending_topic: "{trending_topic['topic']}"
 keywords: ["keyword1", "keyword2", "keyword3"]
@@ -125,7 +125,7 @@ keywords: ["keyword1", "keyword2", "keyword3"]
             'trending_topic': trending_topic['topic'],
             'content_preview': article_content[:500],
             'word_count': len(article_content.split()),
-            'created_at': datetime.utcnow().isoformat()
+            'created_at': datetime.now(timezone.utc).isoformat()
         }).execute()
     except Exception as e:
         logger.error(f"Failed to log article: {e}")

@@ -32,6 +32,7 @@ class HealthChecker:
     def check_all(self) -> dict:
         """Run all health checks and return summary."""
         checks = [
+            self.check_anthropic(),
             self.check_supabase(),
             self.check_gemini(),
             self.check_pexels(),
@@ -115,6 +116,51 @@ class HealthChecker:
         except Exception as e:
             return HealthCheckResult(
                 service="supabase",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_anthropic(self) -> HealthCheckResult:
+        """Check Anthropic Claude API (primary AI dependency)."""
+        import os
+        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+
+        if not api_key:
+            return HealthCheckResult(
+                service="anthropic",
+                status="unhealthy",
+                error="ANTHROPIC_API_KEY not configured"
+            )
+
+        try:
+            import anthropic
+            client = anthropic.Anthropic(api_key=api_key)
+
+            start = datetime.now()
+            resp = client.messages.create(
+                model='claude-sonnet-4-5-20250929',
+                max_tokens=10,
+                messages=[{'role': 'user', 'content': 'ping'}]
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if resp.content:
+                return HealthCheckResult(
+                    service="anthropic",
+                    status="healthy",
+                    response_time_ms=response_time
+                )
+            else:
+                return HealthCheckResult(
+                    service="anthropic",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error="Empty response"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="anthropic",
                 status="unhealthy",
                 error=str(e)
             )

@@ -10,7 +10,7 @@ import os
 import json
 import random
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -176,7 +176,7 @@ def save_used_keyword(keyword: str, state_file: str = "fitover35_keyword_state.j
 
     if keyword not in data['used_keywords']:
         data['used_keywords'].append(keyword)
-        data['last_updated'] = datetime.utcnow().isoformat()
+        data['last_updated'] = datetime.now(timezone.utc).isoformat()
 
     state_path.write_text(json.dumps(data, indent=2))
 

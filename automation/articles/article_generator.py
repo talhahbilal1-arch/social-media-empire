@@ -13,7 +13,7 @@ import os
 import re
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -211,7 +211,7 @@ class ArticleGenerator:
             'sections': sections,
             'faq': faq_items,
             'internal_links': outline.get('internal_links', []),
-            'generated_at': datetime.utcnow().isoformat(),
+            'generated_at': datetime.now(timezone.utc).isoformat(),
         }
 
 
@@ -280,8 +280,8 @@ def generate_html(article_data: dict, template_path: Optional[str] = None) -> st
         "@type": "Article",
         "headline": title,
         "description": meta_desc,
-        "datePublished": datetime.utcnow().strftime("%Y-%m-%d"),
-        "dateModified": datetime.utcnow().strftime("%Y-%m-%d"),
+        "datePublished": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "dateModified": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "author": {
             "@type": "Organization",
             "name": "Daily Deal Darling"
@@ -339,7 +339,7 @@ def generate_html(article_data: dict, template_path: Optional[str] = None) -> st
         </div>
         <h1>{title}</h1>
         <div class="article-meta">
-          <span>Updated {datetime.utcnow().strftime("%B %d, %Y")}</span>
+          <span>Updated {datetime.now(timezone.utc).strftime("%B %d, %Y")}</span>
           <span>{read_time} min read</span>
         </div>
       </div>
@@ -370,7 +370,7 @@ def generate_html(article_data: dict, template_path: Optional[str] = None) -> st
         <p class="footer-disclosure">
           <strong>Affiliate Disclosure:</strong> Daily Deal Darling is a participant in the Amazon Services LLC Associates Program. When you click links and make purchases, we may earn a commission at no extra cost to you.
         </p>
-        <p>&copy; {datetime.utcnow().year} Daily Deal Darling. All rights reserved.</p>
+        <p>&copy; {datetime.now(timezone.utc).year} Daily Deal Darling. All rights reserved.</p>
       </div>
     </div>
   </footer>

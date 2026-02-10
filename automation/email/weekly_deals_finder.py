@@ -8,7 +8,7 @@ for the weekly Tuesday email to subscribers.
 import os
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 from dataclasses import dataclass
@@ -205,7 +205,7 @@ def save_deals_json(deals: list[EmailDeal], output_path: str = "weekly_deals.jso
     """Save deals to JSON for email generation."""
 
     deals_data = {
-        'generated_at': datetime.utcnow().isoformat(),
+        'generated_at': datetime.now(timezone.utc).isoformat(),
         'email_date': get_next_tuesday().isoformat(),
         'deal_count': len(deals),
         'deals': [

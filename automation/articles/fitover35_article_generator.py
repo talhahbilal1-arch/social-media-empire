@@ -18,7 +18,7 @@ import re
 import json
 import logging
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -501,7 +501,7 @@ class FitOver35ArticleGenerator:
             'read_time': read_time,
             'word_count': word_count,
             'internal_links': internal_links,
-            'generated_at': datetime.utcnow().isoformat(),
+            'generated_at': datetime.now(timezone.utc).isoformat(),
         }
 
 
@@ -528,7 +528,7 @@ def generate_html(article_data: dict) -> str:
     faq = article_data.get('faq', [])
     hero_image = article_data['hero_image']
     read_time = article_data['read_time']
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     date_str = now.strftime("%B %d, %Y")
     date_iso = now.strftime("%Y-%m-%d")
     slug = article_data['keyword'].lower().replace(' ', '-').replace('?', '').replace("'", '')

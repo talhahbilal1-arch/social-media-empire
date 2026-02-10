@@ -9,14 +9,24 @@ import json
 import random
 import logging
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import anthropic
 from pytrends.request import TrendReq
 
 logger = logging.getLogger(__name__)
 
-client = anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY', ''))
+_client = None
+
+def _get_anthropic_client():
+    """Lazy initialization of Anthropic client to avoid empty API key at import time."""
+    global _client
+    if _client is None:
+        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        if not api_key:
+            raise ValueError("ANTHROPIC_API_KEY environment variable is required")
+        _client = anthropic.Anthropic(api_key=api_key)
+    return _client
 
 # ═══════════════════════════════════════════════════════════════
 # NICHE CONFIGURATION FOR TREND DISCOVERY
@@ -233,7 +243,7 @@ def fetch_pinterest_trends(brand_key):
     """Discover what's trending on Pinterest for this niche via Claude analysis."""
     config = NICHE_CONFIGS[brand_key]
 
-    response = client.messages.create(
+    response = _get_anthropic_client().messages.create(
         model="claude-sonnet-4-5-20250929",
         max_tokens=1500,
         messages=[{
@@ -249,7 +259,7 @@ For each trending topic, provide:
 2. Why it's trending (seasonal, viral, news-related, etc.)
 3. A score from 1-100 for how hot this trend is right now
 
-IMPORTANT: Focus on what's trending RIGHT NOW (February 2026), not evergreen topics.
+IMPORTANT: Focus on what's trending RIGHT NOW ({datetime.now().strftime('%B %Y')}), not evergreen topics.
 Think about: seasonal trends, viral content, new products, cultural moments, health news.
 
 Return ONLY a JSON array, no other text:
@@ -286,13 +296,13 @@ def fetch_web_trends(brand_key):
     """Use Claude to synthesize trending topics from web knowledge."""
     config = NICHE_CONFIGS[brand_key]
 
-    response = client.messages.create(
+    response = _get_anthropic_client().messages.create(
         model="claude-sonnet-4-5-20250929",
         max_tokens=1500,
         messages=[{
             "role": "user",
             "content": f"""You are a content strategist researching what's trending RIGHT NOW
-(the current week of February 2026) in the {brand_key} niche.
+(the current week of {datetime.now().strftime('%B %Y')}) in the {brand_key} niche.
 
 Think about:
 - What news stories are relevant to this niche right now?
@@ -377,7 +387,7 @@ def discover_weekly_trends(brand_key):
     # Use Claude to filter, deduplicate, rank, and select the best trends
     pins_per_week = {"fitness": 21, "deals": 14, "menopause": 14}
 
-    response = client.messages.create(
+    response = _get_anthropic_client().messages.create(
         model="claude-sonnet-4-5-20250929",
         max_tokens=2000,
         messages=[{
@@ -408,7 +418,7 @@ For each selected topic, provide:
 
 Return ONLY this JSON:
 {{
-    "week_of": "{(datetime.utcnow() + timedelta(days=(7 - datetime.utcnow().weekday()) % 7)).strftime('%Y-%m-%d')}",
+    "week_of": "{(datetime.now(timezone.utc) + timedelta(days=(7 - datetime.now(timezone.utc).weekday()) % 7)).strftime('%Y-%m-%d')}",
     "brand": "{brand_key}",
     "trending_topics": [
         {{
@@ -454,7 +464,7 @@ def get_fallback_trends(brand_key):
     """If all trend discovery fails, use evergreen topics that always perform."""
     fallbacks = {
         "fitness": {
-            "week_of": datetime.utcnow().strftime("%Y-%m-%d"),
+            "week_of": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
             "brand": "fitness",
             "trending_topics": [
                 {"rank": 1, "topic": "protein timing for muscle growth over 35", "trend_score": 60, "pins_to_assign": 5,
@@ -480,7 +490,7 @@ def get_fallback_trends(brand_key):
             ]
         },
         "deals": {
-            "week_of": datetime.utcnow().strftime("%Y-%m-%d"),
+            "week_of": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
             "brand": "deals",
             "trending_topics": [
                 {"rank": 1, "topic": "spring organization refresh", "trend_score": 60, "pins_to_assign": 4,
@@ -502,7 +512,7 @@ def get_fallback_trends(brand_key):
             ]
         },
         "menopause": {
-            "week_of": datetime.utcnow().strftime("%Y-%m-%d"),
+            "week_of": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
             "brand": "menopause",
             "trending_topics": [
                 {"rank": 1, "topic": "managing hot flashes naturally", "trend_score": 60, "pins_to_assign": 4,
@@ -544,10 +554,10 @@ def build_weekly_calendar(weekly_trends, brand_key, supabase_client):
         print(f"No trending topics for {brand_key}, skipping calendar build")
         return None
 
-    week_start = datetime.utcnow() + timedelta(days=(7 - datetime.utcnow().weekday()) % 7)
+    week_start = datetime.now(timezone.utc) + timedelta(days=(7 - datetime.now(timezone.utc).weekday()) % 7)
     week_start_str = week_start.strftime('%Y-%m-%d')
 
-    response = client.messages.create(
+    response = _get_anthropic_client().messages.create(
         model="claude-sonnet-4-5-20250929",
         max_tokens=6000,
         messages=[{
@@ -613,7 +623,7 @@ Return ONLY this JSON:
                 'week_starting': calendar.get('week_starting', week_start_str),
                 'calendar_data': json.dumps(calendar),
                 'trends_data': json.dumps(weekly_trends),
-                'created_at': datetime.utcnow().isoformat()
+                'created_at': datetime.now(timezone.utc).isoformat()
             }).execute()
             print(f"Weekly calendar for {brand_key} saved to Supabase")
         except Exception as e:
@@ -633,13 +643,13 @@ Return ONLY this JSON:
 
 def review_last_week_performance(brand_key, supabase_client):
     """Check how last week's trending topics performed."""
-    one_week_ago = (datetime.utcnow() - timedelta(days=7)).isoformat()
+    one_week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
     try:
         last_calendar = supabase_client.table('weekly_calendar') \
             .select('*') \
             .eq('brand', brand_key) \
-            .lt('created_at', datetime.utcnow().isoformat()) \
+            .lt('created_at', datetime.now(timezone.utc).isoformat()) \
             .gte('created_at', one_week_ago) \
             .order('created_at', desc=True) \
             .limit(1) \

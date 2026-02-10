@@ -16,8 +16,10 @@ import sys
 import requests
 from pathlib import Path
 
-# ElevenLabs API Key - can be overridden via environment variable
-API_KEY = os.environ.get("ELEVENLABS_API_KEY", "sk_560ecaa78b2ab2234497d10b985f78037dc235d1acd9ec04")
+# ElevenLabs API Key - must be set via environment variable
+API_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
+if not API_KEY:
+    print("WARNING: ELEVENLABS_API_KEY environment variable not set")
 
 # Default voice - Rachel (warm, friendly female voice)
 VOICE_ID = "21m00Tcm4TlvDq8ikWAM"

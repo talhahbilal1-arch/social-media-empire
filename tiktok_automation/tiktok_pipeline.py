@@ -15,7 +15,7 @@ import sys
 import logging
 import argparse
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 logger = logging.getLogger(__name__)
@@ -190,12 +190,12 @@ def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]
         "audio_url": audio_url,
         "video_url": video_url,
         "status": status,
-        "script_generated_at": datetime.utcnow().isoformat() + "Z",
-        "audio_generated_at": datetime.utcnow().isoformat() + "Z",
+        "script_generated_at": datetime.now(timezone.utc).isoformat() + "Z",
+        "audio_generated_at": datetime.now(timezone.utc).isoformat() + "Z",
     }
 
     if video_url:
-        payload["video_generated_at"] = datetime.utcnow().isoformat() + "Z"
+        payload["video_generated_at"] = datetime.now(timezone.utc).isoformat() + "Z"
 
     response = requests.post(
         f"{supabase_url}/rest/v1/tiktok_queue",
@@ -229,7 +229,7 @@ def run_pipeline(category: Optional[str] = None) -> dict:
     try:
         audio_data = generate_audio(script["script"])
         if audio_data:
-            timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+            timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
             filename = f"{timestamp}-{script['category']}.mp3"
             audio_url = upload_audio(audio_data, filename)
     except Exception as e:

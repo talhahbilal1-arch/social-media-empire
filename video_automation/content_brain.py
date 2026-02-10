@@ -13,7 +13,7 @@ import random
 import os
 import re
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -594,7 +594,7 @@ def log_pin_to_history(pin_data, supabase_client):
             'pexels_image_id': pin_data.get('pexels_image_id', ''),
             'destination_url': pin_data.get('destination_url', ''),
             'posting_method': pin_data.get('posting_method', ''),
-            'created_at': datetime.utcnow().isoformat()
+            'created_at': datetime.now(timezone.utc).isoformat()
         }).execute()
     except Exception as e:
         logger.error(f"Failed to log pin to history: {e}")
@@ -605,8 +605,8 @@ def generate_pin_from_calendar(brand_key, supabase_client):
 
     Falls back to the original random topic selection if no calendar exists.
     """
-    today = datetime.utcnow().strftime('%A')  # "Monday", "Tuesday", etc.
-    today_date = datetime.utcnow().strftime('%Y-%m-%d')
+    today = datetime.now(timezone.utc).strftime('%A')  # "Monday", "Tuesday", etc.
+    today_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
     # Get the current week's calendar
     try:
@@ -783,5 +783,5 @@ def build_destination_url(base_url, brand, posting_method, campaign="pins"):
         f"utm_source=pinterest&"
         f"utm_medium={posting_method}&"
         f"utm_campaign={brand}_{campaign}&"
-        f"utm_content={datetime.utcnow().strftime('%Y%m%d')}"
+        f"utm_content={datetime.now(timezone.utc).strftime('%Y%m%d')}"
     )

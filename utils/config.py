@@ -99,7 +99,7 @@ class Config:
     def validate(self) -> list[str]:
         """Validate required configuration values. Returns list of missing keys."""
         required = {
-            "gemini_api_key": self.gemini_api_key,
+            "anthropic_api_key": self.anthropic_api_key,
             "pexels_api_key": self.pexels_api_key,
             "supabase_url": self.supabase_url,
             "supabase_key": self.supabase_key,

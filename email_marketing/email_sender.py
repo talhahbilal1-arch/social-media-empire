@@ -26,18 +26,6 @@ BRAND_EMAIL_CONFIG = {
         "reply_to": "support@menopauseplanner.com",
         "footer": "You're receiving this because you signed up for menopause wellness tips."
     },
-    "nurse_planner": {
-        "from_name": "Nurse Planner",
-        "from_email": "hello@nurseplanner.com",
-        "reply_to": "hello@nurseplanner.com",
-        "footer": "You're receiving this because you signed up for nurse life tips."
-    },
-    "adhd_planner": {
-        "from_name": "ADHD Planner",
-        "from_email": "support@adhdplanner.com",
-        "reply_to": "support@adhdplanner.com",
-        "footer": "You're receiving this because you signed up for ADHD productivity tips."
-    },
     "fitover35": {
         "from_name": "Fit Over 35",
         "from_email": "hello@fitover35.com",

@@ -11,7 +11,7 @@ This script:
 import re
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -115,7 +115,7 @@ def generate_deals_section(deals: list[dict]) -> str:
 
     cards_html = '\n'.join(generate_deal_card(deal) for deal in deals)
 
-    return f'''    <!-- Today's Deals Section - Auto-generated {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')} -->
+    return f'''    <!-- Today's Deals Section - Auto-generated {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')} -->
     <section class="section" id="deals" style="background: var(--color-bg-alt);">
       <div class="container">
         <div class="section-header">

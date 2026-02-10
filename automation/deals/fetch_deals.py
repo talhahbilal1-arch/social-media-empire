@@ -11,7 +11,7 @@ This script:
 import os
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -89,7 +89,7 @@ def save_deals_locally(deals: list[Deal], output_path: str = "deals_data.json"):
         output_path: Output file path
     """
     deals_data = {
-        'fetched_at': datetime.utcnow().isoformat(),
+        'fetched_at': datetime.now(timezone.utc).isoformat(),
         'count': len(deals),
         'deals': [d.to_dict() for d in deals],
     }
@@ -119,7 +119,7 @@ def save_deals_to_supabase(deals: list[Deal]):
         # Upsert deals
         for deal in deals:
             deal_dict = deal.to_dict()
-            deal_dict['updated_at'] = datetime.utcnow().isoformat()
+            deal_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
 
             supabase.table('deals').upsert(
                 deal_dict,
