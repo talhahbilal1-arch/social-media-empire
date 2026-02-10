@@ -312,6 +312,33 @@ class FitOver35ArticleGenerator:
                 import time
                 time.sleep(2 ** attempt)
 
+    def _repair_json(self, text: str) -> Optional[str]:
+        """Attempt to repair common JSON issues from LLM responses."""
+        # Fix trailing commas before } or ]
+        repaired = re.sub(r',\s*([}\]])', r'\1', text)
+        # Fix missing commas between values: "value"\n"key" or "value"\n{
+        repaired = re.sub(r'(")\s*\n\s*(")', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(")\s*\n\s*(\{)', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(\})\s*\n\s*(\{)', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(\])\s*\n\s*(")', r'\1,\n\2', repaired)
+        # Fix missing commas between array elements: }\n{  or "value"\n"value" inside arrays
+        repaired = re.sub(r'(\})\s*\n\s*(\{)', r'\1,\n\2', repaired)
+        try:
+            json.loads(repaired)
+            return repaired
+        except json.JSONDecodeError:
+            pass
+        # Try truncating to last valid closing brace (Gemini sometimes appends garbage)
+        last_brace = repaired.rfind('}')
+        if last_brace != -1:
+            candidate = repaired[:last_brace + 1]
+            try:
+                json.loads(candidate)
+                return candidate
+            except json.JSONDecodeError:
+                pass
+        return None
+
     def _parse_json(self, text: str) -> dict:
         """Extract and parse JSON from Gemini response."""
         # Clean the text first
@@ -324,6 +351,11 @@ class FitOver35ArticleGenerator:
                 return json.loads(json_block.group(1))
             except json.JSONDecodeError as e:
                 logger.warning(f"JSON decode error in ```json block: {e}")
+                # Try repairing the extracted block
+                repaired = self._repair_json(json_block.group(1))
+                if repaired:
+                    logger.info("JSON repair succeeded on ```json block")
+                    return json.loads(repaired)
 
         # Second try: if the whole text starts with ```json, strip the markers
         if text.startswith('```json'):
@@ -335,6 +367,10 @@ class FitOver35ArticleGenerator:
                 return json.loads(clean)
             except json.JSONDecodeError as e:
                 logger.warning(f"JSON decode error after stripping markers: {e}")
+                repaired = self._repair_json(clean)
+                if repaired:
+                    logger.info("JSON repair succeeded after stripping markers")
+                    return json.loads(repaired)
 
         # Third try: find the outermost JSON object or array
         for pattern in [r'\{[\s\S]*\}', r'\[[\s\S]*\]']:
@@ -343,7 +379,10 @@ class FitOver35ArticleGenerator:
                 try:
                     return json.loads(json_match.group())
                 except json.JSONDecodeError:
-                    continue
+                    repaired = self._repair_json(json_match.group())
+                    if repaired:
+                        logger.info("JSON repair succeeded on extracted object")
+                        return json.loads(repaired)
 
         # Fourth try: maybe Gemini didn't add the closing ```
         if '```json' in text:
@@ -362,16 +401,29 @@ class FitOver35ArticleGenerator:
                             try:
                                 return json.loads(text[brace_start:i+1])
                             except json.JSONDecodeError:
+                                repaired = self._repair_json(text[brace_start:i+1])
+                                if repaired:
+                                    logger.info("JSON repair succeeded on brace-matched block")
+                                    return json.loads(repaired)
                                 break
 
         raise ValueError(f"No valid JSON found in response: {text[:200]}...")
 
     def generate_outline(self, keyword: str) -> dict:
-        """Generate article outline."""
+        """Generate article outline with retry on parse failure."""
         logger.info(f"Generating outline for: {keyword}")
         prompt = OUTLINE_PROMPT.format(keyword=keyword)
-        response = self._call_gemini(prompt)
-        return self._parse_json(response)
+        last_error = None
+        for attempt in range(3):
+            response = self._call_gemini(prompt)
+            try:
+                return self._parse_json(response)
+            except ValueError as e:
+                last_error = e
+                logger.warning(f"Outline parse failed (attempt {attempt + 1}/3): {e}")
+                import time
+                time.sleep(2)
+        raise last_error
 
     def generate_article_content(self, keyword: str, title: str, outline: dict) -> str:
         """Generate the full article HTML content."""
