@@ -267,7 +267,7 @@ class FitOver35ArticleGenerator:
 
         if gemini_key and genai:
             genai.configure(api_key=gemini_key)
-            self.model = genai.GenerativeModel('gemini-2.0-flash')
+            self.model = genai.GenerativeModel('gemini-2.0-flash-lite')
             self.backend = 'gemini'
             logger.info("Using Gemini backend for article generation")
         elif anthropic_key and _anthropic:
