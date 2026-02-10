@@ -879,6 +879,60 @@ P.S. Use code NURSELIFE for 15% off this week!
             }
         ]
     },
+    "fitover35": {
+        "name": "Fit Over 35",
+        "from_name": "Fit Over 35",
+        "from_email": "hello@fitover35.com",
+        "lead_magnet": "Free 12-Week Workout Program",
+        "form_id": "8946984",
+        "tags": {
+            "subscriber": 15064074,
+            "lead_magnet": 15064075,
+            "blog_reader": 15064076
+        },
+        "sequence": [
+            {
+                "day": 0,
+                "subject": "Your Free 12-Week Workout Program is Here!",
+                "preview": "3 phases, 12 weeks, designed for men 35+ -- let's get started",
+                "template": "welcome_delivery",
+                "content": """
+Hey there,
+
+Thanks for joining the Fit Over 35 community. You just made a decision that your future self will thank you for.
+
+Your free 12-Week Workout Program is ready. This is the same structured approach that has helped hundreds of men over 35 build real, sustainable strength -- without destroying their joints or spending hours in the gym.
+
+**What's Inside Your 12-Week Program:**
+
+**Phase 1: Foundation (Weeks 1-4)**
+Build your base with compound movements, proper form, and progressive overload. This phase focuses on re-establishing movement patterns and building the habit of consistent training.
+
+**Phase 2: Strength Building (Weeks 5-8)**
+Increase intensity with structured strength work. You'll train 3-4 days per week with proven exercises that build functional muscle while protecting your joints.
+
+**Phase 3: Performance (Weeks 9-12)**
+Push your limits with advanced programming. This is where the transformation happens -- increased strength, better body composition, and the confidence that comes with consistent progress.
+
+**Why This Program Works for Men 35+:**
+- Joint-friendly progression with smart warm-ups
+- Time-efficient sessions (45-60 minutes, 3-4 days/week)
+- Recovery-focused with built-in deload weeks
+- Works with a standard gym setup
+- Evidence-based, not social media trends
+
+One piece of advice before you start: trust the process. The first two weeks might feel easy. That's by design. Building a strong foundation prevents injuries and ensures you're still progressing at Week 12.
+
+Welcome to the community. Let's build something that lasts.
+
+Stay strong,
+The Fit Over 35 Team
+""",
+                "cta_text": "Access Your 12-Week Program",
+                "cta_url": "https://fitover35.com/12-week-program.html"
+            }
+        ]
+    },
     "adhd_planner": {
         "name": "The ADHD Planner",
         "from_name": "Mike from The ADHD Planner",

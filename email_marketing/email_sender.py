@@ -37,6 +37,12 @@ BRAND_EMAIL_CONFIG = {
         "from_email": "support@adhdplanner.com",
         "reply_to": "support@adhdplanner.com",
         "footer": "You're receiving this because you signed up for ADHD productivity tips."
+    },
+    "fitover35": {
+        "from_name": "Fit Over 35",
+        "from_email": "hello@fitover35.com",
+        "reply_to": "hello@fitover35.com",
+        "footer": "You're receiving this because you signed up for the free 12-week workout program at fitover35.com"
     }
 }
 
