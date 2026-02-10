@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hormone Health Journal</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#A5A58D;--rose:#DDBEA9;--cream:#FAF7F0;--taupe:#A39384;--deep:#6B705C}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#333;background:var(--cream);line-height:1.5}
+.pg{width:8.5in;min-height:11in;margin:0 auto;padding:.7in;background:#fff;position:relative}
+.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,var(--deep),var(--rose))}
+.cover h1{font-size:2.3em;color:#fff;margin-bottom:.3em}
+.cover h2{font-size:1.1em;color:var(--cream);font-weight:400;margin-bottom:2em}
+.cover .sub{color:#fff;font-size:.95em;border-top:2px solid var(--cream);padding-top:1em;width:60%}
+.hdr{background:var(--deep);color:#fff;text-align:center;padding:.35em;font-size:1.05em;margin-bottom:.4em;border-radius:4px}
+.shdr{background:var(--sage);color:#fff;padding:.2em .5em;font-size:.88em;margin:.35em 0 .2em;border-radius:3px;display:inline-block}
+h3{color:var(--deep);margin:.45em 0 .2em;font-size:.93em}
+p{font-size:.82em;margin-bottom:.3em}
+.note{background:var(--cream);border-left:3px solid var(--sage);padding:.3em .5em;font-size:.78em;margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin-bottom:.4em;font-size:.77em}
+th{background:var(--sage);color:#fff;padding:5px 3px;text-align:left;font-weight:600;font-size:.75em}
+td{border:1px solid #ddd;padding:4px 3px;height:24px}
+tr:nth-child(even) td{background:var(--cream)}
+.box{border:1px solid var(--sage);border-radius:4px;padding:.4em;min-height:.85in;margin-bottom:.3em}
+.box-sm{border:1px solid var(--rose);border-radius:4px;padding:.3em;min-height:.5in;margin-bottom:.25em}
+.box-label{font-size:.75em;color:var(--taupe);font-weight:600;margin-bottom:.15em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.3em}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.25em}
+.cl{list-style:none;font-size:.8em}
+.cl li{margin-bottom:.15em}
+.cl li::before{content:"\2610 ";color:var(--sage)}
+.cols2{columns:2;column-gap:.8em}
+.ft{text-align:center;color:var(--taupe);font-size:.7em;position:absolute;bottom:.35in;left:0;right:0}
+.lines{border-bottom:1px solid #e0ddd8;height:22px;margin-bottom:1px}
+.wb{border:1px solid var(--sage);border-radius:4px;padding:.35em;margin-bottom:.35em}
+.wb-title{background:var(--rose);color:var(--deep);padding:.2em .5em;border-radius:3px;font-weight:600;font-size:.82em;margin-bottom:.25em}
+.ref{font-size:.72em;color:var(--taupe)}
+.scale{display:flex;gap:3px;font-size:.72em;margin:.15em 0}
+.scale span{width:18px;height:18px;border:1px solid var(--sage);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:var(--taupe)}
+@media print{
+  body{background:#fff}
+  .pg{page-break-after:always;margin:0;box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pg:last-child{page-break-after:avoid}
+}
+@media screen{.pg{margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:4px}}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: Cover -->
+<div class="pg cover">
+<div style="font-size:3em;margin-bottom:.3em">&#9883;</div>
+<h1>Hormone Health Journal</h1>
+<h2>Your Complete Health Tracking Companion</h2>
+<div class="sub">Track Labs, Medications, Symptoms &amp; Lifestyle<br>Through Every Stage of Menopause</div>
+<p style="color:#fff;margin-top:3em;font-size:.85em">Name: ___________________________<br><br>Healthcare Provider: ___________________________<br><br>Started: _______________</p>
+</div>
+
+<!-- PAGE 2: Hormone Basics Overview -->
+<div class="pg">
+<div class="hdr">Hormone Basics: What You Need to Know</div>
+
+<h3>Key Hormones in Menopause</h3>
+<table>
+<tr><th>Hormone</th><th>Role</th><th>What Changes in Menopause</th><th>Symptoms When Low</th></tr>
+<tr><td><strong>Estrogen (Estradiol)</strong></td><td>Regulates cycles, bone health, brain function, cardiovascular health</td><td>Fluctuates wildly, then declines permanently</td><td>Hot flashes, vaginal dryness, brain fog, bone loss, mood changes</td></tr>
+<tr><td><strong>Progesterone</strong></td><td>Balances estrogen, supports sleep, calms nervous system</td><td>Drops early in perimenopause</td><td>Anxiety, insomnia, heavy periods, irritability</td></tr>
+<tr><td><strong>Testosterone</strong></td><td>Energy, libido, muscle mass, confidence</td><td>Gradual decline (50% by menopause)</td><td>Low libido, fatigue, reduced muscle mass, low motivation</td></tr>
+<tr><td><strong>FSH</strong></td><td>Stimulates ovaries to produce eggs</td><td>Rises as ovaries respond less</td><td>High FSH = ovaries slowing down</td></tr>
+<tr><td><strong>TSH / Thyroid</strong></td><td>Metabolism, energy, weight, temperature</td><td>Thyroid issues increase after 40</td><td>Fatigue, weight gain, cold intolerance, hair loss</td></tr>
+<tr><td><strong>DHEA</strong></td><td>Precursor to estrogen and testosterone</td><td>Declines with age</td><td>Fatigue, low immunity, reduced well-being</td></tr>
+<tr><td><strong>Cortisol</strong></td><td>Stress response, energy regulation</td><td>Can become dysregulated with chronic stress</td><td>Fatigue, belly fat, insomnia, anxiety</td></tr>
+</table>
+
+<h3>When to Test</h3>
+<p><strong>Best timing:</strong> Day 2-5 of your cycle (if still having periods). Fasting morning blood draw is ideal for most hormones.</p>
+<p><strong>How often:</strong> Every 3-6 months during treatment changes, or annually once stable.</p>
+
+<h3>Treatment Options Overview</h3>
+<table>
+<tr><th>Treatment</th><th>What It Does</th><th>Forms</th></tr>
+<tr><td>Systemic HRT (Estrogen + Progesterone)</td><td>Replaces declining hormones systemically</td><td>Patch, pill, spray, gel</td></tr>
+<tr><td>Local/Vaginal Estrogen</td><td>Treats vaginal dryness &amp; urinary symptoms</td><td>Cream, ring, tablet</td></tr>
+<tr><td>Testosterone</td><td>Supports libido, energy, cognition</td><td>Cream, pellet (compounded)</td></tr>
+<tr><td>SSRIs / SNRIs</td><td>Non-hormonal hot flash relief + mood support</td><td>Pill</td></tr>
+<tr><td>Supplements</td><td>Supportive care (see med/supplement log)</td><td>Various</td></tr>
+</table>
+
+<div class="note"><strong>Important:</strong> This journal is for tracking, not medical advice. Always discuss results and treatments with a qualified healthcare provider, ideally one certified by NAMS (North American Menopause Society).</div>
+<div class="ft">Hormone Health Journal &mdash; Basics</div>
+</div>
+
+<!-- PAGE 3: Lab Result Log with Reference Ranges -->
+<div class="pg">
+<div class="hdr">Lab Result Log</div>
+<p style="font-size:.8em;margin-bottom:.3em">Record your blood test results here. Reference ranges are general guidelines; your lab may differ slightly.</p>
+
+<table>
+<tr><th>Test</th><th>Reference Range</th><th>Date:<br>______</th><th>Date:<br>______</th><th>Date:<br>______</th><th>Date:<br>______</th><th>Date:<br>______</th></tr>
+<tr><td><strong>Estradiol (E2)</strong></td><td class="ref">Premeno: 30-400 pg/mL<br>Postmeno: &lt;30 pg/mL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Progesterone</strong></td><td class="ref">Luteal: 5-20 ng/mL<br>Postmeno: &lt;1 ng/mL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>FSH</strong></td><td class="ref">Premeno: 3-20 mIU/mL<br>Postmeno: 25-135 mIU/mL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>LH</strong></td><td class="ref">Premeno: 2-15 mIU/mL<br>Postmeno: 10-54 mIU/mL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Total Testosterone</strong></td><td class="ref">15-70 ng/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Free Testosterone</strong></td><td class="ref">0.3-1.9 ng/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>DHEA-S</strong></td><td class="ref">35-430 mcg/dL (age-dependent)</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>TSH</strong></td><td class="ref">0.5-4.5 mIU/L</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Free T4</strong></td><td class="ref">0.8-1.8 ng/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Free T3</strong></td><td class="ref">2.3-4.2 pg/mL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Vitamin D (25-OH)</strong></td><td class="ref">30-80 ng/mL (optimal &gt;50)</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Vitamin B12</strong></td><td class="ref">200-900 pg/mL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Ferritin</strong></td><td class="ref">20-200 ng/mL (optimal &gt;50)</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Fasting Glucose</strong></td><td class="ref">70-99 mg/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>HbA1c</strong></td><td class="ref">&lt;5.7% normal</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Total Cholesterol</strong></td><td class="ref">&lt;200 mg/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>LDL</strong></td><td class="ref">&lt;100 mg/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>HDL</strong></td><td class="ref">&gt;50 mg/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Triglycerides</strong></td><td class="ref">&lt;150 mg/dL</td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<div class="box-sm"><div class="box-label">Notes / Doctor's Comments:</div></div>
+<div class="ft">Hormone Health Journal &mdash; Lab Results</div>
+</div>
+
+<!-- PAGES 4-15: 12 Monthly Tracking Pages -->
+<div class="pg">
+<div class="hdr">Month 1 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 2 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 3 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 4 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 4</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 5 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 5</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 6 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 6</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 7 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 7</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 8 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 8</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 9 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 9</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 10 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 10</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 11 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 11</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Month 12 &mdash; Symptom &amp; Hormone Tracker</div>
+<p style="font-size:.8em">Month/Year: _______________ Cycle Day 1 (if applicable): _______________</p>
+<h3>Daily Symptom Tracker</h3>
+<table>
+<tr><th>Day</th><th>Hot Flashes</th><th>Sleep (1-10)</th><th>Energy (1-10)</th><th>Mood (1-10)</th><th>Brain Fog</th><th>Joint Pain</th><th>Anxiety</th><th>Other Symptoms</th></tr>
+<tr><td>1-5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>6-10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>11-15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16-20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21-25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26-31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Period / Bleeding Log</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Start Date:</div></div>
+<div class="box-sm"><div class="box-label">End Date:</div></div>
+<div class="box-sm"><div class="box-label">Flow (Light/Med/Heavy):</div></div>
+</div>
+<h3>Monthly Summary</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Worst symptom this month:</div></div>
+<div class="box-sm"><div class="box-label">Best days / what helped:</div></div>
+<div class="box-sm"><div class="box-label">Treatment changes this month:</div></div>
+<div class="box-sm"><div class="box-label">Questions for next appointment:</div></div>
+</div>
+<div class="ft">Hormone Health Journal &mdash; Month 12</div>
+</div>
+
+<!-- PAGES 16-19: 4 Medication/Supplement Log Pages -->
+<div class="pg">
+<div class="hdr">Medication &amp; Supplement Log &mdash; Page 1</div>
+<p style="font-size:.82em;margin-bottom:.3em">Track everything you take: prescriptions, HRT, supplements, and vitamins. Note dosage changes and how each affects you.</p>
+
+<h3>Current Medications</h3>
+<table>
+<tr><th>Medication / Supplement</th><th>Dose</th><th>Frequency</th><th>Prescriber</th><th>Start Date</th><th>Purpose</th><th>Side Effects / Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Dosage Change Log</h3>
+<table>
+<tr><th>Date</th><th>Medication</th><th>Old Dose</th><th>New Dose</th><th>Reason for Change</th><th>Effect After 2 Weeks</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="ft">Hormone Health Journal &mdash; Medications 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Medication &amp; Supplement Log &mdash; Page 2</div>
+
+<h3>Supplements I've Researched / Want to Try</h3>
+<table>
+<tr><th>Supplement</th><th>Evidence For</th><th>Recommended Dose</th><th>Tried?</th><th>My Experience</th></tr>
+<tr><td>Magnesium Glycinate</td><td>Sleep, muscle cramps, anxiety</td><td>200-400mg at bedtime</td><td></td><td></td></tr>
+<tr><td>Vitamin D3 + K2</td><td>Bone health, mood, immunity</td><td>2000-5000 IU daily</td><td></td><td></td></tr>
+<tr><td>Omega-3 Fish Oil</td><td>Heart health, joint pain, mood</td><td>1000-2000mg EPA+DHA</td><td></td><td></td></tr>
+<tr><td>Black Cohosh</td><td>Hot flashes (some evidence)</td><td>20-40mg standardized</td><td></td><td></td></tr>
+<tr><td>Ashwagandha</td><td>Stress, cortisol, energy</td><td>300-600mg daily</td><td></td><td></td></tr>
+<tr><td>Probiotics</td><td>Gut health, estrogen metabolism</td><td>Varies by strain</td><td></td><td></td></tr>
+<tr><td>Evening Primrose Oil</td><td>Hot flashes, skin health</td><td>500-1000mg daily</td><td></td><td></td></tr>
+<tr><td>Maca Root</td><td>Libido, energy, mood</td><td>1500-3000mg daily</td><td></td><td></td></tr>
+<tr><td>Calcium + D</td><td>Bone density preservation</td><td>1000-1200mg calcium</td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<div class="note"><strong>Always discuss supplements with your doctor.</strong> Some supplements interact with medications (especially HRT, blood thinners, and thyroid meds). More is not always better.</div>
+<div class="ft">Hormone Health Journal &mdash; Medications 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Medication &amp; Supplement Log &mdash; Page 3</div>
+
+<h3>HRT Tracking (if applicable)</h3>
+<table>
+<tr><th>HRT Type</th><th>Brand / Form</th><th>Dose</th><th>Started</th><th>Application Site / Schedule</th></tr>
+<tr><td>Estrogen</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Progesterone</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Testosterone</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Local Estrogen</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Other</td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>HRT Symptom Response Log</h3>
+<table>
+<tr><th>Week</th><th>Hot Flashes</th><th>Sleep</th><th>Mood</th><th>Energy</th><th>Libido</th><th>Side Effects</th><th>Overall Rating (1-10)</th></tr>
+<tr><td>Week 1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Month 6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<div class="box"><div class="box-label">Overall HRT Experience &amp; Notes for Doctor:</div></div>
+<div class="ft">Hormone Health Journal &mdash; Medications 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Medication &amp; Supplement Log &mdash; Page 4</div>
+
+<h3>Discontinued Medications / Supplements</h3>
+<table>
+<tr><th>Name</th><th>Dose</th><th>Date Started</th><th>Date Stopped</th><th>Reason Stopped</th><th>Would I Try Again?</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Allergies &amp; Sensitivities</h3>
+<table>
+<tr><th>Allergen / Sensitivity</th><th>Reaction</th><th>Severity</th><th>Date Discovered</th></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Pharmacy &amp; Insurance Info</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Pharmacy Name &amp; Phone:</div></div>
+<div class="box-sm"><div class="box-label">Insurance Rx Group / ID:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">Compounding Pharmacy (if applicable):</div></div>
+<div class="ft">Hormone Health Journal &mdash; Medications 4</div>
+</div>
+
+<!-- PAGES 20-22: 3 Doctor Prep Worksheets -->
+<div class="pg">
+<div class="hdr">Doctor Appointment Prep &mdash; Visit 1</div>
+<p style="font-size:.82em;margin-bottom:.3em">Complete this before each appointment so you make the most of your time.</p>
+
+<h3>Appointment Details</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Date &amp; Time:</div></div>
+<div class="box-sm"><div class="box-label">Doctor / Specialist:</div></div>
+<div class="box-sm"><div class="box-label">Reason for Visit:</div></div>
+</div>
+
+<h3>Symptoms to Discuss (ranked by priority)</h3>
+<table>
+<tr><th>#</th><th>Symptom</th><th>Since When</th><th>Severity (1-10)</th><th>How It Affects Daily Life</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>4</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>5</td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>My Questions</h3>
+<div class="box" style="min-height:1.2in"><div class="box-label">Write your questions in order of importance (ask the most important ones first):</div></div>
+
+<h3>Current Medications to Review</h3>
+<div class="box-sm"><div class="box-label">List or reference your medication log page:</div></div>
+
+<h3>After the Appointment</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">What the doctor recommended:</div></div>
+<div class="box"><div class="box-label">Tests ordered / follow-up plan:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">Next appointment date:</div></div>
+<div class="ft">Hormone Health Journal &mdash; Doctor Prep 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Doctor Appointment Prep &mdash; Visit 2</div>
+
+<h3>Appointment Details</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Date &amp; Time:</div></div>
+<div class="box-sm"><div class="box-label">Doctor / Specialist:</div></div>
+<div class="box-sm"><div class="box-label">Reason for Visit:</div></div>
+</div>
+
+<h3>Symptoms to Discuss (ranked by priority)</h3>
+<table>
+<tr><th>#</th><th>Symptom</th><th>Since When</th><th>Severity (1-10)</th><th>How It Affects Daily Life</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>4</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>5</td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>My Questions</h3>
+<div class="box" style="min-height:1.2in"><div class="box-label">Write your questions in order of importance:</div></div>
+
+<h3>Updates Since Last Visit</h3>
+<div class="box"><div class="box-label">What changed since my last appointment (new symptoms, medication effects, lifestyle changes):</div></div>
+
+<h3>After the Appointment</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">What the doctor recommended:</div></div>
+<div class="box"><div class="box-label">Tests ordered / follow-up plan:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">Next appointment date:</div></div>
+<div class="ft">Hormone Health Journal &mdash; Doctor Prep 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Doctor Appointment Prep &mdash; Visit 3</div>
+
+<h3>Appointment Details</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Date &amp; Time:</div></div>
+<div class="box-sm"><div class="box-label">Doctor / Specialist:</div></div>
+<div class="box-sm"><div class="box-label">Reason for Visit:</div></div>
+</div>
+
+<h3>Symptoms to Discuss (ranked by priority)</h3>
+<table>
+<tr><th>#</th><th>Symptom</th><th>Since When</th><th>Severity (1-10)</th><th>How It Affects Daily Life</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>4</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>5</td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>My Questions</h3>
+<div class="box" style="min-height:1.2in"><div class="box-label">Write your questions in order of importance:</div></div>
+
+<h3>Updates Since Last Visit</h3>
+<div class="box"><div class="box-label">What changed since my last appointment:</div></div>
+
+<h3>After the Appointment</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">What the doctor recommended:</div></div>
+<div class="box"><div class="box-label">Tests ordered / follow-up plan:</div></div>
+</div>
+<div class="box-sm"><div class="box-label">Next appointment date:</div></div>
+<div class="ft">Hormone Health Journal &mdash; Doctor Prep 3</div>
+</div>
+
+<!-- PAGES 23-26: 4 Lifestyle Factor Tracker Pages -->
+<div class="pg">
+<div class="hdr">Lifestyle Factor Tracker &mdash; Weeks 1-3</div>
+<p style="font-size:.82em;margin-bottom:.3em">Track how lifestyle factors affect your symptoms. Rate each factor and note your top symptoms that day.</p>
+
+<table>
+<tr><th>Week / Day</th><th>Exercise (type/min)</th><th>Water (glasses)</th><th>Alcohol</th><th>Caffeine</th><th>Stress (1-10)</th><th>Sleep (hrs)</th><th>Symptoms Today</th></tr>
+<tr><td>W1 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W1 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W1 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W1 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W1 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W1 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W1 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W2 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W2 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W2 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W2 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W2 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W2 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W2 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W3 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W3 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W3 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W3 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W3 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W3 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W3 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="ft">Hormone Health Journal &mdash; Lifestyle Tracker 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Lifestyle Factor Tracker &mdash; Weeks 4-6</div>
+<table>
+<tr><th>Week / Day</th><th>Exercise (type/min)</th><th>Water (glasses)</th><th>Alcohol</th><th>Caffeine</th><th>Stress (1-10)</th><th>Sleep (hrs)</th><th>Symptoms Today</th></tr>
+<tr><td>W4 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W4 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W4 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W4 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W4 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W4 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W4 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W5 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W5 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W5 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W5 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W5 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W5 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W5 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W6 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W6 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W6 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W6 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W6 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W6 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W6 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="ft">Hormone Health Journal &mdash; Lifestyle Tracker 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Lifestyle Factor Tracker &mdash; Weeks 7-9</div>
+<table>
+<tr><th>Week / Day</th><th>Exercise (type/min)</th><th>Water (glasses)</th><th>Alcohol</th><th>Caffeine</th><th>Stress (1-10)</th><th>Sleep (hrs)</th><th>Symptoms Today</th></tr>
+<tr><td>W7 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W7 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W7 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W7 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W7 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W7 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W7 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W8 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W8 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W8 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W8 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W8 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W8 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W8 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W9 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W9 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W9 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W9 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W9 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W9 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W9 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="ft">Hormone Health Journal &mdash; Lifestyle Tracker 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Lifestyle Factor Tracker &mdash; Weeks 10-12</div>
+<table>
+<tr><th>Week / Day</th><th>Exercise (type/min)</th><th>Water (glasses)</th><th>Alcohol</th><th>Caffeine</th><th>Stress (1-10)</th><th>Sleep (hrs)</th><th>Symptoms Today</th></tr>
+<tr><td>W10 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W10 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W10 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W10 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W10 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W10 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W10 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W11 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W11 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W11 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W11 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W11 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W11 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W11 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W12 Mon</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W12 Tue</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W12 Wed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W12 Thu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W12 Fri</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W12 Sat</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>W12 Sun</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="ft">Hormone Health Journal &mdash; Lifestyle Tracker 4</div>
+</div>
+
+<!-- PAGE 27: Yearly Review -->
+<div class="pg">
+<div class="hdr">Yearly Review &amp; Health Summary</div>
+<p style="font-size:.82em">Year: _______________ Age: ______</p>
+
+<h3>Symptom Trajectory</h3>
+<table>
+<tr><th>Symptom</th><th>Jan-Mar</th><th>Apr-Jun</th><th>Jul-Sep</th><th>Oct-Dec</th><th>Trend</th></tr>
+<tr><td>Hot Flashes</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Sleep Quality</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Energy Level</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Mood / Anxiety</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Brain Fog</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Joint Pain</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Weight</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Periods</td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Treatments &amp; Their Impact</h3>
+<div class="box"><div class="box-label">What treatments/strategies had the most positive effect this year?</div></div>
+
+<h3>Lab Trend Summary</h3>
+<div class="box-sm"><div class="box-label">Key lab changes over the year (improving, worsening, stable):</div></div>
+
+<h3>Biggest Wins This Year</h3>
+<div class="box"><div class="box-label">How I took care of myself, advocacy moments, improvements:</div></div>
+
+<h3>Goals for Next Year</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Health goals:</div></div>
+<div class="box-sm"><div class="box-label">Lifestyle changes to make:</div></div>
+<div class="box-sm"><div class="box-label">Appointments to schedule:</div></div>
+<div class="box-sm"><div class="box-label">Tests to request:</div></div>
+</div>
+
+<div class="note"><strong>You have built an incredible record of your health journey.</strong> This data is powerful. It tells your story in a way that doctors can understand and act on. Keep advocating for yourself -- you are worth it.</div>
+<div class="ft">Hormone Health Journal &mdash; Yearly Review</div>
+</div>
+
+</body>
+</html>
