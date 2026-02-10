@@ -5,7 +5,7 @@ Generates SEO-optimized fitness articles for men over 35 with:
 - Meta tags, Open Graph, and Twitter Card tags
 - Article schema JSON-LD + FAQ schema JSON-LD
 - Proper heading hierarchy (H1, H2, H3)
-- Product recommendations with Amazon affiliate links (tag: fitover35-20)
+- Product recommendations with Amazon affiliate links (tag: dailydealdarl-20)
 - FAQ section with schema markup
 - Pexels hero image integration
 - ConvertKit email signup integration
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-AFFILIATE_TAG = "fitover35-20"
+AFFILIATE_TAG = "dailydealdarl-20"
 CONVERTKIT_FORM_ID = "8946984"
 SITE_URL = "https://fitover35.com"
 SITE_NAME = "FitOver35"
