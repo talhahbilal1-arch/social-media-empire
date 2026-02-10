@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 12-Week Strength System | FitOver35</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1a1a1a;
+            background: #ffffff;
+            line-height: 1.6;
+        }
+        img { max-width: 100%; height: auto; }
+        a { color: #1b4965; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ===== LAYOUT ===== */
+        .page-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b4965 50%, #0d1b2a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(27,73,101,0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(27,73,101,0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .cover-content { position: relative; z-index: 1; max-width: 650px; }
+        .cover-badge {
+            display: inline-block;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 8px 24px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            color: rgba(255,255,255,0.8);
+        }
+        .cover h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        .cover h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 48px;
+            line-height: 1.5;
+        }
+        .cover-byline {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 48px;
+        }
+        .cover-desc {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.7;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-top: 32px;
+        }
+
+        /* ===== SECTION PAGES ===== */
+        .section-page {
+            padding: 60px 0;
+            page-break-before: always;
+        }
+        .section-header {
+            background: #0d1b2a;
+            color: #ffffff;
+            padding: 40px 32px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .section-header .phase-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 8px;
+        }
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .section-header p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+        }
+
+        /* ===== HEADINGS ===== */
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0d1b2a;
+            margin-bottom: 16px;
+            margin-top: 40px;
+        }
+        h3:first-child { margin-top: 0; }
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1b4965;
+            margin-bottom: 12px;
+            margin-top: 28px;
+        }
+
+        /* ===== TEXT ===== */
+        p { margin-bottom: 16px; }
+        .lead-text {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        .coach-note {
+            background: #f5f5f5;
+            border-left: 4px solid #1b4965;
+            padding: 16px 20px;
+            margin: 24px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .coach-note strong {
+            color: #0d1b2a;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .coach-note p { margin-bottom: 0; font-size: 0.95rem; color: #444; }
+
+        /* ===== LISTS ===== */
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+        .checklist li {
+            position: relative;
+            padding-left: 28px;
+        }
+        .checklist li::before {
+            content: '\2610';
+            position: absolute;
+            left: 0;
+            font-size: 1.1rem;
+            color: #1b4965;
+        }
+
+        /* ===== INFO GRID ===== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .info-card {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .info-card .info-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0d1b2a;
+            display: block;
+        }
+        .info-card .info-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        /* ===== WORKOUT DAY ===== */
+        .workout-day {
+            margin: 32px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .workout-day-header {
+            background: #1b4965;
+            color: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .workout-day-header h4 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+        .workout-day-header .day-meta {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+        }
+        .warmup-bar {
+            background: #e8f0f5;
+            padding: 12px 20px;
+            font-size: 0.85rem;
+            color: #1b4965;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .warmup-bar strong { font-weight: 700; }
+
+        /* ===== EXERCISE TABLE ===== */
+        .exercise-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .exercise-table thead th {
+            background: #f5f5f5;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .exercise-table tbody td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: top;
+        }
+        .exercise-table tbody tr:last-child td { border-bottom: none; }
+        .exercise-table tbody tr:hover { background: #fafafa; }
+        .exercise-name {
+            font-weight: 600;
+            color: #0d1b2a;
+        }
+        .form-cue {
+            font-size: 0.8rem;
+            color: #888;
+            font-style: italic;
+            display: block;
+            margin-top: 2px;
+        }
+        .exercise-table .sets-reps { font-weight: 600; white-space: nowrap; }
+        .exercise-table .rest { color: #666; white-space: nowrap; }
+        .exercise-table .rpe {
+            display: inline-block;
+            background: #0d1b2a;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* ===== TRACKING TABLE ===== */
+        .tracking-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin: 24px 0;
+        }
+        .tracking-table th, .tracking-table td {
+            border: 1px solid #d0d0d0;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        .tracking-table th {
+            background: #0d1b2a;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tracking-table td { background: #ffffff; min-height: 30px; }
+        .tracking-table tr:nth-child(even) td { background: #fafafa; }
+        .tracking-table .empty-cell { color: #ccc; }
+
+        /* ===== NUTRITION / RECOVERY CARDS ===== */
+        .tip-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 16px 0;
+        }
+        .tip-card h4 {
+            margin-top: 0;
+            color: #0d1b2a;
+        }
+        .meal-template {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        .meal-template h5 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1b4965;
+            margin-bottom: 8px;
+        }
+        .meal-template p { margin-bottom: 4px; font-size: 0.9rem; }
+
+        /* ===== AFFILIATE LINKS ===== */
+        .gear-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .gear-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: box-shadow 0.2s;
+        }
+        .gear-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .gear-card .gear-icon { font-size: 2rem; margin-bottom: 8px; }
+        .gear-card h5 { font-size: 0.95rem; font-weight: 700; color: #0d1b2a; margin-bottom: 6px; }
+        .gear-card p { font-size: 0.8rem; color: #666; margin-bottom: 12px; }
+        .gear-card a {
+            display: inline-block;
+            background: #1b4965;
+            color: #ffffff;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .gear-card a:hover { background: #0d1b2a; text-decoration: none; }
+
+        /* ===== FINAL PAGE ===== */
+        .final-page {
+            background: #0d1b2a;
+            color: #ffffff;
+            padding: 60px 32px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        .final-page h2 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+        .final-page p { color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto 16px; }
+        .final-page .cta-link {
+            display: inline-block;
+            background: #ffffff;
+            color: #0d1b2a;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 16px;
+            text-decoration: none;
+        }
+        .final-page .cta-link:hover { background: #f5f5f5; text-decoration: none; }
+
+        /* ===== DIVIDERS ===== */
+        .divider {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 40px 0;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            body { font-size: 11pt; color: #000; }
+            .cover {
+                min-height: auto;
+                padding: 80px 40px;
+                page-break-after: always;
+                background: #0d1b2a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .section-page { page-break-before: always; padding: 20px 0; }
+            .workout-day { page-break-inside: avoid; }
+            .section-header {
+                background: #0d1b2a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .workout-day-header {
+                background: #1b4965 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .exercise-table thead th {
+                background: #f5f5f5 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .tracking-table th {
+                background: #0d1b2a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .exercise-table .rpe {
+                background: #0d1b2a !important;
+                color: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .gear-card a, .final-page .cta-link {
+                border: 2px solid #0d1b2a;
+                color: #0d1b2a !important;
+                background: none !important;
+            }
+            .no-print { display: none !important; }
+            a[href]::after { content: none !important; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .cover h1 { font-size: 2.2rem; }
+            .cover h2 { font-size: 1rem; }
+            .section-header h2 { font-size: 1.5rem; }
+            .exercise-table { font-size: 0.8rem; }
+            .exercise-table thead th { font-size: 0.65rem; padding: 8px; }
+            .exercise-table tbody td { padding: 8px; }
+            .form-cue { display: none; }
+            .info-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- COVER PAGE                                                     -->
+<!-- ============================================================ -->
+<div class="cover">
+    <div class="cover-content">
+        <div class="cover-badge">FitOver35.com</div>
+        <h1>THE 12-WEEK<br>STRENGTH SYSTEM</h1>
+        <h2>A Complete Training Program for Men Over 35</h2>
+        <div class="cover-byline">By FitOver35.com</div>
+        <p class="cover-desc">
+            This program is designed for men who want results without living in the gym.
+            3&ndash;4 sessions per week, 45&ndash;60 minutes each. No fluff. No guesswork.
+            Just a proven system that works.
+        </p>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROGRAM OVERVIEW                                               -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Before You Begin</div>
+        <h2>Program Overview</h2>
+        <p>Everything you need to know before you touch a barbell.</p>
+    </div>
+
+    <h3>Training Philosophy</h3>
+    <p class="lead-text">
+        This program is built on three principles that never go out of style:
+    </p>
+    <ol>
+        <li><strong>Progressive Overload</strong> &mdash; You must do more over time. More weight, more reps, or more sets. If the stimulus doesn't increase, your body has no reason to adapt.</li>
+        <li><strong>Compound Movements First</strong> &mdash; Squats, deadlifts, presses, and rows build the most muscle in the least time. Isolation work is the icing, not the cake.</li>
+        <li><strong>Adequate Recovery</strong> &mdash; You don't grow in the gym. You grow when you rest. At 35+, recovery isn't optional&mdash;it's the program.</li>
+    </ol>
+
+    <h3>Who This Is For</h3>
+    <ul>
+        <li>Men 35 and older who can commit to 3&ndash;4 training days per week</li>
+        <li>You have at least 6 months of lifting experience (you know the basic movements)</li>
+        <li>You want a structured plan, not random workouts from social media</li>
+        <li>You understand that consistency beats intensity every single time</li>
+    </ul>
+
+    <div class="coach-note">
+        <strong>Coach's Note</strong>
+        <p>If you have existing injuries or medical conditions, get cleared by your doctor first. This is non-negotiable. Training through pain is not toughness&mdash;it's stupidity.</p>
+    </div>
+
+    <h3>Equipment Needed</h3>
+    <div class="info-grid">
+        <div class="info-card">
+            <span class="info-number">1</span>
+            <span class="info-label">Barbell + Plates</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">2</span>
+            <span class="info-label">Adjustable Dumbbells</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">3</span>
+            <span class="info-label">Pull-Up Bar</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">4</span>
+            <span class="info-label">Flat / Incline Bench</span>
+        </div>
+    </div>
+
+    <div class="gear-grid">
+        <div class="gear-card">
+            <div class="gear-icon">&#127947;</div>
+            <h5>Adjustable Dumbbells</h5>
+            <p>Essential for home gyms. Replace an entire rack.</p>
+            <a href="https://www.amazon.com/s?k=adjustable+dumbbells&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+        <div class="gear-card">
+            <div class="gear-icon">&#128220;</div>
+            <h5>Workout Log Book</h5>
+            <p>Track every session. What gets measured gets managed.</p>
+            <a href="https://www.amazon.com/s?k=workout+log+book&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+        <div class="gear-card">
+            <div class="gear-icon">&#129520;</div>
+            <h5>Resistance Bands</h5>
+            <p>Perfect for warm-ups, mobility, and accessory work.</p>
+            <a href="https://www.amazon.com/s?k=resistance+bands+set&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+    </div>
+
+    <h3>How to Use This Program</h3>
+    <ol>
+        <li><strong>Follow the phases in order.</strong> Phase 1 builds the base. Phase 2 builds strength. Phase 3 peaks it. Skipping ahead is how you get hurt.</li>
+        <li><strong>Log every session.</strong> Write down the weight, sets, and reps for every exercise. You cannot manage what you don't measure.</li>
+        <li><strong>Hit the prescribed RPE.</strong> RPE (Rate of Perceived Exertion) tells you how hard a set should feel on a 1&ndash;10 scale. RPE 7 = you could do 3 more reps. RPE 9 = you could do 1 more rep, maybe.</li>
+        <li><strong>Rest fully between sets.</strong> This is not cardio. Rest periods exist for a reason. Use them.</li>
+        <li><strong>Warm up before every session.</strong> 5 minutes of light cardio + the mobility drills listed. No exceptions.</li>
+    </ol>
+
+    <h3>How to Choose Starting Weights</h3>
+    <p>For each exercise in Week 1, pick a weight where you can complete all prescribed reps with <strong>2&ndash;3 reps left in the tank</strong>. You should finish the set thinking "I could have done more." This is intentional. Week 1 is not the time to test your limits.</p>
+    <p>If you're unsure, start lighter than you think you should. You can always add weight next week. You can't un-tear a muscle.</p>
+
+    <h3>RPE Scale Reference</h3>
+    <div class="tracking-table" style="margin-top:16px;">
+        <table class="tracking-table" style="margin:0;">
+            <thead>
+                <tr>
+                    <th style="width:80px;">RPE</th>
+                    <th>What It Means</th>
+                    <th>Reps Left</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>6</strong></td><td>Light effort. Warming up territory.</td><td>4+ reps left</td></tr>
+                <tr><td><strong>7</strong></td><td>Moderate. You could do 3 more reps with good form.</td><td>3 reps left</td></tr>
+                <tr><td><strong>8</strong></td><td>Hard. You could do 2 more reps, but they'd be tough.</td><td>2 reps left</td></tr>
+                <tr><td><strong>9</strong></td><td>Very hard. Maybe 1 more rep if your life depended on it.</td><td>1 rep left</td></tr>
+                <tr><td><strong>10</strong></td><td>Maximum effort. Nothing left. (We rarely train here.)</td><td>0 reps left</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Standard Warm-Up Protocol (Every Session)</h3>
+    <p>Perform this before every workout. It takes 5&ndash;8 minutes. Do not skip it.</p>
+    <ol>
+        <li><strong>Light cardio</strong> &mdash; 3 minutes. Rowing machine, jump rope, or brisk walk. Get blood flowing.</li>
+        <li><strong>Arm circles</strong> &mdash; 10 forward, 10 backward. Open up the shoulder capsule.</li>
+        <li><strong>Band pull-aparts</strong> &mdash; 15 reps. Activate rear delts and upper back.</li>
+        <li><strong>Bodyweight squats</strong> &mdash; 10 reps. Full depth, slow and controlled.</li>
+        <li><strong>Hip circles</strong> &mdash; 10 each direction. Lubricate the hip joint.</li>
+        <li><strong>Cat-cow stretches</strong> &mdash; 8 reps. Wake up the spine.</li>
+        <li><strong>Ankle circles</strong> &mdash; 10 each direction, each foot.</li>
+    </ol>
+    <p>Then do 1&ndash;2 light warm-up sets of the first exercise of the day before loading your working weight.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 1: FOUNDATION (WEEKS 1-4)                                -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Phase 1 &bull; Weeks 1&ndash;4</div>
+        <h2>Foundation</h2>
+        <p>3 days per week (Mon / Wed / Fri). Build movement patterns, base strength, and prepare your joints for heavier loads.</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <span class="info-number">3</span>
+            <span class="info-label">Days Per Week</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">45</span>
+            <span class="info-label">Minutes Per Session</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">7</span>
+            <span class="info-label">Target RPE</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">4</span>
+            <span class="info-label">Week Duration</span>
+        </div>
+    </div>
+
+    <div class="coach-note">
+        <strong>Phase 1 Goal</strong>
+        <p>Do not chase heavy weights in this phase. Focus on perfect form, full range of motion, and building a habit. The weights will come. Earn them.</p>
+    </div>
+
+    <h3>Week-over-Week Progression (Phase 1)</h3>
+    <ul>
+        <li><strong>Week 1:</strong> Learn the movements. Use conservative weight. RPE 6&ndash;7.</li>
+        <li><strong>Week 2:</strong> Add 5 lbs to compound lifts (squat, bench, deadlift, OHP) if Week 1 felt comfortable.</li>
+        <li><strong>Week 3:</strong> Add another 5 lbs to compounds. Add 2.5 lbs to isolation movements.</li>
+        <li><strong>Week 4:</strong> Same weight as Week 3 but add 1 rep to the final set of each exercise. This is your mini-test.</li>
+    </ul>
+
+    <!-- DAY A: UPPER BODY -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day A: Upper Body</h4>
+            <span class="day-meta">Monday &bull; ~45 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min light cardio + arm circles + band pull-aparts (15 reps) + 2 light sets of bench press
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Bench Press</span>
+                        <span class="form-cue">Retract shoulder blades, feet flat on floor, controlled descent to mid-chest.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Bent-Over Row</span>
+                        <span class="form-cue">Hinge at hips, back flat, pull to lower ribcage, squeeze shoulder blades.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dumbbell Overhead Press</span>
+                        <span class="form-cue">Seated or standing, press from shoulders to full lockout without arching low back.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dumbbell Bicep Curl</span>
+                        <span class="form-cue">Keep elbows pinned to sides, full extension at bottom, controlled tempo.</span>
+                    </td>
+                    <td class="sets-reps">2 x 12</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Overhead Tricep Extension (Dumbbell)</span>
+                        <span class="form-cue">Keep elbows pointing forward, lower behind head, extend to full lockout.</span>
+                    </td>
+                    <td class="sets-reps">2 x 12</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Face Pulls (Band or Cable)</span>
+                        <span class="form-cue">Pull to forehead level, externally rotate at end, squeeze rear delts for 1 second.</span>
+                    </td>
+                    <td class="sets-reps">3 x 15</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 6</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY B: LOWER BODY -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day B: Lower Body</h4>
+            <span class="day-meta">Wednesday &bull; ~45 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min light cardio + bodyweight squats (10) + hip circles + ankle circles + 2 light sets of squats
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Back Squat</span>
+                        <span class="form-cue">Feet shoulder-width, brace core, break at hips and knees together, hit parallel or below.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Romanian Deadlift (Barbell)</span>
+                        <span class="form-cue">Slight knee bend, hinge at hips, bar stays close to legs, feel the stretch in hamstrings.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dumbbell Walking Lunges</span>
+                        <span class="form-cue">Long stride, front knee tracks over toes, keep torso upright, control the descent.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10/leg</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Leg Press (or Goblet Squat)</span>
+                        <span class="form-cue">Full range of motion, don't lock out knees at top, controlled 3-second negative.</span>
+                    </td>
+                    <td class="sets-reps">3 x 12</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Standing Calf Raise</span>
+                        <span class="form-cue">Full stretch at bottom, pause at top for 1 second, slow negative.</span>
+                    </td>
+                    <td class="sets-reps">3 x 15</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Plank Hold</span>
+                        <span class="form-cue">Elbows under shoulders, squeeze glutes, brace like you're about to get punched.</span>
+                    </td>
+                    <td class="sets-reps">3 x 30&ndash;45s</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY C: FULL BODY -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day C: Full Body</h4>
+            <span class="day-meta">Friday &bull; ~50 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min light cardio + full warm-up protocol + 2 light sets of deadlift
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Conventional Deadlift</span>
+                        <span class="form-cue">Bar over mid-foot, chest up, push the floor away, lockout with glutes&mdash;not low back.</span>
+                    </td>
+                    <td class="sets-reps">3 x 5</td>
+                    <td class="rest">3:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Incline Dumbbell Press</span>
+                        <span class="form-cue">30&ndash;45 degree angle, dumbbells at shoulder level, press to full extension.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Pull-Ups (or Lat Pulldown)</span>
+                        <span class="form-cue">Full hang at bottom, pull until chin clears bar, control the negative. Use band for assistance if needed.</span>
+                    </td>
+                    <td class="sets-reps">3 x 6&ndash;8</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dumbbell Farmer Walk</span>
+                        <span class="form-cue">Heavy dumbbells at sides, shoulders packed down, walk with control&mdash;no waddling.</span>
+                    </td>
+                    <td class="sets-reps">3 x 40yd</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Ab Wheel Rollout (or Kneeling)</span>
+                        <span class="form-cue">Start from knees, extend as far as you can with control, don't let hips sag.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8&ndash;10</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Band Pull-Aparts</span>
+                        <span class="form-cue">Arms straight out, pull band apart to chest level, slow return. Posture work.</span>
+                    </td>
+                    <td class="sets-reps">2 x 20</td>
+                    <td class="rest">0:45</td>
+                    <td><span class="rpe">RPE 6</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 2: STRENGTH BUILDING (WEEKS 5-8)                         -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Phase 2 &bull; Weeks 5&ndash;8</div>
+        <h2>Strength Building</h2>
+        <p>4 days per week (Mon / Tue / Thu / Fri). Upper/Lower split with increasing intensity and density training through supersets.</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <span class="info-number">4</span>
+            <span class="info-label">Days Per Week</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">50</span>
+            <span class="info-label">Minutes Per Session</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">8</span>
+            <span class="info-label">Target RPE</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">4</span>
+            <span class="info-label">Week Duration</span>
+        </div>
+    </div>
+
+    <div class="coach-note">
+        <strong>Phase 2 Goal</strong>
+        <p>Now we push. You've built the base&mdash;time to load it. Weights go up, rest stays honest, and we introduce supersets to increase training density. Your body is ready for this.</p>
+    </div>
+
+    <h3>Week-over-Week Progression (Phase 2)</h3>
+    <ul>
+        <li><strong>Week 5:</strong> Start with weights 5&ndash;10 lbs above your Phase 1 finishing weights for compounds. RPE 7&ndash;8.</li>
+        <li><strong>Week 6:</strong> Add 5 lbs to all compounds. Same reps. You should be at RPE 8 on the last sets.</li>
+        <li><strong>Week 7:</strong> Add 2.5&ndash;5 lbs again. If you miss reps, hold the weight and aim to complete all reps next week.</li>
+        <li><strong>Week 8 (Deload):</strong> Drop all weights by 40%. Same sets and reps but at RPE 5&ndash;6. Let your body recover and supercompensate. This is not laziness&mdash;it's strategy.</li>
+    </ul>
+
+    <!-- DAY A: UPPER PUSH/PULL -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day A: Upper &mdash; Push / Pull</h4>
+            <span class="day-meta">Monday &bull; ~50 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min rowing + band pull-aparts (15) + arm circles + 2 light sets of bench press
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Bench Press</span>
+                        <span class="form-cue">Arch upper back, drive feet into floor, bar path slightly diagonal from chest to lockout.</span>
+                    </td>
+                    <td class="sets-reps">4 x 6</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Bent-Over Row</span>
+                        <span class="form-cue">Torso at 45 degrees, grip just outside knees, pull explosively to lower chest.</span>
+                    </td>
+                    <td class="sets-reps">4 x 6</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Superset A1: Dumbbell Incline Press</span>
+                        <span class="form-cue">30-degree bench angle, touch dumbbells at top, 2-second negative.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest" rowspan="2">1:30 after both</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Superset A2: Cable Row (or DB Row)</span>
+                        <span class="form-cue">Chest up, squeeze for 1 second at contraction, control the return.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Superset B1: Lateral Raise</span>
+                        <span class="form-cue">Slight lean forward, lead with elbows, stop at shoulder height.</span>
+                    </td>
+                    <td class="sets-reps">3 x 12</td>
+                    <td class="rest" rowspan="2">1:00 after both</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Superset B2: Face Pulls</span>
+                        <span class="form-cue">High cable, rope attachment, pull to face and externally rotate.</span>
+                    </td>
+                    <td class="sets-reps">3 x 15</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY B: LOWER QUAD/HAMSTRING -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day B: Lower &mdash; Quad / Hamstring</h4>
+            <span class="day-meta">Tuesday &bull; ~50 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min bike or walk + bodyweight squats (10) + hip circles + glute bridges (10) + 2 light sets of squats
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Back Squat</span>
+                        <span class="form-cue">Brace hard before descent, sit back and down, drive through full foot on the way up.</span>
+                    </td>
+                    <td class="sets-reps">4 x 6</td>
+                    <td class="rest">3:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Romanian Deadlift (Barbell)</span>
+                        <span class="form-cue">Push hips back until you feel a deep hamstring stretch, then drive hips forward to stand.</span>
+                    </td>
+                    <td class="sets-reps">4 x 8</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dumbbell Bulgarian Split Squat</span>
+                        <span class="form-cue">Rear foot on bench, lower until front thigh is parallel, keep torso upright.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8/leg</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Leg Curl (Lying or Seated)</span>
+                        <span class="form-cue">Slow negative (3 seconds), full range, squeeze at peak contraction.</span>
+                    </td>
+                    <td class="sets-reps">3 x 12</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Standing Calf Raise</span>
+                        <span class="form-cue">3-second pause at the top, full stretch at the bottom, don't bounce.</span>
+                    </td>
+                    <td class="sets-reps">4 x 12</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Hanging Leg Raise (or Lying)</span>
+                        <span class="form-cue">Curl pelvis up, don't just swing legs. Slow and controlled throughout.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY C: UPPER STRENGTH -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day C: Upper Strength</h4>
+            <span class="day-meta">Thursday &bull; ~55 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min rowing + band dislocates (10) + push-ups (10) + 2 light sets of overhead press
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Overhead Press</span>
+                        <span class="form-cue">Squeeze glutes, brace core, press straight up and slightly back at lockout. No leg drive.</span>
+                    </td>
+                    <td class="sets-reps">4 x 5</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Weighted Pull-Up (or Lat Pulldown)</span>
+                        <span class="form-cue">Add weight via belt or dumbbell between feet. Full stretch, full contraction.</span>
+                    </td>
+                    <td class="sets-reps">4 x 5</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Close-Grip Bench Press</span>
+                        <span class="form-cue">Hands shoulder-width, elbows close to body, emphasize triceps at lockout.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Superset A1: Barbell Curl</span>
+                        <span class="form-cue">Strict form, no swinging. Full range, squeeze at top.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest" rowspan="2">1:00 after both</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Superset A2: Dumbbell Skull Crusher</span>
+                        <span class="form-cue">Lower to forehead, elbows point to ceiling, extend to full lockout.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Rear Delt Fly (Dumbbell)</span>
+                        <span class="form-cue">Bent over at hips, arms slightly bent, raise to sides, squeeze for 1 second.</span>
+                    </td>
+                    <td class="sets-reps">3 x 15</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY D: LOWER STRENGTH + CONDITIONING -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day D: Lower Strength + Conditioning</h4>
+            <span class="day-meta">Friday &bull; ~55 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min jump rope or walk + hip circles + bodyweight lunges (8/leg) + 2 light sets of deadlift
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Conventional Deadlift</span>
+                        <span class="form-cue">Set back, chest up, big breath and brace, push floor away. Reset each rep.</span>
+                    </td>
+                    <td class="sets-reps">4 x 5</td>
+                    <td class="rest">3:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Front Squat (or Goblet Squat)</span>
+                        <span class="form-cue">Elbows high, sit straight down between hips, stay upright through entire lift.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dumbbell Step-Up</span>
+                        <span class="form-cue">Full foot on bench, drive through the heel of the elevated foot, don't push off back foot.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10/leg</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Farmer Walk</span>
+                        <span class="form-cue">Heaviest dumbbells you can carry. Shoulders packed, core braced, walk with purpose.</span>
+                    </td>
+                    <td class="sets-reps">3 x 50yd</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Conditioning Finisher: Dumbbell Complex</span>
+                        <span class="form-cue">5 RDLs + 5 Hang Cleans + 5 Front Squats + 5 Push Presses. No rest between exercises.</span>
+                    </td>
+                    <td class="sets-reps">3 rounds</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 9</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 3: PEAK PERFORMANCE (WEEKS 9-12)                         -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Phase 3 &bull; Weeks 9&ndash;12</div>
+        <h2>Peak Performance</h2>
+        <p>4 days per week. Push/Pull/Legs + Full Body Power. Peak strength, body recomposition, and testing your personal records.</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <span class="info-number">4</span>
+            <span class="info-label">Days Per Week</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">55</span>
+            <span class="info-label">Minutes Per Session</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">8&ndash;9</span>
+            <span class="info-label">Target RPE</span>
+        </div>
+        <div class="info-card">
+            <span class="info-number">4</span>
+            <span class="info-label">Week Duration</span>
+        </div>
+    </div>
+
+    <div class="coach-note">
+        <strong>Phase 3 Goal</strong>
+        <p>This is where 12 weeks of work pays off. You'll test personal records in Week 12. Every rep from this point forward has a purpose. Bring your focus.</p>
+    </div>
+
+    <h3>Week-over-Week Progression (Phase 3)</h3>
+    <ul>
+        <li><strong>Week 9:</strong> Post-deload. You should feel recharged. Start 5 lbs above your Phase 2 peak. RPE 8.</li>
+        <li><strong>Week 10:</strong> Add 5 lbs to compounds. Reduce isolation reps by 1&ndash;2 if needed to maintain weight.</li>
+        <li><strong>Week 11:</strong> Heavy singles prep. Add 5 lbs again. Top sets should feel like RPE 9. This is the hardest week.</li>
+        <li><strong>Week 12 (Test Week):</strong> Test your 3-rep max on squat, bench, deadlift, and OHP. Then celebrate&mdash;you earned it.</li>
+    </ul>
+
+    <!-- DAY A: PUSH -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day A: Push (Chest / Shoulders / Triceps)</h4>
+            <span class="day-meta">Monday &bull; ~55 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min cardio + band pull-aparts (15) + arm circles + push-ups (10) + 2 light sets of bench press
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Bench Press</span>
+                        <span class="form-cue">Controlled descent, slight pause at chest, explosive press. This is your money lift.</span>
+                    </td>
+                    <td class="sets-reps">4 x 4&ndash;5</td>
+                    <td class="rest">3:00</td>
+                    <td><span class="rpe">RPE 8-9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Overhead Press</span>
+                        <span class="form-cue">Strict press, no leg drive. Full lockout, head pushes through at the top.</span>
+                    </td>
+                    <td class="sets-reps">4 x 5</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8-9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dumbbell Incline Press</span>
+                        <span class="form-cue">30-degree angle, full stretch at bottom, press and squeeze at top.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Dips (Weighted if possible)</span>
+                        <span class="form-cue">Slight forward lean, lower until upper arms parallel to floor, press to lockout.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8&ndash;10</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Lateral Raise</span>
+                        <span class="form-cue">Slight bend in elbows, raise to shoulder height, 2-second negative.</span>
+                    </td>
+                    <td class="sets-reps">3 x 12</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Tricep Rope Pushdown</span>
+                        <span class="form-cue">Elbows pinned, split the rope at the bottom, squeeze triceps hard.</span>
+                    </td>
+                    <td class="sets-reps">3 x 12</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY B: PULL -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day B: Pull (Back / Biceps / Rear Delts)</h4>
+            <span class="day-meta">Tuesday &bull; ~55 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min rowing + band pull-aparts (15) + cat-cow (8) + 2 light sets of barbell row
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Row (Pendlay or Bent-Over)</span>
+                        <span class="form-cue">Explosive pull from floor (Pendlay) or controlled from hang. Chest to bar.</span>
+                    </td>
+                    <td class="sets-reps">4 x 5</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8-9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Weighted Pull-Up</span>
+                        <span class="form-cue">Dead hang start, pull chin over bar, 2-second negative on every rep.</span>
+                    </td>
+                    <td class="sets-reps">4 x 4&ndash;6</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8-9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Single-Arm Dumbbell Row</span>
+                        <span class="form-cue">Knee and hand on bench, pull to hip, squeeze lat at the top for 1 second.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8/arm</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Curl</span>
+                        <span class="form-cue">Strict form. No momentum. Full range. 2-second negative.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Hammer Curl</span>
+                        <span class="form-cue">Neutral grip, elbows at sides, build the brachialis for arm thickness.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Face Pull</span>
+                        <span class="form-cue">High cable, pull to face, externally rotate, hold for 1 second. Shoulder health essential.</span>
+                    </td>
+                    <td class="sets-reps">3 x 15</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 7</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY C: LEGS -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day C: Legs (Squat Focus + Accessories)</h4>
+            <span class="day-meta">Thursday &bull; ~55 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min bike + bodyweight squats (10) + hip circles + ankle mobility + 2 light sets of squats
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Back Squat</span>
+                        <span class="form-cue">Big breath, brace hard, controlled descent, drive out of the hole. Own every rep.</span>
+                    </td>
+                    <td class="sets-reps">4 x 4&ndash;5</td>
+                    <td class="rest">3:00</td>
+                    <td><span class="rpe">RPE 8-9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Romanian Deadlift</span>
+                        <span class="form-cue">Hinge until you feel a deep hamstring stretch. Bar glued to legs. Drive hips through.</span>
+                    </td>
+                    <td class="sets-reps">4 x 6</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Bulgarian Split Squat</span>
+                        <span class="form-cue">Dumbbells at sides, rear foot on bench, deep stretch on front leg, drive through heel.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8/leg</td>
+                    <td class="rest">1:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Leg Curl</span>
+                        <span class="form-cue">3-second negative, squeeze at peak, full range of motion.</span>
+                    </td>
+                    <td class="sets-reps">3 x 10</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Standing Calf Raise</span>
+                        <span class="form-cue">Heavy. Pause at top and bottom for 2 seconds each. Build calves with time under tension.</span>
+                    </td>
+                    <td class="sets-reps">4 x 10</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Weighted Plank</span>
+                        <span class="form-cue">Plate on back, elbows under shoulders, squeeze everything. Don't just survive&mdash;own it.</span>
+                    </td>
+                    <td class="sets-reps">3 x 45s</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DAY D: FULL BODY POWER -->
+    <div class="workout-day">
+        <div class="workout-day-header">
+            <h4>Day D: Full Body Power</h4>
+            <span class="day-meta">Friday &bull; ~60 min</span>
+        </div>
+        <div class="warmup-bar">
+            <strong>Warm-Up:</strong> 5 min rowing + full mobility warm-up protocol + 2 light sets of deadlift
+        </div>
+        <table class="exercise-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Exercise</th>
+                    <th>Sets x Reps</th>
+                    <th>Rest</th>
+                    <th>RPE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Conventional Deadlift</span>
+                        <span class="form-cue">Reset every rep. Perfect position. This is the king of all lifts&mdash;treat it with respect.</span>
+                    </td>
+                    <td class="sets-reps">4 x 3&ndash;4</td>
+                    <td class="rest">3:00</td>
+                    <td><span class="rpe">RPE 9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Barbell Bench Press (Paused)</span>
+                        <span class="form-cue">2-second pause on chest. No bounce. Press explosively from the dead stop.</span>
+                    </td>
+                    <td class="sets-reps">3 x 4</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8-9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Front Squat</span>
+                        <span class="form-cue">Elbows high, sit deep, stay upright. Builds quads and core stability.</span>
+                    </td>
+                    <td class="sets-reps">3 x 6</td>
+                    <td class="rest">2:30</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Weighted Pull-Up</span>
+                        <span class="form-cue">Slow, controlled reps. Full stretch, full contraction. Quality over everything.</span>
+                    </td>
+                    <td class="sets-reps">3 x 5</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Farmer Walk (Heavy)</span>
+                        <span class="form-cue">Heaviest dumbbells in the gym. 60 yards. Grip, core, traps, everything works.</span>
+                    </td>
+                    <td class="sets-reps">3 x 60yd</td>
+                    <td class="rest">2:00</td>
+                    <td><span class="rpe">RPE 9</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="exercise-name">Ab Wheel Rollout</span>
+                        <span class="form-cue">From knees or standing (advanced). Full extension, control the return. No sagging hips.</span>
+                    </td>
+                    <td class="sets-reps">3 x 8&ndash;10</td>
+                    <td class="rest">1:00</td>
+                    <td><span class="rpe">RPE 8</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- WEEK 12 TEST DAY -->
+    <div class="coach-note" style="margin-top:40px;">
+        <strong>Week 12 &mdash; Test Week Protocol</strong>
+        <p>In Week 12, replace Day A and Day D with testing sessions. Warm up thoroughly (more sets than usual at lighter weights). Work up to a heavy triple (3-rep max) on bench press (Day A) and deadlift (Day D). Test squat on Day C. Use Day B for lighter back work and recovery. Your 3-rep max is a better indicator of true strength at 35+ than a risky 1-rep max. Record your numbers. Compare them to where you started. Be proud of the progress.</p>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- NUTRITION GUIDELINES                                           -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Fuel</div>
+        <h2>Nutrition Guidelines</h2>
+        <p>You can't out-train a bad diet. Here's the simple framework that supports your training.</p>
+    </div>
+
+    <p class="lead-text">
+        This is not a rigid meal plan. It's a set of principles. Follow them consistently and you'll fuel your training, build muscle, and lose body fat without obsessing over every calorie.
+    </p>
+
+    <h3>The Big Rule: Protein First</h3>
+    <p>Aim for <strong>0.8&ndash;1 gram of protein per pound of bodyweight</strong> every single day. If you weigh 200 lbs, that's 160&ndash;200g of protein daily. This is the single most important nutrition habit for muscle growth and recovery.</p>
+    <p>If you can only change one thing about your diet, make it this.</p>
+
+    <h3>The Simple Meal Template</h3>
+    <p>Every meal should follow this structure:</p>
+
+    <div class="meal-template">
+        <h5>Plate Layout</h5>
+        <p><strong>1 palm</strong> of protein (chicken, beef, fish, eggs, Greek yogurt)</p>
+        <p><strong>1 fist</strong> of vegetables (any kind&mdash;the more color, the better)</p>
+        <p><strong>1 cupped hand</strong> of carbs (rice, potatoes, oats, fruit)</p>
+        <p><strong>1 thumb</strong> of fat (olive oil, avocado, nuts, butter)</p>
+    </div>
+
+    <p>Eat 3&ndash;4 meals per day following this template. That's it. No calorie counting required for most men following this program.</p>
+
+    <h3>Pre-Workout Nutrition</h3>
+    <p>Eat a balanced meal <strong>1.5&ndash;2 hours before training</strong>. Something with protein and carbs. Examples:</p>
+    <ul>
+        <li>Chicken breast + rice + vegetables</li>
+        <li>Greek yogurt + banana + handful of granola</li>
+        <li>Eggs + toast + avocado</li>
+    </ul>
+    <p>Don't train fasted if you want maximum performance. Your muscles need fuel.</p>
+
+    <h3>Post-Workout Nutrition</h3>
+    <p>Eat within <strong>1&ndash;2 hours after training</strong>. Prioritize protein and carbs. This is when your body is primed to absorb nutrients and start the repair process.</p>
+    <ul>
+        <li>Protein shake + banana (quick option)</li>
+        <li>Grilled chicken + sweet potato + greens</li>
+        <li>Salmon + quinoa + roasted vegetables</li>
+    </ul>
+
+    <h3>Hydration</h3>
+    <p>Drink at minimum <strong>half your bodyweight in ounces of water daily</strong>. A 200-lb man should drink at least 100 oz of water per day. More on training days. If your urine isn't light yellow, you're not drinking enough.</p>
+
+    <h3>Supplement Recommendations</h3>
+    <p>Most supplements are a waste of money. These five have solid research behind them and are worth the investment:</p>
+
+    <div class="tip-card">
+        <h4>1. Creatine Monohydrate</h4>
+        <p><strong>Dose:</strong> 5g daily, every day (training or not). No loading phase needed.</p>
+        <p><strong>Why:</strong> The most studied supplement in existence. Increases strength, power, and muscle mass. Cheap and effective.</p>
+        <p><a href="https://www.amazon.com/s?k=creatine+monohydrate+powder&tag=fitover35-20" target="_blank" rel="noopener">Shop Creatine on Amazon</a></p>
+    </div>
+
+    <div class="tip-card">
+        <h4>2. Vitamin D3</h4>
+        <p><strong>Dose:</strong> 2,000&ndash;5,000 IU daily with a meal containing fat.</p>
+        <p><strong>Why:</strong> Most men are deficient. Supports testosterone production, bone health, immune function, and mood. Get your levels tested if possible.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>3. Fish Oil (Omega-3)</h4>
+        <p><strong>Dose:</strong> 2&ndash;3g of combined EPA/DHA daily.</p>
+        <p><strong>Why:</strong> Reduces inflammation, supports joint health (critical at 35+), and benefits heart and brain function.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>4. Magnesium</h4>
+        <p><strong>Dose:</strong> 200&ndash;400mg daily (glycinate form is best, taken before bed).</p>
+        <p><strong>Why:</strong> Supports sleep quality, muscle recovery, and stress management. Most men don't get enough from food alone.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>5. Whey Protein Powder</h4>
+        <p><strong>Dose:</strong> 1&ndash;2 scoops (25&ndash;50g) as needed to hit your daily protein target.</p>
+        <p><strong>Why:</strong> It's not magic&mdash;it's just convenient protein. Use it when whole food isn't practical.</p>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- RECOVERY PROTOCOL                                              -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Recover</div>
+        <h2>Recovery Protocol</h2>
+        <p>Training breaks you down. Recovery builds you up. Ignore this section at your own risk.</p>
+    </div>
+
+    <p class="lead-text">
+        At 35+, recovery is not optional. It's the difference between steady progress and chronic injuries. Your body can still build impressive strength and muscle&mdash;but it needs more intentional recovery than it did at 25. Accept this. Work with it.
+    </p>
+
+    <h3>Sleep: The Non-Negotiable</h3>
+    <p><strong>Minimum 7 hours. Aim for 8.</strong> This is where growth hormone is released, muscles are repaired, and your nervous system resets. If you're sleeping 5&ndash;6 hours and wondering why you're not making progress, you have your answer.</p>
+    <ul>
+        <li>Same bed time and wake time every day (even weekends)</li>
+        <li>No screens 30 minutes before bed</li>
+        <li>Cool, dark room (65&ndash;68 degrees Fahrenheit)</li>
+        <li>No caffeine after 2 PM</li>
+        <li>Magnesium glycinate before bed can improve sleep quality</li>
+    </ul>
+
+    <h3>Active Recovery Days</h3>
+    <p>On non-training days, don't just sit on the couch. Light movement promotes blood flow and accelerates recovery:</p>
+    <ul>
+        <li><strong>20&ndash;30 minute walk</strong> &mdash; The most underrated recovery tool. Walk outside if possible.</li>
+        <li><strong>Light swimming or cycling</strong> &mdash; Easy effort, 20&ndash;30 minutes. Zero impact on joints.</li>
+        <li><strong>Foam rolling</strong> &mdash; 10 minutes hitting quads, hamstrings, glutes, upper back, and lats.</li>
+        <li><strong>Yoga or stretching</strong> &mdash; 15&ndash;20 minutes. Focus on the mobility routine below.</li>
+    </ul>
+
+    <div class="gear-grid">
+        <div class="gear-card">
+            <div class="gear-icon">&#129531;</div>
+            <h5>Foam Roller</h5>
+            <p>Essential for myofascial release and recovery days.</p>
+            <a href="https://www.amazon.com/s?k=foam+roller+high+density&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+    </div>
+
+    <h3>Mobility Routine (10 Minutes)</h3>
+    <p>Perform this on rest days, or after workouts. Hold each stretch for 30&ndash;45 seconds per side.</p>
+
+    <div class="tip-card">
+        <h4>1. 90/90 Hip Stretch</h4>
+        <p>Front leg at 90 degrees, back leg at 90 degrees. Sit tall and lean forward gently. Opens hip internal and external rotation. Critical for squats and deadlifts.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>2. Doorway Chest Stretch</h4>
+        <p>Arm on doorframe at 90 degrees, step through gently. Opens the pec and anterior shoulder. Combats desk posture and protects your bench press form.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>3. World's Greatest Stretch</h4>
+        <p>Lunge position, rotate torso toward front knee, reach arm to ceiling. Hits hip flexors, thoracic spine, hamstrings, and groin in one movement.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>4. Wall Ankle Mobilization</h4>
+        <p>Foot 4 inches from wall, drive knee over toes toward wall. If knee can't touch without heel lifting, you need this stretch. Better ankle mobility means better squats.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>5. Hanging Dead Hang</h4>
+        <p>Hang from pull-up bar with full bodyweight for 30&ndash;60 seconds. Decompresses spine, opens shoulders, builds grip endurance. Simple but powerful.</p>
+    </div>
+
+    <div class="tip-card">
+        <h4>6. Couch Stretch (Hip Flexor)</h4>
+        <p>Back knee against wall or couch, front foot forward in lunge. Squeeze back glute. Directly targets the hip flexors that tighten from sitting all day.</p>
+    </div>
+
+    <h3>When to Deload</h3>
+    <p>A deload is a planned reduction in training volume or intensity. This program includes a built-in deload in Week 8. However, take an unscheduled deload if you experience:</p>
+    <ul>
+        <li>2+ consecutive sessions where you miss prescribed reps at the same weight</li>
+        <li>Joint pain that doesn't improve with warm-up</li>
+        <li>Persistent fatigue despite adequate sleep</li>
+        <li>Loss of motivation or dread about training (this is a real signal, not weakness)</li>
+        <li>Getting sick more frequently than usual</li>
+    </ul>
+    <p><strong>How to deload:</strong> Drop all weights by 40&ndash;50%. Keep the same exercises, sets, and reps. Train at RPE 5&ndash;6 for one full week. Then resume your program where you left off.</p>
+
+    <h3>Signs of Overtraining</h3>
+    <p>Know the difference between normal soreness and overtraining. Watch for these red flags:</p>
+    <ul>
+        <li>Elevated resting heart rate (5+ beats above normal in the morning)</li>
+        <li>Persistent muscle soreness that lasts more than 72 hours</li>
+        <li>Insomnia despite being exhausted</li>
+        <li>Irritability, mood changes, or depression</li>
+        <li>Decreased grip strength (one of the earliest indicators)</li>
+        <li>Frequent illness or slow-healing minor injuries</li>
+    </ul>
+    <p>If you notice 3+ of these symptoms, take a full week off. Not a deload&mdash;complete rest. Walk, stretch, sleep, eat. Come back stronger.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROGRESS TRACKING                                              -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Track</div>
+        <h2>Progress Tracking</h2>
+        <p>What gets measured gets managed. What gets managed gets improved.</p>
+    </div>
+
+    <p class="lead-text">
+        You need a log. Physical or digital&mdash;it doesn't matter. But you must write down every working set of every workout. The data doesn't lie, and it takes the guesswork out of progression.
+    </p>
+
+    <div class="gear-grid" style="margin-bottom:32px;">
+        <div class="gear-card">
+            <div class="gear-icon">&#128221;</div>
+            <h5>Workout Log Book</h5>
+            <p>Pen and paper beats any app for simplicity and speed.</p>
+            <a href="https://www.amazon.com/s?k=workout+log+book&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+    </div>
+
+    <h3>Weekly Tracking Template</h3>
+    <p>Copy this format into your training log for each session:</p>
+
+    <table class="tracking-table">
+        <thead>
+            <tr>
+                <th>Exercise</th>
+                <th>Weight</th>
+                <th>Set 1</th>
+                <th>Set 2</th>
+                <th>Set 3</th>
+                <th>Set 4</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Barbell Bench Press</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td>Barbell Row</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td>Overhead Press</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><span class="empty-cell">(exercise)</span></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><span class="empty-cell">(exercise)</span></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><span class="empty-cell">(exercise)</span></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><em>Record the number of reps completed in each set column. For example: "8, 8, 7" means you hit 8, 8, and 7 reps across 3 sets.</em></p>
+
+    <h3>Monthly Measurement Checklist</h3>
+    <p>Take these measurements on the 1st of each month, in the morning, before eating. Use a flexible tape measure.</p>
+
+    <ul class="checklist">
+        <li>Bodyweight (same scale, same time, minimal clothing)</li>
+        <li>Chest (at nipple line, relaxed)</li>
+        <li>Waist (at navel, relaxed&mdash;don't suck in)</li>
+        <li>Hips (at widest point)</li>
+        <li>Arms (flexed, at the peak of the bicep)</li>
+        <li>Thighs (at the widest point, relaxed)</li>
+        <li>Progress photo &mdash; front, side, back (same lighting, same pose)</li>
+    </ul>
+
+    <div class="coach-note">
+        <strong>Coach's Note</strong>
+        <p>Scale weight is just one data point and often a misleading one. If your waist is shrinking and your lifts are going up, you're recomping&mdash;losing fat and building muscle simultaneously. This is the gold standard for men over 35. Trust the measurements and the mirror over the number on the scale.</p>
+    </div>
+
+    <h3>The 2-for-2 Rule: When to Increase Weight</h3>
+    <p>This is the simplest and most reliable progression method:</p>
+    <p><strong>If you can complete 2 extra reps beyond the prescribed reps on the last set for 2 consecutive workouts, increase the weight.</strong></p>
+    <p>Example: The program says 3x8 on bench press. If your last set goes 8, 8, 10 two weeks in a row, add 5 lbs to the bar next session.</p>
+    <ul>
+        <li><strong>Compound lifts (squat, bench, deadlift, OHP):</strong> Add 5 lbs</li>
+        <li><strong>Isolation lifts (curls, tricep work, lateral raises):</strong> Add 2.5 lbs</li>
+        <li><strong>If 2.5 lb plates aren't available:</strong> Add a rep instead of weight</li>
+    </ul>
+
+    <h3>What to Do If You Plateau</h3>
+    <p>A plateau means you've been stuck at the same weight for 3+ weeks without hitting the 2-for-2 rule. Here's the protocol, in order:</p>
+    <ol>
+        <li><strong>Check your recovery first.</strong> Are you sleeping 7+ hours? Eating enough protein? Managing stress? Fix these before changing your training.</li>
+        <li><strong>Take a deload week.</strong> Drop weight by 40%, same volume. Come back and try again. This works 80% of the time.</li>
+        <li><strong>Change the rep scheme.</strong> If you're stuck at 3x8, try 5x5 at a slightly heavier weight. Different stimulus, same muscle.</li>
+        <li><strong>Add a set.</strong> Go from 3 sets to 4 sets. More volume can drive adaptation.</li>
+        <li><strong>Swap the variation.</strong> Stuck on flat bench? Switch to incline for 3 weeks, then come back to flat. You'll likely break through.</li>
+    </ol>
+    <p>Plateaus are normal. They are not a sign of failure. They're a sign that your body has adapted&mdash;which means the program is working. You just need to nudge it forward.</p>
+
+    <h3>12-Week Summary Tracker</h3>
+    <p>Record your starting numbers (Week 1) and ending numbers (Week 12) here:</p>
+
+    <table class="tracking-table">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Week 1</th>
+                <th>Week 4</th>
+                <th>Week 8</th>
+                <th>Week 12</th>
+                <th>Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Bench Press (3RM)</strong></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><strong>Squat (3RM)</strong></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><strong>Deadlift (3RM)</strong></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><strong>OHP (3RM)</strong></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><strong>Pull-Ups (max reps)</strong></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><strong>Bodyweight</strong></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+            <tr>
+                <td><strong>Waist (inches)</strong></td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+                <td class="empty-cell">___</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- FINAL PAGE                                                     -->
+<!-- ============================================================ -->
+<div class="page-container section-page">
+    <div class="section-header">
+        <div class="phase-label">Now Go</div>
+        <h2>What's Next</h2>
+        <p>You have the plan. Here's how to keep the momentum going.</p>
+    </div>
+
+    <h3>After Week 12</h3>
+    <p>Congratulations. You just completed a serious program. Here's what to do next:</p>
+    <ol>
+        <li><strong>Take a full deload week</strong> after your Week 12 tests. You've earned it. Light movement, lots of sleep, good food.</li>
+        <li><strong>Record your final numbers.</strong> Compare them to Week 1. You'll be surprised how far you've come.</li>
+        <li><strong>Decide your next goal.</strong> Want to run it again with heavier starting weights? Focus on a specific lift? Cut body fat? The foundation is built&mdash;now you choose the direction.</li>
+        <li><strong>Keep the habits.</strong> The workouts are just 3&ndash;4 hours of your week. The sleep, nutrition, and recovery are 24/7. Those habits matter more than any program.</li>
+    </ol>
+
+    <h3>Keep Learning</h3>
+    <p>Visit <a href="https://fitover35.com" target="_blank" rel="noopener"><strong>fitover35.com</strong></a> for new articles on training, nutrition, and recovery specifically for men over 35. We publish actionable content every week&mdash;no fluff, no fads, just what works.</p>
+
+    <h3>Recommended Gear</h3>
+    <p>Here's the minimal equipment list that will serve you for years. Buy quality once.</p>
+
+    <div class="gear-grid">
+        <div class="gear-card">
+            <div class="gear-icon">&#127947;</div>
+            <h5>Adjustable Dumbbells</h5>
+            <p>Replace an entire dumbbell rack. Essential for home training.</p>
+            <a href="https://www.amazon.com/s?k=adjustable+dumbbells&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+        <div class="gear-card">
+            <div class="gear-icon">&#129531;</div>
+            <h5>Foam Roller</h5>
+            <p>High-density for deep tissue work. Use on rest days.</p>
+            <a href="https://www.amazon.com/s?k=foam+roller+high+density&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+        <div class="gear-card">
+            <div class="gear-icon">&#129520;</div>
+            <h5>Resistance Bands</h5>
+            <p>Warm-ups, mobility work, and travel training.</p>
+            <a href="https://www.amazon.com/s?k=resistance+bands+set&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+        <div class="gear-card">
+            <div class="gear-icon">&#128221;</div>
+            <h5>Workout Log Book</h5>
+            <p>Track every session. The data drives the progress.</p>
+            <a href="https://www.amazon.com/s?k=workout+log+book&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+        <div class="gear-card">
+            <div class="gear-icon">&#9889;</div>
+            <h5>Creatine Monohydrate</h5>
+            <p>5g daily. The most proven supplement for strength.</p>
+            <a href="https://www.amazon.com/s?k=creatine+monohydrate+powder&tag=fitover35-20" target="_blank" rel="noopener">Shop on Amazon</a>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="final-page">
+        <h2>You Have Everything You Need.</h2>
+        <p>The only thing left is to start.</p>
+        <p>Not tomorrow. Not Monday. Now. Open your calendar, block your training days, and commit to showing up. The program works&mdash;but only if you do.</p>
+        <p style="margin-top:32px; color: rgba(255,255,255,0.5); font-size:0.85rem;">12 weeks from now, you'll wish you started today.</p>
+        <a href="https://fitover35.com" class="cta-link" target="_blank" rel="noopener">Visit FitOver35.com for More</a>
+    </div>
+
+    <div style="text-align:center; padding:40px 0; color:#999; font-size:0.8rem;">
+        <p>&copy; 2026 FitOver35.com &mdash; All rights reserved.</p>
+        <p>This program is for educational purposes only. Consult your physician before beginning any exercise program.<br>
+        As an Amazon Associate, FitOver35 earns from qualifying purchases.</p>
+    </div>
+</div>
+
+</body>
+</html>

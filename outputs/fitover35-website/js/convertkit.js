@@ -84,7 +84,7 @@ function initConvertKitForms() {
         // Show success message
         const msg = document.createElement('p');
         msg.className = 'ck-success-msg';
-        msg.textContent = 'Check your inbox for your free guide!';
+        msg.textContent = 'Check your inbox for your free 12-week program!';
         msg.style.cssText = 'color: #22c55e; margin-top: 0.5rem; font-size: 0.9rem; text-align: center;';
         if (!this.querySelector('.ck-success-msg')) {
           this.appendChild(msg);
@@ -125,11 +125,11 @@ function initEmailPopup() {
       <div class="popup-modal">
         <button class="popup-close" id="ckPopupClose" aria-label="Close">&times;</button>
         <div class="popup-content">
-          <h2 class="popup-title">Get the Free 5-Day Density Training Starter Guide</h2>
-          <p class="popup-text">Join men over 35 who train smarter, not longer. Get the free PDF guide + weekly training insights. No spam. Unsubscribe anytime.</p>
+          <h2 class="popup-title">Get Your Free 12-Week Workout Program</h2>
+          <p class="popup-text">A complete training program for men over 35. Progressive overload, built-in recovery, and zero guesswork. No spam. Unsubscribe anytime.</p>
           <form class="popup-form" data-ck-form="lead-magnet">
             <input type="email" class="popup-input" placeholder="Enter your email" required>
-            <button type="submit" class="btn btn--primary popup-btn">Get the Free Guide</button>
+            <button type="submit" class="btn btn--primary popup-btn">Send Me The Program</button>
           </form>
         </div>
       </div>
