@@ -280,13 +280,21 @@ class FitOver35ArticleGenerator:
                 "At least one AI API key is required for article generation."
             )
 
-    def _call_gemini(self, prompt: str) -> str:
+    def _call_gemini(self, prompt: str, json_mode: bool = False) -> str:
         """Make an AI API call with retry. Dispatches to Gemini or Anthropic."""
         if self.backend == 'anthropic':
             return self._call_anthropic(prompt)
+        generation_config = None
+        if json_mode and genai:
+            generation_config = genai.types.GenerationConfig(
+                response_mime_type="application/json"
+            )
         for attempt in range(3):
             try:
-                response = self.model.generate_content(prompt)
+                response = self.model.generate_content(
+                    prompt,
+                    generation_config=generation_config
+                )
                 return response.text
             except Exception as e:
                 logger.error(f"Gemini API error (attempt {attempt + 1}): {e}")
@@ -316,13 +324,19 @@ class FitOver35ArticleGenerator:
         """Attempt to repair common JSON issues from LLM responses."""
         # Fix trailing commas before } or ]
         repaired = re.sub(r',\s*([}\]])', r'\1', text)
-        # Fix missing commas between values: "value"\n"key" or "value"\n{
+        # Fix missing commas between values (cross-line)
         repaired = re.sub(r'(")\s*\n\s*(")', r'\1,\n\2', repaired)
         repaired = re.sub(r'(")\s*\n\s*(\{)', r'\1,\n\2', repaired)
         repaired = re.sub(r'(\})\s*\n\s*(\{)', r'\1,\n\2', repaired)
         repaired = re.sub(r'(\])\s*\n\s*(")', r'\1,\n\2', repaired)
-        # Fix missing commas between array elements: }\n{  or "value"\n"value" inside arrays
-        repaired = re.sub(r'(\})\s*\n\s*(\{)', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(\})\s*\n\s*(")', r'\1,\n\2', repaired)
+        # Fix missing commas within a line: "value" "key" or "value"  "key"
+        repaired = re.sub(r'"\s+"(?=[a-zA-Z_])', '", "', repaired)
+        # Fix: true/false/null/number followed by "key" without comma
+        repaired = re.sub(r'(true|false|null|\d+)\s+"', r'\1, "', repaired)
+        # Fix: "value" followed by { or [ without comma (within line)
+        repaired = re.sub(r'"\s+(\{)', r'", \1', repaired)
+        repaired = re.sub(r'"\s+(\[)', r'", \1', repaired)
         try:
             json.loads(repaired)
             return repaired
@@ -415,7 +429,7 @@ class FitOver35ArticleGenerator:
         prompt = OUTLINE_PROMPT.format(keyword=keyword)
         last_error = None
         for attempt in range(3):
-            response = self._call_gemini(prompt)
+            response = self._call_gemini(prompt, json_mode=True)
             try:
                 return self._parse_json(response)
             except ValueError as e:
@@ -454,7 +468,7 @@ class FitOver35ArticleGenerator:
             keyword=keyword,
             products_json=json.dumps(products, indent=2)
         )
-        response = self._call_gemini(prompt)
+        response = self._call_gemini(prompt, json_mode=True)
         try:
             return self._parse_json(response)
         except (ValueError, json.JSONDecodeError):
@@ -471,7 +485,7 @@ class FitOver35ArticleGenerator:
             keyword=keyword,
             faq_json=json.dumps(faq_items, indent=2)
         )
-        response = self._call_gemini(prompt)
+        response = self._call_gemini(prompt, json_mode=True)
         try:
             return self._parse_json(response)
         except (ValueError, json.JSONDecodeError):
