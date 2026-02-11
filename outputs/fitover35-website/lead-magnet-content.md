@@ -1,4 +1,4 @@
-# The 5-Day Density Training Starter Guide
+# The 12-Week Density Training Starter Guide
 
 **For Men 35+ Who Want to Build Strength Without Living in the Gym**
 
