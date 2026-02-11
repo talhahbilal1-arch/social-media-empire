@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-10",
+  "last_updated": "2026-02-11",
   "items": [
     {
       "id": 1,
@@ -187,13 +187,14 @@
       "id": 19,
       "type": "comparison",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "writesonic-vs-copy-ai",
       "tools": [
         "writesonic",
         "copy-ai"
       ],
-      "keyword": "writesonic vs copy.ai"
+      "keyword": "writesonic vs copy.ai",
+      "published_date": "2026-02-11"
     },
     {
       "id": 20,
