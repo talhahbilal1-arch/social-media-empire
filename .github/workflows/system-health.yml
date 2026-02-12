@@ -53,65 +53,40 @@ jobs:
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          NETLIFY_API_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
         run: |
           python -c "
           import os
           import sys
           import json
-          import requests
-          from datetime import datetime
 
+          sys.path.insert(0, '.')
+          from monitoring.health_checker import run_health_check
+
+          result = run_health_check(full=True)
+
+          status = result['overall_status']
           issues = []
-          status = 'healthy'
 
-          # Check Anthropic API
-          try:
-              import anthropic
-              client = anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY', ''))
-              resp = client.messages.create(
-                  model='claude-sonnet-4-5-20250929',
-                  max_tokens=10,
-                  messages=[{'role': 'user', 'content': 'ping'}]
-              )
-              print('Anthropic API: OK')
-          except Exception as e:
-              issues.append(f'Anthropic API: {e}')
-              status = 'degraded'
-
-          # Check Pexels API
-          try:
-              key = os.environ.get('PEXELS_API_KEY', '')
-              resp = requests.get('https://api.pexels.com/v1/search?query=test&per_page=1',
-                                headers={'Authorization': key}, timeout=10)
-              resp.raise_for_status()
-              print('Pexels API: OK')
-          except Exception as e:
-              issues.append(f'Pexels API: {e}')
-              status = 'degraded'
-
-          # Check Supabase
-          try:
-              sys.path.insert(0, '.')
-              from database.supabase_client import get_supabase_client
-              db = get_supabase_client()
-              print('Supabase: OK')
-          except Exception as e:
-              issues.append(f'Supabase: {e}')
-              status = 'unhealthy'
-
-          # Check Late API
-          try:
-              key = os.environ.get('LATE_API_KEY_3') or os.environ.get('LATE_API_KEY', '')
-              if key:
-                  resp = requests.get('https://getlate.dev/api/v1/accounts',
-                                    headers={'Authorization': f'Bearer {key}'}, timeout=10)
-                  resp.raise_for_status()
-                  print('Late API: OK')
+          for check in result.get('checks', []):
+              svc = check['service']
+              svc_status = check['status']
+              if svc_status == 'healthy':
+                  rt = check.get('response_time_ms')
+                  rt_str = f' ({rt:.0f}ms)' if rt else ''
+                  print(f'{svc}: OK{rt_str}')
               else:
-                  issues.append('Late API: No key configured')
-          except Exception as e:
-              issues.append(f'Late API: {e}')
-              status = 'degraded'
+                  err = check.get('error', 'unknown')
+                  issues.append(f'{svc}: {err}')
+                  print(f'{svc}: {svc_status.upper()} - {err}')
+
+          summary = result.get('summary', {})
+          print(f'\nSummary: {summary.get(\"healthy\", 0)} healthy, {summary.get(\"degraded\", 0)} degraded, {summary.get(\"unhealthy\", 0)} unhealthy out of {summary.get(\"total\", 0)} services')
 
           if issues:
               print(f'\nIssues found ({len(issues)}):')
@@ -154,16 +129,36 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -c "
           import sys
+          import json
           sys.path.insert(0, '.')
           from database.supabase_client import get_supabase_client
           from datetime import datetime, timedelta
 
           db = get_supabase_client()
 
-          # Retry failed pins from last 24 hours
+          # --- Phase 1: Workflow Guardian analysis ---
+          print('=== Workflow Guardian: Analyzing recent failures ===')
+          try:
+              from monitoring.workflow_guardian import WorkflowGuardian
+              guardian = WorkflowGuardian()
+              result = guardian.analyze_and_heal(hours=6)
+              print(f'Analyzed: {result[\"analyzed\"]} failed runs')
+              print(f'Retried: {result[\"retried\"]}')
+              print(f'Alerted: {result[\"alerted\"]}')
+              print(f'Issues created: {result[\"issues_created\"]}')
+              if result['failures_by_category']:
+                  print(f'Failure categories: {json.dumps(result[\"failures_by_category\"])}')
+          except Exception as e:
+              print(f'Workflow Guardian analysis failed (non-fatal): {e}')
+
+          # --- Phase 2: Review content engine errors ---
+          print('\n=== Content Engine: Reviewing errors ===')
           try:
               yesterday = (datetime.utcnow() - timedelta(hours=24)).isoformat()
               errors = db.client.table('errors').select('*') \
@@ -172,7 +167,6 @@ jobs:
                   .execute()
               if errors.data:
                   print(f'Found {len(errors.data)} content engine errors in last 24h')
-                  # Mark as reviewed
                   for err in errors.data:
                       db.client.table('errors').update({'resolved': True}) \
                           .eq('id', err['id']).execute()
@@ -181,10 +175,27 @@ jobs:
           except Exception as e:
               print(f'Self-healing error check failed: {e}')
 
-          # Clean old data
+          # --- Phase 3: Review workflow failure errors ---
+          print('\n=== Workflow Failures: Reviewing errors ===')
+          try:
+              yesterday = (datetime.utcnow() - timedelta(hours=24)).isoformat()
+              wf_errors = db.client.table('errors').select('*') \
+                  .eq('error_type', 'workflow_failure') \
+                  .gte('created_at', yesterday) \
+                  .execute()
+              if wf_errors.data:
+                  print(f'Found {len(wf_errors.data)} workflow failure errors in last 24h')
+                  for err in wf_errors.data:
+                      print(f'  - {err.get(\"message\", err.get(\"error_message\", \"unknown\"))}')
+              else:
+                  print('No recent workflow failure errors')
+          except Exception as e:
+              print(f'Workflow error review failed: {e}')
+
+          # --- Phase 4: Clean old data ---
+          print('\n=== Cleanup: Removing old resolved errors ===')
           try:
               cutoff_30d = (datetime.utcnow() - timedelta(days=30)).isoformat()
-              cutoff_90d = (datetime.utcnow() - timedelta(days=90)).isoformat()
               db.client.table('errors').delete() \
                   .eq('resolved', True) \
                   .lt('created_at', cutoff_30d).execute()

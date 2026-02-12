@@ -41,6 +41,9 @@ class HealthChecker:
             self.check_convertkit(),
             self.check_youtube(),
             self.check_make_webhook(),
+            self.check_late_api(),
+            self.check_elevenlabs(),
+            self.check_netlify(),
         ]
 
         # Summarize
@@ -450,6 +453,161 @@ class HealthChecker:
                 service="make_webhook",
                 status="degraded",
                 error="Webhook URL format appears invalid"
+            )
+
+    def check_late_api(self) -> HealthCheckResult:
+        """Check Late API (Pinterest posting for fitness brand)."""
+        config = get_config()
+
+        if not config.late_api_key:
+            return HealthCheckResult(
+                service="late_api",
+                status="degraded",
+                error="LATE_API_KEY not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://getlate.dev/api/v1/accounts",
+                headers={"Authorization": f"Bearer {config.late_api_key}"},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                return HealthCheckResult(
+                    service="late_api",
+                    status="healthy",
+                    response_time_ms=response_time
+                )
+            elif response.status_code == 403:
+                return HealthCheckResult(
+                    service="late_api",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Access forbidden - API key may be invalid or expired"
+                )
+            else:
+                return HealthCheckResult(
+                    service="late_api",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="late_api",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_elevenlabs(self) -> HealthCheckResult:
+        """Check ElevenLabs TTS API (used by TikTok pipeline)."""
+        config = get_config()
+
+        if not config.elevenlabs_api_key:
+            return HealthCheckResult(
+                service="elevenlabs",
+                status="degraded",
+                error="ELEVENLABS_API_KEY not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://api.elevenlabs.io/v1/user",
+                headers={"xi-api-key": config.elevenlabs_api_key},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                return HealthCheckResult(
+                    service="elevenlabs",
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={
+                        "character_count": data.get("subscription", {}).get("character_count", 0),
+                        "character_limit": data.get("subscription", {}).get("character_limit", 0),
+                    }
+                )
+            elif response.status_code == 401:
+                return HealthCheckResult(
+                    service="elevenlabs",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Invalid API key"
+                )
+            else:
+                return HealthCheckResult(
+                    service="elevenlabs",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="elevenlabs",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_netlify(self) -> HealthCheckResult:
+        """Check Netlify deployment API (ToolPilot site)."""
+        config = get_config()
+
+        if not config.netlify_api_token:
+            return HealthCheckResult(
+                service="netlify",
+                status="degraded",
+                error="NETLIFY_API_TOKEN not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                f"https://api.netlify.com/api/v1/sites/{config.netlify_site_id}",
+                headers={"Authorization": f"Bearer {config.netlify_api_token}"},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                return HealthCheckResult(
+                    service="netlify",
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={
+                        "site_name": data.get("name", ""),
+                        "published_deploy": data.get("published_deploy", {}).get("id", ""),
+                        "ssl_url": data.get("ssl_url", ""),
+                    }
+                )
+            elif response.status_code == 401:
+                return HealthCheckResult(
+                    service="netlify",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Invalid API token"
+                )
+            else:
+                return HealthCheckResult(
+                    service="netlify",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="netlify",
+                status="unhealthy",
+                error=str(e)
             )
 
     def check_critical_only(self) -> dict:

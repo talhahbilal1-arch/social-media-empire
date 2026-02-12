@@ -177,6 +177,41 @@ FAILURE_PATTERNS = [
         alert_immediately=True,
         description="Late API access forbidden"
     ),
+    FailurePattern(
+        name="elevenlabs_error",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"elevenlabs.+error", r"xi-api-key.+invalid", r"elevenlabs.+401", r"elevenlabs.+quota"],
+        auto_retry=True,
+        retry_delay_minutes=10,
+        max_retries=2,
+        alert_immediately=False,
+        description="ElevenLabs TTS API error"
+    ),
+    FailurePattern(
+        name="elevenlabs_quota",
+        category=FailureCategory.RESOURCE,
+        patterns=[r"elevenlabs.+character.?limit", r"elevenlabs.+quota.?exceeded"],
+        auto_retry=False,
+        alert_immediately=True,
+        description="ElevenLabs character quota exceeded"
+    ),
+    FailurePattern(
+        name="netlify_deploy_failed",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"netlify.+deploy.+fail", r"netlify.+build.+fail", r"netlify.+error"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        description="Netlify deployment or build failure"
+    ),
+    FailurePattern(
+        name="netlify_auth_error",
+        category=FailureCategory.CREDENTIAL,
+        patterns=[r"NETLIFY_AUTH_TOKEN.+invalid", r"netlify.+401", r"netlify.+unauthorized"],
+        auto_retry=False,
+        alert_immediately=True,
+        description="Netlify authentication failed"
+    ),
 ]
 
 
