@@ -363,6 +363,36 @@ FAILURE_PATTERNS = [
         max_retries=2,
         description="pip install failed"
     ),
+    # --- GitHub Pages deployment failures ---
+    FailurePattern(
+        name="pages_deploy_failed",
+        category=FailureCategory.EXTERNAL,
+        patterns=[
+            r"deploy.+pages.+fail",
+            r"upload.+pages.+artifact.+fail",
+            r"pages.+deploy.+error",
+            r"index\.html.+only.+bytes",
+            r"site.+may.+be.+blank",
+        ],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        alert_immediately=True,
+        description="GitHub Pages deployment failed - website may be down"
+    ),
+    FailurePattern(
+        name="pages_validation_failed",
+        category=FailureCategory.CODE,
+        patterns=[
+            r"FATAL:.+index\.html",
+            r"FATAL:.+styles\.css.+missing",
+            r"FATAL:.+CNAME",
+            r"site.+is.+broken",
+        ],
+        auto_retry=False,
+        alert_immediately=True,
+        description="GitHub Pages pre-deploy validation failed - critical files missing or broken"
+    ),
 ]
 
 

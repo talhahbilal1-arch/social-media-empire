@@ -354,6 +354,40 @@ jobs:
           except Exception as e:
               print(f'Cleanup failed: {e}')
 
+          # --- Phase 9: Website uptime verification ---
+          print('\n=== Phase 9: Website Uptime - Verifying live sites ===')
+          sites = {
+              'dailydealdarling.com': 'https://dailydealdarling.com',
+              'fitover35.com': 'https://fitover35.com',
+          }
+          for name, url in sites.items():
+              try:
+                  resp = requests.get(url, timeout=15)
+                  body_size = len(resp.content)
+                  if resp.status_code != 200:
+                      print(f'CRITICAL: {name} returned HTTP {resp.status_code}')
+                      db.log_error(
+                          error_type='website_down',
+                          error_message=f'{name} returned HTTP {resp.status_code}',
+                          context={'url': url, 'status_code': resp.status_code}
+                      )
+                  elif body_size < 1000:
+                      print(f'CRITICAL: {name} is serving blank/broken page ({body_size} bytes)')
+                      db.log_error(
+                          error_type='website_down',
+                          error_message=f'{name} serving blank page ({body_size} bytes)',
+                          context={'url': url, 'body_size': body_size}
+                      )
+                  else:
+                      print(f'{name}: OK ({body_size} bytes)')
+              except Exception as e:
+                  print(f'CRITICAL: {name} unreachable: {e}')
+                  db.log_error(
+                      error_type='website_down',
+                      error_message=f'{name} unreachable: {e}',
+                      context={'url': url}
+                  )
+
           print('\n=== Self-healing complete ===')
           "
 

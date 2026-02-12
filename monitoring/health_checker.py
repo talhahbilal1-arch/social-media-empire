@@ -48,6 +48,8 @@ class HealthChecker:
             self.check_elevenlabs(),
             self.check_netlify(),
             self.check_github_api(),
+            self.check_website_dailydealdarling(),
+            self.check_website_fitover35(),
         ]
 
         # Summarize
@@ -819,6 +821,74 @@ class HealthChecker:
                 status="unhealthy",
                 error=str(e)
             )
+
+    def _check_website_uptime(self, name: str, url: str, min_size: int = 1000) -> HealthCheckResult:
+        """Check that a website is up and serving real content (not blank/error)."""
+        try:
+            start = datetime.now()
+            response = requests.get(url, timeout=self.timeout_seconds, allow_redirects=True)
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            body_size = len(response.content)
+
+            if response.status_code != 200:
+                return HealthCheckResult(
+                    service=name,
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error=f"HTTP {response.status_code}",
+                    details={"body_size": body_size}
+                )
+
+            if body_size < min_size:
+                return HealthCheckResult(
+                    service=name,
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error=f"Page is only {body_size} bytes (expected >{min_size}) - site may be blank or broken",
+                    details={"body_size": body_size}
+                )
+
+            # Check that it looks like actual HTML content
+            content_start = response.text[:200].lower()
+            if "<!doctype html" not in content_start and "<html" not in content_start:
+                return HealthCheckResult(
+                    service=name,
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error="Response doesn't appear to be HTML",
+                    details={"body_size": body_size}
+                )
+
+            return HealthCheckResult(
+                service=name,
+                status="healthy",
+                response_time_ms=response_time,
+                details={"body_size": body_size}
+            )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service=name,
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_website_dailydealdarling(self) -> HealthCheckResult:
+        """Check that dailydealdarling.com is up and serving real content."""
+        return self._check_website_uptime(
+            "website_dailydealdarling",
+            "https://dailydealdarling.com",
+            min_size=5000
+        )
+
+    def check_website_fitover35(self) -> HealthCheckResult:
+        """Check that fitover35.com is up and serving real content."""
+        return self._check_website_uptime(
+            "website_fitover35",
+            "https://fitover35.com",
+            min_size=5000
+        )
 
     def check_critical_only(self) -> dict:
         """Check only critical services (faster)."""
