@@ -1,0 +1,130 @@
+name: Fix GitHub Pages Custom Domain
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/fix-pages-domain.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  configure-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check current Pages configuration
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Current Pages Config ==="
+          curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" || echo "Pages not configured yet"
+
+      - name: Configure Pages source to deploy from main branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Setting Pages source to main branch ==="
+          # Try to update existing config
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X PUT \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" \
+            -d '{"source":{"branch":"main","path":"/"}}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "Update response ($HTTP_CODE): $BODY"
+
+          # If that fails (404 = pages not enabled), create pages
+          if [ "$HTTP_CODE" = "404" ]; then
+            echo "Pages not enabled, creating..."
+            RESPONSE=$(curl -s -w "\n%{http_code}" \
+              -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${{ github.repository }}/pages" \
+              -d '{"source":{"branch":"main","path":"/"}}')
+            HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+            BODY=$(echo "$RESPONSE" | head -n -1)
+            echo "Create response ($HTTP_CODE): $BODY"
+          fi
+
+      - name: Set custom domain
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Setting custom domain to dailydealdarling.com ==="
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X PUT \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" \
+            -d '{"cname":"dailydealdarling.com","source":{"branch":"main","path":"/"}}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "Response ($HTTP_CODE): $BODY"
+
+      - name: Enable HTTPS enforcement
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Enabling HTTPS ==="
+          # Wait for DNS check to complete
+          sleep 10
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X PUT \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" \
+            -d '{"cname":"dailydealdarling.com","https_enforced":true,"source":{"branch":"main","path":"/"}}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "Response ($HTTP_CODE): $BODY"
+
+      - name: Verify final Pages configuration
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Final Pages Config ==="
+          curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" | python3 -m json.tool
+
+      - name: Wait and verify site is live
+        run: |
+          echo "Waiting 60s for Pages rebuild and CDN propagation..."
+          sleep 60
+
+          echo "=== Checking dailydealdarling.com ==="
+          BODY_SIZE=$(curl -s https://dailydealdarling.com | wc -c)
+          echo "Body size: ${BODY_SIZE} bytes"
+
+          if [ "$BODY_SIZE" -gt 5000 ]; then
+            echo "SUCCESS: Site is live with ${BODY_SIZE} bytes!"
+          elif [ "$BODY_SIZE" -gt 100 ]; then
+            echo "PARTIAL: Site responding but may still be propagating (${BODY_SIZE} bytes)"
+          else
+            echo "WARNING: Site may not have propagated yet (${BODY_SIZE} bytes)"
+            echo "CDN caching can take up to 10 minutes to clear"
+          fi
+
+          echo ""
+          echo "=== Checking github.io URL ==="
+          GH_SIZE=$(curl -s "https://talhahbilal1-arch.github.io/social-media-empire/" | wc -c)
+          echo "github.io body size: ${GH_SIZE} bytes"
