@@ -9,122 +9,99 @@ on:
       - '.github/workflows/fix-pages-domain.yml'
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
+  actions: write
 
 jobs:
   configure-pages:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
+    environment:
+      name: github-pages
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          type gh 2>/dev/null || (
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update && sudo apt install gh -y
+          )
 
       - name: Check current Pages configuration
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "=== Current Pages Config ==="
-          curl -s -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages" || echo "Pages not configured yet"
+          gh api "repos/${{ github.repository }}/pages" 2>&1 || echo "Pages may not be configured yet"
 
-      - name: Configure Pages source to deploy from main branch
+      - name: Configure Pages - set source and custom domain
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "=== Setting Pages source to main branch ==="
-          # Try to update existing config
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X PUT \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages" \
-            -d '{"source":{"branch":"main","path":"/"}}')
-
-          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
-          BODY=$(echo "$RESPONSE" | head -n -1)
-          echo "Update response ($HTTP_CODE): $BODY"
-
-          # If that fails (404 = pages not enabled), create pages
-          if [ "$HTTP_CODE" = "404" ]; then
-            echo "Pages not enabled, creating..."
-            RESPONSE=$(curl -s -w "\n%{http_code}" \
-              -X POST \
-              -H "Authorization: Bearer $GH_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${{ github.repository }}/pages" \
-              -d '{"source":{"branch":"main","path":"/"}}')
-            HTTP_CODE=$(echo "$RESPONSE" | tail -1)
-            BODY=$(echo "$RESPONSE" | head -n -1)
-            echo "Create response ($HTTP_CODE): $BODY"
+          echo "=== Step 1: Ensure Pages is enabled with branch source ==="
+          # Try updating first
+          if ! gh api -X PUT "repos/${{ github.repository }}/pages" \
+            -f source[branch]=main -f source[path]="/" 2>/dev/null; then
+            echo "Update failed, trying to create Pages..."
+            gh api -X POST "repos/${{ github.repository }}/pages" \
+              -f source[branch]=main -f source[path]="/" 2>&1 || echo "Create also failed - Pages may need manual setup"
           fi
 
-      - name: Set custom domain
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "=== Setting custom domain to dailydealdarling.com ==="
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X PUT \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages" \
-            -d '{"cname":"dailydealdarling.com","source":{"branch":"main","path":"/"}}')
+          echo ""
+          echo "=== Step 2: Set custom domain ==="
+          gh api -X PUT "repos/${{ github.repository }}/pages" \
+            -f cname="dailydealdarling.com" \
+            -f source[branch]=main \
+            -f source[path]="/" 2>&1
 
-          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
-          BODY=$(echo "$RESPONSE" | head -n -1)
-          echo "Response ($HTTP_CODE): $BODY"
+          echo ""
+          echo "=== Step 3: Request Pages build ==="
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" 2>&1 || echo "Build request sent (or already queued)"
 
-      - name: Enable HTTPS enforcement
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "=== Enabling HTTPS ==="
-          # Wait for DNS check to complete
-          sleep 10
+          echo ""
+          echo "=== Step 4: Wait for build then enable HTTPS ==="
+          sleep 15
+          gh api -X PUT "repos/${{ github.repository }}/pages" \
+            -f cname="dailydealdarling.com" \
+            -F https_enforced=true \
+            -f source[branch]=main \
+            -f source[path]="/" 2>&1 || echo "HTTPS enforcement may need DNS to propagate first"
 
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X PUT \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages" \
-            -d '{"cname":"dailydealdarling.com","https_enforced":true,"source":{"branch":"main","path":"/"}}')
-
-          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
-          BODY=$(echo "$RESPONSE" | head -n -1)
-          echo "Response ($HTTP_CODE): $BODY"
-
-      - name: Verify final Pages configuration
+      - name: Verify final configuration
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "=== Final Pages Config ==="
-          curl -s -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages" | python3 -m json.tool
+          gh api "repos/${{ github.repository }}/pages" 2>&1
 
-      - name: Wait and verify site is live
+          echo ""
+          echo "=== Latest Pages Build ==="
+          gh api "repos/${{ github.repository }}/pages/builds/latest" 2>&1 || echo "No builds yet"
+
+      - name: Wait and verify site
         run: |
-          echo "Waiting 60s for Pages rebuild and CDN propagation..."
-          sleep 60
+          echo "Waiting 90s for Pages rebuild and CDN propagation..."
+          sleep 90
 
           echo "=== Checking dailydealdarling.com ==="
           BODY_SIZE=$(curl -s https://dailydealdarling.com | wc -c)
-          echo "Body size: ${BODY_SIZE} bytes"
+          echo "Custom domain body size: ${BODY_SIZE} bytes"
 
-          if [ "$BODY_SIZE" -gt 5000 ]; then
-            echo "SUCCESS: Site is live with ${BODY_SIZE} bytes!"
-          elif [ "$BODY_SIZE" -gt 100 ]; then
-            echo "PARTIAL: Site responding but may still be propagating (${BODY_SIZE} bytes)"
-          else
-            echo "WARNING: Site may not have propagated yet (${BODY_SIZE} bytes)"
-            echo "CDN caching can take up to 10 minutes to clear"
-          fi
-
-          echo ""
-          echo "=== Checking github.io URL ==="
+          echo "=== Checking github.io ==="
           GH_SIZE=$(curl -s "https://talhahbilal1-arch.github.io/social-media-empire/" | wc -c)
           echo "github.io body size: ${GH_SIZE} bytes"
+
+          if [ "$BODY_SIZE" -gt 5000 ]; then
+            echo ""
+            echo "SUCCESS: dailydealdarling.com is live! (${BODY_SIZE} bytes)"
+          else
+            echo ""
+            echo "Site may still be propagating. Try again in a few minutes."
+            echo "If still broken, go to Settings > Pages and re-enter dailydealdarling.com as custom domain."
+          fi
