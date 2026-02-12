@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-11",
+  "last_updated": "2026-02-12",
   "items": [
     {
       "id": 1,
@@ -200,13 +200,14 @@
       "id": 20,
       "type": "comparison",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "synthesia-vs-runway",
       "tools": [
         "synthesia",
         "runway"
       ],
-      "keyword": "synthesia vs runway"
+      "keyword": "synthesia vs runway",
+      "published_date": "2026-02-12"
     },
     {
       "id": 30,
