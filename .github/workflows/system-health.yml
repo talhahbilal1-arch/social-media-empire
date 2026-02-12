@@ -45,13 +45,17 @@ jobs:
         id: check
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_TIKTOK_URL: ${{ secrets.SUPABASE_TIKTOK_URL }}
+          SUPABASE_TIKTOK_KEY: ${{ secrets.SUPABASE_TIKTOK_KEY }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+          CONVERTKIT_API_SECRET: ${{ secrets.CONVERTKIT_API_SECRET }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           NETLIFY_API_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
@@ -59,6 +63,9 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           MAKE_COM_PINTEREST_WEBHOOK: ${{ secrets.MAKE_COM_PINTEREST_WEBHOOK }}
+          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -c "
           import os
@@ -129,21 +136,30 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_TIKTOK_URL: ${{ secrets.SUPABASE_TIKTOK_URL }}
+          SUPABASE_TIKTOK_KEY: ${{ secrets.SUPABASE_TIKTOK_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
         run: |
           python -c "
           import sys
           import json
+          import os
           sys.path.insert(0, '.')
           from database.supabase_client import get_supabase_client
           from datetime import datetime, timedelta
+          import requests
 
           db = get_supabase_client()
 
           # --- Phase 1: Workflow Guardian analysis ---
-          print('=== Workflow Guardian: Analyzing recent failures ===')
+          print('=== Phase 1: Workflow Guardian - Analyzing recent failures ===')
           try:
               from monitoring.workflow_guardian import WorkflowGuardian
               guardian = WorkflowGuardian()
@@ -157,8 +173,8 @@ jobs:
           except Exception as e:
               print(f'Workflow Guardian analysis failed (non-fatal): {e}')
 
-          # --- Phase 2: Review content engine errors ---
-          print('\n=== Content Engine: Reviewing errors ===')
+          # --- Phase 2: Review and resolve content engine errors ---
+          print('\n=== Phase 2: Content Engine - Reviewing errors ===')
           try:
               yesterday = (datetime.utcnow() - timedelta(hours=24)).isoformat()
               errors = db.client.table('errors').select('*') \
@@ -173,10 +189,10 @@ jobs:
               else:
                   print('No recent content engine errors')
           except Exception as e:
-              print(f'Self-healing error check failed: {e}')
+              print(f'Content engine error check failed: {e}')
 
           # --- Phase 3: Review workflow failure errors ---
-          print('\n=== Workflow Failures: Reviewing errors ===')
+          print('\n=== Phase 3: Workflow Failures - Reviewing errors ===')
           try:
               yesterday = (datetime.utcnow() - timedelta(hours=24)).isoformat()
               wf_errors = db.client.table('errors').select('*') \
@@ -192,16 +208,153 @@ jobs:
           except Exception as e:
               print(f'Workflow error review failed: {e}')
 
-          # --- Phase 4: Clean old data ---
-          print('\n=== Cleanup: Removing old resolved errors ===')
+          # --- Phase 4: TikTok pipeline - Check for stuck queue items ---
+          print('\n=== Phase 4: TikTok Pipeline - Checking queue health ===')
+          try:
+              tiktok_url = os.environ.get('SUPABASE_TIKTOK_URL') or os.environ.get('SUPABASE_URL', '')
+              tiktok_key = os.environ.get('SUPABASE_TIKTOK_KEY') or os.environ.get('SUPABASE_KEY', '')
+              if tiktok_url and tiktok_key:
+                  cutoff_12h = (datetime.utcnow() - timedelta(hours=12)).isoformat() + 'Z'
+                  resp = requests.get(
+                      f'{tiktok_url}/rest/v1/tiktok_queue',
+                      headers={
+                          'apikey': tiktok_key,
+                          'Authorization': f'Bearer {tiktok_key}',
+                      },
+                      params={
+                          'select': 'id,status,script_generated_at',
+                          'status': 'neq.posted',
+                          'status': 'neq.failed',
+                          'script_generated_at': f'lt.{cutoff_12h}',
+                          'limit': '50',
+                      },
+                      timeout=15
+                  )
+                  if resp.status_code == 200:
+                      stuck = resp.json()
+                      if stuck:
+                          print(f'Found {len(stuck)} stuck TikTok queue items (>12h old, not posted)')
+                          # Mark the oldest stuck items as failed so they dont block the queue
+                          cutoff_24h = (datetime.utcnow() - timedelta(hours=24)).isoformat() + 'Z'
+                          for item in stuck:
+                              if item.get('script_generated_at', '') < cutoff_24h:
+                                  requests.patch(
+                                      f'{tiktok_url}/rest/v1/tiktok_queue?id=eq.{item[\"id\"]}',
+                                      headers={
+                                          'apikey': tiktok_key,
+                                          'Authorization': f'Bearer {tiktok_key}',
+                                          'Content-Type': 'application/json',
+                                      },
+                                      json={'status': 'failed'},
+                                      timeout=10
+                                  )
+                          print('Marked items >24h old as failed')
+                      else:
+                          print('TikTok queue healthy - no stuck items')
+                  else:
+                      print(f'TikTok queue check returned status {resp.status_code} (table may not exist)')
+              else:
+                  print('TikTok Supabase not configured - skipped')
+          except Exception as e:
+              print(f'TikTok queue check failed: {e}')
+
+          # --- Phase 5: Content freshness check across all pipelines ---
+          print('\n=== Phase 5: Content Freshness - Verifying recent output ===')
+          try:
+              yesterday = (datetime.utcnow() - timedelta(hours=24)).isoformat()
+              videos = db.client.table('videos').select('brand, platform') \
+                  .gte('created_at', yesterday) \
+                  .execute()
+
+              if videos.data:
+                  brands_seen = set()
+                  platforms_seen = set()
+                  for v in videos.data:
+                      brands_seen.add(v.get('brand', ''))
+                      platforms_seen.add(v.get('platform', ''))
+                  print(f'Last 24h: {len(videos.data)} videos across brands: {brands_seen}')
+
+                  # Check if any brand is missing output
+                  expected_brands = {'daily_deal_darling', 'fitnessmadeasy', 'menopause_planner'}
+                  missing_brands = expected_brands - brands_seen
+                  if missing_brands:
+                      print(f'WARNING: No content from brands: {missing_brands}')
+                      # Log alert for missing brands
+                      for brand in missing_brands:
+                          db.log_error(
+                              error_type='content_freshness',
+                              error_message=f'No content generated for {brand} in last 24h',
+                              context={'brand': brand, 'hours_checked': 24}
+                          )
+                  else:
+                      print('All brands produced content in last 24h')
+              else:
+                  print('WARNING: No videos created in last 24h across any brand!')
+                  db.log_error(
+                      error_type='content_freshness',
+                      error_message='No content generated across all brands in last 24h',
+                      context={'hours_checked': 24}
+                  )
+          except Exception as e:
+              print(f'Content freshness check failed: {e}')
+
+          # --- Phase 6: Article generation freshness (weekdays only) ---
+          print('\n=== Phase 6: Article Freshness - Checking recent articles ===')
+          try:
+              import glob as g
+              now = datetime.utcnow()
+              if now.weekday() < 5:  # Mon-Fri only
+                  date_str = now.strftime('%Y-%m-%d')
+                  yesterday_str = (now - timedelta(days=1)).strftime('%Y-%m-%d')
+                  # Check if articles were generated recently
+                  fitness_articles = g.glob(f'websites/fitover35/articles/*{date_str}*') + \
+                                    g.glob(f'websites/fitover35/articles/*{yesterday_str}*')
+                  deals_articles = g.glob(f'websites/dailydealdarling/articles/*{date_str}*') + \
+                                   g.glob(f'websites/dailydealdarling/articles/*{yesterday_str}*')
+                  print(f'FitOver35 recent articles: {len(fitness_articles)}')
+                  print(f'DailyDealDarling recent articles: {len(deals_articles)}')
+
+                  if not fitness_articles and not deals_articles:
+                      print('WARNING: No articles generated today or yesterday')
+              else:
+                  print('Weekend - article generation not expected')
+          except Exception as e:
+              print(f'Article freshness check failed: {e}')
+
+          # --- Phase 7: Unresolved error escalation ---
+          print('\n=== Phase 7: Error Escalation - Checking unresolved critical errors ===')
+          try:
+              unresolved = db.get_unresolved_errors(limit=100)
+              critical_count = sum(
+                  1 for e in unresolved
+                  if e.get('context', {}).get('severity') in ['critical', 'high']
+                  or e.get('severity') in ['critical', 'high']
+              )
+              print(f'Total unresolved errors: {len(unresolved)}')
+              print(f'Critical/high severity: {critical_count}')
+              if critical_count > 5:
+                  print('WARNING: High number of critical errors - escalating')
+          except Exception as e:
+              print(f'Error escalation check failed: {e}')
+
+          # --- Phase 8: Clean old data ---
+          print('\n=== Phase 8: Cleanup - Removing old resolved errors ===')
           try:
               cutoff_30d = (datetime.utcnow() - timedelta(days=30)).isoformat()
               db.client.table('errors').delete() \
                   .eq('resolved', True) \
                   .lt('created_at', cutoff_30d).execute()
               print('Cleaned resolved errors older than 30 days')
+
+              # Also clean old analytics data (90 days)
+              cutoff_90d = (datetime.utcnow() - timedelta(days=90)).isoformat()
+              db.client.table('analytics').delete() \
+                  .lt('created_at', cutoff_90d).execute()
+              print('Cleaned analytics data older than 90 days')
           except Exception as e:
               print(f'Cleanup failed: {e}')
+
+          print('\n=== Self-healing complete ===')
           "
 
   alert:
@@ -216,6 +369,7 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
         run: |
+          pip install resend
           python -c "
           import os
           import resend

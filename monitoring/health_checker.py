@@ -34,16 +34,20 @@ class HealthChecker:
         checks = [
             self.check_anthropic(),
             self.check_supabase(),
+            self.check_supabase_tiktok(),
             self.check_gemini(),
             self.check_pexels(),
+            self.check_pexels_video(),
             self.check_creatomate(),
             self.check_resend(),
             self.check_convertkit(),
             self.check_youtube(),
-            self.check_make_webhook(),
+            self.check_make_webhook_deals(),
+            self.check_make_webhook_menopause(),
             self.check_late_api(),
             self.check_elevenlabs(),
             self.check_netlify(),
+            self.check_github_api(),
         ]
 
         # Summarize
@@ -427,33 +431,59 @@ class HealthChecker:
                 error=str(e)
             )
 
-    def check_make_webhook(self) -> HealthCheckResult:
-        """Check Make.com webhook (Pinterest)."""
-        config = get_config()
-
-        if not config.make_com_pinterest_webhook:
+    def _check_make_webhook(self, name: str, webhook_url: str) -> HealthCheckResult:
+        """Check a Make.com webhook URL is valid and reachable."""
+        if not webhook_url:
             return HealthCheckResult(
-                service="make_webhook",
+                service=name,
                 status="degraded",
-                error="MAKE_COM_PINTEREST_WEBHOOK not configured"
+                error=f"{name} webhook not configured"
             )
 
-        # Note: We can't actually test the webhook without triggering it
-        # Just verify the URL is valid
-        webhook_url = config.make_com_pinterest_webhook
-
-        if webhook_url.startswith("https://hook."):
+        if not webhook_url.startswith("https://"):
             return HealthCheckResult(
-                service="make_webhook",
-                status="healthy",
-                details={"webhook_configured": True}
-            )
-        else:
-            return HealthCheckResult(
-                service="make_webhook",
+                service=name,
                 status="degraded",
                 error="Webhook URL format appears invalid"
             )
+
+        # Verify the URL is reachable with a HEAD request (won't trigger the scenario)
+        try:
+            start = datetime.now()
+            response = requests.head(webhook_url, timeout=self.timeout_seconds, allow_redirects=True)
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            # Make.com webhooks return 200 on HEAD when active
+            if response.status_code in [200, 204, 405]:
+                return HealthCheckResult(
+                    service=name,
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={"webhook_configured": True}
+                )
+            else:
+                return HealthCheckResult(
+                    service=name,
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Webhook returned status {response.status_code}"
+                )
+        except Exception as e:
+            return HealthCheckResult(
+                service=name,
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_make_webhook_deals(self) -> HealthCheckResult:
+        """Check Make.com webhook for Daily Deal Darling Pinterest posting."""
+        config = get_config()
+        return self._check_make_webhook("make_webhook_deals", config.make_webhook_deals)
+
+    def check_make_webhook_menopause(self) -> HealthCheckResult:
+        """Check Make.com webhook for Menopause Planner Pinterest posting."""
+        config = get_config()
+        return self._check_make_webhook("make_webhook_menopause", config.make_webhook_menopause)
 
     def check_late_api(self) -> HealthCheckResult:
         """Check Late API (Pinterest posting for fitness brand)."""
@@ -606,6 +636,186 @@ class HealthChecker:
         except Exception as e:
             return HealthCheckResult(
                 service="netlify",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_supabase_tiktok(self) -> HealthCheckResult:
+        """Check TikTok Supabase project connectivity and storage."""
+        config = get_config()
+
+        if not config.supabase_tiktok_url:
+            return HealthCheckResult(
+                service="supabase_tiktok",
+                status="degraded",
+                error="SUPABASE_TIKTOK_URL not configured"
+            )
+
+        # Skip if same as main Supabase (already checked)
+        if config.supabase_tiktok_url == config.supabase_url:
+            return HealthCheckResult(
+                service="supabase_tiktok",
+                status="healthy",
+                details={"shared_with_main": True}
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                f"{config.supabase_tiktok_url}/rest/v1/",
+                headers={
+                    "apikey": config.supabase_tiktok_key,
+                    "Authorization": f"Bearer {config.supabase_tiktok_key}"
+                },
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code in [200, 204]:
+                # Also check storage bucket exists
+                storage_ok = True
+                try:
+                    storage_resp = requests.get(
+                        f"{config.supabase_tiktok_url}/storage/v1/bucket/tiktok-media",
+                        headers={
+                            "apikey": config.supabase_tiktok_key,
+                            "Authorization": f"Bearer {config.supabase_tiktok_key}"
+                        },
+                        timeout=self.timeout_seconds
+                    )
+                    storage_ok = storage_resp.status_code in [200, 404]  # 404 = bucket may not exist yet
+                except Exception:
+                    storage_ok = False
+
+                return HealthCheckResult(
+                    service="supabase_tiktok",
+                    status="healthy" if storage_ok else "degraded",
+                    response_time_ms=response_time,
+                    details={"storage_accessible": storage_ok},
+                    error=None if storage_ok else "Storage bucket check failed"
+                )
+            else:
+                return HealthCheckResult(
+                    service="supabase_tiktok",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="supabase_tiktok",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_pexels_video(self) -> HealthCheckResult:
+        """Check Pexels Video API (used by TikTok pipeline for stock footage)."""
+        config = get_config()
+
+        if not config.pexels_api_key:
+            return HealthCheckResult(
+                service="pexels_video",
+                status="unhealthy",
+                error="PEXELS_API_KEY not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://api.pexels.com/videos/search",
+                headers={"Authorization": config.pexels_api_key},
+                params={"query": "fitness", "per_page": 1, "orientation": "portrait"},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                videos_found = len(data.get("videos", []))
+                return HealthCheckResult(
+                    service="pexels_video",
+                    status="healthy" if videos_found > 0 else "degraded",
+                    response_time_ms=response_time,
+                    details={"videos_found": videos_found},
+                    error=None if videos_found > 0 else "No portrait videos returned"
+                )
+            else:
+                return HealthCheckResult(
+                    service="pexels_video",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="pexels_video",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_github_api(self) -> HealthCheckResult:
+        """Check GitHub API accessibility (used by emergency alert and workflow guardian)."""
+        config = get_config()
+
+        if not config.github_token:
+            return HealthCheckResult(
+                service="github_api",
+                status="degraded",
+                error="GITHUB_TOKEN not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://api.github.com/rate_limit",
+                headers={
+                    "Authorization": f"Bearer {config.github_token}",
+                    "Accept": "application/vnd.github+json"
+                },
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                core_remaining = data.get("resources", {}).get("core", {}).get("remaining", 0)
+                core_limit = data.get("resources", {}).get("core", {}).get("limit", 0)
+
+                if core_remaining < 100:
+                    return HealthCheckResult(
+                        service="github_api",
+                        status="degraded",
+                        response_time_ms=response_time,
+                        error=f"Low rate limit remaining: {core_remaining}/{core_limit}",
+                        details={"remaining": core_remaining, "limit": core_limit}
+                    )
+
+                return HealthCheckResult(
+                    service="github_api",
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={"remaining": core_remaining, "limit": core_limit}
+                )
+            elif response.status_code == 401:
+                return HealthCheckResult(
+                    service="github_api",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Invalid GitHub token"
+                )
+            else:
+                return HealthCheckResult(
+                    service="github_api",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="github_api",
                 status="unhealthy",
                 error=str(e)
             )

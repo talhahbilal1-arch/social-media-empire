@@ -33,14 +33,21 @@ class Config:
     youtube_client_secret: str = ""
     youtube_refresh_token: str = ""
     make_com_pinterest_webhook: str = ""
+    make_webhook_deals: str = ""
+    make_webhook_menopause: str = ""
     late_api_key: str = ""
 
     # TikTok / Audio
     elevenlabs_api_key: str = ""
+    supabase_tiktok_url: str = ""
+    supabase_tiktok_key: str = ""
 
     # Deployment
     netlify_api_token: str = ""
     netlify_site_id: str = ""
+
+    # GitHub
+    github_token: str = ""
 
     # Notifications
     alert_email: str = ""
@@ -99,14 +106,21 @@ class Config:
             youtube_client_secret=os.getenv("YOUTUBE_CLIENT_SECRET", ""),
             youtube_refresh_token=os.getenv("YOUTUBE_REFRESH_TOKEN", ""),
             make_com_pinterest_webhook=os.getenv("MAKE_COM_PINTEREST_WEBHOOK", ""),
+            make_webhook_deals=os.getenv("MAKE_WEBHOOK_DEALS", ""),
+            make_webhook_menopause=os.getenv("MAKE_WEBHOOK_MENOPAUSE", ""),
             late_api_key=os.getenv("LATE_API_KEY", "") or os.getenv("LATE_API_KEY_3", ""),
 
             # TikTok / Audio
             elevenlabs_api_key=os.getenv("ELEVENLABS_API_KEY", ""),
+            supabase_tiktok_url=os.getenv("SUPABASE_TIKTOK_URL", "") or os.getenv("SUPABASE_URL", ""),
+            supabase_tiktok_key=os.getenv("SUPABASE_TIKTOK_KEY", "") or os.getenv("SUPABASE_KEY", ""),
 
             # Deployment
             netlify_api_token=os.getenv("NETLIFY_API_TOKEN", ""),
             netlify_site_id=os.getenv("NETLIFY_SITE_ID", "616e7bf4-fe47-495b-b13e-934e51546d4c"),
+
+            # GitHub
+            github_token=os.getenv("GITHUB_TOKEN", "") or os.getenv("GH_TOKEN", ""),
 
             # Notifications
             alert_email=os.getenv("ALERT_EMAIL", ""),
