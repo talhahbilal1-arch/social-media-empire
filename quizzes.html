@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Quizzes | Daily Deal Darling</title>
+    <meta name="description" content="Take our fun quizzes to find personalized product recommendations for your lifestyle, beauty routine, home organization, and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blush: #F5E6E0;
+            --rose: #E8C4C4;
+            --terracotta: #C68B77;
+            --sage: #A8B5A0;
+            --cream: #FDF8F5;
+            --charcoal: #3D3D3D;
+            --gold: #C9A962;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--blush) 50%, var(--rose) 100%);
+            min-height: 100vh;
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--terracotta);
+            text-decoration: none;
+        }
+        .tagline {
+            font-size: 0.85rem;
+            color: var(--sage);
+            margin-top: -0.3rem;
+        }
+        nav { display: flex; gap: 2rem; }
+        nav a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+        nav a:hover, nav a.active { color: var(--terracotta); }
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .quiz-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .quiz-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--charcoal);
+        }
+        .quiz-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .quiz-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--terracotta), var(--gold));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+        .quiz-card:hover .quiz-btn { opacity: 0.9; }
+        footer {
+            background: var(--charcoal);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        footer p { font-size: 0.85rem; opacity: 0.8; max-width: 800px; margin: 0 auto; }
+        footer .copyright { margin-top: 1rem; opacity: 0.6; font-size: 0.8rem; }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .header-content { flex-direction: column; text-align: center; }
+            nav { gap: 1rem; }
+            .quiz-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div>
+                <a href="index.html" class="logo">Daily Deal Darling</a>
+                <p class="tagline">Curated Finds for Your Best Life</p>
+            </div>
+            <nav>
+                <a href="quizzes.html" class="active">Quizzes</a>
+                <a href="articles.html">Articles</a>
+                <a href="index.html#subscribe">Subscribe</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Find Your Perfect Products</h1>
+        <p>Answer a few quick questions and get personalized product recommendations tailored just for you.</p>
+    </section>
+
+    <section class="section">
+        <div class="quiz-grid">
+            <a href="quiz-morning.html" class="quiz-card">
+                <div class="quiz-icon">&#9728;&#65039;</div>
+                <h3>Morning Routine Quiz</h3>
+                <p>Discover products that will transform your mornings into something magical.</p>
+                <span class="quiz-btn">Take Quiz</span>
+            </a>
+
+            <a href="quiz-organization.html" class="quiz-card">
+                <div class="quiz-icon">&#128230;</div>
+                <h3>Home Organization Quiz</h3>
+                <p>Find storage solutions that match your space and organizational style.</p>
+                <span class="quiz-btn">Take Quiz</span>
+            </a>
+
+            <a href="quiz-selfcare.html" class="quiz-card">
+                <div class="quiz-icon">&#128150;</div>
+                <h3>Self-Care Quiz</h3>
+                <p>Build the perfect self-care routine with products tailored to your needs.</p>
+                <span class="quiz-btn">Take Quiz</span>
+            </a>
+
+            <a href="quiz-beauty.html" class="quiz-card">
+                <div class="quiz-icon">&#10024;</div>
+                <h3>Beauty Match Quiz</h3>
+                <p>Get matched with skincare and beauty products perfect for your skin type.</p>
+                <span class="quiz-btn">Take Quiz</span>
+            </a>
+
+            <a href="quiz-lifestyle.html" class="quiz-card">
+                <div class="quiz-icon">&#127793;</div>
+                <h3>Lifestyle Upgrade Quiz</h3>
+                <p>Elevate your daily life with products that fit your unique lifestyle.</p>
+                <span class="quiz-btn">Take Quiz</span>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>Amazon Associates Disclosure:</strong> As an Amazon Associate, Daily Deal Darling earns from qualifying purchases. This means we may earn a small commission when you click on product links and make a purchase, at no additional cost to you. We only recommend products we genuinely believe in.</p>
+        <p class="copyright">&copy; 2026 Daily Deal Darling. All rights reserved.</p>
+    </footer>
+</body>
+</html>
