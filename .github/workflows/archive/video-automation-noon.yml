@@ -1,0 +1,145 @@
+name: Video Automation - Noon (12 PM PST)
+
+on:
+  schedule:
+    # 12 PM PST = 8 PM UTC (during PST) or 7 PM UTC (during PDT)
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Specific brand to generate for (optional)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Generate but do not post'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-videos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run health check
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -m monitoring.health_checker --json > health_check.json
+          cat health_check.json
+
+      - name: Generate and post videos
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+        run: |
+          set -e
+          echo "=== LATE API KEYS STATUS ==="
+          [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: ✅" || echo "LATE_API_KEY: ❌"
+          [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: ✅" || echo "LATE_API_KEY_2: ❌"
+          [ -n "$LATE_API_KEY_3" ] && echo "LATE_API_KEY_3: ✅" || echo "LATE_API_KEY_3: ❌"
+          [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: ✅" || echo "LATE_API_KEY_4: ❌"
+          echo ""
+          echo "=== BRAND SLOT CONFIGURATION ==="
+          python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('noon'); print(f'Brands for noon slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
+          echo ""
+          ARGS="--slot noon"
+          if [ "${{ github.event.inputs.brand }}" != "" ]; then
+            ARGS="--brand ${{ github.event.inputs.brand }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          echo "=== RUNNING VIDEO GENERATOR ==="
+          echo "Args: $ARGS"
+          python -m video_automation.daily_video_generator $ARGS
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noon-generation-logs
+          path: |
+            *.log
+            health_check.json
+          retention-days: 7
+
+  notify-on-failure:
+    runs-on: ubuntu-latest
+    needs: generate-videos
+    if: failure()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: pip install resend
+
+      - name: Send failure notification
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          python -c "
+          import os
+          import sys
+
+          resend_key = os.environ.get('RESEND_API_KEY', '')
+          alert_email = os.environ.get('ALERT_EMAIL', '')
+
+          if not resend_key or not alert_email:
+              print('WARNING: Email alerting not configured (missing RESEND_API_KEY or ALERT_EMAIL)')
+              sys.exit(0)
+
+          import resend
+          resend.api_key = resend_key
+          resend.Emails.send({
+              'from': 'alerts@socialmediaempire.com',
+              'to': [alert_email],
+              'subject': '🚨 Noon Video Generation Failed',
+              'html': '''
+              <h1>Video Generation Failed</h1>
+              <p>The noon (12 PM PST) video generation workflow has failed.</p>
+              <p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View workflow run</a></p>
+              '''
+          })
+          print('Alert sent successfully')
+          "

@@ -1,0 +1,86 @@
+{
+  "description": "Content ideas for wellness and self-care topics",
+  "brands": ["daily_deal_darling", "menopause_planner", "nurse_planner", "adhd_planner"],
+  "content_ideas": [
+    {
+      "topic": "Morning routine essentials",
+      "hooks": [
+        "Your morning routine is broken. Here's why.",
+        "5 AM girlies, this changed everything",
+        "Stop doing this in the morning"
+      ],
+      "key_points": [
+        "Hydrate before caffeine",
+        "Light exposure within 30 minutes",
+        "Move your body for 5 minutes"
+      ],
+      "suitable_brands": ["daily_deal_darling", "menopause_planner"]
+    },
+    {
+      "topic": "Sleep optimization tips",
+      "hooks": [
+        "Can't sleep? Try this tonight",
+        "The sleep hack nobody talks about",
+        "Why you're always tired (and how to fix it)"
+      ],
+      "key_points": [
+        "Screen curfew 1 hour before bed",
+        "Keep bedroom cool (65-68°F)",
+        "Consistent wake time, even weekends"
+      ],
+      "suitable_brands": ["menopause_planner", "nurse_planner", "adhd_planner"]
+    },
+    {
+      "topic": "Energy boosting strategies",
+      "hooks": [
+        "Tired all the time? Watch this",
+        "3 PM slump? Not anymore",
+        "More energy without more caffeine"
+      ],
+      "key_points": [
+        "10-minute walk beats coffee",
+        "Protein at every meal",
+        "Cold water face splash"
+      ],
+      "suitable_brands": ["daily_deal_darling", "nurse_planner"]
+    },
+    {
+      "topic": "Stress management techniques",
+      "hooks": [
+        "Stressed? Do this in 60 seconds",
+        "My therapist taught me this trick",
+        "Works every time for anxiety"
+      ],
+      "key_points": [
+        "Box breathing (4-4-4-4)",
+        "Name 5 things you can see",
+        "Cold water on wrists"
+      ],
+      "suitable_brands": ["menopause_planner", "nurse_planner", "adhd_planner"]
+    },
+    {
+      "topic": "Self-care on a budget",
+      "hooks": [
+        "Self-care doesn't have to be expensive",
+        "Free self-care ideas that actually work",
+        "Stop spending money on self-care"
+      ],
+      "key_points": [
+        "Library books and free audiobooks",
+        "Nature walks cost nothing",
+        "DIY face masks from kitchen"
+      ],
+      "suitable_brands": ["daily_deal_darling"]
+    }
+  ],
+  "evergreen_topics": [
+    "Hydration reminders",
+    "Quick meditation tips",
+    "Desk stretches",
+    "Healthy snack ideas",
+    "Weekend reset routines",
+    "Gratitude practice",
+    "Digital detox tips",
+    "Boundary setting"
+  ]
+}

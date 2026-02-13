@@ -1,0 +1,148 @@
+{
+  "description": "Content ideas for menopause wellness and support",
+  "brand": "menopause_planner",
+  "symptom_categories": {
+    "hot_flashes": {
+      "topics": [
+        "Instant hot flash relief",
+        "What triggers hot flashes",
+        "Dressing for temperature changes",
+        "Night sweats solutions",
+        "Cooling products that help"
+      ],
+      "hooks": [
+        "Hot flash hitting? Do this NOW",
+        "Why your hot flashes are worse at certain times",
+        "The outfit trick for unpredictable temps",
+        "Finally sleeping through the night",
+        "These cooling products are life-changing"
+      ],
+      "tips": [
+        "Keep a small fan in your purse",
+        "Layer clothing for easy removal",
+        "Avoid spicy foods and alcohol",
+        "Practice slow, deep breathing",
+        "Keep bedroom cool (65°F or below)"
+      ]
+    },
+    "sleep_issues": {
+      "topics": [
+        "Menopause insomnia solutions",
+        "Why you wake up at 3 AM",
+        "Creating a sleep sanctuary",
+        "Natural sleep aids",
+        "Sleep hygiene for menopause"
+      ],
+      "hooks": [
+        "Can't sleep? Your hormones are why",
+        "The 3 AM wake-up explained",
+        "Your bedroom is sabotaging your sleep",
+        "These helped when nothing else did",
+        "Sleep better starting tonight"
+      ],
+      "tips": [
+        "Magnesium before bed",
+        "Cool, dark room",
+        "Consistent bedtime routine",
+        "No screens after 9 PM",
+        "Consider moisture-wicking sheets"
+      ]
+    },
+    "mood_changes": {
+      "topics": [
+        "Managing menopause anxiety",
+        "Brain fog is real",
+        "Mood swings aren't your fault",
+        "Finding joy in midlife",
+        "When to seek help"
+      ],
+      "hooks": [
+        "Anxious for no reason? It might be this",
+        "Can't think straight? Here's why",
+        "You're not going crazy, it's menopause",
+        "How I found myself again",
+        "When mood changes need professional help"
+      ],
+      "tips": [
+        "Regular exercise helps mood",
+        "Write things down immediately",
+        "Talk about how you're feeling",
+        "Practice self-compassion",
+        "Consider therapy support"
+      ]
+    },
+    "weight_changes": {
+      "topics": [
+        "Why the scale won't budge",
+        "Metabolism changes explained",
+        "Eating for hormone balance",
+        "Exercise that actually helps",
+        "Body acceptance in midlife"
+      ],
+      "hooks": [
+        "Doing everything right but gaining weight?",
+        "Your metabolism needs different fuel now",
+        "Foods that help balance hormones",
+        "The workout mistake making things worse",
+        "Learning to love your changing body"
+      ],
+      "tips": [
+        "Strength training is essential",
+        "Protein at every meal",
+        "Reduce sugar and alcohol",
+        "Focus on how you feel, not the scale",
+        "Sleep affects weight"
+      ]
+    },
+    "energy_fatigue": {
+      "topics": [
+        "Constant exhaustion explained",
+        "Energy boosters that work",
+        "When fatigue isn't just tired",
+        "Adapting your routine",
+        "Self-care isn't selfish"
+      ],
+      "hooks": [
+        "Tired all the time? Watch this",
+        "These actually gave me energy back",
+        "Fatigue that won't go away - check this",
+        "Your old routine won't work anymore",
+        "You deserve to rest"
+      ],
+      "tips": [
+        "Check iron and B12 levels",
+        "Gentle movement over intense workouts",
+        "Power naps under 30 minutes",
+        "Say no to draining activities",
+        "Prioritize rest without guilt"
+      ]
+    }
+  },
+  "content_themes": [
+    "You're not alone",
+    "This is normal",
+    "There are solutions",
+    "Your feelings are valid",
+    "This phase will pass",
+    "Support is available"
+  ],
+  "lead_magnet_mentions": [
+    "Free symptom tracker in bio",
+    "Download the complete guide",
+    "Get the weekly planner",
+    "Join our supportive community"
+  ],
+  "sensitive_topics_guidelines": {
+    "approach": "supportive_not_medical_advice",
+    "disclaimers": [
+      "This is not medical advice",
+      "Talk to your healthcare provider",
+      "Everyone's experience is different"
+    ],
+    "avoid": [
+      "Guaranteeing symptom relief",
+      "Dismissing serious concerns",
+      "One-size-fits-all solutions"
+    ]
+  }
+}

@@ -1,0 +1,300 @@
+{
+  "name": "TikTok Video Poster",
+  "description": "Watches for video_ready status, uploads to TikTok via Make.com TikTok module, updates status to posted",
+  "flow": [
+    {
+      "id": 1,
+      "module": "supabase:WatchRecords",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "connection": "{{connection.supabase}}",
+        "table": "tiktok_queue",
+        "filter": "status=eq.video_ready",
+        "order": "created_at.asc",
+        "limit": 1
+      },
+      "metadata": {
+        "designer": {"x": 0, "y": 0},
+        "note": "Triggers when video_url is ready for posting"
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:SetVariables",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "variables": [
+          {
+            "name": "queue_id",
+            "value": "{{1.id}}"
+          },
+          {
+            "name": "video_url",
+            "value": "{{1.video_url}}"
+          },
+          {
+            "name": "caption",
+            "value": "{{1.caption}}"
+          },
+          {
+            "name": "hashtags",
+            "value": "{{join(1.hashtags; \" \")}}"
+          },
+          {
+            "name": "affiliate_link",
+            "value": "https://www.amazon.com/dp/{{1.affiliate_products[0].asin}}?tag={{1.amazon_tag}}"
+          },
+          {
+            "name": "full_caption",
+            "value": "{{1.caption}}\n\n{{join(1.hashtags; \" \")}}\n\nLink in bio for the product"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {"x": 220, "y": 0}
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionGetFile",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "url": "{{2.video_url}}",
+        "method": "GET"
+      },
+      "metadata": {
+        "designer": {"x": 440, "y": 0},
+        "note": "Download video file for TikTok upload"
+      }
+    },
+    {
+      "id": 4,
+      "module": "tiktok:UploadVideo",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "connection": "{{connection.tiktok}}",
+        "video": "{{3.data}}",
+        "title": "{{substring(2.caption; 0; 100)}}",
+        "privacy_level": "PUBLIC_TO_EVERYONE",
+        "disable_comment": false,
+        "disable_duet": false,
+        "disable_stitch": false,
+        "video_cover_timestamp_ms": 1000,
+        "brand_content_toggle": false,
+        "brand_organic_toggle": false
+      },
+      "metadata": {
+        "designer": {"x": 660, "y": 0},
+        "note": "TikTok Content Posting API - requires approved developer access"
+      }
+    },
+    {
+      "id": 5,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": {
+        "designer": {"x": 880, "y": 0}
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": true},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{2.queue_id}}",
+                "method": "PATCH",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "contentType": "application/json",
+                "body": "{\n  \"tiktok_post_id\": \"{{4.data.publish_id}}\",\n  \"tiktok_post_url\": \"https://www.tiktok.com/@{{connection.tiktok_username}}/video/{{4.data.publish_id}}\",\n  \"status\": \"posted\",\n  \"posted_at\": \"{{formatDate(now; \"YYYY-MM-DDTHH:mm:ss.SSSZ\")}}\"\n}"
+              },
+              "metadata": {"designer": {"x": 1100, "y": -100}}
+            },
+            {
+              "id": 7,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/analytics",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"event_type\": \"tiktok_posted\",\n  \"brand\": \"tiktok_fitness\",\n  \"platform\": \"tiktok\",\n  \"data\": {\n    \"queue_id\": \"{{2.queue_id}}\",\n    \"tiktok_post_id\": \"{{4.data.publish_id}}\",\n    \"caption_length\": {{length(2.full_caption)}},\n    \"hashtag_count\": {{length(1.hashtags)}},\n    \"has_affiliate\": true\n  }\n}"
+              },
+              "metadata": {"designer": {"x": 1320, "y": -100}}
+            },
+            {
+              "id": 8,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/videos",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"brand\": \"tiktok_fitness\",\n  \"platform\": \"tiktok\",\n  \"video_url\": \"{{2.video_url}}\",\n  \"title\": \"{{1.topic}}\",\n  \"description\": \"{{2.caption}}\",\n  \"status\": \"posted\",\n  \"platform_id\": \"{{4.data.publish_id}}\"\n}"
+              },
+              "metadata": {
+                "designer": {"x": 1540, "y": -100},
+                "note": "Log to main videos table for cross-platform tracking"
+              }
+            }
+          ],
+          "label": "Success - Update All Records",
+          "filter": {
+            "name": "Upload succeeded",
+            "conditions": [[{"a": "{{4.data.publish_id}}", "o": "exist"}]]
+          }
+        },
+        {
+          "flow": [
+            {
+              "id": 9,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/tiktok_queue?id=eq.{{2.queue_id}}",
+                "method": "PATCH",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"status\": \"failed\",\n  \"error_message\": \"TikTok upload failed: {{4.error.message}}\",\n  \"retry_count\": {{add(1.retry_count; 1)}}\n}"
+              },
+              "metadata": {"designer": {"x": 1100, "y": 150}}
+            },
+            {
+              "id": 10,
+              "module": "http:ActionMakeRequest",
+              "version": 3,
+              "parameters": {"handleErrors": false},
+              "mapper": {
+                "url": "{{connection.supabase_url}}/rest/v1/errors",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connection.supabase_service_key}}"},
+                  {"name": "Authorization", "value": "Bearer {{connection.supabase_service_key}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "body": "{\n  \"error_type\": \"tiktok_upload_failed\",\n  \"error_message\": \"{{4.error.message}}\",\n  \"context\": {\n    \"queue_id\": \"{{2.queue_id}}\",\n    \"video_url\": \"{{2.video_url}}\",\n    \"scenario\": \"tiktok_poster\",\n    \"tiktok_error_code\": \"{{4.error.code}}\"\n  }\n}"
+              },
+              "metadata": {"designer": {"x": 1320, "y": 150}}
+            }
+          ],
+          "label": "Failed - Log Error and Retry Later",
+          "filter": {
+            "name": "Upload failed",
+            "conditions": [[{"a": "{{4.error}}", "o": "exist"}]]
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "sequential": true,
+      "confidential": false
+    }
+  },
+  "connections": {
+    "supabase_url": {
+      "label": "Supabase Project URL",
+      "type": "text",
+      "required": true
+    },
+    "supabase_service_key": {
+      "label": "Supabase Service Role Key",
+      "type": "text",
+      "required": true
+    },
+    "tiktok": {
+      "label": "TikTok Connection",
+      "type": "oauth",
+      "required": true,
+      "help": "Connect via Make.com TikTok module - requires Business Account"
+    },
+    "tiktok_username": {
+      "label": "TikTok Username (without @)",
+      "type": "text",
+      "required": true,
+      "help": "For constructing post URLs"
+    }
+  },
+  "alternative_posting_method": {
+    "description": "If Make.com TikTok module is not available, use TikTok Content Posting API directly",
+    "api_endpoint": "https://open.tiktokapis.com/v2/post/publish/video/init/",
+    "flow": [
+      {
+        "step": 1,
+        "action": "Initialize upload",
+        "method": "POST",
+        "url": "https://open.tiktokapis.com/v2/post/publish/video/init/",
+        "body": {
+          "post_info": {
+            "title": "{{caption}}",
+            "privacy_level": "PUBLIC_TO_EVERYONE",
+            "disable_comment": false,
+            "disable_duet": false,
+            "disable_stitch": false,
+            "video_cover_timestamp_ms": 1000
+          },
+          "source_info": {
+            "source": "PULL_FROM_URL",
+            "video_url": "{{video_url}}"
+          }
+        }
+      },
+      {
+        "step": 2,
+        "action": "Poll for completion",
+        "method": "POST",
+        "url": "https://open.tiktokapis.com/v2/post/publish/status/fetch/",
+        "body": {
+          "publish_id": "{{step1.publish_id}}"
+        }
+      }
+    ]
+  },
+  "notes": {
+    "tiktok_api_access": "TikTok Content Posting API requires approved developer access. Apply at developers.tiktok.com",
+    "video_requirements": "TikTok videos must be: MP4 format, 9:16 aspect ratio, 3-60 seconds, max 287.6 MB",
+    "rate_limits": "TikTok API: varies by app tier. Start with 100 posts/day for new apps",
+    "caption_limits": "TikTok captions max 2200 characters, but 100-150 chars performs best"
+  }
+}

@@ -1,0 +1,158 @@
+name: Weekly Trend Discovery + Content Planning
+
+on:
+  schedule:
+    # Every Sunday at 10 PM PST (6 AM UTC Monday)
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  discover-and-plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run trend discovery for all brands
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: |
+          python -c "
+          import sys, os, json
+          sys.path.insert(0, '.')
+
+          from database.supabase_client import get_supabase_client
+          db = get_supabase_client()
+
+          from video_automation.trend_discovery import run_weekly_discovery
+          results = run_weekly_discovery(db.client)
+
+          for brand, data in results.items():
+              trends = data.get('trends', {})
+              topics = trends.get('trending_topics', []) if isinstance(trends, dict) else []
+              print(f'{brand}: {len(topics)} trending topics selected')
+
+          print('Weekly discovery complete.')
+          "
+
+      - name: Generate articles for all trending topics
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: |
+          python -c "
+          import sys, os, json
+          sys.path.insert(0, '.')
+
+          from database.supabase_client import get_supabase_client
+          db = get_supabase_client()
+
+          from video_automation.article_generator import generate_articles_for_weekly_calendar, publish_article_to_website
+
+          for brand in ['fitness', 'deals', 'menopause']:
+              try:
+                  result = db.client.table('weekly_calendar').select('calendar_data, trends_data') \
+                      .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
+              except Exception as e:
+                  if 'PGRST205' in str(e) or 'schema cache' in str(e):
+                      print(f'Supabase schema cache stale for weekly_calendar — restart project from dashboard')
+                  else:
+                      print(f'Cannot read weekly_calendar table for {brand}: {e}')
+                  continue
+
+              if not result.data:
+                  print(f'No calendar for {brand}, skipping articles')
+                  continue
+
+              calendar = json.loads(result.data[0]['calendar_data']) if isinstance(result.data[0]['calendar_data'], str) else result.data[0]['calendar_data']
+
+              # Attach trending_topics from trends_data to calendar for article generation
+              trends_data = result.data[0].get('trends_data')
+              if trends_data:
+                  if isinstance(trends_data, str):
+                      trends_data = json.loads(trends_data)
+                  calendar['trending_topics'] = trends_data.get('trending_topics', [])
+
+              articles = generate_articles_for_weekly_calendar(calendar, brand, db.client)
+
+              for slug, content in articles.items():
+                  if content:
+                      try:
+                          publish_article_to_website(content, brand, slug)
+                      except Exception as e:
+                          print(f'Publish failed for {brand}/{slug}: {e}')
+
+          print('Article generation complete.')
+          "
+
+      - name: Commit and push new articles
+        run: |
+          git config user.name 'Trend Discovery Bot'
+          git config user.email 'bot@fitover35.com'
+          git add outputs/
+          git diff --staged --quiet || git commit -m "Weekly articles: $(date +%Y-%m-%d) trending topics"
+          git push || echo "Nothing to push"
+
+      - name: Weekly planning summary
+        if: always()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -c "
+          import sys, json, requests, os
+          sys.path.insert(0, '.')
+
+          from database.supabase_client import get_supabase_client
+          db = get_supabase_client()
+
+          print('WEEKLY CONTENT PLAN')
+          print('=' * 40)
+
+          for brand in ['fitness', 'deals', 'menopause']:
+              try:
+                  result = db.client.table('weekly_calendar').select('trends_data') \
+                      .eq('brand', brand).order('created_at', desc=True).limit(1).execute()
+              except Exception as e:
+                  if 'PGRST205' in str(e) or 'schema cache' in str(e):
+                      print(f'\n{brand.upper()}: Supabase schema cache stale — restart project from dashboard Settings > General')
+                  else:
+                      print(f'\n{brand.upper()}: Error reading weekly_calendar: {e}')
+                  continue
+
+              if result.data:
+                  trends = result.data[0].get('trends_data')
+                  if isinstance(trends, str):
+                      trends = json.loads(trends)
+                  topics = trends.get('trending_topics', []) if trends else []
+
+                  print(f'\n{brand.upper()}:')
+                  for t in topics:
+                      print(f'  #{t.get(\"rank\", \"?\")}: {t.get(\"topic\", \"?\")} (score: {t.get(\"trend_score\", \"?\")}, {t.get(\"pins_to_assign\", \"?\")} pins)')
+              else:
+                  print(f'\n{brand.upper()}: No trends found')
+          " >> $GITHUB_STEP_SUMMARY

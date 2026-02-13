@@ -1,0 +1,117 @@
+# Daily Deal Darling - Automation Configuration
+# This file configures the automated website updates
+
+# ============================================
+# Amazon Product Data
+# ============================================
+amazon:
+  affiliate_tag: "dailydealdarl-20"
+  marketplace: "US"
+
+  # API Configuration (Rainforest API)
+  api:
+    provider: "rainforest"  # or "amazon_pa_api"
+    rate_limit: 100  # requests per minute
+    timeout: 30  # seconds
+
+  # Update frequencies
+  update_schedule:
+    product_basics: "weekly"      # title, image, brand
+    prices: "every_6_hours"       # current price
+    deals: "every_4_hours"        # active deals
+    link_verification: "daily"    # check for broken links
+
+# ============================================
+# Deals Page
+# ============================================
+deals:
+  # Minimum discount to show as a "deal"
+  min_discount_percent: 15
+
+  # Maximum deals on homepage
+  max_homepage_deals: 4
+
+  # Categories to monitor for deals
+  categories:
+    - beauty
+    - kitchen
+    - home
+    - sports
+    - electronics
+
+  # Badge colors by discount tier
+  badge_colors:
+    high: "#E74C3C"     # 40%+ discount
+    medium: "#E67E22"   # 25-39% discount
+    low: "#27AE60"      # 15-24% discount
+
+# ============================================
+# Article Generation
+# ============================================
+articles:
+  # Output directory for drafts
+  draft_dir: "articles/drafts"
+
+  # Output directory for published articles
+  publish_dir: "articles"
+
+  # Auto-publish or create for review
+  auto_publish: false
+
+  # Target word count range
+  word_count:
+    min: 800
+    max: 1500
+
+  # SEO settings
+  seo:
+    max_title_length: 60
+    max_description_length: 155
+    target_keyword_density: 1.5  # percent
+
+  # Content settings
+  content:
+    include_faq: true
+    faq_count: 3
+    include_product_cards: true
+    max_products_per_article: 5
+
+# ============================================
+# Link Verification
+# ============================================
+links:
+  # Files/directories to scan
+  scan_paths:
+    - "index.html"
+    - "articles/"
+
+  # Action on broken links
+  on_broken_link: "create_issue"  # or "auto_fix", "alert_only"
+
+  # Issue labels
+  issue_labels:
+    - "bug"
+    - "affiliate-links"
+
+# ============================================
+# Notifications
+# ============================================
+notifications:
+  # Email alerts (requires RESEND_API_KEY)
+  email:
+    enabled: false
+    recipients:
+      - "alerts@dailydealdarling.com"
+
+  # GitHub issues
+  github_issues:
+    enabled: true
+    assign_to: []  # GitHub usernames to assign
+
+# ============================================
+# Scheduling (UTC times)
+# ============================================
+schedule:
+  verify_links: "0 2 * * *"      # 2 AM daily
+  update_deals: "0 */4 * * *"    # Every 4 hours
+  generate_article: "0 6 * * *"  # 6 AM daily

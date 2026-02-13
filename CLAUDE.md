@@ -1,43 +1,185 @@
-# CLAUDE.md - Project Rules
+# CLAUDE.md - Project Context for AI Assistants
 
-## How to Work on This Project
+## Project Overview
 
-1. First think through the problem, read the codebase for relevant files, and write a plan to tasks/todo.md.
+Social Media Empire is an automated content creation and distribution system for multiple lifestyle brands. It generates video content using AI, renders videos with templates, and posts to multiple social media platforms on a schedule.
 
-2. The plan should have a list of todo items that you can check off as you complete them.
+## Key Components
 
-3. Before you begin working, check in with me and I will verify the plan.
+### 1. Video Automation (`video_automation/`)
+- **daily_video_generator.py**: Main orchestrator for video creation pipeline
+- **video_content_generator.py**: Uses Gemini AI to generate video scripts
+- **video_templates.py**: Manages Creatomate video templates
+- **cross_platform_poster.py**: Posts to all platforms
+- **youtube_shorts.py**: YouTube-specific upload logic
+- **pinterest_idea_pins.py**: Pinterest-specific posting via Make.com
 
-4. Then, begin working on the todo items, marking them as complete as you go.
+### 2. Email Marketing (`email_marketing/`)
+- **email_sender.py**: Sends emails via Resend, integrates with ConvertKit
+- **sequences/**: Welcome email sequences (markdown templates)
+- **website_integration/**: HTML signup forms
+- **convertkit_setup/**: ConvertKit automation configuration
 
-5. Please every step of the way just give me a high level explanation of what changes you made.
+### 3. Database (`database/`)
+- **supabase_client.py**: All database operations
+- **schemas.sql**: Database schema (run in Supabase SQL Editor)
 
-6. Make every task and code change you do as simple as possible. We want to avoid making any massive or complex changes. Every change should impact as little code as possible. Everything is about simplicity.
+### 4. Monitoring (`monitoring/`)
+- **health_checker.py**: Checks all API integrations
+- **error_reporter.py**: Logs and alerts on errors
+- **daily_report_generator.py**: Creates daily performance reports
 
-7. Finally, add a review section to the todo.md file with a summary of the changes you made and any other relevant information.
+### 5. GitHub Actions (`.github/workflows/`)
+- 3 video automation workflows (morning/noon/evening)
+- Email automation workflow
+- Health monitoring workflow
+- Error alerts workflow
+- Daily report workflow
+- Self-healing workflow
 
-8. DO NOT BE LAZY. NEVER BE LAZY. IF THERE IS A BUG FIND THE ROOT CAUSE AND FIX IT. NO TEMPORARY FIXES. YOU ARE A SENIOR DEVELOPER. NEVER BE LAZY.
+## Brands
 
-9. MAKE ALL FIXES AND CODE CHANGES AS SIMPLE AS HUMANLY POSSIBLE. THEY SHOULD ONLY IMPACT NECESSARY CODE RELEVANT TO THE TASK AND NOTHING ELSE. IT SHOULD IMPACT AS LITTLE CODE AS POSSIBLE. YOUR GOAL IS TO NOT INTRODUCE ANY BUGS. IT'S ALL ABOUT SIMPLICITY.
+| Brand | Niche | Audience |
+|-------|-------|----------|
+| daily_deal_darling | Lifestyle deals, beauty, home | Budget-conscious women 25-45 |
+| menopause_planner | Menopause wellness | Women 45-60 |
+| nurse_planner | Nurse lifestyle, self-care | Healthcare workers |
+| adhd_planner | ADHD productivity | Adults with ADHD |
 
-## About This Project
+## API Dependencies
 
-This is an autonomous social media content empire that runs 24/7 without manual intervention.
+| API | Purpose | Rate Limits |
+|-----|---------|-------------|
+| Gemini | Content generation | 60 RPM |
+| Pexels | Stock media | 200 req/hour |
+| Creatomate | Video rendering | Per plan |
+| Supabase | Database | Per plan |
+| Resend | Email sending | 100/day free |
+| ConvertKit | Email marketing | Per plan |
+| YouTube | Video uploads | Quota-based |
+| Make.com | Pinterest webhook | Per plan |
 
-### Brands
-1. Daily Deal Darling - Amazon affiliate, women 25-45, beauty/home/lifestyle. Website: dailydealdarling.com. Amazon tag: dailydealdarling1-20
+## Common Tasks
 
-2. The Menopause Planner - Etsy + Pinterest, women in menopause
+### Adding Content Ideas
+Edit the JSON files in `video_automation/content_bank/`:
+- `wellness_ideas.json` - Cross-brand wellness content
+- `deal_topics.json` - Daily Deal Darling specific
+- `menopause_topics.json` - Menopause Planner specific
 
-### Tech Stack
-- GitHub Actions (runs agents on schedule)
-- Supabase (database)
-- Claude API (content generation)
-- Creatomate (video creation)
-- Make.com (TikTok/Instagram posting)
+### Modifying Video Templates
+Edit files in `video_automation/templates/`:
+- Each brand has its own template config
+- Templates reference Creatomate template IDs
+- Colors and fonts are brand-specific
 
-### Key Principles
-- ALWAYS prioritize automation over manual work
-- Systems should self-optimize based on analytics
-- Fail gracefully with alerts, don't break silently
-- Rate limit all API calls to avoid bans
+### Creating Email Sequences
+Add markdown files to `email_marketing/sequences/`:
+- Follow existing sequence structure
+- Include timing, tags, and content
+- Reference in `email_sender.py` if needed
+
+### Adding a New Platform
+1. Create poster module in `video_automation/`
+2. Add client to `utils/api_clients.py`
+3. Add to `cross_platform_poster.py`
+4. Add secrets to GitHub repository
+5. Update workflow environment variables
+
+## Code Patterns
+
+### Configuration
+```python
+from utils.config import get_config
+config = get_config()
+# Access: config.gemini_api_key, config.brands, etc.
+```
+
+### Database Operations
+```python
+from database.supabase_client import get_supabase_client
+db = get_supabase_client()
+db.log_video_creation(brand="...", platform="...", ...)
+```
+
+### Error Reporting
+```python
+from monitoring.error_reporter import report_error
+report_error(
+    error_type="api_failure",
+    error_message="...",
+    severity="high",
+    context={"brand": "...", "platform": "..."}
+)
+```
+
+### Health Checks
+```python
+from monitoring.health_checker import run_health_check
+result = run_health_check(full=True)
+# result["overall_status"] is "healthy", "degraded", or "unhealthy"
+```
+
+## Environment Variables
+
+Required for local development:
+```
+GEMINI_API_KEY
+PEXELS_API_KEY
+SUPABASE_URL
+SUPABASE_KEY
+```
+
+Optional (for full functionality):
+```
+ANTHROPIC_API_KEY
+CREATOMATE_API_KEY
+RESEND_API_KEY
+CONVERTKIT_API_KEY
+CONVERTKIT_API_SECRET
+YOUTUBE_CLIENT_ID
+YOUTUBE_CLIENT_SECRET
+YOUTUBE_REFRESH_TOKEN
+MAKE_COM_PINTEREST_WEBHOOK
+ALERT_EMAIL
+```
+
+## Testing
+
+```bash
+# Syntax check all Python files
+python -m py_compile video_automation/*.py
+python -m py_compile email_marketing/*.py
+python -m py_compile monitoring/*.py
+
+# Run health check
+python -m monitoring.health_checker --full
+
+# Dry run video generation
+python -m video_automation.daily_video_generator --dry-run
+```
+
+## Deployment Notes
+
+1. All secrets must be in GitHub repository settings
+2. Creatomate templates must be created and IDs updated
+3. YouTube OAuth must be set up and refresh token obtained
+4. Make.com scenarios must be created for Pinterest
+5. ConvertKit forms and tags must be created
+6. Supabase tables must be created from schemas.sql
+
+## File Naming Conventions
+
+- Python modules: `snake_case.py`
+- Templates: `brand_type.json`
+- Workflows: `purpose-name.yml`
+- Sequences: `brand_sequence_type.md`
+
+## Important Notes
+
+- Videos are 30 seconds, 9:16 aspect ratio (vertical)
+- 3 videos per day per brand = 12 total daily videos
+- Schedule is PST timezone
+- Error alerts go to ALERT_EMAIL
+- Self-healing runs every 6 hours
+- Old data cleaned up after 30-90 days

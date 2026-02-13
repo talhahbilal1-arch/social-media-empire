@@ -1,0 +1,19 @@
+# YouTube Shorts Automation - Python Dependencies
+
+# HTTP requests
+requests>=2.28.0
+
+# Supabase (Database)
+supabase>=2.0.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# Google APIs (YouTube Direct Upload)
+google-auth>=2.16.0
+google-auth-oauthlib>=1.0.0
+google-api-python-client>=2.80.0
+
+# Optional: For local video processing
+# ffmpeg-python>=0.2.0
+# Pillow>=9.4.0

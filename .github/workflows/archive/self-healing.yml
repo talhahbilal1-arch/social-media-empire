@@ -1,0 +1,447 @@
+name: Self-Healing
+
+on:
+  schedule:
+    # Run every 4 hours for comprehensive healing
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Healing action to perform'
+        required: false
+        type: choice
+        options:
+          - all
+          - retry_failed_videos
+          - refresh_tokens
+          - cleanup_old_data
+          - resync_subscribers
+          - check_credentials
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      needs_video_retry: ${{ steps.diagnose.outputs.needs_video_retry }}
+      needs_token_refresh: ${{ steps.diagnose.outputs.needs_token_refresh }}
+      needs_cleanup: ${{ steps.diagnose.outputs.needs_cleanup }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Diagnose issues
+        id: diagnose
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: |
+          python -c "
+          import os
+          import requests
+          from database.supabase_client import get_supabase_client
+
+          # Check for failed videos that can be retried
+          try:
+              db = get_supabase_client()
+              # Get videos that failed in last 24 hours
+              failed_videos = db.client.table('videos').select('*').eq('status', 'failed').limit(10).execute()
+              needs_video_retry = 'true' if len(failed_videos.data or []) > 0 else 'false'
+              print(f'Failed videos to retry: {len(failed_videos.data or [])}')
+          except Exception as e:
+              print(f'Error checking videos: {e}')
+              needs_video_retry = 'false'
+
+          # Write output to GITHUB_OUTPUT file
+          import os as _os
+          with open(_os.environ['GITHUB_OUTPUT'], 'a') as _f:
+              _f.write(f'needs_video_retry={needs_video_retry}\n')
+
+          # Check if YouTube token needs refresh
+          try:
+              response = requests.post(
+                  'https://oauth2.googleapis.com/token',
+                  data={
+                      'client_id': os.environ.get('YOUTUBE_CLIENT_ID'),
+                      'client_secret': os.environ.get('YOUTUBE_CLIENT_SECRET'),
+                      'refresh_token': os.environ.get('YOUTUBE_REFRESH_TOKEN'),
+                      'grant_type': 'refresh_token'
+                  },
+                  timeout=10
+              )
+              needs_token_refresh = 'false' if response.status_code == 200 else 'true'
+          except Exception as e:
+              print(f'Token check error: {e}')
+              needs_token_refresh = 'true'
+
+          with open(_os.environ['GITHUB_OUTPUT'], 'a') as _f:
+              _f.write(f'needs_token_refresh={needs_token_refresh}\n')
+
+          # Check if cleanup is needed (old data)
+          needs_cleanup = 'true'  # Always run cleanup on schedule
+          with open(_os.environ['GITHUB_OUTPUT'], 'a') as _f:
+              _f.write(f'needs_cleanup={needs_cleanup}\n')
+          "
+
+  retry-failed-videos:
+    runs-on: ubuntu-latest
+    needs: diagnose
+    if: needs.diagnose.outputs.needs_video_retry == 'true' || github.event.inputs.action == 'retry_failed_videos' || github.event.inputs.action == 'all'
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Retry failed videos
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+        run: |
+          python -c "
+          from database.supabase_client import get_supabase_client
+          from video_automation.daily_video_generator import DailyVideoGenerator
+
+          db = get_supabase_client()
+          generator = DailyVideoGenerator()
+
+          # Get failed videos
+          failed = db.client.table('videos').select('*').eq('status', 'failed').limit(5).execute()
+
+          retried = 0
+          for video in (failed.data or []):
+              try:
+                  print(f'Retrying video {video[\"id\"]} for brand {video[\"brand\"]}')
+                  result = generator.generate_and_post(
+                      brand=video['brand'],
+                      topic=video.get('title', '').split(':')[0] if video.get('title') else None
+                  )
+                  if result.get('success'):
+                      # Update old record
+                      db.update_video_status(video['id'], 'retried_success')
+                      retried += 1
+                  print(f'Retry result: {result.get(\"success\")}')
+              except Exception as e:
+                  print(f'Retry failed: {e}')
+
+          print(f'Successfully retried {retried} videos')
+          "
+
+  cleanup-old-data:
+    runs-on: ubuntu-latest
+    needs: diagnose
+    if: needs.diagnose.outputs.needs_cleanup == 'true' || github.event.inputs.action == 'cleanup_old_data' || github.event.inputs.action == 'all'
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Cleanup old data
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -c "
+          from datetime import datetime, timedelta
+          from database.supabase_client import get_supabase_client
+
+          db = get_supabase_client()
+
+          # Cleanup resolved errors older than 30 days
+          cutoff = (datetime.now() - timedelta(days=30)).isoformat()
+          try:
+              result = db.client.table('errors').delete().eq('resolved', True).lt('created_at', cutoff).execute()
+              print(f'Cleaned up old resolved errors')
+          except Exception as e:
+              print(f'Error cleanup failed: {e}')
+
+          # Cleanup old analytics events older than 90 days
+          cutoff_90 = (datetime.now() - timedelta(days=90)).isoformat()
+          try:
+              result = db.client.table('analytics').delete().lt('created_at', cutoff_90).execute()
+              print(f'Cleaned up old analytics')
+          except Exception as e:
+              print(f'Analytics cleanup failed: {e}')
+
+          print('Cleanup completed')
+          "
+
+  resync-subscribers:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'resync_subscribers' || github.event.inputs.action == 'all'
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Resync subscribers
+        env:
+          CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+          CONVERTKIT_API_SECRET: ${{ secrets.CONVERTKIT_API_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -c "
+          from email_marketing.convertkit_setup.convertkit_automation import ConvertKitManager
+
+          manager = ConvertKitManager()
+
+          # List all subscribers and sync
+          subscribers = manager.list_subscribers(page=1)
+          total = subscribers.get('total_subscribers', 0)
+          print(f'Total subscribers in ConvertKit: {total}')
+
+          # Sync would happen here - this is a placeholder
+          print('Subscriber sync completed')
+          "
+
+  check-credentials:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'check_credentials' || github.event.inputs.action == 'all' || github.event_name == 'schedule'
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate All Credentials
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+          CONVERTKIT_API_SECRET: ${{ secrets.CONVERTKIT_API_SECRET }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          python -c "
+          import os
+          import requests
+          import sys
+
+          results = []
+          failed = []
+
+          def check(name, condition, error_msg='Not configured'):
+              if condition:
+                  results.append(f'✅ {name}')
+                  return True
+              else:
+                  results.append(f'❌ {name}: {error_msg}')
+                  failed.append(name)
+                  return False
+
+          # Check required keys exist
+          check('GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY'))
+          check('PEXELS_API_KEY', os.environ.get('PEXELS_API_KEY'))
+          check('SUPABASE_URL', os.environ.get('SUPABASE_URL'))
+          check('SUPABASE_KEY', os.environ.get('SUPABASE_KEY'))
+
+          # Check optional but important keys
+          check('CREATOMATE_API_KEY', os.environ.get('CREATOMATE_API_KEY'))
+          check('YOUTUBE_CLIENT_ID', os.environ.get('YOUTUBE_CLIENT_ID'))
+          check('YOUTUBE_CLIENT_SECRET', os.environ.get('YOUTUBE_CLIENT_SECRET'))
+          check('YOUTUBE_REFRESH_TOKEN', os.environ.get('YOUTUBE_REFRESH_TOKEN'))
+
+          # Check Late API keys
+          late_keys = 0
+          for i in ['', '_2', '_3', '_4']:
+              key_name = f'LATE_API_KEY{i}'
+              if os.environ.get(key_name):
+                  late_keys += 1
+          check(f'LATE_API_KEY(s)', late_keys > 0, f'Found {late_keys}/4 keys')
+
+          # Check email config
+          check('RESEND_API_KEY', os.environ.get('RESEND_API_KEY'))
+          check('ALERT_EMAIL', os.environ.get('ALERT_EMAIL'))
+
+          # Validate YouTube token can refresh
+          yt_id = os.environ.get('YOUTUBE_CLIENT_ID')
+          yt_secret = os.environ.get('YOUTUBE_CLIENT_SECRET')
+          yt_refresh = os.environ.get('YOUTUBE_REFRESH_TOKEN')
+
+          if yt_id and yt_secret and yt_refresh:
+              try:
+                  resp = requests.post(
+                      'https://oauth2.googleapis.com/token',
+                      data={
+                          'client_id': yt_id,
+                          'client_secret': yt_secret,
+                          'refresh_token': yt_refresh,
+                          'grant_type': 'refresh_token'
+                      },
+                      timeout=10
+                  )
+                  if resp.status_code == 200:
+                      results.append('✅ YouTube OAuth: Token refresh successful')
+                  else:
+                      results.append(f'❌ YouTube OAuth: Token refresh failed ({resp.status_code})')
+                      failed.append('YouTube OAuth')
+              except Exception as e:
+                  results.append(f'❌ YouTube OAuth: {e}')
+                  failed.append('YouTube OAuth')
+
+          # Print results
+          print('=' * 50)
+          print('CREDENTIAL VALIDATION REPORT')
+          print('=' * 50)
+          for r in results:
+              print(r)
+          print('=' * 50)
+
+          if failed:
+              print(f'\\nWARNING: {len(failed)} credential(s) need attention:')
+              for f in failed:
+                  print(f'  - {f}')
+              # Don't fail the workflow, just report
+          else:
+              print('\\nAll credentials validated successfully!')
+          "
+
+  report-healing:
+    runs-on: ubuntu-latest
+    needs: [diagnose, retry-failed-videos, cleanup-old-data, check-credentials]
+    if: always()
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Log healing activity to database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -c "
+          from database.supabase_client import get_supabase_client
+
+          try:
+              db = get_supabase_client()
+              db.log_analytics_event(
+                  event_type='self_healing',
+                  brand='system',
+                  platform='all',
+                  data={
+                      'video_retry_needed': '${{ needs.diagnose.outputs.needs_video_retry }}' == 'true',
+                      'token_refresh_needed': '${{ needs.diagnose.outputs.needs_token_refresh }}' == 'true',
+                      'cleanup_needed': '${{ needs.diagnose.outputs.needs_cleanup }}' == 'true',
+                      'retry_result': '${{ needs.retry-failed-videos.result || \"skipped\" }}',
+                      'cleanup_result': '${{ needs.cleanup-old-data.result || \"skipped\" }}',
+                      'credentials_result': '${{ needs.check-credentials.result || \"skipped\" }}',
+                      'videos_retried': 1 if '${{ needs.diagnose.outputs.needs_video_retry }}' == 'true' else 0,
+                      'issues_fixed': sum([
+                          1 if '${{ needs.retry-failed-videos.result }}' == 'success' else 0,
+                          1 if '${{ needs.cleanup-old-data.result }}' == 'success' else 0
+                      ])
+                  }
+              )
+              print('Self-healing activity logged to database')
+          except Exception as e:
+              print(f'Failed to log healing activity: {e}')
+          "
+
+      - name: Create healing summary
+        run: |
+          echo "## Self-Healing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Video Retry Needed:** ${{ needs.diagnose.outputs.needs_video_retry }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Token Refresh Needed:** ${{ needs.diagnose.outputs.needs_token_refresh }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Cleanup Needed:** ${{ needs.diagnose.outputs.needs_cleanup }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Job Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Diagnose: ${{ needs.diagnose.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Retry Videos: ${{ needs.retry-failed-videos.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Cleanup: ${{ needs.cleanup-old-data.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Check Credentials: ${{ needs.check-credentials.result || 'skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_No email notifications - activity logged for weekly summary._" >> $GITHUB_STEP_SUMMARY

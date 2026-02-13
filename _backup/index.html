@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- PRIMARY SEO -->
+    <title>Daily Deal Darling | Best Product Recommendations & Deals 2026</title>
+    <meta name="description" content="Discover the best products with our fun quizzes and expert reviews. Personalized recommendations for skincare, home, kitchen, and more. Updated daily with the best Amazon deals.">
+    <meta name="keywords" content="product recommendations, best amazon deals, skincare routine, home organization, gift ideas, product reviews, shopping guide">
+    <meta name="author" content="Daily Deal Darling">
+
+    <!-- CANONICAL URL -->
+    <link rel="canonical" href="https://dailydealdarling.com/">
+
+    <!-- OPEN GRAPH (Facebook/Social) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dailydealdarling.com/">
+    <meta property="og:title" content="Daily Deal Darling | Find Your Perfect Products">
+    <meta property="og:description" content="Take our fun quizzes to discover personalized product recommendations, or browse expert reviews to find the best deals.">
+    <meta property="og:image" content="https://dailydealdarling.com/images/og-image.jpg">
+    <meta property="og:site_name" content="Daily Deal Darling">
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Daily Deal Darling | Find Your Perfect Products">
+    <meta name="twitter:description" content="Personalized product recommendations through fun quizzes and expert reviews.">
+    <meta name="twitter:image" content="https://dailydealdarling.com/images/twitter-card.jpg">
+
+    <!-- GEO/AI OPTIMIZATION - Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Daily Deal Darling",
+        "url": "https://dailydealdarling.com",
+        "description": "Product recommendation website with interactive quizzes and expert reviews",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Daily Deal Darling",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://dailydealdarling.com/images/logo.png"
+            }
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://dailydealdarling.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Daily Deal Darling",
+        "url": "https://dailydealdarling.com",
+        "description": "Your trusted guide to the best products and deals online",
+        "sameAs": [
+            "https://pinterest.com/dailydealdarling"
+        ]
+    }
+    </script>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================
+           CSS VARIABLES & RESET
+           ============================================ */
+        :root {
+            --primary: #FF6B6B;
+            --primary-dark: #E85555;
+            --secondary: #FFE5E5;
+            --accent: #FFD93D;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --white: #FFFFFF;
+            --bg-light: #FFF9F9;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--white);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ============================================
+           HEADER & NAVIGATION
+           ============================================ */
+        header {
+            background: var(--white);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            color: var(--text-dark);
+            transition: var(--transition);
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--white) 100%);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .trust-badges {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            opacity: 0.7;
+        }
+
+        .trust-badges span {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* ============================================
+           SECTION STYLES
+           ============================================ */
+        section {
+            padding: 80px 0;
+        }
+
+        section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        /* ============================================
+           QUIZ CARDS
+           ============================================ */
+        .quiz-section {
+            background: var(--bg-light);
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .quiz-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .quiz-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .quiz-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .quiz-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .quiz-card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .quiz-card .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .quiz-card .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ============================================
+           FEATURED PRODUCTS
+           ============================================ */
+        .featured-section {
+            background: var(--white);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-image {
+            height: 200px;
+            background: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .product-info .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .product-info .buy-btn {
+            display: block;
+            text-align: center;
+            background: var(--accent);
+            color: var(--text-dark);
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .product-info .buy-btn:hover {
+            background: #E5C235;
+        }
+
+        /* ============================================
+           ARTICLE CARDS
+           ============================================ */
+        .articles-section {
+            background: var(--bg-light);
+        }
+
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .article-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .article-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .article-content {
+            padding: 25px;
+        }
+
+        .article-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .article-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .article-content .read-more {
+            color: var(--primary);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .article-content .read-more:hover {
+            gap: 10px;
+        }
+
+        /* ============================================
+           EMAIL SIGNUP
+           ============================================ */
+        .email-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .email-section h2 {
+            color: var(--white);
+        }
+
+        .email-section p {
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .email-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 10px;
+        }
+
+        .email-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+        }
+
+        .email-form button {
+            background: var(--accent);
+            color: var(--text-dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .email-form button:hover {
+            background: #E5C235;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 50px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul a {
+            color: rgba(255,255,255,0.7);
+            transition: var(--transition);
+        }
+
+        .footer-section ul a:hover {
+            color: var(--white);
+        }
+
+        .affiliate-disclosure {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 30px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            section {
+                padding: 50px 0;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            .email-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/" class="logo">Daily Deal <span>Darling</span></a>
+                <ul class="nav-links">
+                    <li><a href="#quizzes">Quizzes</a></li>
+                    <li><a href="#articles">Articles</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+                <div class="mobile-menu">&#9776;</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1>Find Your <span>Perfect Products</span></h1>
+            <p>Take our fun quizzes to discover personalized recommendations, or browse our expert reviews to find the best deals on products you'll actually love!</p>
+            <a href="#quizzes" class="cta-button">Take a Quiz</a>
+            <div class="trust-badges">
+                <span>Trusted by 50,000+ Shoppers</span>
+                <span>100% Unbiased Reviews</span>
+                <span>Updated Daily</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUIZZES -->
+    <section class="quiz-section" id="quizzes">
+        <div class="container">
+            <h2>Discover What's Perfect For You</h2>
+            <p class="section-subtitle">Answer a few quick questions and get personalized product recommendations</p>
+            <div class="quiz-grid">
+                <a href="/quizzes/skincare-routine.html" class="quiz-card">
+                    <div class="quiz-icon">&#10024;</div>
+                    <h3>Skincare Routine Quiz</h3>
+                    <p>Find the perfect cleanser, serum, and moisturizer for your unique skin type and concerns.</p>
+                    <span class="btn">Start Quiz</span>
+                </a>
+                <a href="/quizzes/gift-finder.html" class="quiz-card">
+                    <div class="quiz-icon">&#127873;</div>
+                    <h3>Gift Finder Quiz</h3>
+                    <p>Stuck on what to get? We'll help you find the perfect gift for anyone on your list.</p>
+                    <span class="btn">Start Quiz</span>
+                </a>
+                <a href="/quizzes/home-organization.html" class="quiz-card">
+                    <div class="quiz-icon">&#127968;</div>
+                    <h3>Home Organization Quiz</h3>
+                    <p>Get personalized recommendations for storage solutions and organizers for every room.</p>
+                    <span class="btn">Start Quiz</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section class="featured-section" id="featured">
+        <div class="container">
+            <h2>Today's Top Picks</h2>
+            <p class="section-subtitle">Hand-selected deals our editors are loving right now</p>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">&#129524;</div>
+                    <div class="product-info">
+                        <h4>CeraVe Moisturizing Cream</h4>
+                        <div class="price">$15.99</div>
+                        <a href="https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarling1-20" target="_blank" rel="nofollow noopener" class="buy-btn">View on Amazon</a>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">&#127859;</div>
+                    <div class="product-info">
+                        <h4>Lodge Cast Iron Skillet</h4>
+                        <div class="price">$19.90</div>
+                        <a href="https://www.amazon.com/dp/B00006JSUB?tag=dailydealdarling1-20" target="_blank" rel="nofollow noopener" class="buy-btn">View on Amazon</a>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">&#128134;</div>
+                    <div class="product-info">
+                        <h4>Laneige Lip Sleeping Mask</h4>
+                        <div class="price">$24.00</div>
+                        <a href="https://www.amazon.com/dp/B07GQWQFHM?tag=dailydealdarling1-20" target="_blank" rel="nofollow noopener" class="buy-btn">View on Amazon</a>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">&#128241;</div>
+                    <div class="product-info">
+                        <h4>Anker Portable Charger</h4>
+                        <div class="price">$21.99</div>
+                        <a href="https://www.amazon.com/dp/B07QXV6N1B?tag=dailydealdarling1-20" target="_blank" rel="nofollow noopener" class="buy-btn">View on Amazon</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section class="articles-section" id="articles">
+        <div class="container">
+            <h2>Latest Reviews & Guides</h2>
+            <p class="section-subtitle">In-depth reviews and curated product roundups</p>
+            <div class="article-grid">
+                <a href="/articles/best-skincare-routine-2025.html" class="article-card">
+                    <div class="article-image">&#10024;</div>
+                    <div class="article-content">
+                        <h3>Best Skincare Routine Products 2026</h3>
+                        <p>Our top picks for cleansers, serums, and moisturizers that actually deliver results.</p>
+                        <span class="read-more">Read More</span>
+                    </div>
+                </a>
+                <a href="/articles/home-organization-essentials.html" class="article-card">
+                    <div class="article-image">&#128230;</div>
+                    <div class="article-content">
+                        <h3>Home Organization Essentials</h3>
+                        <p>Transform your space with these must-have storage and organization products.</p>
+                        <span class="read-more">Read More</span>
+                    </div>
+                </a>
+                <a href="/articles/self-care-sunday-essentials.html" class="article-card">
+                    <div class="article-image">&#128149;</div>
+                    <div class="article-content">
+                        <h3>Self-Care Sunday Essentials</h3>
+                        <p>Create the ultimate relaxation routine with these pampering products.</p>
+                        <span class="read-more">Read More</span>
+                    </div>
+                </a>
+                <a href="/articles/morning-routine-products.html" class="article-card">
+                    <div class="article-image">&#9728;&#65039;</div>
+                    <div class="article-content">
+                        <h3>Morning Routine Products</h3>
+                        <p>Start your day right with these energizing and productivity-boosting finds.</p>
+                        <span class="read-more">Read More</span>
+                    </div>
+                </a>
+                <a href="/articles/amazon-finds-under-25.html" class="article-card">
+                    <div class="article-image">&#128176;</div>
+                    <div class="article-content">
+                        <h3>Amazon Finds Under $25</h3>
+                        <p>Amazing deals that won't break the bank - all under twenty-five dollars!</p>
+                        <span class="read-more">Read More</span>
+                    </div>
+                </a>
+                <a href="/articles/best-kitchen-gadgets.html" class="article-card">
+                    <div class="article-image">&#127859;</div>
+                    <div class="article-content">
+                        <h3>Best Kitchen Gadgets 2026</h3>
+                        <p>Level up your cooking game with these genius kitchen tools and appliances.</p>
+                        <span class="read-more">Read More</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- EMAIL SIGNUP -->
+    <section class="email-section">
+        <div class="container">
+            <h2>Get Exclusive Deals</h2>
+            <p>Join 10,000+ smart shoppers and get the best deals delivered to your inbox weekly.</p>
+            <form class="email-form" action="#" method="POST">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="container" style="text-align: center; max-width: 800px;">
+            <h2>About Daily Deal Darling</h2>
+            <p style="color: var(--text-light); margin-bottom: 20px;">We're a team of shopping enthusiasts who test and review hundreds of products so you don't have to. Our mission is simple: help you find the best products at the best prices.</p>
+            <p style="color: var(--text-light);">Every recommendation is based on real testing, honest opinions, and a genuine desire to help you shop smarter. We never recommend products we wouldn't use ourselves.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Daily Deal Darling</h4>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Your trusted guide to the best products and deals online.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quizzes</h4>
+                    <ul>
+                        <li><a href="/quizzes/skincare-routine.html">Skincare Quiz</a></li>
+                        <li><a href="/quizzes/gift-finder.html">Gift Finder</a></li>
+                        <li><a href="/quizzes/home-organization.html">Home Organization</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Popular Articles</h4>
+                    <ul>
+                        <li><a href="/articles/best-skincare-routine-2025.html">Skincare Routine</a></li>
+                        <li><a href="/articles/amazon-finds-under-25.html">Under $25</a></li>
+                        <li><a href="/articles/best-kitchen-gadgets.html">Kitchen Gadgets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <ul>
+                        <li><a href="https://pinterest.com/dailydealdarling" target="_blank">Pinterest</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="affiliate-disclosure">
+                <strong>Affiliate Disclosure:</strong> Daily Deal Darling is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com. When you click on links to various merchants on this site and make a purchase, this can result in this site earning a commission. Affiliate programs and affiliations include, but are not limited to, the Amazon Associates Program.
+            </div>
+            <div class="copyright">
+                &copy; 2026 Daily Deal Darling. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,103 @@
+{
+  "name": "wellness_tips",
+  "description": "Health and wellness tips format",
+  "duration_seconds": 30,
+  "aspect_ratio": "9:16",
+  "segments": [
+    {
+      "name": "hook",
+      "duration": 4,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "large",
+          "animation": "fade_in"
+        },
+        "background": "video"
+      }
+    },
+    {
+      "name": "tip_1",
+      "duration": 7,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium",
+          "animation": "slide_up"
+        },
+        "icon": "optional"
+      }
+    },
+    {
+      "name": "tip_2",
+      "duration": 7,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium",
+          "animation": "slide_up"
+        },
+        "icon": "optional"
+      }
+    },
+    {
+      "name": "tip_3",
+      "duration": 7,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium",
+          "animation": "slide_up"
+        },
+        "icon": "optional"
+      }
+    },
+    {
+      "name": "cta",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "large",
+          "animation": "pulse"
+        },
+        "logo": "bottom_right"
+      }
+    }
+  ],
+  "music": {
+    "type": "background",
+    "volume": 0.3,
+    "mood": "calm"
+  },
+  "brand_variants": {
+    "daily_deal_darling": {
+      "colors": {
+        "text": "#FFFFFF",
+        "accent": "#E91E63",
+        "background_overlay": "rgba(0,0,0,0.4)"
+      }
+    },
+    "menopause_planner": {
+      "colors": {
+        "text": "#FFFFFF",
+        "accent": "#9C27B0",
+        "background_overlay": "rgba(46,26,71,0.5)"
+      }
+    },
+    "nurse_planner": {
+      "colors": {
+        "text": "#FFFFFF",
+        "accent": "#00BCD4",
+        "background_overlay": "rgba(0,77,64,0.5)"
+      }
+    },
+    "adhd_planner": {
+      "colors": {
+        "text": "#212121",
+        "accent": "#FF9800",
+        "background_overlay": "rgba(255,248,225,0.8)"
+      }
+    }
+  }
+}

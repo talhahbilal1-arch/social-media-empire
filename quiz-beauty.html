@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Take our Beauty Finds Quiz to discover makeup, skincare, and beauty deals tailored to your unique style!">
+    <title>Beauty Finds Quiz - Daily Deal Darling</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">Daily<span>Deal</span>Darling</a>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#quizzes">Quizzes</a></li>
+                    <li><a href="/#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1>&#128132; Beauty Finds Quiz</h1>
+                <p>Let's discover beauty deals that match your style!</p>
+            </div>
+
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" style="width: 20%;"></div>
+            </div>
+
+            <div class="quiz-questions">
+                <!-- Question 1 -->
+                <div class="quiz-question">
+                    <h3>1. How would you describe your makeup style?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Natural - Less is more</div>
+                        <div class="quiz-option">Classic - Timeless and elegant</div>
+                        <div class="quiz-option">Trendy - I love trying new looks</div>
+                        <div class="quiz-option">Bold - Go big or go home!</div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>2. What's your biggest skincare concern?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Dryness - Need more moisture</div>
+                        <div class="quiz-option">Oiliness - Shine control please</div>
+                        <div class="quiz-option">Aging - Prevention or treatment</div>
+                        <div class="quiz-option">Acne - Breakout battles</div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>3. What's your go-to beauty product you can't live without?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Mascara - Lashes are everything</div>
+                        <div class="quiz-option">Lip product - Lips always done</div>
+                        <div class="quiz-option">Foundation/concealer - Flawless base</div>
+                        <div class="quiz-option">Brow product - Brows frame the face</div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>4. How much do you typically spend on beauty products monthly?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Under $25 - Budget-friendly finds</div>
+                        <div class="quiz-option">$25-$50 - Balanced spending</div>
+                        <div class="quiz-option">$50-$100 - Investing in quality</div>
+                        <div class="quiz-option">$100+ - Beauty is a priority</div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-question" style="display: none;">
+                    <h3>5. What interests you most in new beauty products?</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option">Clean/natural ingredients</div>
+                        <div class="quiz-option">Innovative formulas</div>
+                        <div class="quiz-option">Cruelty-free brands</div>
+                        <div class="quiz-option">Luxury at affordable prices</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-nav">
+                <button class="quiz-btn quiz-btn-prev" disabled>Previous</button>
+                <button class="quiz-btn quiz-btn-next">Next</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="quiz-results">
+                <div class="result-icon">&#128133;</div>
+                <h2>Your Beauty Deals Are Ready!</h2>
+                <p>Based on your answers, here are beauty deals curated just for you.</p>
+
+                <div class="deal-recommendations">
+                    <div class="deal-item">
+                        <strong>Skincare Steals</strong>
+                        <p>Serums, moisturizers, and treatments at unbeatable prices.</p>
+                    </div>
+                    <div class="deal-item">
+                        <strong>Makeup Must-Haves</strong>
+                        <p>Foundations, mascaras, and lip products on sale now.</p>
+                    </div>
+                    <div class="deal-item">
+                        <strong>Beauty Tools & Sets</strong>
+                        <p>Brushes, organizers, and curated beauty boxes at a discount.</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 2rem; color: #666;">Sign up above to get these deals delivered to your inbox!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-signup">
+                <h3>Get daily deals in your inbox</h3>
+                <form id="footer-signup-form" class="footer-signup-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/#quizzes">Quizzes</a>
+                    <a href="/#about">About</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2024 Daily Deal Darling. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Exit Intent Email Popup -->
+    <div id="email-popup" class="email-popup-overlay">
+        <div class="email-popup">
+            <button class="popup-close">&times;</button>
+            <div class="popup-form-content">
+                <div class="popup-icon">&#128149;</div>
+                <h2>Wait! Get Exclusive Deals &#128149;</h2>
+                <p>Join 10,000+ smart shoppers getting the best daily deals delivered free.</p>
+                <form class="popup-form">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit">Send Me Deals!</button>
+                </form>
+                <p class="popup-disclaimer">No spam, ever. Unsubscribe anytime.</p>
+            </div>
+            <div class="popup-success">
+                <div class="popup-icon">&#127881;</div>
+                <h2>You're In!</h2>
+                <p>Check your inbox for amazing deals coming your way!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

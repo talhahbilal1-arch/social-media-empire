@@ -1,0 +1,45 @@
+# Environment files
+.env
+config/.env
+
+# Output files
+output/*.mp3
+output/*.mp4
+output/*.wav
+
+# Assets (user-specific)
+assets/*.jpg
+assets/*.png
+assets/*.jpeg
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Credentials (never commit!)
+*credentials*.json
+*token*.json
+*secret*.json
+*.pickle
+config/youtube_client_secret.json
+config/youtube_token.pickle

@@ -1,0 +1,114 @@
+{
+  "description": "Content ideas for men's fitness and health tips",
+  "brand": "fitnessmadeasy",
+  "categories": {
+    "workouts": {
+      "topics": [
+        "5-minute morning workout for busy men",
+        "Best exercises for men over 35",
+        "Home workout with no equipment",
+        "Strength training basics",
+        "Core exercises that actually work"
+      ],
+      "hooks": [
+        "Stop doing crunches - do THIS instead",
+        "The workout that changed my physique at 40",
+        "Why your workouts aren't working",
+        "This 5-minute routine burns more fat",
+        "The exercise most guys skip (but shouldn't)"
+      ],
+      "search_queries": [
+        "man workout gym",
+        "fitness motivation man",
+        "home workout"
+      ]
+    },
+    "nutrition": {
+      "topics": [
+        "Protein-rich meals for muscle gain",
+        "Foods that boost testosterone naturally",
+        "Meal prep for busy professionals",
+        "Best post-workout nutrition",
+        "Simple healthy eating habits"
+      ],
+      "hooks": [
+        "Eat this to build muscle faster",
+        "Foods killing your testosterone",
+        "Meal prep like a pro in 30 minutes",
+        "What I eat after every workout",
+        "Stop eating this if you want results"
+      ],
+      "search_queries": [
+        "healthy meal prep",
+        "protein food",
+        "man cooking healthy"
+      ]
+    },
+    "lifestyle": {
+      "topics": [
+        "Morning routine for high performance",
+        "Sleep hacks for better recovery",
+        "Stress management for busy men",
+        "Work-life balance tips",
+        "Energy boosters that work"
+      ],
+      "hooks": [
+        "My 5 AM routine that changed everything",
+        "Why you're always tired (and how to fix it)",
+        "The sleep hack every man needs",
+        "How I stay fit with a 60-hour work week",
+        "More energy without caffeine"
+      ],
+      "search_queries": [
+        "morning routine man",
+        "productive lifestyle",
+        "healthy habits"
+      ]
+    },
+    "motivation": {
+      "topics": [
+        "Getting back in shape after 35",
+        "Starting fitness journey tips",
+        "Staying consistent with workouts",
+        "Setting realistic fitness goals",
+        "Overcoming gym intimidation"
+      ],
+      "hooks": [
+        "I started at 40 - here's what I learned",
+        "The truth about getting in shape over 35",
+        "Why most guys quit (and how not to)",
+        "Your age is not an excuse",
+        "It's never too late to start"
+      ],
+      "search_queries": [
+        "fitness motivation",
+        "workout transformation",
+        "gym motivation"
+      ]
+    }
+  },
+  "content_themes": [
+    {
+      "theme": "quick_tips",
+      "format": "tips_carousel",
+      "phrases": ["Quick tip", "Pro tip", "Game changer"]
+    },
+    {
+      "theme": "workout_demo",
+      "format": "demonstration",
+      "phrases": ["Try this", "Form check", "Watch this"]
+    },
+    {
+      "theme": "myth_busting",
+      "format": "educational",
+      "phrases": ["Stop believing this", "The truth about", "What nobody tells you"]
+    }
+  ],
+  "call_to_actions": [
+    "Follow for more fitness tips!",
+    "Save this for your next workout!",
+    "Drop a comment if you're trying this!",
+    "Share with a gym buddy!",
+    "Link in bio for the full routine!"
+  ]
+}

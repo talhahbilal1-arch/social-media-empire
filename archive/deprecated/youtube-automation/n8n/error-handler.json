@@ -1,0 +1,135 @@
+{
+  "name": "YouTube Automation - Error Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "notes": "Catches errors from the main workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "error-details",
+              "name": "error_message",
+              "value": "={{ $json.execution?.error?.message || 'Unknown error' }}",
+              "type": "string"
+            },
+            {
+              "id": "workflow-name",
+              "name": "workflow_name",
+              "value": "={{ $json.workflow?.name || 'Unknown workflow' }}",
+              "type": "string"
+            },
+            {
+              "id": "last-node",
+              "name": "last_node",
+              "value": "={{ $json.execution?.lastNodeExecuted || 'Unknown node' }}",
+              "type": "string"
+            },
+            {
+              "id": "execution-id",
+              "name": "execution_id",
+              "value": "={{ $json.execution?.id || 'Unknown' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-error",
+      "name": "Extract Error Details",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "text": "=🚨 *YouTube Automation Error*\n\n*Workflow:* {{ $json.workflow_name }}\n*Failed Node:* {{ $json.last_node }}\n*Error:* {{ $json.error_message }}\n\n*Execution ID:* {{ $json.execution_id }}\n\n<{{ $env.N8N_URL }}/execution/{{ $json.execution_id }}|View Execution>"
+      },
+      "id": "slack-error",
+      "name": "Slack Error Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [440, -100],
+      "credentials": {
+        "slackWebhookApi": {
+          "id": "YOUR_SLACK_CRED_ID",
+          "name": "Slack Webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_SHEETS_ID }}"
+        },
+        "sheetName": "Errors",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now.toISO() }}",
+            "workflow": "={{ $json.workflow_name }}",
+            "node": "={{ $json.last_node }}",
+            "error": "={{ $json.error_message }}",
+            "execution_id": "={{ $json.execution_id }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "log-error",
+      "name": "Log Error to Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 100],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_CRED_ID",
+          "name": "Google Sheets"
+        }
+      },
+      "notes": "Logs errors to an 'Errors' sheet for tracking"
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract Error Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Error Details": {
+      "main": [
+        [
+          {
+            "node": "Slack Error Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log Error to Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

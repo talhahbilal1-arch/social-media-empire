@@ -1,0 +1,176 @@
+<!--
+  Footer Email Signup Form
+  Use: Website footer, always visible
+
+  Compact design for footer placement
+-->
+
+<style>
+  .sme-footer-signup {
+    --brand-primary: #E91E63;
+
+    background: #1a1a1a;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .sme-footer-container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .sme-footer-title {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .sme-footer-subtitle {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .sme-footer-form {
+    display: flex;
+    gap: 8px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .sme-footer-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #333;
+    color: white;
+  }
+
+  .sme-footer-input::placeholder {
+    color: #888;
+  }
+
+  .sme-footer-input:focus {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 2px;
+  }
+
+  .sme-footer-button {
+    padding: 12px 20px;
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .sme-footer-button:hover {
+    background: #c2185b;
+  }
+
+  .sme-footer-privacy {
+    color: #666;
+    font-size: 11px;
+    margin-top: 12px;
+  }
+
+  .sme-footer-privacy a {
+    color: #888;
+    text-decoration: underline;
+  }
+
+  .sme-footer-success {
+    color: #4caf50;
+    font-weight: bold;
+    display: none;
+  }
+
+  .sme-footer-success.show {
+    display: block;
+  }
+
+  @media (max-width: 480px) {
+    .sme-footer-form {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="sme-footer-signup">
+  <div class="sme-footer-container">
+    <h4 class="sme-footer-title">Stay in the Loop 💌</h4>
+    <p class="sme-footer-subtitle">Get weekly tips, deals, and exclusive content</p>
+
+    <form class="sme-footer-form" id="footer-form" onsubmit="return submitFooterForm(event)">
+      <input
+        type="email"
+        name="email"
+        placeholder="Your email address"
+        class="sme-footer-input"
+        required
+      >
+      <button type="submit" class="sme-footer-button">
+        Join Free
+      </button>
+    </form>
+
+    <p class="sme-footer-privacy">
+      No spam. Unsubscribe anytime. <a href="/privacy">Privacy Policy</a>
+    </p>
+
+    <p class="sme-footer-success" id="footer-success">
+      ✓ You're subscribed! Check your inbox.
+    </p>
+  </div>
+</div>
+
+<script>
+async function submitFooterForm(e) {
+  e.preventDefault();
+
+  const form = document.getElementById('footer-form');
+  const email = form.querySelector('input[name="email"]').value;
+
+  const config = {
+    formId: 'YOUR_CONVERTKIT_FORM_ID',
+    apiEndpoint: '/api/subscribe'
+  };
+
+  try {
+    const response = await fetch(config.apiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        form_id: config.formId,
+        source: 'footer_form'
+      })
+    });
+
+    if (response.ok) {
+      form.style.display = 'none';
+      document.getElementById('footer-success').classList.add('show');
+
+      // Track conversion
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'signup', {
+          event_category: 'email',
+          event_label: 'footer_form'
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Signup error:', error);
+    alert('Something went wrong. Please try again.');
+  }
+
+  return false;
+}
+</script>

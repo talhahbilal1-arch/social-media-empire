@@ -1,0 +1,332 @@
+<!--
+  Email Signup Popup Form
+  Trigger: After 5 seconds or 50% scroll
+  Exit intent trigger available
+
+  Customize colors by replacing CSS variables:
+  --brand-primary: Brand main color
+  --brand-secondary: Brand accent color
+-->
+
+<style>
+  :root {
+    --brand-primary: #E91E63;
+    --brand-secondary: #FFC107;
+  }
+
+  .sme-popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .sme-popup-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .sme-popup-container {
+    background: white;
+    border-radius: 16px;
+    max-width: 480px;
+    width: 90%;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .sme-popup-overlay.active .sme-popup-container {
+    transform: scale(1);
+  }
+
+  .sme-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s;
+  }
+
+  .sme-popup-close:hover {
+    color: #333;
+  }
+
+  .sme-popup-emoji {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .sme-popup-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .sme-popup-subtitle {
+    font-size: 16px;
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+
+  .sme-popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sme-popup-input {
+    padding: 14px 18px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .sme-popup-input:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+  }
+
+  .sme-popup-button {
+    padding: 16px;
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .sme-popup-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .sme-popup-privacy {
+    font-size: 12px;
+    text-align: center;
+    color: #999;
+    margin-top: 15px;
+  }
+
+  .sme-popup-privacy a {
+    color: var(--brand-primary);
+    text-decoration: none;
+  }
+
+  .sme-popup-success {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .sme-popup-success-emoji {
+    font-size: 64px;
+    margin-bottom: 15px;
+  }
+
+  .sme-popup-success-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .sme-popup-success-text {
+    color: #666;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    .sme-popup-container {
+      padding: 30px 20px;
+      margin: 10px;
+    }
+
+    .sme-popup-title {
+      font-size: 24px;
+    }
+  }
+</style>
+
+<div id="sme-popup" class="sme-popup-overlay">
+  <div class="sme-popup-container">
+    <button class="sme-popup-close" onclick="SMEPopup.close()">&times;</button>
+
+    <div id="sme-popup-content">
+      <div class="sme-popup-emoji">🎁</div>
+      <h2 class="sme-popup-title">Get Your Free Guide!</h2>
+      <p class="sme-popup-subtitle">
+        Join 10,000+ subscribers and get our best tips delivered straight to your inbox.
+      </p>
+
+      <form class="sme-popup-form" onsubmit="SMEPopup.submit(event)">
+        <input
+          type="text"
+          name="first_name"
+          placeholder="First Name"
+          class="sme-popup-input"
+          required
+        >
+        <input
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          class="sme-popup-input"
+          required
+        >
+        <button type="submit" class="sme-popup-button">
+          Send Me the Free Guide! 📬
+        </button>
+      </form>
+
+      <p class="sme-popup-privacy">
+        We respect your privacy. Unsubscribe anytime.
+        <a href="/privacy">Privacy Policy</a>
+      </p>
+    </div>
+
+    <div id="sme-popup-success" style="display: none;">
+      <div class="sme-popup-success">
+        <div class="sme-popup-success-emoji">🎉</div>
+        <h3 class="sme-popup-success-title">You're In!</h3>
+        <p class="sme-popup-success-text">
+          Check your inbox for your free guide.<br>
+          (Don't forget to check your spam folder!)
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SMEPopup = {
+  config: {
+    delay: 5000,           // Show after 5 seconds
+    scrollTrigger: 50,     // Or after 50% scroll
+    exitIntent: true,      // Show on exit intent
+    cookieDays: 7,         // Don't show again for 7 days
+    formId: 'YOUR_CONVERTKIT_FORM_ID',
+    apiEndpoint: '/api/subscribe'
+  },
+
+  init() {
+    if (this.hasSeenPopup()) return;
+
+    // Delay trigger
+    setTimeout(() => this.show(), this.config.delay);
+
+    // Scroll trigger
+    window.addEventListener('scroll', () => {
+      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      if (scrollPercent >= this.config.scrollTrigger) {
+        this.show();
+      }
+    });
+
+    // Exit intent trigger
+    if (this.config.exitIntent) {
+      document.addEventListener('mouseout', (e) => {
+        if (e.clientY <= 0) {
+          this.show();
+        }
+      });
+    }
+
+    // Close on overlay click
+    document.getElementById('sme-popup').addEventListener('click', (e) => {
+      if (e.target.id === 'sme-popup') {
+        this.close();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.close();
+      }
+    });
+  },
+
+  show() {
+    if (this.hasSeenPopup()) return;
+    document.getElementById('sme-popup').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  },
+
+  close() {
+    document.getElementById('sme-popup').classList.remove('active');
+    document.body.style.overflow = '';
+    this.setCookie();
+  },
+
+  async submit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const data = {
+      email: formData.get('email'),
+      first_name: formData.get('first_name'),
+      form_id: this.config.formId
+    };
+
+    try {
+      const response = await fetch(this.config.apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        document.getElementById('sme-popup-content').style.display = 'none';
+        document.getElementById('sme-popup-success').style.display = 'block';
+        this.setCookie();
+
+        // Track conversion
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'signup', { event_category: 'email' });
+        }
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  },
+
+  hasSeenPopup() {
+    return document.cookie.includes('sme_popup_seen=true');
+  },
+
+  setCookie() {
+    const days = this.config.cookieDays;
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `sme_popup_seen=true;expires=${date.toUTCString()};path=/`;
+  }
+};
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => SMEPopup.init());
+</script>

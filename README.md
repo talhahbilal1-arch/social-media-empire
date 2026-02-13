@@ -1,131 +1,265 @@
-# Social Media Content Empire
+# Social Media Empire
 
-Fully autonomous social media content system that runs 24/7 without manual intervention.
+Automated content creation and distribution system for multiple brands across social media platforms.
+
+## Overview
+
+Social Media Empire automates the entire content pipeline from idea generation to multi-platform posting for:
+
+- **Daily Deal Darling** - Lifestyle deals and product recommendations
+- **Menopause Planner** - Menopause wellness and support
+- **Nurse Planner** - Nurse lifestyle and self-care
+- **ADHD Planner** - ADHD-friendly productivity tips
+
+## Features
+
+### Video Automation
+- AI-powered content generation using Google Gemini
+- Stock media from Pexels API
+- Video rendering via Creatomate
+- Multi-platform posting (YouTube Shorts, Pinterest, TikTok, Instagram Reels)
+- Scheduled posting (6 AM, 12 PM, 6 PM PST)
+
+### Email Marketing
+- ConvertKit integration for subscriber management
+- Resend for transactional emails
+- Automated welcome sequences (7 emails per brand)
+- Weekly newsletter templates
+- Website signup forms (popup, inline, footer)
+
+### Monitoring & Reliability
+- Health checks for all integrated services
+- Error tracking and alerting
+- Daily performance reports
+- Self-healing automation for failed tasks
 
 ## Architecture
 
 ```
-TREND DISCOVERY (5 AM)      ← Finds trending products, topics, news
-        ↓
-CONTENT BRAIN (6 AM)        ← Generates content using AI + trends
-        ↓
-BLOG FACTORY (7 AM)         ← Creates SEO blog articles
-        ↓
-VIDEO FACTORY (8 AM)        ← Renders short-form videos
-        ↓
-MULTI-PLATFORM POSTER       ← Posts to Pinterest, YouTube, etc.
-(9 AM, 1 PM, 9 PM)            (via Make.com for TikTok/Instagram)
-        ↓
-ANALYTICS COLLECTOR (11 PM) ← Tracks performance
-        ↓
-SELF-IMPROVEMENT (Weekly)   ← Optimizes everything automatically
-        ↓
-HEALTH MONITOR (Hourly)     ← Alerts only if something breaks
+social-media-empire/
+├── .github/workflows/     # GitHub Actions automation
+├── video_automation/      # Video generation system
+├── email_marketing/       # Email campaigns and forms
+├── database/              # Supabase integration
+├── monitoring/            # Health checks and reporting
+├── utils/                 # Shared utilities and API clients
+└── products/              # Brand-specific product assets
 ```
 
-## Agents
+## Quick Start
 
-| Agent | Schedule | Description |
-|-------|----------|-------------|
-| Trend Discovery | 5:00 AM | Finds trending topics from Amazon, Reddit, Google Trends, news |
-| Content Brain | 6:00 AM | Uses Claude AI to generate 10-20 content pieces per brand |
-| Blog Factory | 7:00 AM | Creates full SEO blog articles, publishes to Netlify |
-| Video Factory | 8:00 AM | Renders videos using Creatomate |
-| Multi-Platform Poster | 3x daily | Posts to Pinterest, YouTube (TikTok/IG via Make.com) |
-| Analytics Collector | 11:00 PM | Collects engagement metrics |
-| Self-Improvement | Sundays | Analyzes patterns, optimizes system automatically |
-| Health Monitor | Hourly | Checks health, alerts only on failures |
+### Prerequisites
+- Python 3.11+
+- GitHub account with Actions enabled
+- API keys for all integrations
 
-## Setup
-
-### 1. Run Database Schema
-
-Copy `database/schema.sql` and run it in your Supabase SQL Editor.
-
-### 2. Configure GitHub Secrets
-
-Go to your repository → Settings → Secrets and add:
-
-```
-SUPABASE_URL          = https://your-project.supabase.co
-SUPABASE_KEY          = your-anon-key
-
-ANTHROPIC_API_KEY     = sk-ant-...
-
-CREATOMATE_API_KEY    = your-creatomate-key (optional)
-
-NETLIFY_API_TOKEN     = your-netlify-token (optional)
-NETLIFY_SITE_ID       = your-site-id (optional)
-
-YOUTUBE_API_KEY       = your-youtube-key (optional)
-
-ALERT_EMAIL_FROM      = your-gmail@gmail.com
-ALERT_EMAIL_PASSWORD  = gmail-app-password
-ALERT_EMAIL_TO        = alerts@youremail.com
-```
-
-### 3. Push to GitHub
+### Installation
 
 ```bash
-git init
-git add .
-git commit -m "Initial setup"
-git remote add origin https://github.com/yourusername/social-media-empire.git
-git push -u origin main
+# Clone the repository
+git clone https://github.com/yourusername/social-media-empire.git
+cd social-media-empire
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy environment template
+cp .env.example .env
+# Edit .env with your API keys
 ```
 
-### 4. Enable GitHub Actions
+### Environment Variables
 
-Go to repository → Actions → Enable workflows
+Create a `.env` file with:
 
-## Brands
+```env
+# AI Services
+ANTHROPIC_API_KEY=your_key
+GEMINI_API_KEY=your_key
 
-Currently configured for:
+# Media Services
+PEXELS_API_KEY=your_key
+CREATOMATE_API_KEY=your_key
 
-1. **Daily Deal Darling** - Pinterest/Amazon affiliate (beauty, home, lifestyle)
-2. **The Menopause Planner** - Etsy + Pinterest (menopause planners, wellness)
+# Database
+SUPABASE_URL=your_url
+SUPABASE_KEY=your_key
 
-To add a new brand:
-1. Add to `brands` table in Supabase
-2. Add configuration in `agents/content_brain.py` BRAND_GUIDELINES
-3. Add configuration in `agents/trend_discovery.py` BRAND_CONFIG
-4. Add configuration in `agents/blog_factory.py` BRAND_CONFIG
+# Email
+RESEND_API_KEY=your_key
+CONVERTKIT_API_KEY=your_key
+CONVERTKIT_API_SECRET=your_secret
 
-## Make.com Integration
+# Social Platforms
+YOUTUBE_CLIENT_ID=your_id
+YOUTUBE_CLIENT_SECRET=your_secret
+YOUTUBE_REFRESH_TOKEN=your_token
+MAKE_COM_PINTEREST_WEBHOOK=your_webhook
 
-For TikTok and Instagram posting (which don't have easy APIs), use Make.com:
+# Alerts
+ALERT_EMAIL=your_email
+```
 
-1. Create a scenario that triggers on schedule (9 AM, 1 PM, 9 PM)
-2. Fetch pending content from Supabase using HTTP module
-3. Post to TikTok/Instagram using their modules
-4. Update post status in Supabase
+### GitHub Secrets
 
-## Costs
+Add these secrets to your repository for GitHub Actions:
+- All environment variables listed above
 
-| Service | Estimated Monthly Cost |
-|---------|----------------------|
-| GitHub Actions | Free (2000 min/month) |
-| Supabase | Free tier |
-| Claude API | ~$5-20 |
-| Creatomate | $39 (100 videos) |
-| Make.com | $9-16 |
-| **Total** | **~$55-75/month** |
+### Database Setup
+
+Run the schema in Supabase SQL Editor:
+
+```bash
+# The schema is in database/schemas.sql
+```
+
+## Usage
+
+### Generate Videos Manually
+
+```bash
+# Generate for all brands
+python -m video_automation.daily_video_generator
+
+# Generate for specific brand
+python -m video_automation.daily_video_generator --brand daily_deal_darling
+
+# Dry run (don't post)
+python -m video_automation.daily_video_generator --dry-run
+```
+
+### Health Checks
+
+```bash
+# Run full health check
+python -m monitoring.health_checker --full
+
+# Quick check (critical services only)
+python -m monitoring.health_checker
+
+# Output as JSON
+python -m monitoring.health_checker --json
+```
+
+### Daily Reports
+
+```bash
+# Generate report
+python -m monitoring.daily_report_generator
+
+# Generate and send via email
+python -m monitoring.daily_report_generator --send
+```
+
+### Error Reporting
+
+```bash
+# View error summary
+python -m monitoring.error_reporter --summary
+
+# Send error digest
+python -m monitoring.error_reporter --digest
+```
+
+## GitHub Actions Workflows
+
+| Workflow | Schedule | Description |
+|----------|----------|-------------|
+| video-automation-morning | 6 AM PST | Generate and post morning videos |
+| video-automation-noon | 12 PM PST | Generate and post noon videos |
+| video-automation-evening | 6 PM PST | Generate and post evening videos |
+| email-automation | 9 AM, 5 PM PST | Process email sequences |
+| health-monitoring | Every 4 hours | Check service health |
+| error-alerts | Hourly | Monitor for critical errors |
+| daily-report | 9 PM PST | Send daily performance report |
+| self-healing | Every 6 hours | Retry failed tasks, cleanup |
+
+## API Integrations
+
+| Service | Purpose | Documentation |
+|---------|---------|---------------|
+| Google Gemini | AI content generation | [API Docs](https://ai.google.dev/docs) |
+| Pexels | Stock photos/videos | [API Docs](https://www.pexels.com/api/documentation/) |
+| Creatomate | Video rendering | [API Docs](https://creatomate.com/docs/api/introduction) |
+| Supabase | Database | [API Docs](https://supabase.com/docs) |
+| Resend | Email delivery | [API Docs](https://resend.com/docs/api-reference) |
+| ConvertKit | Email marketing | [API Docs](https://developers.convertkit.com/) |
+| YouTube | Video uploads | [API Docs](https://developers.google.com/youtube/v3) |
+| Make.com | Pinterest webhooks | [Documentation](https://www.make.com/en/help) |
 
 ## Monitoring
 
-- Health Monitor runs hourly and emails you ONLY if something breaks
-- Silence = everything working
-- Check `health_checks` and `agent_runs` tables for history
-- Check `system_changes` table for automatic optimizations
+### Health Score
 
-## Manual Triggers
+The system calculates a health score (0-100) based on:
+- Video completion rate (40 points)
+- Service health (30 points)
+- Error status (30 points)
 
-You can manually trigger any agent from GitHub Actions:
+### Alerts
 
-1. Go to Actions tab
-2. Select the workflow
-3. Click "Run workflow"
+Alerts are sent for:
+- Critical service failures
+- Failed video generation
+- Unresolved critical errors
+- Daily summaries
+
+## Development
+
+### Running Tests
+
+```bash
+pytest tests/
+```
+
+### Code Style
+
+```bash
+# Check style
+flake8 .
+
+# Format code
+black .
+```
+
+### Adding a New Brand
+
+1. Add brand config in `utils/config.py`
+2. Add content generator config in `video_automation/video_content_generator.py`
+3. Create video template in `video_automation/templates/`
+4. Add content bank in `video_automation/content_bank/`
+5. Create email sequence in `email_marketing/sequences/`
+6. Add ConvertKit setup in `email_marketing/convertkit_setup/`
+
+## Troubleshooting
+
+### Common Issues
+
+**Videos not posting:**
+- Check API credentials in GitHub Secrets
+- Verify Creatomate template IDs
+- Check Make.com webhook status
+
+**Emails not sending:**
+- Verify Resend API key
+- Check domain verification
+- Review ConvertKit form IDs
+
+**Health check failing:**
+- Run manual health check with `--full` flag
+- Check specific service status
+- Verify API quotas
+
+### Logs
+
+- GitHub Actions logs: Check workflow runs
+- Database logs: Query `errors` table in Supabase
+- Health history: Query `analytics` table for `event_type='health_check'`
 
 ## License
 
-Private - All rights reserved
+This project is proprietary. All rights reserved.
+
+## Support
+
+For issues, please create a GitHub issue or contact the development team.

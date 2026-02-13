@@ -1,0 +1,110 @@
+name: Video Automation - Evening (6 PM PST)
+
+on:
+  schedule:
+    # 6 PM PST = 2 AM UTC next day (during PST) or 1 AM UTC next day (during PDT)
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Specific brand to generate for (optional)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Generate but do not post'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-videos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run health check
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python -m monitoring.health_checker --json > health_check.json
+          cat health_check.json
+
+      - name: Generate and post videos
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+        run: |
+          echo "=== LATE API KEYS STATUS ==="
+          [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: ✅" || echo "LATE_API_KEY: ❌"
+          [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: ✅" || echo "LATE_API_KEY_2: ❌"
+          [ -n "$LATE_API_KEY_3" ] && echo "LATE_API_KEY_3: ✅" || echo "LATE_API_KEY_3: ❌"
+          [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: ✅" || echo "LATE_API_KEY_4: ❌"
+          echo ""
+          echo "=== BRAND SLOT CONFIGURATION ==="
+          python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('evening'); print(f'Brands for evening slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
+          echo ""
+          ARGS="--slot evening"
+          if [ "${{ github.event.inputs.brand }}" != "" ]; then
+            ARGS="--brand ${{ github.event.inputs.brand }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          echo "=== RUNNING VIDEO GENERATOR ==="
+          echo "Args: $ARGS"
+
+          # Run generation - capture exit code but don't fail on partial failures
+          python -m video_automation.daily_video_generator $ARGS || exit_code=$?
+
+          # Only fail if exit code is 2 (no videos generated at all)
+          # Exit code 1 means videos generated but posting partially failed (acceptable)
+          if [ "${exit_code:-0}" -eq 2 ]; then
+            echo "::error::No videos were generated - check Gemini/Pexels API"
+            exit 1
+          fi
+
+          echo "Video generation completed (some platform postings may have failed)"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evening-generation-logs
+          path: |
+            *.log
+            health_check.json
+          retention-days: 7
+
+  # Email notifications disabled - self-healing handles failures
+  # Weekly summary includes video generation stats

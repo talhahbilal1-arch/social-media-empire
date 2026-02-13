@@ -1,0 +1,60 @@
+name: ToolPilot Deploy
+
+on:
+  push:
+    branches: [main, revenue-site]
+    paths:
+      - 'ai-tools-hub/**'
+  workflow_dispatch:
+    inputs:
+      generate_content:
+        description: 'Generate new AI tool reviews'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-tools-hub
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ai-tools-hub/package-lock.json
+
+      - run: npm ci
+
+      - name: Generate new content
+        if: github.event.inputs.generate_content == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node scripts/generate-content.js
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content/
+          git diff --cached --quiet || git commit -m "content: auto-generated AI tool reviews"
+          git push
+
+      - run: npm run build
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: ai-tools-hub/out
+          production-deploy: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions - ${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+          NETLIFY_SITE_ID: '616e7bf4-fe47-495b-b13e-934e51546d4c'

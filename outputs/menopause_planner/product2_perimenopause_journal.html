@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perimenopause Journal</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#A5A58D;--rose:#DDBEA9;--cream:#FAF7F0;--taupe:#A39384;--deep:#6B705C}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#333;background:var(--cream);line-height:1.5}
+.pg{width:8.5in;min-height:11in;margin:0 auto;padding:.75in;background:#fff;position:relative}
+.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,var(--rose),var(--sage))}
+.cover h1{font-size:2.4em;color:#fff;margin-bottom:.3em;letter-spacing:1px}
+.cover h2{font-size:1.1em;color:var(--cream);font-weight:400;margin-bottom:2em}
+.cover .sub{color:#fff;font-size:.95em;border-top:2px solid #fff;padding-top:1em;width:60%}
+.hdr{background:var(--deep);color:#fff;text-align:center;padding:.4em;font-size:1.1em;margin-bottom:.5em;border-radius:4px}
+.shdr{background:var(--sage);color:#fff;padding:.3em .6em;font-size:.95em;margin:.5em 0 .3em;border-radius:3px;display:inline-block}
+h3{color:var(--deep);margin:.6em 0 .3em;font-size:1em}
+p{font-size:.85em;margin-bottom:.4em}
+.note{background:var(--cream);border-left:3px solid var(--sage);padding:.4em .6em;font-size:.8em;margin:.5em 0}
+.box{border:1px solid var(--sage);border-radius:4px;padding:.5em;min-height:1in;margin-bottom:.4em}
+.box-sm{border:1px solid var(--rose);border-radius:4px;padding:.4em;min-height:.6in;margin-bottom:.3em}
+.box-label{font-size:.78em;color:var(--taupe);font-weight:600;margin-bottom:.2em}
+.prompt{background:var(--cream);border-radius:6px;padding:.5em .7em;margin:.4em 0;font-style:italic;color:var(--deep);font-size:.88em;border-left:4px solid var(--rose)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.4em}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3em}
+.cl{list-style:none;font-size:.82em;columns:2;column-gap:1em}
+.cl li{margin-bottom:.2em}
+.cl li::before{content:"\2610 ";color:var(--sage)}
+.mood{display:flex;gap:6px;align-items:center;margin:.3em 0;font-size:.82em}
+.mood span{width:28px;height:28px;border:1px solid var(--sage);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75em;color:var(--taupe)}
+.lines{border-bottom:1px solid #e0ddd8;height:28px;margin-bottom:2px}
+.ft{text-align:center;color:var(--taupe);font-size:.7em;position:absolute;bottom:.4in;left:0;right:0}
+.cols2{columns:2;column-gap:1.2em;font-size:.83em}
+.tag{display:inline-block;background:var(--rose);color:var(--deep);padding:2px 8px;border-radius:10px;font-size:.75em;margin:2px}
+table{width:100%;border-collapse:collapse;font-size:.82em;margin:.3em 0}
+th{background:var(--sage);color:#fff;padding:5px;text-align:left;font-size:.78em}
+td{border:1px solid #ddd;padding:5px;height:26px}
+tr:nth-child(even) td{background:var(--cream)}
+@media print{
+  body{background:#fff}
+  .pg{page-break-after:always;margin:0;box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pg:last-child{page-break-after:avoid}
+}
+@media screen{.pg{margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:4px}}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: Cover -->
+<div class="pg cover">
+<div style="font-size:3em;margin-bottom:.3em">&#10047;</div>
+<h1>Perimenopause Journal</h1>
+<h2>Understanding Your Body. Honoring Your Journey.</h2>
+<div class="sub">A 20-Day Guided Journal for Women<br>Navigating the Transition</div>
+<p style="color:#fff;margin-top:3em;font-size:.85em">Name: ___________________________<br><br>Started: _______________</p>
+</div>
+
+<!-- PAGE 2: About Perimenopause -->
+<div class="pg">
+<div class="hdr">Understanding Perimenopause</div>
+
+<h3>What Is Perimenopause?</h3>
+<p>Perimenopause is the transition period leading to menopause, typically beginning in your 40s (sometimes late 30s) and lasting 4-10 years. During this time, your ovaries gradually produce less estrogen, causing hormonal fluctuations that can affect nearly every system in your body.</p>
+
+<h3>Common Symptoms</h3>
+<ul class="cl">
+<li>Irregular periods</li>
+<li>Hot flashes &amp; night sweats</li>
+<li>Sleep disruptions</li>
+<li>Mood changes &amp; anxiety</li>
+<li>Brain fog &amp; forgetfulness</li>
+<li>Weight changes</li>
+<li>Joint pain</li>
+<li>Vaginal dryness</li>
+<li>Low libido</li>
+<li>Heart palpitations</li>
+<li>Headaches</li>
+<li>Fatigue</li>
+<li>Hair &amp; skin changes</li>
+<li>Digestive changes</li>
+</ul>
+
+<h3>The Stages</h3>
+<table>
+<tr><th>Stage</th><th>Duration</th><th>What Happens</th></tr>
+<tr><td><strong>Early Perimenopause</strong></td><td>Variable</td><td>Cycles become irregular; symptoms begin</td></tr>
+<tr><td><strong>Late Perimenopause</strong></td><td>1-3 years</td><td>Longer gaps between periods; symptoms intensify</td></tr>
+<tr><td><strong>Menopause</strong></td><td>1 day</td><td>12 consecutive months without a period</td></tr>
+<tr><td><strong>Postmenopause</strong></td><td>Rest of life</td><td>Symptoms often ease; new health considerations</td></tr>
+</table>
+
+<h3>Why Journal?</h3>
+<p>Journaling during perimenopause helps you:</p>
+<ul class="cl" style="columns:1">
+<li>Identify symptom patterns and triggers</li>
+<li>Process complex emotions about this transition</li>
+<li>Track what helps and what doesn't</li>
+<li>Communicate clearly with your healthcare provider</li>
+<li>Build self-awareness and self-compassion</li>
+<li>Remember that you are not alone in this experience</li>
+</ul>
+
+<div class="note"><strong>Remember:</strong> Perimenopause is not a disease. It is a natural biological transition. You deserve support, understanding, and excellent care during this chapter of your life.</div>
+<div class="ft">Perimenopause Journal &mdash; Page 2</div>
+</div>
+
+<!-- PAGES 3-22: 20 Daily Journal Pages -->
+<div class="pg">
+<div class="hdr">Day 1</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What is one thing about this transition that nobody warned you about? How are you handling it?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 2</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: How has your relationship with your body changed over the past few years? What would you say to your body right now?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 3</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What is something you used to do easily that now feels harder? How can you give yourself grace about it?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 4</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: Who in your life truly understands what you're going through? If no one, what would you want them to know?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 4</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 5</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: Describe a moment this week when you felt strong or capable, despite everything your body is going through.</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 5</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 6</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What does "self-care" actually mean to you right now -- not the Instagram version, but the real, unglamorous kind?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 6</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 7</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: If you could go back and tell your younger self one thing about aging and hormones, what would it be?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 7</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 8</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What boundaries do you need to set (or reinforce) to protect your energy during this season of life?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 8</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 9</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: How has perimenopause affected your work or professional life? What adaptations have you made?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 9</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 10</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: Write about a woman you admire who has navigated aging with honesty or grace. What can you learn from her?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 10</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 11</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What has surprised you most about perimenopause -- something you never expected, good or bad?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 11</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 12</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: How has your relationship with food and eating changed? What does nourishing yourself look like now?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 12</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 13</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What does movement and exercise look like for you now versus five years ago? How do you feel about that shift?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 13</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 14</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: How has perimenopause affected your closest relationships? What conversations still need to happen?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 14</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 15</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What is one thing you have stopped tolerating since entering this phase of life? How does that feel?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 15</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 16</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: Write a letter to anxiety or brain fog. What would you say to this unwelcome companion?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 16</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 17</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What does your ideal "next chapter" look like? What dreams or goals are emerging as priorities shift?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 17</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 18</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: How do you feel about the medical care you've received for perimenopause? What do you wish was different?</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 18</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 19</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: What is one thing about yourself that has actually improved or deepened with age? Celebrate that.</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 19</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Day 20</div>
+<p style="font-size:.82em">Date: _______________</p>
+<h3>Today's Symptoms</h3>
+<ul class="cl">
+<li>Hot flashes</li><li>Night sweats</li><li>Fatigue</li><li>Brain fog</li><li>Mood swings</li><li>Anxiety</li><li>Insomnia</li><li>Joint pain</li><li>Headache</li><li>Bloating</li><li>Low libido</li><li>Heart palpitations</li>
+</ul>
+<p style="font-size:.82em;margin-top:.3em">Other: ______________________________________</p>
+<h3>Mood Scale</h3>
+<div class="mood"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span> <em style="font-size:.8em;color:var(--taupe);margin-left:.3em">1=struggling &bull; 10=thriving</em></div>
+<div class="prompt">Reflection: Write a compassionate message to yourself. What do you need to hear right now? Give yourself permission to feel it all.</div>
+<div class="box"><div class="box-label">Your Thoughts:</div></div>
+<h3>Gratitude</h3>
+<div class="box-sm"><div class="box-label">Three things I'm grateful for today:</div></div>
+<h3>Tomorrow's Intention</h3>
+<div class="box-sm"><div class="box-label">One thing I want to prioritize tomorrow:</div></div>
+<div class="ft">Perimenopause Journal &mdash; Day 20</div>
+</div>
+
+<!-- PAGE 23: Monthly Reflection -->
+<div class="pg">
+<div class="hdr">Monthly Reflection</div>
+<p style="font-size:.82em">Month: _______________ Date Completed: _______________</p>
+
+<h3>Symptom Review</h3>
+<p style="font-size:.82em">Which symptoms were most frequent this month?</p>
+<div class="box" style="min-height:1in"><div class="box-label">Top 3 Symptoms:</div></div>
+
+<h3>Mood Patterns</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Average Mood Rating (1-10):</div></div>
+<div class="box-sm"><div class="box-label">Best Day &mdash; What Made It Good?</div></div>
+</div>
+
+<h3>What Helped Most?</h3>
+<div class="box" style="min-height:1in"><div class="box-label">Strategies, supplements, habits, or people that made a difference:</div></div>
+
+<h3>What I Learned About Myself</h3>
+<div class="box" style="min-height:1.2in"><div class="box-label">Key insights from 20 days of journaling:</div></div>
+
+<h3>What I Want to Change or Try Next Month</h3>
+<div class="box" style="min-height:1in"></div>
+
+<h3>A Word or Phrase to Carry Forward</h3>
+<div class="box-sm" style="text-align:center;font-size:1.1em;padding:.6em"></div>
+<div class="ft">Perimenopause Journal &mdash; Monthly Reflection</div>
+</div>
+
+<!-- PAGE 24-25: Resources -->
+<div class="pg">
+<div class="hdr">Resources &amp; Support</div>
+
+<h3>Books</h3>
+<table>
+<tr><th>Title</th><th>Author</th><th>Focus</th></tr>
+<tr><td>The Menopause Manifesto</td><td>Dr. Jen Gunter</td><td>Evidence-based menopause guide</td></tr>
+<tr><td>What Fresh Hell Is This?</td><td>Heather Corinna</td><td>Perimenopause survival guide</td></tr>
+<tr><td>The New Menopause</td><td>Dr. Mary Claire Haver</td><td>Nutrition &amp; lifestyle approach</td></tr>
+<tr><td>Estrogen Matters</td><td>Dr. Avrum Bluming</td><td>HRT research &amp; evidence</td></tr>
+<tr><td>Next Level</td><td>Dr. Stacy Sims</td><td>Exercise for midlife women</td></tr>
+</table>
+
+<h3>When to See Your Doctor</h3>
+<ul class="cl" style="columns:1">
+<li>Periods are extremely heavy or lasting longer than 7 days</li>
+<li>Bleeding between periods or after sex</li>
+<li>Symptoms significantly affect your daily life</li>
+<li>You experience depression, persistent anxiety, or suicidal thoughts</li>
+<li>Heart palpitations are frequent or concerning</li>
+<li>You want to discuss HRT or other treatment options</li>
+</ul>
+
+<h3>Types of Healthcare Providers</h3>
+<table>
+<tr><th>Provider</th><th>What They Offer</th></tr>
+<tr><td>OB-GYN</td><td>Hormone testing, HRT prescriptions, reproductive health</td></tr>
+<tr><td>Menopause Specialist (NAMS-certified)</td><td>Expert-level menopause management</td></tr>
+<tr><td>Endocrinologist</td><td>Complex hormone imbalances</td></tr>
+<tr><td>Therapist / Counselor</td><td>Emotional support, anxiety, mood changes</td></tr>
+<tr><td>Registered Dietitian</td><td>Nutrition for hormonal health</td></tr>
+</table>
+
+<h3>Helpful Questions for Doctor Appointments</h3>
+<div class="box" style="min-height:1.5in;font-size:.82em">
+<ul class="cl" style="columns:1;margin-top:.3em">
+<li>Am I in perimenopause? What tests can confirm this?</li>
+<li>What are my options for managing [specific symptom]?</li>
+<li>Am I a candidate for hormone replacement therapy?</li>
+<li>What are the risks and benefits of HRT for my situation?</li>
+<li>Are there non-hormonal options I should consider?</li>
+<li>What supplements have evidence behind them?</li>
+<li>When should I come back for a follow-up?</li>
+</ul>
+</div>
+
+<div class="note"><strong>You are not imagining this. Your symptoms are real. You deserve care and support.</strong> Perimenopause is a significant biological event, and seeking help is a sign of strength, not weakness.</div>
+<div class="ft">Perimenopause Journal &mdash; Resources</div>
+</div>
+
+</body>
+</html>

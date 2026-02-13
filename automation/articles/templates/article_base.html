@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{META_DESCRIPTION}}">
+  <meta name="keywords" content="{{META_KEYWORDS}}">
+  <title>{{TITLE}} | Daily Deal Darling</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+
+  <!-- Article Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{TITLE}}",
+    "description": "{{META_DESCRIPTION}}",
+    "datePublished": "{{DATE_PUBLISHED}}",
+    "dateModified": "{{DATE_MODIFIED}}",
+    "author": {
+      "@type": "Organization",
+      "name": "Daily Deal Darling"
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema (if applicable) -->
+  {{FAQ_SCHEMA}}
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="../index.html" class="logo">💝 Daily Deal Darling</a>
+        <ul class="nav-menu">
+          <li><a href="../index.html#categories" class="nav-link">Categories</a></li>
+          <li><a href="../index.html#bestsellers" class="nav-link">Best Sellers</a></li>
+          <li><a href="../index.html#guides" class="nav-link">Buying Guides</a></li>
+          <li><a href="../index.html#deals" class="nav-link">Today's Deals</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <article class="article-container">
+      <!-- Article Hero -->
+      <div class="article-hero">
+        <div class="breadcrumbs">
+          <a href="../index.html">Home</a> /
+          <a href="../index.html#categories">{{CATEGORY}}</a> /
+          <span>{{TITLE}}</span>
+        </div>
+        <h1>{{TITLE}}</h1>
+        <div class="article-hero-meta">
+          <span>Updated {{DATE_DISPLAY}}</span>
+          <span>{{READ_TIME}} min read</span>
+          <span>{{PRODUCT_COUNT}} products featured</span>
+        </div>
+      </div>
+
+      <!-- Article Body -->
+      <div class="article-body">
+        <!-- Introduction -->
+        <div class="article-intro">
+          {{INTRO_CONTENT}}
+        </div>
+
+        <!-- Quick Picks Box -->
+        <div class="quick-picks-box">
+          <h3>Our Top Picks</h3>
+          <ul>
+            {{QUICK_PICKS_LIST}}
+          </ul>
+        </div>
+
+        <!-- Main Content Sections -->
+        {{SECTIONS_CONTENT}}
+
+        <!-- FAQ Section -->
+        {{FAQ_SECTION}}
+
+        <!-- CTA Box -->
+        <div class="article-cta-box">
+          <h3>Found This Helpful?</h3>
+          <p>Explore more buying guides and product recommendations.</p>
+          <div class="cta-buttons">
+            <a href="../index.html#categories" class="btn btn-primary">Browse Categories</a>
+            <a href="../index.html#deals" class="btn btn-secondary">Today's Deals</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <aside class="related-articles">
+        <h3>Related Guides</h3>
+        <div class="related-grid">
+          {{RELATED_ARTICLES}}
+        </div>
+      </aside>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo">💝 Daily Deal Darling</a>
+          <p>Expert-curated product recommendations with honest reviews. Find the best deals on skincare, home, kitchen & more.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Categories</h4>
+          <ul>
+            <li><a href="best-skincare-products-2026.html">Skincare & Beauty</a></li>
+            <li><a href="best-home-organization-2026.html">Home Organization</a></li>
+            <li><a href="best-kitchen-gadgets-2026.html">Kitchen Gadgets</a></li>
+            <li><a href="best-self-care-products-2026.html">Self Care</a></li>
+            <li><a href="best-fitness-gear-2026.html">Fitness Gear</a></li>
+            <li><a href="amazon-finds-under-25.html">Under $25 Finds</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="../index.html#bestsellers">Best Sellers</a></li>
+            <li><a href="../index.html#deals">Today's Deals</a></li>
+            <li><a href="../quizzes/skincare-routine.html">Skincare Quiz</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-disclosure">
+          <strong>Affiliate Disclosure:</strong> Daily Deal Darling is a participant in the Amazon Services LLC Associates Program. When you click links and make purchases, we may earn a commission at no extra cost to you. We only recommend products we genuinely believe in.
+        </p>
+        <p>&copy; {{YEAR}} Daily Deal Darling. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

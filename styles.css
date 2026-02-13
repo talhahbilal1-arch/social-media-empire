@@ -1,0 +1,691 @@
+/* Daily Deal Darling - Main Stylesheet */
+/* Brand Colors: Coral/Salmon, Soft Pink, Gold, Dark Gray */
+
+:root {
+    --coral: #FF6B6B;
+    --coral-light: #E8A598;
+    --soft-pink: #FFE5E5;
+    --gold: #FFD93D;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --white: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--soft-pink);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    background: var(--white);
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 10px var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--coral);
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--text-dark);
+}
+
+.tagline {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-top: 0.25rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--coral);
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--white) 0%, var(--soft-pink) 100%);
+    border-radius: 20px;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 20px var(--shadow);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: var(--coral);
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+/* Section Headers */
+section {
+    margin-bottom: 3rem;
+}
+
+section h2 {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Quiz Grid */
+.quiz-grid, .article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Cards */
+.card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.card p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.card-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--text-dark);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* CTA Button */
+.cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-light) 100%);
+    color: var(--white);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+/* Quiz Page Styles */
+.quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.quiz-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.quiz-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--coral);
+}
+
+.quiz-header p {
+    color: var(--text-light);
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--coral);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.quiz-question {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+.quiz-question h3 {
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.quiz-option {
+    padding: 1rem 1.5rem;
+    background: var(--soft-pink);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.quiz-option:hover {
+    border-color: var(--coral-light);
+    background: var(--white);
+}
+
+.quiz-option.selected {
+    border-color: var(--coral);
+    background: var(--coral);
+    color: var(--white);
+}
+
+.quiz-progress {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.quiz-progress-bar {
+    background: linear-gradient(90deg, var(--coral), var(--gold));
+    height: 8px;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.quiz-btn {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.quiz-btn-prev {
+    background: var(--white);
+    color: var(--text-dark);
+    border: 2px solid var(--coral-light);
+}
+
+.quiz-btn-next {
+    background: linear-gradient(135deg, var(--coral), var(--coral-light));
+    color: var(--white);
+}
+
+.quiz-btn:hover {
+    transform: scale(1.05);
+}
+
+.quiz-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Results Section */
+.quiz-results {
+    display: none;
+    background: var(--white);
+    border-radius: 15px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px var(--shadow);
+}
+
+.quiz-results.show {
+    display: block;
+}
+
+.quiz-results h2 {
+    color: var(--coral);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.result-icon {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.product-recommendations {
+    margin-top: 2rem;
+}
+
+.product-card {
+    background: var(--soft-pink);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.product-card h4 {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+}
+
+.product-card p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.product-link {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--text-dark);
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.product-link:hover {
+    background: var(--coral);
+    color: var(--white);
+}
+
+/* Article Page Styles */
+article {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px var(--shadow);
+}
+
+article h1 {
+    color: var(--coral);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+article .date {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+article h2 {
+    color: var(--text-dark);
+    font-size: 1.4rem;
+    margin: 2rem 0 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--soft-pink);
+}
+
+article p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+}
+
+article .product-link {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Footer */
+footer {
+    background: var(--white);
+    padding: 2rem;
+    margin-top: auto;
+    text-align: center;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.disclosure {
+    background: var(--soft-pink);
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-links a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+    color: var(--coral);
+}
+
+.footer-copyright {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+/* Email Popup Overlay */
+.email-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.email-popup-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.email-popup {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 450px;
+    width: 90%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.email-popup-overlay.show .email-popup {
+    transform: scale(1);
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--soft-pink);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-close:hover {
+    background: var(--coral);
+    color: var(--white);
+}
+
+.popup-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.email-popup h2 {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.email-popup p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.popup-form input[type="email"] {
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--soft-pink);
+    border-radius: 30px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.popup-form input[type="email"]:focus {
+    border-color: var(--coral);
+}
+
+.popup-form button {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-light) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.popup-form button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+.popup-disclaimer {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 1rem;
+}
+
+.popup-success {
+    display: none;
+}
+
+.popup-success.show {
+    display: block;
+}
+
+/* Footer Signup */
+.footer-signup {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--soft-pink) 0%, #fff 100%);
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.footer-signup h3 {
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.footer-signup-form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.footer-signup-form input[type="email"] {
+    flex: 1;
+    min-width: 250px;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid var(--white);
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.footer-signup-form input[type="email"]:focus {
+    border-color: var(--coral);
+}
+
+.footer-signup-form button {
+    padding: 0.8rem 1.5rem;
+    background: var(--coral);
+    color: var(--white);
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.footer-signup-form button:hover {
+    background: var(--text-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    nav ul {
+        gap: 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .quiz-grid, .article-grid {
+        grid-template-columns: 1fr;
+    }
+
+    article {
+        padding: 1.5rem;
+    }
+
+    .quiz-nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .quiz-btn {
+        width: 100%;
+    }
+}

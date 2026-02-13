@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-950 text-gray-100;
+  }
+}
+
+/* Article content styling */
+.article-content h2 {
+  @apply text-2xl font-bold mt-10 mb-4 text-white;
+}
+
+.article-content h3 {
+  @apply text-xl font-semibold mt-8 mb-3 text-gray-100;
+}
+
+.article-content p {
+  @apply mb-5 leading-relaxed text-gray-300;
+}
+
+.article-content ul, .article-content ol {
+  @apply mb-5 pl-6 space-y-2 text-gray-300;
+}
+
+.article-content ul {
+  @apply list-disc;
+}
+
+.article-content ol {
+  @apply list-decimal;
+}
+
+.article-content li {
+  @apply leading-relaxed;
+}
+
+.article-content a {
+  @apply text-emerald-400 underline hover:text-emerald-300 transition-colors;
+}
+
+.article-content table {
+  @apply w-full mb-6 border-collapse;
+}
+
+.article-content th {
+  @apply bg-gray-800 text-left p-3 font-semibold border border-gray-700;
+}
+
+.article-content td {
+  @apply p-3 border border-gray-700;
+}
+
+.article-content blockquote {
+  @apply border-l-4 border-emerald-500 pl-4 my-6 italic text-gray-400;
+}
+
+.article-content strong {
+  @apply text-white font-semibold;
+}
+
+/* Gutenberg block compatibility */
+.article-content .wp-block-heading { }
+.article-content .wp-block-paragraph { }
+.article-content .wp-block-table { @apply overflow-x-auto; }
+.article-content .wp-block-buttons { @apply flex gap-3 my-6; }
+.article-content .wp-block-button__link {
+  @apply inline-block bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-500 transition-colors no-underline;
+}

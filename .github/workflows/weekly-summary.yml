@@ -1,0 +1,222 @@
+name: Weekly Summary Report
+
+on:
+  schedule:
+    # Run every Sunday at 9 AM PST (5 PM UTC)
+    - cron: '0 17 * * 0'
+  workflow_dispatch:
+    inputs:
+      send_email:
+        description: 'Send report via email'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-weekly-summary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate weekly summary
+        id: summary
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+        run: |
+          python -c "
+          import json
+          import os
+          from datetime import datetime, timedelta
+          from database.supabase_client import get_supabase_client
+
+          db = get_supabase_client()
+          today = datetime.now()
+          week_ago = today - timedelta(days=7)
+
+          summary = {
+              'period': f'{week_ago.strftime(\"%b %d\")} - {today.strftime(\"%b %d, %Y\")}',
+              'generated_at': today.isoformat(),
+              'videos': {'created': 0, 'posted': 0, 'failed': 0, 'by_brand': {}},
+              'articles': {'created': 0, 'by_brand': {}},
+              'email': {'new_subscribers': 0, 'total_subscribers': 0},
+              'errors': {'total': 0, 'resolved': 0, 'unresolved': 0},
+              'self_healing': {'runs': 0, 'videos_retried': 0, 'issues_fixed': 0},
+              'platforms': {'youtube': 0, 'pinterest': 0, 'tiktok': 0, 'instagram': 0}
+          }
+
+          # Get video stats
+          try:
+              videos = db.client.table('videos').select('*').gte('created_at', week_ago.isoformat()).execute()
+              video_list = videos.data or []
+              summary['videos']['created'] = len(video_list)
+              summary['videos']['posted'] = len([v for v in video_list if v.get('status') == 'posted'])
+              summary['videos']['failed'] = len([v for v in video_list if v.get('status') == 'failed'])
+
+              for v in video_list:
+                  brand = v.get('brand', 'unknown')
+                  summary['videos']['by_brand'][brand] = summary['videos']['by_brand'].get(brand, 0) + 1
+          except Exception as e:
+              print(f'Error getting video stats: {e}')
+
+          # Get error stats
+          try:
+              errors = db.client.table('errors').select('*').gte('created_at', week_ago.isoformat()).execute()
+              error_list = errors.data or []
+              summary['errors']['total'] = len(error_list)
+              summary['errors']['resolved'] = len([e for e in error_list if e.get('resolved')])
+              summary['errors']['unresolved'] = len([e for e in error_list if not e.get('resolved')])
+          except Exception as e:
+              print(f'Error getting error stats: {e}')
+
+          # Get self-healing stats
+          try:
+              analytics = db.client.table('analytics').select('*').eq('event_type', 'self_healing').gte('created_at', week_ago.isoformat()).execute()
+              healing_events = analytics.data or []
+              summary['self_healing']['runs'] = len(healing_events)
+              for event in healing_events:
+                  data = event.get('data', {})
+                  summary['self_healing']['videos_retried'] += data.get('videos_retried', 0)
+                  summary['self_healing']['issues_fixed'] += data.get('issues_fixed', 0)
+          except Exception as e:
+              print(f'Error getting self-healing stats: {e}')
+
+          # Get subscriber count
+          try:
+              import requests
+              ck_key = os.environ.get('CONVERTKIT_API_KEY')
+              if ck_key:
+                  resp = requests.get(f'https://api.convertkit.com/v3/subscribers?api_key={ck_key}', timeout=10)
+                  if resp.status_code == 200:
+                      summary['email']['total_subscribers'] = resp.json().get('total_subscribers', 0)
+          except Exception as e:
+              print(f'Error getting subscriber count: {e}')
+
+          # Calculate health score
+          total_videos = summary['videos']['created']
+          posted_videos = summary['videos']['posted']
+          video_success_rate = (posted_videos / total_videos * 100) if total_videos > 0 else 100
+          total_errors = summary['errors']['total']
+          resolved_errors = summary['errors']['resolved']
+          error_resolution_rate = (resolved_errors / total_errors * 100) if total_errors > 0 else 100
+          health_score = int((video_success_rate + error_resolution_rate) / 2)
+          summary['health_score'] = health_score
+
+          with open('weekly_summary.json', 'w') as f:
+              json.dump(summary, f, indent=2)
+          print(json.dumps(summary, indent=2))
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'health_score={health_score}\\n')
+              f.write(f'videos_created={summary[\"videos\"][\"created\"]}\\n')
+          "
+
+      - name: Send weekly email
+        if: github.event_name == 'schedule' || github.event.inputs.send_email == 'true'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          python -c "
+          import os
+          import json
+          import sys
+
+          resend_key = os.environ.get('RESEND_API_KEY', '')
+          alert_email = os.environ.get('ALERT_EMAIL', '')
+
+          if not resend_key or not alert_email:
+              print('Email not configured - skipping')
+              sys.exit(0)
+
+          with open('weekly_summary.json', 'r') as f:
+              summary = json.load(f)
+
+          import resend
+          resend.api_key = resend_key
+
+          health_score = summary.get('health_score', 0)
+          videos = summary.get('videos', {})
+          errors = summary.get('errors', {})
+          healing = summary.get('self_healing', {})
+          email_stats = summary.get('email', {})
+
+          brand_rows = ''
+          for brand, count in videos.get('by_brand', {}).items():
+              brand_rows += f'<tr><td style=\"padding: 8px; border-bottom: 1px solid #eee;\">{brand}</td><td style=\"padding: 8px; text-align: center;\">{count}</td></tr>'
+
+          html = f'''
+          <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">
+            <h1 style=\"color: #1f2937; border-bottom: 2px solid #8b5cf6; padding-bottom: 10px;\">Weekly Summary</h1>
+            <p style=\"color: #6b7280;\">Period: {summary.get(\"period\", \"This Week\")}</p>
+            <div style=\"background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;\">
+              <h2 style=\"margin: 0; font-size: 48px;\">{health_score}</h2>
+              <p style=\"margin: 5px 0 0 0;\">Health Score</p>
+            </div>
+            <h2>Videos</h2>
+            <p>Created: {videos.get(\"created\", 0)} | Posted: {videos.get(\"posted\", 0)} | Failed: {videos.get(\"failed\", 0)}</p>
+            <h3>By Brand</h3>
+            <table style=\"width: 100%; border-collapse: collapse;\">{brand_rows}</table>
+            <h2>Self-Healing</h2>
+            <ul><li>Runs: {healing.get(\"runs\", 0)}</li><li>Videos retried: {healing.get(\"videos_retried\", 0)}</li></ul>
+            <h2>Errors</h2>
+            <p>Total: {errors.get(\"total\", 0)} | Resolved: {errors.get(\"resolved\", 0)} | Unresolved: {errors.get(\"unresolved\", 0)}</p>
+            <h2>Email List</h2>
+            <p>Total subscribers: {email_stats.get(\"total_subscribers\", \"N/A\")}</p>
+            <hr>
+            <p style=\"color: #9ca3af; font-size: 12px;\">Weekly automation summary. Self-healing handles issues automatically.</p>
+          </div>
+          '''
+
+          try:
+              resend.Emails.send({
+                  'from': 'reports@socialmediaempire.com',
+                  'to': [alert_email],
+                  'subject': f'Weekly Summary: Health Score {health_score}/100 | {videos.get(\"created\", 0)} Videos',
+                  'html': html
+              })
+              print('Weekly summary email sent!')
+          except Exception as e:
+              print(f'Failed to send email: {e}')
+          "
+
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-summary-${{ github.run_number }}
+          path: weekly_summary.json
+          retention-days: 90
+
+      - name: Create GitHub summary
+        run: |
+          python -c "
+          import json
+          with open('weekly_summary.json', 'r') as f:
+              s = json.load(f)
+          print('## Weekly Summary')
+          print(f'**Period:** {s.get(\"period\", \"This Week\")}')
+          print(f'**Health Score:** {s.get(\"health_score\", 0)}/100')
+          print('')
+          print('### Videos')
+          print(f'- Created: {s[\"videos\"][\"created\"]}')
+          print(f'- Posted: {s[\"videos\"][\"posted\"]}')
+          print(f'- Failed: {s[\"videos\"][\"failed\"]}')
+          " >> $GITHUB_STEP_SUMMARY

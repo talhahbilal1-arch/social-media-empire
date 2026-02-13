@@ -1,0 +1,48 @@
+{
+  "fitness": {
+    "programs": [
+      {"name": "PLACEHOLDER - ClickBank fitness program", "url": "PLACEHOLDER", "commission": "30-75%"},
+      {"name": "PLACEHOLDER - ShareASale supplement brand", "url": "PLACEHOLDER", "commission": "15-25%"},
+      {"name": "PLACEHOLDER - Bodybuilding.com", "url": "PLACEHOLDER", "commission": "5-15%"}
+    ],
+    "supplements": [
+      {"name": "Transparent Labs Creatine HMB", "url": "PLACEHOLDER_SHAREASALE", "commission": "25%"},
+      {"name": "Legion Athletics Whey+", "url": "PLACEHOLDER_SHAREASALE", "commission": "20%"}
+    ],
+    "equipment": [
+      {"name": "TRX Suspension Trainer", "url": "PLACEHOLDER_SHAREASALE", "commission": "15%"},
+      {"name": "Bowflex SelectTech 552", "url": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20", "commission": "4%"}
+    ],
+    "signup_urls": {
+      "clickbank": "https://www.clickbank.com/affiliate/",
+      "shareasale": "https://www.shareasale.com/",
+      "bodybuilding": "https://www.bodybuilding.com/affiliate"
+    },
+    "note": "Owner must sign up at: clickbank.com, shareasale.com, bodybuilding.com/affiliate"
+  },
+  "deals": {
+    "programs": [
+      {"name": "PLACEHOLDER - ShareASale home/lifestyle", "url": "PLACEHOLDER", "commission": "10-30%"},
+      {"name": "PLACEHOLDER - Impact brands", "url": "PLACEHOLDER", "commission": "5-20%"},
+      {"name": "PLACEHOLDER - Rakuten retailers", "url": "PLACEHOLDER", "commission": "5-15%"}
+    ],
+    "signup_urls": {
+      "shareasale": "https://www.shareasale.com/",
+      "impact": "https://impact.com/",
+      "rakuten": "https://rakutenadvertising.com/"
+    },
+    "note": "Owner must sign up at: shareasale.com, impact.com, rakutenadvertising.com"
+  },
+  "menopause": {
+    "programs": [
+      {"name": "PLACEHOLDER - menopause supplement via ShareASale", "url": "PLACEHOLDER", "commission": "15-30%"},
+      {"name": "PLACEHOLDER - ClickBank health program", "url": "PLACEHOLDER", "commission": "30-75%"},
+      {"name": "Etsy planner", "url": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle", "commission": "100% minus Etsy fees"}
+    ],
+    "signup_urls": {
+      "shareasale": "https://www.shareasale.com/",
+      "clickbank": "https://www.clickbank.com/affiliate/"
+    },
+    "note": "Owner must sign up at: shareasale.com, clickbank.com"
+  }
+}

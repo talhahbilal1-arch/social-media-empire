@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menopause Wellness Planner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nunito+Sans:wght@300;400;600&display=swap');
+
+  :root {
+    --sage: #A5A58D;
+    --rose: #DDBEA9;
+    --cream: #FAF7F0;
+    --taupe: #A39384;
+    --deep-sage: #6B705C;
+    --light-sage: #d4d4bc;
+    --light-rose: #eeddd2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 300;
+    color: #3a3a3a;
+    background: #f0ede8;
+    line-height: 1.5;
+    font-size: 11pt;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    color: var(--deep-sage);
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0.25in auto;
+    padding: 0.6in 0.65in;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    page-break-after: always;
+    position: relative;
+  }
+
+  .page:last-child { page-break-after: auto; }
+
+  /* Cover Page */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 3px double var(--sage);
+    padding: 1in;
+  }
+  .cover .ornament { color: var(--sage); font-size: 28pt; letter-spacing: 8px; margin: 18px 0; }
+  .cover h1 { font-size: 36pt; color: var(--deep-sage); line-height: 1.15; margin-bottom: 8px; font-weight: 300; }
+  .cover .subtitle { font-size: 12pt; color: var(--taupe); max-width: 4.5in; margin: 12px auto; line-height: 1.6; }
+  .cover .year-line { margin-top: 30px; font-size: 14pt; color: var(--sage); letter-spacing: 3px; }
+  .cover .bottom-border { width: 2in; height: 1px; background: var(--rose); margin-top: 30px; }
+  .cover .belongs-to { margin-top: 24px; font-size: 11pt; color: var(--taupe); }
+  .cover .name-line { border-bottom: 1px solid var(--rose); width: 3in; display: inline-block; margin-top: 6px; height: 24px; }
+
+  .page-title {
+    font-size: 22pt;
+    text-align: center;
+    color: var(--deep-sage);
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+  .page-divider {
+    width: 1.5in;
+    height: 1px;
+    background: var(--rose);
+    margin: 8px auto 20px;
+  }
+
+  .section-heading {
+    font-size: 13pt;
+    color: var(--deep-sage);
+    margin: 16px 0 8px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--light-sage);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+  }
+  th {
+    background: var(--sage);
+    color: white;
+    font-weight: 600;
+    padding: 5px 4px;
+    text-align: center;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 8.5pt;
+  }
+  td {
+    border: 1px solid #ddd;
+    padding: 4px 3px;
+    text-align: center;
+    height: 22px;
+  }
+  td.left { text-align: left; padding-left: 6px; }
+
+  .checkbox { display: inline-block; width: 12px; height: 12px; border: 1.5px solid var(--sage); border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .checkbox-item { margin: 5px 0; font-size: 10.5pt; }
+
+  .field-label { font-size: 9pt; color: var(--taupe); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .field-line { border-bottom: 1px solid var(--light-sage); min-height: 22px; margin-bottom: 10px; }
+  .field-line-tall { border-bottom: 1px solid var(--light-sage); min-height: 42px; margin-bottom: 10px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .four-col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+  .note-line { border-bottom: 1px solid #e8e4de; height: 28px; }
+  .note-area { min-height: 0.8in; border: 1px solid #e8e4de; border-radius: 4px; margin: 6px 0; }
+
+  .footer-text {
+    position: absolute;
+    bottom: 0.4in;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 7.5pt;
+    color: var(--taupe);
+    opacity: 0.6;
+  }
+
+  .tip-box {
+    background: var(--cream);
+    border-left: 3px solid var(--sage);
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 9.5pt;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .scale-guide {
+    font-size: 8pt;
+    color: var(--taupe);
+    text-align: center;
+    margin: 2px 0;
+  }
+
+  .card-box {
+    border: 1px solid var(--light-sage);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+
+  .selfcare-item {
+    font-size: 9.5pt;
+    padding: 3px 0;
+    border-bottom: 1px dotted #e8e4de;
+  }
+
+  .lined-page .line {
+    border-bottom: 1px solid #e8e4de;
+    height: 30px;
+  }
+
+  ul.instructions { font-size: 10.5pt; line-height: 1.7; }
+  ul.instructions li { margin-bottom: 6px; }
+
+  @media print {
+    body { background: white; }
+    .page {
+      margin: 0;
+      padding: 0.5in 0.6in;
+      box-shadow: none;
+      width: 100%;
+      min-height: auto;
+      page-break-after: always;
+    }
+    .page:last-child { page-break-after: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover">
+  <div class="ornament">&mdash; &bull; &mdash;</div>
+  <h1>Menopause<br>Wellness Planner</h1>
+  <div class="ornament">&mdash; &bull; &mdash;</div>
+  <p class="subtitle">Your personal guide to tracking symptoms, finding patterns, and feeling empowered</p>
+  <div class="year-line">2 0 2 6</div>
+  <div class="bottom-border"></div>
+  <p class="belongs-to">This planner belongs to:</p>
+  <span class="name-line"></span>
+  <div class="footer-text">Menopause Wellness Planner &bull; Created with care for your journey</div>
+</div>
+
+<!-- PAGE 2: HOW TO USE -->
+<div class="page">
+  <h2 class="page-title">How to Use This Planner</h2>
+  <div class="page-divider"></div>
+  <p style="text-align:center;color:var(--taupe);font-size:10pt;margin-bottom:18px;">This planner is designed to help you track, understand, and manage your menopause journey. Here is what each section is for.</p>
+
+  <h3 class="section-heading">My Menopause Stage</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Identify where you are in your journey. This helps you and your healthcare team understand your baseline.</p>
+
+  <h3 class="section-heading">My Healthcare Team</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Keep all your provider contacts in one place so you always have them when you need them.</p>
+
+  <h3 class="section-heading">Symptom Overview Checklist</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Review the comprehensive list of menopause symptoms. Check the ones you experience to get a clear picture of your symptoms.</p>
+
+  <h3 class="section-heading">Monthly Symptom Trackers</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Use these daily grids to log hot flashes, night sweats, sleep quality, mood, energy, and exercise. Over time, you will see patterns that help you and your doctor make informed decisions.</p>
+
+  <h3 class="section-heading">Weekly Hot Flash Logs</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">For detailed hot flash tracking. Record time, duration, intensity, triggers, and what helped. Great for identifying your personal triggers.</p>
+
+  <h3 class="section-heading">Sleep Quality Tracker</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Track bedtime, wake time, night sweats, and overall sleep quality. Sleep is one of the most affected areas during menopause.</p>
+
+  <h3 class="section-heading">Mood &amp; Energy Log</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Monitor mood fluctuations throughout the day and identify triggers and coping strategies that work for you.</p>
+
+  <h3 class="section-heading">Medication &amp; Supplement Tracker</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Keep a running list of everything you take, including dosage, timing, purpose, and any side effects.</p>
+
+  <h3 class="section-heading">Doctor Visit Preparation</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Prepare for appointments with a checklist, questions, and a symptom summary you can share with your provider.</p>
+
+  <h3 class="section-heading">Self-Care Ideas</h3>
+  <p style="font-size:10pt;margin-bottom:8px;">Browse 40+ ideas organized by category. Circle or highlight the ones that resonate with you.</p>
+
+  <div class="tip-box" style="margin-top:16px;">
+    <strong>Tip:</strong> You do not need to fill in every section every day. Start with what feels manageable and build from there. Even tracking a few things consistently can reveal valuable patterns.
+  </div>
+  <div class="footer-text">Menopause Wellness Planner &bull; Page 2</div>
+</div>
+
+<!-- PAGE 3: MY MENOPAUSE STAGE -->
+<div class="page">
+  <h2 class="page-title">My Menopause Stage</h2>
+  <div class="page-divider"></div>
+
+  <h3 class="section-heading">Where Am I in My Journey?</h3>
+  <div style="margin:14px 0 20px;">
+    <div class="checkbox-item"><span class="checkbox"></span> <strong>Perimenopause</strong> &mdash; Periods are becoming irregular; symptoms are starting</div>
+    <div class="checkbox-item"><span class="checkbox"></span> <strong>Menopause</strong> &mdash; 12+ consecutive months without a period</div>
+    <div class="checkbox-item"><span class="checkbox"></span> <strong>Post-Menopause</strong> &mdash; More than one year since last period</div>
+    <div class="checkbox-item"><span class="checkbox"></span> <strong>Surgical Menopause</strong> &mdash; Following a hysterectomy or oophorectomy</div>
+    <div class="checkbox-item"><span class="checkbox"></span> <strong>Unsure</strong> &mdash; Still figuring it out</div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="field-label">Date Symptoms First Noticed</div>
+      <div class="field-line"></div>
+    </div>
+    <div>
+      <div class="field-label">Date of Last Period</div>
+      <div class="field-line"></div>
+    </div>
+  </div>
+
+  <div class="field-label" style="margin-top:8px;">Age When Symptoms Started</div>
+  <div class="field-line"></div>
+
+  <h3 class="section-heading">My Top Symptoms Right Now</h3>
+  <div class="three-col">
+    <div>
+      <div class="field-label">1.</div><div class="field-line"></div>
+      <div class="field-label">2.</div><div class="field-line"></div>
+      <div class="field-label">3.</div><div class="field-line"></div>
+      <div class="field-label">4.</div><div class="field-line"></div>
+      <div class="field-label">5.</div><div class="field-line"></div>
+    </div>
+    <div>
+      <div class="field-label">6.</div><div class="field-line"></div>
+      <div class="field-label">7.</div><div class="field-line"></div>
+      <div class="field-label">8.</div><div class="field-line"></div>
+      <div class="field-label">9.</div><div class="field-line"></div>
+      <div class="field-label">10.</div><div class="field-line"></div>
+    </div>
+    <div>
+      <div class="field-label">Severity (1-10)</div><div class="field-line"></div>
+      <div class="field-label">Most Bothersome</div><div class="field-line"></div>
+      <div class="field-label">Most Improved</div><div class="field-line"></div>
+      <div class="field-label">New This Month</div><div class="field-line"></div>
+      <div class="field-label">Gone/Reduced</div><div class="field-line"></div>
+    </div>
+  </div>
+
+  <h3 class="section-heading">Current Treatments &amp; Strategies</h3>
+  <div class="field-label">HRT / Medications</div>
+  <div class="field-line-tall"></div>
+  <div class="field-label">Supplements</div>
+  <div class="field-line-tall"></div>
+  <div class="field-label">Lifestyle Changes</div>
+  <div class="field-line-tall"></div>
+  <div class="field-label">What Has Helped Most</div>
+  <div class="field-line-tall"></div>
+
+  <div class="footer-text">Menopause Wellness Planner &bull; Page 3</div>
+</div>
+
+<!-- PAGE 4: MY HEALTHCARE TEAM -->
+<div class="page">
+  <h2 class="page-title">My Healthcare Team</h2>
+  <div class="page-divider"></div>
+  <p style="text-align:center;font-size:10pt;color:var(--taupe);margin-bottom:16px;">Keep your provider information in one convenient place.</p>
+
+  <table>
+    <tr><th style="width:18%;">Provider</th><th style="width:22%;">Name</th><th style="width:18%;">Phone</th><th style="width:22%;">Email</th><th style="width:20%;">Notes</th></tr>
+    <tr><td class="left"><strong>Primary Doctor</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>OB/GYN</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Endocrinologist</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Therapist / Counselor</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Naturopath</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Nutritionist</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Physical Therapist</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Dermatologist</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Pharmacist</strong></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="left"><strong>Other</strong></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h3 class="section-heading" style="margin-top:20px;">Insurance Information</h3>
+  <div class="two-col">
+    <div>
+      <div class="field-label">Insurance Provider</div><div class="field-line"></div>
+      <div class="field-label">Policy Number</div><div class="field-line"></div>
+      <div class="field-label">Group Number</div><div class="field-line"></div>
+    </div>
+    <div>
+      <div class="field-label">Phone Number</div><div class="field-line"></div>
+      <div class="field-label">Pharmacy Name &amp; Phone</div><div class="field-line"></div>
+      <div class="field-label">Pharmacy Address</div><div class="field-line"></div>
+    </div>
+  </div>
+
+  <h3 class="section-heading">Upcoming Appointments</h3>
+  <table>
+    <tr><th>Date</th><th>Time</th><th>Provider</th><th>Purpose</th><th>Notes / Questions</th></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:28px;"></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h3 class="section-heading">Emergency Contacts</h3>
+  <table>
+    <tr><th>Name</th><th>Relationship</th><th>Phone</th><th>Email</th></tr>
+    <tr><td style="height:26px;"></td><td></td><td></td><td></td></tr>
+    <tr><td style="height:26px;"></td><td></td><td></td><td></td></tr>
+  </table>
+  <div class="footer-text">Menopause Wellness Planner &bull; Page 4</div>
+</div>
+
+<!-- PAGE 5: SYMPTOM OVERVIEW CHECKLIST -->
+<div class="page">
+  <h2 class="page-title">Symptom Overview Checklist</h2>
+  <div class="page-divider"></div>
+  <p style="text-align:center;font-size:10pt;color:var(--taupe);margin-bottom:14px;">Check the symptoms you experience. Rate severity: <strong>M</strong> = Mild, <strong>Mod</strong> = Moderate, <strong>S</strong> = Severe</p>
+
+  <div class="two-col">
+    <div>
+      <h3 class="section-heading">Physical Symptoms</h3>
+      <div class="checkbox-item"><span class="checkbox"></span> Hot flashes <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Night sweats <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Irregular periods <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Heavy periods <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Heart palpitations <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Joint pain / stiffness <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Muscle tension <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Headaches / migraines <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Weight gain <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Bloating <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Dry skin / itching <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Hair thinning / loss <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Vaginal dryness <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Urinary issues <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Decreased libido <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Breast tenderness <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Tingling extremities <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Digestive changes <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+
+      <h3 class="section-heading" style="margin-top:14px;">Cognitive Symptoms</h3>
+      <div class="checkbox-item"><span class="checkbox"></span> Brain fog <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Memory lapses <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Difficulty concentrating <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Word-finding difficulty <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+    </div>
+    <div>
+      <h3 class="section-heading">Emotional Symptoms</h3>
+      <div class="checkbox-item"><span class="checkbox"></span> Mood swings <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Irritability <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Anxiety <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Depression <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Crying spells <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Feeling overwhelmed <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Loss of confidence <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Rage / anger episodes <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Panic attacks <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Feeling isolated <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+
+      <h3 class="section-heading" style="margin-top:14px;">Sleep Symptoms</h3>
+      <div class="checkbox-item"><span class="checkbox"></span> Insomnia <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Waking frequently <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Early morning waking <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Fatigue / exhaustion <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Restless legs <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Sleep apnea symptoms <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Vivid dreams <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+      <div class="checkbox-item"><span class="checkbox"></span> Daytime sleepiness <span style="float:right;color:var(--taupe);font-size:8pt;">M / Mod / S</span></div>
+    </div>
+  </div>
+
+  <h3 class="section-heading" style="margin-top:10px;">Other Symptoms</h3>
+  <div class="two-col">
+    <div>
+      <div class="checkbox-item"><span class="checkbox"></span> <div class="field-line" style="display:inline-block;width:80%;"></div></div>
+      <div class="checkbox-item"><span class="checkbox"></span> <div class="field-line" style="display:inline-block;width:80%;"></div></div>
+    </div>
+    <div>
+      <div class="checkbox-item"><span class="checkbox"></span> <div class="field-line" style="display:inline-block;width:80%;"></div></div>
+      <div class="checkbox-item"><span class="checkbox"></span> <div class="field-line" style="display:inline-block;width:80%;"></div></div>
+    </div>
+  </div>
+  <div class="footer-text">Menopause Wellness Planner &bull; Page 5</div>
+</div>
+

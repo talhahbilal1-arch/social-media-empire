@@ -1,0 +1,51 @@
+name: TikTok Content Pipeline
+
+on:
+  schedule:
+    # 3x daily: 5am, 12pm, 6pm PST (1pm, 8pm, 2am UTC)
+    - cron: '0 13 * * *'
+    - cron: '0 20 * * *'
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Number of scripts to generate'
+        required: false
+        default: '1'
+      category:
+        description: 'Content category (optional)'
+        required: false
+        default: ''
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Run TikTok pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_TIKTOK_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_TIKTOK_KEY }}
+        run: |
+          COUNT="${{ github.event.inputs.count || '1' }}"
+          CATEGORY="${{ github.event.inputs.category }}"
+
+          ARGS="--count $COUNT"
+          if [ -n "$CATEGORY" ]; then
+            ARGS="$ARGS --category $CATEGORY"
+          fi
+
+          python3 tiktok_automation/tiktok_pipeline.py $ARGS

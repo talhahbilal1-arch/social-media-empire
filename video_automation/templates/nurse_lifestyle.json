@@ -1,0 +1,106 @@
+{
+  "name": "nurse_lifestyle",
+  "description": "Nurse life hacks and self-care tips",
+  "duration_seconds": 30,
+  "aspect_ratio": "9:16",
+  "brand": "nurse_planner",
+  "segments": [
+    {
+      "name": "hook",
+      "duration": 4,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "large",
+          "animation": "slide_down",
+          "style": "relatable"
+        },
+        "background": {
+          "type": "video",
+          "query": "nurse healthcare coffee"
+        },
+        "emoji_accent": "💉"
+      }
+    },
+    {
+      "name": "problem_relate",
+      "duration": 4,
+      "elements": {
+        "text": {
+          "position": "center",
+          "style": "empathetic"
+        },
+        "background_effect": "slight_zoom"
+      }
+    },
+    {
+      "name": "tip_1",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "number_badge": "1",
+        "icon": "practical"
+      }
+    },
+    {
+      "name": "tip_2",
+      "duration": 6,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "number_badge": "2"
+      }
+    },
+    {
+      "name": "tip_3",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "position": "center",
+          "font_size": "medium"
+        },
+        "number_badge": "3"
+      }
+    },
+    {
+      "name": "cta",
+      "duration": 5,
+      "elements": {
+        "text": {
+          "content": "Grab your free shift planner!",
+          "position": "center",
+          "animation": "bounce"
+        },
+        "stethoscope_icon": true
+      }
+    }
+  ],
+  "colors": {
+    "primary": "#00BCD4",
+    "secondary": "#B2EBF2",
+    "text": "#FFFFFF",
+    "accent": "#004D40"
+  },
+  "music": {
+    "type": "background",
+    "volume": 0.25,
+    "mood": "encouraging"
+  },
+  "content_themes": [
+    "12_hour_shift_survival",
+    "meal_prep_for_nurses",
+    "feet_care_tips",
+    "mental_health_support",
+    "time_management",
+    "scrub_life_hacks",
+    "night_shift_tips",
+    "work_life_balance",
+    "charting_efficiency",
+    "self_care_routines"
+  ]
+}
