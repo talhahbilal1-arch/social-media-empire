@@ -41,6 +41,12 @@ env/
 *.pem
 credentials.json
 
+# Fonts (downloaded at runtime)
+assets/fonts/*.ttf
+
+# Generated pin images
+outputs/pins/
+
 # Cache & Output
 cache/
 output/
