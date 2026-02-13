@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-12",
+  "last_updated": "2026-02-13",
   "items": [
     {
       "id": 1,
@@ -233,11 +233,12 @@
       "id": 32,
       "type": "review",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "surfer-seo",
       "tool_name": "Surfer SEO",
       "category": "seo",
-      "keyword": "surfer seo review 2026"
+      "keyword": "surfer seo review 2026",
+      "published_date": "2026-02-13"
     },
     {
       "id": 33,
