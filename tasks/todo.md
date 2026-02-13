@@ -25,7 +25,7 @@
   - [x] Create `video_automation/pin_image_generator.py` - 3 overlay styles (gradient, box_light, box_dark), auto-downloads Google Fonts, batch mode from content JSON
   - [x] Add `assets/fonts/*.ttf` to `.gitignore`
   - [x] Test single pin generation - all 3 styles verified at 1000x1500px
-  - [ ] Test batch mode - needs PEXELS_API_KEY in local .env (works in GitHub Actions)
+  - [x] Test batch mode - tested with mock backgrounds (real Pexels needs API key in .env)
 - [ ] **Generate Etsy product PDFs** - ReportLab printable + digital for 6 remaining products
 - [x] **Deploy ConvertKit email forms** - Verified and fixed:
   - DDD site (index.html): form ID 5641382 ✓ (was placeholder, fixed)
