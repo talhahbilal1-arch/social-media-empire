@@ -39,7 +39,7 @@ A little about me: I'm obsessed (like, actually obsessed) with finding amazing p
 **CeraVe Moisturizing Cream** - $15.99
 127,000+ 5-star reviews. Dermatologist-recommended. I've been using this for 3 years and my skin has never looked better.
 
-[CHECK CURRENT PRICE →](https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarling1-20)
+[CHECK CURRENT PRICE →](https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20)
 
 Talk soon! (Seriously, I can't wait to share more deals with you!)
 
@@ -84,7 +84,7 @@ Here's why everyone's obsessed:
 
 I put this on before bed and wake up with the softest lips ever. My husband even started stealing it! 😂
 
-[GRAB IT BEFORE IT SELLS OUT AGAIN →](https://www.amazon.com/dp/B07XXPHQZK?tag=dailydealdarling1-20)
+[GRAB IT BEFORE IT SELLS OUT AGAIN →](https://www.amazon.com/dp/B07XXPHQZK?tag=dailydealdarl-20)
 
 **Hot tip:** It often goes on sale during Prime Day and Black Friday, but it also sells out FAST. I always keep a backup!
 
@@ -122,7 +122,7 @@ You asked, I'm delivering! Here are the 5 products I literally use EVERY. SINGLE
 **The Ordinary Niacinamide 10%** - $9.90
 ★★★★★ | 58,000+ reviews
 Why: Shrunk my pores in 2 weeks. At this price, it's basically free.
-[CHECK PRICE →](https://www.amazon.com/dp/B06VSQ2S75?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B06VSQ2S75?tag=dailydealdarl-20)
 
 ---
 
@@ -131,7 +131,7 @@ Why: Shrunk my pores in 2 weeks. At this price, it's basically free.
 **Wet Brush Original Detangler** - $8.98
 ★★★★★ | 112,000+ reviews
 Why: Zero pain, even on wet hair. My daughter asks for it by name!
-[CHECK PRICE →](https://www.amazon.com/dp/B00564Y4L0?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B00564Y4L0?tag=dailydealdarl-20)
 
 ---
 
@@ -140,7 +140,7 @@ Why: Zero pain, even on wet hair. My daughter asks for it by name!
 **YouCopia SpiceStack Organizer** - $22.99
 ★★★★★ | 15,000+ reviews
 Why: Finally found my paprika on the first try. Game changer.
-[CHECK PRICE →](https://www.amazon.com/dp/B003L77WIO?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B003L77WIO?tag=dailydealdarl-20)
 
 ---
 
@@ -149,7 +149,7 @@ Why: Finally found my paprika on the first try. Game changer.
 **Jade Roller Set** - $12.99
 ★★★★★ | 45,000+ reviews
 Why: 5 minutes of face massage = instant relaxation. Keep mine in the fridge!
-[CHECK PRICE →](https://www.amazon.com/dp/B07GT23RH1?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B07GT23RH1?tag=dailydealdarl-20)
 
 ---
 
@@ -158,7 +158,7 @@ Why: 5 minutes of face massage = instant relaxation. Keep mine in the fridge!
 **Anker PowerCore 10000** - $21.99
 ★★★★★ | 95,000+ reviews
 Why: Fits in my purse, charges my phone 3x. Never stranded with a dead battery again.
-[CHECK PRICE →](https://www.amazon.com/dp/B07QXV6N1B?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B07QXV6N1B?tag=dailydealdarl-20)
 
 ---
 
@@ -249,7 +249,7 @@ This thing replaced my:
 
 40% off right now which almost NEVER happens.
 
-[GRAB IT AT 40% OFF →](https://www.amazon.com/dp/B00NGV4506?tag=dailydealdarling1-20)
+[GRAB IT AT 40% OFF →](https://www.amazon.com/dp/B00NGV4506?tag=dailydealdarl-20)
 
 ---
 
@@ -257,19 +257,19 @@ This thing replaced my:
 
 **Lodge Cast Iron Skillet** - $19.90
 The pan that lasts FOREVER. Pre-seasoned and ready to use.
-[CHECK PRICE →](https://www.amazon.com/dp/B00006JSUB?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B00006JSUB?tag=dailydealdarl-20)
 
 **Silicone Baking Mats (3-Pack)** - $14.99
 Replace parchment paper forever. Saves $$$ and the planet.
-[CHECK PRICE →](https://www.amazon.com/dp/B00629K4YK?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B00629K4YK?tag=dailydealdarl-20)
 
 **OXO Cutting Board Set** - $24.99
 Non-slip, dishwasher safe, actually stays put while you chop.
-[CHECK PRICE →](https://www.amazon.com/dp/B00I0Z8W9K?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B00I0Z8W9K?tag=dailydealdarl-20)
 
 **Rubbermaid Meal Prep Containers** - $17.99
 Finally containers that don't stain or warp. Obsessed.
-[CHECK PRICE →](https://www.amazon.com/dp/B01JCRXYXC?tag=dailydealdarling1-20)
+[CHECK PRICE →](https://www.amazon.com/dp/B01JCRXYXC?tag=dailydealdarl-20)
 
 ---
 
@@ -331,7 +331,7 @@ You're not just a subscriber - you're part of a community of 15,000+ women who l
 
 42% off right now! This is the viral blow dryer brush everyone's talking about.
 
-[GRAB IT AT 42% OFF →](https://www.amazon.com/dp/B01LSUQSB0?tag=dailydealdarling1-20)
+[GRAB IT AT 42% OFF →](https://www.amazon.com/dp/B01LSUQSB0?tag=dailydealdarl-20)
 
 You're amazing for being here!
 
@@ -378,7 +378,7 @@ As a thank you for being here, here's an exclusive deal I haven't shared publicl
 
 34% off! This is the weighted blanket that helped me finally sleep through the night. Usually only goes on sale during Black Friday.
 
-[CLAIM YOUR ANNIVERSARY DEAL →](https://www.amazon.com/dp/B073429DV2?tag=dailydealdarling1-20)
+[CLAIM YOUR ANNIVERSARY DEAL →](https://www.amazon.com/dp/B073429DV2?tag=dailydealdarl-20)
 
 ---
 

@@ -15,7 +15,7 @@
   - `googhydr-20` (1 occurrence, wrong network) → fixed to `dailydealdarl-20`
   - All in `dailydealdarling_website/articles/kitchen-tools-every-home-cook-needs.html`
 - [ ] **STILL NEEDED: Standardize Amazon affiliate tags** - Two main tags still used across codebase:
-  - `dailydealdarling1-20` (154 occurrences) → root-level live site, backups, email sequences
+  - `dailydealdarl-20` (154 occurrences) → root-level live site, backups, email sequences
   - `dailydealdarl-20` (225 occurrences) → dailydealdarling_website/, fitover35, automation scripts
   - **ACTION NEEDED:** Check Amazon Associates dashboard to confirm which is the registered tag, then standardize all files
 

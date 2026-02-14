@@ -308,7 +308,7 @@ The local clone at `C:\Users\talha\Desktop\social-media-empire` has only **3 com
 
 4. **Etsy Products Not Maximized** - 6 product HTML mockups exist but no PDFs generated. Only 2 of 8+ products are listed.
 
-5. **Amazon Affiliate Tag Discrepancy** - CLAUDE.md says `dailydealdarling1-20` but a recent commit changed it to `dailydealdarl-20`. Need to verify which is correct.
+5. **Amazon Affiliate Tag Discrepancy** - CLAUDE.md says `dailydealdarl-20` but a recent commit changed it to `dailydealdarl-20`. Need to verify which is correct.
 
 ### Important Gaps (Should Fix Soon)
 
@@ -365,7 +365,7 @@ Workflows are running daily with auto-commits confirmed through Feb 12.
 
 2. **Verify posts_log table** - Check Supabase to confirm if Make.com is now logging posts
 
-3. **Verify Amazon affiliate tag** - Confirm whether `dailydealdarling1-20` or `dailydealdarl-20` is correct
+3. **Verify Amazon affiliate tag** - Confirm whether `dailydealdarl-20` or `dailydealdarl-20` is correct
 
 ### Short-term (This Week)
 

@@ -125,7 +125,7 @@ Each product card follows this structure:
       <span class="price-current">$XX.XX</span>
       <span class="price-original">$XX.XX</span>
     </div>
-    <a href="AMAZON_LINK?tag=dailydealdarling1-20" class="btn btn-amazon product-cta">CTA Text →</a>
+    <a href="AMAZON_LINK?tag=dailydealdarl-20" class="btn btn-amazon product-cta">CTA Text →</a>
   </div>
 </div>
 ```
@@ -142,7 +142,7 @@ Each product card follows this structure:
 
 Before going live, verify:
 
-- [ ] All Amazon links have your affiliate tag (`?tag=dailydealdarling1-20`)
+- [ ] All Amazon links have your affiliate tag (`?tag=dailydealdarl-20`)
 - [ ] Mobile menu opens/closes correctly
 - [ ] Mobile sticky CTA appears on scroll
 - [ ] All product images load
@@ -163,7 +163,7 @@ Before going live, verify:
 
 ## Support Files
 
-Your affiliate tag: `dailydealdarling1-20`
+Your affiliate tag: `dailydealdarl-20`
 
 ASINs used (verified working):
 - B00TTD9BRC - CeraVe Moisturizing Cream

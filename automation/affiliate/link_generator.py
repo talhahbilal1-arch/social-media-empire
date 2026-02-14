@@ -12,8 +12,8 @@ from datetime import datetime
 
 # Brand-specific affiliate tags
 AFFILIATE_TAGS = {
-    'dailydealdarling': 'dailydealdarling1-20',
-    'daily_deal_darling': 'dailydealdarling1-20',
+    'dailydealdarling': 'dailydealdarl-20',
+    'daily_deal_darling': 'dailydealdarl-20',
     'menopause_planner': 'menopauseplan-20',
     'nurse_planner': 'nurseplanner-20',
     'adhd_planner': 'adhdplanner-20',
@@ -21,7 +21,7 @@ AFFILIATE_TAGS = {
 }
 
 # Default affiliate tag
-DEFAULT_TAG = 'dailydealdarling1-20'
+DEFAULT_TAG = 'dailydealdarl-20'
 
 
 def get_affiliate_tag(brand: str) -> str:

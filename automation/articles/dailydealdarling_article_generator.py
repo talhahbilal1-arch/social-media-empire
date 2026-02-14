@@ -5,7 +5,7 @@ Generates SEO-optimized lifestyle/deals articles for budget-conscious women 25-4
 - Meta tags, Open Graph, and Twitter Card tags
 - Article schema JSON-LD + FAQ schema JSON-LD
 - Proper heading hierarchy (H1, H2, H3)
-- Product recommendations with Amazon affiliate links (tag: dailydealdarling1-20)
+- Product recommendations with Amazon affiliate links (tag: dailydealdarl-20)
 - FAQ section with schema markup
 - Pexels hero image integration
 - ConvertKit email signup integration
