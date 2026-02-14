@@ -17,7 +17,7 @@ AFFILIATE_TAGS = {
     'menopause_planner': 'menopauseplan-20',
     'nurse_planner': 'nurseplanner-20',
     'adhd_planner': 'adhdplanner-20',
-    'fitover35': 'fitover35-20',
+    'fitover35': 'dailydealdarl-20',
 }
 
 # Default affiliate tag

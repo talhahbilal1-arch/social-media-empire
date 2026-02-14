@@ -34,3 +34,24 @@
     @apply badge bg-purple-100 text-purple-800;
   }
 }
+
+/* Blog article content overrides */
+.prose .wp-block-buttons {
+  @apply flex justify-center my-6;
+}
+
+.prose .wp-block-button__link {
+  @apply inline-block bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors no-underline;
+}
+
+.prose .wp-block-table table {
+  @apply w-full;
+}
+
+.prose .wp-block-table th {
+  @apply bg-gray-50 text-left font-semibold;
+}
+
+.prose figure.wp-block-table {
+  @apply overflow-x-auto;
+}

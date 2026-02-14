@@ -1,4 +1,5 @@
 """AI-powered content generation for video scripts using Claude API."""
+from __future__ import annotations
 
 import json
 import os

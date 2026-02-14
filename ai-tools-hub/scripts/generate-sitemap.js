@@ -6,6 +6,7 @@ const SITE_URL = 'https://toolpilot-hub.netlify.app'
 const tools = require('../content/tools.json')
 const categories = require('../content/categories.json')
 const comparisons = require('../content/comparisons.json')
+const articles = require('../content/articles.json')
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -41,11 +42,23 @@ ${categories.map(c => `  <url>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>`).join('\n')}
+  <url>
+    <loc>${SITE_URL}/blog/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+${articles.map(a => `  <url>
+    <loc>${SITE_URL}/blog/${a.slug}/</loc>
+    <lastmod>${a.published_date || today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join('\n')}
 </urlset>`
 
 const outDir = path.join(__dirname, '..', 'public')
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap)
-console.log(`Sitemap generated with ${tools.length + categories.length + comparisons.length + 2} URLs`)
+console.log(`Sitemap generated with ${tools.length + categories.length + comparisons.length + articles.length + 3} URLs`)
 
 const robots = `User-agent: *
 Allow: /

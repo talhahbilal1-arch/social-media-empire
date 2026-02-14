@@ -174,7 +174,7 @@ SUPABASE_URL=https://epfoxpgrpsnhlsglxvsa.supabase.co
 SUPABASE_KEY=your_key
 
 # YouTube OAuth (REQUIRED for YouTube uploads)
-YOUTUBE_API_KEY=AIzaSyAx6Of31F32vmtkiAQuF3LOzOodDHxRipM
+YOUTUBE_API_KEY=your_youtube_api_key
 YOUTUBE_CLIENT_ID=your_client_id
 YOUTUBE_CLIENT_SECRET=your_client_secret
 YOUTUBE_REFRESH_TOKEN=your_refresh_token
@@ -186,7 +186,7 @@ MAKE_WEBHOOK_URL=https://hook.us2.make.com/your_webhook_id
 ### GitHub Secrets Required
 
 Add these secrets to your repository:
-1. `YOUTUBE_API_KEY` - Already have: `AIzaSyAx6Of31F32vmtkiAQuF3LOzOodDHxRipM`
+1. `YOUTUBE_API_KEY` - Set via environment variable or GitHub Secrets
 2. `YOUTUBE_CLIENT_ID` - From Google Cloud Console
 3. `YOUTUBE_CLIENT_SECRET` - From Google Cloud Console
 4. `YOUTUBE_REFRESH_TOKEN` - From OAuth flow

@@ -5,7 +5,7 @@ Anti-Gravity: Autonomous Affiliate Marketing Engine.
 CLI orchestrator that runs the full pipeline:
   1. Discover high-buyer-intent keywords (Gemini)
   2. Write 1,500+ word SEO articles with Chain-of-Density (Gemini)
-  3. Publish to WordPress (REST API)
+  3. Publish to Vercel (static site) or WordPress (REST API)
   4. Verify post is live (HTTP 200)
   5. Create 3 Pinterest pin variations staggered across 48 hours
 
@@ -32,6 +32,7 @@ from anti_gravity.core.database import Database
 from anti_gravity.services.writer import Writer
 from anti_gravity.services.wordpress import WordPressClient
 from anti_gravity.services.pinterest import PinterestClient
+from anti_gravity.services.vercel_deploy import VercelDeployer
 
 # ---------------------------------------------------------------------------
 # Global logger → logs/automation.log + console
@@ -64,11 +65,20 @@ class AntiGravity:
         self.db = Database()
         self.writer = Writer()
 
-        # WordPress and Pinterest are optional in dry-run mode
+        # Publishing backends — Vercel is primary, WordPress is fallback
+        self.vercel = None
         self.wp = None
         self.pinterest = None
 
         if not dry_run:
+            # Try Vercel first (always available if CLI is installed)
+            try:
+                self.vercel = VercelDeployer()
+                logger.info("Vercel deployer initialized")
+            except Exception as e:
+                logger.warning(f"Vercel disabled: {e}")
+
+            # WordPress as fallback
             try:
                 self.wp = WordPressClient()
             except ValueError as e:
@@ -148,8 +158,53 @@ class AntiGravity:
             result["post_id"] = post_id
             return result
 
-        # --- Publish to WordPress ---
-        if self.wp:
+        # --- Publish to Vercel (primary) or WordPress (fallback) ---
+        post_url = None
+
+        if self.vercel:
+            logger.info("Publishing via Vercel...")
+            deploy_result = self.vercel.publish_article(
+                title=article["title"],
+                slug=article["slug"],
+                html=article["html"],
+                meta_description=article["meta_description"],
+                word_count=article["word_count"],
+                keyword=keyword,
+                image_prompt=article.get("image_prompt", ""),
+            )
+
+            if deploy_result.success:
+                result["published"] = True
+                post_url = deploy_result.post_url
+                result["post_url"] = post_url
+                result["deploy_url"] = deploy_result.deploy_url
+
+                post_id = self.db.save_post(
+                    slug=article["slug"],
+                    keyword=keyword,
+                    title=article["title"],
+                    url=post_url,
+                    commission_link=affiliate_link,
+                    word_count=article["word_count"],
+                    status="publish",
+                )
+                self.db.mark_keyword_used(keyword)
+
+                # Verify post is live
+                if post_url:
+                    is_live = self.vercel.verify_article_live(post_url)
+                    result["live"] = is_live
+                    if is_live:
+                        self.db.mark_post_live(post_id, post_url)
+                    else:
+                        logger.warning("Post not yet live — Pinterest pins deferred")
+                        return result
+            else:
+                logger.error(f"Vercel deploy failed: {deploy_result.error}")
+                result["error"] = deploy_result.error
+
+        elif self.wp:
+            logger.info("Publishing via WordPress...")
             seo_meta = self.wp.build_seo_meta(
                 meta_description=article["meta_description"],
                 focus_keyword=keyword,
@@ -167,62 +222,34 @@ class AntiGravity:
             if wp_result.success:
                 result["published"] = True
                 result["wp_post_id"] = wp_result.post_id
-                result["post_url"] = wp_result.post_url
+                post_url = wp_result.post_url
+                result["post_url"] = post_url
 
-                # Save to database
                 post_id = self.db.save_post(
                     slug=wp_result.slug or article["slug"],
                     keyword=keyword,
                     title=article["title"],
                     wp_post_id=wp_result.post_id,
-                    url=wp_result.post_url,
+                    url=post_url,
                     commission_link=affiliate_link,
                     word_count=article["word_count"],
                     status="publish",
                 )
                 self.db.mark_keyword_used(keyword)
 
-                # --- Verify post is live ---
-                if wp_result.post_url:
-                    is_live = self.wp.verify_post_live(wp_result.post_url)
+                if post_url:
+                    is_live = self.wp.verify_post_live(post_url)
                     result["live"] = is_live
                     if is_live:
-                        self.db.mark_post_live(post_id, wp_result.post_url)
+                        self.db.mark_post_live(post_id, post_url)
                     else:
                         logger.warning("Post not yet live — Pinterest pins deferred")
                         return result
-
-                # --- Create Pinterest pins ---
-                if self.pinterest and wp_result.post_url:
-                    variations = self.writer.generate_pin_variations(
-                        title=article["title"],
-                        keyword=keyword,
-                        url=wp_result.post_url,
-                    )
-
-                    # Save pin records
-                    for i, v in enumerate(variations, 1):
-                        self.db.save_pin(
-                            post_id=post_id,
-                            variation=i,
-                            title=v.get("pin_title", ""),
-                            description=v.get("pin_description", ""),
-                        )
-
-                    # Post first pin immediately, rest on schedule
-                    pin_results = self.pinterest.post_variations(variations)
-                    result["pins_created"] = sum(1 for p in pin_results if p["success"])
-
-                    for pr in pin_results:
-                        if pr["success"] and pr["pin_id"]:
-                            self.db.mark_pin_posted(pr["variation"], pr["pin_id"])
-
-                    logger.info(f"Created {result['pins_created']}/3 pins")
             else:
                 logger.error(f"WordPress publish failed: {wp_result.error}")
                 result["error"] = wp_result.error
         else:
-            logger.warning("No WordPress client — saving as local draft only")
+            logger.warning("No publisher available — saving as local draft only")
             post_id = self.db.save_post(
                 slug=article["slug"],
                 keyword=keyword,
@@ -231,6 +258,31 @@ class AntiGravity:
                 status="local_draft",
             )
             self.db.mark_keyword_used(keyword)
+
+        # --- Create Pinterest pins ---
+        if self.pinterest and post_url and result.get("live"):
+            variations = self.writer.generate_pin_variations(
+                title=article["title"],
+                keyword=keyword,
+                url=post_url,
+            )
+
+            for i, v in enumerate(variations, 1):
+                self.db.save_pin(
+                    post_id=post_id,
+                    variation=i,
+                    title=v.get("pin_title", ""),
+                    description=v.get("pin_description", ""),
+                )
+
+            pin_results = self.pinterest.post_variations(variations)
+            result["pins_created"] = sum(1 for p in pin_results if p["success"])
+
+            for pr in pin_results:
+                if pr["success"] and pr["pin_id"]:
+                    self.db.mark_pin_posted(pr["variation"], pr["pin_id"])
+
+            logger.info(f"Created {result['pins_created']}/3 pins")
 
         return result
 

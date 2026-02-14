@@ -32,14 +32,24 @@ class HealthChecker:
     def check_all(self) -> dict:
         """Run all health checks and return summary."""
         checks = [
+            self.check_anthropic(),
             self.check_supabase(),
+            self.check_supabase_tiktok(),
             self.check_gemini(),
             self.check_pexels(),
+            self.check_pexels_video(),
             self.check_creatomate(),
             self.check_resend(),
             self.check_convertkit(),
             self.check_youtube(),
-            self.check_make_webhook(),
+            self.check_make_webhook_deals(),
+            self.check_make_webhook_menopause(),
+            self.check_late_api(),
+            self.check_elevenlabs(),
+            self.check_netlify(),
+            self.check_github_api(),
+            self.check_website_dailydealdarling(),
+            self.check_website_fitover35(),
         ]
 
         # Summarize
@@ -115,6 +125,51 @@ class HealthChecker:
         except Exception as e:
             return HealthCheckResult(
                 service="supabase",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_anthropic(self) -> HealthCheckResult:
+        """Check Anthropic Claude API (primary AI dependency)."""
+        import os
+        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+
+        if not api_key:
+            return HealthCheckResult(
+                service="anthropic",
+                status="unhealthy",
+                error="ANTHROPIC_API_KEY not configured"
+            )
+
+        try:
+            import anthropic
+            client = anthropic.Anthropic(api_key=api_key)
+
+            start = datetime.now()
+            resp = client.messages.create(
+                model='claude-sonnet-4-5-20250929',
+                max_tokens=10,
+                messages=[{'role': 'user', 'content': 'ping'}]
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if resp.content:
+                return HealthCheckResult(
+                    service="anthropic",
+                    status="healthy",
+                    response_time_ms=response_time
+                )
+            else:
+                return HealthCheckResult(
+                    service="anthropic",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error="Empty response"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="anthropic",
                 status="unhealthy",
                 error=str(e)
             )
@@ -378,33 +433,462 @@ class HealthChecker:
                 error=str(e)
             )
 
-    def check_make_webhook(self) -> HealthCheckResult:
-        """Check Make.com webhook (Pinterest)."""
-        config = get_config()
-
-        if not config.make_com_pinterest_webhook:
+    def _check_make_webhook(self, name: str, webhook_url: str) -> HealthCheckResult:
+        """Check a Make.com webhook URL is valid and reachable."""
+        if not webhook_url:
             return HealthCheckResult(
-                service="make_webhook",
+                service=name,
                 status="degraded",
-                error="MAKE_COM_PINTEREST_WEBHOOK not configured"
+                error=f"{name} webhook not configured"
             )
 
-        # Note: We can't actually test the webhook without triggering it
-        # Just verify the URL is valid
-        webhook_url = config.make_com_pinterest_webhook
-
-        if webhook_url.startswith("https://hook."):
+        if not webhook_url.startswith("https://"):
             return HealthCheckResult(
-                service="make_webhook",
-                status="healthy",
-                details={"webhook_configured": True}
-            )
-        else:
-            return HealthCheckResult(
-                service="make_webhook",
+                service=name,
                 status="degraded",
                 error="Webhook URL format appears invalid"
             )
+
+        # Verify the URL is reachable with a HEAD request (won't trigger the scenario)
+        try:
+            start = datetime.now()
+            response = requests.head(webhook_url, timeout=self.timeout_seconds, allow_redirects=True)
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            # Make.com webhooks return 200 on HEAD when active
+            if response.status_code in [200, 204, 405]:
+                return HealthCheckResult(
+                    service=name,
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={"webhook_configured": True}
+                )
+            else:
+                return HealthCheckResult(
+                    service=name,
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Webhook returned status {response.status_code}"
+                )
+        except Exception as e:
+            return HealthCheckResult(
+                service=name,
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_make_webhook_deals(self) -> HealthCheckResult:
+        """Check Make.com webhook for Daily Deal Darling Pinterest posting."""
+        config = get_config()
+        return self._check_make_webhook("make_webhook_deals", config.make_webhook_deals)
+
+    def check_make_webhook_menopause(self) -> HealthCheckResult:
+        """Check Make.com webhook for Menopause Planner Pinterest posting."""
+        config = get_config()
+        return self._check_make_webhook("make_webhook_menopause", config.make_webhook_menopause)
+
+    def check_late_api(self) -> HealthCheckResult:
+        """Check Late API (Pinterest posting for fitness brand)."""
+        config = get_config()
+
+        if not config.late_api_key:
+            return HealthCheckResult(
+                service="late_api",
+                status="degraded",
+                error="LATE_API_KEY not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://getlate.dev/api/v1/accounts",
+                headers={"Authorization": f"Bearer {config.late_api_key}"},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                return HealthCheckResult(
+                    service="late_api",
+                    status="healthy",
+                    response_time_ms=response_time
+                )
+            elif response.status_code == 403:
+                return HealthCheckResult(
+                    service="late_api",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Access forbidden - API key may be invalid or expired"
+                )
+            else:
+                return HealthCheckResult(
+                    service="late_api",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="late_api",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_elevenlabs(self) -> HealthCheckResult:
+        """Check ElevenLabs TTS API (used by TikTok pipeline)."""
+        config = get_config()
+
+        if not config.elevenlabs_api_key:
+            return HealthCheckResult(
+                service="elevenlabs",
+                status="degraded",
+                error="ELEVENLABS_API_KEY not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://api.elevenlabs.io/v1/user",
+                headers={"xi-api-key": config.elevenlabs_api_key},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                return HealthCheckResult(
+                    service="elevenlabs",
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={
+                        "character_count": data.get("subscription", {}).get("character_count", 0),
+                        "character_limit": data.get("subscription", {}).get("character_limit", 0),
+                    }
+                )
+            elif response.status_code == 401:
+                return HealthCheckResult(
+                    service="elevenlabs",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Invalid API key"
+                )
+            else:
+                return HealthCheckResult(
+                    service="elevenlabs",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="elevenlabs",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_netlify(self) -> HealthCheckResult:
+        """Check Netlify deployment API (ToolPilot site)."""
+        config = get_config()
+
+        if not config.netlify_api_token:
+            return HealthCheckResult(
+                service="netlify",
+                status="degraded",
+                error="NETLIFY_API_TOKEN not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                f"https://api.netlify.com/api/v1/sites/{config.netlify_site_id}",
+                headers={"Authorization": f"Bearer {config.netlify_api_token}"},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                return HealthCheckResult(
+                    service="netlify",
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={
+                        "site_name": data.get("name", ""),
+                        "published_deploy": data.get("published_deploy", {}).get("id", ""),
+                        "ssl_url": data.get("ssl_url", ""),
+                    }
+                )
+            elif response.status_code == 401:
+                return HealthCheckResult(
+                    service="netlify",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Invalid API token"
+                )
+            else:
+                return HealthCheckResult(
+                    service="netlify",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="netlify",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_supabase_tiktok(self) -> HealthCheckResult:
+        """Check TikTok Supabase project connectivity and storage."""
+        config = get_config()
+
+        if not config.supabase_tiktok_url:
+            return HealthCheckResult(
+                service="supabase_tiktok",
+                status="degraded",
+                error="SUPABASE_TIKTOK_URL not configured"
+            )
+
+        # Skip if same as main Supabase (already checked)
+        if config.supabase_tiktok_url == config.supabase_url:
+            return HealthCheckResult(
+                service="supabase_tiktok",
+                status="healthy",
+                details={"shared_with_main": True}
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                f"{config.supabase_tiktok_url}/rest/v1/",
+                headers={
+                    "apikey": config.supabase_tiktok_key,
+                    "Authorization": f"Bearer {config.supabase_tiktok_key}"
+                },
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code in [200, 204]:
+                # Also check storage bucket exists
+                storage_ok = True
+                try:
+                    storage_resp = requests.get(
+                        f"{config.supabase_tiktok_url}/storage/v1/bucket/tiktok-media",
+                        headers={
+                            "apikey": config.supabase_tiktok_key,
+                            "Authorization": f"Bearer {config.supabase_tiktok_key}"
+                        },
+                        timeout=self.timeout_seconds
+                    )
+                    storage_ok = storage_resp.status_code in [200, 404]  # 404 = bucket may not exist yet
+                except Exception:
+                    storage_ok = False
+
+                return HealthCheckResult(
+                    service="supabase_tiktok",
+                    status="healthy" if storage_ok else "degraded",
+                    response_time_ms=response_time,
+                    details={"storage_accessible": storage_ok},
+                    error=None if storage_ok else "Storage bucket check failed"
+                )
+            else:
+                return HealthCheckResult(
+                    service="supabase_tiktok",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="supabase_tiktok",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_pexels_video(self) -> HealthCheckResult:
+        """Check Pexels Video API (used by TikTok pipeline for stock footage)."""
+        config = get_config()
+
+        if not config.pexels_api_key:
+            return HealthCheckResult(
+                service="pexels_video",
+                status="unhealthy",
+                error="PEXELS_API_KEY not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://api.pexels.com/videos/search",
+                headers={"Authorization": config.pexels_api_key},
+                params={"query": "fitness", "per_page": 1, "orientation": "portrait"},
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                videos_found = len(data.get("videos", []))
+                return HealthCheckResult(
+                    service="pexels_video",
+                    status="healthy" if videos_found > 0 else "degraded",
+                    response_time_ms=response_time,
+                    details={"videos_found": videos_found},
+                    error=None if videos_found > 0 else "No portrait videos returned"
+                )
+            else:
+                return HealthCheckResult(
+                    service="pexels_video",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="pexels_video",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_github_api(self) -> HealthCheckResult:
+        """Check GitHub API accessibility (used by emergency alert and workflow guardian)."""
+        config = get_config()
+
+        if not config.github_token:
+            return HealthCheckResult(
+                service="github_api",
+                status="degraded",
+                error="GITHUB_TOKEN not configured"
+            )
+
+        try:
+            start = datetime.now()
+            response = requests.get(
+                "https://api.github.com/rate_limit",
+                headers={
+                    "Authorization": f"Bearer {config.github_token}",
+                    "Accept": "application/vnd.github+json"
+                },
+                timeout=self.timeout_seconds
+            )
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            if response.status_code == 200:
+                data = response.json()
+                core_remaining = data.get("resources", {}).get("core", {}).get("remaining", 0)
+                core_limit = data.get("resources", {}).get("core", {}).get("limit", 0)
+
+                if core_remaining < 100:
+                    return HealthCheckResult(
+                        service="github_api",
+                        status="degraded",
+                        response_time_ms=response_time,
+                        error=f"Low rate limit remaining: {core_remaining}/{core_limit}",
+                        details={"remaining": core_remaining, "limit": core_limit}
+                    )
+
+                return HealthCheckResult(
+                    service="github_api",
+                    status="healthy",
+                    response_time_ms=response_time,
+                    details={"remaining": core_remaining, "limit": core_limit}
+                )
+            elif response.status_code == 401:
+                return HealthCheckResult(
+                    service="github_api",
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error="Invalid GitHub token"
+                )
+            else:
+                return HealthCheckResult(
+                    service="github_api",
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error=f"Status code: {response.status_code}"
+                )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service="github_api",
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def _check_website_uptime(self, name: str, url: str, min_size: int = 1000) -> HealthCheckResult:
+        """Check that a website is up and serving real content (not blank/error)."""
+        try:
+            start = datetime.now()
+            response = requests.get(url, timeout=self.timeout_seconds, allow_redirects=True)
+            response_time = (datetime.now() - start).total_seconds() * 1000
+
+            body_size = len(response.content)
+
+            if response.status_code != 200:
+                return HealthCheckResult(
+                    service=name,
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error=f"HTTP {response.status_code}",
+                    details={"body_size": body_size}
+                )
+
+            if body_size < min_size:
+                return HealthCheckResult(
+                    service=name,
+                    status="unhealthy",
+                    response_time_ms=response_time,
+                    error=f"Page is only {body_size} bytes (expected >{min_size}) - site may be blank or broken",
+                    details={"body_size": body_size}
+                )
+
+            # Check that it looks like actual HTML content
+            content_start = response.text[:200].lower()
+            if "<!doctype html" not in content_start and "<html" not in content_start:
+                return HealthCheckResult(
+                    service=name,
+                    status="degraded",
+                    response_time_ms=response_time,
+                    error="Response doesn't appear to be HTML",
+                    details={"body_size": body_size}
+                )
+
+            return HealthCheckResult(
+                service=name,
+                status="healthy",
+                response_time_ms=response_time,
+                details={"body_size": body_size}
+            )
+
+        except Exception as e:
+            return HealthCheckResult(
+                service=name,
+                status="unhealthy",
+                error=str(e)
+            )
+
+    def check_website_dailydealdarling(self) -> HealthCheckResult:
+        """Check that dailydealdarling.com is up and serving real content."""
+        return self._check_website_uptime(
+            "website_dailydealdarling",
+            "https://dailydealdarling.com",
+            min_size=5000
+        )
+
+    def check_website_fitover35(self) -> HealthCheckResult:
+        """Check that fitover35.com is up and serving real content."""
+        return self._check_website_uptime(
+            "website_fitover35",
+            "https://fitover35.com",
+            min_size=5000
+        )
 
     def check_critical_only(self) -> dict:
         """Check only critical services (faster)."""

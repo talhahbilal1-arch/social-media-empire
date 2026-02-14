@@ -8,7 +8,7 @@
 
 1. Your Density Training Guide is here
 2. Here's your guide (let's get started)
-3. [Fit Over 35] Your 5-Day Starter Guide
+3. [Fit Over 35] Your 12-Week Starter Guide
 4. The guide you requested + what happens next
 
 ---
@@ -25,7 +25,7 @@ You signed up because you want something different. Not another program that ass
 
 You want results that fit your reality.
 
-**Here's your guide:** [DOWNLOAD: The 5-Day Density Training Starter Guide]
+**Here's your guide:** [DOWNLOAD: The 12-Week Density Training Starter Guide]
 
 Inside, you'll learn:
 

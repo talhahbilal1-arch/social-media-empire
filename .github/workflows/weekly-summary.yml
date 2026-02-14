@@ -40,13 +40,13 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -c "
           import json
           import os
+          import subprocess
           from datetime import datetime, timedelta
           from database.supabase_client import get_supabase_client
 
@@ -57,49 +57,78 @@ jobs:
           summary = {
               'period': f'{week_ago.strftime(\"%b %d\")} - {today.strftime(\"%b %d, %Y\")}',
               'generated_at': today.isoformat(),
-              'videos': {'created': 0, 'posted': 0, 'failed': 0, 'by_brand': {}},
-              'articles': {'created': 0, 'by_brand': {}},
-              'email': {'new_subscribers': 0, 'total_subscribers': 0},
-              'errors': {'total': 0, 'resolved': 0, 'unresolved': 0},
-              'self_healing': {'runs': 0, 'videos_retried': 0, 'issues_fixed': 0},
-              'platforms': {'youtube': 0, 'pinterest': 0, 'tiktok': 0, 'instagram': 0}
+              'pins': {'total': 0, 'by_brand': {}},
+              'errors': {'total': 0, 'resolved': 0, 'unresolved': 0, 'by_type': {}},
+              'self_healing': {'runs': 0, 'issues_fixed': 0},
+              'workflow_failures': {'total': 0, 'by_workflow': {}},
+              'email': {'total_subscribers': 0}
           }
 
-          # Get video stats
+          # Get pin stats from content_history
           try:
-              videos = db.client.table('videos').select('*').gte('created_at', week_ago.isoformat()).execute()
-              video_list = videos.data or []
-              summary['videos']['created'] = len(video_list)
-              summary['videos']['posted'] = len([v for v in video_list if v.get('status') == 'posted'])
-              summary['videos']['failed'] = len([v for v in video_list if v.get('status') == 'failed'])
-
-              for v in video_list:
-                  brand = v.get('brand', 'unknown')
-                  summary['videos']['by_brand'][brand] = summary['videos']['by_brand'].get(brand, 0) + 1
+              pins = db.client.table('content_history').select('brand') \
+                  .gte('created_at', week_ago.isoformat()).execute()
+              pin_list = pins.data or []
+              summary['pins']['total'] = len(pin_list)
+              for p in pin_list:
+                  brand = p.get('brand', 'unknown')
+                  summary['pins']['by_brand'][brand] = summary['pins']['by_brand'].get(brand, 0) + 1
           except Exception as e:
-              print(f'Error getting video stats: {e}')
+              print(f'Error getting pin stats: {e}')
 
           # Get error stats
           try:
-              errors = db.client.table('errors').select('*').gte('created_at', week_ago.isoformat()).execute()
+              errors = db.client.table('errors').select('error_type, resolved') \
+                  .gte('created_at', week_ago.isoformat()).execute()
               error_list = errors.data or []
               summary['errors']['total'] = len(error_list)
               summary['errors']['resolved'] = len([e for e in error_list if e.get('resolved')])
               summary['errors']['unresolved'] = len([e for e in error_list if not e.get('resolved')])
+              for e in error_list:
+                  etype = e.get('error_type', 'unknown')
+                  summary['errors']['by_type'][etype] = summary['errors']['by_type'].get(etype, 0) + 1
           except Exception as e:
               print(f'Error getting error stats: {e}')
 
           # Get self-healing stats
           try:
-              analytics = db.client.table('analytics').select('*').eq('event_type', 'self_healing').gte('created_at', week_ago.isoformat()).execute()
-              healing_events = analytics.data or []
+              healing = db.client.table('analytics').select('data') \
+                  .eq('event_type', 'self_healing') \
+                  .gte('created_at', week_ago.isoformat()).execute()
+              healing_events = healing.data or []
               summary['self_healing']['runs'] = len(healing_events)
               for event in healing_events:
                   data = event.get('data', {})
-                  summary['self_healing']['videos_retried'] += data.get('videos_retried', 0)
-                  summary['self_healing']['issues_fixed'] += data.get('issues_fixed', 0)
+                  if isinstance(data, str):
+                      import json as _json
+                      data = _json.loads(data)
+                  summary['self_healing']['issues_fixed'] += data.get('issues_healed', 0)
           except Exception as e:
               print(f'Error getting self-healing stats: {e}')
+
+          # Get GitHub Actions workflow failure count
+          try:
+              repo = os.environ.get('GITHUB_REPOSITORY', '')
+              if repo:
+                  result = subprocess.run(
+                      ['gh', 'api', f'repos/{repo}/actions/runs',
+                       '--jq', '.workflow_runs | map(select(.conclusion == \"failure\" and (.created_at > \"' + week_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + '\"))) | length'],
+                      capture_output=True, text=True, timeout=30
+                  )
+                  if result.returncode == 0:
+                      summary['workflow_failures']['total'] = int(result.stdout.strip() or '0')
+
+                  # Get failures by workflow name
+                  result2 = subprocess.run(
+                      ['gh', 'api', f'repos/{repo}/actions/runs?status=failure&per_page=50',
+                       '--jq', '[.workflow_runs[] | select(.created_at > \"' + week_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + '\") | .name] | group_by(.) | map({(.[0]): length}) | add // {}'],
+                      capture_output=True, text=True, timeout=30
+                  )
+                  if result2.returncode == 0 and result2.stdout.strip():
+                      import json as _json
+                      summary['workflow_failures']['by_workflow'] = _json.loads(result2.stdout.strip())
+          except Exception as e:
+              print(f'Error getting workflow stats: {e}')
 
           # Get subscriber count
           try:
@@ -113,13 +142,19 @@ jobs:
               print(f'Error getting subscriber count: {e}')
 
           # Calculate health score
-          total_videos = summary['videos']['created']
-          posted_videos = summary['videos']['posted']
-          video_success_rate = (posted_videos / total_videos * 100) if total_videos > 0 else 100
+          target_pins = 49  # 7/day * 7 days
+          actual_pins = summary['pins']['total']
+          pin_rate = min(100, (actual_pins / target_pins * 100)) if target_pins > 0 else 100
+
           total_errors = summary['errors']['total']
           resolved_errors = summary['errors']['resolved']
           error_resolution_rate = (resolved_errors / total_errors * 100) if total_errors > 0 else 100
-          health_score = int((video_success_rate + error_resolution_rate) / 2)
+
+          wf_failures = summary['workflow_failures']['total']
+          wf_penalty = min(30, wf_failures * 2)  # Each failure costs 2 points, max 30
+
+          health_score = int((pin_rate * 0.4 + error_resolution_rate * 0.3 + (100 - wf_penalty) * 0.3))
+          health_score = max(0, min(100, health_score))
           summary['health_score'] = health_score
 
           with open('weekly_summary.json', 'w') as f:
@@ -127,12 +162,12 @@ jobs:
           print(json.dumps(summary, indent=2))
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f'health_score={health_score}\\n')
-              f.write(f'videos_created={summary[\"videos\"][\"created\"]}\\n')
+              f.write(f'health_score={health_score}\n')
+              f.write(f'pins_total={actual_pins}\n')
           "
 
-      - name: Send weekly email
-        if: github.event_name == 'schedule' || github.event.inputs.send_email == 'true'
+      - name: Send weekly email (only if issues need attention)
+        if: (github.event_name == 'schedule' || github.event.inputs.send_email == 'true')
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
@@ -156,35 +191,100 @@ jobs:
           resend.api_key = resend_key
 
           health_score = summary.get('health_score', 0)
-          videos = summary.get('videos', {})
+          pins = summary.get('pins', {})
           errors = summary.get('errors', {})
           healing = summary.get('self_healing', {})
+          wf_failures = summary.get('workflow_failures', {})
           email_stats = summary.get('email', {})
 
+          # Only send email if there are issues that need attention
+          unresolved = errors.get('unresolved', 0)
+          total_wf_failures = wf_failures.get('total', 0)
+          if health_score >= 80 and unresolved == 0 and total_wf_failures <= 3:
+              print(f'System healthy (score={health_score}, unresolved={unresolved}, wf_failures={total_wf_failures}) — no email needed')
+              sys.exit(0)
+
+          print(f'Issues detected (score={health_score}, unresolved={unresolved}, wf_failures={total_wf_failures}) — sending email')
+
+          # Health score color
+          if health_score >= 80:
+              score_color = '#10B981'
+              score_label = 'Healthy'
+          elif health_score >= 50:
+              score_color = '#F59E0B'
+              score_label = 'Needs Attention'
+          else:
+              score_color = '#EF4444'
+              score_label = 'Unhealthy'
+
+          # Pin rows by brand
           brand_rows = ''
-          for brand, count in videos.get('by_brand', {}).items():
+          for brand, count in pins.get('by_brand', {}).items():
               brand_rows += f'<tr><td style=\"padding: 8px; border-bottom: 1px solid #eee;\">{brand}</td><td style=\"padding: 8px; text-align: center;\">{count}</td></tr>'
+          if not brand_rows:
+              brand_rows = '<tr><td style=\"padding: 8px; color: #9ca3af;\" colspan=\"2\">No pins this week</td></tr>'
+
+          # Workflow failure rows
+          wf_rows = ''
+          for wf_name, count in wf_failures.get('by_workflow', {}).items():
+              wf_rows += f'<tr><td style=\"padding: 6px; border-bottom: 1px solid #eee; font-size: 13px;\">{wf_name}</td><td style=\"padding: 6px; text-align: center; font-size: 13px;\">{count}</td></tr>'
+          if not wf_rows:
+              wf_rows = '<tr><td style=\"padding: 6px; color: #9ca3af; font-size: 13px;\" colspan=\"2\">No failures this week</td></tr>'
+
+          # Error type rows
+          error_rows = ''
+          for err_type, count in errors.get('by_type', {}).items():
+              error_rows += f'<tr><td style=\"padding: 6px; border-bottom: 1px solid #eee; font-size: 13px;\">{err_type}</td><td style=\"padding: 6px; text-align: center; font-size: 13px;\">{count}</td></tr>'
 
           html = f'''
-          <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">
-            <h1 style=\"color: #1f2937; border-bottom: 2px solid #8b5cf6; padding-bottom: 10px;\">Weekly Summary</h1>
-            <p style=\"color: #6b7280;\">Period: {summary.get(\"period\", \"This Week\")}</p>
-            <div style=\"background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;\">
-              <h2 style=\"margin: 0; font-size: 48px;\">{health_score}</h2>
-              <p style=\"margin: 5px 0 0 0;\">Health Score</p>
+          <div style=\"font-family: -apple-system, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;\">
+            <div style=\"background: linear-gradient(135deg, #1f2937, #374151); color: white; padding: 25px; text-align: center;\">
+              <h1 style=\"margin: 0; font-size: 22px;\">Weekly System Report</h1>
+              <p style=\"margin: 8px 0 0 0; color: #d1d5db; font-size: 14px;\">{summary.get('period', 'This Week')}</p>
             </div>
-            <h2>Videos</h2>
-            <p>Created: {videos.get(\"created\", 0)} | Posted: {videos.get(\"posted\", 0)} | Failed: {videos.get(\"failed\", 0)}</p>
-            <h3>By Brand</h3>
-            <table style=\"width: 100%; border-collapse: collapse;\">{brand_rows}</table>
-            <h2>Self-Healing</h2>
-            <ul><li>Runs: {healing.get(\"runs\", 0)}</li><li>Videos retried: {healing.get(\"videos_retried\", 0)}</li></ul>
-            <h2>Errors</h2>
-            <p>Total: {errors.get(\"total\", 0)} | Resolved: {errors.get(\"resolved\", 0)} | Unresolved: {errors.get(\"unresolved\", 0)}</p>
-            <h2>Email List</h2>
-            <p>Total subscribers: {email_stats.get(\"total_subscribers\", \"N/A\")}</p>
-            <hr>
-            <p style=\"color: #9ca3af; font-size: 12px;\">Weekly automation summary. Self-healing handles issues automatically.</p>
+
+            <div style=\"background: {score_color}; color: white; padding: 25px; text-align: center;\">
+              <div style=\"font-size: 56px; font-weight: bold; margin: 0;\">{health_score}</div>
+              <div style=\"font-size: 16px; margin-top: 4px;\">Health Score &mdash; {score_label}</div>
+            </div>
+
+            <div style=\"padding: 25px;\">
+              <h2 style=\"color: #1f2937; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;\">Pins Posted</h2>
+              <div style=\"font-size: 32px; font-weight: bold; color: #8b5cf6; margin: 10px 0;\">{pins.get('total', 0)} <span style=\"font-size: 16px; color: #9ca3af;\">/ 49 target</span></div>
+              <table style=\"width: 100%; border-collapse: collapse; margin-top: 10px;\">{brand_rows}</table>
+
+              <h2 style=\"color: #1f2937; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; margin-top: 25px;\">System Failures</h2>
+              <div style=\"display: flex; gap: 15px; margin: 10px 0;\">
+                <div style=\"background: #fef2f2; padding: 12px; border-radius: 8px; flex: 1; text-align: center;\">
+                  <div style=\"font-size: 24px; font-weight: bold; color: #ef4444;\">{wf_failures.get('total', 0)}</div>
+                  <div style=\"font-size: 12px; color: #6b7280;\">Workflow Failures</div>
+                </div>
+                <div style=\"background: #fff7ed; padding: 12px; border-radius: 8px; flex: 1; text-align: center;\">
+                  <div style=\"font-size: 24px; font-weight: bold; color: #f59e0b;\">{errors.get('total', 0)}</div>
+                  <div style=\"font-size: 12px; color: #6b7280;\">DB Errors</div>
+                </div>
+                <div style=\"background: #f0fdf4; padding: 12px; border-radius: 8px; flex: 1; text-align: center;\">
+                  <div style=\"font-size: 24px; font-weight: bold; color: #10b981;\">{errors.get('resolved', 0)}</div>
+                  <div style=\"font-size: 12px; color: #6b7280;\">Auto-Resolved</div>
+                </div>
+              </div>
+              <table style=\"width: 100%; border-collapse: collapse; margin-top: 10px;\">
+                <tr style=\"background: #f9fafb;\"><th style=\"padding: 6px; text-align: left; font-size: 13px;\">Workflow</th><th style=\"padding: 6px; text-align: center; font-size: 13px;\">Failures</th></tr>
+                {wf_rows}
+              </table>
+
+              <h2 style=\"color: #1f2937; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; margin-top: 25px;\">Self-Healing</h2>
+              <p style=\"color: #4b5563;\">Ran <strong>{healing.get('runs', 0)}</strong> times this week, fixed <strong>{healing.get('issues_fixed', 0)}</strong> issues automatically.</p>
+
+              <h2 style=\"color: #1f2937; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; margin-top: 25px;\">Email List</h2>
+              <p style=\"color: #4b5563;\">Total subscribers: <strong>{email_stats.get('total_subscribers', 'N/A')}</strong></p>
+            </div>
+
+            <div style=\"background: #f9fafb; padding: 15px 25px; border-top: 1px solid #e5e7eb;\">
+              <p style=\"color: #9ca3af; font-size: 12px; margin: 0; text-align: center;\">
+                This is your only weekly notification. Self-healing runs every 6 hours to fix issues automatically.
+              </p>
+            </div>
           </div>
           '''
 
@@ -192,7 +292,7 @@ jobs:
               resend.Emails.send({
                   'from': 'reports@socialmediaempire.com',
                   'to': [alert_email],
-                  'subject': f'Weekly Summary: Health Score {health_score}/100 | {videos.get(\"created\", 0)} Videos',
+                  'subject': f'Weekly Report: Health {health_score}/100 | {pins.get(\"total\", 0)} Pins | {wf_failures.get(\"total\", 0)} Failures',
                   'html': html
               })
               print('Weekly summary email sent!')
@@ -217,8 +317,13 @@ jobs:
           print(f'**Period:** {s.get(\"period\", \"This Week\")}')
           print(f'**Health Score:** {s.get(\"health_score\", 0)}/100')
           print('')
-          print('### Videos')
-          print(f'- Created: {s[\"videos\"][\"created\"]}')
-          print(f'- Posted: {s[\"videos\"][\"posted\"]}')
-          print(f'- Failed: {s[\"videos\"][\"failed\"]}')
+          print('### Pins')
+          print(f'- Total: {s[\"pins\"][\"total\"]}')
+          for brand, count in s['pins'].get('by_brand', {}).items():
+              print(f'  - {brand}: {count}')
+          print('')
+          print('### Failures')
+          print(f'- Workflow failures: {s[\"workflow_failures\"][\"total\"]}')
+          print(f'- DB errors: {s[\"errors\"][\"total\"]} ({s[\"errors\"][\"resolved\"]} resolved)')
+          print(f'- Self-healing runs: {s[\"self_healing\"][\"runs\"]}')
           " >> $GITHUB_STEP_SUMMARY

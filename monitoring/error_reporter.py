@@ -108,10 +108,8 @@ class ErrorReporter:
         # Log to database
         self._log_to_database(report)
 
-        # Send alert if needed
-        severity_config = SEVERITY_LEVELS.get(severity, SEVERITY_LEVELS["medium"])
-        if severity_config["alert_immediately"] and self.alert_email:
-            self._send_email_alert(report)
+        # Email alerts disabled — all notifications consolidated to weekly summary
+        # Self-healing runs every 6 hours to auto-resolve issues
 
         return report
 

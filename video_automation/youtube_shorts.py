@@ -1,4 +1,5 @@
 """YouTube Shorts upload functionality."""
+from __future__ import annotations
 
 import os
 import logging
@@ -112,7 +113,7 @@ class YouTubeShortsUploader:
             with os.fdopen(fd, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-        except:
+        except Exception:
             os.close(fd)
             raise
 

@@ -15,7 +15,7 @@ import time
 import logging
 from typing import Optional
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -201,7 +201,7 @@ class RainforestClient:
                 category=product_data.get('categories', [{}])[0].get('name') if product_data.get('categories') else None,
                 is_prime=price_info.get('is_prime', False),
                 affiliate_url=affiliate_url,
-                fetched_at=datetime.utcnow(),
+                fetched_at=datetime.now(timezone.utc),
             )
 
         except Exception as e:

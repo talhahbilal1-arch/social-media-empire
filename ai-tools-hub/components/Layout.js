@@ -67,6 +67,7 @@ export default function Layout({ children, title, description, canonical, ogType
                 <Link href="/category/video/" className="text-gray-600 hover:text-primary-600 transition-colors">Video</Link>
                 <Link href="/category/marketing/" className="text-gray-600 hover:text-primary-600 transition-colors">Marketing</Link>
                 <Link href="/compare/" className="text-gray-600 hover:text-primary-600 transition-colors">Compare</Link>
+                <Link href="/blog/" className="text-gray-600 hover:text-primary-600 transition-colors">Blog</Link>
               </div>
             </div>
           </nav>

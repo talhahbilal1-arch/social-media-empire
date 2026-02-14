@@ -1,4 +1,5 @@
 """Pinterest Idea Pin creation via Late API (preferred) or Make.com webhook (fallback)."""
+from __future__ import annotations
 
 import logging
 import os

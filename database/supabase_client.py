@@ -1,4 +1,5 @@
 """Supabase database client for Social Media Empire."""
+from __future__ import annotations
 
 from datetime import datetime, timezone
 from typing import Optional, Any

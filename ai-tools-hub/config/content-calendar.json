@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-09",
+  "last_updated": "2026-02-13",
   "items": [
     {
       "id": 1,
@@ -174,37 +174,40 @@
       "id": 18,
       "type": "comparison",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "runway-vs-descript",
       "tools": [
         "runway",
         "descript"
       ],
-      "keyword": "runway vs descript"
+      "keyword": "runway vs descript",
+      "published_date": "2026-02-10"
     },
     {
       "id": 19,
       "type": "comparison",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "writesonic-vs-copy-ai",
       "tools": [
         "writesonic",
         "copy-ai"
       ],
-      "keyword": "writesonic vs copy.ai"
+      "keyword": "writesonic vs copy.ai",
+      "published_date": "2026-02-11"
     },
     {
       "id": 20,
       "type": "comparison",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "synthesia-vs-runway",
       "tools": [
         "synthesia",
         "runway"
       ],
-      "keyword": "synthesia vs runway"
+      "keyword": "synthesia vs runway",
+      "published_date": "2026-02-12"
     },
     {
       "id": 30,
@@ -230,11 +233,12 @@
       "id": 32,
       "type": "review",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "surfer-seo",
       "tool_name": "Surfer SEO",
       "category": "seo",
-      "keyword": "surfer seo review 2026"
+      "keyword": "surfer seo review 2026",
+      "published_date": "2026-02-13"
     },
     {
       "id": 33,

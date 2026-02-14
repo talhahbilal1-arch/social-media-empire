@@ -15,7 +15,7 @@ env:
 jobs:
   discover-and-plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -53,6 +53,17 @@ jobs:
               trends = data.get('trends', {})
               topics = trends.get('trending_topics', []) if isinstance(trends, dict) else []
               print(f'{brand}: {len(topics)} trending topics selected')
+
+          # Update agent_runs for trend_discovery
+          try:
+              db.client.table('agent_runs').upsert({
+                  'agent_name': 'trend_discovery',
+                  'last_run_at': __import__('datetime').datetime.utcnow().isoformat(),
+                  'status': 'success',
+                  'updated_at': __import__('datetime').datetime.utcnow().isoformat()
+              }, on_conflict='agent_name').execute()
+          except:
+              pass
 
           print('Weekly discovery complete.')
           "

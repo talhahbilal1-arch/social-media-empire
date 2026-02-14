@@ -283,6 +283,20 @@ FORM_CONFIGS = {
             "button_text": "Send Them Free",
             "placeholder": "Your email"
         }
+    },
+    "fitover35": {
+        "popup": {
+            "title": "Free 12-Week Workout Program",
+            "subtitle": "Build real strength after 35 with our proven 3-phase program",
+            "button_text": "Get My Free Program",
+            "placeholder": "Enter your email"
+        },
+        "inline": {
+            "title": "Start Your Transformation",
+            "subtitle": "FREE 12-Week Workout Program for Men 35+",
+            "button_text": "Get Free Access",
+            "placeholder": "Your email address"
+        }
     }
 }
 
@@ -296,7 +310,8 @@ def generate_form_html(brand: str, form_type: str = "inline") -> str:
         "daily_deal_darling": {"primary": "#E91E63", "secondary": "#FFC107"},
         "menopause_planner": {"primary": "#9C27B0", "secondary": "#E1BEE7"},
         "nurse_planner": {"primary": "#00BCD4", "secondary": "#B2EBF2"},
-        "adhd_planner": {"primary": "#FF9800", "secondary": "#FFE0B2"}
+        "adhd_planner": {"primary": "#FF9800", "secondary": "#FFE0B2"},
+        "fitover35": {"primary": "#e94560", "secondary": "#1a1a2e"}
     }
     colors = brand_colors.get(brand, brand_colors["daily_deal_darling"])
 

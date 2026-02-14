@@ -20,15 +20,12 @@ import json
 import requests
 from pathlib import Path
 
-# Supabase Configuration (can be overridden via env vars)
-SUPABASE_URL = os.environ.get(
-    "SUPABASE_URL",
-    "https://bjacmhjtpkdcxngkasux.supabase.co"
-)
-SUPABASE_KEY = os.environ.get(
-    "SUPABASE_KEY",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqYWNtaGp0cGtkY3huZ2thc3V4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTM4NTMyNSwiZXhwIjoyMDg0OTYxMzI1fQ.r5Fsa9yUwQXH2xtQvUP9KZxse2F66YD4w-uGwUK1F0w"
-)
+# Supabase Configuration (must be set via env vars)
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+if not SUPABASE_URL or not SUPABASE_KEY:
+    print("ERROR: SUPABASE_URL and SUPABASE_KEY environment variables are required")
+    print("Set them before running this script")
 BUCKET = "videos"
 
 
@@ -52,9 +49,9 @@ BRAND_CONFIG = {
             "cta": "Link in Bio!",
         },
         "pinterest": {
-            "accountId": "697ba20193a320156c4220b4",
-            "boardId": "874683627569021288",
-            "apiKey": "sk_191f58baa59a897d5836822d023958b4b08dc50b942c42608f54f35db5e51f26",
+            "accountId": os.environ.get("PINTEREST_DDD_ACCOUNT_ID", ""),
+            "boardId": os.environ.get("PINTEREST_DDD_BOARD_ID", ""),
+            "apiKey": os.environ.get("LATE_API_KEY_DDD", ""),
             "link": "https://dailydealdarling.com",
         },
         "video": {
@@ -77,9 +74,9 @@ BRAND_CONFIG = {
             "cta": "Save for Later!",
         },
         "pinterest": {
-            "accountId": "697bb4b893a320156c4221ab",
-            "boardId": "756745612325868912",
-            "apiKey": "sk_78b46c6df3c475b75acb864d30343172b1502a2ddb836adcc5c165f5fbc7ee82",
+            "accountId": os.environ.get("PINTEREST_FITNESS_ACCOUNT_ID", ""),
+            "boardId": os.environ.get("PINTEREST_FITNESS_BOARD_ID", ""),
+            "apiKey": os.environ.get("LATE_API_KEY", ""),
             "link": "https://fitnessmadeasy.com",
         },
         "video": {
@@ -102,9 +99,9 @@ BRAND_CONFIG = {
             "cta": "Get the Guide!",
         },
         "pinterest": {
-            "accountId": "697c329393a320156c422e6d",
-            "boardId": "1076993767079887530",
-            "apiKey": "sk_37d9439119d55bdaab7316707b2dda03ad616752ae9b4ee720764c944dac39cb",
+            "accountId": os.environ.get("PINTEREST_MENO_ACCOUNT_ID", ""),
+            "boardId": os.environ.get("PINTEREST_MENO_BOARD_ID", ""),
+            "apiKey": os.environ.get("LATE_API_KEY_MENO", ""),
             "link": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle",
         },
         "video": {

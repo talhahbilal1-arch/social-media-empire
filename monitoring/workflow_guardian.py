@@ -177,6 +177,222 @@ FAILURE_PATTERNS = [
         alert_immediately=True,
         description="Late API access forbidden"
     ),
+    FailurePattern(
+        name="elevenlabs_error",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"elevenlabs.+error", r"xi-api-key.+invalid", r"elevenlabs.+401", r"elevenlabs.+quota"],
+        auto_retry=True,
+        retry_delay_minutes=10,
+        max_retries=2,
+        alert_immediately=False,
+        description="ElevenLabs TTS API error"
+    ),
+    FailurePattern(
+        name="elevenlabs_quota",
+        category=FailureCategory.RESOURCE,
+        patterns=[r"elevenlabs.+character.?limit", r"elevenlabs.+quota.?exceeded"],
+        auto_retry=False,
+        alert_immediately=True,
+        description="ElevenLabs character quota exceeded"
+    ),
+    FailurePattern(
+        name="netlify_deploy_failed",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"netlify.+deploy.+fail", r"netlify.+build.+fail", r"netlify.+error"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        description="Netlify deployment or build failure"
+    ),
+    FailurePattern(
+        name="netlify_auth_error",
+        category=FailureCategory.CREDENTIAL,
+        patterns=[r"NETLIFY_AUTH_TOKEN.+invalid", r"netlify.+401", r"netlify.+unauthorized"],
+        auto_retry=False,
+        alert_immediately=True,
+        description="Netlify authentication failed"
+    ),
+    # --- Make.com webhook failures ---
+    FailurePattern(
+        name="make_webhook_failed",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"make\.com.+fail", r"webhook.+fail", r"make_webhook.+error", r"MAKE_WEBHOOK.+not configured"],
+        auto_retry=True,
+        retry_delay_minutes=10,
+        max_retries=2,
+        description="Make.com webhook delivery failed"
+    ),
+    FailurePattern(
+        name="make_webhook_timeout",
+        category=FailureCategory.TRANSIENT,
+        patterns=[r"webhook.+timeout", r"hook\..+timeout"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=3,
+        description="Make.com webhook timed out"
+    ),
+    # --- Supabase-specific failures ---
+    FailurePattern(
+        name="supabase_storage_error",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"storage/v1.+error", r"storage.+upload.+fail", r"supabase.+storage.+error"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        description="Supabase storage upload failed"
+    ),
+    FailurePattern(
+        name="supabase_schema_stale",
+        category=FailureCategory.CONFIGURATION,
+        patterns=[r"PGRST205", r"schema.?cache.+stale", r"schema.?cache.+lookup"],
+        auto_retry=True,
+        retry_delay_minutes=15,
+        max_retries=1,
+        alert_immediately=True,
+        description="Supabase schema cache stale - may need project restart"
+    ),
+    # --- AI content generation failures ---
+    FailurePattern(
+        name="json_parse_error",
+        category=FailureCategory.TRANSIENT,
+        patterns=[r"JSONDecodeError", r"json\.loads.+fail", r"Expecting.+value", r"invalid.+json"],
+        auto_retry=True,
+        retry_delay_minutes=2,
+        max_retries=3,
+        description="AI returned invalid JSON - retryable"
+    ),
+    FailurePattern(
+        name="content_calendar_exhausted",
+        category=FailureCategory.CONFIGURATION,
+        patterns=[r"calendar.+exhausted", r"no.+topics?.+remaining", r"all.+slots?.+used"],
+        auto_retry=False,
+        alert_immediately=True,
+        description="Content calendar has no remaining topics"
+    ),
+    # --- Pexels-specific failures ---
+    FailurePattern(
+        name="pexels_no_results",
+        category=FailureCategory.TRANSIENT,
+        patterns=[r"pexels.+no.+results?", r"pexels.+no.+photos?", r"pexels.+no.+videos?", r"pexels.+empty"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        description="Pexels returned no results for search query"
+    ),
+    # --- Git / CI failures ---
+    FailurePattern(
+        name="git_push_failed",
+        category=FailureCategory.TRANSIENT,
+        patterns=[r"git.+push.+fail", r"failed.+to.+push", r"rejected.+push", r"non-fast-forward"],
+        auto_retry=True,
+        retry_delay_minutes=2,
+        max_retries=2,
+        description="Git push failed (may be a race condition)"
+    ),
+    FailurePattern(
+        name="git_merge_conflict",
+        category=FailureCategory.CODE,
+        patterns=[r"merge.+conflict", r"CONFLICT.+content", r"automatic.+merge.+failed"],
+        auto_retry=False,
+        alert_immediately=True,
+        description="Git merge conflict requires manual resolution"
+    ),
+    # --- Node.js / build failures ---
+    FailurePattern(
+        name="node_build_failed",
+        category=FailureCategory.CODE,
+        patterns=[r"npm.+ERR!", r"build.+failed", r"next.+build.+error", r"webpack.+error"],
+        auto_retry=False,
+        description="Node.js / npm build failed"
+    ),
+    FailurePattern(
+        name="npm_install_failed",
+        category=FailureCategory.TRANSIENT,
+        patterns=[r"npm.+install.+fail", r"npm.+ci.+fail", r"ERESOLVE", r"npm.+WARN.+peer"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        description="npm install/ci failed"
+    ),
+    # --- FFmpeg / video rendering failures ---
+    FailurePattern(
+        name="ffmpeg_error",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"ffmpeg.+error", r"ffmpeg.+not.+found", r"ffmpeg.+fail", r"video.+render.+fail"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=1,
+        description="FFmpeg video rendering failed"
+    ),
+    # --- YouTube upload failures ---
+    FailurePattern(
+        name="youtube_upload_failed",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"youtube.+upload.+fail", r"youtube.+quota", r"youtube.+403", r"uploadLimitExceeded"],
+        auto_retry=False,
+        alert_immediately=True,
+        description="YouTube upload failed or quota exceeded"
+    ),
+    # --- GitHub API failures (for emergency alert) ---
+    FailurePattern(
+        name="github_api_error",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"gh.+api.+error", r"github.+api.+fail", r"gh:.+error"],
+        auto_retry=True,
+        retry_delay_minutes=10,
+        max_retries=2,
+        description="GitHub API call failed"
+    ),
+    # --- Google search engine ping failures ---
+    FailurePattern(
+        name="google_ping_failed",
+        category=FailureCategory.EXTERNAL,
+        patterns=[r"ping.+google.+fail", r"sitemap.+ping.+fail", r"search.+engine.+ping"],
+        auto_retry=True,
+        retry_delay_minutes=30,
+        max_retries=1,
+        description="Google search engine ping failed"
+    ),
+    # --- pip / Python dependency failures ---
+    FailurePattern(
+        name="pip_install_failed",
+        category=FailureCategory.TRANSIENT,
+        patterns=[r"pip.+install.+fail", r"Could not find.+version", r"ResolutionImpossible"],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        description="pip install failed"
+    ),
+    # --- GitHub Pages deployment failures ---
+    FailurePattern(
+        name="pages_deploy_failed",
+        category=FailureCategory.EXTERNAL,
+        patterns=[
+            r"deploy.+pages.+fail",
+            r"upload.+pages.+artifact.+fail",
+            r"pages.+deploy.+error",
+            r"index\.html.+only.+bytes",
+            r"site.+may.+be.+blank",
+        ],
+        auto_retry=True,
+        retry_delay_minutes=5,
+        max_retries=2,
+        alert_immediately=True,
+        description="GitHub Pages deployment failed - website may be down"
+    ),
+    FailurePattern(
+        name="pages_validation_failed",
+        category=FailureCategory.CODE,
+        patterns=[
+            r"FATAL:.+index\.html",
+            r"FATAL:.+styles\.css.+missing",
+            r"FATAL:.+CNAME",
+            r"site.+is.+broken",
+        ],
+        auto_retry=False,
+        alert_immediately=True,
+        description="GitHub Pages pre-deploy validation failed - critical files missing or broken"
+    ),
 ]
 
 
@@ -382,8 +598,7 @@ This failure requires manual attention.
         except Exception as e:
             logger.warning(f"Failed to log alert to database: {e}")
 
-        # Send email alert if configured
-        self._send_email_alert(run, category, pattern_name, description)
+        # Email alerts disabled — consolidated to weekly summary only
 
         self.actions_taken.append(RemediationAction(
             workflow_run_id=run.id,

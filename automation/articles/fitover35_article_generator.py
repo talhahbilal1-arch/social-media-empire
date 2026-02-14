@@ -5,7 +5,7 @@ Generates SEO-optimized fitness articles for men over 35 with:
 - Meta tags, Open Graph, and Twitter Card tags
 - Article schema JSON-LD + FAQ schema JSON-LD
 - Proper heading hierarchy (H1, H2, H3)
-- Product recommendations with Amazon affiliate links (tag: fitover35-20)
+- Product recommendations with Amazon affiliate links (tag: dailydealdarl-20)
 - FAQ section with schema markup
 - Pexels hero image integration
 - ConvertKit email signup integration
@@ -18,7 +18,7 @@ import re
 import json
 import logging
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-AFFILIATE_TAG = "fitover35-20"
+AFFILIATE_TAG = "dailydealdarl-20"
 CONVERTKIT_FORM_ID = "8946984"
 SITE_URL = "https://fitover35.com"
 SITE_NAME = "FitOver35"
@@ -81,28 +81,54 @@ CATEGORY_DISPLAY = {
 
 # ── Prompts ──────────────────────────────────────────────────────────────────
 
-OUTLINE_PROMPT = """You are an expert fitness content writer for FitOver35.com, a website targeting men over 35 who want to build or maintain a strong physique.
+RESEARCH_AND_OUTLINE_PROMPT = """You are an expert fitness content researcher and writer for FitOver35.com, a website targeting men over 35 who want to build or maintain a strong physique.
 
 The site owner has a Bachelor's in Kinesiology, Master's in Education, 15+ years fitness experience, and is a natural bodybuilder/coach.
 
-Create a detailed article outline for the keyword: "{keyword}"
+Your task has TWO parts for the keyword: "{keyword}"
 
-The article should:
-1. Be 1000-2000 words (plan sections accordingly)
-2. Target men over 35 who are searching for practical, evidence-based fitness advice
-3. Include 4-6 main sections (H2 headings) with logical flow
-4. Have a compelling, authoritative introduction that hooks immediately
-5. Include 2-3 places where product recommendations fit naturally
-6. End with a FAQ section (3-5 questions that people actually search for)
-7. Include practical, actionable advice -- not fluff
-8. Reference scientific evidence where appropriate
-9. Use a direct, no-BS tone (confident, evidence-based, practical)
+═══ PART 1: RESEARCH ═══
+Compile research on this topic as it specifically applies to men over 35:
+- 3-5 statistics with sources (journals, health organizations, or well-known studies — cite author/org and year)
+- 2-3 expert perspectives or quotes (real researchers, coaches, or doctors who have published on this topic)
+- 1-2 common misconceptions the audience likely holds about this topic
+- The specific angle that makes this topic different for men over 35 vs the general population
+
+═══ PART 2: OUTLINE ═══
+Using the research above, create a detailed article outline:
+1. 1000-2000 words (plan sections accordingly)
+2. Target men over 35 searching for practical, evidence-based fitness advice
+3. 4-6 main sections (H2 headings) with logical flow
+4. 2-3 places where product recommendations fit naturally
+5. FAQ section (3-5 questions people actually search for)
+6. Practical, actionable advice — not fluff
+7. Direct, no-BS tone (confident, evidence-based, practical)
+
+═══ PART 3: HOOKS ═══
+Write 3 different opening hooks for this article. Each should be 1-2 sentences that immediately grab a man over 35:
+- bold_statement: A confident, specific claim that challenges conventional thinking
+- story_hook: A brief personal-sounding anecdote that creates relatability
+- data_hook: Lead with a surprising statistic from the research above
 
 Return ONLY valid JSON in this exact format:
 {{
+    "research": {{
+        "statistics": [
+            {{"fact": "The statistic or finding", "source": "Author/Organization, Year"}}
+        ],
+        "expert_perspectives": [
+            {{"expert": "Name and credentials", "insight": "What they said or found"}}
+        ],
+        "misconceptions": ["Common misconception about this topic"],
+        "age_specific_angle": "Why this topic is different for men over 35"
+    }},
+    "hooks": {{
+        "bold_statement": "Opening hook using a bold claim",
+        "story_hook": "Opening hook using a relatable anecdote",
+        "data_hook": "Opening hook leading with a surprising stat"
+    }},
     "title": "SEO-optimized title (55-65 chars, include keyword naturally)",
     "meta_description": "Compelling description (145-155 chars, include keyword, actionable)",
-    "intro_hook": "Opening sentence that immediately grabs a man over 35",
     "sections": [
         {{
             "heading": "H2 heading text",
@@ -129,26 +155,72 @@ Return ONLY valid JSON in this exact format:
 }}
 """
 
+HOOK_EVALUATION_PROMPT = """You are a senior editor at a men's fitness publication. Your job is to pick the strongest opening hook for an article.
+
+ARTICLE KEYWORD: "{keyword}"
+TARGET AUDIENCE: Men over 35 who want practical, evidence-based fitness advice
+
+Here are 3 candidate hooks:
+
+BOLD STATEMENT: {bold_statement}
+STORY HOOK: {story_hook}
+DATA HOOK: {data_hook}
+
+Score each hook on these criteria (1-10):
+- CURIOSITY: Does it make you NEED to read the next sentence?
+- VALUE SIGNAL: Does it promise something specific and useful?
+- SPECIFICITY: Does it avoid vague/generic language?
+- AUDIENCE FIT: Does it speak directly to a man over 35?
+
+Then select the winner and polish it — tighten the language, sharpen the specificity, and write a 1-sentence transition that bridges from the hook into the article's first section.
+
+Return ONLY valid JSON:
+{{
+    "scores": {{
+        "bold_statement": {{"curiosity": 0, "value": 0, "specificity": 0, "audience_fit": 0, "total": 0}},
+        "story_hook": {{"curiosity": 0, "value": 0, "specificity": 0, "audience_fit": 0, "total": 0}},
+        "data_hook": {{"curiosity": 0, "value": 0, "specificity": 0, "audience_fit": 0, "total": 0}}
+    }},
+    "winner": "bold_statement|story_hook|data_hook",
+    "polished_hook": "The refined, publication-ready opening hook",
+    "transition": "One sentence bridging the hook into the first section"
+}}
+"""
+
 ARTICLE_CONTENT_PROMPT = """You are the head writer for FitOver35.com. The site owner has a Bachelor's in Kinesiology, Master's in Education, 15+ years fitness experience, and is a natural bodybuilder/coach.
 
 Write the FULL article content for: "{keyword}"
 Title: {title}
 
+OPEN WITH THIS EDITOR-SELECTED HOOK:
+{winning_hook}
+
+TRANSITION INTO THE FIRST SECTION:
+{hook_transition}
+
 Use this outline:
 {outline_json}
+
+RESEARCH TO WEAVE INTO THE ARTICLE (cite conversationally, not as footnotes):
+{research_json}
+
+Examples of good inline citations:
+- "A 2023 study in the Journal of Strength and Conditioning Research found that..."
+- "According to Dr. Brad Schoenfeld, one of the leading hypertrophy researchers..."
+- "The American College of Sports Medicine recommends..."
+Do NOT add a references section at the end. Weave citations naturally into the text.
 
 WRITING GUIDELINES:
 - Total length: 1000-2000 words
 - Tone: Direct, authoritative, no-BS. Like a knowledgeable friend who happens to have credentials.
 - Write for men over 35 who are busy professionals, dads, or both
-- Use "you" language -- speak directly to the reader
+- Use "you" language — speak directly to the reader
 - Include specific numbers, sets, reps, percentages when relevant
-- Reference research/evidence naturally (don't be overly academic)
-- Be practical -- every paragraph should have actionable value
-- Avoid filler phrases like "in today's fast-paced world" or "it's important to note"
+- Be practical — every paragraph should have actionable value
 - Use short paragraphs (2-4 sentences max)
-- Include relevant statistics or research findings where natural
 - Don't use excessive exclamation marks or hype language
+- VOICE CHECK: If any sentence sounds like it came from WebMD, a corporate blog, or a generic health site, rewrite it in the voice of a real guy talking to another guy at the gym.
+- FILLER BAN: Do not use these phrases: "in today's fast-paced world", "it's important to note", "when it comes to", "at the end of the day", "it goes without saying", "the fact of the matter is"
 
 INTERNAL LINKS TO INCLUDE (use these existing article URLs where relevant):
 {internal_links}
@@ -161,9 +233,29 @@ Use these HTML elements:
 - <ul>/<ol> and <li> for lists
 - <strong> for emphasis
 - <a href="..."> for internal links (use relative paths like "articles/slug.html")
-- Do NOT include the title (H1) -- that's handled separately
+- Do NOT include the title (H1) — that's handled separately
 
 Write the complete article now.
+"""
+
+REVIEW_AND_POLISH_PROMPT = """You are a senior editor reviewing an article for FitOver35.com before publication.
+
+ARTICLE KEYWORD: "{keyword}"
+ARTICLE TITLE: "{title}"
+
+Review the following HTML article content and improve it. Check for:
+
+1. FLOW: Does each section transition smoothly to the next? Fix any abrupt jumps.
+2. UNSUPPORTED CLAIMS: Flag or soften any health/fitness claims that lack a citation or qualifier. Add "research suggests" or "according to [source]" where needed.
+3. VOICE CONSISTENCY: Every sentence should sound like a knowledgeable 38-year-old guy who lifts. If anything sounds like WebMD, a textbook, or a corporate blog, rewrite it.
+4. FILLER PHRASES: Remove or replace: "in today's fast-paced world", "it's important to note", "when it comes to", "at the end of the day", "it goes without saying", "the fact of the matter is", "in conclusion"
+5. SPECIFICITY: Replace vague advice ("exercise regularly") with specific advice ("3 sets of 8-10 reps, twice per week").
+6. READABILITY: Break up any paragraphs longer than 4 sentences. Ensure lists are used where appropriate.
+
+Return the IMPROVED HTML content only. Keep all existing HTML tags, links, and structure. Do not add <html>, <head>, or <body> tags. Do not add a title (H1).
+
+ARTICLE CONTENT TO REVIEW:
+{content_html}
 """
 
 PRODUCT_SECTION_PROMPT = """Write product recommendation cards for a FitOver35 article about "{keyword}".
@@ -267,7 +359,7 @@ class FitOver35ArticleGenerator:
 
         if gemini_key and genai:
             genai.configure(api_key=gemini_key)
-            self.model = genai.GenerativeModel('gemini-2.0-flash')
+            self.model = genai.GenerativeModel('gemini-2.0-flash-lite')
             self.backend = 'gemini'
             logger.info("Using Gemini backend for article generation")
         elif anthropic_key and _anthropic:
@@ -280,13 +372,21 @@ class FitOver35ArticleGenerator:
                 "At least one AI API key is required for article generation."
             )
 
-    def _call_gemini(self, prompt: str) -> str:
+    def _call_gemini(self, prompt: str, json_mode: bool = False) -> str:
         """Make an AI API call with retry. Dispatches to Gemini or Anthropic."""
         if self.backend == 'anthropic':
             return self._call_anthropic(prompt)
+        generation_config = None
+        if json_mode and genai:
+            generation_config = genai.types.GenerationConfig(
+                response_mime_type="application/json"
+            )
         for attempt in range(3):
             try:
-                response = self.model.generate_content(prompt)
+                response = self.model.generate_content(
+                    prompt,
+                    generation_config=generation_config
+                )
                 return response.text
             except Exception as e:
                 logger.error(f"Gemini API error (attempt {attempt + 1}): {e}")
@@ -312,6 +412,39 @@ class FitOver35ArticleGenerator:
                 import time
                 time.sleep(2 ** attempt)
 
+    def _repair_json(self, text: str) -> Optional[str]:
+        """Attempt to repair common JSON issues from LLM responses."""
+        # Fix trailing commas before } or ]
+        repaired = re.sub(r',\s*([}\]])', r'\1', text)
+        # Fix missing commas between values (cross-line)
+        repaired = re.sub(r'(")\s*\n\s*(")', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(")\s*\n\s*(\{)', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(\})\s*\n\s*(\{)', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(\])\s*\n\s*(")', r'\1,\n\2', repaired)
+        repaired = re.sub(r'(\})\s*\n\s*(")', r'\1,\n\2', repaired)
+        # Fix missing commas within a line: "value" "key" or "value"  "key"
+        repaired = re.sub(r'"\s+"(?=[a-zA-Z_])', '", "', repaired)
+        # Fix: true/false/null/number followed by "key" without comma
+        repaired = re.sub(r'(true|false|null|\d+)\s+"', r'\1, "', repaired)
+        # Fix: "value" followed by { or [ without comma (within line)
+        repaired = re.sub(r'"\s+(\{)', r'", \1', repaired)
+        repaired = re.sub(r'"\s+(\[)', r'", \1', repaired)
+        try:
+            json.loads(repaired)
+            return repaired
+        except json.JSONDecodeError:
+            pass
+        # Try truncating to last valid closing brace (Gemini sometimes appends garbage)
+        last_brace = repaired.rfind('}')
+        if last_brace != -1:
+            candidate = repaired[:last_brace + 1]
+            try:
+                json.loads(candidate)
+                return candidate
+            except json.JSONDecodeError:
+                pass
+        return None
+
     def _parse_json(self, text: str) -> dict:
         """Extract and parse JSON from Gemini response."""
         # Clean the text first
@@ -324,6 +457,11 @@ class FitOver35ArticleGenerator:
                 return json.loads(json_block.group(1))
             except json.JSONDecodeError as e:
                 logger.warning(f"JSON decode error in ```json block: {e}")
+                # Try repairing the extracted block
+                repaired = self._repair_json(json_block.group(1))
+                if repaired:
+                    logger.info("JSON repair succeeded on ```json block")
+                    return json.loads(repaired)
 
         # Second try: if the whole text starts with ```json, strip the markers
         if text.startswith('```json'):
@@ -335,6 +473,10 @@ class FitOver35ArticleGenerator:
                 return json.loads(clean)
             except json.JSONDecodeError as e:
                 logger.warning(f"JSON decode error after stripping markers: {e}")
+                repaired = self._repair_json(clean)
+                if repaired:
+                    logger.info("JSON repair succeeded after stripping markers")
+                    return json.loads(repaired)
 
         # Third try: find the outermost JSON object or array
         for pattern in [r'\{[\s\S]*\}', r'\[[\s\S]*\]']:
@@ -343,7 +485,10 @@ class FitOver35ArticleGenerator:
                 try:
                     return json.loads(json_match.group())
                 except json.JSONDecodeError:
-                    continue
+                    repaired = self._repair_json(json_match.group())
+                    if repaired:
+                        logger.info("JSON repair succeeded on extracted object")
+                        return json.loads(repaired)
 
         # Fourth try: maybe Gemini didn't add the closing ```
         if '```json' in text:
@@ -362,18 +507,58 @@ class FitOver35ArticleGenerator:
                             try:
                                 return json.loads(text[brace_start:i+1])
                             except json.JSONDecodeError:
+                                repaired = self._repair_json(text[brace_start:i+1])
+                                if repaired:
+                                    logger.info("JSON repair succeeded on brace-matched block")
+                                    return json.loads(repaired)
                                 break
 
         raise ValueError(f"No valid JSON found in response: {text[:200]}...")
 
-    def generate_outline(self, keyword: str) -> dict:
-        """Generate article outline."""
-        logger.info(f"Generating outline for: {keyword}")
-        prompt = OUTLINE_PROMPT.format(keyword=keyword)
-        response = self._call_gemini(prompt)
-        return self._parse_json(response)
+    def research_and_outline(self, keyword: str) -> dict:
+        """Generate research + article outline with retry on parse failure."""
+        logger.info(f"Researching and outlining: {keyword}")
+        prompt = RESEARCH_AND_OUTLINE_PROMPT.format(keyword=keyword)
+        last_error = None
+        for attempt in range(3):
+            response = self._call_gemini(prompt, json_mode=True)
+            try:
+                return self._parse_json(response)
+            except ValueError as e:
+                last_error = e
+                logger.warning(f"Research+outline parse failed (attempt {attempt + 1}/3): {e}")
+                import time
+                time.sleep(2)
+        raise last_error
 
-    def generate_article_content(self, keyword: str, title: str, outline: dict) -> str:
+    def evaluate_hooks(self, keyword: str, hooks: dict) -> dict:
+        """Score 3 hook candidates and return the winner with polish."""
+        logger.info(f"Evaluating hooks for: {keyword}")
+        prompt = HOOK_EVALUATION_PROMPT.format(
+            keyword=keyword,
+            bold_statement=hooks.get('bold_statement', ''),
+            story_hook=hooks.get('story_hook', ''),
+            data_hook=hooks.get('data_hook', '')
+        )
+        try:
+            response = self._call_gemini(prompt, json_mode=True)
+            result = self._parse_json(response)
+            # Validate required keys
+            if 'polished_hook' in result and 'winner' in result:
+                return result
+        except Exception as e:
+            logger.warning(f"Hook evaluation failed: {e}")
+
+        # Fallback: use bold_statement as winner
+        return {
+            'winner': 'bold_statement',
+            'polished_hook': hooks.get('bold_statement', ''),
+            'transition': 'Here\'s what you need to know.'
+        }
+
+    def generate_article_content(self, keyword: str, title: str, outline: dict,
+                                  winning_hook: str = '', hook_transition: str = '',
+                                  research: Optional[dict] = None) -> str:
         """Generate the full article HTML content."""
         logger.info(f"Generating article content for: {keyword}")
 
@@ -384,13 +569,37 @@ class FitOver35ArticleGenerator:
             if article["slug"] in link_slugs or not link_slugs:
                 internal_links += f'- {article["title"]}: articles/{article["slug"]}.html\n'
 
+        research_json = json.dumps(research, indent=2) if research else "No research data available — use your knowledge."
+
         prompt = ARTICLE_CONTENT_PROMPT.format(
             keyword=keyword,
             title=title,
+            winning_hook=winning_hook or "Write a compelling opening hook.",
+            hook_transition=hook_transition or "Transition naturally into the first section.",
             outline_json=json.dumps(outline, indent=2),
+            research_json=research_json,
             internal_links=internal_links
         )
         return self._call_gemini(prompt)
+
+    def review_and_polish(self, keyword: str, title: str, content_html: str) -> str:
+        """Editorial review pass — checks flow, voice, unsupported claims, filler."""
+        logger.info(f"Editorial review for: {keyword}")
+        prompt = REVIEW_AND_POLISH_PROMPT.format(
+            keyword=keyword,
+            title=title,
+            content_html=content_html
+        )
+        try:
+            reviewed = self._call_gemini(prompt)
+            # Safety check: if output is suspiciously short, keep original
+            if len(reviewed.strip()) < len(content_html.strip()) * 0.6:
+                logger.warning("Review output too short, keeping original content")
+                return content_html
+            return reviewed
+        except Exception as e:
+            logger.warning(f"Editorial review failed: {e} — keeping original content")
+            return content_html
 
     def generate_product_recommendations(self, keyword: str, products: list) -> list:
         """Generate product recommendation content."""
@@ -402,7 +611,7 @@ class FitOver35ArticleGenerator:
             keyword=keyword,
             products_json=json.dumps(products, indent=2)
         )
-        response = self._call_gemini(prompt)
+        response = self._call_gemini(prompt, json_mode=True)
         try:
             return self._parse_json(response)
         except (ValueError, json.JSONDecodeError):
@@ -419,7 +628,7 @@ class FitOver35ArticleGenerator:
             keyword=keyword,
             faq_json=json.dumps(faq_items, indent=2)
         )
-        response = self._call_gemini(prompt)
+        response = self._call_gemini(prompt, json_mode=True)
         try:
             return self._parse_json(response)
         except (ValueError, json.JSONDecodeError):
@@ -433,6 +642,16 @@ class FitOver35ArticleGenerator:
         """
         Generate a complete article with all components.
 
+        Uses the content-research-writer methodology:
+        1. Research + Outline (combined)
+        2. Hook Evaluation (pick best opening)
+        3. Article Content (with research + winning hook)
+        4. Editorial Review (polish voice, citations, flow)
+        5. Product Recommendations (unchanged)
+        6. FAQ (unchanged)
+
+        Set ENHANCED_ARTICLES=false env var to skip steps 2 + 4 (research/review).
+
         Args:
             keyword: Target keyword
             category: Article category
@@ -440,29 +659,57 @@ class FitOver35ArticleGenerator:
         Returns:
             Dict with all article components needed for HTML generation
         """
+        enhanced = os.getenv('ENHANCED_ARTICLES', 'true').lower() != 'false'
+
         logger.info(f"{'='*60}")
         logger.info(f"Generating full article for: {keyword}")
-        logger.info(f"Category: {category}")
+        logger.info(f"Category: {category} | Enhanced: {enhanced}")
         logger.info(f"{'='*60}")
 
-        # Step 1: Generate outline
-        outline = self.generate_outline(keyword)
+        # Step 1: Research + Outline
+        outline = self.research_and_outline(keyword)
         title = outline.get('title', keyword.title())
         meta_description = outline.get('meta_description', '')
+        research = outline.get('research', {})
+        hooks = outline.get('hooks', {})
 
-        # Step 2: Generate article content
-        content_html = self.generate_article_content(keyword, title, outline)
+        # Step 2: Hook Evaluation (skip if not enhanced)
+        winning_hook = ''
+        hook_transition = ''
+        hook_selected = ''
+        if enhanced and hooks:
+            hook_result = self.evaluate_hooks(keyword, hooks)
+            winning_hook = hook_result.get('polished_hook', '')
+            hook_transition = hook_result.get('transition', '')
+            hook_selected = hook_result.get('winner', '')
+            logger.info(f"Hook selected: {hook_selected}")
+        elif hooks:
+            # Use bold_statement as default without evaluation
+            winning_hook = hooks.get('bold_statement', '')
+            hook_selected = 'bold_statement (default)'
 
-        # Step 3: Generate product recommendations
+        # Step 3: Generate article content (with research + hook)
+        content_html = self.generate_article_content(
+            keyword, title, outline,
+            winning_hook=winning_hook,
+            hook_transition=hook_transition,
+            research=research if enhanced else None
+        )
+
+        # Step 4: Editorial Review (skip if not enhanced)
+        if enhanced:
+            content_html = self.review_and_polish(keyword, title, content_html)
+
+        # Step 5: Generate product recommendations
         products = self.generate_product_recommendations(
             keyword,
             outline.get('product_recommendations', [])
         )
 
-        # Step 4: Generate FAQ
+        # Step 6: Generate FAQ
         faq = self.generate_faq(keyword, outline.get('faq', []))
 
-        # Step 5: Fetch hero image
+        # Fetch hero image
         pexels_query = outline.get('pexels_search', keyword)
         hero_image = fetch_pexels_image(pexels_query, self.pexels_key)
         if not hero_image:
@@ -471,20 +718,19 @@ class FitOver35ArticleGenerator:
                 FALLBACK_IMAGES["strength_training"]
             )
 
-        # Step 6: Calculate read time
+        # Calculate read time
         total_text = content_html
         for item in faq:
             total_text += " " + item.get("answer", "")
         word_count = len(total_text.split())
         read_time = max(5, word_count // 200)
 
-        # Step 7: Determine internal links
+        # Determine internal links
         internal_link_slugs = outline.get('internal_link_slugs', [])
         internal_links = [
             a for a in EXISTING_ARTICLES
             if a["slug"] in internal_link_slugs
         ]
-        # If none matched, pick 2-3 related ones
         if not internal_links:
             internal_links = EXISTING_ARTICLES[:3]
 
@@ -501,7 +747,9 @@ class FitOver35ArticleGenerator:
             'read_time': read_time,
             'word_count': word_count,
             'internal_links': internal_links,
-            'generated_at': datetime.utcnow().isoformat(),
+            'research': research,
+            'hook_selected': hook_selected,
+            'generated_at': datetime.now(timezone.utc).isoformat(),
         }
 
 
@@ -528,7 +776,7 @@ def generate_html(article_data: dict) -> str:
     faq = article_data.get('faq', [])
     hero_image = article_data['hero_image']
     read_time = article_data['read_time']
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     date_str = now.strftime("%B %d, %Y")
     date_iso = now.strftime("%Y-%m-%d")
     slug = article_data['keyword'].lower().replace(' ', '-').replace('?', '').replace("'", '')
@@ -959,7 +1207,7 @@ def main():
     generator = FitOver35ArticleGenerator()
 
     if args.dry_run:
-        outline = generator.generate_outline(args.keyword)
+        outline = generator.research_and_outline(args.keyword)
         print(json.dumps(outline, indent=2))
         return 0
 

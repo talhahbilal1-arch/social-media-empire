@@ -9,7 +9,7 @@ import json
 import argparse
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 # Import our Rainforest client
@@ -66,7 +66,7 @@ def verify_asins(asins_data: dict, client: Optional[RainforestClient] = None) ->
                 'availability': verification.get('availability'),
                 'error': verification.get('error'),
                 'locations': item.get('locations', []),
-                'verified_at': datetime.utcnow().isoformat(),
+                'verified_at': datetime.now(timezone.utc).isoformat(),
             })
 
         except Exception as e:
@@ -79,12 +79,12 @@ def verify_asins(asins_data: dict, client: Optional[RainforestClient] = None) ->
                 'availability': None,
                 'error': str(e),
                 'locations': item.get('locations', []),
-                'verified_at': datetime.utcnow().isoformat(),
+                'verified_at': datetime.now(timezone.utc).isoformat(),
             })
             logger.error(f"Error verifying {asin}: {e}")
 
     return {
-        'verified_at': datetime.utcnow().isoformat(),
+        'verified_at': datetime.now(timezone.utc).isoformat(),
         'summary': {
             'total': len(results),
             'valid': valid_count,
@@ -188,7 +188,7 @@ def main():
     if args.dry_run:
         logger.info("DRY RUN - skipping API verification")
         report = {
-            'verified_at': datetime.utcnow().isoformat(),
+            'verified_at': datetime.now(timezone.utc).isoformat(),
             'summary': {'total': asins_data['unique_asins'], 'valid': 0, 'invalid': 0, 'errors': 0},
             'results': [],
             'dry_run': True,
