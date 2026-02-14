@@ -14,10 +14,7 @@
   - `dailydealdar-20` (3 occurrences) → fixed to `dailydealdarl-20`
   - `googhydr-20` (1 occurrence, wrong network) → fixed to `dailydealdarl-20`
   - All in `dailydealdarling_website/articles/kitchen-tools-every-home-cook-needs.html`
-- [ ] **STILL NEEDED: Standardize Amazon affiliate tags** - Two main tags still used across codebase:
-  - `dailydealdarl-20` (154 occurrences) → root-level live site, backups, email sequences
-  - `dailydealdarl-20` (225 occurrences) → dailydealdarling_website/, fitover35, automation scripts
-  - **ACTION NEEDED:** Check Amazon Associates dashboard to confirm which is the registered tag, then standardize all files
+- [x] **Standardize Amazon affiliate tags** - Replaced `dailydealdarling1-20` → `dailydealdarl-20` across 27 files (131 occurrences). All active code now uses the registered tag.
 
 ## This Week
 
@@ -26,7 +23,9 @@
   - [x] Add `assets/fonts/*.ttf` to `.gitignore`
   - [x] Test single pin generation - all 3 styles verified at 1000x1500px
   - [x] Test batch mode - tested with mock backgrounds (real Pexels needs API key in .env)
-- [ ] **Generate Etsy product PDFs** - ReportLab printable + digital for 6 remaining products
+- [x] **Generate Etsy product PDFs** - 6 menopause planner PDFs generated via Playwright Chromium:
+  - product1_sleep_log (402 KB), product2_perimenopause_journal (618 KB), product3_hot_flash_tracker (456 KB)
+  - product4_selfcare_planner (548 KB), product5_hormone_health_journal (600 KB), digital_planner landscape (725 KB)
 - [x] **Deploy ConvertKit email forms** - Verified and fixed:
   - DDD site (index.html): form ID 5641382 ✓ (was placeholder, fixed)
   - DDD pages (about, contact, privacy, disclosure): copied to root for GitHub Pages ✓
@@ -36,12 +35,32 @@
 
 ## This Month
 
-- [ ] **Consolidate agent systems** - Merge overlapping `agents/` and `automation/` code
+- [x] **Consolidate agent systems** - Archived dead code: moved automation/{deals,email,links,affiliate,amazon} → archive/deprecated/automation/ (14 files). Kept automation/articles/ (used by fitness-articles.yml). PR #16 includes these moves.
 - [ ] **Deploy subdomain sites** - 10 subdomain landing pages have HTML ready
-- [ ] **Activate YouTube Shorts** - Test uploader and start publishing
+- [x] **Activate YouTube Shorts** - Already working! Workflow posted 1 video on Feb 13. Hits Gemini rate limits but retries and succeeds.
 - [ ] **Build Pinterest Analytics** - Replace placeholder zeros with real API data
-- [ ] **List remaining Etsy products** - 6 products with HTML mockups need PDFs and listings
-- [ ] **Nurse Planner digital PDF** - Create landscape version for existing Etsy listing
+- [ ] **List remaining Etsy products** - PDFs generated ✓, need to upload to Etsy store
+- [x] **Nurse Planner digital PDF** - Already landscape (11x8.5in, 22 pages). Landscape copy created at `Etsy Planners./Nurse Planner pdf/nurse_planner_digital_landscape.pdf`
+
+## Also Completed (Feb 13-14, 2026)
+
+- [x] **Cleaned up 10 stale git branches** - Deleted all except main + active PRs
+- [x] **Merged PR #14** (fitover35-netlify-deploy) - Resolved 15 merge conflicts, merged to main
+- [x] **Created PR #16** (toolpilot-newsletter) - Newsletter system with bug fixes:
+  - Fixed ConvertKit API key bug in NewsletterSignup.js (was passing form ID as api_key)
+  - Fixed schedule conflict (moved newsletter cron to 5PM UTC, 2hrs after discovery)
+  - 17 files: signup component, discovery script, newsletter generator, workflows, etc.
+
+## Remaining (Requires Manual Action)
+
+- [ ] **Deploy 10 subdomain sites** - HTML ready in `outputs/infrastructure/`, need 10 Netlify sites + DNS CNAME records
+- [ ] **FitOver35 Pinterest via Make.com** - Need to create Make.com scenario for existing Pinterest account (469 followers)
+- [ ] **Upload 6 Etsy products** - PDFs generated, need manual Etsy store listing
+- [ ] **Pinterest Analytics API** - Needs Pinterest OAuth token to replace placeholder data
+- [ ] **DNS for fitover35.com** - A record → 75.2.60.5, CNAME www → fitover35.netlify.app (Namecheap)
+- [ ] **Check affiliate approvals** - Writesonic, ElevenLabs, Descript (pending since Feb 7)
+- [ ] **Grammarly + Synthesia signups** - Need manual signup (automation blocked)
+- [ ] **Merge PR #16** - Newsletter system ready for review
 
 ---
 
