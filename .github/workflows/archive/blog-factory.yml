@@ -1,12 +1,17 @@
+# ARCHIVED 2026-02-13: Duplicates fitness-articles.yml
+# This ran agents.blog_factory daily at 7AM UTC.
+# fitness-articles.yml runs daily Mon-Fri at 7AM UTC using automation/articles/
+# with keyword selection, SEO article generation, and git commit/push.
+# Both workflows targeted the same time slot causing unnecessary duplication.
+#
 # Agent 8: Blog Factory
 # Runs daily at 7:00 AM UTC to create and publish blog articles
 
-name: Blog Factory
+name: Blog Factory (ARCHIVED)
 
 on:
-  schedule:
-    # 7:00 AM UTC daily (1 hour after Content Brain)
-    - cron: '0 7 * * *'
+  # schedule disabled — archived
+  # - cron: '0 7 * * *'
   workflow_dispatch:
     inputs:
       brand:
