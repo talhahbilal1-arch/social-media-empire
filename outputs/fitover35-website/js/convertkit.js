@@ -84,7 +84,7 @@ function initConvertKitForms() {
         // Show success message
         const msg = document.createElement('p');
         msg.className = 'ck-success-msg';
-        msg.textContent = 'Check your inbox for your free guide!';
+        msg.textContent = 'Check your inbox for your free 12-week program!';
         msg.style.cssText = 'color: #22c55e; margin-top: 0.5rem; font-size: 0.9rem; text-align: center;';
         if (!this.querySelector('.ck-success-msg')) {
           this.appendChild(msg);
@@ -111,7 +111,87 @@ function initConvertKitForms() {
   });
 }
 
+/**
+ * Email Popup Modal
+ * Shows after 30s or 60% scroll, once per session
+ */
+function initEmailPopup() {
+  // Don't show if already dismissed
+  if (sessionStorage.getItem('ck_popup_shown')) return;
+
+  // Create popup HTML
+  const popupHTML = `
+    <div class="popup-overlay" id="ckPopup" style="display:none;">
+      <div class="popup-modal">
+        <button class="popup-close" id="ckPopupClose" aria-label="Close">&times;</button>
+        <div class="popup-content">
+          <h2 class="popup-title">Get Your Free 12-Week Workout Program</h2>
+          <p class="popup-text">A complete training program for men over 35. Progressive overload, built-in recovery, and zero guesswork. No spam. Unsubscribe anytime.</p>
+          <form class="popup-form" data-ck-form="lead-magnet">
+            <input type="email" class="popup-input" placeholder="Enter your email" required>
+            <button type="submit" class="btn btn--primary popup-btn">Send Me The Program</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+  const popup = document.getElementById('ckPopup');
+  const closeBtn = document.getElementById('ckPopupClose');
+  let popupShown = false;
+
+  function showPopup() {
+    if (popupShown || sessionStorage.getItem('ck_popup_shown')) return;
+    popupShown = true;
+    popup.style.display = 'flex';
+    sessionStorage.setItem('ck_popup_shown', 'true');
+    // Re-init forms to capture the new popup form
+    initConvertKitForms();
+  }
+
+  function hidePopup() {
+    popup.style.display = 'none';
+  }
+
+  // Close button
+  closeBtn.addEventListener('click', hidePopup);
+
+  // Close on overlay click
+  popup.addEventListener('click', function(e) {
+    if (e.target === popup) hidePopup();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') hidePopup();
+  });
+
+  // Trigger: after 30 seconds
+  setTimeout(showPopup, 30000);
+
+  // Trigger: 60% scroll
+  window.addEventListener('scroll', function onScroll() {
+    const scrollPercent = (window.scrollY + window.innerHeight) / document.body.scrollHeight;
+    if (scrollPercent > 0.6) {
+      showPopup();
+      window.removeEventListener('scroll', onScroll);
+    }
+  });
+
+  // Trigger: exit intent (desktop only)
+  if (window.innerWidth > 768) {
+    document.addEventListener('mouseout', function(e) {
+      if (e.clientY < 10 && e.relatedTarget === null) {
+        showPopup();
+      }
+    });
+  }
+}
+
 // Initialize when DOM ready
 document.addEventListener('DOMContentLoaded', function() {
   initConvertKitForms();
+  initEmailPopup();
 });

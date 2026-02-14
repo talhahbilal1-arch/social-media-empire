@@ -122,6 +122,29 @@ p {
 }
 
 /* ==========================================================================
+   Announcement Bar
+   ========================================================================== */
+
+.header-top {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  text-align: center;
+  padding: 0.5rem var(--spacing-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.header-top a {
+  color: var(--color-white);
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.header-top a:hover {
+  color: var(--color-off-white);
+}
+
+/* ==========================================================================
    Header & Navigation
    ========================================================================== */
 
