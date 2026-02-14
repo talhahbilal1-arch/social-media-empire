@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import googleConfig from '../config/google.json'
+import NewsletterSignup from './NewsletterSignup'
 
 const SITE_NAME = 'ToolPilot'
-const SITE_TAGLINE = 'Find the Perfect AI Tool'
+const SITE_TAGLINE = 'Save Money & Make Money with AI'
 const SITE_URL = 'https://toolpilot-hub.netlify.app'
 
 // Google config — auto-activates when real values are pasted into config/google.json
@@ -14,7 +15,7 @@ const hasGA4 = GA4_ID && !GA4_ID.startsWith('PASTE')
 
 export default function Layout({ children, title, description, canonical, ogType, structuredData }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - ${SITE_TAGLINE}`
-  const metaDesc = description || 'Compare the best AI tools in 2026. Honest reviews, pricing comparisons, and expert recommendations for AI writing, coding, image, video, and marketing tools.'
+  const metaDesc = description || 'Make money and save money with AI tools. Honest reviews, pricing comparisons, and practical guides for AI writing, coding, image, video, and marketing tools in 2026.'
   const canonicalUrl = canonical || SITE_URL
 
   return (
@@ -79,6 +80,7 @@ export default function Layout({ children, title, description, canonical, ogType
 
         <footer className="bg-gray-50 border-t border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <NewsletterSignup variant="default" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
@@ -110,7 +112,7 @@ export default function Layout({ children, title, description, canonical, ogType
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4">About</h3>
                 <p className="text-gray-600 text-sm mb-4">
-                  ToolPilot helps you find the perfect AI tool for your needs with honest reviews and detailed comparisons.
+                  ToolPilot helps you make money and save money with AI tools. Honest reviews, detailed comparisons, and practical income guides.
                 </p>
                 <p className="text-gray-500 text-xs">
                   Affiliate disclosure: Some links on this site are affiliate links. If you purchase through these links, we may earn a commission at no additional cost to you. This does not influence our reviews or recommendations.

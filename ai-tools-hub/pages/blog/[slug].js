@@ -1,5 +1,6 @@
 import Layout from '../../components/Layout'
 import { AffiliateDisclosure } from '../../components/AffiliateLink'
+import NewsletterSignup from '../../components/NewsletterSignup'
 import Link from 'next/link'
 import { getAllArticles, getArticleBySlug, getReadingTime } from '../../lib/articles'
 
@@ -84,6 +85,9 @@ export default function ArticlePage({ article }) {
           className="prose prose-lg max-w-none mt-8"
           dangerouslySetInnerHTML={{ __html: article.html }}
         />
+
+        {/* Newsletter CTA */}
+        <NewsletterSignup variant="inline" />
 
         {/* Footer */}
         <footer className="mt-12 pt-8 border-t border-gray-200">

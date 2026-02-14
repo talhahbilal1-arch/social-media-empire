@@ -231,6 +231,62 @@ class ConvertKitManager:
         response.raise_for_status()
         return response.json()
 
+    def create_broadcast(
+        self,
+        subject: str,
+        content: str,
+        description: Optional[str] = None,
+        public: bool = True,
+        published_at: Optional[str] = None,
+        send_at: Optional[str] = None,
+        email_layout_template: Optional[str] = None,
+        thumbnail_alt: Optional[str] = None,
+        thumbnail_url: Optional[str] = None,
+        preview_text: Optional[str] = None,
+    ) -> dict:
+        """Create a new broadcast (email to all subscribers).
+
+        Args:
+            subject: Email subject line
+            content: HTML content of the email
+            description: Internal description (not shown to subscribers)
+            public: Whether to show on public profile (default True)
+            published_at: ISO 8601 date for published date
+            send_at: ISO 8601 date to schedule sending
+            email_layout_template: ConvertKit email template to use
+            thumbnail_alt: Alt text for thumbnail
+            thumbnail_url: URL for thumbnail image
+            preview_text: Email preview text
+        """
+        data = {
+            "api_secret": self.api_secret,
+            "subject": subject,
+            "content": content,
+        }
+        if description:
+            data["description"] = description
+        if published_at:
+            data["published_at"] = published_at
+        if send_at:
+            data["send_at"] = send_at
+        if email_layout_template:
+            data["email_layout_template"] = email_layout_template
+        if thumbnail_alt:
+            data["thumbnail_alt"] = thumbnail_alt
+        if thumbnail_url:
+            data["thumbnail_url"] = thumbnail_url
+        if preview_text:
+            data["preview_text"] = preview_text
+        data["public"] = public
+
+        response = requests.post(
+            f"{self.base_url}/broadcasts",
+            json=data
+        )
+        response.raise_for_status()
+        logger.info(f"Created broadcast: {subject}")
+        return response.json()
+
     def get_broadcast_stats(self, broadcast_id: str) -> dict:
         """Get statistics for a broadcast."""
         response = requests.get(

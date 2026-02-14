@@ -13,6 +13,7 @@ const path = require('path')
 const SITE_URL = 'https://toolpilot-hub.netlify.app'
 const tools = require('../content/tools.json')
 const comparisons = require('../content/comparisons.json')
+const articles = require('../content/articles.json')
 
 function generateToolPins() {
   const pins = []
@@ -56,6 +57,18 @@ function generateToolPins() {
     })
   }
 
+  // Article pins
+  for (const article of articles) {
+    pins.push({
+      type: 'article',
+      title: article.title,
+      description: article.excerpt || article.meta_description,
+      link: `${SITE_URL}/blog/${article.slug}/`,
+      keywords: article.keywords || [article.category, 'AI tools', '2026'],
+      board_suggestion: 'AI Tools & Money'
+    })
+  }
+
   return pins
 }
 
@@ -67,4 +80,5 @@ console.log(`Generated ${pins.length} Pinterest pin ideas:`)
 console.log(`  - ${pins.filter(p => p.type === 'tool_review').length} tool review pins`)
 console.log(`  - ${pins.filter(p => p.type === 'best_for').length} "best for" pins`)
 console.log(`  - ${pins.filter(p => p.type === 'comparison').length} comparison pins`)
+console.log(`  - ${pins.filter(p => p.type === 'article').length} article pins`)
 console.log(`Output: ${outputPath}`)

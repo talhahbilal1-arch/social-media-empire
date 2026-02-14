@@ -18,6 +18,7 @@ const https = require('https')
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const TOOLS_FILE = path.join(__dirname, '..', 'content', 'tools.json')
 const COMPARISONS_FILE = path.join(__dirname, '..', 'content', 'comparisons.json')
+const ARTICLES_FILE = path.join(__dirname, '..', 'content', 'articles.json')
 const CALENDAR_FILE = path.join(__dirname, '..', 'config', 'content-calendar.json')
 
 // Parse CLI args
@@ -126,7 +127,9 @@ Return ONLY valid JSON (no markdown, no explanation) matching this exact structu
   "best_for": ["3-4 specific use cases"],
   "logo": "/logos/${slug}.svg",
   "founded": year (real founding year),
-  "company": "Actual Company Name"
+  "company": "Actual Company Name",
+  "money_use_cases": ["3-4 specific ways people make money using this tool (e.g., 'Freelance blog writing at $0.10-0.20/word', 'Creating and selling online courses')"],
+  "free_tier_verdict": "1-2 sentences: Is the free tier good enough for real use? What can you actually accomplish without paying?"
 }`
 
   console.log(`  Calling Claude API for ${toolName} review...`)
@@ -181,6 +184,65 @@ Include 6-8 comparison points covering: core quality, ease of use, features, pri
 
   console.log(`  Calling Claude API for ${tool1Name} vs ${tool2Name}...`)
   const response = await callClaude(prompt, 4000)
+  return extractJson(response)
+}
+
+// ---------- Listicle/Article Generation ----------
+
+async function generateListicle(item, existingTools) {
+  const slug = item.slug
+  const title = item.title
+  const keyword = item.keyword
+  const moneyAngle = item.money_angle || ''
+
+  // Build context from existing tools if tool_slugs are specified
+  let toolContext = ''
+  if (item.tool_slugs && item.tool_slugs.length > 0) {
+    const tools = item.tool_slugs
+      .map(s => existingTools.find(t => t.slug === s))
+      .filter(Boolean)
+    if (tools.length > 0) {
+      toolContext = `\nExisting tool data to reference:\n${tools.map(t =>
+        `- ${t.name}: ${t.rating}/5, ${t.pricing.free_tier ? 'free tier' : '$' + t.pricing.starting_price + '/mo'}, best for: ${t.best_for.slice(0, 2).join(', ')}`
+      ).join('\n')}`
+    }
+  }
+
+  const prompt = `Write a comprehensive buyer's guide article titled "${title}" targeting the keyword "${keyword}".
+${toolContext}
+${moneyAngle ? `\nMONEY ANGLE: ${moneyAngle}` : ''}
+
+IMPORTANT RULES:
+- Write from a "Make Money & Save Money with AI" perspective
+- Include practical, actionable money-making or money-saving tips for EACH tool mentioned
+- Include real pricing data and honest free tier assessments
+- Write 2000-3000 words of substantive, specific content
+- Use HTML formatting (h2, h3, p, ul/li, strong, a tags, figure/table)
+- Include a comparison table near the top
+- Include an FAQ section with 4-5 questions using schema.org FAQPage markup
+- Internal links should use relative paths like /tools/slug/ and /compare/slug/
+- NO markdown — only valid HTML
+- Be honest and specific, not generic or fluffy
+
+Return ONLY valid JSON matching this structure:
+{
+  "slug": "${slug}",
+  "title": "${title}",
+  "excerpt": "150-160 chars summarizing the article with the main keyword",
+  "html": "<p>Full article HTML content here...</p>",
+  "category": "the most relevant category (writing, coding, image, video, marketing, productivity, audio, seo, research, design)",
+  "tags": ["4-6 relevant tags as kebab-case strings"],
+  "word_count": approximate word count (number),
+  "published_date": "${new Date().toISOString().split('T')[0]}",
+  "author": "ToolPilot Team",
+  "featured": ${item.priority === 'high' ? 'true' : 'false'},
+  "meta_title": "SEO-optimized title under 60 chars",
+  "meta_description": "150-160 char meta description with primary keyword",
+  "keywords": ["${keyword}", "2-3 more relevant keywords"]
+}`
+
+  console.log(`  Calling Claude API for listicle "${title}"...`)
+  const response = await callClaude(prompt, 8000)
   return extractJson(response)
 }
 
@@ -276,10 +338,19 @@ async function main() {
         console.log(`  Done: ${comparison.title}`)
 
       } else if (item.type === 'listicle') {
-        // Listicles are logged as TODO — they need a page template
-        console.log(`  Skipping listicle "${item.slug}" — listicle page template not yet implemented`)
-        // Don't mark as published
-        continue
+        const existingArticles = JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8'))
+        const articleSlugs = new Set(existingArticles.map(a => a.slug))
+
+        if (articleSlugs.has(item.slug)) {
+          console.log(`  Skipping — ${item.slug} already exists in articles.json`)
+          markPublished(calendar, item.id)
+          continue
+        }
+
+        const article = await generateListicle(item, existingTools)
+        existingArticles.push(article)
+        fs.writeFileSync(ARTICLES_FILE, JSON.stringify(existingArticles, null, 2))
+        console.log(`  Done: ${article.title} (${article.word_count} words)`)
       }
 
       markPublished(calendar, item.id)
@@ -304,10 +375,12 @@ async function main() {
     require('./generate-pins.js')
   }
 
+  const existingArticles = JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8'))
   console.log(`\n=== Summary ===`)
   console.log(`Generated: ${generated} items`)
   console.log(`Total tools: ${existingTools.length}`)
   console.log(`Total comparisons: ${existingComparisons.length}`)
+  console.log(`Total articles: ${existingArticles.length}`)
   const remaining = calendar.items.filter(i => i.status === 'pending').length
   console.log(`Calendar items remaining: ${remaining}`)
 }

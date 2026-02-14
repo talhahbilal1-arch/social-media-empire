@@ -1,0 +1,78 @@
+name: ToolPilot Weekly Discovery
+
+on:
+  schedule:
+    # Sunday 11PM PST (Monday 7AM UTC)
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+    inputs:
+      skip_discovery:
+        description: 'Skip trend discovery (generate pending content only)'
+        required: false
+        default: 'false'
+        type: boolean
+      content_count:
+        description: 'Number of pending items to generate'
+        required: false
+        default: '3'
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  discover-and-generate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-tools-hub
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ai-tools-hub/package-lock.json
+
+      - run: npm ci
+
+      # Step 1: Discover AI trends and update calendar
+      - name: Discover AI trends
+        if: github.event.inputs.skip_discovery != 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/discover-ai-trends.js
+
+      # Step 2: Generate discovered content
+      - name: Generate new content
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-content.js --count ${{ github.event.inputs.content_count || '3' }}
+
+      # Step 3: Build site
+      - name: Build site
+        run: npm run build
+
+      # Step 4: Deploy to Netlify
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: ai-tools-hub/out
+          production-deploy: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Weekly discovery deploy - ${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+          NETLIFY_SITE_ID: '616e7bf4-fe47-495b-b13e-934e51546d4c'
+
+      # Step 5: Commit new content to git
+      - name: Commit generated content
+        run: |
+          cd ..
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ai-tools-hub/content/ ai-tools-hub/config/ ai-tools-hub/public/sitemap.xml ai-tools-hub/public/robots.txt
+          git diff --cached --quiet || git commit -m "content: weekly discovery + auto-generated content"
+          git push

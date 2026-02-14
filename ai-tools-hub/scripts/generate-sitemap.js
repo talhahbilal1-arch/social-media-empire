@@ -46,13 +46,13 @@ ${categories.map(c => `  <url>
     <loc>${SITE_URL}/blog/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
 ${articles.map(a => `  <url>
     <loc>${SITE_URL}/blog/${a.slug}/</loc>
     <lastmod>${a.published_date || today}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>`).join('\n')}
 </urlset>`
 

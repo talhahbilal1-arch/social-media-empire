@@ -1,6 +1,7 @@
 import Layout from '../../components/Layout'
 import StarRating from '../../components/StarRating'
 import AffiliateLink, { AffiliateDisclosure } from '../../components/AffiliateLink'
+import NewsletterSignup from '../../components/NewsletterSignup'
 import Link from 'next/link'
 import { getAllTools, getToolBySlug, getToolsByCategory, formatPrice, getAllComparisons, getAffiliateUrl } from '../../lib/tools'
 
@@ -201,6 +202,49 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
                 ))}
               </div>
             </section>
+
+            {/* How to Make Money */}
+            {tool.money_use_cases && tool.money_use_cases.length > 0 && (
+              <section className="bg-green-50 border border-green-200 rounded-xl p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">How to Make Money with {tool.name}</h2>
+                <ul className="space-y-3">
+                  {tool.money_use_cases.map(useCase => (
+                    <li key={useCase} className="flex items-start space-x-2">
+                      <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-gray-700">{useCase}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Free Tier Verdict */}
+            {tool.free_tier_verdict && (
+              <section className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Free Tier Verdict</h2>
+                <p className="text-gray-700">{tool.free_tier_verdict}</p>
+              </section>
+            )}
+
+            {/* Free Alternative Callout */}
+            {!tool.pricing.free_tier && relatedTools.some(t => t.pricing.free_tier) && (
+              <section className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">Looking for a Free Alternative?</h2>
+                <div className="space-y-2">
+                  {relatedTools.filter(t => t.pricing.free_tier).slice(0, 2).map(alt => (
+                    <Link key={alt.slug} href={`/tools/${alt.slug}/`} className="flex items-center justify-between p-3 bg-white rounded-lg hover:ring-2 hover:ring-amber-300 transition-all">
+                      <div>
+                        <span className="font-semibold text-gray-900">{alt.name}</span>
+                        <span className="text-sm text-gray-500 ml-2">{alt.rating}/5</span>
+                      </div>
+                      <span className="badge-green text-xs">Free Tier</span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -248,6 +292,9 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
                 Visit Website
               </a>
             </div>
+
+            {/* Newsletter Signup */}
+            <NewsletterSignup variant="sidebar" />
 
             {/* Related Comparisons */}
             {relatedComparisons.length > 0 && (

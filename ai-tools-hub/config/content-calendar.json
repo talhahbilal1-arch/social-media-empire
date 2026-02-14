@@ -386,7 +386,8 @@
       "status": "pending",
       "slug": "best-free-ai-tools",
       "keyword": "best free ai tools 2026",
-      "title": "12 Best Free AI Tools in 2026"
+      "title": "12 Best Free AI Tools in 2026",
+      "money_angle": "Free tools that can replace $500+/month in software subscriptions"
     },
     {
       "id": 55,
@@ -395,7 +396,8 @@
       "status": "pending",
       "slug": "best-ai-tools-small-business",
       "keyword": "best ai tools for small business",
-      "title": "10 Best AI Tools for Small Business in 2026"
+      "title": "10 Best AI Tools for Small Business in 2026",
+      "money_angle": "ROI breakdown: how each tool saves time and money for small business owners"
     },
     {
       "id": 56,
@@ -432,6 +434,63 @@
       "slug": "best-ai-audio-tools",
       "keyword": "best ai audio tools 2026",
       "title": "6 Best AI Audio & Voice Tools in 2026"
+    },
+    {
+      "id": 60,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "chatgpt-vs-jasper",
+      "tools": ["chatgpt", "jasper"],
+      "keyword": "chatgpt vs jasper 2026"
+    },
+    {
+      "id": 61,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "claude-vs-jasper",
+      "tools": ["claude", "jasper"],
+      "keyword": "claude vs jasper 2026"
+    },
+    {
+      "id": 62,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "chatgpt-vs-perplexity",
+      "tools": ["chatgpt", "perplexity"],
+      "keyword": "chatgpt vs perplexity 2026"
+    },
+    {
+      "id": 64,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-ai-tools-make-money-online",
+      "keyword": "best ai tools to make money online 2026",
+      "title": "7 Best AI Tools to Make Money Online in 2026",
+      "money_angle": "How to use each tool to generate income — freelancing, side hustles, and passive revenue streams"
+    },
+    {
+      "id": 65,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-ai-tools-freelancers-double-income",
+      "keyword": "best ai tools for freelancers 2026",
+      "title": "8 Best AI Tools for Freelancers to Double Their Income in 2026",
+      "money_angle": "Specific workflows for freelance writers, designers, and developers to 2x output and earnings"
+    },
+    {
+      "id": 66,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "start-business-with-ai-tools-free",
+      "keyword": "start a business with free ai tools",
+      "title": "How to Start a Business Using Only Free AI Tools in 2026",
+      "money_angle": "Zero-cost startup guide using free tiers of AI tools for writing, design, marketing, and automation"
     }
   ]
 }
