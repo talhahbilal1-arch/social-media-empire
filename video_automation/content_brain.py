@@ -143,6 +143,11 @@ Be specific. Use real exercises, real foods, real numbers.""",
             "best exercises men over 35", "creatine over 35", "metabolism boost natural"
         ],
 
+        "hashtags": [
+            "#fitover35", "#menshealth", "#fitnessmotivation", "#workoutover35",
+            "#strengthtraining", "#musclebuilding", "#fitnessafter35", "#mensfitness"
+        ],
+
         "destination_base_url": "https://fitover35.com",
         "pinterest_boards": [
             "Workouts for Men Over 35",
@@ -248,6 +253,11 @@ Be conversational, relatable, and helpful.""",
             "budget home makeover", "amazon home finds", "target finds",
             "home must haves", "apartment decor ideas", "organization hacks",
             "best deals home", "product review honest", "worth buying"
+        ],
+
+        "hashtags": [
+            "#amazonfinds", "#homefinds", "#dealsoftheday", "#budgetfriendly",
+            "#homeorganization", "#kitchengadgets", "#selfcare", "#worthbuying"
         ],
 
         "destination_base_url": "https://dailydealdarling.com",
@@ -365,7 +375,12 @@ This audience is going through something hard and wants to feel seen and helped.
             "menopause nutrition", "menopause brain fog", "menopause support"
         ],
 
-        "destination_base_url": "NEEDS_LANDING_PAGE",
+        "hashtags": [
+            "#menopausesupport", "#perimenopause", "#menopauserelief", "#hormonebalance",
+            "#menopausewellness", "#hotflashrelief", "#menopausetips", "#womenover45"
+        ],
+
+        "destination_base_url": "https://menopauseplanner.netlify.app",
         "pinterest_boards": [
             "Menopause Symptoms & Relief",
             "Hormone Balance Naturally",
@@ -422,6 +437,43 @@ DESCRIPTION_OPENERS = [
     "time_hook"       # "In the next 30 days..."
 ]
 
+# ═══════════════════════════════════════════════════════════════
+# TOPIC-TO-BOARD MAPPING (deterministic board selection by category)
+# ═══════════════════════════════════════════════════════════════
+
+TOPIC_TO_BOARD_MAP = {
+    "fitness": {
+        "workouts": "Workouts for Men Over 35",
+        "nutrition": "Meal Prep & Nutrition",
+        "supplements": "Supplement Honest Reviews",
+        "fat_loss": "Fat Loss After 35",
+        "lifestyle": "Fitness Motivation",
+        "_default": "Home Gym Ideas"
+    },
+    "deals": {
+        "kitchen": "Kitchen Must-Haves",
+        "home_decor": "Budget Home Decor",
+        "organization": "Home Organization Finds",
+        "self_care": "Self Care Products Worth It",
+        "seasonal": "Seasonal Favorites",
+        "_default": "Gift Ideas"
+    },
+    "menopause": {
+        "symptoms": "Menopause Symptoms & Relief",
+        "nutrition": "Menopause Nutrition & Wellness",
+        "wellness": "Menopause Self Care",
+        "planning": "Perimenopause Tips & Support",
+        "mental_health": "Hormone Balance Naturally",
+        "_default": "Menopause Symptoms & Relief"
+    }
+}
+
+
+def _get_board_for_topic(brand_key, category):
+    """Get the best board for a given topic category using deterministic mapping."""
+    brand_map = TOPIC_TO_BOARD_MAP.get(brand_key, {})
+    return brand_map.get(category, brand_map.get('_default', BRAND_CONFIGS[brand_key]['pinterest_boards'][0]))
+
 
 def generate_pin_content(brand_key, supabase_client):
     """Generate a complete, UNIQUE pin for the specified brand.
@@ -443,15 +495,15 @@ def generate_pin_content(brand_key, supabase_client):
     except Exception:
         recent_data = []
 
-    recent_topics = [r.get('topic', '') for r in recent_data[:10]]
+    recent_topics = [r.get('topic', '') for r in recent_data[:25]]
     recent_angles = [r.get('angle_framework', '') for r in recent_data[:5]]
     recent_styles = [r.get('visual_style', '') for r in recent_data[:4]]
     recent_boards = [r.get('board', '') for r in recent_data[:3]]
     recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
-    recent_image_queries = [r.get('image_query', '') for r in recent_data[:15]]
+    recent_image_queries = [r.get('image_query', '') for r in recent_data[:25]]
     recent_titles = [r.get('title', '') for r in recent_data[:20]]
 
-    # ── Step 2: Select topic (not used in last 10 pins) ──
+    # ── Step 2: Select topic (not used in last 25 pins) ──
     all_topics = []
     for category, topics in config['topics_by_category'].items():
         for topic in topics:
@@ -475,11 +527,8 @@ def generate_pin_content(brand_key, supabase_client):
         available_styles = PIN_VISUAL_STYLES
     selected_style = random.choice(available_styles)
 
-    # ── Step 5: Select board (not used in last 3 pins) ──
-    available_boards = [b for b in config['pinterest_boards'] if b not in recent_boards]
-    if not available_boards:
-        available_boards = config['pinterest_boards']
-    selected_board = random.choice(available_boards)
+    # ── Step 5: Select board (deterministic mapping by topic category) ──
+    selected_board = _get_board_for_topic(brand_key, selected_topic['category'])
 
     # ── Step 6: Select description opener (not used in last 5 pins) ──
     available_openers = [o for o in DESCRIPTION_OPENERS if o not in recent_openers]
@@ -489,6 +538,10 @@ def generate_pin_content(brand_key, supabase_client):
 
     # ── Step 7: Select SEO keywords (pick 4-5 random ones) ──
     selected_keywords = random.sample(config['seo_keywords'], min(5, len(config['seo_keywords'])))
+
+    # ── Step 7b: Get brand hashtags ──
+    brand_hashtags = config.get('hashtags', [])
+    selected_hashtags = random.sample(brand_hashtags, min(6, len(brand_hashtags))) if brand_hashtags else []
 
     # ── Step 8: Call Claude to generate the content ──
     prompt = f"""You are creating a Pinterest pin for the brand "{config['name']}".
@@ -514,6 +567,9 @@ DESCRIPTION MUST OPEN WITH THIS STYLE: {selected_opener}
 SEO KEYWORDS TO NATURALLY INCLUDE (use 3-5 in description):
 {', '.join(selected_keywords)}
 
+HASHTAGS TO APPEND AT END OF DESCRIPTION (use 5-8):
+{' '.join(selected_hashtags)}
+
 VISUAL STYLE FOR THIS PIN: {selected_style['name']} — {selected_style['description']}
 
 RECENTLY USED TITLES (your title MUST be completely different from all of these):
@@ -528,11 +584,12 @@ RULES:
 3. NEVER give away the complete answer in the pin title or description
 4. Description must be 150-300 characters, conversational, with keywords woven in naturally
 5. Description must end with a soft CTA (not "BUY NOW" — more like "Full guide at the link" or "More at fitover35.com")
-6. Image search query must be SPECIFIC and DETAILED — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic lighting"
-7. Image query should match this pin's specific topic, not be generic
-8. Text overlay should be 3-8 words max, large readable font, that captures the pin's core hook
-9. EVERYTHING must feel written by a real human, not an AI content mill
-10. NO generic phrases: "unlock", "transform", "game-changer", "must-have", "you won't believe"
+6. After the CTA, append 5-8 relevant hashtags from the provided list on a new line. Hashtags go at the VERY END of the description.
+7. Image search query must be SPECIFIC and DETAILED — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic lighting"
+8. Image query should match this pin's specific topic, not be generic
+9. Text overlay should be 3-8 words max, large readable font, that captures the pin's core hook
+10. EVERYTHING must feel written by a real human, not an AI content mill
+11. NO generic phrases: "unlock", "transform", "game-changer", "must-have", "you won't believe"
 
 OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
 {{
@@ -691,6 +748,10 @@ def generate_pin_from_calendar(brand_key, supabase_client):
     # Select SEO keywords
     selected_keywords = random.sample(config['seo_keywords'], min(5, len(config['seo_keywords'])))
 
+    # Select hashtags
+    brand_hashtags = config.get('hashtags', [])
+    selected_hashtags = random.sample(brand_hashtags, min(6, len(brand_hashtags))) if brand_hashtags else []
+
     # Select description opener (rotate)
     recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
     available_openers = [o for o in DESCRIPTION_OPENERS if o not in recent_openers]
@@ -715,6 +776,7 @@ The suggested title is a starting point. Improve it or create a different angle 
 DESCRIPTION MUST OPEN WITH THIS STYLE: {selected_opener}
 VISUAL STYLE FOR THIS PIN: {selected_style['name']} — {selected_style['description']}
 SEO KEYWORDS TO INCLUDE (3-5 naturally): {', '.join(selected_keywords)}
+HASHTAGS TO APPEND AT END OF DESCRIPTION (use 5-8): {' '.join(selected_hashtags)}
 DESTINATION URL: {destination_url}
 
 RECENTLY USED TITLES (yours must be completely different):
@@ -723,10 +785,11 @@ RECENTLY USED TITLES (yours must be completely different):
 RULES:
 1. Title creates a CURIOSITY GAP — viewer must click to get the answer (max 100 chars)
 2. Description is 150-300 chars, conversational, keyword-rich, ends with soft CTA
-3. Image search query is SPECIFIC and DETAILED (not generic stock photo terms)
-4. Text overlay is 3-8 words, large readable font
-5. Everything must feel human-written, not AI-generated
-6. NO generic phrases: "unlock", "transform", "game-changer", "must-have"
+3. After the CTA, append 5-8 relevant hashtags from the provided list on a new line at the VERY END
+4. Image search query is SPECIFIC and DETAILED (not generic stock photo terms)
+5. Text overlay is 3-8 words, large readable font
+6. Everything must feel human-written, not AI-generated
+7. NO generic phrases: "unlock", "transform", "game-changer", "must-have"
 
 OUTPUT ONLY THIS JSON:
 {{
@@ -772,16 +835,29 @@ OUTPUT ONLY THIS JSON:
     return pin_data
 
 
-def build_destination_url(base_url, brand, posting_method, campaign="pins"):
-    """Build destination URL with UTM tracking parameters."""
+def build_destination_url(base_url, brand, posting_method, campaign="pins",
+                         topic_slug="", board_name=""):
+    """Build destination URL with UTM tracking parameters.
+
+    Includes topic_slug in utm_content for pin-level tracking and
+    utm_term with board_name for board-level analytics.
+    """
     if base_url == "NEEDS_LANDING_PAGE":
-        base_url = "https://linktr.ee/menopauseplanner"
+        base_url = "https://menopauseplanner.netlify.app"
 
     separator = '&' if '?' in base_url else '?'
-    return (
+    # Include topic slug in utm_content for pin-level tracking
+    date_str = datetime.now(timezone.utc).strftime('%Y%m%d')
+    utm_content = f"{topic_slug}_{date_str}" if topic_slug else date_str
+    # Sanitize board name for URL
+    utm_term = board_name.lower().replace(' ', '-').replace('&', 'and') if board_name else ''
+    url = (
         f"{base_url}{separator}"
         f"utm_source=pinterest&"
         f"utm_medium={posting_method}&"
         f"utm_campaign={brand}_{campaign}&"
-        f"utm_content={datetime.now(timezone.utc).strftime('%Y%m%d')}"
+        f"utm_content={utm_content}"
     )
+    if utm_term:
+        url += f"&utm_term={utm_term}"
+    return url
