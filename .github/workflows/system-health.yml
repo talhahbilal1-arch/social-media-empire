@@ -2,8 +2,8 @@ name: System Health
 
 on:
   schedule:
-    # Every 6 hours
-    - cron: '0 */6 * * *'
+    # Every 2 hours
+    - cron: '0 */2 * * *'
   workflow_dispatch:
     inputs:
       action:
@@ -231,7 +231,7 @@ jobs:
               try:
                   from monitoring.workflow_guardian import WorkflowGuardian
                   guardian = WorkflowGuardian()
-                  result = guardian.analyze_and_heal(hours=6)
+                  result = guardian.analyze_and_heal(hours=2)
                   print(f'  Analyzed: {result[\"analyzed\"]} failed runs')
                   print(f'  Retried: {result[\"retried\"]}')
                   healed += result.get('retried', 0)
@@ -348,15 +348,80 @@ jobs:
                                           'payment', 'billing', 'subscription']):
                   unresolvable.append(issue)
 
-          # Write outputs
+          # ── Retry tracking: only notify after 10 consecutive failures ──
+          # Store failure count in analytics table as a tracker
+          RETRY_THRESHOLD = 10
+          should_notify = False
+          if unresolvable and db:
+              try:
+                  # Check existing retry counter
+                  tracker = db.client.table('analytics').select('id, data') \
+                      .eq('event_type', 'unresolvable_tracker') \
+                      .eq('brand', 'system') \
+                      .order('created_at', desc=True).limit(1).execute()
+
+                  if tracker.data:
+                      tracker_data = tracker.data[0].get('data', {})
+                      if isinstance(tracker_data, str):
+                          tracker_data = json.loads(tracker_data)
+                      attempt = tracker_data.get('attempt', 0) + 1
+                      prev_issues = set(tracker_data.get('issues', []))
+                      curr_issues = set(unresolvable)
+
+                      # Reset counter if the issues changed
+                      if curr_issues != prev_issues:
+                          attempt = 1
+
+                      # Update tracker
+                      db.client.table('analytics').update({
+                          'data': {'attempt': attempt, 'issues': unresolvable, 'last_seen': datetime.utcnow().isoformat()}
+                      }).eq('id', tracker.data[0]['id']).execute()
+
+                      if attempt >= RETRY_THRESHOLD:
+                          should_notify = True
+                          print(f'  Attempt {attempt}/{RETRY_THRESHOLD} — NOTIFYING owner')
+                          # Reset counter after notifying
+                          db.client.table('analytics').update({
+                              'data': {'attempt': 0, 'issues': unresolvable, 'notified_at': datetime.utcnow().isoformat()}
+                          }).eq('id', tracker.data[0]['id']).execute()
+                      else:
+                          print(f'  Attempt {attempt}/{RETRY_THRESHOLD} — will keep trying before notifying')
+                  else:
+                      # First time seeing unresolvable issues — start counter at 1
+                      db.client.table('analytics').insert({
+                          'event_type': 'unresolvable_tracker',
+                          'brand': 'system',
+                          'platform': 'all',
+                          'data': {'attempt': 1, 'issues': unresolvable, 'last_seen': datetime.utcnow().isoformat()}
+                      }).execute()
+                      print(f'  Attempt 1/{RETRY_THRESHOLD} — will keep trying before notifying')
+              except Exception as e:
+                  print(f'  Retry tracking failed: {e}')
+                  # If tracking fails, notify to be safe
+                  should_notify = True
+          elif not unresolvable and db:
+              # All clear — reset tracker if it exists
+              try:
+                  tracker = db.client.table('analytics').select('id') \
+                      .eq('event_type', 'unresolvable_tracker') \
+                      .eq('brand', 'system').limit(1).execute()
+                  if tracker.data:
+                      db.client.table('analytics').update({
+                          'data': {'attempt': 0, 'issues': [], 'cleared_at': datetime.utcnow().isoformat()}
+                      }).eq('id', tracker.data[0]['id']).execute()
+              except:
+                  pass
+
+          # Write outputs — only flag for notification if threshold reached
+          notify_count = len(unresolvable) if should_notify else 0
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f'unresolvable={len(unresolvable)}\n')
-              details_json = json.dumps(unresolvable).replace('\"', '\\\"')
-              f.write(f'unresolvable_details={json.dumps(unresolvable)}\n')
+              f.write(f'unresolvable={notify_count}\n')
+              f.write(f'unresolvable_details={json.dumps(unresolvable if should_notify else [])}\n')
 
           print(f'\n=== Self-Healing Summary ===')
           print(f'  Issues healed: {healed}')
           print(f'  Unresolvable: {len(unresolvable)}')
+          print(f'  Will notify: {should_notify}')
           for u in unresolvable:
               print(f'    - {u}')
           "
