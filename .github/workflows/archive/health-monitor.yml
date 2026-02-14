@@ -1,13 +1,16 @@
+# ARCHIVED 2026-02-13: Duplicate of system-health.yml
+# This ran hourly (24x/day) doing the same checks as system-health.yml (every 2hrs, 12x/day).
+# Wasteful and redundant — system-health.yml includes self-healing and is the canonical health workflow.
+#
 # Agent 6: Health Monitor
 # Runs hourly to check system health and send alerts if needed
 
-name: Health Monitor
+name: Health Monitor (ARCHIVED)
 
 on:
-  schedule:
-    # Every hour at minute 30
-    - cron: '30 * * * *'
-  workflow_dispatch:  # Allow manual trigger
+  # schedule disabled — archived
+  # - cron: '30 * * * *'
+  workflow_dispatch:  # Allow manual trigger for debugging only
 
 env:
   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -43,7 +46,7 @@ jobs:
         id: health
         run: |
           python -m agents.health_monitor
-        continue-on-error: true  # Don't fail the workflow, let the agent handle alerts
+        continue-on-error: true
 
       - name: Summary
         if: always()

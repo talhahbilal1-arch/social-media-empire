@@ -1,12 +1,17 @@
+# ARCHIVED 2026-02-13: Duplicates content-engine.yml
+# This ran agents.content_brain once/day at 6AM UTC to generate content.
+# content-engine.yml runs 3x/day and calls video_automation.content_brain directly
+# with full posting logic, image selection, and multi-brand scheduling.
+# This older agent-based workflow is redundant and was consuming unnecessary CI minutes.
+#
 # Agent 1: Content Brain
 # Runs daily at 6:00 AM UTC to generate content using Claude AI
 
-name: Content Brain
+name: Content Brain (ARCHIVED)
 
 on:
-  schedule:
-    # 6:00 AM UTC daily (1 hour after Trend Discovery)
-    - cron: '0 6 * * *'
+  # schedule disabled — archived
+  # - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       brand:
