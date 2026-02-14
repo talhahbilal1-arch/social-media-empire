@@ -44,6 +44,112 @@ def _load_affiliate_config():
         return {}
 
 
+# ── Affiliate Link Mapping ──────────────────────────────────────────────────
+
+AFFILIATE_LINKS = {
+    'fitness': {
+        'supplements': 'https://www.amazon.com/s?k=supplements+men+over+35&tag=dailydealdarl-20',
+        'equipment': 'https://www.amazon.com/s?k=home+gym+equipment&tag=dailydealdarl-20',
+        'protein': 'https://www.amazon.com/s?k=whey+protein+powder&tag=dailydealdarl-20',
+        'creatine': 'https://www.amazon.com/s?k=creatine+monohydrate&tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/s?k=fitness+gear+men&tag=dailydealdarl-20',
+    },
+    'deals': {
+        'kitchen': 'https://www.amazon.com/s?k=kitchen+gadgets&tag=dailydealdarl-20',
+        'home': 'https://www.amazon.com/s?k=home+organization&tag=dailydealdarl-20',
+        'beauty': 'https://www.amazon.com/s?k=skincare+products&tag=dailydealdarl-20',
+        'selfcare': 'https://www.amazon.com/s?k=self+care+gifts&tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/s?k=daily+deals&tag=dailydealdarl-20',
+    },
+    'menopause': {
+        'supplements': 'https://www.amazon.com/s?k=menopause+supplements&tag=dailydealdarl-20',
+        'wellness': 'https://www.amazon.com/s?k=menopause+wellness&tag=dailydealdarl-20',
+        'sleep': 'https://www.amazon.com/s?k=sleep+aid+menopause&tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/s?k=menopause+relief&tag=dailydealdarl-20',
+    }
+}
+
+
+# ── ConvertKit Signup Form HTML ─────────────────────────────────────────────
+
+CONVERTKIT_FORMS = {
+    'fitness': (
+        '<div class="email-signup" style="background:#f0f4f8;padding:24px;border-radius:12px;margin:32px 0;text-align:center;">'
+        '<h3 style="margin:0 0 8px">Free 12-Week Workout Program</h3>'
+        '<p style="margin:0 0 16px;color:#555">Join 10,000+ men over 35 getting stronger every week.</p>'
+        '<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>'
+        '<form action="https://app.convertkit.com/forms/8946984/subscriptions" method="post" data-sv-form="8946984">'
+        '<input type="email" name="email_address" placeholder="Enter your email" required style="padding:12px;border:1px solid #ddd;border-radius:6px;width:60%;margin-right:8px">'
+        '<button type="submit" style="padding:12px 24px;background:#1565C0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold">Get Free Program</button>'
+        '</form>'
+        '</div>'
+    ),
+    'deals': (
+        '<div class="email-signup" style="background:#fff5f5;padding:24px;border-radius:12px;margin:32px 0;text-align:center;">'
+        '<h3 style="margin:0 0 8px">Get the Best Deals First</h3>'
+        '<p style="margin:0 0 16px;color:#555">Join our community and never miss a hidden gem.</p>'
+        '<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>'
+        '<form action="https://app.convertkit.com/forms/5641382/subscriptions" method="post" data-sv-form="5641382">'
+        '<input type="email" name="email_address" placeholder="Enter your email" required style="padding:12px;border:1px solid #ddd;border-radius:6px;width:60%;margin-right:8px">'
+        '<button type="submit" style="padding:12px 24px;background:#E91E63;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold">Join Free</button>'
+        '</form>'
+        '</div>'
+    ),
+    'menopause': (
+        '<div class="email-signup" style="background:#fff5f5;padding:24px;border-radius:12px;margin:32px 0;text-align:center;">'
+        '<h3 style="margin:0 0 8px">Your Menopause Support Guide</h3>'
+        '<p style="margin:0 0 16px;color:#555">Get weekly tips for managing symptoms naturally.</p>'
+        '<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>'
+        '<form action="https://app.convertkit.com/forms/5641382/subscriptions" method="post" data-sv-form="5641382">'
+        '<input type="email" name="email_address" placeholder="Enter your email" required style="padding:12px;border:1px solid #ddd;border-radius:6px;width:60%;margin-right:8px">'
+        '<button type="submit" style="padding:12px 24px;background:#E91E63;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold">Join Free</button>'
+        '</form>'
+        '</div>'
+    ),
+}
+
+
+AFFILIATE_DISCLOSURE = (
+    '\n\n<p style="font-size:12px;color:#888;margin-top:40px;padding-top:16px;'
+    'border-top:1px solid #eee"><em>This article contains affiliate links. '
+    'If you purchase through these links, we may earn a small commission at '
+    'no extra cost to you. This helps us continue creating free content.</em></p>'
+)
+
+
+def resolve_affiliate_links(content, brand_key):
+    # type: (str, str) -> str
+    """Replace [AFFILIATE_LINK_PLACEHOLDER:brand:category] with real affiliate URLs."""
+    brand_links = AFFILIATE_LINKS.get(brand_key, {})
+    default_link = brand_links.get('default', '')
+
+    def _replace_match(match):
+        # match group(1) = brand_key, group(2) = product_category
+        category = match.group(2).strip().lower() if match.group(2) else ''
+        # Also handle template literal braces: {product_category}
+        if category.startswith('{') and category.endswith('}'):
+            # Unresolved template variable — use default
+            return default_link or '#'
+        url = brand_links.get(category, default_link) or '#'
+        return url
+
+    pattern = r'\[AFFILIATE_LINK_PLACEHOLDER:([^:\]]+):([^\]]*)\]'
+    return re.sub(pattern, _replace_match, content)
+
+
+def resolve_signup_forms(content, brand_key):
+    # type: (str, str) -> str
+    """Replace [SIGNUP_FORM_PLACEHOLDER] with real ConvertKit form HTML."""
+    form_html = CONVERTKIT_FORMS.get(brand_key, CONVERTKIT_FORMS.get('deals', ''))
+    return content.replace('[SIGNUP_FORM_PLACEHOLDER]', form_html)
+
+
+def add_affiliate_disclosure(content):
+    # type: (str) -> str
+    """Append the affiliate disclosure footer to article content."""
+    return content + AFFILIATE_DISCLOSURE
+
+
 # ── Research-Writer Prompts ─────────────────────────────────────────────────
 
 ARTICLE_RESEARCH_PROMPT = """You are a content researcher for the {brand_name} brand.
@@ -283,6 +389,11 @@ def generate_article_for_trend(brand_key, trending_topic, article_slug, supabase
     if enhanced:
         article_content = _review_article(brand_config, article_content)
 
+    # Post-process: resolve affiliate links, signup forms, and add disclosure
+    article_content = resolve_affiliate_links(article_content, brand_key)
+    article_content = resolve_signup_forms(article_content, brand_key)
+    article_content = add_affiliate_disclosure(article_content)
+
     # Log the article generation
     try:
         supabase_client.table('generated_articles').insert({
@@ -299,7 +410,7 @@ def generate_article_for_trend(brand_key, trending_topic, article_slug, supabase
     return article_content
 
 
-MAX_ARTICLES_PER_BRAND = 2  # Reduced from 3 to offset extra API calls per article
+MAX_ARTICLES_PER_BRAND = 8  # Increased from 2 to boost content volume
 
 
 def generate_articles_for_weekly_calendar(calendar, brand_key, supabase_client):
