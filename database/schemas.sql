@@ -25,9 +25,11 @@ CREATE INDEX idx_videos_created_at ON videos(created_at);
 CREATE TABLE IF NOT EXISTS content_bank (
     id BIGSERIAL PRIMARY KEY,
     brand VARCHAR(50) NOT NULL,
+    brand_id VARCHAR(50),
     content_type VARCHAR(50) NOT NULL,
     topic VARCHAR(255) NOT NULL,
     details JSONB DEFAULT '{}',
+    affiliate_products JSONB DEFAULT '[]',
     used BOOLEAN DEFAULT FALSE,
     used_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -36,6 +38,21 @@ CREATE TABLE IF NOT EXISTS content_bank (
 CREATE INDEX idx_content_bank_brand ON content_bank(brand);
 CREATE INDEX idx_content_bank_type ON content_bank(content_type);
 CREATE INDEX idx_content_bank_used ON content_bank(used);
+
+-- ==================== Agent Runs Table ====================
+-- Tracks when each system component last ran (used by monitoring)
+CREATE TABLE IF NOT EXISTS agent_runs (
+    id BIGSERIAL PRIMARY KEY,
+    agent_name VARCHAR(100) NOT NULL UNIQUE,
+    last_run_at TIMESTAMPTZ DEFAULT NOW(),
+    status VARCHAR(20) DEFAULT 'success',
+    error_message TEXT,
+    run_count INTEGER DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_agent_runs_name ON agent_runs(agent_name);
 
 -- ==================== Subscribers Table ====================
 CREATE TABLE IF NOT EXISTS subscribers (

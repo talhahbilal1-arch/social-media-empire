@@ -15,17 +15,15 @@ jobs:
       - name: Check if content-engine ran in last 24h
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
         run: |
           # Check last successful content-engine run
           LAST_RUN=$(gh api "repos/${{ github.repository }}/actions/workflows/content-engine.yml/runs?status=success&per_page=1" --jq '.workflow_runs[0].created_at // empty' 2>/dev/null || echo "")
 
           if [ -z "$LAST_RUN" ]; then
             echo "WARNING: No successful content-engine runs found"
-            ALERT=true
+            echo "::warning::Content engine has no recent successful runs"
           else
-            # Check if last run was within 24 hours
+            # Check if last run was within 26 hours
             LAST_EPOCH=$(date -d "$LAST_RUN" +%s 2>/dev/null || date -jf "%Y-%m-%dT%H:%M:%SZ" "$LAST_RUN" +%s 2>/dev/null || echo "0")
             NOW_EPOCH=$(date +%s)
             DIFF=$(( NOW_EPOCH - LAST_EPOCH ))
@@ -34,33 +32,20 @@ jobs:
             echo "Last successful run: $LAST_RUN ($HOURS hours ago)"
 
             if [ "$HOURS" -gt 26 ]; then
-              echo "ALERT: Content engine hasn't run in $HOURS hours"
-              ALERT=true
+              echo "::warning::Content engine hasn't run in $HOURS hours"
             else
               echo "OK: Content engine ran $HOURS hours ago"
-              ALERT=false
             fi
           fi
 
-          if [ "$ALERT" = "true" ]; then
-            # Send alert via Resend
-            python3 -c "
-          import os
-          try:
-              import resend
-              resend.api_key = os.environ.get('RESEND_API_KEY', '')
-              alert_email = os.environ.get('ALERT_EMAIL', '')
-              if resend.api_key and alert_email:
-                  resend.Emails.send({
-                      'from': 'alerts@socialmediaempire.com',
-                      'to': [alert_email],
-                      'subject': 'ALERT: Content Engine Down > 24h',
-                      'html': '<h1>Content Engine Alert</h1><p>The content engine has not run successfully in the last 24 hours. Check GitHub Actions immediately.</p><p><a href=\"https://github.com/${{ github.repository }}/actions\">View Actions</a></p>'
-                  })
-                  print('Alert email sent')
-              else:
-                  print('Email not configured')
-          except Exception as e:
-              print(f'Failed to send alert: {e}')
-            " || true
-          fi
+          # No email notifications — issues logged to GitHub only
+          # Weekly summary email covers all failures
+
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## Dead Man's Switch Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Checked if content-engine ran in last 24 hours." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_No email notification — check weekly summary for health trends._" >> $GITHUB_STEP_SUMMARY

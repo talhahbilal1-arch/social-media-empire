@@ -598,8 +598,7 @@ This failure requires manual attention.
         except Exception as e:
             logger.warning(f"Failed to log alert to database: {e}")
 
-        # Send email alert if configured
-        self._send_email_alert(run, category, pattern_name, description)
+        # Email alerts disabled — consolidated to weekly summary only
 
         self.actions_taken.append(RemediationAction(
             workflow_run_id=run.id,
