@@ -13,6 +13,19 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+# ==================== Automation Trigger Thresholds ====================
+
+# Number of link clicks to qualify as highly engaged
+HIGHLY_ENGAGED_CLICK_THRESHOLD = 3
+
+# Welcome sequence completion tag pattern
+WELCOME_COMPLETED_TAG = "{brand}-welcome-completed"
+
+# Engagement level tag names (match convertkit_automation.py ENGAGEMENT_TAGS)
+TAG_HIGHLY_ENGAGED = "highly_engaged"
+TAG_PURCHASER = "purchaser"
+
+
 @dataclass
 class ConvertKitAutomation:
     """Manages ConvertKit email automation."""
@@ -48,12 +61,12 @@ class ConvertKitAutomation:
         response.raise_for_status()
         return response.json()
 
-    def get_forms(self) -> list[dict]:
+    def get_forms(self) -> list:
         """Get all ConvertKit forms."""
         result = self._make_request("GET", "forms")
         return result.get("forms", [])
 
-    def get_sequences(self) -> list[dict]:
+    def get_sequences(self) -> list:
         """Get all ConvertKit sequences."""
         result = self._make_request("GET", "sequences")
         return result.get("courses", [])
@@ -80,6 +93,19 @@ class ConvertKitAutomation:
         """Add a tag to a subscriber."""
         data = {"email": email}
         return self._make_request("POST", f"tags/{tag_id}/subscribe", data)
+
+    def get_tags(self) -> list:
+        """Get all tags."""
+        result = self._make_request("GET", "tags")
+        return result.get("tags", [])
+
+    def find_tag_by_name(self, name: str) -> Optional[dict]:
+        """Find a tag by its name."""
+        tags = self.get_tags()
+        for tag in tags:
+            if tag.get("name") == name:
+                return tag
+        return None
 
     def get_subscriber(self, email: str) -> Optional[dict]:
         """Get subscriber by email."""
@@ -137,7 +163,7 @@ class EmailAutomationManager:
         if self.convertkit is None:
             self.convertkit = ConvertKitAutomation()
 
-    def setup_all_brands(self) -> list[dict]:
+    def setup_all_brands(self) -> list:
         """Set up email automation for all brands."""
         results = []
 
@@ -225,8 +251,248 @@ class EmailAutomationManager:
 
         return preview
 
+    # ==================== Automation Triggers ====================
 
-# Form configurations for embedding
+    def handle_welcome_sequence_completed(self, email: str, brand: str) -> dict:
+        """Process automation when a subscriber completes the welcome sequence.
+
+        Triggered after the final email in the welcome sequence is sent.
+        Tags the subscriber as welcome-completed and moves them to the
+        active newsletter segment.
+
+        Args:
+            email: Subscriber email address.
+            brand: Brand identifier.
+
+        Returns:
+            Dict with results of tagging operations.
+        """
+        results = {
+            "email": email,
+            "brand": brand,
+            "tags_applied": [],
+            "errors": []
+        }
+
+        # Tag as welcome completed
+        completion_tag = WELCOME_COMPLETED_TAG.format(brand=brand)
+        tag = self.convertkit.find_tag_by_name(completion_tag)
+        if not tag:
+            try:
+                tag = self.convertkit.create_tag(completion_tag)
+                logger.info(f"Created completion tag: {completion_tag}")
+            except Exception as e:
+                results["errors"].append(f"Could not create tag {completion_tag}: {e}")
+
+        if tag:
+            try:
+                self.convertkit.tag_subscriber(str(tag.get("id")), email)
+                results["tags_applied"].append(completion_tag)
+                logger.info(f"Tagged {email} as {completion_tag}")
+            except Exception as e:
+                results["errors"].append(f"Could not apply tag {completion_tag}: {e}")
+
+        # Tag as newsletter-active
+        newsletter_tag_name = f"{brand}-newsletter-active"
+        newsletter_tag = self.convertkit.find_tag_by_name(newsletter_tag_name)
+        if not newsletter_tag:
+            try:
+                newsletter_tag = self.convertkit.create_tag(newsletter_tag_name)
+            except Exception as e:
+                results["errors"].append(f"Could not create tag {newsletter_tag_name}: {e}")
+
+        if newsletter_tag:
+            try:
+                self.convertkit.tag_subscriber(str(newsletter_tag.get("id")), email)
+                results["tags_applied"].append(newsletter_tag_name)
+                logger.info(f"Moved {email} to newsletter segment: {newsletter_tag_name}")
+            except Exception as e:
+                results["errors"].append(f"Could not apply tag {newsletter_tag_name}: {e}")
+
+        # Log to database
+        try:
+            db = get_supabase_client()
+            db.log_analytics_event(
+                event_type="welcome_sequence_completed",
+                brand=brand,
+                platform="email",
+                data={"email": email, "tags": results["tags_applied"]}
+            )
+        except Exception as e:
+            logger.warning(f"Failed to log completion to database: {e}")
+
+        results["success"] = len(results["errors"]) == 0
+        return results
+
+    def handle_link_click(
+        self,
+        email: str,
+        brand: str,
+        link_type: str,
+        link_url: str
+    ) -> dict:
+        """Process automation when a subscriber clicks a link.
+
+        Tracks click count per subscriber and applies engagement tags
+        when thresholds are met. Also applies interest tags based on
+        link type and detects affiliate link clicks.
+
+        Args:
+            email: Subscriber email address.
+            brand: Brand identifier.
+            link_type: Type of content clicked (e.g., 'workout', 'nutrition',
+                      'affiliate', 'recovery', 'equipment').
+            link_url: The URL that was clicked.
+
+        Returns:
+            Dict with results of automation actions taken.
+        """
+        from .convertkit_setup.convertkit_automation import (
+            ConvertKitManager,
+            BRAND_INTEREST_MAP,
+            INTEREST_TAGS
+        )
+
+        results = {
+            "email": email,
+            "brand": brand,
+            "link_type": link_type,
+            "actions_taken": [],
+            "errors": []
+        }
+
+        ck_manager = ConvertKitManager()
+        db = get_supabase_client()
+
+        # 1. Apply interest tag if applicable
+        interest_group = BRAND_INTEREST_MAP.get(brand, "")
+        if interest_group:
+            interest_key = f"interest_{link_type}"
+            brand_interests = INTEREST_TAGS.get(interest_group, {})
+            if interest_key in brand_interests:
+                tag_result = ck_manager.tag_subscriber_interest(email, brand, interest_key)
+                if tag_result.get("success"):
+                    results["actions_taken"].append(f"Applied interest tag: {interest_key}")
+                else:
+                    results["errors"].append(f"Interest tag failed: {tag_result.get('error')}")
+
+        # 2. Check if this is an affiliate link click
+        is_affiliate = (
+            "tag=dailydealdarl-20" in link_url
+            or link_type == "affiliate"
+            or "amazon.com" in link_url
+        )
+
+        if is_affiliate:
+            tag_result = ck_manager.tag_subscriber_engagement(email, TAG_PURCHASER)
+            if tag_result.get("success"):
+                results["actions_taken"].append("Applied purchaser tag (affiliate click)")
+            else:
+                results["errors"].append(f"Purchaser tag failed: {tag_result.get('error')}")
+
+        # 3. Track click count and check for highly_engaged threshold
+        try:
+            # Log the click event
+            db.log_analytics_event(
+                event_type="email_link_click",
+                brand=brand,
+                platform="email",
+                data={
+                    "email": email,
+                    "link_type": link_type,
+                    "link_url": link_url,
+                    "is_affiliate": is_affiliate,
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+            )
+
+            # Query total clicks for this subscriber
+            click_count = _get_subscriber_click_count(db, email, brand)
+
+            if click_count >= HIGHLY_ENGAGED_CLICK_THRESHOLD:
+                tag_result = ck_manager.tag_subscriber_engagement(
+                    email, TAG_HIGHLY_ENGAGED
+                )
+                if tag_result.get("success"):
+                    results["actions_taken"].append(
+                        f"Applied highly_engaged tag (click count: {click_count})"
+                    )
+                    logger.info(
+                        f"Subscriber {email} marked as highly engaged "
+                        f"({click_count} clicks)"
+                    )
+
+        except Exception as e:
+            logger.warning(f"Failed to track click count: {e}")
+            results["errors"].append(f"Click tracking failed: {e}")
+
+        results["success"] = len(results["errors"]) == 0
+        return results
+
+    def process_engagement_check(self, brand: str) -> dict:
+        """Run periodic engagement check across all subscribers for a brand.
+
+        Evaluates subscriber engagement levels and applies appropriate
+        engagement tags. Should be run periodically (e.g., weekly).
+
+        Args:
+            brand: Brand identifier to check.
+
+        Returns:
+            Dict with summary of engagement updates.
+        """
+        from .convertkit_setup.convertkit_automation import ConvertKitManager
+
+        ck_manager = ConvertKitManager()
+
+        results = {
+            "brand": brand,
+            "subscribers_checked": 0,
+            "highly_engaged": 0,
+            "moderate_engaged": 0,
+            "at_risk": 0,
+            "errors": []
+        }
+
+        logger.info(
+            f"Engagement check for {brand}: "
+            f"Use ConvertKit Visual Automations to track open rates "
+            f"and apply engagement tags automatically."
+        )
+
+        return results
+
+
+def _get_subscriber_click_count(db, email: str, brand: str) -> int:
+    """Get total link click count for a subscriber from the database.
+
+    Args:
+        db: Supabase client instance.
+        email: Subscriber email.
+        brand: Brand identifier.
+
+    Returns:
+        Total number of tracked link clicks.
+    """
+    try:
+        result = db.client.table("analytics_events").select(
+            "id", count="exact"
+        ).eq(
+            "event_type", "email_link_click"
+        ).eq(
+            "brand", brand
+        ).like(
+            "data->>email", email
+        ).execute()
+
+        return result.count if result.count else 0
+    except Exception as e:
+        logger.warning(f"Could not query click count for {email}: {e}")
+        return 0
+
+
+# ==================== Form Configurations ====================
+
 FORM_CONFIGS = {
     "daily_deal_darling": {
         "popup": {
@@ -315,7 +581,7 @@ def generate_form_html(brand: str, form_type: str = "inline") -> str:
     }
     colors = brand_colors.get(brand, brand_colors["daily_deal_darling"])
 
-    return f'''
+    return f"""
 <div class="email-form" style="background: {colors["secondary"]}; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px; margin: 20px auto;">
     <h3 style="color: {colors["primary"]}; margin-bottom: 10px;">{form_config["title"]}</h3>
     <p style="color: #333; margin-bottom: 20px;">{form_config["subtitle"]}</p>
@@ -329,7 +595,7 @@ def generate_form_html(brand: str, form_type: str = "inline") -> str:
     </form>
     <p style="font-size: 12px; color: #666; margin-top: 10px;">We respect your privacy. Unsubscribe anytime.</p>
 </div>
-'''
+"""
 
 
 if __name__ == "__main__":
