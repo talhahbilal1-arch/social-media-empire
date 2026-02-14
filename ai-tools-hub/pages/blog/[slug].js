@@ -1,5 +1,6 @@
 import Layout from '../../components/Layout'
 import { AffiliateDisclosure } from '../../components/AffiliateLink'
+import NewsletterSignup from '../../components/NewsletterSignup'
 import Link from 'next/link'
 import { getAllArticles, getArticleBySlug, getReadingTime } from '../../lib/articles'
 
@@ -37,6 +38,15 @@ export default function ArticlePage({ article }) {
       ]
     }
   ]
+
+  // Split HTML content to insert newsletter mid-article
+  const contentHtml = article.html || ''
+  const midPoint = Math.floor(contentHtml.length / 2)
+  // Find the nearest closing tag after the midpoint to avoid splitting inside a tag
+  const splitIndex = contentHtml.indexOf('</p>', midPoint)
+  const hasEnoughContent = contentHtml.length > 1000 && splitIndex !== -1
+  const firstHalf = hasEnoughContent ? contentHtml.substring(0, splitIndex + 4) : contentHtml
+  const secondHalf = hasEnoughContent ? contentHtml.substring(splitIndex + 4) : ''
 
   return (
     <Layout
@@ -79,14 +89,34 @@ export default function ArticlePage({ article }) {
 
         <AffiliateDisclosure />
 
-        {/* Article content */}
+        {/* First half of article content */}
         <div
           className="prose prose-lg max-w-none mt-8"
-          dangerouslySetInnerHTML={{ __html: article.html }}
+          dangerouslySetInnerHTML={{ __html: firstHalf }}
         />
 
+        {/* Mid-article newsletter signup */}
+        {hasEnoughContent && (
+          <div className="my-10">
+            <NewsletterSignup variant="inline" />
+          </div>
+        )}
+
+        {/* Second half of article content */}
+        {hasEnoughContent && secondHalf && (
+          <div
+            className="prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: secondHalf }}
+          />
+        )}
+
+        {/* End-of-article newsletter signup */}
+        <div className="mt-12 mb-8">
+          <NewsletterSignup variant="banner" />
+        </div>
+
         {/* Footer */}
-        <footer className="mt-12 pt-8 border-t border-gray-200">
+        <footer className="mt-8 pt-8 border-t border-gray-200">
           <Link href="/blog/" className="text-primary-600 hover:text-primary-700 font-medium">
             &larr; Back to all articles
           </Link>

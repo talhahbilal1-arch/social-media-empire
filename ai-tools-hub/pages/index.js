@@ -1,5 +1,6 @@
 import Layout from '../components/Layout'
 import ToolCard from '../components/ToolCard'
+import NewsletterSignup from '../components/NewsletterSignup'
 import Link from 'next/link'
 import { getAllTools, getAllCategories, getAllComparisons, getFeaturedTools } from '../lib/tools'
 
@@ -9,24 +10,62 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
       canonical="https://toolpilot-hub.netlify.app/"
     >
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-600 to-primary-800 text-white">
+      <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-purple-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 text-white mb-6">
+            Updated February 2026 &mdash; {totalTools}+ tools reviewed
+          </span>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Find the Perfect AI Tool
+            Stop Wasting Money on the<br className="hidden md:block" /> Wrong AI Tools
           </h1>
-          <p className="text-xl md:text-2xl text-primary-100 mb-8 max-w-3xl mx-auto">
-            Honest reviews and side-by-side comparisons of {totalTools}+ AI tools for writing, coding, design, video, and marketing.
+          <p className="text-xl md:text-2xl text-primary-100 mb-4 max-w-3xl mx-auto">
+            Find the perfect AI tool in minutes with honest reviews, real pricing data, and side-by-side comparisons. Save hours of research and hundreds of dollars.
+          </p>
+          <p className="text-primary-200 mb-8 max-w-2xl mx-auto">
+            Trusted by creators, marketers, and developers who need AI tools that actually deliver ROI.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/category/writing/" className="btn-primary bg-white text-primary-700 hover:bg-primary-50">
+            <Link href="/category/writing/" className="btn-primary bg-white text-primary-700 hover:bg-primary-50 font-bold">
               AI Writing Tools
             </Link>
-            <Link href="/category/coding/" className="btn-primary bg-primary-500 hover:bg-primary-400 border border-primary-400">
+            <Link href="/category/coding/" className="btn-primary bg-primary-500 hover:bg-primary-400 border border-primary-400 font-bold">
               AI Coding Tools
             </Link>
-            <Link href="/compare/" className="btn-primary bg-transparent hover:bg-primary-700 border border-primary-300">
+            <Link href="/compare/" className="btn-primary bg-transparent hover:bg-primary-700 border border-primary-300 font-bold">
               Compare Tools
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof Bar */}
+      <section className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 text-sm text-gray-600">
+            <div className="flex items-center space-x-2">
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>{totalTools}+</strong> AI tools reviewed</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>10</strong> categories covered</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>Updated</strong> February 2026</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>100%</strong> independent reviews</span>
+            </div>
           </div>
         </div>
       </section>
@@ -34,9 +73,9 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
       {/* Featured Tools */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Top-Rated AI Tools</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Top-Rated AI Tools for 2026</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Our highest-rated AI tools across all categories, updated for 2026.
+            Our highest-rated AI tools across all categories. Each tool is hands-on tested and rated on features, pricing, ease of use, and value.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -97,6 +136,11 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         </div>
       </section>
 
+      {/* Newsletter Signup */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <NewsletterSignup variant="banner" />
+      </section>
+
       {/* SEO Content Block */}
       <section className="bg-gray-50 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg">
@@ -104,7 +148,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
           <p>
             The AI tools landscape is evolving rapidly, with new products launching every week.
             ToolPilot cuts through the noise with honest, data-driven reviews and side-by-side
-            comparisons that help you make informed decisions.
+            comparisons that help you make informed decisions &mdash; and save you money.
           </p>
           <h3>What Makes Our Reviews Different</h3>
           <ul>

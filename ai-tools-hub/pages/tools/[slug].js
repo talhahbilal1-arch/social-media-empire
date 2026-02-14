@@ -1,6 +1,7 @@
+import { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import StarRating from '../../components/StarRating'
-import AffiliateLink, { AffiliateDisclosure } from '../../components/AffiliateLink'
+import AffiliateLink, { AffiliateDisclosure, trackAffiliateClick } from '../../components/AffiliateLink'
 import Link from 'next/link'
 import { getAllTools, getToolBySlug, getToolsByCategory, formatPrice, getAllComparisons, getAffiliateUrl } from '../../lib/tools'
 
@@ -9,7 +10,25 @@ const SITE_URL = 'https://toolpilot-hub.netlify.app'
 export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
   if (!tool) return null
 
+  const [showStickyCTA, setShowStickyCTA] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show sticky CTA after scrolling past 400px (past hero section)
+      setShowStickyCTA(window.scrollY > 400)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const affiliateUrl = tool.affiliateUrlWithUtm
   const canonicalUrl = `${SITE_URL}/tools/${tool.slug}/`
+
+  // Determine CTA copy based on free tier availability
+  const primaryCTA = tool.pricing.free_tier
+    ? `Start ${tool.name} Free Today`
+    : `See ${tool.name} Pricing & Plans`
+  const primaryCTAArrow = `${primaryCTA} \u2192`
 
   // Combined structured data: SoftwareApplication + Review + BreadcrumbList
   const structuredData = [
@@ -37,6 +56,7 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
         "@type": "Review",
         "author": { "@type": "Organization", "name": "ToolPilot" },
         "datePublished": "2026-02-06",
+        "dateModified": "2026-02-13",
         "reviewRating": {
           "@type": "Rating",
           "ratingValue": tool.rating,
@@ -84,8 +104,10 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{tool.name}</h1>
                 {tool.pricing.free_tier && <span className="badge-green">Free Tier</span>}
               </div>
-              <p className="text-lg text-gray-600 mb-4">{tool.tagline}</p>
-              <div className="flex items-center space-x-3">
+              <p className="text-lg text-gray-600 mb-2">{tool.tagline}</p>
+              {/* Last Updated Date */}
+              <p className="text-sm text-gray-500 mt-1">Last updated: February 2026</p>
+              <div className="flex items-center space-x-3 mt-3">
                 <StarRating rating={tool.rating} size="lg" />
                 <span className="text-lg font-bold text-gray-900">{tool.rating}/5</span>
                 <span className="text-gray-500">({tool.review_count.toLocaleString()} reviews)</span>
@@ -96,12 +118,17 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
                 <span className="text-sm text-gray-500">Starting at</span>
                 <p className="text-3xl font-bold text-gray-900">{formatPrice(tool.pricing.starting_price)}</p>
               </div>
+              {/* Updated February 2026 badge */}
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Updated February 2026
+              </span>
               <AffiliateLink
-                href={tool.affiliateUrlWithUtm}
+                href={affiliateUrl}
                 tool={tool.slug}
                 className="btn-primary"
+                placement="hero_cta"
               >
-                Try {tool.name} Free &rarr;
+                {primaryCTAArrow}
               </AffiliateLink>
             </div>
           </div>
@@ -164,6 +191,24 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
                   ))}
                 </ul>
               </div>
+            </section>
+
+            {/* Mid-content CTA */}
+            <section className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-6 text-center">
+              <p className="text-lg font-semibold text-gray-900 mb-2">Ready to try {tool.name}?</p>
+              <p className="text-gray-600 mb-4 text-sm">
+                {tool.pricing.free_tier
+                  ? `Get started with ${tool.name}'s free tier \u2014 no credit card required.`
+                  : `See all ${tool.name} plans and find the right fit for your needs.`}
+              </p>
+              <AffiliateLink
+                href={affiliateUrl}
+                tool={tool.slug}
+                className="inline-block py-3 px-8 text-center text-white font-bold rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all"
+                placement="mid_content_cta"
+              >
+                {primaryCTAArrow}
+              </AffiliateLink>
             </section>
 
             {/* Pricing */}
@@ -232,11 +277,12 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
               </dl>
 
               <AffiliateLink
-                href={tool.affiliateUrlWithUtm}
+                href={affiliateUrl}
                 tool={tool.slug}
                 className="btn-primary w-full justify-center mt-6"
+                placement="sidebar_cta"
               >
-                Try {tool.name} &rarr;
+                {tool.pricing.free_tier ? `Start ${tool.name} Free Today \u2192` : `See ${tool.name} Pricing & Plans \u2192`}
               </AffiliateLink>
 
               <a
@@ -285,6 +331,17 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
             ))}
           </div>
         </section>
+      )}
+
+      {/* Sticky Mobile CTA */}
+      {showStickyCTA && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 p-3 bg-white border-t border-gray-200 shadow-lg md:hidden">
+          <a href={affiliateUrl} target="_blank" rel="noopener noreferrer sponsored"
+             className="block w-full py-3 px-6 text-center text-white font-bold rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all"
+             onClick={() => trackAffiliateClick(tool.name, 'sticky_mobile')}>
+            {tool.pricing.free_tier ? `Try ${tool.name} Free \u2192` : `See ${tool.name} Plans \u2192`}
+          </a>
+        </div>
       )}
     </Layout>
   )
