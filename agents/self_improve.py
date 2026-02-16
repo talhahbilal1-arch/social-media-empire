@@ -50,7 +50,11 @@ class SelfImprovementEngine:
         }
 
         try:
-            brands = self.db.get_active_brands()
+            try:
+                brands = self.db.get_active_brands()
+            except Exception as e:
+                print(f"[self_improve] Database error fetching active brands: {e}")
+                brands = []
             print(f"Analyzing {len(brands)} brands...")
 
             for brand in brands:
@@ -106,7 +110,11 @@ class SelfImprovementEngine:
             return results
 
         # Get current patterns
-        current_patterns = self.db.get_winning_patterns(brand_id)
+        try:
+            current_patterns = self.db.get_winning_patterns(brand_id)
+        except Exception as e:
+            print(f"[self_improve] Database error fetching winning patterns: {e}")
+            current_patterns = []
 
         # Analyze with Claude
         try:
@@ -128,7 +136,11 @@ class SelfImprovementEngine:
                     'confidence_score': pattern.get('confidence', 0.5),
                     'is_active': True
                 }
-                self.db.upsert_pattern(pattern_record)
+                try:
+                    self.db.upsert_pattern(pattern_record)
+                except Exception as e:
+                    print(f"[self_improve] Database error upserting pattern: {e}")
+                    continue
                 results['patterns_updated'] += 1
 
                 # Log the change
@@ -139,7 +151,10 @@ class SelfImprovementEngine:
                     'new_value': pattern,
                     'reason': pattern.get('reason', 'Performance analysis')
                 }
-                self.db.log_system_change(change)
+                try:
+                    self.db.log_system_change(change)
+                except Exception as e:
+                    print(f"[self_improve] Database error logging system change: {e}")
                 results['changes'].append(change)
 
                 print(f"    Added pattern: {pattern['pattern_type']} = {pattern['pattern_value']}")
@@ -154,10 +169,14 @@ class SelfImprovementEngine:
                 for p in current_patterns:
                     if (p['pattern_type'] == retire['pattern_type'] and
                         p['pattern_value'] == retire['pattern_value']):
-                        self.db.upsert_pattern({
-                            **p,
-                            'is_active': False
-                        })
+                        try:
+                            self.db.upsert_pattern({
+                                **p,
+                                'is_active': False
+                            })
+                        except Exception as e:
+                            print(f"[self_improve] Database error retiring pattern: {e}")
+                            break
 
                         change = {
                             'agent_name': 'self_improve',
@@ -166,7 +185,10 @@ class SelfImprovementEngine:
                             'old_value': p,
                             'reason': retire.get('reason', 'Underperforming')
                         }
-                        self.db.log_system_change(change)
+                        try:
+                            self.db.log_system_change(change)
+                        except Exception as e:
+                            print(f"[self_improve] Database error logging system change: {e}")
                         results['changes'].append(change)
 
                         print(f"    Retired pattern: {retire['pattern_type']} = {retire['pattern_value']}")
@@ -178,7 +200,11 @@ class SelfImprovementEngine:
         # Process schedule changes
         for schedule_change in analysis.get('schedule_changes', []):
             try:
-                current_config = self.db.get_config(brand_id, 'posting_schedule') or {}
+                try:
+                    current_config = self.db.get_config(brand_id, 'posting_schedule') or {}
+                except Exception as e:
+                    print(f"[self_improve] Database error fetching posting schedule config: {e}")
+                    current_config = {}
 
                 platform = schedule_change['platform']
                 old_time = schedule_change.get('current_time')
@@ -192,12 +218,16 @@ class SelfImprovementEngine:
                         old_times.sort()
                         current_config[platform]['times'] = old_times
 
-                        self.db.update_config(
-                            brand_id,
-                            'posting_schedule',
-                            current_config,
-                            updated_by='self_improve'
-                        )
+                        try:
+                            self.db.update_config(
+                                brand_id,
+                                'posting_schedule',
+                                current_config,
+                                updated_by='self_improve'
+                            )
+                        except Exception as e:
+                            print(f"[self_improve] Database error updating config: {e}")
+                            continue
                         results['configs_updated'] += 1
 
                         change = {
@@ -209,7 +239,10 @@ class SelfImprovementEngine:
                             'new_value': {'time': new_time},
                             'reason': schedule_change.get('reason', 'Optimization')
                         }
-                        self.db.log_system_change(change)
+                        try:
+                            self.db.log_system_change(change)
+                        except Exception as e:
+                            print(f"[self_improve] Database error logging system change: {e}")
                         results['changes'].append(change)
 
                         print(f"    Updated {platform} schedule: {old_time} -> {new_time}")
@@ -231,23 +264,35 @@ class SelfImprovementEngine:
         analytics = []
 
         # Get posts for this brand
-        posts = self.db.get_posts_for_analytics(hours_ago=days * 24)
+        try:
+            posts = self.db.get_posts_for_analytics(hours_ago=days * 24)
+        except Exception as e:
+            print(f"[self_improve] Database error fetching posts for analytics: {e}")
+            return analytics
 
         for post in posts:
-            post_analytics = self.db.client.table('analytics').select('*')\
-                .eq('post_id', post['id'])\
-                .order('recorded_at', desc=True)\
-                .limit(1)\
-                .execute()
+            try:
+                post_analytics = self.db.client.table('analytics').select('*')\
+                    .eq('post_id', post['id'])\
+                    .order('recorded_at', desc=True)\
+                    .limit(1)\
+                    .execute()
+            except Exception as e:
+                print(f"[self_improve] Database error fetching analytics for post {post['id']}: {e}")
+                continue
 
             if post_analytics.data:
                 latest = post_analytics.data[0]
 
                 # Get content details
-                content = self.db.client.table('content_bank').select('*')\
-                    .eq('id', post.get('content_id'))\
-                    .single()\
-                    .execute()
+                try:
+                    content = self.db.client.table('content_bank').select('*')\
+                        .eq('id', post.get('content_id'))\
+                        .single()\
+                        .execute()
+                except Exception as e:
+                    print(f"[self_improve] Database error fetching content for post {post['id']}: {e}")
+                    continue
 
                 if content.data:
                     analytics.append({

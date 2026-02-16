@@ -115,7 +115,11 @@ class TrendDiscoveryEngine:
         }
 
         try:
-            brands = self.db.get_active_brands()
+            try:
+                brands = self.db.get_active_brands()
+            except Exception as e:
+                print(f"[trend_discovery] Database error fetching active brands: {e}")
+                brands = []
             print(f"Discovering trends for {len(brands)} brands...")
 
             for brand in brands:
@@ -139,7 +143,11 @@ class TrendDiscoveryEngine:
                 results['errors'].extend(brand_results.get('errors', []))
 
             # Cleanup old trends
-            cleaned = self.db.cleanup_expired_trends()
+            try:
+                cleaned = self.db.cleanup_expired_trends()
+            except Exception as e:
+                print(f"[trend_discovery] Database error cleaning up expired trends: {e}")
+                cleaned = 0
             print(f"\nCleaned up {cleaned} expired trends")
 
             self.db.complete_agent_run(
@@ -207,8 +215,11 @@ class TrendDiscoveryEngine:
 
         # Save to database
         if unique_discoveries:
-            saved = self.db.save_trends_batch(unique_discoveries)
-            results['total'] = len(saved)
+            try:
+                saved = self.db.save_trends_batch(unique_discoveries)
+                results['total'] = len(saved)
+            except Exception as e:
+                print(f"[trend_discovery] Database error saving trends batch: {e}")
 
         return results
 

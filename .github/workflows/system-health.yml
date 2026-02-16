@@ -2,8 +2,8 @@ name: System Health
 
 on:
   schedule:
-    # Every 2 hours
-    - cron: '0 */2 * * *'
+    # Every 6 hours (aligned with health-monitor.yml)
+    - cron: '30 */6 * * *'
   workflow_dispatch:
     inputs:
       action:

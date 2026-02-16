@@ -1,12 +1,12 @@
-# Agent 6: Health Monitor
-# Runs hourly to check system health and send alerts if needed
+# Health Monitor + Self-Healer
+# Runs every 6 hours to check system health and auto-fix issues
 
 name: Health Monitor
 
 on:
   schedule:
-    # Every hour at minute 30
-    - cron: '30 * * * *'
+    # Every 6 hours
+    - cron: '0 */6 * * *'
   workflow_dispatch:  # Allow manual trigger
 
 env:
@@ -22,7 +22,7 @@ env:
 jobs:
   health-check:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -43,11 +43,24 @@ jobs:
         id: health
         run: |
           python -m agents.health_monitor
-        continue-on-error: true  # Don't fail the workflow, let the agent handle alerts
+        continue-on-error: true
+
+      - name: Run Self-Healer
+        id: heal
+        if: always()
+        run: |
+          python -m agents.self_healer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        continue-on-error: true
 
       - name: Summary
         if: always()
         run: |
-          echo "## Health Check Complete" >> $GITHUB_STEP_SUMMARY
-          echo "Status: ${{ steps.health.outcome }}" >> $GITHUB_STEP_SUMMARY
-          echo "Time: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "## Health Monitor + Self-Healer" >> $GITHUB_STEP_SUMMARY
+          echo "**Health Check:** ${{ steps.health.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Self-Healer:** ${{ steps.heal.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Runs every 6 hours. Email alerts only after 10 consecutive failures._" >> $GITHUB_STEP_SUMMARY

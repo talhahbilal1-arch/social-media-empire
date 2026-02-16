@@ -1,12 +1,21 @@
 """
 Notifications - Email alerts for system health
+
+Rules:
+- NO email for any error seen fewer than 10 consecutive times
+- NO email for successful health checks
+- NO email for warnings that auto-resolve
+- SEND email ONLY when:
+  - Same error has failed to self-heal 10 consecutive times
+  - A critical agent has been down for 48+ hours
+  - The self-healer itself crashes
 """
 import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 
 def send_alert(subject: str,
@@ -155,3 +164,96 @@ System Health: All agents running normally
 """
 
     return send_alert(subject, message, severity="info", details=stats)
+
+
+# ==========================================
+# THRESHOLD-BASED NOTIFICATION SYSTEM
+# ==========================================
+
+# Critical agents that warrant faster alerting
+CRITICAL_AGENTS = ['content_brain', 'video_factory', 'content_pipeline']
+
+# Minimum consecutive failures before sending email
+FAILURE_THRESHOLD = 10
+
+# Minimum hours between re-notifications for the same error
+NOTIFICATION_COOLDOWN_HOURS = 24
+
+
+def should_send_alert(agent_name: str,
+                      consecutive_failures: int,
+                      hours_down: float = 0,
+                      last_notified_at: Optional[str] = None) -> bool:
+    """
+    Determine whether to send an email alert based on failure threshold rules.
+
+    Returns True ONLY when:
+    - The same error has failed to self-heal 10+ consecutive times
+    - A critical agent has been down for 48+ hours
+    - Respects 24-hour cooldown between re-notifications
+    """
+    # Check cooldown - don't re-notify within 24 hours
+    if last_notified_at:
+        try:
+            last_notified = datetime.fromisoformat(last_notified_at.replace('Z', '+00:00')).replace(tzinfo=None)
+            hours_since_notify = (datetime.utcnow() - last_notified).total_seconds() / 3600
+            if hours_since_notify < NOTIFICATION_COOLDOWN_HOURS:
+                return False
+        except (ValueError, TypeError):
+            pass
+
+    # Critical agents: alert if down for 48+ hours regardless of failure count
+    if agent_name in CRITICAL_AGENTS and hours_down >= 48:
+        return True
+
+    # Standard threshold: 10 consecutive failures
+    if consecutive_failures >= FAILURE_THRESHOLD:
+        return True
+
+    return False
+
+
+def send_critical_alert(agent_name: str,
+                        error_message: str,
+                        consecutive_failures: int,
+                        timestamps: Optional[List[str]] = None,
+                        suggested_fix: str = "") -> bool:
+    """
+    Send a critical alert email for persistent failures.
+
+    Subject format: EMPIRE CRITICAL: [agent_name] failed 10x -- needs manual fix
+    Body includes: error message, attempt count, last 3 timestamps, suggested fix.
+    """
+    subject = f"EMPIRE CRITICAL: {agent_name} failed {consecutive_failures}x -- needs manual fix"
+
+    # Format timestamps
+    ts_text = "No timestamp data"
+    if timestamps:
+        ts_text = "\n".join([f"  - {ts}" for ts in timestamps[-3:]])
+
+    message = f"""CRITICAL ALERT: {agent_name} has failed {consecutive_failures} consecutive times.
+
+Error Message:
+  {error_message}
+
+Consecutive Failures: {consecutive_failures}
+Last 3 Failure Timestamps:
+{ts_text}
+
+Suggested Manual Fix:
+  {suggested_fix or 'Check GitHub Actions logs and Supabase dashboard for details.'}
+
+This alert was sent because the self-healer could not resolve this issue after {consecutive_failures} attempts.
+Manual intervention is required.
+"""
+
+    return send_alert(
+        subject=subject,
+        message=message,
+        severity="critical",
+        details={
+            'agent': agent_name,
+            'consecutive_failures': consecutive_failures,
+            'error': error_message[:200]
+        }
+    )

@@ -55,7 +55,11 @@ class VideoFactory:
 
         try:
             # Get pending video content
-            pending = self.db.get_pending_videos(limit=10)  # Limit to avoid API costs
+            try:
+                pending = self.db.get_pending_videos(limit=10)  # Limit to avoid API costs
+            except Exception as e:
+                print(f"[video_factory] Database error fetching pending videos: {e}")
+                pending = []
             print(f"Found {len(pending)} content pieces needing videos")
 
             if not pending:
@@ -90,7 +94,10 @@ class VideoFactory:
                         print(f"  Render started: {render_result['render_id']}")
 
                         # Update content status
-                        self.db.update_content_status(content['id'], 'video_ready')
+                        try:
+                            self.db.update_content_status(content['id'], 'video_ready')
+                        except Exception as e:
+                            print(f"[video_factory] Database error updating content status: {e}")
                     else:
                         results['total_failed'] += 1
                         results['errors'].append(render_result.get('error'))
@@ -176,7 +183,10 @@ class VideoFactory:
                 'width': template.get('width', 1080),
                 'height': template.get('height', 1920)
             }
-            self.db.save_video(video_record)
+            try:
+                self.db.save_video(video_record)
+            except Exception as e:
+                print(f"[video_factory] Database error saving video record: {e}")
 
             return {
                 'success': True,

@@ -311,6 +311,10 @@ CREATE TABLE IF NOT EXISTS health_checks (
     duration_ms INTEGER,
     error_message TEXT,
     details JSONB DEFAULT '{}',
+    consecutive_failures INTEGER DEFAULT 0,
+    last_notified_at TIMESTAMP WITH TIME ZONE,
+    auto_heal_attempted BOOLEAN DEFAULT false,
+    auto_heal_success BOOLEAN DEFAULT false,
     checked_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

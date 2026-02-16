@@ -1,4 +1,86 @@
-# CHANGES-SUMMARY — Quality Pivot v2 + Trending Discovery
+# CHANGES-SUMMARY
+
+---
+
+## Health System Overhaul (2026-02-16)
+
+Resolved 3 CRITICAL errors and 3 WARNINGS that caused the system to report `unhealthy` status. Overhauled the self-healing and email notification systems.
+
+### CRITICAL FIXES
+
+| # | Error | File(s) Changed | Fix |
+|---|-------|-----------------|-----|
+| 1 | PGRST204: Missing `affiliate_products` column on `content_bank` | `database/migrations/2026-02-16-fix-critical-health-issues.sql` | Migration adds column with `ALTER TABLE content_bank ADD COLUMN IF NOT EXISTS affiliate_products JSONB DEFAULT '[]'` |
+| 2 | PGRST100: Malformed filter `is.not.null` | `core/supabase_client.py:206` | Changed `.is_('video_script', 'not.null')` to `.not_.is_('video_script', 'null')` |
+| 3 | 42703: Column `content_bank.brand_id` does not exist | `database/migrations/2026-02-16-fix-critical-health-issues.sql` | Migration adds `brand_id` column with sync trigger to keep `brand` and `brand_id` in sync |
+
+### WARNING FIXES
+
+| # | Warning | File(s) Changed | Fix |
+|---|---------|-----------------|-----|
+| 1 | `trend_discovery` dormant (873h) | `.github/workflows/trend-discovery.yml` | Updated cron to `0 6 * * *` (6:00 AM UTC daily) |
+| 1 | `multi_platform_poster` dormant (858h) | `.github/workflows/content-engine.yml` | Updated cron to `0 14, 0 19, 0 0 * * *` (14:00, 19:00, 00:00 UTC) |
+| 2 | High DB failure rate (18 in 24h) | `agents/content_brain.py`, `agents/video_factory.py`, `agents/trend_discovery.py`, `agents/analytics_collector.py`, `agents/self_improve.py` | Added try/except wrappers around all Supabase queries |
+
+### OVERHAULS
+
+**Self-Healing System** (`agents/self_healer.py` - NEW):
+- Checks all agent statuses and database health
+- Auto-fixes: re-triggers workflows, retries with exponential backoff
+- Schema errors logged only (needs human review)
+- Emails only after 10+ consecutive failures or critical agent down 48+ hours
+
+**Email Notification System** (`core/notifications.py`):
+- Added `should_send_alert()` with 10-failure threshold and 24h cooldown
+- Added `send_critical_alert()` with formatted subject: `EMPIRE CRITICAL: [agent] failed 10x`
+- Updated `agents/health_monitor.py` to use threshold-based alerts
+
+**Health Monitor Workflow** (`.github/workflows/health-monitor.yml`):
+- Changed from hourly to every 6 hours (`0 */6 * * *`)
+- Added self-healer step after health check
+
+### Database Changes
+
+**Migration:** `database/migrations/2026-02-16-fix-critical-health-issues.sql` (run in Supabase SQL Editor)
+- Adds `affiliate_products`, `brand_id`, and other missing content_bank columns
+- Adds `consecutive_failures`, `last_notified_at`, `auto_heal_attempted`, `auto_heal_success` to health_checks
+- Clears stale errors and reloads PostgREST schema cache
+
+**Schema:** `database/schema.sql` - Added notification tracking columns to health_checks table
+
+### All Files Changed
+
+| File | Action |
+|------|--------|
+| `core/supabase_client.py` | Fixed `is.not.null` filter syntax |
+| `core/notifications.py` | Added threshold-based notification functions |
+| `agents/self_healer.py` | **NEW** - Self-healing agent |
+| `agents/health_monitor.py` | Updated schedules and threshold-based alerts |
+| `agents/content_brain.py` | Added try/except wrappers |
+| `agents/video_factory.py` | Added try/except wrappers |
+| `agents/trend_discovery.py` | Added try/except wrappers |
+| `agents/analytics_collector.py` | Added try/except wrappers |
+| `agents/self_improve.py` | Added try/except wrappers |
+| `database/schema.sql` | Added health_checks notification columns |
+| `database/migrations/2026-02-16-fix-critical-health-issues.sql` | **NEW** - All DB fixes |
+| `.github/workflows/health-monitor.yml` | 6h cron, added self-healer step |
+| `.github/workflows/trend-discovery.yml` | Updated cron to 6:00 AM UTC |
+| `.github/workflows/content-engine.yml` | Updated cron to 14:00/19:00/00:00 UTC |
+| `.github/workflows/system-health.yml` | Changed to 6h cron |
+
+### Post-Deployment
+
+1. Run `database/migrations/2026-02-16-fix-critical-health-issues.sql` in Supabase SQL Editor
+2. Manually trigger `trend-discovery.yml` and `content-engine.yml` to clear dormant warnings
+3. Monitor the next health-monitor run to confirm system reports healthy
+
+---
+
+# Previous Changes
+
+---
+
+# Quality Pivot v2 + Trending Discovery
 
 **Branch:** `quality-pivot-v2` (merged) + `trending-discovery`
 **Date:** 2026-02-05

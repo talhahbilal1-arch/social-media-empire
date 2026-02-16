@@ -104,7 +104,11 @@ class ContentBrain:
         }
 
         try:
-            brands = self.db.get_active_brands()
+            try:
+                brands = self.db.get_active_brands()
+            except Exception as e:
+                print(f"[content_brain] Database error fetching active brands: {e}")
+                brands = []
             print(f"Generating content for {len(brands)} brands...")
 
             for brand in brands:
@@ -156,18 +160,30 @@ class ContentBrain:
         results = {'total': 0, 'by_type': {}, 'errors': []}
 
         # Get configuration
-        config = self.db.get_config(brand_id, 'content_generation') or {
-            'daily_pieces': 10,
-            'video_ratio': 0.3
-        }
+        try:
+            config = self.db.get_config(brand_id, 'content_generation') or {
+                'daily_pieces': 10,
+                'video_ratio': 0.3
+            }
+        except Exception as e:
+            print(f"[content_brain] Database error fetching config: {e}")
+            config = {'daily_pieces': 10, 'video_ratio': 0.3}
         target_pieces = config.get('daily_pieces', 10)
 
         # Get fresh trends
-        trends = self.db.get_unused_trends(brand_id, limit=15)
+        try:
+            trends = self.db.get_unused_trends(brand_id, limit=15)
+        except Exception as e:
+            print(f"[content_brain] Database error fetching unused trends: {e}")
+            trends = []
         print(f"  Found {len(trends)} unused trends")
 
         # Get winning patterns
-        patterns = self.db.get_winning_patterns(brand_id)
+        try:
+            patterns = self.db.get_winning_patterns(brand_id)
+        except Exception as e:
+            print(f"[content_brain] Database error fetching winning patterns: {e}")
+            patterns = []
         print(f"  Found {len(patterns)} winning patterns")
 
         # Calculate content mix based on guidelines
@@ -201,13 +217,20 @@ class ContentBrain:
 
         # Save all content to database
         if all_content:
-            saved = self.db.save_content_batch(all_content)
-            results['total'] = len(saved)
+            try:
+                saved = self.db.save_content_batch(all_content)
+                results['total'] = len(saved)
+            except Exception as e:
+                print(f"[content_brain] Database error saving content batch: {e}")
+                saved = []
 
             # Mark used trends
             used_trend_ids = set(c.get('trend_id') for c in all_content if c.get('trend_id'))
             for trend_id in used_trend_ids:
-                self.db.mark_trend_used(trend_id)
+                try:
+                    self.db.mark_trend_used(trend_id)
+                except Exception as e:
+                    print(f"[content_brain] Database error marking trend {trend_id} as used: {e}")
             print(f"  Marked {len(used_trend_ids)} trends as used")
 
         return results

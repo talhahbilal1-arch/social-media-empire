@@ -2,10 +2,10 @@ name: Content Engine
 
 on:
   schedule:
-    # 3 runs per day — staggered for Pinterest optimal times
-    - cron: '0 16 * * *'  # 8 AM PST
-    - cron: '0 21 * * *'  # 1 PM PST
-    - cron: '0 2 * * *'   # 6 PM PST
+    # 3 runs per day — multi_platform_poster schedule
+    - cron: '0 14 * * *'  # 14:00 UTC / 6 AM PST
+    - cron: '0 19 * * *'  # 19:00 UTC / 11 AM PST
+    - cron: '0 0 * * *'   # 00:00 UTC / 4 PM PST
   workflow_dispatch:
     inputs:
       brand:
@@ -44,12 +44,12 @@ jobs:
       - name: Determine posting slot
         id: slot
         run: |
-          # Determine which slot this is based on cron schedule
+          # Determine which slot this is based on cron schedule (14:00, 19:00, 00:00 UTC)
           HOUR=$(date -u +%H)
-          if [ "$HOUR" -ge "15" ] && [ "$HOUR" -le "17" ]; then
+          if [ "$HOUR" -ge "13" ] && [ "$HOUR" -le "15" ]; then
             SLOT="morning"
             BRANDS="fitness,deals,menopause"
-          elif [ "$HOUR" -ge "20" ] && [ "$HOUR" -le "22" ]; then
+          elif [ "$HOUR" -ge "18" ] && [ "$HOUR" -le "20" ]; then
             SLOT="afternoon"
             BRANDS="fitness,deals"
           else

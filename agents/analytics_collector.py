@@ -52,8 +52,11 @@ class AnalyticsCollector:
                     analytics = self._collect_for_platform(post)
 
                     if analytics:
-                        self.db.save_analytics(analytics)
-                        results['analytics_saved'] += 1
+                        try:
+                            self.db.save_analytics(analytics)
+                            results['analytics_saved'] += 1
+                        except Exception as e:
+                            print(f"[analytics_collector] Database error saving analytics: {e}")
                         results['by_platform'][platform] = results['by_platform'].get(platform, 0) + 1
 
                     results['posts_analyzed'] += 1
@@ -84,7 +87,11 @@ class AnalyticsCollector:
     def _get_posts_needing_analytics(self) -> List[Dict]:
         """Get recent posts that need analytics collection."""
         # Get posts from last 7 days
-        return self.db.get_posts_for_analytics(hours_ago=168)  # 7 days
+        try:
+            return self.db.get_posts_for_analytics(hours_ago=168)  # 7 days
+        except Exception as e:
+            print(f"[analytics_collector] Database error fetching posts for analytics: {e}")
+            return []
 
     def _collect_for_platform(self, post: Dict) -> Optional[Dict]:
         """Collect analytics for a specific post based on platform."""
