@@ -177,7 +177,7 @@ def get_unique_pexels_image(search_query, brand, supabase_client):
 
     return {
         "id": str(chosen['id']),
-        "url": chosen['src']['large2x'],
+        "url": chosen['src']['original'],
         "photographer": chosen['photographer'],
         "alt": chosen.get('alt', '')
     }
