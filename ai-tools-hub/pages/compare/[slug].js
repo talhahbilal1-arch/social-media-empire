@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Layout from '../../components/Layout'
 import ComparisonTable from '../../components/ComparisonTable'
 import StarRating from '../../components/StarRating'
@@ -6,6 +7,47 @@ import Link from 'next/link'
 import { getAllComparisons, getComparisonBySlug, getToolBySlug, formatPrice, getAffiliateUrl } from '../../lib/tools'
 
 const SITE_URL = 'https://toolpilot-hub.netlify.app'
+
+/**
+ * Generate FAQ schema questions for a comparison page.
+ */
+function generateFAQs(comparison, tool1, tool2) {
+  const faqs = [
+    {
+      "@type": "Question",
+      "name": `Is ${tool1.name} better than ${tool2.name}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": comparison.verdict || `${tool1.name} excels at ${(tool1.best_for || []).slice(0, 2).join(' and ')}, while ${tool2.name} is better for ${(tool2.best_for || []).slice(0, 2).join(' and ')}.`
+      }
+    },
+    {
+      "@type": "Question",
+      "name": `Which is cheaper, ${tool1.name} or ${tool2.name}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `${tool1.name} starts at ${formatPrice(tool1.pricing.starting_price)}, while ${tool2.name} starts at ${formatPrice(tool2.pricing.starting_price)}. ${tool1.pricing.free_tier && tool2.pricing.free_tier ? 'Both offer free tiers.' : tool1.pricing.free_tier ? `${tool1.name} offers a free tier.` : tool2.pricing.free_tier ? `${tool2.name} offers a free tier.` : 'Neither offers a free tier.'}`
+      }
+    },
+    {
+      "@type": "Question",
+      "name": `Can I use ${tool1.name} and ${tool2.name} together?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Yes, many professionals use both ${tool1.name} and ${tool2.name} for different tasks. ${tool1.name} is typically preferred for ${(tool1.best_for || ['general tasks']).slice(0, 1).join('')}, while ${tool2.name} shines at ${(tool2.best_for || ['general tasks']).slice(0, 1).join('')}. Using both can give you the best of both worlds.`
+      }
+    },
+    {
+      "@type": "Question",
+      "name": `Which has better ratings, ${tool1.name} or ${tool2.name}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `${tool1.name} has a rating of ${tool1.rating}/5 based on ${tool1.review_count.toLocaleString()} reviews, while ${tool2.name} has a rating of ${tool2.rating}/5 based on ${tool2.review_count.toLocaleString()} reviews. ${tool1.rating > tool2.rating ? `${tool1.name} is rated slightly higher.` : tool2.rating > tool1.rating ? `${tool2.name} is rated slightly higher.` : 'Both tools are rated equally.'}`
+      }
+    }
+  ]
+  return faqs
+}
 
 export default function ComparisonPage({ comparison, tool1, tool2 }) {
   if (!comparison || !tool1 || !tool2) return null
@@ -16,6 +58,8 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
 
   const canonicalUrl = `${SITE_URL}/compare/${comparison.slug}/`
 
+  const faqItems = generateFAQs(comparison, tool1, tool2)
+
   const structuredData = [
     {
       "@context": "https://schema.org",
@@ -23,7 +67,7 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
       "headline": comparison.title,
       "description": comparison.meta_description,
       "datePublished": "2026-02-06",
-      "dateModified": "2026-02-06",
+      "dateModified": "2026-02-13",
       "author": { "@type": "Organization", "name": "ToolPilot" },
       "publisher": { "@type": "Organization", "name": "ToolPilot" }
     },
@@ -38,6 +82,12 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
     }
   ]
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems
+  }
+
   return (
     <Layout
       title={`${tool1.name} vs ${tool2.name} (2026): Which Is Better?`}
@@ -46,6 +96,14 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
       ogType="article"
       structuredData={structuredData}
     >
+      {/* FAQ Schema */}
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      </Head>
+
       {/* Breadcrumb */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <ol className="flex items-center space-x-2 text-sm text-gray-500">
@@ -60,9 +118,10 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
       {/* Hero */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
         <div className="bg-gradient-to-r from-primary-50 to-blue-50 rounded-2xl p-8 md:p-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 text-center">
             {comparison.title}
           </h1>
+          <p className="text-sm text-gray-500 text-center mb-6">Last updated: February 2026</p>
 
           {/* Score Summary */}
           <div className="flex items-center justify-center space-x-8 md:space-x-16">
@@ -158,9 +217,23 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
                   href={tool.affiliateUrlWithUtm}
                   tool={tool.slug}
                   className="btn-primary w-full justify-center mt-4"
+                  placement="comparison_pricing"
                 >
-                  Try {tool.name} &rarr;
+                  {tool.pricing.free_tier ? `Start ${tool.name} Free Today \u2192` : `See ${tool.name} Pricing & Plans \u2192`}
                 </AffiliateLink>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {faqItems.map((faq, idx) => (
+              <div key={idx} className="card">
+                <h3 className="font-bold text-gray-900 mb-2">{faq.name}</h3>
+                <p className="text-gray-600">{faq.acceptedAnswer.text}</p>
               </div>
             ))}
           </div>
