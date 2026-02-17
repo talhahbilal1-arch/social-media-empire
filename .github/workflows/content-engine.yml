@@ -173,7 +173,7 @@ jobs:
                           'brand': brand_map.get(brand, brand),
                           'title': pin_data['title'],
                           'description': pin_data['description'],
-                          'image_url': pin_data['image_url'],
+                          'video_url': pin_data['image_url'],
                           'board_name': pin_data.get('board', ''),
                           'link': pin_data['destination_url'],
                       }
