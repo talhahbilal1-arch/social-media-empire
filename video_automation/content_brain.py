@@ -676,18 +676,18 @@ Adapt this framework creatively (do NOT copy it word-for-word):
 {selected_angle}
 
 ═══ TITLE RULES (CRITICAL — this determines if anyone clicks) ═══
-Your title MUST:
+Your title MUST be a LISTICLE with the number 5:
+- Format: "5 [Things/Ways/Secrets/Signs/Mistakes] That [Outcome]"
 - Be 40-60 characters (optimal Pinterest display length, HARD LIMIT 70 chars)
-- Create an irresistible CURIOSITY GAP — the reader MUST click to satisfy their curiosity
-- Use ONE of these proven Pinterest title patterns:
-  * "[Number] Things That [Outcome] (#[X] Surprised Me)"
-  * "Stop [Mistake] — Do This Instead"
-  * "I Tried [Thing] for [Time] — Here's What Happened"
-  * "The [Adjective] [Thing] That [Result] (Most People Don't Know)"
-  * "Why [Common Thing] Is [Secretly Bad] (And the Fix)"
+- Create an irresistible CURIOSITY GAP — the reader MUST click to get all 5
+- Use ONE of these proven listicle patterns:
+  * "5 Things That [Outcome] (#3 Surprised Me)"
+  * "5 [Topic] Mistakes You're Making After 35"
+  * "5 Proven [Things] for [Outcome] (Most People Miss #4)"
+  * "5 [Adjective] [Things] That Actually [Result]"
+  * "5 Signs Your [Thing] Needs This (Don't Ignore #2)"
 - Include at least ONE power word: secret, proven, simple, essential, surprising, honest, finally, actually
-- NEVER be generic. "Healthy Meal Prep Tips" = TERRIBLE. "The $2 Meal Prep Trick I Use Every Sunday" = GREAT.
-- NEVER give away the answer. Tease the outcome, withhold the method.
+- NEVER be generic. NEVER give away all the answers in the title.
 
 ═══ DESCRIPTION RULES (SEO + click-through) ═══
 Opening style: {selected_opener}
@@ -731,10 +731,18 @@ Recent titles:
 Recent image queries:
 {chr(10).join(recent_image_queries[:10]) if recent_image_queries else 'None yet'}
 
+═══ 5 TIPS (CRITICAL — these appear as numbered items ON the pin image) ═══
+Generate EXACTLY 5 tips/items related to the topic. These are displayed as a numbered list on the pin.
+Each tip MUST be:
+- 6-12 words max (must fit on one line of a pin image)
+- Specific and actionable (not vague platitudes)
+- Teasing — give enough to intrigue but not the full answer (the article has the details)
+- Each tip should cover a DIFFERENT angle/aspect of the topic
+
 ═══ IMAGE + OVERLAY RULES ═══
 - Image search query: SPECIFIC and VIVID — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic side lighting"
 - Query must match THIS topic specifically, not be generic stock photo terms
-- Text overlay: 3-8 words max that capture the pin's core hook in large bold readable font
+- For Fitness Made Easy: image query MUST feature men/male subjects. Include "man", "male", or "guy" in the query. NEVER use gender-neutral terms that could return female images.
 - Alt text: brief accessible description for screen readers
 
 ═══ BANNED PHRASES ═══
@@ -745,13 +753,13 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
     "title": "...",
     "description": "...",
     "image_search_query": "...",
-    "text_overlay": "...",
+    "tips": ["tip 1 text", "tip 2 text", "tip 3 text", "tip 4 text", "tip 5 text"],
     "alt_text": "..."
 }}"""
 
     response = _get_client().messages.create(
         model="claude-sonnet-4-5-20250929",
-        max_tokens=800,
+        max_tokens=1000,
         messages=[{"role": "user", "content": prompt}]
     )
 
@@ -804,6 +812,192 @@ def log_pin_to_history(pin_data, supabase_client):
         }).execute()
     except Exception as e:
         logger.error(f"Failed to log pin to history: {e}")
+
+
+def generate_pin_from_daily_trend(brand_key, run_index, supabase_client):
+    """Generate a pin based on today's daily trending topics.
+
+    The daily_trend_scout runs at 6 AM PST and stores 3 ranked topics per brand.
+    Topic distribution: run 0→#1, run 1→#2, run 2→#3, run 3→#1, run 4→#2
+    (Topic #1 gets 2 pins/day, Topic #2 gets 2, Topic #3 gets 1.)
+
+    Returns pin_data dict or None if no daily trends exist.
+    """
+    today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    config = BRAND_CONFIGS[brand_key]
+
+    # Query today's trends
+    try:
+        result = supabase_client.table('daily_trending') \
+            .select('topics') \
+            .eq('brand', brand_key) \
+            .eq('trend_date', today_str) \
+            .limit(1) \
+            .execute()
+    except Exception as e:
+        logger.warning(f"Could not query daily_trending: {e}")
+        return None
+
+    if not result.data:
+        print(f"  No daily trends for {brand_key} on {today_str}")
+        return None
+
+    raw = result.data[0]['topics']
+    topics = json.loads(raw) if isinstance(raw, str) else raw
+
+    if not topics:
+        return None
+
+    # Map run_index to topic: 0→#1, 1→#2, 2→#3, 3→#1, 4→#2
+    topic_index = run_index % len(topics)
+    selected_trend = topics[topic_index]
+    print(f"  Using daily trend #{selected_trend.get('rank', topic_index+1)}: {selected_trend['topic']}")
+
+    # Get recent pins for uniqueness check
+    try:
+        recent = supabase_client.table('content_history') \
+            .select('title, description, image_query, visual_style, description_opener') \
+            .eq('brand', brand_key) \
+            .order('created_at', desc=True) \
+            .limit(20) \
+            .execute()
+        recent_data = recent.data or []
+    except Exception:
+        recent_data = []
+
+    recent_titles = [r.get('title', '') for r in recent_data]
+    recent_styles = [r.get('visual_style', '') for r in recent_data[:4]]
+    recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
+
+    # Select visual style
+    selected_style = _select_visual_style_weighted(recent_styles)
+
+    # Select SEO keywords
+    selected_keywords = random.sample(config['seo_keywords'], min(5, len(config['seo_keywords'])))
+
+    # Select hashtags
+    brand_hashtags = config.get('hashtags', [])
+    selected_hashtags = random.sample(brand_hashtags, min(6, len(brand_hashtags))) if brand_hashtags else []
+
+    # Select description opener (rotate)
+    available_openers = [o for o in DESCRIPTION_OPENERS if o not in recent_openers]
+    if not available_openers:
+        available_openers = DESCRIPTION_OPENERS
+    selected_opener = random.choice(available_openers)
+
+    # Board from trend data, fall back to brand default
+    selected_board = selected_trend.get('board', config['pinterest_boards'][0])
+
+    # Affiliate products from trend data or brand config
+    trend_products = selected_trend.get('affiliate_products', [])
+    if not trend_products:
+        all_products = []
+        for cat_products in config.get('affiliate_products', {}).values():
+            all_products.extend(cat_products)
+        trend_products = random.sample(all_products, min(5, len(all_products))) if all_products else []
+
+    prompt = f"""You are creating a Pinterest pin for "{config['name']}".
+Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
+
+═══ YOUR VOICE ═══
+{config['voice']}
+
+═══ TODAY'S TRENDING TOPIC ═══
+Topic: {selected_trend['topic']}
+Why it's trending: {selected_trend.get('why_trending', 'Currently popular in this niche')}
+Content angle: {selected_trend.get('content_angle', 'Create engaging visual content about this trend')}
+Target board: {selected_board}
+
+═══ TITLE RULES (CRITICAL — determines if anyone clicks) ═══
+Your title MUST be a LISTICLE with the number 5:
+- Format: "5 [Things/Ways/Secrets/Signs/Mistakes] That [Outcome]"
+- MUST be 40-60 characters (optimal Pinterest display, HARD LIMIT 70 chars)
+- MUST create an irresistible CURIOSITY GAP — reader cannot resist clicking
+- Use ONE proven listicle pattern:
+  * "5 Things That [Outcome] (#3 Surprised Me)"
+  * "5 [Topic] Mistakes You're Making After 35"
+  * "5 Proven [Things] for [Outcome] (Most People Miss #4)"
+  * "5 Signs Your [Thing] Needs This (Don't Ignore #2)"
+- Include a power word: secret, proven, simple, essential, surprising, honest, finally, actually
+- NEVER generic. NEVER give away all the answers in the title.
+
+═══ DESCRIPTION RULES ═══
+Opening style: {selected_opener}
+Requirements:
+1. FIRST 50 CHARACTERS must contain primary SEO keyword
+2. Length: 150-300 chars before hashtags
+3. Include 3-5 keywords: {', '.join(selected_keywords)}
+4. Include EMOTIONAL TRIGGER for this audience
+5. End with CTA: "Click for the full guide" / "Save this" / "Full breakdown at the link"
+6. NEW LINE after CTA with 5-8 hashtags: {' '.join(selected_hashtags)}
+7. If a product fits, mention its BENEFIT not just its name
+
+═══ AFFILIATE PRODUCTS (only if naturally relevant) ═══
+{', '.join(trend_products) if trend_products else 'none available'}
+
+═══ VISUAL STYLE ═══
+{selected_style['name']} — {selected_style['description']}
+
+═══ RECENTLY USED TITLES (yours must be completely different) ═══
+{chr(10).join(recent_titles[:10]) if recent_titles else 'None yet'}
+
+═══ BANNED PHRASES ═══
+Never use: "unlock", "transform your", "game-changer", "must-have", "you won't believe", "amazing", "incredible", "life-changing", "revolutionary", "ultimate guide"
+
+═══ 5 TIPS (CRITICAL — numbered items ON the pin image) ═══
+Generate EXACTLY 5 tips/items about the trending topic.
+Each tip MUST be:
+- 6-12 words max (must fit on one line of a pin image)
+- Specific and actionable (not vague platitudes)
+- Each tip covers a DIFFERENT angle/aspect
+
+═══ IMAGE + OVERLAY ═══
+- Image query: SPECIFIC and VIVID (not generic stock terms)
+- For Fitness Made Easy: MUST feature men/male subjects. Include "man", "male", or "guy".
+- Alt text: brief accessible description
+
+OUTPUT ONLY THIS JSON:
+{{
+    "title": "...",
+    "description": "...",
+    "image_search_query": "...",
+    "tips": ["tip 1", "tip 2", "tip 3", "tip 4", "tip 5"],
+    "alt_text": "..."
+}}"""
+
+    response = _get_client().messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=1000,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    content = response.content[0].text.strip()
+
+    try:
+        pin_data = json.loads(content)
+    except json.JSONDecodeError:
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        if json_match:
+            pin_data = json.loads(json_match.group())
+        else:
+            logger.error(f"Daily trend pin parse error: {content[:200]}")
+            return None
+
+    # Add metadata
+    pin_data['brand'] = brand_key
+    pin_data['topic'] = selected_trend['topic']
+    pin_data['trending_topic'] = selected_trend['topic']
+    pin_data['category'] = 'daily_trending'
+    pin_data['angle_framework'] = f"Daily Trend #{selected_trend.get('rank', topic_index+1)}"
+    pin_data['visual_style'] = selected_style['name']
+    pin_data['creatomate_template'] = selected_style['creatomate_template']
+    pin_data['board'] = selected_board
+    pin_data['description_opener'] = selected_opener
+    pin_data['destination_url'] = config['destination_base_url']
+    pin_data['keywords_used'] = selected_keywords
+    pin_data['daily_trend'] = True
+
+    return pin_data
 
 
 def generate_pin_from_calendar(brand_key, supabase_client):
@@ -929,15 +1123,17 @@ Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 The suggested title is a STARTING POINT. You MUST improve it using the title rules below.
 
 ═══ TITLE RULES (CRITICAL — determines if anyone clicks) ═══
+Your title MUST be a LISTICLE with the number 5:
+- Format: "5 [Things/Ways/Secrets/Signs/Mistakes] That [Outcome]"
 - MUST be 40-60 characters (optimal Pinterest display, HARD LIMIT 70 chars)
 - MUST create an irresistible CURIOSITY GAP — reader cannot resist clicking
-- Use ONE proven Pinterest pattern:
-  * "[Number] Things That [Outcome] (#[X] Surprised Me)"
-  * "Stop [Mistake] — Do This Instead"
-  * "I Tried [Thing] for [Time] — Here's What Happened"
-  * "The [Adjective] [Thing] That [Result] (Most People Don't Know)"
+- Use ONE proven listicle pattern:
+  * "5 Things That [Outcome] (#3 Surprised Me)"
+  * "5 [Topic] Mistakes You're Making After 35"
+  * "5 Proven [Things] for [Outcome] (Most People Miss #4)"
+  * "5 Signs Your [Thing] Needs This (Don't Ignore #2)"
 - Include a power word: secret, proven, simple, essential, surprising, honest, finally, actually
-- NEVER generic. NEVER give away the answer. Tease outcome, withhold method.
+- NEVER generic. NEVER give away all the answers in the title.
 
 ═══ DESCRIPTION RULES ═══
 Opening style: {selected_opener}
@@ -976,9 +1172,17 @@ Requirements:
 ═══ BANNED PHRASES ═══
 Never use: "unlock", "transform your", "game-changer", "must-have", "you won't believe", "amazing", "incredible", "life-changing", "revolutionary", "ultimate guide"
 
+═══ 5 TIPS (CRITICAL — these appear as numbered items ON the pin image) ═══
+Generate EXACTLY 5 tips/items related to the topic. These are displayed as a numbered list on the pin.
+Each tip MUST be:
+- 6-12 words max (must fit on one line of a pin image)
+- Specific and actionable (not vague platitudes)
+- Teasing — give enough to intrigue but not the full answer (the article has the details)
+- Each tip should cover a DIFFERENT angle/aspect of the topic
+
 ═══ IMAGE + OVERLAY ═══
 - Image query: SPECIFIC and VIVID (not generic stock terms)
-- Text overlay: 3-8 impactful words for large bold font
+- For Fitness Made Easy: image query MUST feature men/male subjects. Include "man", "male", or "guy" in the query. NEVER use gender-neutral terms that could return female images.
 - Alt text: brief accessible description
 
 OUTPUT ONLY THIS JSON:
@@ -986,13 +1190,13 @@ OUTPUT ONLY THIS JSON:
     "title": "...",
     "description": "...",
     "image_search_query": "...",
-    "text_overlay": "...",
+    "tips": ["tip 1 text", "tip 2 text", "tip 3 text", "tip 4 text", "tip 5 text"],
     "alt_text": "..."
 }}"""
 
     response = _get_client().messages.create(
         model="claude-sonnet-4-5-20250929",
-        max_tokens=800,
+        max_tokens=1000,
         messages=[{"role": "user", "content": prompt}]
     )
 

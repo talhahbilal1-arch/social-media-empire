@@ -1,0 +1,74 @@
+name: Daily Trend Scout
+
+on:
+  schedule:
+    # 6 AM PST (14:00 UTC) — 1 hour before first content-engine run
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  discover-trends:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run daily trend scout
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python3 << 'PYEOF'
+          import sys
+          import json
+          from datetime import datetime, timezone
+
+          sys.path.insert(0, '.')
+          from database.supabase_client import get_supabase_client
+          from video_automation.daily_trend_scout import run_daily_trend_scout
+
+          db = get_supabase_client()
+          results = run_daily_trend_scout(db.client)
+
+          # Print summary for GitHub Actions step summary
+          summary_lines = ["# Daily Trend Scout Results\n"]
+          for brand, data in results.items():
+              summary_lines.append(f"## {brand.upper()}")
+              topics = data.get('topics', [])
+              if topics:
+                  for t in topics:
+                      summary_lines.append(f"- **#{t['rank']}** {t['topic']} (score: {t.get('trend_score', '?')})")
+              else:
+                  summary_lines.append("- _No trends discovered (using fallback)_")
+              summary_lines.append("")
+
+          summary = "\n".join(summary_lines)
+          print(summary)
+
+          # Write to GitHub step summary
+          import os
+          summary_file = os.environ.get('GITHUB_STEP_SUMMARY', '')
+          if summary_file:
+              with open(summary_file, 'a') as f:
+                  f.write(summary)
+          PYEOF

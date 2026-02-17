@@ -20,6 +20,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
 env:
   PYTHON_VERSION: '3.11'
 
@@ -31,6 +34,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -59,18 +64,23 @@ jobs:
           import sys
           import json
           import requests
+          import subprocess
           import time
           from datetime import datetime, timezone
 
           sys.path.insert(0, '.')
           from video_automation.content_brain import (
               generate_pin_content, generate_pin_from_calendar,
+              generate_pin_from_daily_trend,
               log_pin_to_history, build_destination_url
           )
           from video_automation.image_selector import get_unique_pexels_image
           from video_automation.pin_image_generator import render_pin_to_bytes, map_visual_style
           from video_automation.supabase_storage import upload_pin_image
           from video_automation.pinterest_boards import get_board_id
+          from video_automation.pin_article_generator import (
+              generate_article_for_pin, article_to_html, save_and_register_article
+          )
 
           dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
 
@@ -104,22 +114,136 @@ jobs:
 
               return False, error_msg
 
-          results = []
-          for brand_idx, brand in enumerate(brands):
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 1: Generate all pin content (Claude calls)
+          # ══════════════════════════════════════════════════════════════
+          print('=== PHASE 1: Generating pin content ===')
+          pin_data_by_brand = {}
+          for brand in brands:
               brand = brand.strip()
-              print(f'\n=== Generating pin for {brand} ===')
+              print(f'\n--- Generating content for {brand} ---')
               try:
-                  # Step 1: Generate content via Claude (calendar-aware with fallback)
-                  pin_data = generate_pin_from_calendar(brand, db.client)
-                  if pin_data is None:
-                      print(f'  Calendar exhausted for today, using random topic')
-                      pin_data = generate_pin_content(brand, db.client)
+                  # Count today's posts to determine run_index
+                  today_date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+                  try:
+                      today_posts = db.client.table('content_history') \
+                          .select('id') \
+                          .eq('brand', brand) \
+                          .gte('created_at', today_date_str + 'T00:00:00Z') \
+                          .execute()
+                      run_index = len(today_posts.data) if today_posts.data else 0
+                  except Exception:
+                      run_index = 0
+                  print(f'  Run index: {run_index} (posts today so far)')
+
+                  # 3-tier priority: daily trends → weekly calendar → random static topics
+                  pin_data = generate_pin_from_daily_trend(brand, run_index, db.client)
+                  if pin_data is not None:
+                      print(f'  Source: DAILY TREND')
+                  else:
+                      pin_data = generate_pin_from_calendar(brand, db.client)
+                      if pin_data is not None:
+                          print(f'  Source: WEEKLY CALENDAR')
+                      else:
+                          print(f'  Calendar exhausted for today, using random topic')
+                          pin_data = generate_pin_content(brand, db.client)
+                          print(f'  Source: RANDOM STATIC')
                   print(f'  Title: {pin_data["title"]}')
                   print(f'  Board: {pin_data["board"]}')
                   print(f'  Style: {pin_data["visual_style"]}')
-                  print(f'  Text overlay: {pin_data.get("text_overlay", "N/A")}')
+                  print(f'  Topic: {pin_data.get("topic", "N/A")}')
+                  pin_data_by_brand[brand] = pin_data
+              except Exception as e:
+                  print(f'  ERROR generating content for {brand}: {e}')
+                  import traceback
+                  traceback.print_exc()
+                  pin_data_by_brand[brand] = None
 
-                  # Step 2: Get unique image from Pexels
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 2: Generate articles for each pin (Claude calls)
+          # ══════════════════════════════════════════════════════════════
+          print('\n=== PHASE 2: Generating articles ===')
+          from video_automation.pin_article_generator import BRAND_SITE_CONFIG, _make_slug
+          articles_generated = []
+          for brand, pin_data in pin_data_by_brand.items():
+              if pin_data is None:
+                  continue
+              print(f'\n--- Generating article for {brand} ---')
+              try:
+                  slug, article_md = generate_article_for_pin(brand, pin_data, db.client)
+                  if slug and article_md:
+                      html = article_to_html(article_md, brand, slug)
+                      article_url = save_and_register_article(html, brand, slug, pin_data, db.client)
+                      pin_data['destination_url'] = article_url
+                      articles_generated.append(f'{brand}: {slug}')
+                      print(f'  Article saved: {slug} -> {article_url}')
+                  elif slug:
+                      # Article already existed or generation skipped — still link to article URL
+                      site = BRAND_SITE_CONFIG.get(brand, {})
+                      base_url = site.get('base_url', pin_data.get('destination_url', ''))
+                      pin_data['destination_url'] = f'{base_url}/articles/{slug}.html'
+                      print(f'  Article already exists: {slug} -> {pin_data["destination_url"]}')
+                  else:
+                      print(f'  No topic for article, using homepage')
+              except Exception as e:
+                  print(f'  Article generation failed for {brand}: {e}')
+                  import traceback
+                  traceback.print_exc()
+                  # Even if generation failed, try to construct article URL from topic
+                  topic = pin_data.get('topic', '') or pin_data.get('trending_topic', '')
+                  if topic:
+                      fallback_slug = _make_slug(topic)
+                      if fallback_slug:
+                          site = BRAND_SITE_CONFIG.get(brand, {})
+                          base_url = site.get('base_url', pin_data.get('destination_url', ''))
+                          pin_data['destination_url'] = f'{base_url}/articles/{fallback_slug}.html'
+                          print(f'  Fallback article URL: {pin_data["destination_url"]}')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 3: Git commit + push articles (before posting pins)
+          # ══════════════════════════════════════════════════════════════
+          if articles_generated and not dry_run:
+              print('\n=== PHASE 3: Publishing articles ===')
+              try:
+                  subprocess.run(['git', 'config', 'user.name', 'Content Engine Bot'], check=True)
+                  subprocess.run(['git', 'config', 'user.email', 'bot@fitover35.com'], check=True)
+                  subprocess.run(['git', 'add', 'outputs/'], check=True)
+                  result = subprocess.run(['git', 'diff', '--staged', '--quiet'])
+                  if result.returncode != 0:
+                      timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
+                      subprocess.run(
+                          ['git', 'commit', '-m', f'content: publish pin articles {timestamp}'],
+                          check=True
+                      )
+                      subprocess.run(['git', 'push'], check=True)
+                      print(f'  Pushed {len(articles_generated)} articles')
+                      # Wait for deploy to propagate
+                      print('  Waiting 30s for deploy...')
+                      time.sleep(30)
+                  else:
+                      print('  No new article files to commit')
+              except Exception as e:
+                  print(f'  Git push failed: {e} — pins will link to homepage')
+                  import traceback
+                  traceback.print_exc()
+          else:
+              print('\n=== PHASE 3: Skipped (no articles or dry run) ===')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 4: Render images, upload, post via Make.com
+          # ══════════════════════════════════════════════════════════════
+          print('\n=== PHASE 4: Rendering and posting pins ===')
+          results = []
+          for brand_idx, brand in enumerate(brands):
+              brand = brand.strip()
+              pin_data = pin_data_by_brand.get(brand)
+              if pin_data is None:
+                  results.append({'brand': brand, 'status': 'failed', 'error': 'content generation failed'})
+                  continue
+
+              print(f'\n--- Posting pin for {brand} ---')
+              try:
+                  # Step 1: Get unique image from Pexels
                   image = get_unique_pexels_image(
                       pin_data['image_search_query'], brand, db.client
                   )
@@ -127,25 +251,32 @@ jobs:
                   pin_data['image_url'] = image['url']
                   print(f'  Image: {image["id"]} by {image["photographer"]}')
 
-                  # Step 3: Render text overlay pin with PIL
-                  pil_style = map_visual_style(pin_data['visual_style'])
-                  text_overlay = pin_data.get('text_overlay', pin_data['title'])
+                  # Step 2: Render text overlay pin with PIL (always numbered_list with 5 tips)
+                  tips = pin_data.get('tips', [])
+                  if tips and len(tips) >= 2:
+                      # Format tips as numbered list for the renderer
+                      tips_subheadline = ' '.join(f'{i+1}. {t}' for i, t in enumerate(tips[:5]))
+                      pil_style = 'numbered_list'
+                  else:
+                      # Fallback if no tips generated
+                      tips_subheadline = pin_data['title']
+                      pil_style = map_visual_style(pin_data['visual_style'])
                   image_bytes = render_pin_to_bytes(
                       brand=brand,
-                      headline=text_overlay,
-                      subheadline=pin_data['title'],
+                      headline=pin_data['title'],
+                      subheadline=tips_subheadline,
                       keyword_or_url=image['url'],
                       style=pil_style,
                   )
-                  print(f'  Rendered pin: {len(image_bytes)} bytes ({pil_style} style)')
+                  print(f'  Rendered pin: {len(image_bytes)} bytes ({pil_style} style, {len(tips)} tips)')
 
-                  # Step 4: Upload to Supabase Storage
+                  # Step 3: Upload to Supabase Storage
                   timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
                   filename = f'{brand}_{timestamp}.jpg'
                   rendered_url = upload_pin_image(image_bytes, filename)
                   print(f'  Uploaded: {rendered_url}')
 
-                  # Step 5: Build destination URL with UTM
+                  # Step 4: Build destination URL with UTM
                   posting_method = f'make_{brand}'
                   topic_slug = pin_data.get('topic', '').replace(' ', '-').replace('/', '-')[:40]
                   pin_data['destination_url'] = build_destination_url(
@@ -153,16 +284,17 @@ jobs:
                       topic_slug=topic_slug, board_name=pin_data.get('board', '')
                   )
 
-                  # Step 6: Resolve board_id from board name
+                  # Step 5: Resolve board_id from board name
                   board_id = get_board_id(brand, pin_data.get('board', ''))
                   print(f'  Board ID: {board_id}')
 
                   if dry_run:
                       print(f'  [DRY RUN] Would post: {pin_data["title"]}')
+                      print(f'  [DRY RUN] Destination: {pin_data["destination_url"]}')
                       results.append({'brand': brand, 'status': 'dry_run', 'title': pin_data['title']})
                       continue
 
-                  # Step 7: Post via Make.com webhook
+                  # Step 6: Post via Make.com webhook
                   brand_map = {
                       'fitness': 'fitness-made-easy',
                       'deals': 'daily-deal-darling',
@@ -189,7 +321,7 @@ jobs:
                       print(f'  WARNING: No Make.com webhook configured - skipping {brand}')
                       pin_data['posting_method'] = 'skipped'
 
-                  # Step 8: Log to content_history
+                  # Step 7: Log to content_history
                   status_map = {'skipped': 'skipped', 'failed': 'failed'}
                   actual_status = status_map.get(pin_data.get('posting_method', ''), 'posted')
                   log_pin_to_history(pin_data, db.client)
@@ -223,6 +355,10 @@ jobs:
           for r in results:
               status = r['status'].upper()
               print(f'  {r["brand"]}: {status} - {r.get("title", r.get("error", ""))}')
+          if articles_generated:
+              print(f'\n  Articles published: {len(articles_generated)}')
+              for a in articles_generated:
+                  print(f'    {a}')
 
           # Update agent_runs
           posted = [r for r in results if r['status'] == 'posted']
