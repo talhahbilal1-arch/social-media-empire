@@ -21,7 +21,7 @@ OMG, I'm SO excited you're here! Welcome to the Deal Darlings family! 💕
 
 As promised, here's your FREE guide: **50 Hidden Amazon Gems Under $25**
 
-[DOWNLOAD YOUR FREE GUIDE →]
+[DOWNLOAD YOUR FREE GUIDE →](https://dailydealdarling.com/free-guide)
 
 I spent WEEKS putting this together because I know how frustrating it is to scroll through Amazon hoping to find something good. These are my actual favorite finds that I use every single day.
 

@@ -19,7 +19,7 @@ Hi {first_name},
 Welcome! I'm so glad you're here.
 
 First things first - here's your FREE Menopause Symptom Tracker:
-[DOWNLOAD BUTTON]
+[DOWNLOAD YOUR FREE SYMPTOM TRACKER](https://menopauseplanner.com/symptom-tracker)
 
 This tracker helped me finally see patterns in my symptoms that I'd been missing for months. I hope it does the same for you.
 
@@ -157,7 +157,7 @@ Using my symptom tracker, I discovered that red wine and spicy food made mine 10
 At the first sign of a flash, I do 5 slow, deep breaths. It doesn't stop it, but it reduces the intensity.
 
 **5. Cooling Products**
-[Link to recommended cooling towel/pillow/etc]
+[Cooling Towel for Hot Flashes -- $9.99 on Amazon](https://www.amazon.com/dp/B07FNDQBQG?tag=dailydealdarl-20)
 
 Everyone's triggers are different, which is why tracking is so important.
 
@@ -229,9 +229,9 @@ Thousands of women are on this journey with you. We share tips, support each oth
 - Community Q&As
 
 **Resources for you:**
-- [Link to symptom tracker] - if you need a fresh copy
-- [Link to blog] - for deeper dives on symptoms
-- [Link to planner] - when you're ready
+- [Download Symptom Tracker](https://menopauseplanner.com/symptom-tracker) - if you need a fresh copy
+- [Read Our Blog](https://menopauseplanner.com/blog) - for deeper dives on symptoms
+- [Get the Menopause Planner](https://menopauseplanner.com/planner) - when you're ready
 
 Remember: This phase of life is challenging, but it's also an opportunity. An opportunity to prioritize yourself, maybe for the first time in years.
 

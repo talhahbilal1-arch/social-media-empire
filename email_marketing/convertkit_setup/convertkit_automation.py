@@ -11,6 +11,45 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+# ==================== Interest & Engagement Tags ====================
+
+INTEREST_TAGS = {
+    'fitness': {
+        'interest_workouts': 'Clicked workout content',
+        'interest_nutrition': 'Clicked nutrition content',
+        'interest_supplements': 'Clicked supplement content',
+        'interest_recovery': 'Clicked recovery content',
+        'interest_equipment': 'Clicked equipment content',
+    },
+    'deals': {
+        'interest_beauty': 'Clicked beauty products',
+        'interest_kitchen': 'Clicked kitchen products',
+        'interest_home': 'Clicked home organization',
+        'interest_selfcare': 'Clicked self care products',
+    },
+    'menopause': {
+        'interest_symptoms': 'Clicked symptom relief content',
+        'interest_nutrition': 'Clicked nutrition content',
+        'interest_sleep': 'Clicked sleep content',
+        'interest_wellness': 'Clicked wellness content',
+    }
+}
+
+ENGAGEMENT_TAGS = {
+    'highly_engaged': 'Opens 80%+ of emails',
+    'moderate_engaged': 'Opens 40-80% of emails',
+    'at_risk': 'Opens less than 20% of emails',
+    'purchaser': 'Clicked affiliate link and likely purchased',
+}
+
+# Brand-to-interest-group mapping
+BRAND_INTEREST_MAP = {
+    'fitover35': 'fitness',
+    'daily_deal_darling': 'deals',
+    'menopause_planner': 'menopause',
+}
+
+
 @dataclass
 class ConvertKitManager:
     """Manages ConvertKit forms, tags, sequences, and subscribers."""
@@ -28,7 +67,7 @@ class ConvertKitManager:
 
     # ==================== Forms ====================
 
-    def list_forms(self) -> list[dict]:
+    def list_forms(self) -> list:
         """Get all forms."""
         response = requests.get(
             f"{self.base_url}/forms",
@@ -43,7 +82,7 @@ class ConvertKitManager:
         email: str,
         first_name: Optional[str] = None,
         fields: Optional[dict] = None,
-        tags: Optional[list[int]] = None
+        tags: Optional[list] = None
     ) -> dict:
         """Add subscriber to a form."""
         data = {
@@ -66,7 +105,7 @@ class ConvertKitManager:
 
     # ==================== Tags ====================
 
-    def list_tags(self) -> list[dict]:
+    def list_tags(self) -> list:
         """Get all tags."""
         response = requests.get(
             f"{self.base_url}/tags",
@@ -184,7 +223,7 @@ class ConvertKitManager:
 
     # ==================== Sequences ====================
 
-    def list_sequences(self) -> list[dict]:
+    def list_sequences(self) -> list:
         """Get all sequences."""
         response = requests.get(
             f"{self.base_url}/sequences",
@@ -242,7 +281,7 @@ class ConvertKitManager:
 
     # ==================== Custom Fields ====================
 
-    def list_custom_fields(self) -> list[dict]:
+    def list_custom_fields(self) -> list:
         """Get all custom fields."""
         response = requests.get(
             f"{self.base_url}/custom_fields",
@@ -262,6 +301,269 @@ class ConvertKitManager:
         )
         response.raise_for_status()
         return response.json()
+
+    # ==================== Interest Tagging ====================
+
+    def ensure_tags_exist(self) -> dict:
+        """Create all interest and engagement tags if they don't already exist.
+
+        Checks existing tags in ConvertKit and creates any that are missing
+        from INTEREST_TAGS and ENGAGEMENT_TAGS definitions.
+
+        Returns:
+            Dict with created tags, existing tags, and any errors.
+        """
+        existing_tags = self.list_tags()
+        existing_tag_names = {tag["name"] for tag in existing_tags}
+
+        results = {
+            "created": [],
+            "already_exists": [],
+            "errors": []
+        }
+
+        # Collect all tag names we need to ensure exist
+        all_needed_tags = {}
+
+        # Interest tags (per brand group)
+        for brand_group, tags in INTEREST_TAGS.items():
+            for tag_name, description in tags.items():
+                all_needed_tags[tag_name] = description
+
+        # Engagement tags
+        for tag_name, description in ENGAGEMENT_TAGS.items():
+            all_needed_tags[tag_name] = description
+
+        # Create missing tags
+        for tag_name, description in all_needed_tags.items():
+            if tag_name in existing_tag_names:
+                results["already_exists"].append(tag_name)
+                logger.debug(f"Tag already exists: {tag_name}")
+            else:
+                try:
+                    result = self.create_tag(tag_name)
+                    results["created"].append({
+                        "name": tag_name,
+                        "description": description,
+                        "id": result.get("id")
+                    })
+                    logger.info(f"Created tag: {tag_name} ({description})")
+                except Exception as e:
+                    results["errors"].append({
+                        "name": tag_name,
+                        "error": str(e)
+                    })
+                    logger.warning(f"Could not create tag {tag_name}: {e}")
+
+        logger.info(
+            f"Tag sync complete: {len(results['created'])} created, "
+            f"{len(results['already_exists'])} existing, "
+            f"{len(results['errors'])} errors"
+        )
+
+        return results
+
+    def tag_subscriber_interest(
+        self,
+        email: str,
+        brand: str,
+        interest: str
+    ) -> dict:
+        """Tag a subscriber with an interest-based tag.
+
+        Looks up the appropriate interest tag for the brand and applies it
+        to the subscriber.
+
+        Args:
+            email: Subscriber email address.
+            brand: Brand identifier (e.g., 'fitover35', 'daily_deal_darling').
+            interest: Interest key (e.g., 'interest_workouts', 'interest_beauty').
+
+        Returns:
+            Dict with success status and tag details.
+        """
+        # Determine the interest group for this brand
+        interest_group = BRAND_INTEREST_MAP.get(brand)
+        if not interest_group:
+            return {
+                "success": False,
+                "error": f"Unknown brand: {brand}. Known brands: {list(BRAND_INTEREST_MAP.keys())}"
+            }
+
+        # Validate the interest exists for this brand group
+        brand_interests = INTEREST_TAGS.get(interest_group, {})
+        if interest not in brand_interests:
+            return {
+                "success": False,
+                "error": (
+                    f"Unknown interest '{interest}' for brand '{brand}' "
+                    f"(group: {interest_group}). "
+                    f"Valid interests: {list(brand_interests.keys())}"
+                )
+            }
+
+        # Find the tag ID by name
+        existing_tags = self.list_tags()
+        tag_id = None
+        for tag in existing_tags:
+            if tag["name"] == interest:
+                tag_id = tag["id"]
+                break
+
+        if not tag_id:
+            # Tag doesn't exist yet, create it
+            try:
+                result = self.create_tag(interest)
+                tag_id = result.get("id")
+                logger.info(f"Created missing tag: {interest}")
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Could not create tag '{interest}': {e}"
+                }
+
+        # Apply the tag
+        try:
+            result = self.tag_subscriber(str(tag_id), email)
+            logger.info(
+                f"Tagged {email} with '{interest}' "
+                f"(brand: {brand}, description: {brand_interests[interest]})"
+            )
+            return {
+                "success": True,
+                "tag_name": interest,
+                "tag_id": tag_id,
+                "description": brand_interests[interest],
+                "email": email,
+                "brand": brand
+            }
+        except Exception as e:
+            logger.error(f"Failed to tag subscriber {email} with {interest}: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
+    def tag_subscriber_engagement(self, email: str, engagement_level: str) -> dict:
+        """Tag a subscriber with an engagement level.
+
+        Args:
+            email: Subscriber email address.
+            engagement_level: One of 'highly_engaged', 'moderate_engaged',
+                            'at_risk', or 'purchaser'.
+
+        Returns:
+            Dict with success status.
+        """
+        if engagement_level not in ENGAGEMENT_TAGS:
+            return {
+                "success": False,
+                "error": (
+                    f"Unknown engagement level: {engagement_level}. "
+                    f"Valid levels: {list(ENGAGEMENT_TAGS.keys())}"
+                )
+            }
+
+        # Find tag ID
+        existing_tags = self.list_tags()
+        tag_id = None
+        for tag in existing_tags:
+            if tag["name"] == engagement_level:
+                tag_id = tag["id"]
+                break
+
+        if not tag_id:
+            try:
+                result = self.create_tag(engagement_level)
+                tag_id = result.get("id")
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Could not create engagement tag: {e}"
+                }
+
+        # Remove conflicting engagement tags (subscriber should only
+        # have one level at a time, except 'purchaser')
+        if engagement_level != "purchaser":
+            subscriber = self.find_subscriber_by_email(email)
+            if subscriber:
+                subscriber_id = str(subscriber.get("id", ""))
+                for other_level in ENGAGEMENT_TAGS:
+                    if other_level != engagement_level and other_level != "purchaser":
+                        for tag in existing_tags:
+                            if tag["name"] == other_level:
+                                try:
+                                    self.remove_tag_from_subscriber(
+                                        str(tag["id"]),
+                                        subscriber_id
+                                    )
+                                except Exception:
+                                    pass  # Tag might not be on subscriber
+
+        # Apply the engagement tag
+        try:
+            self.tag_subscriber(str(tag_id), email)
+            logger.info(
+                f"Tagged {email} as '{engagement_level}' "
+                f"({ENGAGEMENT_TAGS[engagement_level]})"
+            )
+            return {
+                "success": True,
+                "tag_name": engagement_level,
+                "description": ENGAGEMENT_TAGS[engagement_level]
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
+    def get_subscriber_interests(self, email: str) -> dict:
+        """Get all interest tags for a subscriber.
+
+        Args:
+            email: Subscriber email address.
+
+        Returns:
+            Dict with subscriber's interest tags grouped by brand.
+        """
+        subscriber = self.find_subscriber_by_email(email)
+        if not subscriber:
+            return {"success": False, "error": "Subscriber not found"}
+
+        subscriber_id = subscriber.get("id")
+        response = requests.get(
+            f"{self.base_url}/subscribers/{subscriber_id}/tags",
+            params={"api_key": self.api_key}
+        )
+        response.raise_for_status()
+        subscriber_tags = response.json().get("tags", [])
+
+        # Build all interest tag names for lookup
+        all_interest_tag_names = set()
+        for brand_group_tags in INTEREST_TAGS.values():
+            all_interest_tag_names.update(brand_group_tags.keys())
+
+        # Filter to interest tags only
+        interests = {}
+        for tag in subscriber_tags:
+            tag_name = tag.get("name", "")
+            if tag_name in all_interest_tag_names:
+                for group_name, group_tags in INTEREST_TAGS.items():
+                    if tag_name in group_tags:
+                        if group_name not in interests:
+                            interests[group_name] = []
+                        interests[group_name].append({
+                            "tag": tag_name,
+                            "description": group_tags[tag_name]
+                        })
+
+        return {
+            "success": True,
+            "email": email,
+            "interests": interests,
+            "total_interest_tags": sum(len(v) for v in interests.values())
+        }
 
     # ==================== Utility Methods ====================
 
@@ -348,6 +650,14 @@ def setup_all_brands():
         result = manager.setup_brand_infrastructure(brand)
         results.append(result)
         logger.info(f"Set up brand: {brand}")
+
+    # Also ensure all interest and engagement tags exist
+    tag_results = manager.ensure_tags_exist()
+    results.append({
+        "brand": "_interest_tags",
+        "tags_created": len(tag_results["created"]),
+        "tags": tag_results
+    })
 
     return results
 
