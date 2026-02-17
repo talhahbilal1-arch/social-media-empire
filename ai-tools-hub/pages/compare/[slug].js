@@ -6,7 +6,7 @@ import AffiliateLink, { AffiliateDisclosure } from '../../components/AffiliateLi
 import Link from 'next/link'
 import { getAllComparisons, getComparisonBySlug, getToolBySlug, formatPrice, getAffiliateUrl } from '../../lib/tools'
 
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
 
 /**
  * Generate FAQ schema questions for a comparison page.

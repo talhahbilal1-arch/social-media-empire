@@ -389,7 +389,7 @@ For each brand, answer:
 | Pexels Dashboard | https://www.pexels.com/api/dashboard/ |
 | fitover35.com | https://fitover35.com |
 | dailydealdarling.com | https://dailydealdarling.com |
-| ToolPilot Hub | https://toolpilot-hub.netlify.app |
+| ToolPilot Hub | https://ai-tools-hub-lilac.vercel.app |
 
 ### Emergency Contacts
 

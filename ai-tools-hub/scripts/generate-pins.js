@@ -10,7 +10,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
 const tools = require('../content/tools.json')
 const comparisons = require('../content/comparisons.json')
 

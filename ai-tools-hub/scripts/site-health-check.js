@@ -20,7 +20,7 @@ const http = require('http')
 const fs = require('fs')
 const path = require('path')
 
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
 const args = process.argv.slice(2)
 const JSON_OUTPUT = args.includes('--json')
 const SKIP_LIVE = args.includes('--skip-live')

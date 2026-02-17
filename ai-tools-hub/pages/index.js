@@ -7,7 +7,7 @@ import { getAllTools, getAllCategories, getAllComparisons, getFeaturedTools } fr
 export default function Home({ featuredTools, categories, comparisons, totalTools }) {
   return (
     <Layout
-      canonical="https://toolpilot-hub.netlify.app/"
+      canonical="https://ai-tools-hub-lilac.vercel.app/"
     >
       {/* Hero */}
       <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-purple-800 text-white">
@@ -177,7 +177,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
             "@type": "WebSite",
             "name": "ToolPilot",
             "description": "Find the perfect AI tool with honest reviews and comparisons",
-            "url": "https://toolpilot-hub.netlify.app"
+            "url": "https://ai-tools-hub-lilac.vercel.app"
           })
         }}
       />

@@ -84,5 +84,5 @@ jobs:
           echo "### Content Generation Complete" >> $GITHUB_STEP_SUMMARY
           echo "- Total tools: $TOOLS" >> $GITHUB_STEP_SUMMARY
           echo "- Total comparisons: $COMPS" >> $GITHUB_STEP_SUMMARY
-          echo "- Deployed to: https://toolpilot-hub.netlify.app" >> $GITHUB_STEP_SUMMARY
+          echo "- Deployed to: https://ai-tools-hub-lilac.vercel.app" >> $GITHUB_STEP_SUMMARY
           echo "- Search engines pinged for re-crawl" >> $GITHUB_STEP_SUMMARY

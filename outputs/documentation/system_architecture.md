@@ -60,7 +60,7 @@ flowchart TB
         FIT[fitover35.com\nNetlify]
         DDD[dailydealdarling.com\nNetlify]
         MENO[Menopause Planner\nLanding Page]
-        TOOL[toolpilot-hub.netlify.app\nAI Tools Directory]
+        TOOL[ai-tools-hub-lilac.vercel.app\nAI Tools Directory]
         SUB1[Subdomain Site 1]
         SUB2[Subdomain Site 2]
         SUBN[... Subdomain Site N]
@@ -487,7 +487,7 @@ flowchart TB
     end
 
     subgraph "Revenue Properties"
-        TOOL_HUB[toolpilot-hub.netlify.app\nAI Tools Directory\n16 tools, 10 categories]
+        TOOL_HUB[ai-tools-hub-lilac.vercel.app\nAI Tools Directory\n16 tools, 10 categories]
     end
 
     subgraph "Pinterest Accounts"

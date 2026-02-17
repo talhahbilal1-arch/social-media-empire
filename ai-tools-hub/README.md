@@ -1,6 +1,6 @@
 # ToolPilot - AI Tools Directory & Comparison Site
 
-**Live URL**: https://toolpilot-hub.netlify.app
+**Live URL**: https://ai-tools-hub-lilac.vercel.app
 **Revenue Model**: AI SaaS affiliate commissions (25-50% recurring)
 
 ## Executive Summary

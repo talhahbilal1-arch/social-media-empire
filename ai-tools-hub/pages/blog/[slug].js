@@ -4,7 +4,7 @@ import NewsletterSignup from '../../components/NewsletterSignup'
 import Link from 'next/link'
 import { getAllArticles, getArticleBySlug, getReadingTime } from '../../lib/articles'
 
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
 
 export default function ArticlePage({ article }) {
   if (!article) return null

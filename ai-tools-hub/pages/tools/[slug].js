@@ -5,7 +5,7 @@ import AffiliateLink, { AffiliateDisclosure, trackAffiliateClick } from '../../c
 import Link from 'next/link'
 import { getAllTools, getToolBySlug, getToolsByCategory, formatPrice, getAllComparisons, getAffiliateUrl } from '../../lib/tools'
 
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
 
 export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
   if (!tool) return null

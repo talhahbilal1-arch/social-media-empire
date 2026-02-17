@@ -60,6 +60,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Health:** ${{ steps.health.outputs.health }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Total pages:** ${{ steps.health.outputs.total_pages }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Site:** https://toolpilot-hub.netlify.app" >> $GITHUB_STEP_SUMMARY
+          echo "- **Site:** https://ai-tools-hub-lilac.vercel.app" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Full report printed in step logs above." >> $GITHUB_STEP_SUMMARY

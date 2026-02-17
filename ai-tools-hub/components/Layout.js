@@ -4,7 +4,7 @@ import googleConfig from '../config/google.json'
 
 const SITE_NAME = 'ToolPilot'
 const SITE_TAGLINE = 'Find the Perfect AI Tool'
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
 
 // Google config — auto-activates when real values are pasted into config/google.json
 const GSC_TAG = googleConfig.search_console.verification_tag

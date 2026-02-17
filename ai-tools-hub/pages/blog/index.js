@@ -2,7 +2,7 @@ import Layout from '../../components/Layout'
 import Link from 'next/link'
 import { getAllArticles, getReadingTime } from '../../lib/articles'
 
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
 
 export default function BlogIndex({ articles }) {
   const structuredData = {
