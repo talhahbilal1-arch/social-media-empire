@@ -197,6 +197,10 @@ jobs:
                   'video_factory', 'content_pipeline', 'agent_runs',
                   'schema cache', 'PGRST204', 'PGRST100', 'PGRST205',
                   'not_null', 'column', 'does not exist',
+                  # Transient / network errors that self-heal
+                  'timeout', 'connection refused', 'rate limit', 'temporarily unavailable',
+                  '429', '503', '504', 'ECONNREFUSED', 'ECONNRESET', 'socket hang up',
+                  'network error', 'fetch failed', 'ETIMEDOUT', 'too many requests',
               ]
               try:
                   all_errors = db.client.table('errors').select('id, error_message, error_type') \
@@ -232,7 +236,7 @@ jobs:
                   from monitoring.workflow_guardian import WorkflowGuardian
                   guardian = WorkflowGuardian()
                   result = guardian.analyze_and_heal(hours=2)
-                  print(f'  Analyzed: {result[\"analyzed\"]} failed runs')
+                  print(f'  Checked: {result[\"checked\"]} workflows, {result[\"failed\"]} failed runs')
                   print(f'  Retried: {result[\"retried\"]}')
                   healed += result.get('retried', 0)
               except Exception as e:
@@ -339,13 +343,28 @@ jobs:
               except Exception as e:
                   print(f'  Failed to log: {e}')
 
-          # ── Check for truly unresolvable issues ──
+          # ── Check for truly unresolvable (critical-only) issues ──
+          # ONLY flag issues that self-healing cannot fix:
+          #   - API key invalid (401/403 after retry)
+          #   - Supabase completely offline
+          #   - All 3 Pinterest posting methods failed
+          #   - Billing/payment issues
+          # DO NOT flag transient issues (timeouts, rate limits, 429, 503, 504)
           health_issues = json.loads(os.environ.get('HEALTH_ISSUES', '[]'))
+          transient_keywords = [
+              'timeout', 'rate limit', 'temporarily', '429', '503', '504',
+              'ECONNREFUSED', 'ECONNRESET', 'socket hang up', 'network error',
+              'fetch failed', 'ETIMEDOUT', 'too many requests', 'connection refused',
+          ]
           for issue in health_issues:
               il = issue.lower()
-              # Only unresolvable: API keys missing/invalid, billing, forbidden
+              # Skip transient issues — these self-heal
+              if any(kw.lower() in il for kw in transient_keywords):
+                  continue
+              # Only unresolvable: API keys missing/invalid, billing, forbidden, Supabase offline
               if any(kw in il for kw in ['not configured', '401', '403', 'forbidden',
-                                          'payment', 'billing', 'subscription']):
+                                          'payment', 'billing', 'subscription',
+                                          'supabase', 'all pinterest methods failed']):
                   unresolvable.append(issue)
 
           # ── Retry tracking: only notify after 10 consecutive failures ──

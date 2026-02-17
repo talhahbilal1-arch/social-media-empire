@@ -1,11 +1,17 @@
+# ARCHIVED 2026-02-13: Superseded by content-engine.yml
+# This ran agents.video_factory daily at 8AM UTC to create videos.
+# content-engine.yml now handles the full pin creation + posting pipeline 3x/day
+# including content generation, image selection, and multi-platform posting.
+# This workflow produced no visible output and was consuming CI minutes.
+#
 # Agent 2: Video Factory
 # Runs daily at 8:00 AM UTC to create videos
 
-name: Video Factory
+name: Video Factory (ARCHIVED)
 
 on:
-  schedule:
-    - cron: '0 8 * * *'
+  # schedule disabled — archived
+  # - cron: '0 8 * * *'
   workflow_dispatch:
 
 env:
