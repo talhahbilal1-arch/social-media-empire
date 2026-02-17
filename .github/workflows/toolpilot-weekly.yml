@@ -55,17 +55,16 @@ jobs:
       - name: Build site
         run: npm run build
 
-      # Step 4: Deploy to Netlify
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3
-        with:
-          publish-dir: ai-tools-hub/out
-          production-deploy: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Weekly discovery deploy - ${{ github.sha }}"
+      # Step 4: Deploy to Vercel
+      - name: Deploy to Vercel
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
-          NETLIFY_SITE_ID: '616e7bf4-fe47-495b-b13e-934e51546d4c'
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          npx vercel build --prod --token=$VERCEL_TOKEN
+          npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
       # Step 5: Commit new content to git
       - name: Commit generated content

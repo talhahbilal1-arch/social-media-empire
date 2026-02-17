@@ -457,6 +457,7 @@ jobs:
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          UNRESOLVABLE_DETAILS: ${{ needs.self-heal.outputs.unresolvable_details }}
         run: |
           pip install resend
           python -c "
@@ -471,12 +472,6 @@ jobs:
               exit(0)
 
           details = json.loads(os.environ.get('UNRESOLVABLE_DETAILS', '[]'))
-          if not details:
-              # Try from step output
-              try:
-                  details = ${{ needs.self-heal.outputs.unresolvable_details }}
-              except:
-                  details = []
           if not details:
               print('No unresolvable issues — no email needed')
               exit(0)
