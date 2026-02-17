@@ -160,7 +160,7 @@ jobs:
                       start_idx = day % len(late_keys)
                       ordered_keys = late_keys[start_idx:] + late_keys[:start_idx]
 
-                      account_id = os.environ.get('PINTEREST_FITNESS_ACCOUNT_ID', '')
+                      env_account_id = os.environ.get('PINTEREST_FITNESS_ACCOUNT_ID', '')
                       board_id = os.environ.get('PINTEREST_FITNESS_BOARD_ID', '')
 
                       post_success = False
@@ -168,7 +168,9 @@ jobs:
                       for key_name, late_key in ordered_keys:
                           print(f'  Trying {key_name} ({late_key[:8]}...)')
 
-                          # Auto-detect account ID if not set (only need to do once)
+                          # Each key may belong to a different Late.dev account,
+                          # so detect the Pinterest account ID per key
+                          account_id = env_account_id
                           if not account_id:
                               try:
                                   acct_resp = requests.get(
@@ -188,7 +190,7 @@ jobs:
                                   print(f'  Could not detect account with {key_name}: {e}')
                                   continue
                           if not account_id:
-                              print(f'  No Pinterest account found, trying next key...')
+                              print(f'  No Pinterest account found for {key_name}, trying next...')
                               continue
 
                           # Build payload per Late API docs (POST /posts)
