@@ -2,10 +2,10 @@ name: Content Engine
 
 on:
   schedule:
-    # 3 runs per day — staggered for Pinterest optimal times
-    - cron: '0 17 * * *'  # 9 AM PST (peak morning scroll)
-    - cron: '0 21 * * *'  # 1 PM PST
-    - cron: '0 4 * * *'   # 8 PM PST (peak evening scroll)
+    # 3 runs per day — staggered 5+ hours apart for Pinterest optimal times
+    - cron: '0 15 * * *'  # 7 AM PST (early morning scroll)
+    - cron: '0 21 * * *'  # 1 PM PST (lunch break)
+    - cron: '0 3 * * *'   # 7 PM PST (evening scroll)
   workflow_dispatch:
     inputs:
       brand:
@@ -46,7 +46,7 @@ jobs:
         run: |
           # Determine which slot this is based on cron schedule
           HOUR=$(date -u +%H)
-          if [ "$HOUR" -ge "16" ] && [ "$HOUR" -le "18" ]; then
+          if [ "$HOUR" -ge "14" ] && [ "$HOUR" -le "16" ]; then
             SLOT="morning"
             BRANDS="fitness,deals,menopause"
           elif [ "$HOUR" -ge "20" ] && [ "$HOUR" -le "22" ]; then
@@ -97,8 +97,31 @@ jobs:
           from database.supabase_client import get_supabase_client
           db = get_supabase_client()
 
+          def post_to_make_webhook(webhook_url, payload, brand_name, max_retries=2):
+              \"\"\"Post to Make.com webhook with retry logic.
+
+              Tries up to max_retries times with a 60s wait between attempts.
+              Returns (success: bool, response_or_error: str).
+              \"\"\"
+              for attempt in range(1, max_retries + 1):
+                  try:
+                      resp = requests.post(webhook_url, json=payload, timeout=30)
+                      if resp.status_code < 400:
+                          return True, f'{resp.status_code}'
+                      error_msg = f'HTTP {resp.status_code}: {resp.text[:300]}'
+                      print(f'  Make.com attempt {attempt}/{max_retries} failed for {brand_name}: {error_msg}')
+                  except requests.exceptions.RequestException as req_err:
+                      error_msg = str(req_err)
+                      print(f'  Make.com attempt {attempt}/{max_retries} request error for {brand_name}: {error_msg}')
+
+                  if attempt < max_retries:
+                      print(f'  Waiting 60s before retry...')
+                      time.sleep(60)
+
+              return False, error_msg
+
           results = []
-          for brand in brands:
+          for brand_idx, brand in enumerate(brands):
               brand = brand.strip()
               print(f'\n=== Generating pin for {brand} ===')
               try:
@@ -120,8 +143,9 @@ jobs:
                   print(f'  Image: {image[\"id\"]} by {image[\"photographer\"]}')
 
                   # Step 3: Build destination URL with UTM
+                  # ALL brands now route through Make.com (no Late API)
                   from video_automation.content_brain import build_destination_url
-                  posting_method = 'late_api' if brand == 'fitness' else f'make_s{1 if brand == \"deals\" else 2}'
+                  posting_method = f'make_{brand}'
                   # Generate topic slug for pin-level UTM tracking
                   topic_slug = pin_data.get('topic', '').replace(' ', '-').replace('/', '-')[:40]
                   pin_data['destination_url'] = build_destination_url(
@@ -134,45 +158,48 @@ jobs:
                       results.append({'brand': brand, 'status': 'dry_run', 'title': pin_data['title']})
                       continue
 
-                  # Step 4: Post via Make.com webhook (all brands)
-                  # The 'Video to Pinterest - All Brands' Make.com scenario routes
-                  # to the correct Pinterest account based on the brand field
+                  # Step 4: Post via Make.com webhook (ALL brands)
+                  # The Make.com scenario routes to the correct Pinterest account
+                  # based on the brand field. No Late API — all traffic goes through Make.com.
                   brand_map = {
                       'fitness': 'fitness-made-easy',
                       'deals': 'daily-deal-darling',
                       'menopause': 'menopause-planner',
                   }
-                  # Use MAKE_WEBHOOK_DEALS as the shared webhook (all point to same scenario)
+                  # Use MAKE_WEBHOOK_DEALS as the shared webhook (all brands use same scenario)
                   webhook = os.environ.get('MAKE_WEBHOOK_DEALS', '') or os.environ.get('MAKE_WEBHOOK_MENOPAUSE', '')
                   if webhook:
                       payload = {
                           'brand': brand_map.get(brand, brand),
                           'title': pin_data['title'],
                           'description': pin_data['description'],
-                          'video_url': pin_data['image_url'],
+                          'image_url': pin_data['image_url'],
+                          'board_name': pin_data.get('board', ''),
                           'link': pin_data['destination_url'],
                       }
-                      resp = requests.post(webhook, json=payload, timeout=30)
-                      if resp.status_code >= 400:
-                          print(f'  Make.com webhook error {resp.status_code}: {resp.text[:300]}')
-                          resp.raise_for_status()
-                      method_name = f'make_{brand}'
-                      pin_data['posting_method'] = method_name
-                      print(f'  Posted via Make.com ({method_name}): {resp.status_code}')
+                      success, result_msg = post_to_make_webhook(webhook, payload, brand)
+                      if success:
+                          method_name = f'make_{brand}'
+                          pin_data['posting_method'] = method_name
+                          print(f'  Posted via Make.com ({method_name}): {result_msg}')
+                      else:
+                          print(f'  Make.com webhook FAILED after retries for {brand}: {result_msg}')
+                          pin_data['posting_method'] = 'failed'
                   else:
                       print(f'  WARNING: No Make.com webhook configured - skipping {brand}')
                       pin_data['posting_method'] = 'skipped'
 
                   # Step 5: Log to content_history and track result correctly
-                  actual_status = 'skipped' if pin_data.get('posting_method') == 'skipped' else 'posted'
+                  status_map = {'skipped': 'skipped', 'failed': 'failed'}
+                  actual_status = status_map.get(pin_data.get('posting_method', ''), 'posted')
                   log_pin_to_history(pin_data, db.client)
                   results.append({'brand': brand, 'status': actual_status, 'title': pin_data['title']})
                   print(f'  Status: {actual_status} | Logged to content_history')
 
-                  # Stagger posts 5 minutes apart to avoid feed flooding (only for actual posts)
-                  if actual_status == 'posted' and brand != brands[-1].strip():
-                      print(f'  Waiting 5 minutes before next brand...')
-                      time.sleep(300)
+                  # Stagger posts 30s apart between brands to avoid flooding
+                  if actual_status == 'posted' and brand_idx < len(brands) - 1:
+                      print(f'  Waiting 30s before next brand...')
+                      time.sleep(30)
 
               except Exception as e:
                   print(f'  ERROR generating/posting for {brand}: {e}')
@@ -198,9 +225,12 @@ jobs:
 
           # Update agent_runs so monitoring knows we're alive
           posted = [r for r in results if r['status'] == 'posted']
+          failed = [r for r in results if r['status'] == 'failed']
           skipped = [r for r in results if r['status'] == 'skipped']
           if skipped:
               print(f'\n  WARNING: {len(skipped)} brand(s) skipped due to missing config')
+          if failed:
+              print(f'  WARNING: {len(failed)} brand(s) failed to post')
           agents_to_update = ['content_brain', 'content_pipeline', 'image_selector']
           if posted:
               agents_to_update.append('multi_platform_poster')

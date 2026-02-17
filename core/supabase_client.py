@@ -203,7 +203,7 @@ class SupabaseClient:
         response = self.client.table('content_bank').select('*')\
             .eq('status', 'pending')\
             .in_('content_type', ['video', 'reel', 'short'])\
-            .is_('video_script', 'not.null')\
+            .not_.is_('video_script', 'null')\
             .order('created_at', desc=False)\
             .limit(limit)\
             .execute()

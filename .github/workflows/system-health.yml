@@ -68,7 +68,7 @@ jobs:
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python -c "
+          python3 << 'PYEOF'
           import os
           import sys
           import json
@@ -94,7 +94,7 @@ jobs:
                   print(f'{svc}: {svc_status.upper()} - {err}')
 
           summary = result.get('summary', {})
-          print(f'\nSummary: {summary.get(\"healthy\", 0)} healthy, {summary.get(\"degraded\", 0)} degraded, {summary.get(\"unhealthy\", 0)} unhealthy out of {summary.get(\"total\", 0)} services')
+          print(f'\nSummary: {summary.get("healthy", 0)} healthy, {summary.get("degraded", 0)} degraded, {summary.get("unhealthy", 0)} unhealthy out of {summary.get("total", 0)} services')
 
           if issues:
               print(f'\nIssues found ({len(issues)}):')
@@ -108,7 +108,7 @@ jobs:
               f.write(f'issues_count={len(issues)}\n')
 
           print(f'\nOverall status: {status}')
-          "
+          PYEOF
 
   self-heal:
     runs-on: ubuntu-latest
@@ -149,9 +149,9 @@ jobs:
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           HEALTH_STATUS: ${{ needs.health-check.outputs.status }}
-          HEALTH_ISSUES: ${{ needs.health-check.outputs.issues }}
+          HEALTH_ISSUES: '${{ needs.health-check.outputs.issues }}'
         run: |
-          python -c "
+          python3 << 'PYEOF'
           import sys, json, os, subprocess
           sys.path.insert(0, '.')
           from datetime import datetime, timedelta
@@ -236,8 +236,8 @@ jobs:
                   from monitoring.workflow_guardian import WorkflowGuardian
                   guardian = WorkflowGuardian()
                   result = guardian.analyze_and_heal(hours=2)
-                  print(f'  Checked: {result[\"checked\"]} workflows, {result[\"failed\"]} failed runs')
-                  print(f'  Retried: {result[\"retried\"]}')
+                  print(f'  Checked: {result["checked"]} workflows, {result["failed"]} failed runs')
+                  print(f'  Retried: {result["retried"]}')
                   healed += result.get('retried', 0)
               except Exception as e:
                   print(f'  Workflow Guardian: {e}')
@@ -249,7 +249,7 @@ jobs:
                   if repo:
                       r = subprocess.run(
                           ['gh', 'api', f'repos/{repo}/actions/runs?status=failure&per_page=5',
-                           '--jq', '.workflow_runs[] | select(.conclusion == \"failure\") | .id'],
+                           '--jq', '.workflow_runs[] | select(.conclusion == "failure") | .id'],
                           capture_output=True, text=True, timeout=30
                       )
                       if r.returncode == 0 and r.stdout.strip():
@@ -350,7 +350,12 @@ jobs:
           #   - All 3 Pinterest posting methods failed
           #   - Billing/payment issues
           # DO NOT flag transient issues (timeouts, rate limits, 429, 503, 504)
-          health_issues = json.loads(os.environ.get('HEALTH_ISSUES', '[]'))
+          try:
+              health_issues = json.loads(os.environ.get('HEALTH_ISSUES', '[]'))
+          except (json.JSONDecodeError, TypeError):
+              raw = os.environ.get('HEALTH_ISSUES', '')
+              health_issues = [raw] if raw and raw != '[]' else []
+
           transient_keywords = [
               'timeout', 'rate limit', 'temporarily', '429', '503', '504',
               'ECONNREFUSED', 'ECONNRESET', 'socket hang up', 'network error',
@@ -443,7 +448,7 @@ jobs:
           print(f'  Will notify: {should_notify}')
           for u in unresolvable:
               print(f'    - {u}')
-          "
+          PYEOF
 
   # Only email if self-healing found issues it truly cannot fix
   alert-unresolvable:
@@ -457,10 +462,10 @@ jobs:
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
-          UNRESOLVABLE_DETAILS: ${{ needs.self-heal.outputs.unresolvable_details }}
+          UNRESOLVABLE_DETAILS: '${{ needs.self-heal.outputs.unresolvable_details }}'
         run: |
           pip install resend
-          python -c "
+          python3 << 'PYEOF'
           import os
           import json
 
@@ -471,7 +476,12 @@ jobs:
               print('Email not configured')
               exit(0)
 
-          details = json.loads(os.environ.get('UNRESOLVABLE_DETAILS', '[]'))
+          try:
+              details = json.loads(os.environ.get('UNRESOLVABLE_DETAILS', '[]'))
+          except (json.JSONDecodeError, TypeError):
+              raw = os.environ.get('UNRESOLVABLE_DETAILS', '')
+              details = [raw] if raw and raw != '[]' else []
+
           if not details:
               print('No unresolvable issues — no email needed')
               exit(0)
@@ -479,17 +489,17 @@ jobs:
           import resend
           resend.api_key = resend_key
 
-          issue_list = ''.join([f'<li style=\"margin:5px 0;padding:8px;background:#fef2f2;border-radius:4px;\">{d}</li>' for d in details])
+          issue_list = ''.join([f'<li style="margin:5px 0;padding:8px;background:#fef2f2;border-radius:4px;">{d}</li>' for d in details])
 
           html = f'''
-          <div style=\"font-family:-apple-system,Arial,sans-serif;max-width:500px;margin:0 auto\">
-            <div style=\"background:#dc2626;color:white;padding:20px;text-align:center;border-radius:8px 8px 0 0\">
-              <h2 style=\"margin:0\">Action Required</h2>
-              <p style=\"margin:5px 0 0 0;opacity:0.9\">Self-healing could not fix these issues</p>
+          <div style="font-family:-apple-system,Arial,sans-serif;max-width:500px;margin:0 auto">
+            <div style="background:#dc2626;color:white;padding:20px;text-align:center;border-radius:8px 8px 0 0">
+              <h2 style="margin:0">Action Required</h2>
+              <p style="margin:5px 0 0 0;opacity:0.9">Self-healing could not fix these issues</p>
             </div>
-            <div style=\"padding:20px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px\">
-              <ul style=\"list-style:none;padding:0;margin:0\">{issue_list}</ul>
-              <p style=\"color:#6b7280;font-size:13px;margin-top:15px\">
+            <div style="padding:20px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
+              <ul style="list-style:none;padding:0;margin:0">{issue_list}</ul>
+              <p style="color:#6b7280;font-size:13px;margin-top:15px">
                 These require manual attention — check GitHub Secrets or API dashboards.
                 Self-healing auto-resolved all other issues.
               </p>
@@ -507,7 +517,7 @@ jobs:
               print(f'Alert sent for {len(details)} unresolvable issues')
           except Exception as e:
               print(f'Failed to send: {e}')
-          "
+          PYEOF
 
       - name: Create GitHub summary
         if: always()

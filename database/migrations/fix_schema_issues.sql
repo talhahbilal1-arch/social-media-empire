@@ -39,6 +39,34 @@ BEGIN
 END $$;
 
 -- =====================================================
+-- 2b. Ensure errors table exists with all needed columns
+--     Error: 400 Bad Request on POST to errors table
+-- =====================================================
+CREATE TABLE IF NOT EXISTS errors (
+    id BIGSERIAL PRIMARY KEY,
+    error_type VARCHAR(100) NOT NULL,
+    error_message TEXT NOT NULL,
+    context JSONB DEFAULT '{}',
+    resolved BOOLEAN DEFAULT FALSE,
+    resolved_at TIMESTAMPTZ,
+    resolution_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Grant access on errors table
+GRANT ALL ON errors TO anon, authenticated, service_role;
+GRANT USAGE, SELECT ON SEQUENCE errors_id_seq TO anon, authenticated, service_role;
+
+-- RLS policy for errors
+ALTER TABLE errors ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Service role full access errors" ON errors;
+CREATE POLICY "Service role full access errors" ON errors FOR ALL USING (true);
+
+CREATE INDEX IF NOT EXISTS idx_errors_type ON errors(error_type);
+CREATE INDEX IF NOT EXISTS idx_errors_resolved ON errors(resolved);
+CREATE INDEX IF NOT EXISTS idx_errors_created_at ON errors(created_at);
+
+-- =====================================================
 -- 3. Create agent_runs table if it doesn't exist
 --    Used by external monitoring to track component health
 -- =====================================================
@@ -57,8 +85,9 @@ CREATE TABLE IF NOT EXISTS agent_runs (
 GRANT ALL ON agent_runs TO anon, authenticated, service_role;
 GRANT USAGE, SELECT ON SEQUENCE agent_runs_id_seq TO anon, authenticated, service_role;
 
--- Disable RLS for service role access
+-- RLS for service role access
 ALTER TABLE agent_runs ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Service role full access" ON agent_runs;
 CREATE POLICY "Service role full access" ON agent_runs FOR ALL USING (true);
 
 -- Upsert function for agent runs
