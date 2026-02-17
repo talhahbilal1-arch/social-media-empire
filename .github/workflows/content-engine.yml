@@ -2,10 +2,12 @@ name: Content Engine
 
 on:
   schedule:
-    # 3 runs per day — staggered 5+ hours apart for Pinterest optimal times
-    - cron: '0 15 * * *'  # 7 AM PST (early morning scroll)
-    - cron: '0 21 * * *'  # 1 PM PST (lunch break)
-    - cron: '0 3 * * *'   # 7 PM PST (evening scroll)
+    # 5 runs per day — staggered for Pinterest optimal times (PST)
+    - cron: '0 15 * * *'  # 7 AM PST
+    - cron: '0 18 * * *'  # 10 AM PST
+    - cron: '0 21 * * *'  # 1 PM PST
+    - cron: '0 1 * * *'   # 5 PM PST (next day UTC)
+    - cron: '0 4 * * *'   # 8 PM PST (next day UTC)
   workflow_dispatch:
     inputs:
       brand:
@@ -41,31 +43,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Determine posting slot
-        id: slot
-        run: |
-          # Determine which slot this is based on cron schedule
-          HOUR=$(date -u +%H)
-          if [ "$HOUR" -ge "14" ] && [ "$HOUR" -le "16" ]; then
-            SLOT="morning"
-            BRANDS="fitness,deals,menopause"
-          elif [ "$HOUR" -ge "20" ] && [ "$HOUR" -le "22" ]; then
-            SLOT="afternoon"
-            BRANDS="fitness,deals"
-          else
-            SLOT="evening"
-            BRANDS="fitness,menopause"
-          fi
-
-          # Override if manual brand specified
-          if [ -n "${{ github.event.inputs.brand }}" ]; then
-            BRANDS="${{ github.event.inputs.brand }}"
-          fi
-
-          echo "slot=$SLOT" >> $GITHUB_OUTPUT
-          echo "brands=$BRANDS" >> $GITHUB_OUTPUT
-          echo "Slot: $SLOT | Brands: $BRANDS"
-
       - name: Generate and post pins
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -77,32 +54,39 @@ jobs:
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
-          python -c "
+          python3 << 'PYEOF'
           import os
           import sys
           import json
           import requests
           import time
-          from datetime import datetime
+          from datetime import datetime, timezone
 
           sys.path.insert(0, '.')
-          from video_automation.content_brain import generate_pin_content, generate_pin_from_calendar, log_pin_to_history
+          from video_automation.content_brain import (
+              generate_pin_content, generate_pin_from_calendar,
+              log_pin_to_history, build_destination_url
+          )
           from video_automation.image_selector import get_unique_pexels_image
+          from video_automation.pin_image_generator import render_pin_to_bytes, map_visual_style
+          from video_automation.supabase_storage import upload_pin_image
+          from video_automation.pinterest_boards import get_board_id
 
           dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
-          brands = os.environ.get('BRANDS', '${{ steps.slot.outputs.brands }}').split(',')
-          slot = '${{ steps.slot.outputs.slot }}'
+
+          # Override brand if specified, else all 3 brands every run (1 pin each = 15/day)
+          manual_brand = os.environ.get('BRAND', '${{ github.event.inputs.brand }}').strip()
+          if manual_brand and manual_brand != '':
+              brands = [b.strip() for b in manual_brand.split(',')]
+          else:
+              brands = ['fitness', 'deals', 'menopause']
 
           # Initialize Supabase
           from database.supabase_client import get_supabase_client
           db = get_supabase_client()
 
           def post_to_make_webhook(webhook_url, payload, brand_name, max_retries=2):
-              \"\"\"Post to Make.com webhook with retry logic.
-
-              Tries up to max_retries times with a 60s wait between attempts.
-              Returns (success: bool, response_or_error: str).
-              \"\"\"
+              """Post to Make.com webhook with retry logic."""
               for attempt in range(1, max_retries + 1):
                   try:
                       resp = requests.post(webhook_url, json=payload, timeout=30)
@@ -130,58 +114,74 @@ jobs:
                   if pin_data is None:
                       print(f'  Calendar exhausted for today, using random topic')
                       pin_data = generate_pin_content(brand, db.client)
-                  print(f'  Title: {pin_data[\"title\"]}')
-                  print(f'  Board: {pin_data[\"board\"]}')
-                  print(f'  Style: {pin_data[\"visual_style\"]}')
+                  print(f'  Title: {pin_data["title"]}')
+                  print(f'  Board: {pin_data["board"]}')
+                  print(f'  Style: {pin_data["visual_style"]}')
+                  print(f'  Text overlay: {pin_data.get("text_overlay", "N/A")}')
 
-                  # Step 2: Get unique image
+                  # Step 2: Get unique image from Pexels
                   image = get_unique_pexels_image(
                       pin_data['image_search_query'], brand, db.client
                   )
                   pin_data['pexels_image_id'] = image['id']
                   pin_data['image_url'] = image['url']
-                  print(f'  Image: {image[\"id\"]} by {image[\"photographer\"]}')
+                  print(f'  Image: {image["id"]} by {image["photographer"]}')
 
-                  # Step 3: Build destination URL with UTM
-                  # ALL brands now route through Make.com (no Late API)
-                  from video_automation.content_brain import build_destination_url
+                  # Step 3: Render text overlay pin with PIL
+                  pil_style = map_visual_style(pin_data['visual_style'])
+                  text_overlay = pin_data.get('text_overlay', pin_data['title'])
+                  image_bytes = render_pin_to_bytes(
+                      brand=brand,
+                      headline=text_overlay,
+                      subheadline=pin_data['title'],
+                      keyword_or_url=image['url'],
+                      style=pil_style,
+                  )
+                  print(f'  Rendered pin: {len(image_bytes)} bytes ({pil_style} style)')
+
+                  # Step 4: Upload to Supabase Storage
+                  timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
+                  filename = f'{brand}_{timestamp}.jpg'
+                  rendered_url = upload_pin_image(image_bytes, filename)
+                  print(f'  Uploaded: {rendered_url}')
+
+                  # Step 5: Build destination URL with UTM
                   posting_method = f'make_{brand}'
-                  # Generate topic slug for pin-level UTM tracking
                   topic_slug = pin_data.get('topic', '').replace(' ', '-').replace('/', '-')[:40]
                   pin_data['destination_url'] = build_destination_url(
-                      pin_data['destination_url'], brand, posting_method, slot,
+                      pin_data['destination_url'], brand, posting_method, 'pins',
                       topic_slug=topic_slug, board_name=pin_data.get('board', '')
                   )
 
+                  # Step 6: Resolve board_id from board name
+                  board_id = get_board_id(brand, pin_data.get('board', ''))
+                  print(f'  Board ID: {board_id}')
+
                   if dry_run:
-                      print(f'  [DRY RUN] Would post: {pin_data[\"title\"]}')
+                      print(f'  [DRY RUN] Would post: {pin_data["title"]}')
                       results.append({'brand': brand, 'status': 'dry_run', 'title': pin_data['title']})
                       continue
 
-                  # Step 4: Post via Make.com webhook (ALL brands)
-                  # The Make.com scenario routes to the correct Pinterest account
-                  # based on the brand field. No Late API — all traffic goes through Make.com.
+                  # Step 7: Post via Make.com webhook
                   brand_map = {
                       'fitness': 'fitness-made-easy',
                       'deals': 'daily-deal-darling',
                       'menopause': 'menopause-planner',
                   }
-                  # Use MAKE_WEBHOOK_DEALS as the shared webhook (all brands use same scenario)
                   webhook = os.environ.get('MAKE_WEBHOOK_DEALS', '') or os.environ.get('MAKE_WEBHOOK_MENOPAUSE', '')
                   if webhook:
                       payload = {
                           'brand': brand_map.get(brand, brand),
                           'title': pin_data['title'],
                           'description': pin_data['description'],
-                          'video_url': pin_data['image_url'],
-                          'board_name': pin_data.get('board', ''),
+                          'image_url': rendered_url,
+                          'board_id': board_id,
                           'link': pin_data['destination_url'],
                       }
                       success, result_msg = post_to_make_webhook(webhook, payload, brand)
                       if success:
-                          method_name = f'make_{brand}'
-                          pin_data['posting_method'] = method_name
-                          print(f'  Posted via Make.com ({method_name}): {result_msg}')
+                          pin_data['posting_method'] = posting_method
+                          print(f'  Posted via Make.com ({posting_method}): {result_msg}')
                       else:
                           print(f'  Make.com webhook FAILED after retries for {brand}: {result_msg}')
                           pin_data['posting_method'] = 'failed'
@@ -189,41 +189,42 @@ jobs:
                       print(f'  WARNING: No Make.com webhook configured - skipping {brand}')
                       pin_data['posting_method'] = 'skipped'
 
-                  # Step 5: Log to content_history and track result correctly
+                  # Step 8: Log to content_history
                   status_map = {'skipped': 'skipped', 'failed': 'failed'}
                   actual_status = status_map.get(pin_data.get('posting_method', ''), 'posted')
                   log_pin_to_history(pin_data, db.client)
                   results.append({'brand': brand, 'status': actual_status, 'title': pin_data['title']})
                   print(f'  Status: {actual_status} | Logged to content_history')
 
-                  # Stagger posts 30s apart between brands to avoid flooding
+                  # Stagger posts 30s apart between brands
                   if actual_status == 'posted' and brand_idx < len(brands) - 1:
                       print(f'  Waiting 30s before next brand...')
                       time.sleep(30)
 
               except Exception as e:
                   print(f'  ERROR generating/posting for {brand}: {e}')
-                  # Log error to Supabase
+                  import traceback
+                  traceback.print_exc()
                   try:
                       db.client.table('errors').insert({
                           'error_type': 'content_engine',
                           'error_message': str(e),
-                          'context': json.dumps({'brand': brand, 'slot': slot}),
+                          'context': json.dumps({'brand': brand}),
                           'severity': 'high',
-                          'created_at': datetime.utcnow().isoformat()
+                          'created_at': datetime.now(timezone.utc).isoformat()
                       }).execute()
                   except:
                       pass
                   results.append({'brand': brand, 'status': 'failed', 'error': str(e)})
-                  continue  # Don't let one failure kill the whole run
+                  continue
 
           # Summary
           print(f'\n=== Content Engine Summary ===')
           for r in results:
               status = r['status'].upper()
-              print(f'  {r[\"brand\"]}: {status} - {r.get(\"title\", r.get(\"error\", \"\"))}')
+              print(f'  {r["brand"]}: {status} - {r.get("title", r.get("error", ""))}')
 
-          # Update agent_runs so monitoring knows we're alive
+          # Update agent_runs
           posted = [r for r in results if r['status'] == 'posted']
           failed = [r for r in results if r['status'] == 'failed']
           skipped = [r for r in results if r['status'] == 'skipped']
@@ -238,23 +239,23 @@ jobs:
               try:
                   db.client.table('agent_runs').upsert({
                       'agent_name': agent,
-                      'last_run_at': datetime.utcnow().isoformat(),
+                      'last_run_at': datetime.now(timezone.utc).isoformat(),
                       'status': 'success' if posted else 'failed',
-                      'updated_at': datetime.utcnow().isoformat()
+                      'updated_at': datetime.now(timezone.utc).isoformat()
                   }, on_conflict='agent_name').execute()
               except:
-                  pass  # Table may not exist yet
+                  pass
 
-          # Fail the workflow only if ALL brands failed (skipped counts as non-failure)
+          # Fail the workflow only if ALL brands failed
           non_failed = [r for r in results if r['status'] != 'failed']
           if not non_failed:
               sys.exit(1)
-          "
+          PYEOF
 
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: content-engine-${{ steps.slot.outputs.slot }}-${{ github.run_number }}
+          name: content-engine-${{ github.run_number }}
           path: '*.log'
           retention-days: 7
