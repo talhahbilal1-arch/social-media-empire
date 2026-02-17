@@ -3,9 +3,9 @@ name: Content Engine
 on:
   schedule:
     # 3 runs per day — staggered for Pinterest optimal times
-    - cron: '0 16 * * *'  # 8 AM PST
+    - cron: '0 17 * * *'  # 9 AM PST (peak morning scroll)
     - cron: '0 21 * * *'  # 1 PM PST
-    - cron: '0 2 * * *'   # 6 PM PST
+    - cron: '0 4 * * *'   # 8 PM PST (peak evening scroll)
   workflow_dispatch:
     inputs:
       brand:
@@ -24,7 +24,7 @@ env:
 jobs:
   generate-and-post:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -46,7 +46,7 @@ jobs:
         run: |
           # Determine which slot this is based on cron schedule
           HOUR=$(date -u +%H)
-          if [ "$HOUR" -ge "15" ] && [ "$HOUR" -le "17" ]; then
+          if [ "$HOUR" -ge "16" ] && [ "$HOUR" -le "18" ]; then
             SLOT="morning"
             BRANDS="fitness,deals,menopause"
           elif [ "$HOUR" -ge "20" ] && [ "$HOUR" -le "22" ]; then
@@ -86,6 +86,7 @@ jobs:
           import sys
           import json
           import requests
+          import time
           from datetime import datetime
 
           sys.path.insert(0, '.')
@@ -125,8 +126,11 @@ jobs:
                   # Step 3: Build destination URL with UTM
                   from video_automation.content_brain import build_destination_url
                   posting_method = 'late_api' if brand == 'fitness' else f'make_s{1 if brand == \"deals\" else 2}'
+                  # Generate topic slug for pin-level UTM tracking
+                  topic_slug = pin_data.get('topic', '').replace(' ', '-').replace('/', '-')[:40]
                   pin_data['destination_url'] = build_destination_url(
-                      pin_data['destination_url'], brand, posting_method, slot
+                      pin_data['destination_url'], brand, posting_method, slot,
+                      topic_slug=topic_slug, board_name=pin_data.get('board', '')
                   )
 
                   if dry_run:
@@ -254,6 +258,11 @@ jobs:
                   log_pin_to_history(pin_data, db.client)
                   results.append({'brand': brand, 'status': 'posted', 'title': pin_data['title']})
                   print(f'  Logged to content_history')
+
+                  # Stagger posts 5 minutes apart to avoid feed flooding
+                  if brand != brands[-1].strip():
+                      print(f'  Waiting 5 minutes before next brand...')
+                      time.sleep(300)
 
               except Exception as e:
                   print(f'  ERROR generating/posting for {brand}: {e}')
