@@ -1,0 +1,43 @@
+name: ToolPilot Newsletter
+
+on:
+  schedule:
+    # Monday 9AM PST (5PM UTC) — 2 hours after weekly discovery completes
+    - cron: '0 17 * * 1'
+  workflow_dispatch:
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ai-tools-hub/package-lock.json
+
+      - name: Install Node dependencies
+        working-directory: ai-tools-hub
+        run: npm ci
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install requests
+
+      - name: Generate newsletter
+        working-directory: ai-tools-hub
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-newsletter.js --output /tmp/newsletter.json
+
+      - name: Send via ConvertKit
+        env:
+          CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+          CONVERTKIT_API_SECRET: ${{ secrets.CONVERTKIT_API_SECRET }}
+        run: python3 email_marketing/toolpilot_newsletter.py /tmp/newsletter.json
