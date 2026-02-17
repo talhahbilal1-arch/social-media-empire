@@ -1519,5 +1519,101 @@
     "logo": "/logos/surfer-seo.svg",
     "founded": 2017,
     "company": "Surfer SEO Sp. z o.o."
+  },
+  {
+    "slug": "otter-ai",
+    "name": "Otter.ai",
+    "tagline": "AI-powered meeting transcription with real-time collaboration features",
+    "description": "Otter.ai is an automated transcription service that converts speech to text in real-time, designed for meetings, interviews, and lectures. It stands out for its ability to identify different speakers, integrate with Zoom and Google Meet, and generate automated meeting summaries with action items. Popular among remote teams, journalists, and students for its accuracy and collaborative features.",
+    "category": "productivity",
+    "categories": [
+      "productivity",
+      "audio",
+      "writing"
+    ],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 0,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {
+          "name": "Basic",
+          "price": 0,
+          "features": [
+            "600 minutes/month transcription",
+            "30 minutes per conversation",
+            "Real-time transcription",
+            "Basic search"
+          ]
+        },
+        {
+          "name": "Pro",
+          "price": 16.99,
+          "features": [
+            "1200 minutes/month transcription",
+            "90 minutes per conversation",
+            "Advanced search and export",
+            "Vocabulary customization"
+          ]
+        },
+        {
+          "name": "Business",
+          "price": 30,
+          "features": [
+            "6000 minutes/month per user",
+            "4 hours per conversation",
+            "Admin dashboard",
+            "Priority support"
+          ]
+        },
+        {
+          "name": "Enterprise",
+          "price": null,
+          "features": [
+            "Unlimited transcription",
+            "Advanced security controls",
+            "Dedicated support",
+            "Custom integrations"
+          ]
+        }
+      ]
+    },
+    "rating": 4.4,
+    "review_count": 8742,
+    "affiliate_url": "https://otter.ai",
+    "website": "https://otter.ai",
+    "features": [
+      "Real-time transcription with speaker identification",
+      "Automated meeting notes and summary generation",
+      "Direct Zoom, Google Meet, and Microsoft Teams integration",
+      "Collaborative editing with comments and highlights",
+      "OtterPilot for automated meeting joining and recording",
+      "Action item extraction from conversations",
+      "Mobile apps for iOS and Android recording",
+      "Custom vocabulary for industry-specific terminology"
+    ],
+    "pros": [
+      "Excellent transcription accuracy, especially for clear audio",
+      "Generous free tier with 600 minutes per month",
+      "Seamless integration with major video conferencing platforms",
+      "Real-time collaboration features make it great for team meetings",
+      "Automated meeting summaries save significant time"
+    ],
+    "cons": [
+      "Accuracy drops significantly with accents or background noise",
+      "Speaker identification can be inconsistent with multiple participants",
+      "Limited editing tools compared to dedicated transcription software",
+      "Monthly minute limits can be restrictive for heavy users on lower tiers"
+    ],
+    "best_for": [
+      "Remote teams conducting frequent video meetings",
+      "Journalists and researchers conducting interviews",
+      "Students recording lectures and study sessions",
+      "Professionals needing searchable meeting archives"
+    ],
+    "logo": "/logos/otter-ai.svg",
+    "founded": 2016,
+    "company": "Otter.ai, Inc."
   }
 ]

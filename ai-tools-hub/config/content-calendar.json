@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-13",
+  "last_updated": "2026-02-17",
   "items": [
     {
       "id": 1,
@@ -244,11 +244,12 @@
       "id": 33,
       "type": "review",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "otter-ai",
       "tool_name": "Otter.ai",
       "category": "productivity",
-      "keyword": "otter ai review 2026"
+      "keyword": "otter ai review 2026",
+      "published_date": "2026-02-17"
     },
     {
       "id": 34,
