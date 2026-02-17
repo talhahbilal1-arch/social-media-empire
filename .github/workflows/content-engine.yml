@@ -74,7 +74,9 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           PINTEREST_FITNESS_ACCOUNT_ID: ${{ secrets.PINTEREST_FITNESS_ACCOUNT_ID }}
@@ -100,6 +102,14 @@ jobs:
           # Initialize Supabase
           from database.supabase_client import get_supabase_client
           db = get_supabase_client()
+
+          # Collect all available Late API keys for rotation (4 keys x 20 posts/month = 80/month)
+          late_keys = []
+          for key_name in ['LATE_API_KEY', 'LATE_API_KEY_2', 'LATE_API_KEY_3', 'LATE_API_KEY_4']:
+              key_val = os.environ.get(key_name, '')
+              if key_val:
+                  late_keys.append((key_name, key_val))
+          print(f'Available Late API keys: {len(late_keys)}')
 
           results = []
           for brand in brands:
@@ -140,127 +150,128 @@ jobs:
 
                   # Step 4: Post via appropriate method
                   if brand == 'fitness':
-                      # Post via Late API (POST /posts endpoint)
-                      # Try LATE_API_KEY first (original key), fall back to LATE_API_KEY_3
-                      late_key = os.environ.get('LATE_API_KEY') or os.environ.get('LATE_API_KEY_3')
-                      late_key_source = 'LATE_API_KEY' if os.environ.get('LATE_API_KEY') else 'LATE_API_KEY_3'
-                      print(f'  Using API key: {late_key_source} ({late_key[:8]}...)')
+                      # Post via Late API with 4-key rotation
+                      # Rotate primary key based on day of month to spread usage evenly
+                      day = datetime.utcnow().day
+                      if not late_keys:
+                          raise Exception('No Late API keys configured')
+
+                      # Order keys starting from the day-based primary
+                      start_idx = day % len(late_keys)
+                      ordered_keys = late_keys[start_idx:] + late_keys[:start_idx]
+
                       account_id = os.environ.get('PINTEREST_FITNESS_ACCOUNT_ID', '')
                       board_id = os.environ.get('PINTEREST_FITNESS_BOARD_ID', '')
 
-                      # Auto-detect account ID if not set
-                      if not account_id:
-                          acct_resp = requests.get(
-                              'https://getlate.dev/api/v1/accounts',
-                              headers={'Authorization': f'Bearer {late_key}'},
-                              timeout=15
-                          )
-                          acct_resp.raise_for_status()
-                          accounts = acct_resp.json()
-                          if isinstance(accounts, dict):
-                              accounts = accounts.get('accounts', accounts.get('data', []))
-                          for acct in accounts:
-                              if acct.get('platform') == 'pinterest':
-                                  account_id = acct.get('_id') or acct.get('id')
-                                  break
-                          if not account_id:
-                              raise Exception('No Pinterest account found in Late API')
-                          print(f'  Auto-detected Pinterest account: {account_id}')
+                      post_success = False
+                      last_error = ''
+                      for key_name, late_key in ordered_keys:
+                          print(f'  Trying {key_name} ({late_key[:8]}...)')
 
-                      # Build payload per Late API docs (POST /posts)
-                      content_text = f\"{pin_data['title']}\\n\\n{pin_data['description']}\"
-                      platform_data = {
-                          'platform': 'pinterest',
-                          'accountId': account_id,
-                          'platformSpecificData': {
+                          # Auto-detect account ID if not set (only need to do once)
+                          if not account_id:
+                              try:
+                                  acct_resp = requests.get(
+                                      'https://getlate.dev/api/v1/accounts',
+                                      headers={'Authorization': f'Bearer {late_key}'},
+                                      timeout=15
+                                  )
+                                  acct_resp.raise_for_status()
+                                  accounts = acct_resp.json()
+                                  if isinstance(accounts, dict):
+                                      accounts = accounts.get('accounts', accounts.get('data', []))
+                                  for acct in accounts:
+                                      if acct.get('platform') == 'pinterest':
+                                          account_id = acct.get('_id') or acct.get('id')
+                                          break
+                              except Exception as e:
+                                  print(f'  Could not detect account with {key_name}: {e}')
+                                  continue
+                          if not account_id:
+                              print(f'  No Pinterest account found, trying next key...')
+                              continue
+
+                          # Build payload per Late API docs (POST /posts)
+                          content_text = f\"{pin_data['title']}\\n\\n{pin_data['description']}\"
+                          platform_data = {
+                              'platform': 'pinterest',
+                              'accountId': account_id,
+                              'platformSpecificData': {
+                                  'link': pin_data['destination_url'],
+                              }
+                          }
+                          if board_id:
+                              platform_data['platformSpecificData']['boardId'] = board_id
+
+                          post_payload = {
+                              'content': content_text,
+                              'platforms': [platform_data],
+                              'mediaItems': [{'type': 'image', 'url': pin_data['image_url']}],
+                          }
+
+                          try:
+                              post_resp = requests.post(
+                                  'https://getlate.dev/api/v1/posts',
+                                  headers={'Authorization': f'Bearer {late_key}', 'Content-Type': 'application/json'},
+                                  json=post_payload,
+                                  timeout=30
+                              )
+                              if post_resp.status_code == 403 and 'limit' in post_resp.text.lower():
+                                  print(f'  {key_name} hit rate limit, trying next key...')
+                                  last_error = f'{key_name} rate limited'
+                                  continue
+                              if post_resp.status_code >= 400:
+                                  print(f'  {key_name} error {post_resp.status_code}: {post_resp.text[:300]}')
+                                  last_error = f'{key_name} error {post_resp.status_code}'
+                                  continue
+                              post_result = post_resp.json()
+                              post_obj = post_result.get('post', post_result)
+                              pin_data['posting_method'] = 'late_api'
+                              pin_data['late_post_id'] = post_obj.get('_id', '')
+                              print(f'  Posted via Late API ({key_name}): {post_resp.status_code} | Post ID: {post_obj.get(\"_id\", \"unknown\")}')
+                              post_success = True
+                              break
+                          except requests.exceptions.RequestException as e:
+                              print(f'  {key_name} request failed: {e}')
+                              last_error = str(e)
+                              continue
+
+                      if not post_success:
+                          raise Exception(f'All Late API keys exhausted: {last_error}')
+
+                  elif brand in ('deals', 'menopause'):
+                      # Post via Make.com webhook (routes to correct Pinterest account)
+                      webhook_var = 'MAKE_WEBHOOK_DEALS' if brand == 'deals' else 'MAKE_WEBHOOK_MENOPAUSE'
+                      webhook = os.environ.get(webhook_var, '')
+                      if webhook:
+                          # Payload format matches Make.com 'Video to Pinterest - All Brands' scenario
+                          brand_map = {'deals': 'daily-deal-darling', 'menopause': 'menopause-planner'}
+                          payload = {
+                              'brand': brand_map.get(brand, brand),
+                              'title': pin_data['title'],
+                              'description': pin_data['description'],
+                              'video_url': pin_data['image_url'],
                               'link': pin_data['destination_url'],
                           }
-                      }
-                      if board_id:
-                          platform_data['platformSpecificData']['boardId'] = board_id
-
-                      post_payload = {
-                          'content': content_text,
-                          'platforms': [platform_data],
-                          'mediaItems': [{'type': 'image', 'url': pin_data['image_url']}],
-                      }
-
-                      print(f'  Late API payload: {json.dumps(post_payload, indent=2)[:500]}')
-                      post_resp = requests.post(
-                          'https://getlate.dev/api/v1/posts',
-                          headers={'Authorization': f'Bearer {late_key}', 'Content-Type': 'application/json'},
-                          json=post_payload,
-                          timeout=30
-                      )
-                      if post_resp.status_code >= 400:
-                          print(f'  Late API error {post_resp.status_code}: {post_resp.text[:500]}')
-                          # If first key fails with 403, try the other key
-                          if post_resp.status_code == 403:
-                              alt_key = os.environ.get('LATE_API_KEY_3') if late_key_source == 'LATE_API_KEY' else os.environ.get('LATE_API_KEY')
-                              if alt_key and alt_key != late_key:
-                                  print(f'  Retrying with alternate key...')
-                                  post_resp = requests.post(
-                                      'https://getlate.dev/api/v1/posts',
-                                      headers={'Authorization': f'Bearer {alt_key}', 'Content-Type': 'application/json'},
-                                      json=post_payload,
-                                      timeout=30
-                                  )
-                                  if post_resp.status_code >= 400:
-                                      print(f'  Alternate key also failed {post_resp.status_code}: {post_resp.text[:500]}')
-                      post_resp.raise_for_status()
-                      post_result = post_resp.json()
-                      post_obj = post_result.get('post', post_result)
-                      pin_data['posting_method'] = 'late_api'
-                      pin_data['late_post_id'] = post_obj.get('_id', '')
-                      print(f'  Posted via Late API: {post_resp.status_code} | Post ID: {post_obj.get(\"_id\", \"unknown\")}')
-
-                  elif brand == 'deals':
-                      # Post via Make.com Scenario 1 webhook
-                      webhook = os.environ.get('MAKE_WEBHOOK_DEALS', '')
-                      if webhook:
-                          payload = {
-                              'title': pin_data['title'],
-                              'description': pin_data['description'],
-                              'image_url': pin_data['image_url'],
-                              'destination_url': pin_data['destination_url'],
-                              'board_name': pin_data['board'],
-                              'text_overlay': pin_data.get('text_overlay', '')
-                          }
                           resp = requests.post(webhook, json=payload, timeout=30)
-                          resp.raise_for_status()
-                          pin_data['posting_method'] = 'make_s1'
-                          print(f'  Posted via Make.com S1: {resp.status_code}')
+                          if resp.status_code >= 400:
+                              print(f'  Make.com webhook error {resp.status_code}: {resp.text[:300]}')
+                              resp.raise_for_status()
+                          method_name = 'make_s1' if brand == 'deals' else 'make_s2'
+                          pin_data['posting_method'] = method_name
+                          print(f'  Posted via Make.com ({method_name}): {resp.status_code}')
                       else:
-                          print('  WARNING: MAKE_WEBHOOK_DEALS not configured')
+                          print(f'  WARNING: {webhook_var} not configured - skipping {brand}')
                           pin_data['posting_method'] = 'skipped'
 
-                  elif brand == 'menopause':
-                      # Post via Make.com Scenario 2 webhook
-                      webhook = os.environ.get('MAKE_WEBHOOK_MENOPAUSE', '')
-                      if webhook:
-                          payload = {
-                              'title': pin_data['title'],
-                              'description': pin_data['description'],
-                              'image_url': pin_data['image_url'],
-                              'destination_url': pin_data['destination_url'],
-                              'board_name': pin_data['board'],
-                              'text_overlay': pin_data.get('text_overlay', '')
-                          }
-                          resp = requests.post(webhook, json=payload, timeout=30)
-                          resp.raise_for_status()
-                          pin_data['posting_method'] = 'make_s2'
-                          print(f'  Posted via Make.com S2: {resp.status_code}')
-                      else:
-                          print('  WARNING: MAKE_WEBHOOK_MENOPAUSE not configured')
-                          pin_data['posting_method'] = 'skipped'
-
-                  # Step 5: Log to content_history
+                  # Step 5: Log to content_history and track result correctly
+                  actual_status = 'skipped' if pin_data.get('posting_method') == 'skipped' else 'posted'
                   log_pin_to_history(pin_data, db.client)
-                  results.append({'brand': brand, 'status': 'posted', 'title': pin_data['title']})
-                  print(f'  Logged to content_history')
+                  results.append({'brand': brand, 'status': actual_status, 'title': pin_data['title']})
+                  print(f'  Status: {actual_status} | Logged to content_history')
 
-                  # Stagger posts 5 minutes apart to avoid feed flooding
-                  if brand != brands[-1].strip():
+                  # Stagger posts 5 minutes apart to avoid feed flooding (only for actual posts)
+                  if actual_status == 'posted' and brand != brands[-1].strip():
                       print(f'  Waiting 5 minutes before next brand...')
                       time.sleep(300)
 
@@ -288,6 +299,9 @@ jobs:
 
           # Update agent_runs so monitoring knows we're alive
           posted = [r for r in results if r['status'] == 'posted']
+          skipped = [r for r in results if r['status'] == 'skipped']
+          if skipped:
+              print(f'\n  WARNING: {len(skipped)} brand(s) skipped due to missing config')
           agents_to_update = ['content_brain', 'content_pipeline', 'image_selector']
           if posted:
               agents_to_update.append('multi_platform_poster')
@@ -302,8 +316,9 @@ jobs:
               except:
                   pass  # Table may not exist yet
 
-          # Fail the workflow only if ALL brands failed
-          if all(r['status'] == 'failed' for r in results):
+          # Fail the workflow only if ALL brands failed (skipped counts as non-failure)
+          non_failed = [r for r in results if r['status'] != 'failed']
+          if not non_failed:
               sys.exit(1)
           "
 
