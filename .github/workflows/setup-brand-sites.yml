@@ -15,11 +15,10 @@ jobs:
       - name: Deploy fitover35
         id: fitover35
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
         run: |
           set -o pipefail
           cd outputs/fitover35-website
-          # No VERCEL_ORG_ID/VERCEL_PROJECT_ID set — CLI auto-creates the project
           vercel deploy --prod --yes --token $VERCEL_TOKEN 2>&1 | tee /tmp/fitover35.log
           DEPLOY_URL=$(grep -oE 'https://[^ ]+\.vercel\.app' /tmp/fitover35.log | tail -1)
           echo "Deploy URL: $DEPLOY_URL"
@@ -28,7 +27,7 @@ jobs:
       - name: Deploy dailydealdarling
         id: deals
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
         run: |
           set -o pipefail
           cd outputs/dailydealdarling-website
@@ -40,7 +39,7 @@ jobs:
       - name: Deploy menopause-planner
         id: menopause
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
         run: |
           set -o pipefail
           cd outputs/menopause-planner-website
@@ -52,7 +51,7 @@ jobs:
       - name: Lookup project IDs
         id: ids
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
         run: |
           # List all projects and find the 3 new ones by directory name
           PROJECTS=$(curl -s "https://api.vercel.com/v9/projects?limit=50" \
