@@ -76,6 +76,7 @@ package-lock.json
 .agents/
 .claude/
 .gemini/
+.mcp.json
 
 # Misc local files
 Documents:Claude:/
