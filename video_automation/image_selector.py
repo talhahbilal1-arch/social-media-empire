@@ -21,14 +21,16 @@ BRAND_IMAGE_RULES = {
             "fitness", "gym", "workout", "exercise", "muscle", "protein",
             "healthy food", "meal prep", "running", "weightlifting", "stretching",
             "yoga", "active lifestyle", "sports nutrition", "home workout",
-            "dumbbell", "resistance band", "athletic", "training", "cardio"
+            "dumbbell", "resistance band", "athletic", "training", "cardio",
+            "man", "male", "men", "guy", "masculine", "male athlete"
         ],
         "blocked_terms": [
             "bedroom", "furniture", "decor", "fashion", "beauty", "makeup",
             "skincare", "menopause", "hot flash", "deal", "sale", "discount",
-            "coupon", "baby", "wedding", "party", "christmas", "holiday"
+            "coupon", "baby", "wedding", "party", "christmas", "holiday",
+            "woman", "women", "female", "girl", "feminine", "she", "her"
         ],
-        "fallback_query": "fitness workout healthy lifestyle"
+        "fallback_query": "man fitness workout gym"
     },
     "deals": {
         "name": "Daily Deal Darling",
@@ -86,7 +88,14 @@ def validate_image_query(query, brand):
     if not has_relevant_term:
         logger.warning(f"Query '{query}' has no relevant terms for brand '{brand}'. Appending brand context.")
         context_word = random.choice(rules["allowed_themes"][:5])
-        return f"{query} {context_word}"
+        query = f"{query} {context_word}"
+
+    # Fitness gender enforcement: ensure male-oriented imagery
+    if brand == "fitness":
+        male_terms = {"man", "male", "men", "guy", "masculine"}
+        if not any(term in query_lower for term in male_terms):
+            logger.info(f"Fitness query '{query}' missing male terms. Prepending 'man'.")
+            query = f"man {query}"
 
     return query
 

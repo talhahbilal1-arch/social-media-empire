@@ -507,28 +507,28 @@ def _render_big_stat(draw, headline, subheadline, heading_font, sub_font,
 
 def _render_numbered_list(draw, headline, subheadline, heading_font, sub_font,
                           text_color, sub_color, colors, max_text_width, text_margin):
-    """Render a numbered list with headline at top and items below."""
+    """Render a numbered list with headline at top and 5 items below."""
     accent = hex_to_rgb(colors.get("accent", "#FFD700"))
 
-    # Headline at top
+    # Headline at top — slightly smaller to leave room for 5 items
     title_font = load_font(
         next((n for n in GOOGLE_FONT_URLS if n.lower().replace(" ", "_") in
               str(getattr(heading_font, 'path', '')).lower()), "Oswald"),
-        64, bold=True
+        56, bold=True
     )
     title_lines = _wrap_text(headline, title_font, max_text_width)
-    y = int(PIN_HEIGHT * 0.10)
+    y = int(PIN_HEIGHT * 0.07)
     for line in title_lines:
         bbox = title_font.getbbox(line)
         line_w = bbox[2] - bbox[0]
         x = (PIN_WIDTH - line_w) // 2
         _draw_text_with_shadow(draw, (x, y), line, title_font, text_color)
-        y += 78
+        y += 68
 
     # Accent divider
-    y += 15
+    y += 10
     draw.line([(text_margin, y), (PIN_WIDTH - text_margin, y)], fill=accent, width=3)
-    y += 30
+    y += 24
 
     # Parse numbered items from subheadline or generate placeholders
     items = []
@@ -542,19 +542,19 @@ def _render_numbered_list(draw, headline, subheadline, heading_font, sub_font,
         # Use headline words as a single-item list
         items = [subheadline or headline]
 
-    # Render up to 4 items
+    # Render up to 5 items — sized to fit all on the pin
     item_font = load_font(
         next((n for n in GOOGLE_FONT_URLS if n.lower().replace(" ", "_") in
               str(getattr(sub_font, 'path', '')).lower()), "Open Sans"),
-        40, bold=False
+        34, bold=False
     )
-    num_font = load_font("Oswald", 56, bold=True)
+    num_font = load_font("Oswald", 46, bold=True)
 
-    for i, item in enumerate(items[:4]):
+    for i, item in enumerate(items[:5]):
         num_str = str(i + 1)
         # Draw number circle
         circle_x = text_margin + 10
-        circle_r = 30
+        circle_r = 26
         draw.ellipse(
             [(circle_x, y), (circle_x + circle_r * 2, y + circle_r * 2)],
             fill=accent,
@@ -572,22 +572,21 @@ def _render_numbered_list(draw, headline, subheadline, heading_font, sub_font,
         item_x = circle_x + circle_r * 2 + 20
         item_max_w = PIN_WIDTH - item_x - text_margin
         item_lines = _wrap_text(item, item_font, item_max_w)
-        item_y = y + 8
+        item_y = y + 4
         for line in item_lines:
             _draw_text_with_shadow(draw, (item_x, item_y), line, item_font, text_color, shadow_offset=1)
-            item_y += 50
-        y = max(item_y, y + circle_r * 2) + 25
+            item_y += 44
+        y = max(item_y, y + circle_r * 2) + 18
 
-    # "See all at link..." teaser
-    if len(items) > 4 or True:  # Always show teaser
-        teaser_font = load_font("Open Sans", 34, bold=False)
-        teaser_text = "See the full list at the link..."
-        bbox = teaser_font.getbbox(teaser_text)
-        tw = bbox[2] - bbox[0]
-        _draw_text_with_shadow(
-            draw, ((PIN_WIDTH - tw) // 2, y + 10),
-            teaser_text, teaser_font, accent, shadow_offset=1
-        )
+    # "Tap for all the details" teaser
+    teaser_font = load_font("Open Sans", 32, bold=False)
+    teaser_text = "Tap for all the details \u2192"
+    bbox = teaser_font.getbbox(teaser_text)
+    tw = bbox[2] - bbox[0]
+    _draw_text_with_shadow(
+        draw, ((PIN_WIDTH - tw) // 2, y + 10),
+        teaser_text, teaser_font, accent, shadow_offset=1
+    )
 
 
 # ═══════════════════════════════════════════════════════════════
