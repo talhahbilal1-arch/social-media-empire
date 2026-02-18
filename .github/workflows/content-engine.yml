@@ -388,6 +388,44 @@ jobs:
               sys.exit(1)
           PYEOF
 
+      - name: Deploy brand sites to Vercel
+        if: '!cancelled()'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          FITOVER35_PROJECT_ID: ${{ secrets.VERCEL_FITOVER35_PROJECT_ID }}
+          DEALS_PROJECT_ID: ${{ secrets.VERCEL_DEALS_PROJECT_ID }}
+          MENOPAUSE_PROJECT_ID: ${{ secrets.VERCEL_MENOPAUSE_PROJECT_ID }}
+        run: |
+          npm install -g vercel@latest
+          echo "=== Deploying brand sites ==="
+
+          if [ -n "$FITOVER35_PROJECT_ID" ]; then
+            cd $GITHUB_WORKSPACE/outputs/fitover35-website
+            VERCEL_PROJECT_ID="$FITOVER35_PROJECT_ID" vercel deploy --prod --yes --token $VERCEL_TOKEN . \
+              && echo "✅ fitover35 deployed" || echo "❌ fitover35 deploy failed"
+            cd $GITHUB_WORKSPACE
+          else
+            echo "⏭ fitover35: VERCEL_FITOVER35_PROJECT_ID not set, skipping"
+          fi
+
+          if [ -n "$DEALS_PROJECT_ID" ]; then
+            cd $GITHUB_WORKSPACE/outputs/dailydealdarling-website
+            VERCEL_PROJECT_ID="$DEALS_PROJECT_ID" vercel deploy --prod --yes --token $VERCEL_TOKEN . \
+              && echo "✅ dailydealdarling deployed" || echo "❌ deals deploy failed"
+            cd $GITHUB_WORKSPACE
+          else
+            echo "⏭ dailydealdarling: VERCEL_DEALS_PROJECT_ID not set, skipping"
+          fi
+
+          if [ -n "$MENOPAUSE_PROJECT_ID" ]; then
+            cd $GITHUB_WORKSPACE/outputs/menopause-planner-website
+            VERCEL_PROJECT_ID="$MENOPAUSE_PROJECT_ID" vercel deploy --prod --yes --token $VERCEL_TOKEN . \
+              && echo "✅ menopause-planner deployed" || echo "❌ menopause deploy failed"
+          else
+            echo "⏭ menopause-planner: VERCEL_MENOPAUSE_PROJECT_ID not set, skipping"
+          fi
+
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4

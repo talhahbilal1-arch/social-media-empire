@@ -1,0 +1,46 @@
+name: Deploy Brand Sites
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Deploy fitover35
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FITOVER35_PROJECT_ID }}
+        run: |
+          cd outputs/fitover35-website
+          vercel deploy --prod --yes --token $VERCEL_TOKEN .
+          echo "✅ fitover35 deployed"
+
+      - name: Deploy dailydealdarling
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_DEALS_PROJECT_ID }}
+        run: |
+          cd outputs/dailydealdarling-website
+          vercel deploy --prod --yes --token $VERCEL_TOKEN .
+          echo "✅ dailydealdarling deployed"
+
+      - name: Deploy menopause-planner
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_MENOPAUSE_PROJECT_ID }}
+        run: |
+          cd outputs/menopause-planner-website
+          vercel deploy --prod --yes --token $VERCEL_TOKEN .
+          echo "✅ menopause-planner deployed"

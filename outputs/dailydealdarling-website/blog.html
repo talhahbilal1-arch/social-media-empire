@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Daily Deal Darling articles - smart shopping tips, beauty reviews, and home finds for budget-conscious women.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Articles - Daily Deal Darling">
+    <meta property="og:description" content="Smart shopping tips, honest reviews, and budget-friendly finds.">
+    <meta property="og:url" content="https://www.dailydealdarling.com/blog">
+    <meta property="og:type" content="website">
+    <title>Articles - Daily Deal Darling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        nav a {
+            margin-left: 2.5rem;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #E91E63;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #fff5f9 0%, #ffffff 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Content Area */
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Placeholder Card */
+        .placeholder-card {
+            background: linear-gradient(135deg, #fff5f9 0%, #fce4ec 100%);
+            border: 2px dashed #E91E63;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .placeholder-card h2 {
+            color: #E91E63;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .placeholder-card p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .placeholder-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Article Grid */
+        #article-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.15);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #fff5f9 0%, #fce4ec 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #E91E63;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .article-date {
+            color: #E91E63;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-card h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .article-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-link {
+            color: #E91E63;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .article-link:hover {
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            #article-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">Daily Deal <span style="color: #E91E63;">Darling</span></div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/blog.html">Articles</a>
+                <a href="/about.html">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Smart Shopping Articles</h1>
+        <p>Tips, reviews, and finds to help you shop smarter</p>
+    </section>
+
+    <!-- Content -->
+    <section class="content">
+        <!-- Placeholder -->
+        <div class="placeholder-card">
+            <div class="icon">📰</div>
+            <h2>New Articles Coming Daily</h2>
+            <p>Check back soon for fresh deals, beauty reviews, and home finds. We're adding new content every day!</p>
+        </div>
+
+        <!-- Article Grid (populated by content engine) -->
+        <div id="article-list"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2026 Daily Deal Darling. All rights reserved.</p>
+            <p>Helping women shop smarter, not harder.</p>
+        </div>
+    </footer>
+</body>
+</html>

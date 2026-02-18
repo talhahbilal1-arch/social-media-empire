@@ -1,0 +1,92 @@
+name: Setup Brand Sites on Vercel (run once)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Create & deploy fitover35
+        id: fitover35
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd outputs/fitover35-website
+
+          # Create project via API
+          RESPONSE=$(curl -s -X POST "https://api.vercel.com/v9/projects" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"name":"fitover35-site","framework":null}')
+          echo "Create response: $RESPONSE"
+          PROJECT_ID=$(echo $RESPONSE | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id',''))")
+          echo "fitover35_project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "FitOver35 Project ID: $PROJECT_ID"
+
+          # Deploy
+          vercel deploy --prod --yes \
+            --token $VERCEL_TOKEN \
+            --scope talhahbilal1-arch \
+            .
+
+      - name: Create & deploy dailydealdarling
+        id: deals
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd outputs/dailydealdarling-website
+
+          RESPONSE=$(curl -s -X POST "https://api.vercel.com/v9/projects" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"name":"daily-deal-darling","framework":null}')
+          echo "Create response: $RESPONSE"
+          PROJECT_ID=$(echo $RESPONSE | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id',''))")
+          echo "deals_project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "Daily Deal Darling Project ID: $PROJECT_ID"
+
+          vercel deploy --prod --yes \
+            --token $VERCEL_TOKEN \
+            --scope talhahbilal1-arch \
+            .
+
+      - name: Create & deploy menopause-planner
+        id: menopause
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd outputs/menopause-planner-website
+
+          RESPONSE=$(curl -s -X POST "https://api.vercel.com/v9/projects" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"name":"menopause-planner","framework":null}')
+          echo "Create response: $RESPONSE"
+          PROJECT_ID=$(echo $RESPONSE | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id',''))")
+          echo "menopause_project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "Menopause Planner Project ID: $PROJECT_ID"
+
+          vercel deploy --prod --yes \
+            --token $VERCEL_TOKEN \
+            --scope talhahbilal1-arch \
+            .
+
+      - name: Print project IDs to summary
+        run: |
+          echo "## Brand Sites Created on Vercel" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Add these as GitHub repository secrets:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret Name | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| VERCEL_FITOVER35_PROJECT_ID | ${{ steps.fitover35.outputs.fitover35_project_id }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| VERCEL_DEALS_PROJECT_ID | ${{ steps.deals.outputs.deals_project_id }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| VERCEL_MENOPAUSE_PROJECT_ID | ${{ steps.menopause.outputs.menopause_project_id }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "After adding secrets, the content-engine will auto-deploy articles on every run." >> $GITHUB_STEP_SUMMARY

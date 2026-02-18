@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About The Menopause Planner - helping women navigate menopause with evidence-based information, not fear.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="About - The Menopause Planner">
+    <meta property="og:description" content="Learn about our mission to help women navigate menopause with clarity and confidence.">
+    <meta property="og:url" content="https://www.menopauseplanner.com/about">
+    <meta property="og:type" content="website">
+    <title>About - The Menopause Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        nav a {
+            margin-left: 2.5rem;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #7B1FA2;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Content */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            color: #7B1FA2;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: #666;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Values Grid */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .value-item {
+            background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e1bee7;
+        }
+
+        .value-item h3 {
+            color: #7B1FA2;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-item p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Signup Section */
+        .signup-section {
+            background: linear-gradient(135deg, #7B1FA2 0%, #6a1b9a 100%);
+            padding: 4rem 2rem;
+            color: white;
+            margin: 3rem -2rem -2rem -2rem;
+        }
+
+        .signup-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .signup-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .signup-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            color: white;
+        }
+
+        /* ConvertKit Form Styling */
+        .formkit-form {
+            background: rgba(255,255,255,0.95) !important;
+            border-radius: 6px !important;
+            padding: 2rem !important;
+        }
+
+        .formkit-input {
+            border-radius: 4px !important;
+        }
+
+        .formkit-submit {
+            background-color: #7B1FA2 !important;
+            font-weight: 600 !important;
+            border-radius: 4px !important;
+        }
+
+        .formkit-submit:hover {
+            background-color: #6a1b9a !important;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .signup-section {
+                margin: 3rem -2rem -2rem -2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">The Menopause <span style="color: #7B1FA2;">Planner</span></div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/blog.html">Articles</a>
+                <a href="/about.html">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>About Us</h1>
+        <p>Real information. No fear. Just clarity.</p>
+    </section>
+
+    <!-- Content -->
+    <section class="content">
+        <div class="section">
+            <h2>Our Mission</h2>
+            <p>The Menopause Planner exists to help women navigate one of life's most significant transitions with real information, not fear. Menopause doesn't have to be confusing—and it definitely doesn't have to be something you suffer through alone.</p>
+            <p>We believe every woman deserves evidence-based information about what's happening in her body, her options for managing symptoms, and practical strategies for thriving during menopause. Our goal is to empower you to make informed decisions about your health and your future.</p>
+        </div>
+
+        <div class="section">
+            <h2>What We Provide</h2>
+            <p>We create clear, science-backed guides on menopause symptoms, hormone replacement therapy, natural alternatives, and lifestyle approaches. Every article is grounded in research, written in plain language, and designed to help you understand your body and your options.</p>
+            <p>Whether you're in perimenopause wondering what hot flashes are really about, or in full menopause looking for symptom management strategies, you'll find practical, honest information here.</p>
+        </div>
+
+        <div class="section">
+            <h2>Our Values</h2>
+            <div class="values-grid">
+                <div class="value-item">
+                    <h3>Evidence-Based</h3>
+                    <p>All our information is grounded in current research and medical understanding.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Honest</h3>
+                    <p>We tell you the good, the challenging, and the nuanced reality of menopause.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Empowering</h3>
+                    <p>We help you take control of your health and your menopause experience.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Supportive</h3>
+                    <p>You're not alone in this. We're here to support your journey.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Why This Matters</h2>
+            <p>Menopause affects how you sleep, your energy, your mood, your body, and your sense of self. That's why accurate information matters. That's why you deserve clarity instead of confusion. That's why The Menopause Planner exists—to meet you where you are and help you navigate this transition with confidence.</p>
+        </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section class="signup-section">
+        <div class="signup-container">
+            <h2>Get Your Free Menopause Guide</h2>
+            <p>Sign up to receive a free guide on understanding menopause symptoms and relief strategies.</p>
+            <script async data-uid="5641382" src="https://menopauseplanner.ck.page/5641382/index.js"></script>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2026 The Menopause Planner. All rights reserved.</p>
+            <p>Real information. No fear. Just clarity.</p>
+        </div>
+    </footer>
+</body>
+</html>

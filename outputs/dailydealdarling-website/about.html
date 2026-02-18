@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About Daily Deal Darling - helping women shop smarter and save more on beauty, home, and lifestyle.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="About - Daily Deal Darling">
+    <meta property="og:description" content="Learn about our mission to help women shop smarter, not harder.">
+    <meta property="og:url" content="https://www.dailydealdarling.com/about">
+    <meta property="og:type" content="website">
+    <title>About - Daily Deal Darling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        nav a {
+            margin-left: 2.5rem;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #E91E63;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #fff5f9 0%, #ffffff 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Content */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            color: #E91E63;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: #666;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Values Grid */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .value-item {
+            background: linear-gradient(135deg, #fff5f9 0%, #fce4ec 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #f8bbd0;
+        }
+
+        .value-item h3 {
+            color: #E91E63;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-item p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Signup Section */
+        .signup-section {
+            background: linear-gradient(135deg, #E91E63 0%, #c2185b 100%);
+            padding: 4rem 2rem;
+            color: white;
+            margin: 3rem -2rem -2rem -2rem;
+        }
+
+        .signup-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .signup-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .signup-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            color: white;
+        }
+
+        /* ConvertKit Form Styling */
+        .formkit-form {
+            background: rgba(255,255,255,0.95) !important;
+            border-radius: 6px !important;
+            padding: 2rem !important;
+        }
+
+        .formkit-input {
+            border-radius: 4px !important;
+        }
+
+        .formkit-submit {
+            background-color: #E91E63 !important;
+            font-weight: 600 !important;
+            border-radius: 4px !important;
+        }
+
+        .formkit-submit:hover {
+            background-color: #c2185b !important;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .signup-section {
+                margin: 3rem -2rem -2rem -2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">Daily Deal <span style="color: #E91E63;">Darling</span></div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/blog.html">Articles</a>
+                <a href="/about.html">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>About Us</h1>
+        <p>Helping women shop smarter, not harder</p>
+    </section>
+
+    <!-- Content -->
+    <section class="content">
+        <div class="section">
+            <h2>Our Mission</h2>
+            <p>Daily Deal Darling exists to help budget-conscious women find real value in a world of overwhelming choices. We believe you shouldn't have to sacrifice quality or style to be smart with your money. Shopping should be enjoyable, not guilt-ridden.</p>
+            <p>We curate deals, test products, and share honest reviews so you can spend your time living your life instead of scouring the internet for the best bargains. Real savings. Real products. Real talk.</p>
+        </div>
+
+        <div class="section">
+            <h2>What We Do</h2>
+            <p>Every week, we hunt down the best deals on beauty, home goods, lifestyle products, and more. But we don't just share any deal — we share the ones we actually use and love. Our team tests products, reads reviews, and makes sure every recommendation meets our high standards for quality and value.</p>
+        </div>
+
+        <div class="section">
+            <h2>Our Values</h2>
+            <div class="values-grid">
+                <div class="value-item">
+                    <h3>Honesty</h3>
+                    <p>We tell you the truth, even if it means passing on a deal.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Value</h3>
+                    <p>Every recommendation delivers real savings without compromise.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Empowerment</h3>
+                    <p>We help you make informed choices about your money.</p>
+                </div>
+                <div class="value-item">
+                    <h3>Community</h3>
+                    <p>We're here for women who want to shop smart together.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Why You'll Love It Here</h2>
+            <p>Whether you're hunting for your next skincare find, refreshing your home on a budget, or just looking for a deal that's too good to miss, Daily Deal Darling has you covered. Join our community of smart shoppers and start saving today.</p>
+        </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section class="signup-section">
+        <div class="signup-container">
+            <h2>Stay in the Loop</h2>
+            <p>Get weekly deals and honest reviews delivered straight to your inbox.</p>
+            <script async data-uid="5641382" src="https://dailydealdarling.ck.page/5641382/index.js"></script>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2026 Daily Deal Darling. All rights reserved.</p>
+            <p>Helping women shop smarter, not harder.</p>
+        </div>
+    </footer>
+</body>
+</html>
