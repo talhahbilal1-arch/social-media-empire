@@ -104,7 +104,7 @@ BRAND_SITE_CONFIG = {
     },
     "deals": {
         "site_name": "Daily Deal Darling",
-        "base_url": "https://dailydealdarling.com",
+        "base_url": "https://dailydealdarling-website.vercel.app",
         "output_dir": "outputs/dailydealdarling-website/articles",
         "primary_color": "#E91E63",
         "accent_color": "#C2185B",
@@ -121,7 +121,7 @@ BRAND_SITE_CONFIG = {
     },
     "menopause": {
         "site_name": "The Menopause Planner",
-        "base_url": "https://menopauseplanner.netlify.app",
+        "base_url": "https://menopause-planner-website.vercel.app",
         "output_dir": "outputs/menopause-planner-website/articles",
         "primary_color": "#7B1FA2",
         "accent_color": "#6A1B9A",
