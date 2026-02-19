@@ -62,41 +62,38 @@ Tested via `claw send`: CLAW successfully:
 
 ---
 
-## What To Do Next 🔜
+## ✅ COMPLETED — 2026-02-19
 
-### Step 1 — Restart Claude Code
-Close this session and reopen in `~/Desktop/social-media-empire/`. The Make.com MCP tools (`mcp__make__*`) will load automatically.
+All steps done in follow-up session.
 
-### Step 2 — Activate Make.com Scenario
-In the new chat, say: **"activate the Make.com scenario and retry the creatine pin"**
+### What Was Resolved
 
-Claude will:
-1. Call `mcp__make__scenarios_activate` with scenario ID `3977247`
-2. Retry `claw send` for the creatine pin post
-3. Confirm success via Telegram
+**Root cause:** Two stale values from when the Make.com scenario was rebuilt:
+1. **Webhook URL changed** — old `8d51h67qpdt77jgz5brhvd5c9hgvaap8` was dead; new hook (`pinterest-pin-publisher`) is `6i5khyaxd3jf5ask3oyvj98iqnv996sk`
+2. **Brand name format** — filters expect hyphenated names (`fitness-made-easy`), not underscored (`fitness_made_easy`)
 
-### Step 3 — Commit project-claw Changes
-The 3 modified files in `~/Desktop/project-claw/` are **not yet committed**. After verifying the pin posts successfully, commit them:
-```bash
-cd ~/Desktop/project-claw
-git add src/tools/revenue/pinterest.ts src/security/vault.ts src/cli/commands/start.ts
-git commit -m "feat: rewrite Pinterest tool to use Make.com webhook"
-git push
-```
+**Make.com MCP note:** SSE endpoint returns HTTP 524 (Cloudflare timeout) — MCP tools will not load. Used browser automation + direct webhook calls instead.
+
+### Step 1 ✅ — Scenario confirmed active
+Verified via Make.com UI (`aria-checked: true`). User had already toggled it on.
+
+### Step 2 ✅ — Creatine pin posted
+- Discovered correct webhook URL via Make.com Webhooks page
+- Sent pin with `"brand": "fitness-made-easy"` (hyphenated)
+- **Result:** Success — 2 ops, 1.7 KB at 10:32 PM (Feb 18)
+
+### Step 3 ✅ — project-claw changes committed
+Already committed as `23d8e03 feat: rewrite Pinterest tool to use Make.com webhook` before handoff was written.
 
 ---
 
-## Key Facts for Next Session
+## Current Webhook URLs
 
-| Item | Value |
-|------|-------|
-| Make.com scenario ID | `3977247` |
-| Make.com scenario name | "Pinterest Pin Publisher - All Brands" |
-| Webhook URL | `https://hook.us2.make.com/8d51h67qpdt77jgz5brhvd5c9hgvaap8` |
-| Make.com MCP token | stored in `.mcp.json` (gitignored — local only) |
-| CLAW PID | 61739 (may have changed — check with `claw status`) |
-| project-claw changes | 3 files modified, not committed |
-| Test pin content | "Creatine After 35: The #1 Supplement for Muscle & Recovery" / Supplement Honest Reviews board |
+| Hook name | URL |
+|-----------|-----|
+| `pinterest-pin-publisher` | `https://hook.us2.make.com/6i5khyaxd3jf5ask3oyvj98iqnv996sk` |
+
+Updated in: GitHub secret `MAKE_WEBHOOK_DEALS`, CLAW vault `make-webhook-url`, MEMORY.md
 
 ---
 
