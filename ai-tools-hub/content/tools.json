@@ -1615,5 +1615,81 @@
     "logo": "/logos/otter-ai.svg",
     "founded": 2016,
     "company": "Otter.ai, Inc."
+  },
+  {
+    "slug": "stable-diffusion",
+    "name": "Stable Diffusion",
+    "tagline": "Open-source text-to-image AI model with full local control and customization",
+    "description": "Stable Diffusion is a latent diffusion model for generating high-quality images from text prompts, developed by Stability AI. Unlike proprietary alternatives, it can run locally on consumer hardware and be freely modified, making it the go-to choice for developers, researchers, and creators who need full control over their image generation workflow without usage restrictions or recurring costs.",
+    "category": "image",
+    "categories": [
+      "image",
+      "design",
+      "research"
+    ],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 0,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {
+          "name": "Self-Hosted",
+          "price": 0,
+          "features": [
+            "Unlimited generations on your hardware",
+            "Full model access and customization",
+            "No content restrictions",
+            "Complete privacy and data ownership"
+          ]
+        },
+        {
+          "name": "DreamStudio API",
+          "price": 10,
+          "features": [
+            "Cloud-based generation starting at $10 credits",
+            "Pay-per-image pricing (~$0.002-0.01 per image)",
+            "No local hardware required",
+            "Faster generation with high-end GPUs"
+          ]
+        }
+      ]
+    },
+    "rating": 4.3,
+    "review_count": 8742,
+    "affiliate_url": "https://stability.ai",
+    "website": "https://stability.ai",
+    "features": [
+      "Text-to-image generation with complex prompt understanding",
+      "Image-to-image transformation and style transfer",
+      "Inpainting and outpainting capabilities",
+      "ControlNet integration for precise composition control",
+      "Custom model training and fine-tuning support",
+      "Multiple model versions (SD 1.5, 2.1, SDXL)",
+      "LoRA and embedding support for style customization",
+      "API and local deployment options"
+    ],
+    "pros": [
+      "Completely open-source with permissive licensing for most use cases",
+      "Runs locally on consumer GPUs (8GB+ VRAM recommended)",
+      "Massive community ecosystem with thousands of custom models and tools",
+      "No ongoing costs or generation limits when self-hosted",
+      "Highly customizable with extensive fine-tuning options"
+    ],
+    "cons": [
+      "Steep learning curve for installation and optimal configuration",
+      "Requires significant technical knowledge and powerful hardware",
+      "Quality can be inconsistent without proper prompt engineering",
+      "Base models struggle with hands, text, and complex anatomical details"
+    ],
+    "best_for": [
+      "Developers building AI image generation into applications",
+      "Researchers experimenting with generative AI models",
+      "Content creators needing unlimited generations without subscription costs",
+      "Users requiring complete privacy and control over their image data"
+    ],
+    "logo": "/logos/stable-diffusion.svg",
+    "founded": 2022,
+    "company": "Stability AI"
   }
 ]

@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-17",
+  "last_updated": "2026-02-19",
   "items": [
     {
       "id": 1,
@@ -255,11 +255,12 @@
       "id": 34,
       "type": "review",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "stable-diffusion",
       "tool_name": "Stable Diffusion",
       "category": "image",
-      "keyword": "stable diffusion review 2026"
+      "keyword": "stable diffusion review 2026",
+      "published_date": "2026-02-19"
     },
     {
       "id": 35,
