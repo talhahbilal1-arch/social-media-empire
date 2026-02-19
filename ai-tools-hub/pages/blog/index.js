@@ -40,8 +40,18 @@ export default function BlogIndex({ articles }) {
               <Link
                 key={article.slug}
                 href={`/blog/${article.slug}/`}
-                className="card group hover:shadow-lg transition-shadow"
+                className="card group hover:shadow-lg transition-shadow overflow-hidden"
               >
+                {article.hero_image && (
+                  <div className="w-full h-48 overflow-hidden bg-gray-100">
+                    <img
+                      src={article.hero_image}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="badge badge-blue text-xs">{article.category}</span>
