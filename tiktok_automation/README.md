@@ -53,11 +53,16 @@ See `SETUP_GUIDE.md` for detailed API setup.
 | File | Purpose |
 |------|---------|
 | `database/tiktok_schema.sql` | Supabase tables + 20 starter topics |
-| `make_scenarios/1_content_generator.json` | Cron → Claude → Supabase |
-| `make_scenarios/2_video_renderer.json` | ElevenLabs TTS + HeyGen video |
-| `make_scenarios/3_tiktok_poster.json` | Upload to TikTok |
-| `make_scenarios/4_analytics_monitor.json` | Analytics + cross-post |
+| `tiktok_pipeline.py` | Content generation (Claude → ElevenLabs → Pexels) |
+| `tiktok_poster.py` | Posts video_ready items to TikTok via Content Posting API |
+| `manual_posting_guide.py` | Formats videos for manual TikTok upload (fallback) |
+| `make_scenarios/1_content_generator.json` | Make.com reference: Cron → Claude → Supabase |
+| `make_scenarios/2_video_renderer.json` | Make.com reference: ElevenLabs TTS + HeyGen |
+| `make_scenarios/3_tiktok_poster.json` | Make.com reference: Upload to TikTok |
+| `make_scenarios/4_analytics_monitor.json` | Make.com reference: Analytics + cross-post |
 | `SETUP_GUIDE.md` | Complete setup documentation |
+| `POSTING_GUIDE.md` | TikTok posting pipeline setup & troubleshooting |
+| `HANDOFF.md` | Project handoff & next steps |
 
 ## Workflow Status Flow
 
@@ -86,11 +91,55 @@ pending → script_ready → audio_ready → video_ready → posted
 
 - **Content**: Claude claude-sonnet-4-20250514
 - **Voice**: ElevenLabs Turbo v2.5
-- **Video**: HeyGen API v2
+- **Video**: HeyGen API v2 or Pexels (stock video)
 - **Database**: Supabase PostgreSQL
-- **Automation**: Make.com
-- **Posting**: TikTok Content Posting API
+- **Automation**: GitHub Actions + Python scripts
+- **Posting**: TikTok Content Posting API (async via polling)
+
+## Posting Pipeline (NEW)
+
+### Automated Posting
+```bash
+# Scheduled: Daily 6 PM UTC
+python3 tiktok_automation/tiktok_poster.py --max 5
+```
+
+Features:
+- Reads `video_ready` items from `tiktok_queue`
+- Posts to TikTok via Content Posting API
+- Polls for completion (up to 5 minutes)
+- Updates database with post IDs
+- Requires `TIKTOK_ACCESS_TOKEN` secret
+
+Workflow: `.github/workflows/tiktok-poster.yml` (daily at 6 PM UTC)
+
+### Manual Posting (Fallback)
+```bash
+# Generate batch for manual upload
+python3 tiktok_automation/manual_posting_guide.py
+```
+
+Use when `TIKTOK_ACCESS_TOKEN` unavailable:
+1. Format videos with captions & hashtags
+2. Upload manually via TikTok app
+3. Update Supabase after posting
+
+See `POSTING_GUIDE.md` for complete details.
 
 ---
 
-See `SETUP_GUIDE.md` for complete documentation.
+## Getting Started
+
+**New to TikTok posting?** Start here:
+1. Read `POSTING_GUIDE.md` for full setup
+2. Ensure Supabase secondary project is configured
+3. Add `TIKTOK_ACCESS_TOKEN` to GitHub Secrets (optional)
+4. Workflow runs automatically daily at 6 PM UTC
+
+**Without API token?** Use manual posting:
+```bash
+python3 tiktok_automation/manual_posting_guide.py --output batch.json
+# Then upload videos manually from the batch file
+```
+
+See `SETUP_GUIDE.md` and `POSTING_GUIDE.md` for complete documentation.
