@@ -1,0 +1,44 @@
+# Pinterest Analytics Collector
+# Runs every Monday at 8 AM UTC to collect real board analytics from Pinterest API v5
+# Stores impressions, saves, clicks, and pin_clicks to Supabase
+
+name: Pinterest Analytics
+
+on:
+  schedule:
+    # Every Monday at 8:00 AM UTC
+    # (Sunday 11 PM PST)
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+env:
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+
+jobs:
+  collect-analytics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Collect Pinterest Analytics
+        run: python -m video_automation.pinterest_analytics
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+      - name: Report failure to monitoring
+        if: failure()
+        run: |
+          echo "Pinterest Analytics collection failed"
+          exit 1

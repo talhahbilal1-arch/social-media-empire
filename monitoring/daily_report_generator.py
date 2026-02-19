@@ -46,6 +46,7 @@ class DailyReportGenerator:
         email_stats = self._get_email_stats(date)
         error_stats = self._get_error_stats(date)
         health_status = self._get_health_status()
+        pinterest_stats = self._get_pinterest_analytics(date)
 
         # Calculate overall health score
         health_score = self._calculate_health_score(
@@ -60,6 +61,7 @@ class DailyReportGenerator:
             "email": email_stats,
             "errors": error_stats,
             "system_health": health_status,
+            "pinterest": pinterest_stats,
             "brands": self._get_brand_breakdown(date)
         }
 
@@ -128,6 +130,61 @@ class DailyReportGenerator:
         except Exception as e:
             logger.error(f"Failed to get error stats: {e}")
             return {"total_today": 0, "error": str(e)}
+
+    def _get_pinterest_analytics(self, date: str) -> dict:
+        """Get latest Pinterest board analytics from weekly collection."""
+        try:
+            from database.supabase_client import get_supabase_client
+            db = get_supabase_client()
+
+            # Get latest analytics for each brand
+            analytics_by_brand = {}
+
+            # Query latest pinterest_analytics records for each brand
+            result = db.client.table("pinterest_analytics").select(
+                "brand, board_name, impressions, saves, clicks, pin_clicks, collected_at"
+            ).order("collected_at", desc=True).limit(20).execute()
+
+            if result.data:
+                # Group by brand, keep only latest per brand
+                latest_by_brand = {}
+                for record in result.data:
+                    brand = record.get("brand")
+                    if brand not in latest_by_brand:
+                        latest_by_brand[brand] = record
+
+                # Aggregate metrics per brand
+                for brand, record in latest_by_brand.items():
+                    analytics_by_brand[brand] = {
+                        "impressions": record.get("impressions", 0),
+                        "saves": record.get("saves", 0),
+                        "clicks": record.get("clicks", 0),
+                        "pin_clicks": record.get("pin_clicks", 0),
+                        "collected_at": record.get("collected_at", "N/A")
+                    }
+
+            return {
+                "by_brand": analytics_by_brand,
+                "total_impressions": sum(
+                    b.get("impressions", 0) for b in analytics_by_brand.values()
+                ),
+                "total_saves": sum(
+                    b.get("saves", 0) for b in analytics_by_brand.values()
+                ),
+                "last_collected": max(
+                    (b.get("collected_at") for b in analytics_by_brand.values()),
+                    default="Never"
+                )
+            }
+        except Exception as e:
+            logger.error(f"Failed to get Pinterest analytics: {e}")
+            return {
+                "by_brand": {},
+                "total_impressions": 0,
+                "total_saves": 0,
+                "last_collected": "N/A",
+                "error": str(e)
+            }
 
     def _get_health_status(self) -> dict:
         """Get current system health status."""
@@ -252,6 +309,7 @@ class DailyReportGenerator:
         video_stats = report.get("videos", {})
         email_stats = report.get("email", {})
         error_stats = report.get("errors", {})
+        pinterest_stats = report.get("pinterest", {})
         brands = report.get("brands", {})
 
         # Brand rows
@@ -308,6 +366,21 @@ class DailyReportGenerator:
                 <div style="background: #fff3e0; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
                     <div style="font-size: 36px; font-weight: bold; color: #e65100;">{email_stats.get('new_subscribers', 0)}</div>
                     <div>New Subscribers Today</div>
+                </div>
+
+                <h2 style="border-bottom: 2px solid #667eea; padding-bottom: 10px;">📌 Pinterest Analytics</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div style="background: #f3e5f5; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 36px; font-weight: bold; color: #7b1fa2;">{pinterest_stats.get('total_impressions', 0):,}</div>
+                        <div>Total Impressions</div>
+                    </div>
+                    <div style="background: #e1f5fe; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 36px; font-weight: bold; color: #0277bd;">{pinterest_stats.get('total_saves', 0):,}</div>
+                        <div>Total Saves</div>
+                    </div>
+                </div>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; font-size: 12px; margin-bottom: 20px;">
+                    <strong>Last Collected:</strong> {pinterest_stats.get('last_collected', 'Never')}
                 </div>
 
                 <h2 style="border-bottom: 2px solid #667eea; padding-bottom: 10px;">⚠️ Errors & Issues</h2>
