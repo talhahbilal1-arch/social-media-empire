@@ -55,8 +55,7 @@ jobs:
           CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
-          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python3 << 'PYEOF'
@@ -300,7 +299,7 @@ jobs:
                       'deals': 'daily-deal-darling',
                       'menopause': 'menopause-planner',
                   }
-                  webhook = os.environ.get('MAKE_WEBHOOK_DEALS', '') or os.environ.get('MAKE_WEBHOOK_MENOPAUSE', '')
+                  webhook = os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
                   if webhook:
                       payload = {
                           'brand': brand_map.get(brand, brand),
