@@ -396,6 +396,19 @@ def article_to_html(markdown_content, brand_key, slug):
     )
     body_html = body_html.replace('<!-- email-signup-placeholder -->', signup_html)
 
+    # Menopause Planner: insert Etsy CTA before affiliate disclosure
+    if brand_key == "menopause":
+        etsy_cta = (
+            '<div style="background:linear-gradient(135deg,#f3e8ff,#ede0f7);border:2px solid #c084fc;border-radius:14px;padding:28px;margin:36px 0;text-align:center;">'
+            '<p style="font-size:0.8em;font-weight:700;letter-spacing:0.08em;color:#7B1FA2;text-transform:uppercase;margin:0 0 8px">The Menopause Planner — Digital Download</p>'
+            '<h3 style="margin:0 0 10px;font-size:1.3em;color:#111">Track Every Symptom. Reclaim Your Sleep.</h3>'
+            '<p style="margin:0 0 18px;color:#444;font-size:0.97em">A printable digital planner built specifically for women navigating menopause — track symptoms, sleep patterns, supplements, and mood in one place. Instant download, print at home.</p>'
+            '<a href="https://www.etsy.com/shop/TheMenopausePlanner" target="_blank" rel="noopener" style="display:inline-block;background:#7B1FA2;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1em">Get the Planner on Etsy →</a>'
+            '<p style="margin:12px 0 0;font-size:0.82em;color:#777">Instant download • Print at home • One-time purchase</p>'
+            '</div>'
+        )
+        body_html = body_html.replace('<p style="font-size:12px;', f'{etsy_cta}\n    <p style="font-size:12px;')
+
     # Build nav
     nav_html = '\n'.join(
         f'        <a href="{url}" style="color:#333;text-decoration:none;margin:0 12px">{label}</a>'
