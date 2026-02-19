@@ -56,7 +56,7 @@ def generate_script(client: anthropic.Anthropic, category: Optional[str] = None)
         category = random.choice(CATEGORIES)
 
     response = client.messages.create(
-        model="claude-sonnet-4-5-20250929",
+        model="claude-sonnet-4-6",
         max_tokens=1500,
         messages=[
             {
@@ -186,7 +186,7 @@ def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]
         "caption": script_data["caption"],
         "hashtags": script_data["hashtags"],
         "affiliate_products": [script_data["affiliate_product"]],
-        "amazon_tag": "fitnessquick-20",
+        "amazon_tag": "dailydealdarl-20",
         "audio_url": audio_url,
         "video_url": video_url,
         "status": status,
@@ -207,6 +207,8 @@ def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]
         },
         json=payload,
     )
+    if not response.ok:
+        logger.error(f"Supabase insert failed {response.status_code}: {response.text}")
     response.raise_for_status()
     record = response.json()[0]
     logger.info(f"Saved to Supabase: {record['id']} ({status})")
