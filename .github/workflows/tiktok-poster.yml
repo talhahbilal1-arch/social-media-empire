@@ -1,0 +1,59 @@
+name: TikTok Video Poster
+
+on:
+  schedule:
+    # Daily at 6 PM UTC (10 AM PST)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+    inputs:
+      max_videos:
+        description: 'Max videos to post'
+        required: false
+        default: '5'
+      dry_run:
+        description: 'Dry run (no actual posting)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+
+jobs:
+  post-videos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Post video_ready items to TikTok
+        env:
+          SUPABASE_TIKTOK_URL: ${{ secrets.SUPABASE_TIKTOK_URL }}
+          SUPABASE_TIKTOK_KEY: ${{ secrets.SUPABASE_TIKTOK_KEY }}
+          TIKTOK_ACCESS_TOKEN: ${{ secrets.TIKTOK_ACCESS_TOKEN }}
+        run: |
+          MAX="${{ github.event.inputs.max_videos || '5' }}"
+          DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
+
+          ARGS="--max $MAX"
+          if [ "$DRY_RUN" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          python3 tiktok_automation/tiktok_poster.py $ARGS
+
+      - name: Report workflow status
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✓ TikTok posting completed successfully"
+          else
+            echo "✗ TikTok posting had errors"
+          fi
