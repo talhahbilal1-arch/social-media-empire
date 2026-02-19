@@ -1,0 +1,90 @@
+name: Deploy Subdomain Sites to Vercel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-subdomains:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Daily Deal Darling subdomains
+          - subdomain: "beauty"
+            brand: "dailydealdarling"
+            path: "outputs/infrastructure/dailydealdarling/beauty"
+            url: "https://beauty.dailydealdarling.com"
+          - subdomain: "home"
+            brand: "dailydealdarling"
+            path: "outputs/infrastructure/dailydealdarling/home"
+            url: "https://home.dailydealdarling.com"
+          - subdomain: "kitchen"
+            brand: "dailydealdarling"
+            path: "outputs/infrastructure/dailydealdarling/kitchen"
+            url: "https://kitchen.dailydealdarling.com"
+          - subdomain: "selfcare"
+            brand: "dailydealdarling"
+            path: "outputs/infrastructure/dailydealdarling/selfcare"
+            url: "https://selfcare.dailydealdarling.com"
+          - subdomain: "mom"
+            brand: "dailydealdarling"
+            path: "outputs/infrastructure/dailydealdarling/mom"
+            url: "https://mom.dailydealdarling.com"
+          # Fit Over 35 subdomains
+          - subdomain: "workouts"
+            brand: "fitover35"
+            path: "outputs/infrastructure/fitover35/workouts"
+            url: "https://workouts.fitover35.com"
+          - subdomain: "nutrition"
+            brand: "fitover35"
+            path: "outputs/infrastructure/fitover35/nutrition"
+            url: "https://nutrition.fitover35.com"
+          - subdomain: "recovery"
+            brand: "fitover35"
+            path: "outputs/infrastructure/fitover35/recovery"
+            url: "https://recovery.fitover35.com"
+          - subdomain: "mindset"
+            brand: "fitover35"
+            path: "outputs/infrastructure/fitover35/mindset"
+            url: "https://mindset.fitover35.com"
+          - subdomain: "homegym"
+            brand: "fitover35"
+            path: "outputs/infrastructure/fitover35/homegym"
+            url: "https://homegym.fitover35.com"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Deploy ${{ matrix.subdomain }} to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
+        run: |
+          cd ${{ matrix.path }}
+
+          # Deploy with Vercel - create new project if doesn't exist
+          # Using project name pattern: {brand}-{subdomain}
+          vercel deploy \
+            --token=$VERCEL_TOKEN \
+            --prod \
+            --yes \
+            --name="${{ matrix.brand }}-${{ matrix.subdomain }}" || true
+
+          echo "Deployed ${{ matrix.subdomain }} to Vercel"
+
+      - name: Log deployment info
+        run: |
+          echo "✓ Deployed ${{ matrix.brand }}-${{ matrix.subdomain }}"
+          echo "  URL: ${{ matrix.url }}"
+          echo "  Path: ${{ matrix.path }}"

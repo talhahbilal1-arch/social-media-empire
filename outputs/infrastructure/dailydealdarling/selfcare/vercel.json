@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "daily-deal-selfcare",
+  "public": true,
+  "buildCommand": "echo 'Static site'",
+  "outputDirectory": "."
+}

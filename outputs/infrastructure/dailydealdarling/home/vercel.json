@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "daily-deal-home",
+  "public": true,
+  "buildCommand": "echo 'Static site'",
+  "outputDirectory": "."
+}

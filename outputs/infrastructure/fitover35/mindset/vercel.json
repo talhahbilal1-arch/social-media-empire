@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "fitover35-mindset",
+  "public": true,
+  "buildCommand": "echo 'Static site'",
+  "outputDirectory": "."
+}
