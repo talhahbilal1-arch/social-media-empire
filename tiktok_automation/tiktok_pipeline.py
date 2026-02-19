@@ -190,12 +190,12 @@ def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]
         "audio_url": audio_url,
         "video_url": video_url,
         "status": status,
-        "script_generated_at": datetime.now(timezone.utc).isoformat() + "Z",
-        "audio_generated_at": datetime.now(timezone.utc).isoformat() + "Z",
+        "script_generated_at": datetime.now(timezone.utc).isoformat(),
+        "audio_generated_at": datetime.now(timezone.utc).isoformat(),
     }
 
     if video_url:
-        payload["video_generated_at"] = datetime.now(timezone.utc).isoformat() + "Z"
+        payload["video_generated_at"] = datetime.now(timezone.utc).isoformat()
 
     response = requests.post(
         f"{supabase_url}/rest/v1/tiktok_queue",
