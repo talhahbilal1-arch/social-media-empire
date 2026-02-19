@@ -1,10 +1,10 @@
 {
   "search_console": {
-    "verification_tag": "PASTE_YOUR_VERIFICATION_CODE_HERE",
+    "verification_tag": "3vrNJ7j-0jCY9cbkFDWgnRUJPkQ3pd-FBRDWMLGsVj0",
     "instructions": "Go to https://search.google.com/search-console → Add Property → URL prefix → https://ai-tools-hub-lilac.vercel.app → HTML tag method → Copy just the content value (e.g., 'abc123xyz') → Paste it above"
   },
   "analytics": {
-    "ga4_measurement_id": "PASTE_YOUR_GA4_ID_HERE",
+    "ga4_measurement_id": "G-0FGLVKVERF",
     "instructions": "Go to https://analytics.google.com → Create GA4 property → Get Measurement ID (starts with G-) → Paste it above"
   },
   "site_url": "https://ai-tools-hub-lilac.vercel.app"
