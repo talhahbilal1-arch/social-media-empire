@@ -45,27 +45,28 @@ def _load_affiliate_config():
 
 
 # ── Affiliate Link Mapping ──────────────────────────────────────────────────
+# CRITICAL: Always use direct product links (/dp/ASIN?tag=dailydealdarl-20), never /s? search URLs
 
 AFFILIATE_LINKS = {
     'fitness': {
-        'supplements': 'https://www.amazon.com/s?k=supplements+men+over+35&tag=dailydealdarl-20',
-        'equipment': 'https://www.amazon.com/s?k=home+gym+equipment&tag=dailydealdarl-20',
-        'protein': 'https://www.amazon.com/s?k=whey+protein+powder&tag=dailydealdarl-20',
-        'creatine': 'https://www.amazon.com/s?k=creatine+monohydrate&tag=dailydealdarl-20',
-        'default': 'https://www.amazon.com/s?k=fitness+gear+men&tag=dailydealdarl-20',
+        'supplements': 'https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarl-20',
+        'equipment': 'https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20',
+        'protein': 'https://www.amazon.com/dp/B000QSNYGI?tag=dailydealdarl-20',
+        'creatine': 'https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20',
     },
     'deals': {
-        'kitchen': 'https://www.amazon.com/s?k=kitchen+gadgets&tag=dailydealdarl-20',
-        'home': 'https://www.amazon.com/s?k=home+organization&tag=dailydealdarl-20',
-        'beauty': 'https://www.amazon.com/s?k=skincare+products&tag=dailydealdarl-20',
-        'selfcare': 'https://www.amazon.com/s?k=self+care+gifts&tag=dailydealdarl-20',
-        'default': 'https://www.amazon.com/s?k=daily+deals&tag=dailydealdarl-20',
+        'kitchen': 'https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarl-20',
+        'home': 'https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20',
+        'beauty': 'https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20',
+        'selfcare': 'https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20',
     },
     'menopause': {
-        'supplements': 'https://www.amazon.com/s?k=menopause+supplements&tag=dailydealdarl-20',
-        'wellness': 'https://www.amazon.com/s?k=menopause+wellness&tag=dailydealdarl-20',
-        'sleep': 'https://www.amazon.com/s?k=sleep+aid+menopause&tag=dailydealdarl-20',
-        'default': 'https://www.amazon.com/s?k=menopause+relief&tag=dailydealdarl-20',
+        'supplements': 'https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20',
+        'wellness': 'https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20',
+        'sleep': 'https://www.amazon.com/dp/B005DEK990?tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20',
     }
 }
 

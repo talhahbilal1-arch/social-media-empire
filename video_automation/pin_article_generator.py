@@ -30,53 +30,54 @@ def _get_client():
 
 
 # ── Amazon Associates affiliate links (tag=dailydealdarl-20) ─────────────────
+# CRITICAL: Always use direct product links (/dp/ASIN?tag=dailydealdarl-20), never /s? search URLs
 
 AMAZON_AFFILIATE_LINKS = {
     "fitness": {
-        "creatine monohydrate": "https://www.amazon.com/s?k=creatine+monohydrate&tag=dailydealdarl-20",
-        "vitamin D3": "https://www.amazon.com/s?k=vitamin+d3+supplement&tag=dailydealdarl-20",
-        "magnesium glycinate": "https://www.amazon.com/s?k=magnesium+glycinate&tag=dailydealdarl-20",
-        "fish oil": "https://www.amazon.com/s?k=fish+oil+supplement&tag=dailydealdarl-20",
-        "ashwagandha": "https://www.amazon.com/s?k=ashwagandha+supplement&tag=dailydealdarl-20",
-        "protein powder": "https://www.amazon.com/s?k=whey+protein+powder&tag=dailydealdarl-20",
-        "collagen peptides": "https://www.amazon.com/s?k=collagen+peptides&tag=dailydealdarl-20",
-        "resistance bands set": "https://www.amazon.com/s?k=resistance+bands+set&tag=dailydealdarl-20",
-        "adjustable dumbbells": "https://www.amazon.com/s?k=adjustable+dumbbells&tag=dailydealdarl-20",
-        "pull-up bar": "https://www.amazon.com/s?k=pull+up+bar+doorway&tag=dailydealdarl-20",
-        "foam roller": "https://www.amazon.com/s?k=foam+roller+muscle+recovery&tag=dailydealdarl-20",
-        "kettlebell": "https://www.amazon.com/s?k=kettlebell&tag=dailydealdarl-20",
-        "massage gun": "https://www.amazon.com/s?k=massage+gun&tag=dailydealdarl-20",
-        "food scale": "https://www.amazon.com/s?k=food+scale+kitchen&tag=dailydealdarl-20",
-        "glass meal prep containers": "https://www.amazon.com/s?k=glass+meal+prep+containers&tag=dailydealdarl-20",
-        "protein shaker": "https://www.amazon.com/s?k=protein+shaker+bottle&tag=dailydealdarl-20",
-        "_default": "https://www.amazon.com/s?k=fitness+gear+men&tag=dailydealdarl-20",
+        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarl-20",
+        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarl-20",
+        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20",
+        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=dailydealdarl-20",
+        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=dailydealdarl-20",
+        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=dailydealdarl-20",
+        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarl-20",
+        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=dailydealdarl-20",
+        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20",
+        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=dailydealdarl-20",
+        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=dailydealdarl-20",
+        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=dailydealdarl-20",
+        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=dailydealdarl-20",
+        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=dailydealdarl-20",
+        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarl-20",
+        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20",
     },
     "deals": {
-        "air fryer": "https://www.amazon.com/s?k=air+fryer&tag=dailydealdarl-20",
-        "knife set": "https://www.amazon.com/s?k=knife+set+kitchen&tag=dailydealdarl-20",
-        "meal prep containers": "https://www.amazon.com/s?k=meal+prep+containers&tag=dailydealdarl-20",
-        "organizer bins": "https://www.amazon.com/s?k=storage+organizer+bins&tag=dailydealdarl-20",
-        "silk pillowcase": "https://www.amazon.com/s?k=silk+pillowcase&tag=dailydealdarl-20",
-        "LED face mask": "https://www.amazon.com/s?k=LED+face+mask+skincare&tag=dailydealdarl-20",
-        "label maker": "https://www.amazon.com/s?k=label+maker&tag=dailydealdarl-20",
-        "drawer dividers": "https://www.amazon.com/s?k=drawer+dividers&tag=dailydealdarl-20",
-        "throw pillows": "https://www.amazon.com/s?k=decorative+throw+pillows&tag=dailydealdarl-20",
-        "LED candles": "https://www.amazon.com/s?k=LED+candles+flickering&tag=dailydealdarl-20",
-        "_default": "https://www.amazon.com/s?k=daily+deals&tag=dailydealdarl-20",
+        "air fryer": "https://www.amazon.com/dp/B07FDJMC9Q?tag=dailydealdarl-20",
+        "knife set": "https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarl-20",
+        "meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarl-20",
+        "organizer bins": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
+        "silk pillowcase": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
+        "LED face mask": "https://www.amazon.com/dp/B07D3KVL4Z?tag=dailydealdarl-20",
+        "label maker": "https://www.amazon.com/dp/B0719RFLTQ?tag=dailydealdarl-20",
+        "drawer dividers": "https://www.amazon.com/dp/B073VB74FJ?tag=dailydealdarl-20",
+        "throw pillows": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
+        "LED candles": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
     },
     "menopause": {
-        "black cohosh": "https://www.amazon.com/s?k=black+cohosh+supplement&tag=dailydealdarl-20",
-        "evening primrose oil": "https://www.amazon.com/s?k=evening+primrose+oil&tag=dailydealdarl-20",
-        "magnesium glycinate": "https://www.amazon.com/s?k=magnesium+glycinate&tag=dailydealdarl-20",
-        "vitamin D3": "https://www.amazon.com/s?k=vitamin+d3+supplement&tag=dailydealdarl-20",
-        "cooling pillow": "https://www.amazon.com/s?k=cooling+pillow+menopause&tag=dailydealdarl-20",
-        "bamboo sheets": "https://www.amazon.com/s?k=bamboo+cooling+sheets&tag=dailydealdarl-20",
-        "cooling pajamas": "https://www.amazon.com/s?k=cooling+pajamas+women&tag=dailydealdarl-20",
-        "weighted blanket": "https://www.amazon.com/s?k=weighted+blanket&tag=dailydealdarl-20",
-        "symptom tracker journal": "https://www.amazon.com/s?k=menopause+journal+tracker&tag=dailydealdarl-20",
-        "essential oils diffuser": "https://www.amazon.com/s?k=essential+oil+diffuser&tag=dailydealdarl-20",
-        "collagen powder": "https://www.amazon.com/s?k=collagen+powder+women&tag=dailydealdarl-20",
-        "_default": "https://www.amazon.com/s?k=menopause+relief&tag=dailydealdarl-20",
+        "black cohosh": "https://www.amazon.com/dp/B0019LTI86?tag=dailydealdarl-20",
+        "evening primrose oil": "https://www.amazon.com/dp/B00DWCZWHK?tag=dailydealdarl-20",
+        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20",
+        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarl-20",
+        "cooling pillow": "https://www.amazon.com/dp/B07C7FQBDT?tag=dailydealdarl-20",
+        "bamboo sheets": "https://www.amazon.com/dp/B07QDFLQ7J?tag=dailydealdarl-20",
+        "cooling pajamas": "https://www.amazon.com/dp/B07YC684QN?tag=dailydealdarl-20",
+        "weighted blanket": "https://www.amazon.com/dp/B07H2DKQGJ?tag=dailydealdarl-20",
+        "symptom tracker journal": "https://www.amazon.com/dp/B0BW9GDRP7?tag=dailydealdarl-20",
+        "essential oils diffuser": "https://www.amazon.com/dp/B07L4R62GQ?tag=dailydealdarl-20",
+        "collagen powder": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20",
     },
 }
 
@@ -234,6 +235,8 @@ REQUIREMENTS:
    [SIGNUP_FORM_PLACEHOLDER]
 4. AMAZON PRODUCT RECOMMENDATIONS: Include 2-3 product recommendations naturally within the article.
    Link each product to its Amazon page using markdown links.
+   CRITICAL: All Amazon links must be DIRECT PRODUCT LINKS in format: https://www.amazon.com/dp/[ASIN]?tag=dailydealdarl-20
+   NEVER use Amazon search URLs (/s?k=...) — these are broken and don't convert to sales.
    Format: **[Product Name]**({amazon_url}) — honest 1-sentence review of why this product helps.
    Available products with Amazon links:
 {products_text}
