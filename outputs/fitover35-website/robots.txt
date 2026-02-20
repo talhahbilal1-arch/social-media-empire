@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.fitover35.com/sitemap.xml
