@@ -1691,5 +1691,101 @@
     "logo": "/logos/stable-diffusion.svg",
     "founded": 2022,
     "company": "Stability AI"
+  },
+  {
+    "slug": "luma-ai",
+    "name": "Luma AI",
+    "tagline": "Text-to-video and image-to-video generation with Dream Machine",
+    "description": "Luma AI's Dream Machine is a highly accessible AI video generator that creates realistic, cinematic 5-second clips from text prompts or images in approximately 120 seconds. Known for its speed and quality balance, it has gained significant traction among content creators who need quick video generation without extensive technical knowledge. The tool excels at motion consistency and character coherence compared to many competitors.",
+    "category": "video",
+    "categories": [
+      "video",
+      "image",
+      "design"
+    ],
+    "pricing": {
+      "free_tier": true,
+      "starting_price": 9.99,
+      "currency": "USD",
+      "billing": "monthly",
+      "plans": [
+        {
+          "name": "Free",
+          "price": 0,
+          "features": [
+            "30 generations per month",
+            "5-second videos",
+            "Standard generation speed",
+            "Watermarked outputs"
+          ]
+        },
+        {
+          "name": "Standard",
+          "price": 9.99,
+          "features": [
+            "120 generations per month",
+            "Priority generation queue",
+            "No watermarks",
+            "Extended generation capabilities"
+          ]
+        },
+        {
+          "name": "Pro",
+          "price": 29.99,
+          "features": [
+            "400 generations per month",
+            "Fastest generation speed",
+            "Commercial usage rights",
+            "Advanced editing features"
+          ]
+        },
+        {
+          "name": "Premier",
+          "price": 99.99,
+          "features": [
+            "2000 generations per month",
+            "Maximum priority",
+            "API access",
+            "Dedicated support"
+          ]
+        }
+      ]
+    },
+    "rating": 4.3,
+    "review_count": 2847,
+    "affiliate_url": "https://lumalabs.ai",
+    "website": "https://lumalabs.ai",
+    "features": [
+      "Text-to-video generation with natural language prompts",
+      "Image-to-video animation from static images",
+      "Extend video feature to continue existing clips",
+      "Keyframe control for precise motion direction",
+      "Character consistency across generated frames",
+      "Cinematic camera movements and smooth motion",
+      "5-second HD video outputs",
+      "Fast generation times (~120 seconds)"
+    ],
+    "pros": [
+      "Exceptionally fast generation compared to competitors like Runway and Pika",
+      "Strong motion coherence and realistic physics simulation",
+      "Intuitive interface requiring minimal learning curve",
+      "Generous free tier allows meaningful testing before commitment",
+      "Better at handling complex scenes with multiple elements than earlier AI video tools"
+    ],
+    "cons": [
+      "Limited to 5-second clips, requiring multiple generations for longer content",
+      "Occasional morphing artifacts in complex transformations",
+      "Less control over specific elements compared to Runway Gen-2",
+      "Quality can be inconsistent with abstract or highly specific prompts"
+    ],
+    "best_for": [
+      "Social media content creators needing quick video clips",
+      "Marketing teams producing product demo animations",
+      "Filmmakers prototyping scenes and concept visualization",
+      "Educators creating engaging educational video content"
+    ],
+    "logo": "/logos/luma-ai.svg",
+    "founded": 2021,
+    "company": "Luma AI, Inc."
   }
 ]

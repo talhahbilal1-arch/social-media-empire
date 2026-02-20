@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-19",
+  "last_updated": "2026-02-20",
   "items": [
     {
       "id": 1,
@@ -266,11 +266,12 @@
       "id": 35,
       "type": "review",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "luma-ai",
       "tool_name": "Luma AI",
       "category": "video",
-      "keyword": "luma ai review 2026"
+      "keyword": "luma ai review 2026",
+      "published_date": "2026-02-20"
     },
     {
       "id": 36,
