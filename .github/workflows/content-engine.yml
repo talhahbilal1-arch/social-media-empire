@@ -320,9 +320,10 @@ jobs:
                       'deals': 'MAKE_WEBHOOK_DEALS',
                       'menopause': 'MAKE_WEBHOOK_MENOPAUSE',
                   }
+                  global_webhook = os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
                   webhook = (
                       os.environ.get(webhook_keys.get(brand, ''), '')
-                      or os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
+                      or global_webhook
                   )
                   if webhook:
                       payload = {
@@ -334,6 +335,13 @@ jobs:
                           'link': pin_data['destination_url'],
                       }
                       success, result_msg = post_to_make_webhook(webhook, payload, brand)
+
+                      # If brand-specific webhook failed, retry with global fallback
+                      brand_webhook = os.environ.get(webhook_keys.get(brand, ''), '')
+                      if not success and brand_webhook and global_webhook and brand_webhook != global_webhook:
+                          print(f'  Brand webhook failed, retrying with global fallback...')
+                          success, result_msg = post_to_make_webhook(global_webhook, payload, brand)
+
                       if success:
                           pin_data['posting_method'] = posting_method
                           print(f'  Posted via Make.com ({posting_method}): {result_msg}')
