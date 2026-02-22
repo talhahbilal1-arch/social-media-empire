@@ -12,31 +12,39 @@ from src.clients.late_api import LateAPIClient
 # Sample video URL (Google sample video - reliable and public)
 VIDEO_URL = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
 
-# All 3 accounts to test - API keys and IDs must be set via environment variables
+# Helper to get first available env var from a list
+def _first_env(*env_names):
+    for name in env_names:
+        val = os.environ.get(name, "")
+        if val:
+            return val
+    return ""
+
+# All 3 accounts to test - supports both legacy and standardized env var names
 ACCOUNTS = [
     {
         "brand": "daily_deal_darling",
-        "api_key": os.environ.get("LATE_API_KEY_DDD", ""),
-        "account_id": os.environ.get("PINTEREST_DDD_ACCOUNT_ID", ""),
-        "board_id": os.environ.get("PINTEREST_DDD_BOARD_ID", ""),
+        "api_key": _first_env("LATE_API_KEY_DDD", "LATE_API_KEY_2", "LATE_API_KEY"),
+        "account_id": _first_env("PINTEREST_DDD_ACCOUNT_ID", "PINTEREST_DEALS_ACCOUNT_ID"),
+        "board_id": _first_env("PINTEREST_DDD_BOARD_ID", "PINTEREST_DEALS_BOARD_ID"),
         "title": "Must-Have Kitchen Gadget for 2026!",
         "description": "This genius kitchen find is a total game-changer! Makes cooking so much easier. Link in bio for details!\n\n#amazonfinds #kitchenhacks #deals #homegadgets #cooking",
         "link": "https://dailydealdarling.com"
     },
     {
         "brand": "fitnessmadeasy",
-        "api_key": os.environ.get("LATE_API_KEY", ""),
-        "account_id": os.environ.get("PINTEREST_FITNESS_ACCOUNT_ID", ""),
-        "board_id": os.environ.get("PINTEREST_FITNESS_BOARD_ID", ""),
+        "api_key": _first_env("LATE_API_KEY", "LATE_API_KEY_3"),
+        "account_id": _first_env("PINTEREST_FITNESS_ACCOUNT_ID"),
+        "board_id": _first_env("PINTEREST_FITNESS_BOARD_ID"),
         "title": "5-Minute Ab Workout - No Equipment Needed!",
         "description": "Quick and effective core workout you can do anywhere! Perfect for busy days. Save this for later!\n\n#fitness #abworkout #homeworkout #fitover35 #exercise",
         "link": "https://fitnessmadeasy.com"
     },
     {
         "brand": "menopause_planner",
-        "api_key": os.environ.get("LATE_API_KEY_MENO", ""),
-        "account_id": os.environ.get("PINTEREST_MENO_ACCOUNT_ID", ""),
-        "board_id": os.environ.get("PINTEREST_MENO_BOARD_ID", ""),
+        "api_key": _first_env("LATE_API_KEY_MENO", "LATE_API_KEY_4", "LATE_API_KEY"),
+        "account_id": _first_env("PINTEREST_MENO_ACCOUNT_ID", "PINTEREST_MENOPAUSE_ACCOUNT_ID"),
+        "board_id": _first_env("PINTEREST_MENO_BOARD_ID", "PINTEREST_MENOPAUSE_BOARD_ID"),
         "title": "3 Natural Ways to Beat Hot Flashes",
         "description": "Struggling with hot flashes? These natural remedies can help! Save this for when you need relief.\n\n#menopause #hotflashes #wellness #womenover50 #naturalremedies",
         "link": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle"

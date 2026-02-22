@@ -1,0 +1,286 @@
+# Manual test: Post one image pin + one video pin to every Pinterest account
+# Trigger from GitHub Actions UI → "Run workflow"
+
+name: Test Pinterest Posting
+
+on:
+  workflow_dispatch:
+    inputs:
+      post_type:
+        description: 'What to post'
+        required: true
+        type: choice
+        options:
+          - both
+          - image_only
+          - video_only
+        default: both
+      dry_run:
+        description: 'Dry run (validate config only, no posting)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  test-pinterest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+
+      - name: Test Pinterest posting for all brands
+        env:
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+          LATE_API_KEY_DDD: ${{ secrets.LATE_API_KEY_DDD }}
+          LATE_API_KEY_MENO: ${{ secrets.LATE_API_KEY_MENO }}
+          PINTEREST_FITNESS_ACCOUNT_ID: ${{ secrets.PINTEREST_FITNESS_ACCOUNT_ID }}
+          PINTEREST_FITNESS_BOARD_ID: ${{ secrets.PINTEREST_FITNESS_BOARD_ID }}
+          PINTEREST_DEALS_ACCOUNT_ID: ${{ secrets.PINTEREST_DEALS_ACCOUNT_ID }}
+          PINTEREST_DEALS_BOARD_ID: ${{ secrets.PINTEREST_DEALS_BOARD_ID }}
+          PINTEREST_DDD_ACCOUNT_ID: ${{ secrets.PINTEREST_DDD_ACCOUNT_ID }}
+          PINTEREST_DDD_BOARD_ID: ${{ secrets.PINTEREST_DDD_BOARD_ID }}
+          PINTEREST_MENOPAUSE_ACCOUNT_ID: ${{ secrets.PINTEREST_MENOPAUSE_ACCOUNT_ID }}
+          PINTEREST_MENOPAUSE_BOARD_ID: ${{ secrets.PINTEREST_MENOPAUSE_BOARD_ID }}
+          PINTEREST_MENO_ACCOUNT_ID: ${{ secrets.PINTEREST_MENO_ACCOUNT_ID }}
+          PINTEREST_MENO_BOARD_ID: ${{ secrets.PINTEREST_MENO_BOARD_ID }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          POST_TYPE: ${{ inputs.post_type }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          python -c "
+          import os, sys, json, requests, time
+          from datetime import datetime
+
+          dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
+          post_type = os.environ.get('POST_TYPE', 'both')
+
+          # Sample video URL (public Google sample video)
+          SAMPLE_VIDEO = 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'
+
+          # Brand configs with env var fallback chains
+          BRANDS = {
+              'daily_deal_darling': {
+                  'display': 'DailyDealDarling',
+                  'api_key_envs': ['LATE_API_KEY_DDD', 'LATE_API_KEY_2', 'LATE_API_KEY'],
+                  'account_id_envs': ['PINTEREST_DDD_ACCOUNT_ID', 'PINTEREST_DEALS_ACCOUNT_ID'],
+                  'board_id_envs': ['PINTEREST_DDD_BOARD_ID', 'PINTEREST_DEALS_BOARD_ID'],
+                  'link': 'https://dailydealdarling.com',
+                  'image_title': 'Top 5 Must-Have Kitchen Gadgets for 2026',
+                  'image_desc': 'These genius kitchen finds will save you time and money! Every home needs #3. Tap to see them all!\n\n#amazonfinds #kitchengadgets #deals #homedecor',
+                  'video_title': 'This Kitchen Gadget Changed My Life!',
+                  'video_desc': 'Under \$25 on Amazon with over 50,000 5-star reviews! Link in bio for the deal!\n\n#amazonfinds #kitchenhacks #deals #dailydealdarling',
+                  'image_query': 'kitchen gadgets aesthetic flat lay',
+              },
+              'fitnessmadeasy': {
+                  'display': 'FitOver35',
+                  'api_key_envs': ['LATE_API_KEY', 'LATE_API_KEY_3'],
+                  'account_id_envs': ['PINTEREST_FITNESS_ACCOUNT_ID'],
+                  'board_id_envs': ['PINTEREST_FITNESS_BOARD_ID'],
+                  'link': 'https://fitnessmadeasy.com',
+                  'image_title': '5-Minute Morning Stretch Routine',
+                  'image_desc': 'Start your day right with this simple stretch routine. No equipment needed!\n\n#fitness #morningroutine #stretching #fitover35 #homeworkout',
+                  'video_title': '5-Minute Ab Workout - No Equipment!',
+                  'video_desc': 'Quick core workout you can do anywhere! Perfect for busy mornings. Save for later!\n\n#fitness #abworkout #homeworkout #fitover35',
+                  'image_query': 'woman stretching morning exercise',
+              },
+              'menopause_planner': {
+                  'display': 'MenopausePlanner',
+                  'api_key_envs': ['LATE_API_KEY_MENO', 'LATE_API_KEY_4', 'LATE_API_KEY'],
+                  'account_id_envs': ['PINTEREST_MENO_ACCOUNT_ID', 'PINTEREST_MENOPAUSE_ACCOUNT_ID'],
+                  'board_id_envs': ['PINTEREST_MENO_BOARD_ID', 'PINTEREST_MENOPAUSE_BOARD_ID'],
+                  'link': 'https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle',
+                  'image_title': '3 Natural Ways to Beat Hot Flashes',
+                  'image_desc': 'Struggling with hot flashes? These natural remedies really work. Save this!\n\n#menopause #hotflashes #wellness #womenover50 #naturalremedies',
+                  'video_title': 'Natural Hot Flash Relief That Works',
+                  'video_desc': 'I wish I knew this sooner! No medications needed. Get the guide - link in bio!\n\n#menopause #wellness #hotflashes #perimenopause',
+                  'image_query': 'wellness herbal tea calming',
+              },
+          }
+
+          def get_first_env(env_list):
+              for env_name in env_list:
+                  val = os.environ.get(env_name, '')
+                  if val:
+                      return val, env_name
+              return '', env_list[0] if env_list else 'UNKNOWN'
+
+          def get_pexels_image(query):
+              pexels_key = os.environ.get('PEXELS_API_KEY', '')
+              if not pexels_key:
+                  return 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800'
+              resp = requests.get(
+                  'https://api.pexels.com/v1/search',
+                  headers={'Authorization': pexels_key},
+                  params={'query': query, 'per_page': 1, 'orientation': 'portrait'},
+                  timeout=10
+              )
+              if resp.status_code == 200:
+                  photos = resp.json().get('photos', [])
+                  if photos:
+                      return photos[0].get('src', {}).get('large2x', photos[0].get('src', {}).get('original', ''))
+              return 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800'
+
+          def auto_detect_account(api_key):
+              try:
+                  resp = requests.get(
+                      'https://getlate.dev/api/v1/accounts',
+                      headers={'Authorization': f'Bearer {api_key}'},
+                      timeout=15
+                  )
+                  resp.raise_for_status()
+                  accounts = resp.json()
+                  if isinstance(accounts, dict):
+                      accounts = accounts.get('accounts', accounts.get('data', []))
+                  for acct in accounts:
+                      if acct.get('platform') == 'pinterest':
+                          return acct.get('_id') or acct.get('id')
+              except:
+                  pass
+              return None
+
+          def post_pin(api_key, account_id, board_id, title, description, media_url, media_type, link):
+              content_text = f'{title}\n\n{description}'
+              platform_data = {
+                  'platform': 'pinterest',
+                  'accountId': account_id,
+                  'platformSpecificData': {'link': link}
+              }
+              if board_id:
+                  platform_data['platformSpecificData']['boardId'] = board_id
+
+              payload = {
+                  'content': content_text,
+                  'platforms': [platform_data],
+                  'mediaItems': [{'type': media_type, 'url': media_url}],
+              }
+
+              resp = requests.post(
+                  'https://getlate.dev/api/v1/posts',
+                  headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+                  json=payload,
+                  timeout=120
+              )
+
+              if resp.status_code < 400:
+                  result = resp.json()
+                  post = result.get('post', result)
+                  return {'success': True, 'post_id': post.get('_id', ''), 'status': post.get('status', '')}
+              else:
+                  return {'success': False, 'error': f'{resp.status_code}: {resp.text[:300]}'}
+
+          # Run tests
+          print('=' * 60)
+          print(f'PINTEREST POSTING TEST - {datetime.utcnow().strftime(\"%Y-%m-%d %H:%M UTC\")}')
+          print(f'Mode: {post_type} | Dry run: {dry_run}')
+          print('=' * 60)
+
+          results = []
+
+          for brand_id, cfg in BRANDS.items():
+              print(f'\n--- {cfg[\"display\"]} ({brand_id}) ---')
+
+              api_key, key_source = get_first_env(cfg['api_key_envs'])
+              account_id, acct_source = get_first_env(cfg['account_id_envs'])
+              board_id, board_source = get_first_env(cfg['board_id_envs'])
+
+              print(f'  API key: {key_source} = {api_key[:12]}...' if api_key else f'  API key: MISSING (tried {cfg[\"api_key_envs\"]})')
+              print(f'  Account: {acct_source} = {account_id}' if account_id else f'  Account: will auto-detect')
+              print(f'  Board: {board_source} = {board_id}' if board_id else f'  Board: MISSING')
+
+              if not api_key:
+                  print(f'  SKIP: No API key')
+                  results.append({'brand': brand_id, 'image': 'skipped', 'video': 'skipped', 'error': 'No API key'})
+                  continue
+
+              # Auto-detect account if needed
+              if not account_id:
+                  account_id = auto_detect_account(api_key)
+                  if account_id:
+                      print(f'  Auto-detected account: {account_id}')
+                  else:
+                      print(f'  SKIP: Could not detect Pinterest account')
+                      results.append({'brand': brand_id, 'image': 'skipped', 'video': 'skipped', 'error': 'No account ID'})
+                      continue
+
+              brand_result = {'brand': brand_id, 'image': 'skipped', 'video': 'skipped'}
+
+              if dry_run:
+                  print(f'  [DRY RUN] Config valid - would post image + video')
+                  brand_result['image'] = 'dry_run_ok'
+                  brand_result['video'] = 'dry_run_ok'
+                  results.append(brand_result)
+                  continue
+
+              # Post IMAGE pin
+              if post_type in ('both', 'image_only'):
+                  print(f'  Posting IMAGE pin: {cfg[\"image_title\"]}')
+                  image_url = get_pexels_image(cfg['image_query'])
+                  print(f'  Image URL: {image_url[:80]}...')
+                  img_result = post_pin(api_key, account_id, board_id, cfg['image_title'], cfg['image_desc'], image_url, 'image', cfg['link'])
+                  if img_result['success']:
+                      print(f'  IMAGE OK - Post ID: {img_result[\"post_id\"]} | Status: {img_result[\"status\"]}')
+                      brand_result['image'] = 'success'
+                  else:
+                      print(f'  IMAGE FAIL - {img_result[\"error\"]}')
+                      brand_result['image'] = f'failed: {img_result[\"error\"][:100]}'
+
+                  time.sleep(2)
+
+              # Post VIDEO pin
+              if post_type in ('both', 'video_only'):
+                  print(f'  Posting VIDEO pin: {cfg[\"video_title\"]}')
+                  vid_result = post_pin(api_key, account_id, board_id, cfg['video_title'], cfg['video_desc'], SAMPLE_VIDEO, 'video', cfg['link'])
+                  if vid_result['success']:
+                      print(f'  VIDEO OK - Post ID: {vid_result[\"post_id\"]} | Status: {vid_result[\"status\"]}')
+                      brand_result['video'] = 'success'
+                  else:
+                      print(f'  VIDEO FAIL - {vid_result[\"error\"]}')
+                      brand_result['video'] = f'failed: {vid_result[\"error\"][:100]}'
+
+              results.append(brand_result)
+
+          # Summary
+          print('\n' + '=' * 60)
+          print('RESULTS SUMMARY')
+          print('=' * 60)
+
+          total_image_ok = sum(1 for r in results if r['image'] == 'success')
+          total_video_ok = sum(1 for r in results if r['video'] == 'success')
+          total_brands = len(results)
+
+          for r in results:
+              img = 'OK' if r['image'] == 'success' else r['image'].upper()
+              vid = 'OK' if r['video'] == 'success' else r['video'].upper()
+              print(f'  {r[\"brand\"]}: image={img} | video={vid}')
+
+          print(f'\n  Images: {total_image_ok}/{total_brands} | Videos: {total_video_ok}/{total_brands}')
+
+          if any(r.get('error') for r in results):
+              print('\nErrors:')
+              for r in results:
+                  if r.get('error'):
+                      print(f'  {r[\"brand\"]}: {r[\"error\"]}')
+
+          # Exit with failure if anything failed (ignoring skipped)
+          posted = [r for r in results if r['image'] != 'skipped' or r['video'] != 'skipped']
+          if posted and all(
+              (r['image'] in ('success', 'skipped', 'dry_run_ok')) and
+              (r['video'] in ('success', 'skipped', 'dry_run_ok'))
+              for r in posted
+          ):
+              print('\nAll tests passed!')
+          elif not posted:
+              print('\nNo brands configured - check GitHub Secrets')
+              sys.exit(1)
+          else:
+              print('\nSome tests failed - check output above')
+              sys.exit(1)
+          "
