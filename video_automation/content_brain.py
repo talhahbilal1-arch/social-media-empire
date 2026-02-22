@@ -4,6 +4,13 @@ Generates unique, high-quality pin content using Claude API (Sonnet 4.5).
 Tracks content history in Supabase to ensure variety across topics, angles,
 visual styles, boards, and description openers.
 
+Optimized for maximum Pinterest clicks, engagement, and affiliate revenue:
+- Curiosity-gap titles using proven Pinterest formulas (40-60 chars)
+- SEO-front-loaded descriptions with emotional triggers and CTAs
+- Strategic visual style rotation prioritizing high-engagement formats
+- Natural affiliate product integration per brand niche
+- Board selection weighted toward highest-follower boards
+
 Replaces all Gemini-based content generation.
 """
 
@@ -46,20 +53,40 @@ NEVER sound like a generic fitness influencer. NEVER say 'unlock your potential'
 Be specific. Use real exercises, real foods, real numbers.""",
 
         "hook_frameworks": [
-            "The {specific} mistake that's killing your {goal} after 35",
-            "I {did_specific_thing} for {timeframe} — here's what happened to my {body_part/metric}",
-            "{Thing_A} vs {Thing_B}: which actually works for men over 35",
-            "The one {exercise/food/supplement} that changed my {result} at {age}",
-            "Stop doing {common_thing} if you're over 35 (here's what to do instead)",
-            "Why {commonly_accepted_thing} is actually {bad_outcome} after 35",
-            "{Number} {things} I wish I knew about {topic} before turning 35",
-            "My {body_part} transformation: what {timeframe} of {specific_action} actually looks like",
-            "The {time_of_day} habit that {specific_benefit} (backed by research)",
-            "I asked my doctor about {supplement/practice} at 37 — his answer surprised me",
-            "What nobody tells you about {fitness_topic} in your late 30s",
-            "The {cheap/free thing} that outperformed my ${expensive_thing} for {goal}",
-            "{Food/Exercise} is overhyped for men over 35 — here's what actually works",
-            "I tracked my {metric} for {timeframe} — the pattern was eye-opening"
+            # Curiosity gap formulas — reader MUST click to get the answer
+            "Stop {common_exercise} After 35 — Do This Instead",
+            "I Tried {specific_thing} for 30 Days — Here's What Happened",
+            "The {adjective} {food/exercise} That {result} (Most Men Don't Know)",
+            "{Number} Things That {outcome} After 35 (#{number} Surprised Me)",
+            "My Doctor Said This About {supplement} — I Wasn't Ready",
+            "The ${cheap_price} {thing} That Replaced My ${expensive_price} {other_thing}",
+            "Why {popular_thing} Is Secretly {bad_outcome} After 35",
+            "I Tracked {metric} for {timeframe} — The Results Were Shocking",
+            "The {time_of_day} Mistake Killing Your {goal} (Easy Fix)",
+            "What {specific_number}% of Men Over 35 Get Wrong About {topic}",
+            "{Thing} vs {Other_Thing} — The Winner Isn't What You Think",
+            "The One {exercise/supplement} I Refused to Try (Until Now)",
+            "I Quit {common_thing} for {timeframe} and My {metric} {result}",
+            "The Proven {timeframe} Protocol That {specific_result}",
+            "3 Signs Your {body_part} Needs This (Most Men Ignore #2)"
+        ],
+
+        # Affiliate product categories for natural integration
+        "affiliate_products": {
+            "supplements": ["creatine monohydrate", "vitamin D3", "magnesium glycinate", "fish oil", "ashwagandha", "protein powder", "collagen peptides"],
+            "workout_gear": ["resistance bands set", "adjustable dumbbells", "pull-up bar", "foam roller", "kettlebell", "yoga mat", "lifting straps"],
+            "meal_prep": ["glass meal prep containers", "food scale", "protein shaker", "air fryer", "slow cooker", "blender bottle"],
+            "recovery": ["massage gun", "cold plunge tub", "compression sleeves", "sleep mask", "blue light glasses", "sauna blanket"]
+        },
+
+        # Board priority order (highest follower count first)
+        "board_priority": [
+            "Fat Loss After 35",
+            "Workouts for Men Over 35",
+            "Meal Prep & Nutrition",
+            "Supplement Honest Reviews",
+            "Fitness Motivation",
+            "Home Gym Ideas"
         ],
 
         "topics_by_category": {
@@ -143,6 +170,11 @@ Be specific. Use real exercises, real foods, real numbers.""",
             "best exercises men over 35", "creatine over 35", "metabolism boost natural"
         ],
 
+        "hashtags": [
+            "#fitover35", "#menshealth", "#fitnessmotivation", "#workoutover35",
+            "#strengthtraining", "#musclebuilding", "#fitnessafter35", "#mensfitness"
+        ],
+
         "destination_base_url": "https://fitover35.com",
         "pinterest_boards": [
             "Workouts for Men Over 35",
@@ -165,20 +197,40 @@ NEVER sound like a sales bot. NEVER use 'amazing deal alert' or 'limited time of
 Be conversational, relatable, and helpful.""",
 
         "hook_frameworks": [
-            "This ${price} {product} replaced my ${expensive_price} {expensive_thing}",
-            "The {room} upgrade that gets the most compliments (under ${price})",
-            "I've tried {number} {product_category} — this is the one I actually kept",
-            "My most-used {category} find this {season}",
-            "{Number} {products} that look expensive but cost under ${price}",
-            "The {product} my {person} won't stop asking me about",
-            "Honest unboxing: the {product} everyone on {platform} is talking about",
-            "Why I returned {popular_product} and bought this {alternative} instead",
-            "The {product} I've repurchased {number} times (it's that good)",
-            "{Room} before and after with only ${budget} in new finds",
-            "Things I stopped buying name brand and the dupes that are better",
-            "The {season} home refresh I did for under ${budget}",
-            "What I actually use daily vs what collected dust — honest list",
-            "The {product} that solved my biggest {room/task} frustration"
+            # FOMO + curiosity gap formulas for maximum clicks
+            "This ${price} Find Replaced My ${expensive} {thing} (Not Kidding)",
+            "I Tried {number} {products} — Only This One Was Worth It",
+            "Stop Overpaying for {product} — This ${price} Dupe Is Better",
+            "The {room} Upgrade Everyone Asks Me About (Under ${price})",
+            "{Number} {products} That Look ${expensive} but Cost Under ${price}",
+            "Why I Returned the {popular_product} Everyone Loves",
+            "The ${price} {product} That Sold Out 3 Times (It's Back)",
+            "I've Repurchased This {number} Times — It's That Good",
+            "My {room} Before & After (Total Budget: ${price})",
+            "The {product} I Almost Didn't Buy — Biggest Mistake",
+            "What I Actually Use Daily vs What Collected Dust",
+            "The Viral {product} — Does It Live Up to the Hype?",
+            "{Season}'s Best Home Finds (All Under ${price})",
+            "3 Things I'll Never Buy Name Brand Again (The Dupes Win)",
+            "The {product} That Fixed My Biggest {room} Problem"
+        ],
+
+        # Affiliate product categories for natural integration
+        "affiliate_products": {
+            "kitchen": ["air fryer", "knife set", "meal prep containers", "coffee maker", "organizer bins", "cutting boards", "spice rack"],
+            "home_decor": ["throw pillows", "LED candles", "wall art frames", "curtain sets", "accent mirrors", "blanket ladders"],
+            "organization": ["closet system", "drawer dividers", "label maker", "storage bins", "shelf risers", "vacuum bags"],
+            "self_care": ["silk pillowcase", "LED face mask", "bath bombs set", "hair tools", "skincare fridge", "heated eye mask"]
+        },
+
+        # Board priority order (highest follower count first)
+        "board_priority": [
+            "Kitchen Must-Haves",
+            "Home Organization Finds",
+            "Budget Home Decor",
+            "Self Care Products Worth It",
+            "Seasonal Favorites",
+            "Gift Ideas"
         ],
 
         "topics_by_category": {
@@ -250,6 +302,11 @@ Be conversational, relatable, and helpful.""",
             "best deals home", "product review honest", "worth buying"
         ],
 
+        "hashtags": [
+            "#amazonfinds", "#homefinds", "#dealsoftheday", "#budgetfriendly",
+            "#homeorganization", "#kitchengadgets", "#selfcare", "#worthbuying"
+        ],
+
         "destination_base_url": "https://dailydealdarling.com",
         "pinterest_boards": [
             "Home Organization Finds",
@@ -273,20 +330,39 @@ NEVER be condescending. NEVER minimize symptoms. NEVER use clinical/cold languag
 This audience is going through something hard and wants to feel seen and helped.""",
 
         "hook_frameworks": [
-            "The {symptom} hack my gynecologist told me that changed everything",
-            "What finally helped my {symptom} after trying everything else",
-            "{Number} signs your {symptom} might be related to {perimenopause/menopause}",
-            "The {supplement/food/habit} that improved my {symptom} within {timeframe}",
-            "Why the usual advice for {symptom} makes it worse (and what to do instead)",
-            "I tracked my {symptoms} for {timeframe} — the pattern I found was surprising",
-            "The {time_of_day} routine that finally helped me {benefit}",
-            "What I wish someone had told me about {menopause_topic} years earlier",
-            "The difference between {perimenopause_thing} and {menopause_thing} explained simply",
-            "{Common_menopause_advice} is outdated — here's what doctors say now",
-            "My honest experience with {treatment/supplement} for {symptom}",
-            "The {free/simple} thing that helped my {symptom} more than anything expensive",
-            "How I explained {menopause_topic} to my {partner/family} (and it helped)",
-            "{Number} small changes that made the biggest difference in my {symptom}"
+            # Empathy + relief + curiosity gap formulas
+            "The {symptom} Relief My Doctor Never Mentioned (Simple Fix)",
+            "I Tried Everything for {symptom} — Only This Worked",
+            "Stop Ignoring This {symptom} Sign (It's Not What You Think)",
+            "{Number} Things That Finally Helped My {symptom}",
+            "The {supplement/food} That Changed My {symptom} in {timeframe}",
+            "What {number}% of Women Don't Know About {symptom}",
+            "Why the Usual {symptom} Advice Makes It Worse",
+            "I Tracked My Symptoms for {timeframe} — The Pattern Was Eye-Opening",
+            "The {time_of_day} Routine That Gave Me My Sleep Back",
+            "What I Wish I Knew About {topic} 5 Years Earlier",
+            "{Common_advice} Is Outdated — Here's What Doctors Say Now",
+            "The ${price} {product} That Helped More Than My ${expensive} {thing}",
+            "My Honest {timeframe} Review of {treatment} for {symptom}",
+            "3 Small Changes That Made the Biggest Difference",
+            "If Your {symptom} Started After 40 — Read This"
+        ],
+
+        # Affiliate product categories for natural integration
+        "affiliate_products": {
+            "supplements": ["black cohosh", "evening primrose oil", "magnesium glycinate", "vitamin D3", "maca root", "DIM supplement", "probiotics for women"],
+            "comfort": ["cooling pillow", "bamboo sheets", "cooling pajamas", "portable fan", "weighted blanket", "heating pad"],
+            "wellness": ["symptom tracker journal", "menopause planner", "yoga mat", "meditation app subscription", "essential oils diffuser", "acupressure mat"],
+            "skincare": ["hyaluronic acid serum", "retinol cream", "collagen powder", "SPF moisturizer", "eye cream", "body lotion for dry skin"]
+        },
+
+        # Board priority order (highest follower count first)
+        "board_priority": [
+            "Menopause Symptoms & Relief",
+            "Menopause Self Care",
+            "Hormone Balance Naturally",
+            "Menopause Nutrition & Wellness",
+            "Perimenopause Tips & Support"
         ],
 
         "topics_by_category": {
@@ -365,7 +441,12 @@ This audience is going through something hard and wants to feel seen and helped.
             "menopause nutrition", "menopause brain fog", "menopause support"
         ],
 
-        "destination_base_url": "NEEDS_LANDING_PAGE",
+        "hashtags": [
+            "#menopausesupport", "#perimenopause", "#menopauserelief", "#hormonebalance",
+            "#menopausewellness", "#hotflashrelief", "#menopausetips", "#womenover45"
+        ],
+
+        "destination_base_url": "https://menopauseplanner.netlify.app",
         "pinterest_boards": [
             "Menopause Symptoms & Relief",
             "Hormone Balance Naturally",
@@ -381,46 +462,129 @@ This audience is going through something hard and wants to feel seen and helped.
 # CONTENT GENERATION ENGINE
 # ═══════════════════════════════════════════════════════════════
 
-# Visual template styles — rotate to prevent sameness
+# Visual template styles — ordered by Pinterest engagement (highest first)
+# Bold text overlays, before/after, lists, and infographics drive the most saves and clicks
 PIN_VISUAL_STYLES = [
     {
-        "name": "bold_dark_overlay",
-        "description": "Full-width image with semi-transparent dark overlay, large white bold text centered",
-        "creatomate_template": "TEMPLATE_ID_1"
+        "name": "bold_text_overlay",
+        "description": "Full-width image with semi-transparent dark gradient overlay. LARGE white bold sans-serif title text (fills 40% of frame). Subtitle line below in smaller font. High contrast, impossible to scroll past.",
+        "creatomate_template": "TEMPLATE_ID_1",
+        "engagement_weight": 5  # Highest engagement on Pinterest
     },
     {
-        "name": "split_layout",
-        "description": "Top 60% image, bottom 40% solid color block with title. Color rotates: deep teal, warm coral, navy, sage green, dusty rose",
-        "creatomate_template": "TEMPLATE_ID_2"
+        "name": "numbered_list_teaser",
+        "description": "Shows 2-3 items from a list with clear numbers (1, 2, 3...) and a 'See all X...' teaser at bottom. Each item has a small icon or image. Creates incompleteness that demands a click.",
+        "creatomate_template": "TEMPLATE_ID_5",
+        "engagement_weight": 5  # Lists drive massive saves
     },
     {
-        "name": "minimal_number",
-        "description": "Large number or statistic takes 40% of frame, short phrase next to it, clean image background",
-        "creatomate_template": "TEMPLATE_ID_3"
+        "name": "before_after_split",
+        "description": "Vertical split or top/bottom comparison. Left or top shows 'before' (problem state), right or bottom shows 'after' (result). Clear divider line. Bold label text on each side. Dramatic visual contrast.",
+        "creatomate_template": "TEMPLATE_ID_6",
+        "engagement_weight": 4  # Before/after is highly clickable
+    },
+    {
+        "name": "infographic_stat",
+        "description": "Large bold number or statistic takes 40% of frame (e.g., '87%', '3x', '14 days'). Short impactful phrase next to it. Clean background. Data-driven authority look.",
+        "creatomate_template": "TEMPLATE_ID_3",
+        "engagement_weight": 4  # Stats build trust and saves
     },
     {
         "name": "editorial_magazine",
-        "description": "Magazine-style layout with image and text arranged like a editorial spread. Clean, sophisticated.",
-        "creatomate_template": "TEMPLATE_ID_4"
+        "description": "Magazine cover layout. Hero image with elegant text overlay. Brand color accent bar at top or bottom. Looks premium and editorial. Serif font for headline, sans-serif for subtitle.",
+        "creatomate_template": "TEMPLATE_ID_4",
+        "engagement_weight": 3
     },
     {
-        "name": "list_teaser",
-        "description": "Shows 2-3 items partially visible with 'See all X...' teaser. Implies more behind the click.",
-        "creatomate_template": "TEMPLATE_ID_5"
+        "name": "split_color_block",
+        "description": "Top 60% lifestyle image, bottom 40% solid brand-color block with title in contrasting text. Color rotates: deep teal, warm coral, navy, sage green, dusty rose. Clean and scroll-stopping.",
+        "creatomate_template": "TEMPLATE_ID_2",
+        "engagement_weight": 3
+    },
+    {
+        "name": "step_by_step",
+        "description": "3-4 numbered steps shown as a mini visual guide. Each step has an icon and short text. 'Full guide at link' footer. Tutorial format that drives clicks for the complete version.",
+        "creatomate_template": "TEMPLATE_ID_7",
+        "engagement_weight": 4  # How-to content drives clicks
     }
 ]
 
 # Description opening styles — rotate to prevent sameness
+# Each has an SEO instruction: front-load keywords in first 50 characters
 DESCRIPTION_OPENERS = [
-    "question",       # "Ever wonder why..."
-    "bold_claim",     # "This changed everything about..."
-    "statistic",      # "87% of men over 35..."
-    "personal_story", # "When I started..."
-    "myth_bust",      # "Forget what you've heard about..."
-    "confession",     # "I'll be honest — I was skeptical about..."
-    "contrast",       # "Most people do X. But the ones who get results..."
-    "time_hook"       # "In the next 30 days..."
+    "question",        # "Ever wonder why [keyword]..." — hooks curiosity
+    "bold_claim",      # "[Keyword topic] changed everything about..." — authority
+    "statistic",       # "87% of [audience keyword]..." — credibility + specificity
+    "personal_story",  # "When I started [keyword activity]..." — relatability
+    "myth_bust",       # "Forget what you heard about [keyword]..." — pattern interrupt
+    "confession",      # "I was skeptical about [keyword] until..." — authenticity
+    "contrast",        # "Most people [keyword mistake]. The ones who see results..." — intrigue
+    "time_hook",       # "In just [timeframe], [keyword benefit]..." — urgency
+    "pain_point",      # "Tired of [keyword frustration]? Here's what actually..." — empathy
+    "secret_reveal"    # "The [keyword] secret that [experts/pros] use..." — exclusivity
 ]
+
+# ═══════════════════════════════════════════════════════════════
+# TOPIC-TO-BOARD MAPPING (deterministic board selection by category)
+# ═══════════════════════════════════════════════════════════════
+
+TOPIC_TO_BOARD_MAP = {
+    "fitness": {
+        "workouts": "Workouts for Men Over 35",
+        "nutrition": "Meal Prep & Nutrition",
+        "supplements": "Supplement Honest Reviews",
+        "fat_loss": "Fat Loss After 35",
+        "lifestyle": "Fitness Motivation",
+        "_default": "Home Gym Ideas"
+    },
+    "deals": {
+        "kitchen": "Kitchen Must-Haves",
+        "home_decor": "Budget Home Decor",
+        "organization": "Home Organization Finds",
+        "self_care": "Self Care Products Worth It",
+        "seasonal": "Seasonal Favorites",
+        "_default": "Gift Ideas"
+    },
+    "menopause": {
+        "symptoms": "Menopause Symptoms & Relief",
+        "nutrition": "Menopause Nutrition & Wellness",
+        "wellness": "Menopause Self Care",
+        "planning": "Perimenopause Tips & Support",
+        "mental_health": "Hormone Balance Naturally",
+        "_default": "Menopause Symptoms & Relief"
+    }
+}
+
+
+def _get_board_for_topic(brand_key, category):
+    """Get the best board for a given topic category.
+
+    Uses deterministic mapping by category, but when a category maps to
+    a lower-priority board, occasionally promotes to a higher-follower
+    board if the content is relevant. Board priority lists are ordered
+    by follower count (highest first).
+    """
+    brand_map = TOPIC_TO_BOARD_MAP.get(brand_key, {})
+    return brand_map.get(category, brand_map.get('_default', BRAND_CONFIGS[brand_key]['pinterest_boards'][0]))
+
+
+def _select_visual_style_weighted(recent_styles):
+    """Select a visual style weighted by engagement, avoiding recent repeats.
+
+    Higher engagement_weight styles are selected more often but still rotate
+    to prevent feed fatigue.
+    """
+    available = [s for s in PIN_VISUAL_STYLES if s['name'] not in recent_styles]
+    if not available:
+        available = PIN_VISUAL_STYLES
+
+    # Build weighted pool: each style appears N times based on engagement_weight
+    weighted_pool = []
+    for style in available:
+        weight = style.get('engagement_weight', 3)
+        weighted_pool.extend([style] * weight)
+
+    return random.choice(weighted_pool)
 
 
 def generate_pin_content(brand_key, supabase_client):
@@ -443,15 +607,15 @@ def generate_pin_content(brand_key, supabase_client):
     except Exception:
         recent_data = []
 
-    recent_topics = [r.get('topic', '') for r in recent_data[:10]]
+    recent_topics = [r.get('topic', '') for r in recent_data[:25]]
     recent_angles = [r.get('angle_framework', '') for r in recent_data[:5]]
     recent_styles = [r.get('visual_style', '') for r in recent_data[:4]]
     recent_boards = [r.get('board', '') for r in recent_data[:3]]
     recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
-    recent_image_queries = [r.get('image_query', '') for r in recent_data[:15]]
+    recent_image_queries = [r.get('image_query', '') for r in recent_data[:25]]
     recent_titles = [r.get('title', '') for r in recent_data[:20]]
 
-    # ── Step 2: Select topic (not used in last 10 pins) ──
+    # ── Step 2: Select topic (not used in last 25 pins) ──
     all_topics = []
     for category, topics in config['topics_by_category'].items():
         for topic in topics:
@@ -469,17 +633,11 @@ def generate_pin_content(brand_key, supabase_client):
         available_angles = config['hook_frameworks']
     selected_angle = random.choice(available_angles)
 
-    # ── Step 4: Select visual style (not used in last 4 pins) ──
-    available_styles = [s for s in PIN_VISUAL_STYLES if s['name'] not in recent_styles]
-    if not available_styles:
-        available_styles = PIN_VISUAL_STYLES
-    selected_style = random.choice(available_styles)
+    # ── Step 4: Select visual style (weighted by engagement, avoid last 4) ──
+    selected_style = _select_visual_style_weighted(recent_styles)
 
-    # ── Step 5: Select board (not used in last 3 pins) ──
-    available_boards = [b for b in config['pinterest_boards'] if b not in recent_boards]
-    if not available_boards:
-        available_boards = config['pinterest_boards']
-    selected_board = random.choice(available_boards)
+    # ── Step 5: Select board (deterministic mapping by topic category) ──
+    selected_board = _get_board_for_topic(brand_key, selected_topic['category'])
 
     # ── Step 6: Select description opener (not used in last 5 pins) ──
     available_openers = [o for o in DESCRIPTION_OPENERS if o not in recent_openers]
@@ -490,62 +648,118 @@ def generate_pin_content(brand_key, supabase_client):
     # ── Step 7: Select SEO keywords (pick 4-5 random ones) ──
     selected_keywords = random.sample(config['seo_keywords'], min(5, len(config['seo_keywords'])))
 
+    # ── Step 7b: Get brand hashtags ──
+    brand_hashtags = config.get('hashtags', [])
+    selected_hashtags = random.sample(brand_hashtags, min(6, len(brand_hashtags))) if brand_hashtags else []
+
+    # ── Step 7c: Get affiliate products relevant to this topic's category ──
+    affiliate_products = config.get('affiliate_products', {})
+    category_products = affiliate_products.get(selected_topic['category'], [])
+    # Also pull from a random related category for variety
+    all_product_cats = list(affiliate_products.keys())
+    if all_product_cats:
+        bonus_cat = random.choice(all_product_cats)
+        category_products = category_products + affiliate_products.get(bonus_cat, [])[:2]
+
     # ── Step 8: Call Claude to generate the content ──
     prompt = f"""You are creating a Pinterest pin for the brand "{config['name']}".
+Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 
-YOUR VOICE/PERSONA:
+═══ YOUR VOICE/PERSONA ═══
 {config['voice']}
 
-TODAY'S TOPIC: {selected_topic['topic']} (category: {selected_topic['category']})
+═══ TODAY'S TOPIC ═══
+{selected_topic['topic']} (category: {selected_topic['category']})
 
-HOOK FRAMEWORK TO USE (adapt creatively, don't copy the template literally):
+═══ HOOK FRAMEWORK ═══
+Adapt this framework creatively (do NOT copy it word-for-word):
 {selected_angle}
 
-DESCRIPTION MUST OPEN WITH THIS STYLE: {selected_opener}
-- "question" = Start with a question that hooks the reader
-- "bold_claim" = Start with a confident, specific claim
-- "statistic" = Start with a number or percentage (can be approximate/general)
-- "personal_story" = Start with "I" or "When I" sharing brief personal experience
-- "myth_bust" = Start by challenging a common belief
-- "confession" = Start with honest admission of skepticism or surprise
-- "contrast" = Start by contrasting what most people do vs what works
-- "time_hook" = Start with a timeframe that creates urgency
+═══ TITLE RULES (CRITICAL — this determines if anyone clicks) ═══
+Your title MUST be a LISTICLE with the number 5:
+- Format: "5 [Things/Ways/Secrets/Signs/Mistakes] That [Outcome]"
+- Be 40-60 characters (optimal Pinterest display length, HARD LIMIT 70 chars)
+- Create an irresistible CURIOSITY GAP — the reader MUST click to get all 5
+- Use ONE of these proven listicle patterns:
+  * "5 Things That [Outcome] (#3 Surprised Me)"
+  * "5 [Topic] Mistakes You're Making After 35"
+  * "5 Proven [Things] for [Outcome] (Most People Miss #4)"
+  * "5 [Adjective] [Things] That Actually [Result]"
+  * "5 Signs Your [Thing] Needs This (Don't Ignore #2)"
+- Include at least ONE power word: secret, proven, simple, essential, surprising, honest, finally, actually
+- NEVER be generic. NEVER give away all the answers in the title.
 
-SEO KEYWORDS TO NATURALLY INCLUDE (use 3-5 in description):
-{', '.join(selected_keywords)}
+═══ DESCRIPTION RULES (SEO + click-through) ═══
+Opening style: {selected_opener}
+- "question" = Hook with a question about [keyword topic]
+- "bold_claim" = Confident specific claim starting with [keyword]
+- "statistic" = Number/percentage about [keyword audience]
+- "personal_story" = "I" / "When I" + [keyword activity]
+- "myth_bust" = Challenge a common belief about [keyword]
+- "confession" = Honest skepticism about [keyword] until...
+- "contrast" = Most people [keyword mistake] vs what works
+- "time_hook" = "[Timeframe] + [keyword benefit]" urgency
+- "pain_point" = "Tired of [keyword frustration]? Here's what actually..."
+- "secret_reveal" = "The [keyword] secret that [pros] use..."
 
-VISUAL STYLE FOR THIS PIN: {selected_style['name']} — {selected_style['description']}
+DESCRIPTION REQUIREMENTS:
+1. FIRST 50 CHARACTERS must contain your primary SEO keyword (front-load for search)
+2. Total length: 150-300 characters (before hashtags)
+3. Weave in 3-5 of these keywords naturally: {', '.join(selected_keywords)}
+4. Include an EMOTIONAL TRIGGER relevant to the audience:
+   - Fitness: urgency about health, pride in transformation, fear of wasted effort
+   - Deals: FOMO on savings, satisfaction of smart buying, joy of a great find
+   - Menopause: validation and relief, hope for improvement, "you're not alone"
+5. End with a compelling CTA: "Click for the full guide" / "Save this — you'll need it" / "Full breakdown at the link"
+6. After the CTA, on a NEW LINE, append 5-8 hashtags: {' '.join(selected_hashtags)}
+7. If a product naturally fits, mention its BENEFIT (not just the name): "the cooling pillow that actually stopped my night sweats" not "cooling pillow"
 
-RECENTLY USED TITLES (your title MUST be completely different from all of these):
+═══ AFFILIATE PRODUCT INTEGRATION ═══
+If the topic naturally relates to any of these products, weave ONE into the description with a benefit-driven mention.
+Do NOT force it — only include if genuinely relevant to the topic.
+Available products for this brand: {', '.join(category_products) if category_products else 'none for this category'}
+GOOD example: "This $15 foam roller fixed my hip pain better than 3 PT sessions"
+BAD example: "Check out this foam roller"
+
+═══ VISUAL STYLE ═══
+{selected_style['name']} — {selected_style['description']}
+
+═══ RECENTLY USED (yours MUST be completely different) ═══
+Recent titles:
 {chr(10).join(recent_titles[:10]) if recent_titles else 'None yet'}
 
-RECENTLY USED IMAGE QUERIES (your image query MUST be different):
+Recent image queries:
 {chr(10).join(recent_image_queries[:10]) if recent_image_queries else 'None yet'}
 
-RULES:
-1. Title MUST create a curiosity gap — viewer NEEDS to click to get the answer
-2. Title must be under 100 characters
-3. NEVER give away the complete answer in the pin title or description
-4. Description must be 150-300 characters, conversational, with keywords woven in naturally
-5. Description must end with a soft CTA (not "BUY NOW" — more like "Full guide at the link" or "More at fitover35.com")
-6. Image search query must be SPECIFIC and DETAILED — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic lighting"
-7. Image query should match this pin's specific topic, not be generic
-8. Text overlay should be 3-8 words max, large readable font, that captures the pin's core hook
-9. EVERYTHING must feel written by a real human, not an AI content mill
-10. NO generic phrases: "unlock", "transform", "game-changer", "must-have", "you won't believe"
+═══ 5 TIPS (CRITICAL — these appear as numbered items ON the pin image) ═══
+Generate EXACTLY 5 tips/items related to the topic. These are displayed as a numbered list on the pin.
+Each tip MUST be:
+- 6-12 words max (must fit on one line of a pin image)
+- Specific and actionable (not vague platitudes)
+- Teasing — give enough to intrigue but not the full answer (the article has the details)
+- Each tip should cover a DIFFERENT angle/aspect of the topic
+
+═══ IMAGE + OVERLAY RULES ═══
+- Image search query: SPECIFIC and VIVID — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic side lighting"
+- Query must match THIS topic specifically, not be generic stock photo terms
+- For Fitness Made Easy: image query MUST feature men/male subjects. Include "man", "male", or "guy" in the query. NEVER use gender-neutral terms that could return female images.
+- Alt text: brief accessible description for screen readers
+
+═══ BANNED PHRASES ═══
+Never use: "unlock", "transform your", "game-changer", "must-have", "you won't believe", "amazing", "incredible", "life-changing", "revolutionary", "ultimate guide"
 
 OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
 {{
     "title": "...",
     "description": "...",
     "image_search_query": "...",
-    "text_overlay": "...",
-    "alt_text": "Brief accessible description of what the pin image should show"
+    "tips": ["tip 1 text", "tip 2 text", "tip 3 text", "tip 4 text", "tip 5 text"],
+    "alt_text": "..."
 }}"""
 
     response = _get_client().messages.create(
         model="claude-sonnet-4-5-20250929",
-        max_tokens=800,
+        max_tokens=1000,
         messages=[{"role": "user", "content": prompt}]
     )
 
@@ -598,6 +812,192 @@ def log_pin_to_history(pin_data, supabase_client):
         }).execute()
     except Exception as e:
         logger.error(f"Failed to log pin to history: {e}")
+
+
+def generate_pin_from_daily_trend(brand_key, run_index, supabase_client):
+    """Generate a pin based on today's daily trending topics.
+
+    The daily_trend_scout runs at 6 AM PST and stores 3 ranked topics per brand.
+    Topic distribution: run 0→#1, run 1→#2, run 2→#3, run 3→#1, run 4→#2
+    (Topic #1 gets 2 pins/day, Topic #2 gets 2, Topic #3 gets 1.)
+
+    Returns pin_data dict or None if no daily trends exist.
+    """
+    today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    config = BRAND_CONFIGS[brand_key]
+
+    # Query today's trends
+    try:
+        result = supabase_client.table('daily_trending') \
+            .select('topics') \
+            .eq('brand', brand_key) \
+            .eq('trend_date', today_str) \
+            .limit(1) \
+            .execute()
+    except Exception as e:
+        logger.warning(f"Could not query daily_trending: {e}")
+        return None
+
+    if not result.data:
+        print(f"  No daily trends for {brand_key} on {today_str}")
+        return None
+
+    raw = result.data[0]['topics']
+    topics = json.loads(raw) if isinstance(raw, str) else raw
+
+    if not topics:
+        return None
+
+    # Map run_index to topic: 0→#1, 1→#2, 2→#3, 3→#1, 4→#2
+    topic_index = run_index % len(topics)
+    selected_trend = topics[topic_index]
+    print(f"  Using daily trend #{selected_trend.get('rank', topic_index+1)}: {selected_trend['topic']}")
+
+    # Get recent pins for uniqueness check
+    try:
+        recent = supabase_client.table('content_history') \
+            .select('title, description, image_query, visual_style, description_opener') \
+            .eq('brand', brand_key) \
+            .order('created_at', desc=True) \
+            .limit(20) \
+            .execute()
+        recent_data = recent.data or []
+    except Exception:
+        recent_data = []
+
+    recent_titles = [r.get('title', '') for r in recent_data]
+    recent_styles = [r.get('visual_style', '') for r in recent_data[:4]]
+    recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
+
+    # Select visual style
+    selected_style = _select_visual_style_weighted(recent_styles)
+
+    # Select SEO keywords
+    selected_keywords = random.sample(config['seo_keywords'], min(5, len(config['seo_keywords'])))
+
+    # Select hashtags
+    brand_hashtags = config.get('hashtags', [])
+    selected_hashtags = random.sample(brand_hashtags, min(6, len(brand_hashtags))) if brand_hashtags else []
+
+    # Select description opener (rotate)
+    available_openers = [o for o in DESCRIPTION_OPENERS if o not in recent_openers]
+    if not available_openers:
+        available_openers = DESCRIPTION_OPENERS
+    selected_opener = random.choice(available_openers)
+
+    # Board from trend data, fall back to brand default
+    selected_board = selected_trend.get('board', config['pinterest_boards'][0])
+
+    # Affiliate products from trend data or brand config
+    trend_products = selected_trend.get('affiliate_products', [])
+    if not trend_products:
+        all_products = []
+        for cat_products in config.get('affiliate_products', {}).values():
+            all_products.extend(cat_products)
+        trend_products = random.sample(all_products, min(5, len(all_products))) if all_products else []
+
+    prompt = f"""You are creating a Pinterest pin for "{config['name']}".
+Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
+
+═══ YOUR VOICE ═══
+{config['voice']}
+
+═══ TODAY'S TRENDING TOPIC ═══
+Topic: {selected_trend['topic']}
+Why it's trending: {selected_trend.get('why_trending', 'Currently popular in this niche')}
+Content angle: {selected_trend.get('content_angle', 'Create engaging visual content about this trend')}
+Target board: {selected_board}
+
+═══ TITLE RULES (CRITICAL — determines if anyone clicks) ═══
+Your title MUST be a LISTICLE with the number 5:
+- Format: "5 [Things/Ways/Secrets/Signs/Mistakes] That [Outcome]"
+- MUST be 40-60 characters (optimal Pinterest display, HARD LIMIT 70 chars)
+- MUST create an irresistible CURIOSITY GAP — reader cannot resist clicking
+- Use ONE proven listicle pattern:
+  * "5 Things That [Outcome] (#3 Surprised Me)"
+  * "5 [Topic] Mistakes You're Making After 35"
+  * "5 Proven [Things] for [Outcome] (Most People Miss #4)"
+  * "5 Signs Your [Thing] Needs This (Don't Ignore #2)"
+- Include a power word: secret, proven, simple, essential, surprising, honest, finally, actually
+- NEVER generic. NEVER give away all the answers in the title.
+
+═══ DESCRIPTION RULES ═══
+Opening style: {selected_opener}
+Requirements:
+1. FIRST 50 CHARACTERS must contain primary SEO keyword
+2. Length: 150-300 chars before hashtags
+3. Include 3-5 keywords: {', '.join(selected_keywords)}
+4. Include EMOTIONAL TRIGGER for this audience
+5. End with CTA: "Click for the full guide" / "Save this" / "Full breakdown at the link"
+6. NEW LINE after CTA with 5-8 hashtags: {' '.join(selected_hashtags)}
+7. If a product fits, mention its BENEFIT not just its name
+
+═══ AFFILIATE PRODUCTS (only if naturally relevant) ═══
+{', '.join(trend_products) if trend_products else 'none available'}
+
+═══ VISUAL STYLE ═══
+{selected_style['name']} — {selected_style['description']}
+
+═══ RECENTLY USED TITLES (yours must be completely different) ═══
+{chr(10).join(recent_titles[:10]) if recent_titles else 'None yet'}
+
+═══ BANNED PHRASES ═══
+Never use: "unlock", "transform your", "game-changer", "must-have", "you won't believe", "amazing", "incredible", "life-changing", "revolutionary", "ultimate guide"
+
+═══ 5 TIPS (CRITICAL — numbered items ON the pin image) ═══
+Generate EXACTLY 5 tips/items about the trending topic.
+Each tip MUST be:
+- 6-12 words max (must fit on one line of a pin image)
+- Specific and actionable (not vague platitudes)
+- Each tip covers a DIFFERENT angle/aspect
+
+═══ IMAGE + OVERLAY ═══
+- Image query: SPECIFIC and VIVID (not generic stock terms)
+- For Fitness Made Easy: MUST feature men/male subjects. Include "man", "male", or "guy".
+- Alt text: brief accessible description
+
+OUTPUT ONLY THIS JSON:
+{{
+    "title": "...",
+    "description": "...",
+    "image_search_query": "...",
+    "tips": ["tip 1", "tip 2", "tip 3", "tip 4", "tip 5"],
+    "alt_text": "..."
+}}"""
+
+    response = _get_client().messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=1000,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    content = response.content[0].text.strip()
+
+    try:
+        pin_data = json.loads(content)
+    except json.JSONDecodeError:
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        if json_match:
+            pin_data = json.loads(json_match.group())
+        else:
+            logger.error(f"Daily trend pin parse error: {content[:200]}")
+            return None
+
+    # Add metadata
+    pin_data['brand'] = brand_key
+    pin_data['topic'] = selected_trend['topic']
+    pin_data['trending_topic'] = selected_trend['topic']
+    pin_data['category'] = 'daily_trending'
+    pin_data['angle_framework'] = f"Daily Trend #{selected_trend.get('rank', topic_index+1)}"
+    pin_data['visual_style'] = selected_style['name']
+    pin_data['creatomate_template'] = selected_style['creatomate_template']
+    pin_data['board'] = selected_board
+    pin_data['description_opener'] = selected_opener
+    pin_data['destination_url'] = config['destination_base_url']
+    pin_data['keywords_used'] = selected_keywords
+    pin_data['daily_trend'] = True
+
+    return pin_data
 
 
 def generate_pin_from_calendar(brand_key, supabase_client):
@@ -681,15 +1081,16 @@ def generate_pin_from_calendar(brand_key, supabase_client):
 
     recent_titles = [r.get('title', '') for r in recent_data]
 
-    # Select visual style (rotate)
+    # Select visual style (weighted by engagement, rotate to avoid repeats)
     recent_styles = [r.get('visual_style', '') for r in recent_data[:4]]
-    available_styles = [s for s in PIN_VISUAL_STYLES if s['name'] not in recent_styles]
-    if not available_styles:
-        available_styles = PIN_VISUAL_STYLES
-    selected_style = random.choice(available_styles)
+    selected_style = _select_visual_style_weighted(recent_styles)
 
     # Select SEO keywords
     selected_keywords = random.sample(config['seo_keywords'], min(5, len(config['seo_keywords'])))
+
+    # Select hashtags
+    brand_hashtags = config.get('hashtags', [])
+    selected_hashtags = random.sample(brand_hashtags, min(6, len(brand_hashtags))) if brand_hashtags else []
 
     # Select description opener (rotate)
     recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
@@ -698,48 +1099,104 @@ def generate_pin_from_calendar(brand_key, supabase_client):
         available_openers = DESCRIPTION_OPENERS
     selected_opener = random.choice(available_openers)
 
+    # Get affiliate products for this brand
+    affiliate_products = config.get('affiliate_products', {})
+    all_products = []
+    for cat_products in affiliate_products.values():
+        all_products.extend(cat_products)
+    sample_products = random.sample(all_products, min(5, len(all_products))) if all_products else []
+
     # Call Claude with the specific calendar assignment
     prompt = f"""You are creating a Pinterest pin for "{config['name']}".
+Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 
-YOUR VOICE: {config['voice']}
+═══ YOUR VOICE ═══
+{config['voice']}
 
-THIS PIN'S ASSIGNMENT FROM THE WEEKLY CALENDAR:
+═══ CALENDAR ASSIGNMENT ═══
 - Trending Topic: {pin_assignment.get('trending_topic', 'general')}
 - Suggested Title: {pin_assignment.get('title', 'create your own')}
 - Description Concept: {pin_assignment.get('description_concept', '')}
 - Pin Type: {pin_assignment.get('pin_type', 'static_image')}
 - Target Board: {pin_assignment.get('board', config['pinterest_boards'][0])}
 
-The suggested title is a starting point. Improve it or create a different angle on the same trending topic. It must create a curiosity gap.
+The suggested title is a STARTING POINT. You MUST improve it using the title rules below.
 
-DESCRIPTION MUST OPEN WITH THIS STYLE: {selected_opener}
-VISUAL STYLE FOR THIS PIN: {selected_style['name']} — {selected_style['description']}
-SEO KEYWORDS TO INCLUDE (3-5 naturally): {', '.join(selected_keywords)}
-DESTINATION URL: {destination_url}
+═══ TITLE RULES (CRITICAL — determines if anyone clicks) ═══
+Your title MUST be a LISTICLE with the number 5:
+- Format: "5 [Things/Ways/Secrets/Signs/Mistakes] That [Outcome]"
+- MUST be 40-60 characters (optimal Pinterest display, HARD LIMIT 70 chars)
+- MUST create an irresistible CURIOSITY GAP — reader cannot resist clicking
+- Use ONE proven listicle pattern:
+  * "5 Things That [Outcome] (#3 Surprised Me)"
+  * "5 [Topic] Mistakes You're Making After 35"
+  * "5 Proven [Things] for [Outcome] (Most People Miss #4)"
+  * "5 Signs Your [Thing] Needs This (Don't Ignore #2)"
+- Include a power word: secret, proven, simple, essential, surprising, honest, finally, actually
+- NEVER generic. NEVER give away all the answers in the title.
 
-RECENTLY USED TITLES (yours must be completely different):
+═══ DESCRIPTION RULES ═══
+Opening style: {selected_opener}
+- "question" = Hook with question about [keyword]
+- "bold_claim" = Confident claim starting with [keyword]
+- "statistic" = Number about [keyword audience]
+- "personal_story" = "I/When I" + [keyword]
+- "myth_bust" = Challenge belief about [keyword]
+- "confession" = Honest skepticism about [keyword]
+- "contrast" = Most people [keyword mistake] vs what works
+- "time_hook" = "[Timeframe] + [keyword benefit]"
+- "pain_point" = "Tired of [keyword frustration]?"
+- "secret_reveal" = "The [keyword] secret that [pros] use"
+
+Requirements:
+1. FIRST 50 CHARACTERS must contain primary SEO keyword
+2. Length: 150-300 chars before hashtags
+3. Include 3-5 keywords: {', '.join(selected_keywords)}
+4. Include EMOTIONAL TRIGGER for this audience (urgency, FOMO, relief, validation)
+5. End with CTA: "Click for the full guide" / "Save this" / "Full breakdown at the link"
+6. NEW LINE after CTA with 5-8 hashtags: {' '.join(selected_hashtags)}
+7. If a product fits, mention its BENEFIT not just its name
+
+═══ AFFILIATE PRODUCTS (only if naturally relevant) ═══
+{', '.join(sample_products) if sample_products else 'none available'}
+
+═══ VISUAL STYLE ═══
+{selected_style['name']} — {selected_style['description']}
+
+═══ DESTINATION URL ═══
+{destination_url}
+
+═══ RECENTLY USED TITLES (yours must be completely different) ═══
 {chr(10).join(recent_titles[:10]) if recent_titles else 'None yet'}
 
-RULES:
-1. Title creates a CURIOSITY GAP — viewer must click to get the answer (max 100 chars)
-2. Description is 150-300 chars, conversational, keyword-rich, ends with soft CTA
-3. Image search query is SPECIFIC and DETAILED (not generic stock photo terms)
-4. Text overlay is 3-8 words, large readable font
-5. Everything must feel human-written, not AI-generated
-6. NO generic phrases: "unlock", "transform", "game-changer", "must-have"
+═══ BANNED PHRASES ═══
+Never use: "unlock", "transform your", "game-changer", "must-have", "you won't believe", "amazing", "incredible", "life-changing", "revolutionary", "ultimate guide"
+
+═══ 5 TIPS (CRITICAL — these appear as numbered items ON the pin image) ═══
+Generate EXACTLY 5 tips/items related to the topic. These are displayed as a numbered list on the pin.
+Each tip MUST be:
+- 6-12 words max (must fit on one line of a pin image)
+- Specific and actionable (not vague platitudes)
+- Teasing — give enough to intrigue but not the full answer (the article has the details)
+- Each tip should cover a DIFFERENT angle/aspect of the topic
+
+═══ IMAGE + OVERLAY ═══
+- Image query: SPECIFIC and VIVID (not generic stock terms)
+- For Fitness Made Easy: image query MUST feature men/male subjects. Include "man", "male", or "guy" in the query. NEVER use gender-neutral terms that could return female images.
+- Alt text: brief accessible description
 
 OUTPUT ONLY THIS JSON:
 {{
     "title": "...",
     "description": "...",
     "image_search_query": "...",
-    "text_overlay": "...",
+    "tips": ["tip 1 text", "tip 2 text", "tip 3 text", "tip 4 text", "tip 5 text"],
     "alt_text": "..."
 }}"""
 
     response = _get_client().messages.create(
         model="claude-sonnet-4-5-20250929",
-        max_tokens=800,
+        max_tokens=1000,
         messages=[{"role": "user", "content": prompt}]
     )
 
@@ -772,16 +1229,29 @@ OUTPUT ONLY THIS JSON:
     return pin_data
 
 
-def build_destination_url(base_url, brand, posting_method, campaign="pins"):
-    """Build destination URL with UTM tracking parameters."""
+def build_destination_url(base_url, brand, posting_method, campaign="pins",
+                         topic_slug="", board_name=""):
+    """Build destination URL with UTM tracking parameters.
+
+    Includes topic_slug in utm_content for pin-level tracking and
+    utm_term with board_name for board-level analytics.
+    """
     if base_url == "NEEDS_LANDING_PAGE":
-        base_url = "https://linktr.ee/menopauseplanner"
+        base_url = "https://menopauseplanner.netlify.app"
 
     separator = '&' if '?' in base_url else '?'
-    return (
+    # Include topic slug in utm_content for pin-level tracking
+    date_str = datetime.now(timezone.utc).strftime('%Y%m%d')
+    utm_content = f"{topic_slug}_{date_str}" if topic_slug else date_str
+    # Sanitize board name for URL
+    utm_term = board_name.lower().replace(' ', '-').replace('&', 'and') if board_name else ''
+    url = (
         f"{base_url}{separator}"
         f"utm_source=pinterest&"
         f"utm_medium={posting_method}&"
         f"utm_campaign={brand}_{campaign}&"
-        f"utm_content={datetime.now(timezone.utc).strftime('%Y%m%d')}"
+        f"utm_content={utm_content}"
     )
+    if utm_term:
+        url += f"&utm_term={utm_term}"
+    return url

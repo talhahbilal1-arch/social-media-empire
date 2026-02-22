@@ -2,10 +2,12 @@ name: Content Engine
 
 on:
   schedule:
-    # 3 runs per day — multi_platform_poster schedule
-    - cron: '0 14 * * *'  # 14:00 UTC / 6 AM PST
-    - cron: '0 19 * * *'  # 19:00 UTC / 11 AM PST
-    - cron: '0 0 * * *'   # 00:00 UTC / 4 PM PST
+    # 5 runs per day — staggered for Pinterest optimal times (PST)
+    - cron: '0 15 * * *'  # 7 AM PST
+    - cron: '0 18 * * *'  # 10 AM PST
+    - cron: '0 21 * * *'  # 1 PM PST
+    - cron: '0 1 * * *'   # 5 PM PST (next day UTC)
+    - cron: '0 4 * * *'   # 8 PM PST (next day UTC)
   workflow_dispatch:
     inputs:
       brand:
@@ -18,17 +20,22 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
 env:
   PYTHON_VERSION: '3.11'
 
 jobs:
   generate-and-post:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -41,31 +48,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Determine posting slot
-        id: slot
-        run: |
-          # Determine which slot this is based on cron schedule (14:00, 19:00, 00:00 UTC)
-          HOUR=$(date -u +%H)
-          if [ "$HOUR" -ge "13" ] && [ "$HOUR" -le "15" ]; then
-            SLOT="morning"
-            BRANDS="fitness,deals,menopause"
-          elif [ "$HOUR" -ge "18" ] && [ "$HOUR" -le "20" ]; then
-            SLOT="afternoon"
-            BRANDS="fitness,deals"
-          else
-            SLOT="evening"
-            BRANDS="fitness,menopause"
-          fi
-
-          # Override if manual brand specified
-          if [ -n "${{ github.event.inputs.brand }}" ]; then
-            BRANDS="${{ github.event.inputs.brand }}"
-          fi
-
-          echo "slot=$SLOT" >> $GITHUB_OUTPUT
-          echo "brands=$BRANDS" >> $GITHUB_OUTPUT
-          echo "Slot: $SLOT | Brands: $BRANDS"
-
       - name: Generate and post pins
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -73,244 +55,487 @@ jobs:
           CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
-          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
-          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           PINTEREST_FITNESS_ACCOUNT_ID: ${{ secrets.PINTEREST_FITNESS_ACCOUNT_ID }}
-          PINTEREST_FITNESS_BOARD_ID: ${{ secrets.PINTEREST_FITNESS_BOARD_ID }}
           PINTEREST_DEALS_ACCOUNT_ID: ${{ secrets.PINTEREST_DEALS_ACCOUNT_ID }}
-          PINTEREST_DEALS_BOARD_ID: ${{ secrets.PINTEREST_DEALS_BOARD_ID }}
           PINTEREST_MENOPAUSE_ACCOUNT_ID: ${{ secrets.PINTEREST_MENOPAUSE_ACCOUNT_ID }}
+          PINTEREST_FITNESS_BOARD_ID: ${{ secrets.PINTEREST_FITNESS_BOARD_ID }}
+          PINTEREST_DEALS_BOARD_ID: ${{ secrets.PINTEREST_DEALS_BOARD_ID }}
           PINTEREST_MENOPAUSE_BOARD_ID: ${{ secrets.PINTEREST_MENOPAUSE_BOARD_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
-          python -c "
+          python3 << 'PYEOF'
           import os
           import sys
           import json
           import requests
-          from datetime import datetime
+          import subprocess
+          import time
+          from datetime import datetime, timezone
 
           sys.path.insert(0, '.')
-          from video_automation.content_brain import generate_pin_content, generate_pin_from_calendar, log_pin_to_history
+          from video_automation.content_brain import (
+              generate_pin_content, generate_pin_from_calendar,
+              generate_pin_from_daily_trend,
+              log_pin_to_history, build_destination_url
+          )
           from video_automation.image_selector import get_unique_pexels_image
+          from video_automation.pin_image_generator import render_pin_to_bytes, map_visual_style
+          from video_automation.supabase_storage import upload_pin_image
+          from video_automation.pinterest_boards import get_board_id
+          from video_automation.pin_article_generator import (
+              generate_article_for_pin, article_to_html, save_and_register_article
+          )
 
           dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
-          brands = os.environ.get('BRANDS', '${{ steps.slot.outputs.brands }}').split(',')
-          slot = '${{ steps.slot.outputs.slot }}'
+
+          # Override brand if specified, else all 3 brands every run (1 pin each = 15/day)
+          manual_brand = os.environ.get('BRAND', '${{ github.event.inputs.brand }}').strip()
+          if manual_brand and manual_brand != '':
+              brands = [b.strip() for b in manual_brand.split(',')]
+          else:
+              brands = ['fitness', 'deals', 'menopause']
 
           # Initialize Supabase
           from database.supabase_client import get_supabase_client
           db = get_supabase_client()
 
-          results = []
+          def post_to_make_webhook(webhook_url, payload, brand_name, max_retries=2):
+              """Post to Make.com webhook with retry logic."""
+              for attempt in range(1, max_retries + 1):
+                  try:
+                      resp = requests.post(webhook_url, json=payload, timeout=30)
+                      if resp.status_code < 400:
+                          return True, f'{resp.status_code}'
+                      error_msg = f'HTTP {resp.status_code}: {resp.text[:300]}'
+                      print(f'  Make.com attempt {attempt}/{max_retries} failed for {brand_name}: {error_msg}')
+                  except requests.exceptions.RequestException as req_err:
+                      error_msg = str(req_err)
+                      print(f'  Make.com attempt {attempt}/{max_retries} request error for {brand_name}: {error_msg}')
+
+                  if attempt < max_retries:
+                      print(f'  Waiting 60s before retry...')
+                      time.sleep(60)
+
+              return False, error_msg
+
+          def post_via_late_api(brand, pin_data, image_url):
+              """Post to Pinterest via Late API. Returns (success, post_id_or_error)."""
+              BRAND_LATE_CONFIG = {
+                  'fitness': {
+                      'api_key_envs': ['LATE_API_KEY', 'LATE_API_KEY_3'],
+                      'account_id_env': 'PINTEREST_FITNESS_ACCOUNT_ID',
+                      'board_id_env': 'PINTEREST_FITNESS_BOARD_ID',
+                  },
+                  'deals': {
+                      'api_key_envs': ['LATE_API_KEY_2', 'LATE_API_KEY'],
+                      'account_id_env': 'PINTEREST_DEALS_ACCOUNT_ID',
+                      'board_id_env': 'PINTEREST_DEALS_BOARD_ID',
+                  },
+                  'menopause': {
+                      'api_key_envs': ['LATE_API_KEY_4', 'LATE_API_KEY'],
+                      'account_id_env': 'PINTEREST_MENOPAUSE_ACCOUNT_ID',
+                      'board_id_env': 'PINTEREST_MENOPAUSE_BOARD_ID',
+                  },
+              }
+              cfg = BRAND_LATE_CONFIG.get(brand)
+              if not cfg:
+                  return False, f'No Late API config for brand {brand}'
+
+              # Find a working API key
+              late_key = None
+              for key_env in cfg['api_key_envs']:
+                  k = os.environ.get(key_env)
+                  if k:
+                      late_key = k
+                      break
+              if not late_key:
+                  return False, 'No Late API key available'
+
+              account_id = os.environ.get(cfg['account_id_env'], '')
+              board_id = os.environ.get(cfg['board_id_env'], '')
+
+              # Auto-detect account if not configured
+              if not account_id:
+                  try:
+                      acct_resp = requests.get(
+                          'https://getlate.dev/api/v1/accounts',
+                          headers={'Authorization': f'Bearer {late_key}'},
+                          timeout=15
+                      )
+                      acct_resp.raise_for_status()
+                      accounts = acct_resp.json()
+                      if isinstance(accounts, dict):
+                          accounts = accounts.get('accounts', accounts.get('data', []))
+                      for acct in accounts:
+                          if acct.get('platform') == 'pinterest':
+                              account_id = acct.get('_id') or acct.get('id')
+                              break
+                  except Exception as e:
+                      return False, f'Account detection failed: {e}'
+              if not account_id:
+                  return False, 'No Pinterest account found in Late API'
+
+              # Build payload
+              content_text = f"{pin_data['title']}\n\n{pin_data['description']}"
+              platform_data = {
+                  'platform': 'pinterest',
+                  'accountId': account_id,
+                  'platformSpecificData': {
+                      'link': pin_data.get('destination_url', ''),
+                  }
+              }
+              if board_id:
+                  platform_data['platformSpecificData']['boardId'] = board_id
+
+              post_payload = {
+                  'content': content_text,
+                  'platforms': [platform_data],
+                  'mediaItems': [{'type': 'image', 'url': image_url}],
+              }
+
+              # Try posting with key rotation on 403
+              all_keys = [(k, os.environ.get(k)) for k in cfg['api_key_envs'] if os.environ.get(k)]
+              for key_name, key_val in all_keys:
+                  try:
+                      resp = requests.post(
+                          'https://getlate.dev/api/v1/posts',
+                          headers={'Authorization': f'Bearer {key_val}', 'Content-Type': 'application/json'},
+                          json=post_payload,
+                          timeout=120
+                      )
+                      if resp.status_code < 400:
+                          result = resp.json()
+                          post_obj = result.get('post', result)
+                          post_id = post_obj.get('_id', 'unknown')
+                          return True, post_id
+                      elif resp.status_code == 403:
+                          print(f'    Late API 403 with {key_name}, trying next key...')
+                          continue
+                      else:
+                          return False, f'HTTP {resp.status_code}: {resp.text[:300]}'
+                  except requests.exceptions.RequestException as e:
+                      return False, f'Request error: {e}'
+
+              return False, 'All Late API keys returned 403'
+
+          def send_failure_alert(failed_brands, error_details):
+              """Send email alert when pins fail to post."""
+              resend_key = os.environ.get('RESEND_API_KEY', '')
+              alert_email = os.environ.get('ALERT_EMAIL', '')
+              if not resend_key or not alert_email:
+                  print('  No RESEND_API_KEY or ALERT_EMAIL configured — skipping alert')
+                  return
+              try:
+                  brand_list = ', '.join(failed_brands)
+                  details = '\n'.join(f'  - {b}: {e}' for b, e in error_details.items())
+                  requests.post(
+                      'https://api.resend.com/emails',
+                      headers={'Authorization': f'Bearer {resend_key}', 'Content-Type': 'application/json'},
+                      json={
+                          'from': 'Content Engine <alerts@updates.fitover35.com>',
+                          'to': [alert_email],
+                          'subject': f'PIN POSTING FAILED: {brand_list}',
+                          'text': (
+                              f'Pinterest pin posting failed for: {brand_list}\n\n'
+                              f'Details:\n{details}\n\n'
+                              f'Both Make.com and Late API were tried.\n'
+                              f'Check: https://github.com/talhahbilal1-arch/social-media-empire/actions\n\n'
+                              f'Common fixes:\n'
+                              f'1. Check Make.com scenario is active (not paused)\n'
+                              f'2. Check Late API keys are valid at getlate.dev\n'
+                              f'3. Check Pinterest accounts are still connected\n'
+                              f'4. Check Supabase Storage bucket "pin-images" exists\n'
+                          ),
+                      },
+                      timeout=15,
+                  )
+                  print(f'  Alert email sent to {alert_email}')
+              except Exception as e:
+                  print(f'  Failed to send alert email: {e}')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 1: Generate all pin content (Claude calls)
+          # ══════════════════════════════════════════════════════════════
+          print('=== PHASE 1: Generating pin content ===')
+          pin_data_by_brand = {}
           for brand in brands:
               brand = brand.strip()
-              print(f'\n=== Generating pin for {brand} ===')
+              print(f'\n--- Generating content for {brand} ---')
               try:
-                  # Step 1: Generate content via Claude (calendar-aware with fallback)
-                  pin_data = generate_pin_from_calendar(brand, db.client)
-                  if pin_data is None:
-                      print(f'  Calendar exhausted for today, using random topic')
-                      pin_data = generate_pin_content(brand, db.client)
-                  print(f'  Title: {pin_data[\"title\"]}')
-                  print(f'  Board: {pin_data[\"board\"]}')
-                  print(f'  Style: {pin_data[\"visual_style\"]}')
+                  # Count today's posts to determine run_index
+                  today_date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+                  try:
+                      today_posts = db.client.table('content_history') \
+                          .select('id') \
+                          .eq('brand', brand) \
+                          .gte('created_at', today_date_str + 'T00:00:00Z') \
+                          .execute()
+                      run_index = len(today_posts.data) if today_posts.data else 0
+                  except Exception:
+                      run_index = 0
+                  print(f'  Run index: {run_index} (posts today so far)')
 
-                  # Step 2: Get unique image
+                  # 3-tier priority: daily trends -> weekly calendar -> random static topics
+                  pin_data = generate_pin_from_daily_trend(brand, run_index, db.client)
+                  if pin_data is not None:
+                      print(f'  Source: DAILY TREND')
+                  else:
+                      pin_data = generate_pin_from_calendar(brand, db.client)
+                      if pin_data is not None:
+                          print(f'  Source: WEEKLY CALENDAR')
+                      else:
+                          print(f'  Calendar exhausted for today, using random topic')
+                          pin_data = generate_pin_content(brand, db.client)
+                          print(f'  Source: RANDOM STATIC')
+                  print(f'  Title: {pin_data["title"]}')
+                  print(f'  Board: {pin_data["board"]}')
+                  print(f'  Style: {pin_data["visual_style"]}')
+                  print(f'  Topic: {pin_data.get("topic", "N/A")}')
+                  pin_data_by_brand[brand] = pin_data
+              except Exception as e:
+                  print(f'  ERROR generating content for {brand}: {e}')
+                  import traceback
+                  traceback.print_exc()
+                  pin_data_by_brand[brand] = None
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 2: Generate articles for each pin (Claude calls)
+          # ══════════════════════════════════════════════════════════════
+          print('\n=== PHASE 2: Generating articles ===')
+          from video_automation.pin_article_generator import BRAND_SITE_CONFIG, _make_slug
+          articles_generated = []
+          for brand, pin_data in pin_data_by_brand.items():
+              if pin_data is None:
+                  continue
+              print(f'\n--- Generating article for {brand} ---')
+              try:
+                  slug, article_md = generate_article_for_pin(brand, pin_data, db.client)
+                  if slug and article_md:
+                      html = article_to_html(article_md, brand, slug)
+                      article_url = save_and_register_article(html, brand, slug, pin_data, db.client)
+                      pin_data['destination_url'] = article_url
+                      articles_generated.append(f'{brand}: {slug}')
+                      print(f'  Article saved: {slug} -> {article_url}')
+                  elif slug:
+                      site = BRAND_SITE_CONFIG.get(brand, {})
+                      base_url = site.get('base_url', pin_data.get('destination_url', ''))
+                      pin_data['destination_url'] = f'{base_url}/articles/{slug}.html'
+                      print(f'  Article already exists: {slug} -> {pin_data["destination_url"]}')
+                  else:
+                      print(f'  No topic for article, using homepage')
+              except Exception as e:
+                  print(f'  Article generation failed for {brand}: {e}')
+                  import traceback
+                  traceback.print_exc()
+                  topic = pin_data.get('topic', '') or pin_data.get('trending_topic', '')
+                  if topic:
+                      fallback_slug = _make_slug(topic)
+                      if fallback_slug:
+                          site = BRAND_SITE_CONFIG.get(brand, {})
+                          base_url = site.get('base_url', pin_data.get('destination_url', ''))
+                          pin_data['destination_url'] = f'{base_url}/articles/{fallback_slug}.html'
+                          print(f'  Fallback article URL: {pin_data["destination_url"]}')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 3: Git commit + push articles (before posting pins)
+          # ══════════════════════════════════════════════════════════════
+          if articles_generated and not dry_run:
+              print('\n=== PHASE 3: Publishing articles ===')
+              try:
+                  subprocess.run(['git', 'config', 'user.name', 'Content Engine Bot'], check=True)
+                  subprocess.run(['git', 'config', 'user.email', 'bot@fitover35.com'], check=True)
+                  subprocess.run(['git', 'add', 'outputs/'], check=True)
+                  result = subprocess.run(['git', 'diff', '--staged', '--quiet'])
+                  if result.returncode != 0:
+                      timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
+                      subprocess.run(
+                          ['git', 'commit', '-m', f'content: publish pin articles {timestamp}'],
+                          check=True
+                      )
+                      subprocess.run(['git', 'push'], check=True)
+                      print(f'  Pushed {len(articles_generated)} articles')
+                      print('  Waiting 30s for deploy...')
+                      time.sleep(30)
+                  else:
+                      print('  No new article files to commit')
+              except Exception as e:
+                  print(f'  Git push failed: {e} — pins will link to homepage')
+                  import traceback
+                  traceback.print_exc()
+          else:
+              print('\n=== PHASE 3: Skipped (no articles or dry run) ===')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 4: Render images, upload, post (Make.com + Late API fallback)
+          # ══════════════════════════════════════════════════════════════
+          print('\n=== PHASE 4: Rendering and posting pins ===')
+          results = []
+          failure_details = {}
+          for brand_idx, brand in enumerate(brands):
+              brand = brand.strip()
+              pin_data = pin_data_by_brand.get(brand)
+              if pin_data is None:
+                  results.append({'brand': brand, 'status': 'failed', 'error': 'content generation failed'})
+                  failure_details[brand] = 'Content generation failed in Phase 1'
+                  continue
+
+              print(f'\n--- Posting pin for {brand} ---')
+              try:
+                  # Step 1: Get unique image from Pexels
                   image = get_unique_pexels_image(
                       pin_data['image_search_query'], brand, db.client
                   )
                   pin_data['pexels_image_id'] = image['id']
                   pin_data['image_url'] = image['url']
-                  print(f'  Image: {image[\"id\"]} by {image[\"photographer\"]}')
+                  print(f'  Image: {image["id"]} by {image["photographer"]}')
 
-                  # Step 3: Build destination URL with UTM
-                  from video_automation.content_brain import build_destination_url
-                  posting_method = 'late_api'
+                  # Step 2: Render text overlay pin with PIL
+                  tips = pin_data.get('tips', [])
+                  if tips and len(tips) >= 2:
+                      tips_subheadline = ' '.join(f'{i+1}. {t}' for i, t in enumerate(tips[:5]))
+                      pil_style = 'numbered_list'
+                  else:
+                      tips_subheadline = pin_data['title']
+                      pil_style = map_visual_style(pin_data['visual_style'])
+                  image_bytes = render_pin_to_bytes(
+                      brand=brand,
+                      headline=pin_data['title'],
+                      subheadline=tips_subheadline,
+                      keyword_or_url=image['url'],
+                      style=pil_style,
+                  )
+                  print(f'  Rendered pin: {len(image_bytes)} bytes ({pil_style} style, {len(tips)} tips)')
+
+                  # Step 3: Upload to Supabase Storage
+                  timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
+                  filename = f'{brand}_{timestamp}.jpg'
+                  rendered_url = upload_pin_image(image_bytes, filename)
+                  print(f'  Uploaded: {rendered_url}')
+
+                  # Step 4: Build destination URL with UTM
+                  posting_method = f'make_{brand}'
+                  topic_slug = pin_data.get('topic', '').replace(' ', '-').replace('/', '-')[:40]
                   pin_data['destination_url'] = build_destination_url(
-                      pin_data['destination_url'], brand, posting_method, slot
+                      pin_data['destination_url'], brand, posting_method, 'pins',
+                      topic_slug=topic_slug, board_name=pin_data.get('board', '')
                   )
 
+                  # Step 5: Resolve board_id from board name
+                  board_id = get_board_id(brand, pin_data.get('board', ''))
+                  print(f'  Board ID: {board_id}')
+
                   if dry_run:
-                      print(f'  [DRY RUN] Would post: {pin_data[\"title\"]}')
+                      print(f'  [DRY RUN] Would post: {pin_data["title"]}')
+                      print(f'  [DRY RUN] Destination: {pin_data["destination_url"]}')
                       results.append({'brand': brand, 'status': 'dry_run', 'title': pin_data['title']})
                       continue
 
-                  # Step 4: Post via Late API (all brands)
-                  # Brand-specific Late API key and Pinterest account config
-                  BRAND_LATE_CONFIG = {
-                      'fitness': {
-                          'api_key_envs': ['LATE_API_KEY', 'LATE_API_KEY_3'],
-                          'account_id_env': 'PINTEREST_FITNESS_ACCOUNT_ID',
-                          'board_id_env': 'PINTEREST_FITNESS_BOARD_ID',
-                          'make_webhook_env': None,
-                      },
-                      'deals': {
-                          'api_key_envs': ['LATE_API_KEY_2', 'LATE_API_KEY'],
-                          'account_id_env': 'PINTEREST_DEALS_ACCOUNT_ID',
-                          'board_id_env': 'PINTEREST_DEALS_BOARD_ID',
-                          'make_webhook_env': 'MAKE_WEBHOOK_DEALS',
-                      },
-                      'menopause': {
-                          'api_key_envs': ['LATE_API_KEY_4', 'LATE_API_KEY'],
-                          'account_id_env': 'PINTEREST_MENOPAUSE_ACCOUNT_ID',
-                          'board_id_env': 'PINTEREST_MENOPAUSE_BOARD_ID',
-                          'make_webhook_env': 'MAKE_WEBHOOK_MENOPAUSE',
-                      },
-                  }
-
-                  brand_late_cfg = BRAND_LATE_CONFIG.get(brand, BRAND_LATE_CONFIG.get('fitness'))
-
-                  # Find a working Late API key for this brand
-                  late_key = None
-                  late_key_source = None
-                  for key_env in brand_late_cfg['api_key_envs']:
-                      k = os.environ.get(key_env)
-                      if k:
-                          late_key = k
-                          late_key_source = key_env
-                          break
-
-                  account_id = os.environ.get(brand_late_cfg['account_id_env'], '')
-                  board_id = os.environ.get(brand_late_cfg['board_id_env'], '')
+                  # ── POSTING: Make.com primary, Late API fallback ──
                   posted = False
+                  post_errors = []
 
-                  # Try Late API first (preferred — works for both image and video pins)
-                  if late_key:
-                      print(f'  Using Late API key: {late_key_source} ({late_key[:8]}...)')
-
-                      # Auto-detect account ID if not set
-                      if not account_id:
-                          acct_resp = requests.get(
-                              'https://getlate.dev/api/v1/accounts',
-                              headers={'Authorization': f'Bearer {late_key}'},
-                              timeout=15
-                          )
-                          acct_resp.raise_for_status()
-                          accounts = acct_resp.json()
-                          if isinstance(accounts, dict):
-                              accounts = accounts.get('accounts', accounts.get('data', []))
-                          for acct in accounts:
-                              if acct.get('platform') == 'pinterest':
-                                  account_id = acct.get('_id') or acct.get('id')
-                                  break
-                          if not account_id:
-                              raise Exception(f'No Pinterest account found in Late API for {brand}')
-                          print(f'  Auto-detected Pinterest account: {account_id}')
-
-                      # Build payload per Late API docs (POST /posts)
-                      content_text = f\"{pin_data['title']}\\n\\n{pin_data['description']}\"
-                      platform_data = {
-                          'platform': 'pinterest',
-                          'accountId': account_id,
-                          'platformSpecificData': {
-                              'link': pin_data['destination_url'],
-                          }
+                  # PRIMARY: Post via Make.com webhook
+                  brand_map = {
+                      'fitness': 'fitness-made-easy',
+                      'deals': 'daily-deal-darling',
+                      'menopause': 'menopause-planner',
+                  }
+                  webhook = os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
+                  if webhook:
+                      payload = {
+                          'brand': brand_map.get(brand, brand),
+                          'title': pin_data['title'],
+                          'description': pin_data['description'],
+                          'image_url': rendered_url,
+                          'board_id': board_id,
+                          'link': pin_data['destination_url'],
                       }
-                      if board_id:
-                          platform_data['platformSpecificData']['boardId'] = board_id
-
-                      post_payload = {
-                          'content': content_text,
-                          'platforms': [platform_data],
-                          'mediaItems': [{'type': 'image', 'url': pin_data['image_url']}],
-                      }
-
-                      print(f'  Late API payload: {json.dumps(post_payload, indent=2)[:500]}')
-                      post_resp = requests.post(
-                          'https://getlate.dev/api/v1/posts',
-                          headers={'Authorization': f'Bearer {late_key}', 'Content-Type': 'application/json'},
-                          json=post_payload,
-                          timeout=120
-                      )
-
-                      if post_resp.status_code == 403:
-                          # Try alternate keys on 403
-                          for alt_env in brand_late_cfg['api_key_envs']:
-                              alt_key = os.environ.get(alt_env)
-                              if alt_key and alt_key != late_key:
-                                  print(f'  Got 403, retrying with {alt_env}...')
-                                  post_resp = requests.post(
-                                      'https://getlate.dev/api/v1/posts',
-                                      headers={'Authorization': f'Bearer {alt_key}', 'Content-Type': 'application/json'},
-                                      json=post_payload,
-                                      timeout=120
-                                  )
-                                  if post_resp.status_code < 400:
-                                      break
-
-                      if post_resp.status_code < 400:
-                          post_result = post_resp.json()
-                          post_obj = post_result.get('post', post_result)
-                          pin_data['posting_method'] = 'late_api'
-                          pin_data['late_post_id'] = post_obj.get('_id', '')
-                          print(f'  Posted via Late API: {post_resp.status_code} | Post ID: {post_obj.get(\"_id\", \"unknown\")}')
+                      success, result_msg = post_to_make_webhook(webhook, payload, brand)
+                      if success:
+                          pin_data['posting_method'] = posting_method
+                          print(f'  Posted via Make.com ({posting_method}): {result_msg}')
                           posted = True
                       else:
-                          print(f'  Late API error {post_resp.status_code}: {post_resp.text[:500]}')
+                          post_errors.append(f'Make.com: {result_msg}')
+                          print(f'  Make.com FAILED: {result_msg}')
+                  else:
+                      post_errors.append('Make.com: No MAKE_WEBHOOK_PINTEREST configured')
+                      print(f'  No Make.com webhook configured')
 
-                  # Fallback to Make.com webhook if Late API unavailable or failed
+                  # FALLBACK: Post via Late API if Make.com failed
                   if not posted:
-                      webhook_env = brand_late_cfg.get('make_webhook_env')
-                      webhook = os.environ.get(webhook_env, '') if webhook_env else ''
-                      if webhook:
-                          print(f'  Falling back to Make.com webhook ({webhook_env})...')
-                          payload = {
-                              'title': pin_data['title'],
-                              'description': pin_data['description'],
-                              'image_url': pin_data['image_url'],
-                              'destination_url': pin_data['destination_url'],
-                              'board_name': pin_data['board'],
-                              'text_overlay': pin_data.get('text_overlay', '')
-                          }
-                          resp = requests.post(webhook, json=payload, timeout=30)
-                          resp.raise_for_status()
-                          pin_data['posting_method'] = f'make_webhook'
-                          print(f'  Posted via Make.com: {resp.status_code}')
+                      print(f'  Trying Late API fallback...')
+                      late_success, late_result = post_via_late_api(brand, pin_data, rendered_url)
+                      if late_success:
+                          pin_data['posting_method'] = 'late_api'
+                          pin_data['late_post_id'] = late_result
+                          print(f'  Posted via Late API (fallback): Post ID {late_result}')
                           posted = True
-                      elif late_key:
-                          # Late API was tried but failed, and no webhook fallback
-                          post_resp.raise_for_status()  # Will raise with the Late API error
                       else:
-                          print(f'  WARNING: No posting method configured for {brand}')
-                          print(f'  Set {brand_late_cfg[\"api_key_envs\"][0]} in GitHub Secrets')
-                          pin_data['posting_method'] = 'skipped'
-                          results.append({'brand': brand, 'status': 'skipped', 'title': pin_data['title'], 'error': 'No posting method configured'})
-                          continue
+                          post_errors.append(f'Late API: {late_result}')
+                          print(f'  Late API FAILED: {late_result}')
 
-                  # Step 5: Log to content_history (only if actually posted)
-                  log_pin_to_history(pin_data, db.client)
-                  results.append({'brand': brand, 'status': 'posted', 'title': pin_data['title']})
-                  print(f'  Logged to content_history')
+                  # Record result
+                  if posted:
+                      log_pin_to_history(pin_data, db.client)
+                      results.append({'brand': brand, 'status': 'posted', 'title': pin_data['title']})
+                      print(f'  Status: POSTED via {pin_data["posting_method"]} | Logged to content_history')
+                  else:
+                      pin_data['posting_method'] = 'failed'
+                      results.append({'brand': brand, 'status': 'failed', 'title': pin_data['title'], 'error': '; '.join(post_errors)})
+                      failure_details[brand] = '; '.join(post_errors)
+                      print(f'  Status: FAILED — all posting methods exhausted')
+
+                  # Stagger posts 30s apart between brands
+                  if posted and brand_idx < len(brands) - 1:
+                      print(f'  Waiting 30s before next brand...')
+                      time.sleep(30)
 
               except Exception as e:
                   print(f'  ERROR generating/posting for {brand}: {e}')
-                  # Log error to Supabase
+                  import traceback
+                  traceback.print_exc()
                   try:
                       db.client.table('errors').insert({
                           'error_type': 'content_engine',
                           'error_message': str(e),
-                          'context': json.dumps({'brand': brand, 'slot': slot}),
+                          'context': json.dumps({'brand': brand}),
                           'severity': 'high',
-                          'created_at': datetime.utcnow().isoformat()
+                          'created_at': datetime.now(timezone.utc).isoformat()
                       }).execute()
                   except:
                       pass
                   results.append({'brand': brand, 'status': 'failed', 'error': str(e)})
-                  continue  # Don't let one failure kill the whole run
+                  failure_details[brand] = str(e)
+                  continue
 
-          # Summary
+          # ══════════════════════════════════════════════════════════════
+          # Summary + Alerting
+          # ══════════════════════════════════════════════════════════════
           print(f'\n=== Content Engine Summary ===')
           for r in results:
               status = r['status'].upper()
-              print(f'  {r[\"brand\"]}: {status} - {r.get(\"title\", r.get(\"error\", \"\"))}')
+              print(f'  {r["brand"]}: {status} - {r.get("title", r.get("error", ""))}')
+          if articles_generated:
+              print(f'\n  Articles published: {len(articles_generated)}')
+              for a in articles_generated:
+                  print(f'    {a}')
 
-          # Update agent_runs so monitoring knows we're alive
+          # Update agent_runs
           posted = [r for r in results if r['status'] == 'posted']
+          failed = [r for r in results if r['status'] == 'failed']
+          skipped = [r for r in results if r['status'] == 'skipped']
+          if skipped:
+              print(f'\n  WARNING: {len(skipped)} brand(s) skipped due to missing config')
+          if failed:
+              print(f'  WARNING: {len(failed)} brand(s) failed to post')
           agents_to_update = ['content_brain', 'content_pipeline', 'image_selector']
           if posted:
               agents_to_update.append('multi_platform_poster')
@@ -318,22 +543,65 @@ jobs:
               try:
                   db.client.table('agent_runs').upsert({
                       'agent_name': agent,
-                      'last_run_at': datetime.utcnow().isoformat(),
+                      'last_run_at': datetime.now(timezone.utc).isoformat(),
                       'status': 'success' if posted else 'failed',
-                      'updated_at': datetime.utcnow().isoformat()
+                      'updated_at': datetime.now(timezone.utc).isoformat()
                   }, on_conflict='agent_name').execute()
               except:
-                  pass  # Table may not exist yet
+                  pass
+
+          # Send alert email if ANY brand failed to post
+          if failure_details:
+              send_failure_alert(list(failure_details.keys()), failure_details)
 
           # Fail the workflow only if ALL brands failed
-          if all(r['status'] == 'failed' for r in results):
+          non_failed = [r for r in results if r['status'] != 'failed']
+          if not non_failed:
               sys.exit(1)
-          "
+          PYEOF
+
+      - name: Deploy brand sites to Vercel
+        if: '!cancelled()'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          FITOVER35_PROJECT_ID: ${{ secrets.VERCEL_FITOVER35_PROJECT_ID }}
+          DEALS_PROJECT_ID: ${{ secrets.VERCEL_DEALS_PROJECT_ID }}
+          MENOPAUSE_PROJECT_ID: ${{ secrets.VERCEL_MENOPAUSE_PROJECT_ID }}
+        run: |
+          npm install -g vercel@latest
+          echo "=== Deploying brand sites ==="
+
+          if [ -n "$FITOVER35_PROJECT_ID" ]; then
+            cd $GITHUB_WORKSPACE/outputs/fitover35-website
+            VERCEL_PROJECT_ID="$FITOVER35_PROJECT_ID" vercel deploy --prod --yes --token $VERCEL_TOKEN . \
+              && echo "fitover35 deployed" || echo "fitover35 deploy failed"
+            cd $GITHUB_WORKSPACE
+          else
+            echo "fitover35: VERCEL_FITOVER35_PROJECT_ID not set, skipping"
+          fi
+
+          if [ -n "$DEALS_PROJECT_ID" ]; then
+            cd $GITHUB_WORKSPACE/outputs/dailydealdarling-website
+            VERCEL_PROJECT_ID="$DEALS_PROJECT_ID" vercel deploy --prod --yes --token $VERCEL_TOKEN . \
+              && echo "dailydealdarling deployed" || echo "deals deploy failed"
+            cd $GITHUB_WORKSPACE
+          else
+            echo "dailydealdarling: VERCEL_DEALS_PROJECT_ID not set, skipping"
+          fi
+
+          if [ -n "$MENOPAUSE_PROJECT_ID" ]; then
+            cd $GITHUB_WORKSPACE/outputs/menopause-planner-website
+            VERCEL_PROJECT_ID="$MENOPAUSE_PROJECT_ID" vercel deploy --prod --yes --token $VERCEL_TOKEN . \
+              && echo "menopause-planner deployed" || echo "menopause deploy failed"
+          else
+            echo "menopause-planner: VERCEL_MENOPAUSE_PROJECT_ID not set, skipping"
+          fi
 
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: content-engine-${{ steps.slot.outputs.slot }}-${{ github.run_number }}
+          name: content-engine-${{ github.run_number }}
           path: '*.log'
           retention-days: 7

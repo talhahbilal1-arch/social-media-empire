@@ -1,0 +1,214 @@
+name: Posting Watchdog
+
+# Runs once daily at 11 PM PST (7 AM UTC next day).
+# Checks if pins were actually posted today.
+# Sends alert email if posting count is below expected threshold.
+# This catches silent failures that the content engine might miss.
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # 7 AM UTC = 11 PM PST
+  workflow_dispatch:
+
+jobs:
+  verify-posting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify today's pins were posted
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+        run: |
+          python3 << 'PYEOF'
+          import os
+          import sys
+          import json
+          import requests
+          from datetime import datetime, timezone, timedelta
+
+          sys.path.insert(0, '.')
+          from database.supabase_client import get_supabase_client
+
+          db = get_supabase_client()
+          today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+
+          print(f'=== Posting Watchdog — {today} ===\n')
+
+          # ── Check 1: How many pins were logged to content_history today? ──
+          EXPECTED_MIN_PINS = 5  # 5 runs x 3 brands = 15 max, but at least 5
+          try:
+              result = db.client.table('content_history') \
+                  .select('id, brand, posting_method, created_at') \
+                  .gte('created_at', f'{today}T00:00:00Z') \
+                  .execute()
+              today_pins = result.data if result.data else []
+          except Exception as e:
+              print(f'ERROR: Could not query content_history: {e}')
+              today_pins = []
+
+          print(f'Pins logged today: {len(today_pins)}')
+
+          # Break down by brand
+          brand_counts = {}
+          method_counts = {}
+          for pin in today_pins:
+              b = pin.get('brand', 'unknown')
+              m = pin.get('posting_method', 'unknown')
+              brand_counts[b] = brand_counts.get(b, 0) + 1
+              method_counts[m] = method_counts.get(m, 0) + 1
+
+          for brand, count in sorted(brand_counts.items()):
+              print(f'  {brand}: {count} pins')
+          for method, count in sorted(method_counts.items()):
+              print(f'  Method {method}: {count} pins')
+
+          # ── Check 2: Were there any errors today? ──
+          try:
+              errors = db.client.table('errors') \
+                  .select('error_type, error_message, severity, created_at') \
+                  .gte('created_at', f'{today}T00:00:00Z') \
+                  .eq('error_type', 'content_engine') \
+                  .execute()
+              today_errors = errors.data if errors.data else []
+          except Exception:
+              today_errors = []
+
+          print(f'\nContent engine errors today: {len(today_errors)}')
+          for err in today_errors[:5]:
+              print(f'  [{err.get("severity", "?")}] {err.get("error_message", "")[:100]}')
+
+          # ── Check 3: Are the posting services reachable? ──
+          print(f'\n--- Service health checks ---')
+          services_ok = True
+
+          # Check Make.com webhook
+          webhook = os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
+          if webhook:
+              print(f'  Make.com webhook: configured')
+          else:
+              print(f'  Make.com webhook: NOT CONFIGURED')
+              services_ok = False
+
+          # Check Late API keys
+          for key_name in ['LATE_API_KEY', 'LATE_API_KEY_2', 'LATE_API_KEY_4']:
+              key = os.environ.get(key_name, '')
+              if key:
+                  try:
+                      resp = requests.get(
+                          'https://getlate.dev/api/v1/accounts',
+                          headers={'Authorization': f'Bearer {key}'},
+                          timeout=10
+                      )
+                      if resp.status_code < 400:
+                          accounts = resp.json()
+                          if isinstance(accounts, dict):
+                              accounts = accounts.get('accounts', accounts.get('data', []))
+                          pinterest_accounts = [a for a in accounts if a.get('platform') == 'pinterest']
+                          print(f'  {key_name}: OK ({len(pinterest_accounts)} Pinterest account(s))')
+                      else:
+                          print(f'  {key_name}: ERROR {resp.status_code}')
+                          services_ok = False
+                  except Exception as e:
+                      print(f'  {key_name}: UNREACHABLE ({e})')
+                      services_ok = False
+              else:
+                  print(f'  {key_name}: not set')
+
+          # ── Check 4: Did any content-engine workflow runs fail today? ──
+          try:
+              agent_run = db.client.table('agent_runs') \
+                  .select('agent_name, last_run_at, status') \
+                  .eq('agent_name', 'multi_platform_poster') \
+                  .limit(1) \
+                  .execute()
+              if agent_run.data:
+                  last_run = agent_run.data[0]
+                  print(f'\n  multi_platform_poster last run: {last_run.get("last_run_at", "never")} — {last_run.get("status", "unknown")}')
+              else:
+                  print(f'\n  multi_platform_poster: no runs recorded')
+          except Exception:
+              pass
+
+          # ── Decision: Should we alert? ──
+          problems = []
+          if len(today_pins) < EXPECTED_MIN_PINS:
+              problems.append(f'Only {len(today_pins)} pins posted today (expected at least {EXPECTED_MIN_PINS})')
+          if len(today_errors) > 5:
+              problems.append(f'{len(today_errors)} content engine errors today')
+          if not services_ok:
+              problems.append('One or more posting services are down or misconfigured')
+
+          # Check if specific brands are completely missing
+          for expected_brand in ['fitness', 'deals', 'menopause']:
+              if brand_counts.get(expected_brand, 0) == 0:
+                  problems.append(f'ZERO pins for {expected_brand} today')
+
+          if not problems:
+              print(f'\n=== ALL GOOD: {len(today_pins)} pins posted, all services healthy ===')
+              sys.exit(0)
+
+          # ── Send alert ──
+          print(f'\n=== PROBLEMS DETECTED ===')
+          for p in problems:
+              print(f'  - {p}')
+
+          resend_key = os.environ.get('RESEND_API_KEY', '')
+          alert_email = os.environ.get('ALERT_EMAIL', '')
+          if resend_key and alert_email:
+              problem_list = '\n'.join(f'  - {p}' for p in problems)
+              brand_summary = '\n'.join(f'  {b}: {c} pins' for b, c in sorted(brand_counts.items())) or '  No pins posted at all!'
+              try:
+                  requests.post(
+                      'https://api.resend.com/emails',
+                      headers={'Authorization': f'Bearer {resend_key}', 'Content-Type': 'application/json'},
+                      json={
+                          'from': 'Posting Watchdog <alerts@updates.fitover35.com>',
+                          'to': [alert_email],
+                          'subject': f'WATCHDOG ALERT: Pinterest posting problems ({today})',
+                          'text': (
+                              f'The Posting Watchdog detected problems with Pinterest pin posting.\n\n'
+                              f'PROBLEMS:\n{problem_list}\n\n'
+                              f'TODAY\'S PIN COUNT:\n{brand_summary}\n\n'
+                              f'ERRORS: {len(today_errors)}\n\n'
+                              f'WHAT TO CHECK:\n'
+                              f'1. Is the Make.com scenario active? Log in at make.com and check.\n'
+                              f'2. Are Late API keys valid? Check at getlate.dev.\n'
+                              f'3. Are Pinterest accounts still connected?\n'
+                              f'4. Check workflow logs: https://github.com/talhahbilal1-arch/social-media-empire/actions\n\n'
+                              f'The content engine uses Make.com as primary and Late API as fallback.\n'
+                              f'If both are failing, the Pinterest account connections may need to be refreshed.\n'
+                          ),
+                      },
+                      timeout=15,
+                  )
+                  print(f'  Alert sent to {alert_email}')
+              except Exception as e:
+                  print(f'  Failed to send alert: {e}')
+          else:
+              print('  No RESEND_API_KEY or ALERT_EMAIL — cannot send alert')
+
+          # Exit with error to mark the workflow as failed in GitHub Actions
+          sys.exit(1)
+          PYEOF
