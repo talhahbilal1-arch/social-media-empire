@@ -28,3 +28,21 @@ jobs:
       - run: python -m agents.video_factory
         env:
           GITHUB_RUN_ID: ${{ github.run_id }}
+          # Late API keys for Pinterest video posting
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+          LATE_API_KEY_DDD: ${{ secrets.LATE_API_KEY_DDD }}
+          LATE_API_KEY_MENO: ${{ secrets.LATE_API_KEY_MENO }}
+          # Pinterest account/board IDs
+          PINTEREST_FITNESS_ACCOUNT_ID: ${{ secrets.PINTEREST_FITNESS_ACCOUNT_ID }}
+          PINTEREST_FITNESS_BOARD_ID: ${{ secrets.PINTEREST_FITNESS_BOARD_ID }}
+          PINTEREST_DEALS_ACCOUNT_ID: ${{ secrets.PINTEREST_DEALS_ACCOUNT_ID }}
+          PINTEREST_DEALS_BOARD_ID: ${{ secrets.PINTEREST_DEALS_BOARD_ID }}
+          PINTEREST_DDD_ACCOUNT_ID: ${{ secrets.PINTEREST_DDD_ACCOUNT_ID }}
+          PINTEREST_DDD_BOARD_ID: ${{ secrets.PINTEREST_DDD_BOARD_ID }}
+          PINTEREST_MENOPAUSE_ACCOUNT_ID: ${{ secrets.PINTEREST_MENOPAUSE_ACCOUNT_ID }}
+          PINTEREST_MENOPAUSE_BOARD_ID: ${{ secrets.PINTEREST_MENOPAUSE_BOARD_ID }}
+          PINTEREST_MENO_ACCOUNT_ID: ${{ secrets.PINTEREST_MENO_ACCOUNT_ID }}
+          PINTEREST_MENO_BOARD_ID: ${{ secrets.PINTEREST_MENO_BOARD_ID }}
