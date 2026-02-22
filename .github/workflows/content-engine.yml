@@ -74,11 +74,17 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           PINTEREST_FITNESS_ACCOUNT_ID: ${{ secrets.PINTEREST_FITNESS_ACCOUNT_ID }}
           PINTEREST_FITNESS_BOARD_ID: ${{ secrets.PINTEREST_FITNESS_BOARD_ID }}
+          PINTEREST_DEALS_ACCOUNT_ID: ${{ secrets.PINTEREST_DEALS_ACCOUNT_ID }}
+          PINTEREST_DEALS_BOARD_ID: ${{ secrets.PINTEREST_DEALS_BOARD_ID }}
+          PINTEREST_MENOPAUSE_ACCOUNT_ID: ${{ secrets.PINTEREST_MENOPAUSE_ACCOUNT_ID }}
+          PINTEREST_MENOPAUSE_BOARD_ID: ${{ secrets.PINTEREST_MENOPAUSE_BOARD_ID }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python -c "
@@ -124,7 +130,7 @@ jobs:
 
                   # Step 3: Build destination URL with UTM
                   from video_automation.content_brain import build_destination_url
-                  posting_method = 'late_api' if brand == 'fitness' else f'make_s{1 if brand == \"deals\" else 2}'
+                  posting_method = 'late_api'
                   pin_data['destination_url'] = build_destination_url(
                       pin_data['destination_url'], brand, posting_method, slot
                   )
@@ -134,15 +140,48 @@ jobs:
                       results.append({'brand': brand, 'status': 'dry_run', 'title': pin_data['title']})
                       continue
 
-                  # Step 4: Post via appropriate method
-                  if brand == 'fitness':
-                      # Post via Late API (POST /posts endpoint)
-                      # Try LATE_API_KEY first (original key), fall back to LATE_API_KEY_3
-                      late_key = os.environ.get('LATE_API_KEY') or os.environ.get('LATE_API_KEY_3')
-                      late_key_source = 'LATE_API_KEY' if os.environ.get('LATE_API_KEY') else 'LATE_API_KEY_3'
-                      print(f'  Using API key: {late_key_source} ({late_key[:8]}...)')
-                      account_id = os.environ.get('PINTEREST_FITNESS_ACCOUNT_ID', '')
-                      board_id = os.environ.get('PINTEREST_FITNESS_BOARD_ID', '')
+                  # Step 4: Post via Late API (all brands)
+                  # Brand-specific Late API key and Pinterest account config
+                  BRAND_LATE_CONFIG = {
+                      'fitness': {
+                          'api_key_envs': ['LATE_API_KEY', 'LATE_API_KEY_3'],
+                          'account_id_env': 'PINTEREST_FITNESS_ACCOUNT_ID',
+                          'board_id_env': 'PINTEREST_FITNESS_BOARD_ID',
+                          'make_webhook_env': None,
+                      },
+                      'deals': {
+                          'api_key_envs': ['LATE_API_KEY_2', 'LATE_API_KEY'],
+                          'account_id_env': 'PINTEREST_DEALS_ACCOUNT_ID',
+                          'board_id_env': 'PINTEREST_DEALS_BOARD_ID',
+                          'make_webhook_env': 'MAKE_WEBHOOK_DEALS',
+                      },
+                      'menopause': {
+                          'api_key_envs': ['LATE_API_KEY_4', 'LATE_API_KEY'],
+                          'account_id_env': 'PINTEREST_MENOPAUSE_ACCOUNT_ID',
+                          'board_id_env': 'PINTEREST_MENOPAUSE_BOARD_ID',
+                          'make_webhook_env': 'MAKE_WEBHOOK_MENOPAUSE',
+                      },
+                  }
+
+                  brand_late_cfg = BRAND_LATE_CONFIG.get(brand, BRAND_LATE_CONFIG.get('fitness'))
+
+                  # Find a working Late API key for this brand
+                  late_key = None
+                  late_key_source = None
+                  for key_env in brand_late_cfg['api_key_envs']:
+                      k = os.environ.get(key_env)
+                      if k:
+                          late_key = k
+                          late_key_source = key_env
+                          break
+
+                  account_id = os.environ.get(brand_late_cfg['account_id_env'], '')
+                  board_id = os.environ.get(brand_late_cfg['board_id_env'], '')
+                  posted = False
+
+                  # Try Late API first (preferred — works for both image and video pins)
+                  if late_key:
+                      print(f'  Using Late API key: {late_key_source} ({late_key[:8]}...)')
 
                       # Auto-detect account ID if not set
                       if not account_id:
@@ -160,7 +199,7 @@ jobs:
                                   account_id = acct.get('_id') or acct.get('id')
                                   break
                           if not account_id:
-                              raise Exception('No Pinterest account found in Late API')
+                              raise Exception(f'No Pinterest account found in Late API for {brand}')
                           print(f'  Auto-detected Pinterest account: {account_id}')
 
                       # Build payload per Late API docs (POST /posts)
@@ -186,34 +225,40 @@ jobs:
                           'https://getlate.dev/api/v1/posts',
                           headers={'Authorization': f'Bearer {late_key}', 'Content-Type': 'application/json'},
                           json=post_payload,
-                          timeout=30
+                          timeout=120
                       )
-                      if post_resp.status_code >= 400:
-                          print(f'  Late API error {post_resp.status_code}: {post_resp.text[:500]}')
-                          # If first key fails with 403, try the other key
-                          if post_resp.status_code == 403:
-                              alt_key = os.environ.get('LATE_API_KEY_3') if late_key_source == 'LATE_API_KEY' else os.environ.get('LATE_API_KEY')
+
+                      if post_resp.status_code == 403:
+                          # Try alternate keys on 403
+                          for alt_env in brand_late_cfg['api_key_envs']:
+                              alt_key = os.environ.get(alt_env)
                               if alt_key and alt_key != late_key:
-                                  print(f'  Retrying with alternate key...')
+                                  print(f'  Got 403, retrying with {alt_env}...')
                                   post_resp = requests.post(
                                       'https://getlate.dev/api/v1/posts',
                                       headers={'Authorization': f'Bearer {alt_key}', 'Content-Type': 'application/json'},
                                       json=post_payload,
-                                      timeout=30
+                                      timeout=120
                                   )
-                                  if post_resp.status_code >= 400:
-                                      print(f'  Alternate key also failed {post_resp.status_code}: {post_resp.text[:500]}')
-                      post_resp.raise_for_status()
-                      post_result = post_resp.json()
-                      post_obj = post_result.get('post', post_result)
-                      pin_data['posting_method'] = 'late_api'
-                      pin_data['late_post_id'] = post_obj.get('_id', '')
-                      print(f'  Posted via Late API: {post_resp.status_code} | Post ID: {post_obj.get(\"_id\", \"unknown\")}')
+                                  if post_resp.status_code < 400:
+                                      break
 
-                  elif brand == 'deals':
-                      # Post via Make.com Scenario 1 webhook
-                      webhook = os.environ.get('MAKE_WEBHOOK_DEALS', '')
+                      if post_resp.status_code < 400:
+                          post_result = post_resp.json()
+                          post_obj = post_result.get('post', post_result)
+                          pin_data['posting_method'] = 'late_api'
+                          pin_data['late_post_id'] = post_obj.get('_id', '')
+                          print(f'  Posted via Late API: {post_resp.status_code} | Post ID: {post_obj.get(\"_id\", \"unknown\")}')
+                          posted = True
+                      else:
+                          print(f'  Late API error {post_resp.status_code}: {post_resp.text[:500]}')
+
+                  # Fallback to Make.com webhook if Late API unavailable or failed
+                  if not posted:
+                      webhook_env = brand_late_cfg.get('make_webhook_env')
+                      webhook = os.environ.get(webhook_env, '') if webhook_env else ''
                       if webhook:
+                          print(f'  Falling back to Make.com webhook ({webhook_env})...')
                           payload = {
                               'title': pin_data['title'],
                               'description': pin_data['description'],
@@ -224,30 +269,15 @@ jobs:
                           }
                           resp = requests.post(webhook, json=payload, timeout=30)
                           resp.raise_for_status()
-                          pin_data['posting_method'] = 'make_s1'
-                          print(f'  Posted via Make.com S1: {resp.status_code}')
+                          pin_data['posting_method'] = f'make_webhook'
+                          print(f'  Posted via Make.com: {resp.status_code}')
+                          posted = True
+                      elif late_key:
+                          # Late API was tried but failed, and no webhook fallback
+                          post_resp.raise_for_status()  # Will raise with the Late API error
                       else:
-                          print('  WARNING: MAKE_WEBHOOK_DEALS not configured')
-                          pin_data['posting_method'] = 'skipped'
-
-                  elif brand == 'menopause':
-                      # Post via Make.com Scenario 2 webhook
-                      webhook = os.environ.get('MAKE_WEBHOOK_MENOPAUSE', '')
-                      if webhook:
-                          payload = {
-                              'title': pin_data['title'],
-                              'description': pin_data['description'],
-                              'image_url': pin_data['image_url'],
-                              'destination_url': pin_data['destination_url'],
-                              'board_name': pin_data['board'],
-                              'text_overlay': pin_data.get('text_overlay', '')
-                          }
-                          resp = requests.post(webhook, json=payload, timeout=30)
-                          resp.raise_for_status()
-                          pin_data['posting_method'] = 'make_s2'
-                          print(f'  Posted via Make.com S2: {resp.status_code}')
-                      else:
-                          print('  WARNING: MAKE_WEBHOOK_MENOPAUSE not configured')
+                          print(f'  WARNING: No posting method configured for {brand}')
+                          print(f'  Set {brand_late_cfg[\"api_key_envs\"][0]} in GitHub Secrets')
                           pin_data['posting_method'] = 'skipped'
 
                   # Step 5: Log to content_history
