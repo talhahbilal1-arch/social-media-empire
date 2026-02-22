@@ -48,6 +48,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Pre-flight check
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
+          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+        run: python3 scripts/preflight_check.py
+
       - name: Generate and post pins
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -55,6 +68,9 @@ jobs:
           CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
+          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
@@ -293,13 +309,21 @@ jobs:
                       results.append({'brand': brand, 'status': 'dry_run', 'title': pin_data['title']})
                       continue
 
-                  # Step 6: Post via Make.com webhook
+                  # Step 6: Post via Make.com webhook (per-brand routing with global fallback)
                   brand_map = {
                       'fitness': 'fitness-made-easy',
                       'deals': 'daily-deal-darling',
                       'menopause': 'menopause-planner',
                   }
-                  webhook = os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
+                  webhook_keys = {
+                      'fitness': 'MAKE_WEBHOOK_FITNESS',
+                      'deals': 'MAKE_WEBHOOK_DEALS',
+                      'menopause': 'MAKE_WEBHOOK_MENOPAUSE',
+                  }
+                  webhook = (
+                      os.environ.get(webhook_keys.get(brand, ''), '')
+                      or os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
+                  )
                   if webhook:
                       payload = {
                           'brand': brand_map.get(brand, brand),

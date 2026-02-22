@@ -1,185 +1,171 @@
-# CLAUDE.md - Project Context for AI Assistants
+# CLAUDE.md - Social Media Empire Project Context
 
 ## Project Overview
 
-Social Media Empire is an automated content creation and distribution system for multiple lifestyle brands. It generates video content using AI, renders videos with templates, and posts to multiple social media platforms on a schedule.
+Automated Pinterest content system for 3 lifestyle brands. Generates pin content via Claude (Sonnet),
+renders images with PIL, uploads to Supabase Storage, and posts to Pinterest via Make.com webhooks.
+15 pins/day total (5 per brand × 3 brands × 5 daily runs).
 
-## Key Components
+## Active Brands (3 only)
 
-### 1. Video Automation (`video_automation/`)
-- **daily_video_generator.py**: Main orchestrator for video creation pipeline
-- **video_content_generator.py**: Uses Gemini AI to generate video scripts
-- **video_templates.py**: Manages Creatomate video templates
-- **cross_platform_poster.py**: Posts to all platforms
-- **youtube_shorts.py**: YouTube-specific upload logic
-- **pinterest_idea_pins.py**: Pinterest-specific posting via Make.com
+| Brand key | Site | Niche | Pins/day |
+|-----------|------|-------|----------|
+| `fitness` | fitover35.com | Men's fitness over 35 | 5 |
+| `deals` | dailydealdarling.com | Budget home & lifestyle | 5 |
+| `menopause` | menopause-planner-website.vercel.app | Menopause wellness | 5 |
 
-### 2. Email Marketing (`email_marketing/`)
-- **email_sender.py**: Sends emails via Resend, integrates with ConvertKit
-- **sequences/**: Welcome email sequences (markdown templates)
-- **website_integration/**: HTML signup forms
-- **convertkit_setup/**: ConvertKit automation configuration
+## Pipeline Architecture (content-engine.yml — 5x daily)
 
-### 3. Database (`database/`)
-- **supabase_client.py**: All database operations
-- **schemas.sql**: Database schema (run in Supabase SQL Editor)
+```
+Phase 0: Pre-flight check (scripts/preflight_check.py) — validate secrets, connectivity
+Phase 1: Generate pin content (Claude API) → brand topic + title + tips + image query
+Phase 2: Generate article per pin (Claude API) → 800-1200 word SEO article
+Phase 3: Git commit + push articles → deploys to Vercel brand sites
+Phase 4: Render PIL image → upload Supabase Storage → post via Make.com webhook
+```
 
-### 4. Monitoring (`monitoring/`)
-- **health_checker.py**: Checks all API integrations
-- **error_reporter.py**: Logs and alerts on errors
-- **daily_report_generator.py**: Creates daily performance reports
+## Key Files
 
-### 5. GitHub Actions (`.github/workflows/`)
-- 3 video automation workflows (morning/noon/evening)
-- Email automation workflow
-- Health monitoring workflow
-- Error alerts workflow
-- Daily report workflow
-- Self-healing workflow
+| File | Purpose |
+|------|---------|
+| `video_automation/content_brain.py` | Claude API generates all pin content (Sonnet 4.5) |
+| `video_automation/pin_image_generator.py` | PIL renders 1000x1500 overlay images |
+| `video_automation/pin_article_generator.py` | Claude generates 800-1200 word SEO articles |
+| `video_automation/image_selector.py` | Unique Pexels images per brand |
+| `video_automation/pinterest_boards.py` | Board ID mappings per brand |
+| `video_automation/supabase_storage.py` | Upload/cleanup pin images in Supabase Storage |
+| `video_automation/trend_discovery.py` | Weekly trend discovery (Google Trends + Claude) |
+| `scripts/preflight_check.py` | Pre-flight secret/API validation |
+| `database/migrations/001_master_schema.sql` | Consolidated idempotent master schema |
+| `.github/workflows/content-engine.yml` | Main 5x-daily pipeline workflow |
+| `.github/workflows/weekly-discovery.yml` | Sunday trend discovery |
 
-## Brands
+## GitHub Secrets Required
 
-| Brand | Niche | Audience |
-|-------|-------|----------|
-| daily_deal_darling | Lifestyle deals, beauty, home | Budget-conscious women 25-45 |
-| menopause_planner | Menopause wellness | Women 45-60 |
-| nurse_planner | Nurse lifestyle, self-care | Healthcare workers |
-| adhd_planner | ADHD productivity | Adults with ADHD |
+| Secret | Purpose |
+|--------|---------|
+| `ANTHROPIC_API_KEY` | Claude API |
+| `PEXELS_API_KEY` | Background images |
+| `SUPABASE_URL` | Database |
+| `SUPABASE_KEY` | Database |
+| `MAKE_WEBHOOK_FITNESS` | Make.com webhook — fitness brand |
+| `MAKE_WEBHOOK_DEALS` | Make.com webhook — deals brand |
+| `MAKE_WEBHOOK_MENOPAUSE` | Make.com webhook — menopause brand |
+| `VERCEL_BRAND_TOKEN` | Vercel deploy (personal access token) |
+| `VERCEL_FITOVER35_PROJECT_ID` | Vercel project ID for fitover35 |
+| `VERCEL_DEALS_PROJECT_ID` | Vercel project ID for deals |
+| `VERCEL_MENOPAUSE_PROJECT_ID` | Vercel project ID for menopause |
 
-## API Dependencies
+## Brand Key Convention
 
-| API | Purpose | Rate Limits |
-|-----|---------|-------------|
-| Gemini | Content generation | 60 RPM |
-| Pexels | Stock media | 200 req/hour |
-| Creatomate | Video rendering | Per plan |
-| Supabase | Database | Per plan |
-| Resend | Email sending | 100/day free |
-| ConvertKit | Email marketing | Per plan |
-| YouTube | Video uploads | Quota-based |
-| Make.com | Pinterest webhook | Per plan |
+Python code uses short keys: `fitness`, `deals`, `menopause`
+Make.com payload uses hyphenated names: `fitness-made-easy`, `daily-deal-darling`, `menopause-planner`
 
-## Common Tasks
+## Supabase Projects (CRITICAL — two separate projects)
 
-### Adding Content Ideas
-Edit the JSON files in `video_automation/content_bank/`:
-- `wellness_ideas.json` - Cross-brand wellness content
-- `deal_topics.json` - Daily Deal Darling specific
-- `menopause_topics.json` - Menopause Planner specific
+- **Production** (`epfoxpgrpsnhlsglxvsa`): ALL workflow tables — content_history, errors, agent_runs,
+  daily_trending, generated_articles, weekly_calendar, pinterest_pins, etc.
+  GitHub secrets (`SUPABASE_URL` / `SUPABASE_KEY`) point here.
+- **Secondary** (`bjacmhjtpkdcxngkasux`): TikTok tables only (tiktok_queue, tiktok_analytics).
+  Do NOT create workflow tables here.
 
-### Modifying Video Templates
-Edit files in `video_automation/templates/`:
-- Each brand has its own template config
-- Templates reference Creatomate template IDs
-- Colors and fonts are brand-specific
+## Supabase Table: Key Columns
 
-### Creating Email Sequences
-Add markdown files to `email_marketing/sequences/`:
-- Follow existing sequence structure
-- Include timing, tags, and content
-- Reference in `email_sender.py` if needed
+- `errors`: requires `severity` VARCHAR(20) DEFAULT 'medium' — run `001_master_schema.sql` if missing
+- `content_history`: requires `trending_topic`, `status` columns — included in migration
+- `agent_runs`: unique on `agent_name` — upserted on every pipeline run
 
-### Adding a New Platform
-1. Create poster module in `video_automation/`
-2. Add client to `utils/api_clients.py`
-3. Add to `cross_platform_poster.py`
-4. Add secrets to GitHub repository
-5. Update workflow environment variables
+## Make.com Scenario
+
+- **ID**: 3977247 | **Webhook hook ID**: 1802056
+- **URL** (all brands): `https://hook.us2.make.com/8d51h67qpdt77jgz5brhvd5c9hgvaap8`
+- Routes by `brand` field in payload → brand-specific Pinterest connection
+- Board ID provided dynamically in payload (`board_id` field)
+
+## PIL Pin Image Styles (5 overlays)
+
+| Style | Description |
+|-------|-------------|
+| `gradient` | Black gradient bottom 60%, white bold text |
+| `box_dark` | Dark semi-transparent box, centered text |
+| `numbered_list` | Numbered items with accent circles |
+| `big_stat` | Large number/percentage + supporting text |
+| `split_layout` | Top 60% image, bottom 40% brand-color block |
+
+## Vercel Brand Sites
+
+- fitover35.com → `outputs/fitover35-website/` (articles/, index.html, blog.html)
+- dailydealdarling.com → `outputs/dailydealdarling-website/`
+- menopause-planner-website.vercel.app → `outputs/menopause-planner-website/`
+
+## Active GitHub Workflows (9)
+
+1. `content-engine.yml` — 5x daily pin + article + deploy pipeline
+2. `weekly-discovery.yml` — Sunday 10PM PST trend discovery
+3. `fitness-articles.yml` — FitOver35 article generation
+4. `system-health.yml` — 6-hourly self-healing + DB maintenance
+5. `email-automation.yml` — ConvertKit email sequences
+6. `weekly-maintenance.yml` — Sunday cleanup + DB vacuum
+7. `emergency-alert.yml` — Critical failure alerts
+8. `auto-merge.yml` — Auto-merge passing PRs
+9. `toolpilot-deploy.yml` — ToolPilot AI directory deploy
+
+## Common Issues & Fixes
+
+- **`severity` column missing in errors**: Run `database/migrations/001_master_schema.sql`
+- **Pins not posting**: Check Make.com scenario is ON; verify per-brand webhook secrets
+- **Font download crash**: Fixed in `pin_image_generator.py` — returns None gracefully
+- **Article timeout**: 3 articles via Claude ~15-20 min; workflow timeout is 45 min
+- **Supabase new tables**: Always `GRANT ALL` + disable RLS + restart project (5-8 min)
+- **Python**: Use `python3`, not `python` (macOS default)
+- **Workflow git push**: Needs `permissions: contents: write`
 
 ## Code Patterns
 
-### Configuration
-```python
-from utils.config import get_config
-config = get_config()
-# Access: config.gemini_api_key, config.brands, etc.
-```
-
-### Database Operations
+### Database
 ```python
 from database.supabase_client import get_supabase_client
 db = get_supabase_client()
-db.log_video_creation(brand="...", platform="...", ...)
+db.client.table('content_history').insert({...}).execute()
 ```
 
-### Error Reporting
+### Content Generation
 ```python
-from monitoring.error_reporter import report_error
-report_error(
-    error_type="api_failure",
-    error_message="...",
-    severity="high",
-    context={"brand": "...", "platform": "..."}
-)
+from video_automation.content_brain import generate_pin_content, log_pin_to_history
+pin_data = generate_pin_content('fitness', db.client)
+log_pin_to_history(pin_data, db.client)
 ```
 
-### Health Checks
+### Error Logging
 ```python
-from monitoring.health_checker import run_health_check
-result = run_health_check(full=True)
-# result["overall_status"] is "healthy", "degraded", or "unhealthy"
-```
-
-## Environment Variables
-
-Required for local development:
-```
-GEMINI_API_KEY
-PEXELS_API_KEY
-SUPABASE_URL
-SUPABASE_KEY
-```
-
-Optional (for full functionality):
-```
-ANTHROPIC_API_KEY
-CREATOMATE_API_KEY
-RESEND_API_KEY
-CONVERTKIT_API_KEY
-CONVERTKIT_API_SECRET
-YOUTUBE_CLIENT_ID
-YOUTUBE_CLIENT_SECRET
-YOUTUBE_REFRESH_TOKEN
-MAKE_COM_PINTEREST_WEBHOOK
-ALERT_EMAIL
+db.client.table('errors').insert({
+    'error_type': 'content_engine',
+    'error_message': str(e),
+    'context': json.dumps({'brand': brand}),
+    'severity': 'high',  # REQUIRED — column exists after migration
+    'created_at': datetime.now(timezone.utc).isoformat()
+}).execute()
 ```
 
 ## Testing
 
 ```bash
-# Syntax check all Python files
-python -m py_compile video_automation/*.py
-python -m py_compile email_marketing/*.py
-python -m py_compile monitoring/*.py
+# Syntax check
+python3 -m py_compile video_automation/content_brain.py
+python3 -m py_compile video_automation/pin_image_generator.py
+python3 -m py_compile scripts/preflight_check.py
 
-# Run health check
-python -m monitoring.health_checker --full
+# Validate workflow YAML
+python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.yml'))"
 
-# Dry run video generation
-python -m video_automation.daily_video_generator --dry-run
+# Dry run (no posting)
+# Trigger content-engine workflow with dry_run=true in GitHub Actions UI
 ```
 
-## Deployment Notes
+## Deployment Checklist (after fresh setup)
 
-1. All secrets must be in GitHub repository settings
-2. Creatomate templates must be created and IDs updated
-3. YouTube OAuth must be set up and refresh token obtained
-4. Make.com scenarios must be created for Pinterest
-5. ConvertKit forms and tags must be created
-6. Supabase tables must be created from schemas.sql
-
-## File Naming Conventions
-
-- Python modules: `snake_case.py`
-- Templates: `brand_type.json`
-- Workflows: `purpose-name.yml`
-- Sequences: `brand_sequence_type.md`
-
-## Important Notes
-
-- Videos are 30 seconds, 9:16 aspect ratio (vertical)
-- 3 videos per day per brand = 12 total daily videos
-- Schedule is PST timezone
-- Error alerts go to ALERT_EMAIL
-- Self-healing runs every 6 hours
-- Old data cleaned up after 30-90 days
+1. Run `database/migrations/001_master_schema.sql` in Supabase SQL Editor
+2. Restart Supabase project (Settings > General) — wait 5-8 min
+3. Set all GitHub secrets (see table above)
+4. Verify Make.com scenario "Pinterest Pin Publisher - All Brands" is ON
+5. Trigger content-engine.yml manually with `dry_run=true` to validate

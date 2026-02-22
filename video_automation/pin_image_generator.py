@@ -105,12 +105,28 @@ def _font_filename(name, bold=False):
 
 
 def ensure_font(name, bold=False):
-    """Download a Google Font TTF if not already cached. Returns path to TTF file."""
+    """Download a Google Font TTF if not already cached.
+
+    Returns path to TTF file, or None if download fails.
+    Falls back gracefully rather than crashing the pipeline.
+    """
     FONTS_DIR.mkdir(parents=True, exist_ok=True)
     local_path = FONTS_DIR / _font_filename(name, bold)
 
+    # Valid font file magic bytes: TTF, TrueType, OTF, WOFF
+    _VALID_HEADERS = (b'\x00\x01\x00\x00', b'true', b'OTTO', b'wOFF')
+
     if local_path.exists():
-        return local_path
+        # Validate cached file is a real font
+        try:
+            header = local_path.read_bytes()[:4]
+            if any(header.startswith(h) for h in _VALID_HEADERS):
+                return local_path
+            else:
+                logger.warning(f"Cached font '{name}' appears corrupt, re-downloading")
+                local_path.unlink(missing_ok=True)
+        except Exception:
+            pass
 
     # Try bold variant first if requested
     if bold and name in GOOGLE_FONT_BOLD_URLS:
@@ -122,11 +138,20 @@ def ensure_font(name, bold=False):
         return None
 
     logger.info(f"Downloading font: {name} ({'bold' if bold else 'regular'}) ...")
-    resp = requests.get(url, timeout=30)
-    resp.raise_for_status()
-    local_path.write_bytes(resp.content)
-    logger.info(f"Saved font to {local_path}")
-    return local_path
+    try:
+        resp = requests.get(url, timeout=30)
+        resp.raise_for_status()
+        data = resp.content
+        # Validate downloaded bytes are a real font
+        if not any(data[:4].startswith(h) for h in _VALID_HEADERS):
+            logger.warning(f"Downloaded font '{name}' failed magic-byte check — skipping")
+            return None
+        local_path.write_bytes(data)
+        logger.info(f"Saved font to {local_path}")
+        return local_path
+    except Exception as e:
+        logger.warning(f"Font download failed for '{name}': {e} — will use PIL default")
+        return None
 
 
 def load_font(name, size, bold=False):

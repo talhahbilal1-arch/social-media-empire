@@ -808,6 +808,8 @@ def log_pin_to_history(pin_data, supabase_client):
             'pexels_image_id': pin_data.get('pexels_image_id', ''),
             'destination_url': pin_data.get('destination_url', ''),
             'posting_method': pin_data.get('posting_method', ''),
+            'trending_topic': pin_data.get('trending_topic', ''),
+            'status': pin_data.get('posting_method', 'posted') or 'posted',
             'created_at': datetime.now(timezone.utc).isoformat()
         }).execute()
     except Exception as e:
