@@ -186,15 +186,14 @@ class HealthChecker:
             )
 
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=config.gemini_api_key)
+            from google import genai
+
+            client = genai.Client(api_key=config.gemini_api_key)
 
             start = datetime.now()
-            # Simple test generation
-            model = genai.GenerativeModel("gemini-2.0-flash")
-            response = model.generate_content(
-                "Say 'ok'",
-                generation_config=genai.GenerationConfig(max_output_tokens=10)
+            response = client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents="Say 'ok'",
             )
             response_time = (datetime.now() - start).total_seconds() * 1000
 
@@ -488,51 +487,71 @@ class HealthChecker:
         return self._check_make_webhook("make_webhook_menopause", config.make_webhook_menopause)
 
     def check_late_api(self) -> HealthCheckResult:
-        """Check Late API (Pinterest posting for fitness brand)."""
+        """Check Late API keys used for Pinterest posting across all brands.
+
+        Checks all configured Late API keys (LATE_API_KEY through LATE_API_KEY_4)
+        since each brand uses a different key.
+        """
+        import os
         config = get_config()
 
-        if not config.late_api_key:
-            return HealthCheckResult(
-                service="late_api",
-                status="degraded",
-                error="LATE_API_KEY not configured"
-            )
+        # Map of brand to their Late API key env var
+        key_map = {
+            "primary": ("LATE_API_KEY", config.late_api_key),
+            "deals": ("LATE_API_KEY_2", os.environ.get("LATE_API_KEY_2", "")),
+            "fitness": ("LATE_API_KEY_3", os.environ.get("LATE_API_KEY_3", "")),
+            "menopause": ("LATE_API_KEY_4", os.environ.get("LATE_API_KEY_4", "")),
+        }
 
-        try:
-            start = datetime.now()
-            response = requests.get(
-                "https://getlate.dev/api/v1/accounts",
-                headers={"Authorization": f"Bearer {config.late_api_key}"},
-                timeout=self.timeout_seconds
-            )
-            response_time = (datetime.now() - start).total_seconds() * 1000
+        configured_keys = {name: (env, key) for name, (env, key) in key_map.items() if key}
 
-            if response.status_code == 200:
-                return HealthCheckResult(
-                    service="late_api",
-                    status="healthy",
-                    response_time_ms=response_time
-                )
-            elif response.status_code == 403:
-                return HealthCheckResult(
-                    service="late_api",
-                    status="unhealthy",
-                    response_time_ms=response_time,
-                    error="Access forbidden - API key may be invalid or expired"
-                )
-            else:
-                return HealthCheckResult(
-                    service="late_api",
-                    status="degraded",
-                    response_time_ms=response_time,
-                    error=f"Status code: {response.status_code}"
-                )
-
-        except Exception as e:
+        if not configured_keys:
             return HealthCheckResult(
                 service="late_api",
                 status="unhealthy",
-                error=str(e)
+                error="No Late API keys configured (need at least LATE_API_KEY)",
+                details={"keys_checked": list(key_map.keys()), "keys_configured": 0}
+            )
+
+        healthy_keys = []
+        failed_keys = []
+
+        for name, (env_var, key) in configured_keys.items():
+            try:
+                response = requests.get(
+                    "https://getlate.dev/api/v1/accounts",
+                    headers={"Authorization": f"Bearer {key}"},
+                    timeout=self.timeout_seconds
+                )
+                if response.status_code == 200:
+                    healthy_keys.append(name)
+                else:
+                    failed_keys.append(f"{name}({env_var}): HTTP {response.status_code}")
+            except Exception as e:
+                failed_keys.append(f"{name}({env_var}): {str(e)[:50]}")
+
+        total = len(configured_keys)
+        ok = len(healthy_keys)
+
+        if ok == total:
+            return HealthCheckResult(
+                service="late_api",
+                status="healthy",
+                details={"keys_healthy": ok, "keys_total": total, "healthy": healthy_keys}
+            )
+        elif ok > 0:
+            return HealthCheckResult(
+                service="late_api",
+                status="degraded",
+                error=f"{len(failed_keys)}/{total} keys failing: {'; '.join(failed_keys)}",
+                details={"keys_healthy": ok, "keys_total": total, "failed": failed_keys}
+            )
+        else:
+            return HealthCheckResult(
+                service="late_api",
+                status="unhealthy",
+                error=f"All {total} configured keys failing: {'; '.join(failed_keys)}",
+                details={"keys_healthy": 0, "keys_total": total, "failed": failed_keys}
             )
 
     def check_elevenlabs(self) -> HealthCheckResult:
@@ -891,11 +910,12 @@ class HealthChecker:
         )
 
     def check_critical_only(self) -> dict:
-        """Check only critical services (faster)."""
+        """Check only critical services for pin posting pipeline (faster)."""
         checks = [
+            self.check_anthropic(),
             self.check_supabase(),
-            self.check_gemini(),
             self.check_pexels(),
+            self.check_late_api(),
         ]
 
         healthy = all(c.status == "healthy" for c in checks)

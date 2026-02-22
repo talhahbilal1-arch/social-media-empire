@@ -279,8 +279,10 @@ jobs:
                           print(f'  WARNING: No posting method configured for {brand}')
                           print(f'  Set {brand_late_cfg[\"api_key_envs\"][0]} in GitHub Secrets')
                           pin_data['posting_method'] = 'skipped'
+                          results.append({'brand': brand, 'status': 'skipped', 'title': pin_data['title'], 'error': 'No posting method configured'})
+                          continue
 
-                  # Step 5: Log to content_history
+                  # Step 5: Log to content_history (only if actually posted)
                   log_pin_to_history(pin_data, db.client)
                   results.append({'brand': brand, 'status': 'posted', 'title': pin_data['title']})
                   print(f'  Logged to content_history')
