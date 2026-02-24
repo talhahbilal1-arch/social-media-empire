@@ -1,17 +1,9 @@
-# Agent 4: Analytics Collector
-# Runs daily at 11:00 PM UTC to collect engagement metrics
-
 name: Analytics Collector
 
 on:
   schedule:
     - cron: '0 23 * * *'
   workflow_dispatch:
-
-env:
-  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-  YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
 
 jobs:
   collect-analytics:
@@ -25,6 +17,76 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip install -r requirements.txt
-      - run: python -m agents.analytics_collector
+
+      - name: Collect analytics
         env:
-          GITHUB_RUN_ID: ${{ github.run_id }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python3 << 'PYEOF'
+          import sys, os, json
+          from datetime import datetime, timezone, timedelta
+
+          sys.path.insert(0, '.')
+          from database.supabase_client import get_supabase_client
+
+          db = get_supabase_client()
+          today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+          yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime('%Y-%m-%d')
+
+          print('=== Daily Analytics Collection ===')
+
+          # Count pins posted today per brand
+          for brand in ['fitness', 'deals', 'menopause']:
+              try:
+                  result = db.client.table('content_history') \
+                      .select('id', count='exact') \
+                      .eq('brand', brand) \
+                      .gte('created_at', yesterday + 'T00:00:00Z') \
+                      .execute()
+                  count = result.count if result.count else 0
+                  print(f'  {brand}: {count} pins posted (last 24h)')
+
+                  db.client.table('analytics').insert({
+                      'brand': brand,
+                      'platform': 'pinterest',
+                      'metric_name': 'daily_pins_posted',
+                      'metric_value': count,
+                      'recorded_at': datetime.now(timezone.utc).isoformat()
+                  }).execute()
+              except Exception as e:
+                  print(f'  {brand} analytics error: {e}')
+
+          # Count articles generated
+          try:
+              articles = db.client.table('generated_articles') \
+                  .select('id', count='exact') \
+                  .gte('created_at', yesterday + 'T00:00:00Z') \
+                  .execute()
+              print(f'  Articles generated (24h): {articles.count or 0}')
+          except Exception as e:
+              print(f'  Article count error: {e}')
+
+          # Count errors
+          try:
+              errors = db.client.table('errors') \
+                  .select('id', count='exact') \
+                  .eq('resolved', False) \
+                  .execute()
+              print(f'  Unresolved errors: {errors.count or 0}')
+          except Exception as e:
+              print(f'  Error count error: {e}')
+
+          # Update agent_runs
+          try:
+              db.client.table('agent_runs').upsert({
+                  'agent_name': 'analytics_collector',
+                  'last_run_at': datetime.now(timezone.utc).isoformat(),
+                  'status': 'success',
+                  'updated_at': datetime.now(timezone.utc).isoformat()
+              }, on_conflict='agent_name').execute()
+          except:
+              pass
+
+          print(f'\nAnalytics collection complete: {today}')
+          PYEOF

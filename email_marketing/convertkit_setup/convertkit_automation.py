@@ -279,6 +279,44 @@ class ConvertKitManager:
         response.raise_for_status()
         return response.json()
 
+    def create_broadcast(
+        self,
+        subject: str,
+        content: str,
+        description: str = "",
+        preview_text: str = "",
+        public: bool = True,
+    ) -> dict:
+        """Create and send a broadcast email.
+
+        Args:
+            subject: Email subject line.
+            content: HTML content of the email.
+            description: Internal description for the broadcast.
+            preview_text: Preview text shown in inbox.
+            public: Whether the broadcast is publicly visible.
+
+        Returns:
+            ConvertKit broadcast response with broadcast ID.
+        """
+        data = {
+            "api_secret": self.api_secret,
+            "subject": subject,
+            "content": content,
+            "public": public,
+        }
+        if description:
+            data["description"] = description
+        if preview_text:
+            data["email_layout_template"] = preview_text
+
+        response = requests.post(
+            f"{self.base_url}/broadcasts",
+            json=data
+        )
+        response.raise_for_status()
+        return response.json()
+
     # ==================== Custom Fields ====================
 
     def list_custom_fields(self) -> list:

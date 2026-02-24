@@ -79,6 +79,8 @@ CREATE TABLE IF NOT EXISTS analytics (
     metric_value NUMERIC,
     recorded_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE analytics ADD COLUMN IF NOT EXISTS event_type VARCHAR(100);
+ALTER TABLE analytics ADD COLUMN IF NOT EXISTS data JSONB;
 
 -- ── errors ────────────────────────────────────────────────────
 -- severity column was missing — added here and via ALTER
@@ -93,6 +95,8 @@ CREATE TABLE IF NOT EXISTS errors (
 );
 ALTER TABLE errors ADD COLUMN IF NOT EXISTS severity VARCHAR(20) DEFAULT 'medium';
 ALTER TABLE errors ADD COLUMN IF NOT EXISTS resolved BOOLEAN DEFAULT FALSE;
+ALTER TABLE errors ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMPTZ;
+ALTER TABLE errors ADD COLUMN IF NOT EXISTS resolution_notes TEXT;
 
 -- Clear stale error entries from known failure patterns so they don't pile up
 DELETE FROM errors
@@ -170,6 +174,9 @@ CREATE TABLE IF NOT EXISTS weekly_calendar (
     calendar_data JSONB NOT NULL DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE weekly_calendar ADD COLUMN IF NOT EXISTS trends_data JSONB;
+ALTER TABLE weekly_calendar ADD COLUMN IF NOT EXISTS performance_review JSONB;
+ALTER TABLE weekly_calendar ADD COLUMN IF NOT EXISTS week_starting DATE;
 
 -- ── generated_articles ────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS generated_articles (
