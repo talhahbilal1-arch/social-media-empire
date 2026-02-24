@@ -1,21 +1,9 @@
-# Agent 5: Self-Improvement Engine
-# Runs weekly on Sundays at 6:00 AM UTC
-
 name: Self-Improvement
 
 on:
   schedule:
-    # Every Sunday at 6:00 AM UTC
     - cron: '0 6 * * 0'
   workflow_dispatch:
-
-env:
-  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-  ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
-  ALERT_EMAIL_PASSWORD: ${{ secrets.ALERT_EMAIL_PASSWORD }}
-  ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
 
 jobs:
   optimize:
@@ -29,6 +17,84 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip install -r requirements.txt
-      - run: python -m agents.self_improve
+
+      - name: Run self-improvement analysis
         env:
-          GITHUB_RUN_ID: ${{ github.run_id }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 << 'PYEOF'
+          import sys, os, json
+          from datetime import datetime, timezone, timedelta
+
+          sys.path.insert(0, '.')
+          from database.supabase_client import get_supabase_client
+
+          db = get_supabase_client()
+          now = datetime.now(timezone.utc)
+          week_ago = (now - timedelta(days=7)).isoformat()
+
+          print('=== Weekly Self-Improvement Analysis ===')
+
+          # Analyze error patterns from the past week
+          try:
+              errors = db.client.table('errors') \
+                  .select('error_type, error_message, severity') \
+                  .gte('created_at', week_ago) \
+                  .execute()
+
+              if errors.data:
+                  # Group by error_type
+                  error_groups = {}
+                  for e in errors.data:
+                      etype = e.get('error_type', 'unknown')
+                      error_groups.setdefault(etype, []).append(e)
+
+                  print(f'\nError patterns (last 7 days): {len(errors.data)} total')
+                  for etype, items in sorted(error_groups.items(), key=lambda x: -len(x[1])):
+                      print(f'  {etype}: {len(items)} occurrences')
+                      if len(items) >= 3:
+                          print(f'    ^ Recurring pattern — investigate root cause')
+              else:
+                  print('  No errors in the past week — system healthy!')
+          except Exception as e:
+              print(f'  Error analysis failed: {e}')
+
+          # Check content output trends
+          try:
+              content = db.client.table('content_history') \
+                  .select('brand, status') \
+                  .gte('created_at', week_ago) \
+                  .execute()
+
+              if content.data:
+                  brand_stats = {}
+                  for c in content.data:
+                      b = c.get('brand', 'unknown')
+                      s = c.get('status', 'unknown')
+                      brand_stats.setdefault(b, {'posted': 0, 'failed': 0, 'skipped': 0})
+                      if s in brand_stats[b]:
+                          brand_stats[b][s] += 1
+
+                  print(f'\nContent output (last 7 days):')
+                  for brand, stats in brand_stats.items():
+                      total = sum(stats.values())
+                      success_rate = (stats['posted'] / total * 100) if total > 0 else 0
+                      print(f'  {brand}: {stats["posted"]} posted, {stats["failed"]} failed ({success_rate:.0f}% success)')
+          except Exception as e:
+              print(f'  Content analysis failed: {e}')
+
+          # Log self-improvement run
+          try:
+              db.client.table('agent_runs').upsert({
+                  'agent_name': 'self_improve',
+                  'last_run_at': now.isoformat(),
+                  'status': 'success',
+                  'updated_at': now.isoformat()
+              }, on_conflict='agent_name').execute()
+          except:
+              pass
+
+          print(f'\nSelf-improvement analysis complete.')
+          PYEOF

@@ -29,8 +29,13 @@ def _get_client():
     return _client
 
 
-# ── Amazon Associates affiliate links (tag=dailydealdarl-20) ─────────────────
-# CRITICAL: Always use direct product links (/dp/ASIN?tag=dailydealdarl-20), never /s? search URLs
+# ── Amazon Associates affiliate links ──────────────────────────────────────────
+# NOTE: All brands currently use tag=dailydealdarl-20 (single Associates account).
+# When separate Associates accounts are set up per brand, update tags here:
+#   fitness  -> tag=fitover35-20
+#   deals    -> tag=dailydealdarl-20
+#   menopause -> tag=menopauseplan-20
+# CRITICAL: Always use direct product links (/dp/ASIN?tag=...), never /s? search URLs
 
 AMAZON_AFFILIATE_LINKS = {
     "fitness": {

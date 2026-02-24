@@ -29,7 +29,7 @@ env:
 jobs:
   generate-and-post:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repository
@@ -45,7 +45,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Pre-flight check
@@ -58,7 +58,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
-          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
         run: python3 scripts/preflight_check.py
 
       - name: Generate and post pins
@@ -71,7 +71,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
-          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python3 << 'PYEOF'
@@ -233,8 +233,8 @@ jobs:
                       subprocess.run(['git', 'push'], check=True)
                       print(f'  Pushed {len(articles_generated)} articles')
                       # Wait for deploy to propagate
-                      print('  Waiting 30s for deploy...')
-                      time.sleep(30)
+                      print('  Waiting 60s for deploy...')
+                      time.sleep(60)
                   else:
                       print('  No new article files to commit')
               except Exception as e:
