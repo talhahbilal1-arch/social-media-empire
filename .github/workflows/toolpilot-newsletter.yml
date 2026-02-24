@@ -28,7 +28,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install Python dependencies
-        run: pip install requests
+        run: pip install requests resend
 
       - name: Generate newsletter
         working-directory: ai-tools-hub

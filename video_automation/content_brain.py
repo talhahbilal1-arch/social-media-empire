@@ -446,7 +446,7 @@ This audience is going through something hard and wants to feel seen and helped.
             "#menopausewellness", "#hotflashrelief", "#menopausetips", "#womenover45"
         ],
 
-        "destination_base_url": "https://menopauseplanner.netlify.app",
+        "destination_base_url": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic",
         "pinterest_boards": [
             "Menopause Symptoms & Relief",
             "Hormone Balance Naturally",
