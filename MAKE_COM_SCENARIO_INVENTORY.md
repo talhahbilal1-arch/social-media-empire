@@ -57,9 +57,9 @@ These scenarios receive Pinterest pin data via webhook and post to Pinterest.
 | **Schedule** | Every 6 hours (21600 seconds) |
 | **Source table** | `pinterest_pins` where `status=failed` |
 | **Flow** | GET failed pins → Iterator → Router (brand filter) → POST to brand webhook |
-| **Status** | ⚠️ Inactive — needs Supabase key replacement + webhook URL update for fitness |
+| **Status** | ✅ Active — verified 2026-02-24 |
 
-#### Route Filters (update fitness route to new webhook)
+#### Route Filters
 | Route | Brand Filter | Target Webhook |
 |-------|-------------|----------------|
 | Fitness | `brand = fitness-made-easy` | `https://hook.us2.make.com/c9hrx4dvf8nm5hkrq41sk29ty6lp1ir9` |
@@ -74,7 +74,7 @@ These scenarios receive Pinterest pin data via webhook and post to Pinterest.
 | **Schedule** | Every 24 hours (86400 seconds) |
 | **Source table** | `pinterest_pins` last 24h |
 | **Flow** | GET posted count → GET failed count → POST Telegram report |
-| **Status** | ⚠️ Inactive — needs Supabase key + Telegram bot token replacement |
+| **Status** | ✅ Active — verified 2026-02-24 |
 
 ---
 
@@ -148,3 +148,5 @@ Make.com Health Report (every 24h) — scenario 4210643 [INACTIVE]
 | 2026-02-24 | Scenarios 4210274 (deals) + 4210434 (menopause) activated; Supabase key injected via API |
 | 2026-02-24 | Scenario 4210216 (fitness): old webhook hook 1918987 was dead (410); new hook 1924684 created + blueprint patched + activated |
 | 2026-02-24 | All 3 brands verified posting end-to-end via CLAW v2 dedicated webhooks |
+| 2026-02-24 | Scenario 4210597 (retry): activated; Supabase key injected + fitness webhook updated to new hook |
+| 2026-02-24 | Scenario 4210643 (health report): activated; Supabase key + Telegram bot token injected |
