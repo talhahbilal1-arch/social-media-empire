@@ -114,7 +114,7 @@ Available Make.com connections (as of 2026-02-23):
 |-------|-------|
 | **Old scenario ID** | 3977247 |
 | **Old webhook** | `https://hook.us2.make.com/8d51h67qpdt77jgz5brhvd5c9hgvaap8` |
-| **Status** | Can be deactivated — all 3 CLAW v2 pin posters are active |
+| **Status** | ✅ Deactivated 2026-02-24 — replaced by CLAW v2 scenarios |
 
 ---
 
@@ -150,3 +150,4 @@ Make.com Health Report (every 24h) — scenario 4210643 [INACTIVE]
 | 2026-02-24 | All 3 brands verified posting end-to-end via CLAW v2 dedicated webhooks |
 | 2026-02-24 | Scenario 4210597 (retry): activated; Supabase key injected + fitness webhook updated to new hook |
 | 2026-02-24 | Scenario 4210643 (health report): activated; Supabase key + Telegram bot token injected |
+| 2026-02-24 | Old scenario 3977247 (Pinterest Pin Publisher - All Brands): deactivated |
