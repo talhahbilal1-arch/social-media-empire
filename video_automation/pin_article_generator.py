@@ -115,7 +115,7 @@ BRAND_SITE_CONFIG = {
             ("Articles", "./"),
             ("About", "../about.html"),
         ],
-        "has_css": False,
+        "has_css": True,
         "lead_magnet": "FREE Weekly Deals Digest",
         "signup_form_id": "5641382",
         "signup_button_text": "Join Free",

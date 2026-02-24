@@ -1,283 +1,516 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Daily Deal Darling articles - smart shopping tips, beauty reviews, and home finds for budget-conscious women.">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Articles - Daily Deal Darling">
-    <meta property="og:description" content="Smart shopping tips, honest reviews, and budget-friendly finds.">
-    <meta property="og:url" content="https://www.dailydealdarling.com/blog">
-    <meta property="og:type" content="website">
-    <title>Articles - Daily Deal Darling</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse all Daily Deal Darling articles — kitchen gadgets, home organization, beauty finds, and the best deals under $20.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="All Articles - Daily Deal Darling">
+  <meta property="og:description" content="Smart shopping tips, honest reviews, and budget-friendly finds for women who love a great deal.">
+  <meta property="og:url" content="https://www.dailydealdarling.com/blog">
+  <meta property="og:type" content="website">
+  <title>All Articles - Daily Deal Darling</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVCLZPEYNS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HVCLZPEYNS');
+  </script>
+  <style>
+    /* ── Blog page extras ─────────────────────────────────────────────── */
+    .blog-hero {
+      background: linear-gradient(135deg, var(--bg-pink) 0%, #FFF0F5 100%);
+      padding: 48px 0 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-pink);
+    }
+    .blog-hero h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--dark); margin-bottom: 10px; }
+    .blog-hero p  { color: var(--muted); font-size: 1.05rem; }
+    .blog-hero .article-count { display: inline-block; background: var(--pink); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
+    /* Category filter tabs */
+    .filter-bar { background: #fff; border-bottom: 1px solid var(--border); position: sticky; top: 64px; z-index: 90; }
+    .filter-bar__inner { display: flex; gap: 4px; padding: 12px 0; overflow-x: auto; scrollbar-width: none; }
+    .filter-bar__inner::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; padding: 8px 18px; border-radius: 24px; border: 1.5px solid var(--border); background: #fff; color: var(--muted); font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--pink); background: var(--pink); color: #fff; }
+    .filter-btn.cat-kitchen.active, .filter-btn.cat-kitchen:hover { background: var(--cat-kitchen); border-color: var(--cat-kitchen); color: #fff; }
+    .filter-btn.cat-home.active, .filter-btn.cat-home:hover { background: var(--cat-home); border-color: var(--cat-home); color: #fff; }
+    .filter-btn.cat-beauty.active, .filter-btn.cat-beauty:hover { background: var(--cat-beauty); border-color: var(--cat-beauty); color: #fff; }
+    .filter-btn.cat-deals.active, .filter-btn.cat-deals:hover { background: var(--cat-deals); border-color: var(--cat-deals); color: #fff; }
 
-        /* Header */
-        header {
-            background-color: #fff;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
+    /* Category sections */
+    .cat-section { padding: 48px 0 16px; }
+    .cat-section + .cat-section { padding-top: 16px; }
+    .cat-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
+    .cat-header h2 { font-size: 1.35rem; font-weight: 800; color: var(--dark); }
+    .cat-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .cat-icon--kitchen { background: var(--cat-kitchen-bg); }
+    .cat-icon--home    { background: var(--cat-home-bg); }
+    .cat-icon--beauty  { background: var(--cat-beauty-bg); }
+    .cat-icon--deals   { background: var(--cat-deals-bg); }
+    .cat-count { margin-left: auto; font-size: 0.8rem; color: var(--muted); font-weight: 500; background: var(--bg-soft); padding: 4px 12px; border-radius: 12px; }
 
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* Article grid on blog page */
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+    @media (max-width: 900px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .blog-grid { grid-template-columns: 1fr; } }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #333;
-        }
+    /* Blog card variant — slightly taller thumbnail */
+    .blog-card { background: #fff; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; transition: box-shadow var(--transition), transform var(--transition); display: flex; flex-direction: column; }
+    .blog-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .blog-card__thumb { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; }
+    .blog-card__body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .blog-card__title { font-size: 0.95rem; font-weight: 700; color: var(--dark); line-height: 1.4; flex: 1; }
+    .blog-card__meta { font-size: 0.78rem; color: var(--muted); }
+    .blog-card__cta { display: inline-block; margin-top: 4px; font-size: 0.8rem; font-weight: 600; color: var(--pink); }
+    .blog-card__cta:hover { color: var(--pink-dark); }
 
-        nav a {
-            margin-left: 2.5rem;
-            text-decoration: none;
-            color: #666;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            font-size: 0.95rem;
-        }
+    /* Email band on blog */
+    .blog-email-band { background: linear-gradient(135deg, #E91E63, #C2185B); color: #fff; padding: 40px 0; margin: 40px 0; border-radius: var(--radius-lg); text-align: center; }
+    .blog-email-band h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
+    .blog-email-band p { opacity: 0.9; margin-bottom: 20px; }
+    .blog-email-band form { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .blog-email-band input[type="email"] { padding: 12px 20px; border-radius: 8px; border: none; font-size: 0.95rem; width: 280px; max-width: 100%; }
+    .blog-email-band button { padding: 12px 24px; border-radius: 8px; border: 2px solid #fff; background: transparent; color: #fff; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition); }
+    .blog-email-band button:hover { background: #fff; color: var(--pink); }
 
-        nav a:hover {
-            color: #E91E63;
-        }
-
-        nav {
-            display: flex;
-        }
-
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #fff5f9 0%, #ffffff 100%);
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-header p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        /* Content Area */
-        .content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        /* Placeholder Card */
-        .placeholder-card {
-            background: linear-gradient(135deg, #fff5f9 0%, #fce4ec 100%);
-            border: 2px dashed #E91E63;
-            border-radius: 8px;
-            padding: 3rem;
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .placeholder-card h2 {
-            color: #E91E63;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .placeholder-card p {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .placeholder-card .icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Article Grid */
-        #article-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .article-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #f0f0f0;
-        }
-
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.15);
-        }
-
-        .article-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #fff5f9 0%, #fce4ec 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #E91E63;
-        }
-
-        .article-content {
-            padding: 1.5rem;
-        }
-
-        .article-date {
-            color: #E91E63;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .article-card h3 {
-            font-size: 1.3rem;
-            color: #333;
-            margin-bottom: 0.8rem;
-            line-height: 1.4;
-        }
-
-        .article-card p {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .article-link {
-            color: #E91E63;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .article-link:hover {
-            transform: translateX(5px);
-        }
-
-        /* Footer */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-            margin-top: 4rem;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        footer p {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
-
-            nav a {
-                margin-left: 0;
-            }
-
-            .page-header h1 {
-                font-size: 1.8rem;
-            }
-
-            #article-list {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVCLZPEYNS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-HVCLZPEYNS');
-    </script>
+    /* Hide/show by category */
+    .cat-section[data-cat] { transition: opacity 0.2s; }
+    .cat-section.hidden { display: none; }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="logo">Daily Deal <span style="color: #E91E63;">Darling</span></div>
-            <nav>
-                <a href="/">Home</a>
-                <a href="/blog.html">Articles</a>
-                <a href="/about.html">About</a>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <h1>Smart Shopping Articles</h1>
-        <p>Tips, reviews, and finds to help you shop smarter</p>
+  <!-- ── Header ──────────────────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="container">
+      <div class="site-header__inner">
+        <a href="index.html" class="site-logo">Daily Deal <span>Darling</span></a>
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="blog.html" class="active">Articles</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <a href="#newsletter" class="header-cta">Get Free Deals →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Blog Hero ───────────────────────────────────────────────────── -->
+  <section class="blog-hero">
+    <div class="container">
+      <span class="article-count">29 Articles</span>
+      <h1>All Articles</h1>
+      <p>Smart shopping tips, honest product reviews, and the best deals — all in one place.</p>
+    </div>
+  </section>
+
+  <!-- ── Category Filter Bar ─────────────────────────────────────────── -->
+  <div class="filter-bar">
+    <div class="container">
+      <div class="filter-bar__inner">
+        <button class="filter-btn active" onclick="filterCat('all', this)">✨ All Articles</button>
+        <button class="filter-btn cat-kitchen" onclick="filterCat('kitchen', this)">🍳 Kitchen</button>
+        <button class="filter-btn cat-home" onclick="filterCat('home', this)">🏡 Home Organization</button>
+        <button class="filter-btn cat-beauty" onclick="filterCat('beauty', this)">💄 Beauty</button>
+        <button class="filter-btn cat-deals" onclick="filterCat('deals', this)">🏷️ Sales &amp; Deals</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container" style="padding-bottom:64px">
+
+    <!-- ── Kitchen ────────────────────────────────────────────────────── -->
+    <section class="cat-section" data-cat="kitchen">
+      <div class="cat-header">
+        <div class="cat-icon cat-icon--kitchen">🍳</div>
+        <h2>Kitchen Finds</h2>
+        <span class="cat-count">11 articles</span>
+      </div>
+      <div class="blog-grid">
+
+        <a href="articles/budget-kitchen-gadgets-under-20-that-save-time" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">🥘</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Kitchen Gadgets Under $20 That Actually Save Time (Not Junk Drawer Fillers)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/amazon-kitchen-finds-under-10-that-pros-are-loving-this-mont" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">👨‍🍳</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Kitchen Tools Chefs Actually Use Under $10 (I Bought Them All)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/viral-kitchen-gadgets-modern-must-haves-tiktok-finds" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">📱</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Viral Kitchen Gadgets Actually Worth Your Money (I Tested Them All)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/kitchen-essentials-that-look-expensive-but-start-at-7" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">✨</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Kitchen Essentials That Look Expensive But Cost $7</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/kitchen-gadgets-under-15-for-healthy-eating-goals" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">🥗</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Kitchen Gadgets Under $15 That Actually Help You Eat Healthier</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/the-8-kitchen-tool-replacing-expensive-appliances" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">🔪</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">The $8 Kitchen Tool That Made Me Ditch My $100 Food Processor</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/8-kitchen-gadget-that-replaces-expensive-appliances" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">🥄</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">This $8 Manual Chopper Replaced My $75 Food Processor (And I'm Never Going Back)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/timeless-kitchen-gadgets-that-never-go-out-of-style-grandma-" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">👵</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Kitchen Tools Grandma Bought Once That Still Work Perfectly</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/non-plastic-kitchen-utensils-for-healthier-cooking" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">🌿</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Kitchen Utensils Secretly Leaching Toxins Into Your Food</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/kitchen-tools-were-replacing-in-2026-budget-friendly-upgrade" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">🆕</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">5 Kitchen Tools We're Finally Replacing in 2026 (That $22 Knife Set Though)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/williams-sonoma-outlet-deals-premium-kitchen-finds-up-to-44-" class="blog-card">
+          <div class="blog-card__thumb card__thumb--kitchen">🏪</div>
+          <div class="blog-card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <p class="blog-card__title">Williams Sonoma Outlet Deals: 5 Premium Kitchen Finds Actually Worth Your Money</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+      </div>
     </section>
 
-    <!-- Content -->
-    <section class="content">
-        <!-- Placeholder -->
-        <div class="placeholder-card">
-            <div class="icon">📰</div>
-            <h2>New Articles Coming Daily</h2>
-            <p>Check back soon for fresh deals, beauty reviews, and home finds. We're adding new content every day!</p>
-        </div>
+    <!-- ── Email Band ─────────────────────────────────────────────────── -->
+    <div class="blog-email-band" id="newsletter">
+      <h3>Get the best deals in your inbox</h3>
+      <p>Join 4,200+ smart shoppers who never pay full price</p>
+      <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+      <form action="https://app.convertkit.com/forms/5641382/subscriptions" method="post" data-sv-form="5641382">
+        <input type="email" name="email_address" placeholder="Your email address" required>
+        <button type="submit">Get Free Deals</button>
+      </form>
+    </div>
 
-        <!-- Article Grid (populated by content engine) -->
-        <div id="article-list"></div>
+    <!-- ── Home Organization ──────────────────────────────────────────── -->
+    <section class="cat-section" data-cat="home">
+      <div class="cat-header">
+        <div class="cat-icon cat-icon--home">🏡</div>
+        <h2>Home Organization</h2>
+        <span class="cat-count">8 articles</span>
+      </div>
+      <div class="blog-grid">
+
+        <a href="articles/2026-home-organization-hacks-that-actually-work" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">📦</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">5 Home Organization Hacks That Actually Work (I Tested Them All)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/8-storage-baskets-for-laundry-and-home-organization" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">🧺</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">These $8 Storage Baskets Fixed Every Messy Corner in My House</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/bathroom-cabinet-organization-solutions" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">🛁</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">5 Bathroom Cabinet Secrets That Actually Save Space (Without Buying New Furniture)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/kids-room-organization-that-actually-stays-organized" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">🧸</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">5 Kids Room Organization Tricks That Actually Stay Organized (From a Mom Who's Tried Everything)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/label-makers-for-peak-home-organization" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">🏷️</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">5 Label Maker Secrets That Actually Work (#3 Saved Me)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/spring-cleaning-organization-products-storage-deals" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">🌸</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">5 Storage Products That Sell Out Every March (And Why They're Actually Worth It)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/spring-cleaning-prep-deals-organization-product-launches" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">🧹</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">5 Spring Cleaning Essentials Under $6 That Actually Work (I Use #2 Weekly)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/budget-walmart-storage-cabinets-for-home-organization-under-" class="blog-card">
+          <div class="blog-card__thumb card__thumb--home">🗄️</div>
+          <div class="blog-card__body">
+            <span class="badge badge--home">Home</span>
+            <p class="blog-card__title">5 Walmart Storage Cabinets Under $100 That Actually Look Expensive</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <p>&copy; 2026 Daily Deal Darling. All rights reserved.</p>
-            <p>Helping women shop smarter, not harder.</p>
+    <!-- ── Beauty & Wellness ──────────────────────────────────────────── -->
+    <section class="cat-section" data-cat="beauty">
+      <div class="cat-header">
+        <div class="cat-icon cat-icon--beauty">💄</div>
+        <h2>Beauty &amp; Wellness</h2>
+        <span class="cat-count">4 articles</span>
+      </div>
+      <div class="blog-grid">
+
+        <a href="articles/at-home-spa-night-essentials-and-setup" class="blog-card">
+          <div class="blog-card__thumb card__thumb--beauty">🛁</div>
+          <div class="blog-card__body">
+            <span class="badge badge--beauty">Beauty</span>
+            <p class="blog-card__title">5 Spa Night Essentials That Actually Feel Luxe (Not Just Pinterest-Pretty)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/bath-products-that-feel-luxurious-under-20" class="blog-card">
+          <div class="blog-card__thumb card__thumb--beauty">🌸</div>
+          <div class="blog-card__body">
+            <span class="badge badge--beauty">Beauty</span>
+            <p class="blog-card__title">5 Bath Products That Feel Spa-Level Under $20</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/hair-tools-honest-review-and-comparison" class="blog-card">
+          <div class="blog-card__thumb card__thumb--beauty">💇‍♀️</div>
+          <div class="blog-card__body">
+            <span class="badge badge--beauty">Beauty</span>
+            <p class="blog-card__title">5 Hair Tools That Actually Earn Their Counter Space (Honest Reviews)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/skincare-routine-affordable-products-that-work" class="blog-card">
+          <div class="blog-card__thumb card__thumb--beauty">✨</div>
+          <div class="blog-card__body">
+            <span class="badge badge--beauty">Beauty</span>
+            <p class="blog-card__title">5 Affordable Skincare Products That Actually Work (No Luxury Tax Required)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ── Sales & Deals ──────────────────────────────────────────────── -->
+    <section class="cat-section" data-cat="deals">
+      <div class="cat-header">
+        <div class="cat-icon cat-icon--deals">🏷️</div>
+        <h2>Sales &amp; Deals</h2>
+        <span class="cat-count">6 articles</span>
+      </div>
+      <div class="blog-grid">
+
+        <a href="articles/wayfair-warehouse-clearance-up-to-60-off-furniture-storage" class="blog-card">
+          <div class="blog-card__thumb card__thumb--deals">🛋️</div>
+          <div class="blog-card__body">
+            <span class="badge badge--deals">Deals</span>
+            <p class="blog-card__title">5 Wayfair Clearance Secrets Most People Miss (I Saved $487 Last Month)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/crate-barrel-clearance-home-deals-up-to-60-off" class="blog-card">
+          <div class="blog-card__thumb card__thumb--deals">🏺</div>
+          <div class="blog-card__body">
+            <span class="badge badge--deals">Deals</span>
+            <p class="blog-card__title">Crate &amp; Barrel Clearance: 5 Home Finds I'm Actually Buying Before They Sell Out</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/presidents-day-mattress-furniture-sale-deals-2026" class="blog-card">
+          <div class="blog-card__thumb card__thumb--deals">🛏️</div>
+          <div class="blog-card__body">
+            <span class="badge badge--deals">Deals</span>
+            <p class="blog-card__title">5 Presidents Day Furniture Tricks That Expose Fake Sales (2026)</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/tax-refund-smart-spending-best-home-upgrades-under-500" class="blog-card">
+          <div class="blog-card__thumb card__thumb--deals">💰</div>
+          <div class="blog-card__body">
+            <span class="badge badge--deals">Deals</span>
+            <p class="blog-card__title">5 Tax Refund Buys Under $500 That I Actually Use Every Single Day</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/valentines-day-clearance-haul-deals-75-off" class="blog-card">
+          <div class="blog-card__thumb card__thumb--deals">💝</div>
+          <div class="blog-card__body">
+            <span class="badge badge--deals">Deals</span>
+            <p class="blog-card__title">5 Valentines Clearance Finds I'm Spray Painting Into Year-Round Decor</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+        <a href="articles/target-valentines-clearance-haul-75-percent-off" class="blog-card">
+          <div class="blog-card__thumb card__thumb--deals">🎯</div>
+          <div class="blog-card__body">
+            <span class="badge badge--deals">Deals</span>
+            <p class="blog-card__title">Target Valentine's Day Clearance Haul — 75% Off Finds Worth Grabbing</p>
+            <span class="blog-card__cta">Read article →</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+        <div class="site-footer__brand">
+          <a href="index.html" class="site-logo">Daily Deal <span>Darling</span></a>
+          <p>Smart shopping, honest reviews, and real deals for women who want it all — without breaking the bank.</p>
         </div>
-    </footer>
+        <div>
+          <h4>Kitchen</h4>
+          <ul>
+            <li><a href="articles/budget-kitchen-gadgets-under-20-that-save-time">Gadgets Under $20</a></li>
+            <li><a href="articles/viral-kitchen-gadgets-modern-must-haves-tiktok-finds">Viral Kitchen Finds</a></li>
+            <li><a href="articles/kitchen-essentials-that-look-expensive-but-start-at-7">Look Expensive, Cost $7</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Home Org</h4>
+          <ul>
+            <li><a href="articles/2026-home-organization-hacks-that-actually-work">Organization Hacks</a></li>
+            <li><a href="articles/8-storage-baskets-for-laundry-and-home-organization">$8 Storage Baskets</a></li>
+            <li><a href="articles/label-makers-for-peak-home-organization">Label Maker Secrets</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Beauty</h4>
+          <ul>
+            <li><a href="articles/at-home-spa-night-essentials-and-setup">Spa Night Essentials</a></li>
+            <li><a href="articles/skincare-routine-affordable-products-that-work">Affordable Skincare</a></li>
+            <li><a href="articles/hair-tools-honest-review-and-comparison">Hair Tool Reviews</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-footer__bottom">
+        <p>© 2026 Daily Deal Darling. All rights reserved.</p>
+        <p>This site contains affiliate links. We may earn a small commission when you shop through our links, at no extra cost to you. <a href="about.html">Learn more</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function filterCat(cat, btn) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Show/hide sections
+      document.querySelectorAll('.cat-section[data-cat]').forEach(section => {
+        if (cat === 'all' || section.dataset.cat === cat) {
+          section.classList.remove('hidden');
+        } else {
+          section.classList.add('hidden');
+        }
+      });
+
+      // Show/hide email band (only in 'all' view)
+      const emailBand = document.querySelector('.blog-email-band');
+      if (emailBand) emailBand.style.display = cat === 'all' ? '' : 'none';
+    }
+
+</script>
+
 </body>
 </html>

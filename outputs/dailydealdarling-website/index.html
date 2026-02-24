@@ -1,390 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Smart shopping for budget-conscious women. Discover curated deals, honest reviews, and beauty finds without the guilt.">
-    <meta name="robots" content="index, follow">
-    <meta name="google-site-verification" content="TkpLNBtF-UxaiEShcsTsFlJth6PjuzUeI66SAgUtfzg" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVCLZPEYNS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-HVCLZPEYNS');
-    </script>
-    <meta property="og:title" content="Daily Deal Darling - Smart Shopping. Real Savings.">
-    <meta property="og:description" content="Weekly deals, home finds, and beauty picks for women who want it all without the guilt.">
-    <meta property="og:url" content="https://www.dailydealdarling.com">
-    <meta property="og:type" content="website">
-    <title>Daily Deal Darling - Smart Shopping, Real Savings, Actual Life</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        /* Header */
-        header {
-            background-color: #fff;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        nav a {
-            margin-left: 2.5rem;
-            text-decoration: none;
-            color: #666;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            font-size: 0.95rem;
-        }
-
-        nav a:hover {
-            color: #E91E63;
-        }
-
-        nav {
-            display: flex;
-        }
-
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, #fff5f9 0%, #ffffff 100%);
-            padding: 6rem 2rem;
-        }
-
-        .hero-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            color: #333;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 2.5rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: #E91E63;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #c2185b;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(233, 30, 99, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: #f0f0f0;
-            color: #333;
-            border: 2px solid #E91E63;
-            color: #E91E63;
-        }
-
-        .btn-secondary:hover {
-            background-color: #E91E63;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* Value Props */
-        .value-props {
-            padding: 5rem 2rem;
-            background-color: #ffffff;
-        }
-
-        .value-props-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .value-props h2 {
-            text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 3rem;
-            color: #333;
-        }
-
-        .props-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .prop-card {
-            padding: 2rem;
-            background: linear-gradient(135deg, #fff5f9 0%, #fce4ec 100%);
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #f8bbd0;
-        }
-
-        .prop-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.15);
-        }
-
-        .prop-card h3 {
-            font-size: 1.5rem;
-            color: #E91E63;
-            margin-bottom: 1rem;
-        }
-
-        .prop-card p {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        /* Signup Section */
-        .signup-section {
-            background: linear-gradient(135deg, #E91E63 0%, #c2185b 100%);
-            padding: 4rem 2rem;
-            color: white;
-            margin: 0;
-        }
-
-        .signup-container {
-            max-width: 700px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .signup-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .signup-section p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        #signup {
-            scroll-margin-top: 100px;
-        }
-
-        /* ConvertKit Form Styling */
-        .formkit-form {
-            background: rgba(255,255,255,0.95) !important;
-            border-radius: 6px !important;
-            padding: 2rem !important;
-        }
-
-        .formkit-input {
-            border-radius: 4px !important;
-        }
-
-        .formkit-submit {
-            background-color: #E91E63 !important;
-            font-weight: 600 !important;
-            border-radius: 4px !important;
-        }
-
-        .formkit-submit:hover {
-            background-color: #c2185b !important;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        footer p {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
-
-            nav a {
-                margin-left: 0;
-            }
-
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .value-props h2 {
-                font-size: 1.8rem;
-            }
-
-            .signup-section h2 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Smart shopping for budget-conscious women. Curated deals, honest product reviews, and home finds — without the guilt.">
+  <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="TkpLNBtF-UxaiEShcsTsFlJth6PjuzUeI66SAgUtfzg">
+  <meta property="og:title" content="Daily Deal Darling — Smart Shopping, Real Savings">
+  <meta property="og:description" content="Curated deals, honest reviews, and home finds for women who want it all without the guilt.">
+  <meta property="og:url" content="https://www.dailydealdarling.com">
+  <meta property="og:type" content="website">
+  <title>Daily Deal Darling — Smart Shopping, Real Savings, Actual Life</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVCLZPEYNS"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HVCLZPEYNS');</script>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="logo">Daily Deal <span style="color: #E91E63;">Darling</span></div>
-            <nav>
-                <a href="/">Home</a>
-                <a href="/blog.html">Articles</a>
-                <a href="/about.html">About</a>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <h1>Smart Shopping. Real Savings. Actual Life.</h1>
-            <p>Weekly deals, home finds, and beauty picks for women who want it all without the guilt.</p>
-            <div class="cta-buttons">
-                <a href="/blog.html" class="btn btn-primary">Browse Articles</a>
-                <a href="#signup" class="btn btn-secondary">Join Free</a>
-            </div>
-        </div>
-    </section>
+<!-- ═══ HEADER ═══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="container">
+    <div class="site-header__inner">
+      <a href="/" class="site-logo">Daily Deal <span>Darling</span></a>
+      <nav class="site-nav">
+        <a href="/" class="active">Home</a>
+        <a href="/blog">Articles</a>
+        <a href="/about">About</a>
+      </nav>
+      <a href="#newsletter" class="header-cta">Get Free Deals →</a>
+    </div>
+  </div>
+</header>
 
-    <!-- Value Props -->
-    <section class="value-props">
-        <div class="value-props-container">
-            <h2>Why Daily Deal Darling?</h2>
-            <div class="props-grid">
-                <div class="prop-card">
-                    <h3>Curated Deals</h3>
-                    <p>Hand-picked products and discounts that actually matter. No trash, just treasures for your home and beauty routine.</p>
-                </div>
-                <div class="prop-card">
-                    <h3>Honest Reviews</h3>
-                    <p>Real talk from someone who shops like you do. We test it, we live with it, and we tell you the truth.</p>
-                </div>
-                <div class="prop-card">
-                    <h3>Budget-Friendly Finds</h3>
-                    <p>Quality products that don't break the bank. Save money without sacrificing style or performance.</p>
-                </div>
-            </div>
+<!-- ═══ HERO ══════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__inner">
+      <div class="hero__text">
+        <div class="hero__eyebrow">✨ New deals every week</div>
+        <h1 class="hero__title">The Deals You Need.<br><span>The Reviews You Can Trust.</span></h1>
+        <p class="hero__subtitle">Curated finds for your home, kitchen, and beauty routine — all budget-friendly, all worth it.</p>
+        <div class="hero__actions">
+          <a href="/blog" class="btn btn--primary">Browse All Articles</a>
+          <a href="#newsletter" class="btn btn--outline">Get Weekly Deals</a>
         </div>
-    </section>
+        <p class="hero__trust">Join <span>4,200+</span> smart shoppers who never miss a deal</p>
+      </div>
+      <div class="hero-email-card" id="newsletter">
+        <div class="hero-email-card__title">🎁 Get This Week's Best Deals</div>
+        <div class="hero-email-card__sub">Curated deals, home finds & beauty picks — delivered free every week.</div>
+        <script async data-uid="5641382" src="https://dailydealdarling.ck.page/5641382/index.js"></script>
+        <ul class="email-perks">
+          <li>Best Amazon deals before they sell out</li>
+          <li>Hidden clearance finds at Target & Walmart</li>
+          <li>Home & kitchen picks under $25</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Signup Section -->
-    <section class="signup-section" id="signup">
-        <div class="signup-container">
-            <h2>Get Weekly Deals Delivered</h2>
-            <p>Join thousands of smart shoppers getting curated deals, home finds, and beauty picks every week.</p>
-            <script async data-uid="5641382" src="https://dailydealdarling.ck.page/5641382/index.js"></script>
+<!-- ═══ CATEGORY BAR ════════════════════════════════════════════════════ -->
+<nav class="category-bar" aria-label="Browse by category">
+  <div class="category-bar__inner">
+    <a href="/blog" class="cat-pill active">All Articles</a>
+    <a href="/blog#kitchen" class="cat-pill">🍳 Kitchen Deals</a>
+    <a href="/blog#home" class="cat-pill">🏠 Home Organization</a>
+    <a href="/blog#beauty" class="cat-pill">💄 Beauty & Wellness</a>
+    <a href="/blog#deals" class="cat-pill">🏷️ Best Sales</a>
+  </div>
+</nav>
+
+<!-- ═══ FEATURED / TRENDING ══════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>✨ Trending Right Now</h2>
+      <a href="/blog">View all articles →</a>
+    </div>
+
+    <div class="grid-featured">
+      <!-- Big feature card -->
+      <a href="/articles/2026-home-organization-hacks-that-actually-work" class="card card--featured" style="text-decoration:none">
+        <div class="card__thumb card__thumb--home" style="font-size:5rem">🏡</div>
+        <div class="card__body">
+          <div class="card__meta">
+            <span class="badge badge--home">Home Organization</span>
+            <span>5 min read</span>
+          </div>
+          <div class="card__title" style="font-size:1.5rem;-webkit-line-clamp:4">
+            2026 Home Organization Hacks That Actually Work — And Cost Almost Nothing
+          </div>
+          <p class="card__excerpt">Real systems that stick. No Pinterest-perfect storage walls required — just smart, affordable solutions women are actually using.</p>
+          <div class="card__footer">
+            <span class="card__link">Read article →</span>
+          </div>
         </div>
-    </section>
+      </a>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <p>&copy; 2026 Daily Deal Darling. All rights reserved.</p>
-            <p>Helping women shop smarter, not harder.</p>
+      <!-- Sidebar stack -->
+      <div class="grid-featured__sidebar">
+        <a href="/articles/budget-kitchen-gadgets-under-20-that-save-time" class="card card--compact" style="text-decoration:none">
+          <div class="card__thumb card__thumb--kitchen">🍳</div>
+          <div class="card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <div class="card__title">5 Kitchen Gadgets Under $20 That Actually Save Time</div>
+          </div>
+        </a>
+        <a href="/articles/non-plastic-kitchen-utensils-for-healthier-cooking" class="card card--compact" style="text-decoration:none">
+          <div class="card__thumb card__thumb--kitchen">🥗</div>
+          <div class="card__body">
+            <span class="badge badge--kitchen">Kitchen</span>
+            <div class="card__title">Non-Plastic Kitchen Utensils for Healthier Cooking</div>
+          </div>
+        </a>
+        <a href="/articles/at-home-spa-night-essentials-and-setup" class="card card--compact" style="text-decoration:none">
+          <div class="card__thumb card__thumb--beauty">🛁</div>
+          <div class="card__body">
+            <span class="badge badge--beauty">Beauty</span>
+            <div class="card__title">At-Home Spa Night Essentials and Setup</div>
+          </div>
+        </a>
+        <a href="/articles/skincare-routine-affordable-products-that-work" class="card card--compact" style="text-decoration:none">
+          <div class="card__thumb card__thumb--beauty">✨</div>
+          <div class="card__body">
+            <span class="badge badge--beauty">Beauty</span>
+            <div class="card__title">Skincare Routine: Affordable Products That Work</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LATEST KITCHEN DEALS ═════════════════════════════════════════════ -->
+<section class="section section--gray" id="kitchen">
+  <div class="container">
+    <div class="section-header">
+      <h2>🍳 Kitchen Deals</h2>
+      <a href="/blog#kitchen">See all →</a>
+    </div>
+    <div class="grid-3">
+      <a href="/articles/amazon-kitchen-finds-under-10-that-pros-are-loving-this-mont" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--kitchen">🛒</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--kitchen">Kitchen</span><span>4 min read</span></div>
+          <div class="card__title">Amazon Kitchen Finds Under $10 That Pros Are Loving This Month</div>
+          <p class="card__excerpt">The best-selling kitchen items under $10 that chefs actually buy for themselves.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
         </div>
-    </footer>
+      </a>
+      <a href="/articles/kitchen-essentials-that-look-expensive-but-start-at-7" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--kitchen">💰</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--kitchen">Kitchen</span><span>5 min read</span></div>
+          <div class="card__title">Kitchen Essentials That Look Expensive But Start at $7</div>
+          <p class="card__excerpt">Fool your guests into thinking you splurged. These affordable finds look like they cost 10x more.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/viral-kitchen-gadgets-modern-must-haves-tiktok-finds" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--kitchen">📱</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--kitchen">Kitchen</span><span>4 min read</span></div>
+          <div class="card__title">Viral Kitchen Gadgets: TikTok Must-Haves That Are Actually Worth It</div>
+          <p class="card__excerpt">We tried the trending kitchen gadgets so you don't have to waste money on the duds.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
 
-    <!-- Schema.org Markup -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Daily Deal Darling",
-        "url": "https://www.dailydealdarling.com",
-        "description": "Smart shopping for budget-conscious women. Discover curated deals, honest reviews, and beauty finds.",
-        "sameAs": [
-            "https://www.pinterest.com/dailydealdarling",
-            "https://www.instagram.com/dailydealdarling"
-        ]
-    }
-    </script>
+<!-- ═══ EMAIL NEWSLETTER BAND ════════════════════════════════════════════ -->
+<section class="email-band">
+  <div class="container">
+    <h2>Never Miss a Deal Again</h2>
+    <p>Get the week's best finds delivered to your inbox — free, every Tuesday morning.</p>
+    <script async data-uid="5641382" src="https://dailydealdarling.ck.page/5641382/index.js"></script>
+    <p class="email-band__sub">No spam. Unsubscribe anytime. Join 4,200+ smart shoppers.</p>
+  </div>
+</section>
+
+<!-- ═══ HOME ORGANIZATION ════════════════════════════════════════════════ -->
+<section class="section" id="home">
+  <div class="container">
+    <div class="section-header">
+      <h2>🏠 Home Organization</h2>
+      <a href="/blog#home">See all →</a>
+    </div>
+    <div class="grid-3">
+      <a href="/articles/8-storage-baskets-for-laundry-and-home-organization" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--home">🧺</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--home">Home Org</span><span>5 min read</span></div>
+          <div class="card__title">8 Storage Baskets for Laundry and Home Organization</div>
+          <p class="card__excerpt">The storage baskets that transformed cluttered laundry rooms into organized spaces women are actually proud of.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/spring-cleaning-organization-products-storage-deals" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--home">🌸</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--home">Home Org</span><span>6 min read</span></div>
+          <div class="card__title">Spring Cleaning Organization Products & Storage Deals</div>
+          <p class="card__excerpt">The organization products going on sale this spring — and the ones worth buying before they sell out.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/bathroom-cabinet-organization-solutions" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--home">🪟</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--home">Home Org</span><span>4 min read</span></div>
+          <div class="card__title">Bathroom Cabinet Organization Solutions That Actually Fit</div>
+          <p class="card__excerpt">No more avalanche of products when you open the cabinet. These solutions work in real-sized bathrooms.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BEAUTY & WELLNESS ════════════════════════════════════════════════ -->
+<section class="section section--pink" id="beauty">
+  <div class="container">
+    <div class="section-header">
+      <h2>💄 Beauty & Wellness</h2>
+      <a href="/blog#beauty">See all →</a>
+    </div>
+    <div class="grid-3">
+      <a href="/articles/bath-products-that-feel-luxurious-under-20" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--beauty">🛁</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--beauty">Beauty</span><span>4 min read</span></div>
+          <div class="card__title">Bath Products That Feel Luxurious Under $20</div>
+          <p class="card__excerpt">Spa-quality bath products that cost a fraction of the boutique versions — and work just as well.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/skincare-routine-affordable-products-that-work" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--beauty">✨</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--beauty">Beauty</span><span>6 min read</span></div>
+          <div class="card__title">Skincare Routine: Affordable Products That Actually Work</div>
+          <p class="card__excerpt">The honest skincare routine using drugstore products that dermatologists actually recommend.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/hair-tools-honest-review-and-comparison" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--beauty">💇</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--beauty">Beauty</span><span>5 min read</span></div>
+          <div class="card__title">Hair Tools: Honest Review and Comparison (Budget vs. Splurge)</div>
+          <p class="card__excerpt">We compared the $30 version to the $250 version. The results might surprise you.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BEST SALES & DEALS ════════════════════════════════════════════════ -->
+<section class="section" id="deals">
+  <div class="container">
+    <div class="section-header">
+      <h2>🏷️ Best Sales Right Now</h2>
+      <a href="/blog#deals">See all →</a>
+    </div>
+    <div class="grid-4">
+      <a href="/articles/wayfair-warehouse-clearance-up-to-60-off-furniture-storage" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--deals" style="font-size:2rem">🛋️</div>
+        <div class="card__body">
+          <span class="badge badge--deals">60% Off</span>
+          <div class="card__title">Wayfair Warehouse Clearance — Up to 60% Off Furniture & Storage</div>
+          <div class="card__footer"><span class="card__link">Shop deals →</span></div>
+        </div>
+      </a>
+      <a href="/articles/crate-barrel-clearance-home-deals-up-to-60-off" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--deals" style="font-size:2rem">🏺</div>
+        <div class="card__body">
+          <span class="badge badge--deals">Up to 60% Off</span>
+          <div class="card__title">Crate & Barrel Clearance: Home Deals You Don't Want to Miss</div>
+          <div class="card__footer"><span class="card__link">Shop deals →</span></div>
+        </div>
+      </a>
+      <a href="/articles/tax-refund-smart-spending-best-home-upgrades-under-500" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--deals" style="font-size:2rem">💵</div>
+        <div class="card__body">
+          <span class="badge badge--deals">Tax Refund</span>
+          <div class="card__title">Best Home Upgrades Under $500 to Spend Your Tax Refund On</div>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/williams-sonoma-outlet-deals-premium-kitchen-finds-up-to-44-" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--deals" style="font-size:2rem">🍽️</div>
+        <div class="card__body">
+          <span class="badge badge--deals">44% Off</span>
+          <div class="card__title">Williams-Sonoma Outlet: Premium Kitchen Finds Up to 44% Off</div>
+          <div class="card__footer"><span class="card__link">Shop deals →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MORE ARTICLES ════════════════════════════════════════════════════ -->
+<section class="section section--gray">
+  <div class="container">
+    <div class="section-header">
+      <h2>More to Explore</h2>
+      <a href="/blog">All articles →</a>
+    </div>
+    <div class="grid-3">
+      <a href="/articles/kids-room-organization-that-actually-stays-organized" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--home">👧</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--home">Home Org</span></div>
+          <div class="card__title">Kids Room Organization That Actually Stays Organized</div>
+          <p class="card__excerpt">Systems that work even when your kids are involved — because let's be honest, they won't maintain complicated ones.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/label-makers-for-peak-home-organization" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--home">🏷️</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--home">Home Org</span></div>
+          <div class="card__title">Label Makers for Peak Home Organization — Tested and Ranked</div>
+          <p class="card__excerpt">The label makers that actually make your home look organized — not just labeled.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+      <a href="/articles/presidents-day-mattress-furniture-sale-deals-2026" class="card" style="text-decoration:none">
+        <div class="card__thumb card__thumb--deals">🛏️</div>
+        <div class="card__body">
+          <div class="card__meta"><span class="badge badge--deals">Sale Alert</span></div>
+          <div class="card__title">President's Day Mattress & Furniture Sale Deals 2026</div>
+          <p class="card__excerpt">The best mattress and furniture deals happening right now — ranked by actual value.</p>
+          <div class="card__footer"><span class="card__link">Read more →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a href="/" class="site-logo">Daily Deal <span>Darling</span></a>
+        <p>Smart shopping, honest reviews, and real deals for women who want it all — without breaking the bank.</p>
+      </div>
+      <div>
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="/blog#kitchen">Kitchen Deals</a></li>
+          <li><a href="/blog#home">Home Organization</a></li>
+          <li><a href="/blog#beauty">Beauty & Wellness</a></li>
+          <li><a href="/blog#deals">Best Sales</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog">All Articles</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <p>© 2026 Daily Deal Darling. All rights reserved.</p>
+      <p style="font-size:0.75rem;opacity:0.5">This site contains affiliate links. We earn a small commission at no extra cost to you.</p>
+    </div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Daily Deal Darling",
+  "url": "https://www.dailydealdarling.com",
+  "description": "Smart shopping for budget-conscious women. Curated deals, honest reviews, and home finds.",
+  "potentialAction": { "@type": "SearchAction", "target": "https://www.dailydealdarling.com/blog?q={search_term_string}", "query-input": "required name=search_term_string" }
+}
+</script>
 </body>
 </html>
