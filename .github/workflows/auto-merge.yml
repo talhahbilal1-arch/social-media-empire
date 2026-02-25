@@ -21,17 +21,45 @@ jobs:
           fetch-depth: 0
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      
+
+      - name: Validate branch before merge
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          echo "Merging branch: $BRANCH"
+
+          # Ensure branch has no syntax errors in workflow files
+          git fetch origin "$BRANCH"
+          CHANGED_WORKFLOWS=$(git diff main...origin/"$BRANCH" --name-only -- '.github/workflows/*.yml' || true)
+          if [ -n "$CHANGED_WORKFLOWS" ]; then
+            echo "Workflow files changed — validating YAML syntax:"
+            for f in $CHANGED_WORKFLOWS; do
+              echo "  Checking $f..."
+              python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null || {
+                echo "  ERROR: Invalid YAML in $f — aborting merge"
+                exit 1
+              }
+            done
+            echo "  All workflow YAML valid"
+          fi
+
+          # Ensure no merge conflicts
+          git merge --no-commit --no-ff origin/"$BRANCH" || {
+            echo "ERROR: Merge conflicts detected — aborting"
+            git merge --abort
+            exit 1
+          }
+          git merge --abort 2>/dev/null || true
+
       - name: Fetch and merge
         run: |
           git fetch origin ${{ github.ref_name }}
           git merge origin/${{ github.ref_name }} --no-edit -m "Merge ${{ github.ref_name }}"
-          
+
       - name: Push changes
         run: |
           git push origin main

@@ -39,7 +39,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run health check
@@ -132,7 +132,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Self-healing — comprehensive auto-fix
@@ -150,11 +150,15 @@ jobs:
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           HEALTH_STATUS: ${{ needs.health-check.outputs.status }}
           HEALTH_ISSUES: '${{ needs.health-check.outputs.issues }}'
+          MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
+          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
         run: |
           python3 << 'PYEOF'
           import sys, json, os, subprocess
           sys.path.insert(0, '.')
-          from datetime import datetime, timezone, timedelta
+          from datetime import datetime, timedelta, timezone
           import requests
 
           healed = 0
@@ -314,45 +318,6 @@ jobs:
                   except Exception as e:
                       print(f'  {name}: unreachable ({e})')
 
-              # ── Phase 6b: Content Freshness ──
-              print('\n=== Phase 6b: Content Freshness ===')
-              try:
-                  # Check if any pins were generated in the last 24h
-                  cutoff_24h = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
-                  recent_pins = db.client.table('pinterest_pins').select('id', count='exact') \
-                      .gte('created_at', cutoff_24h).execute()
-                  pin_count = recent_pins.count if recent_pins.count is not None else len(recent_pins.data or [])
-                  print(f'  Pins in last 24h: {pin_count}')
-
-                  if pin_count == 0:
-                      print('  WARNING: No pins generated in 24h — triggering content-engine')
-                      # Log as error for visibility
-                      db.client.table('errors').insert({
-                          'error_type': 'content_freshness',
-                          'error_message': 'No pins generated in the last 24 hours',
-                          'context': json.dumps({'checked_at': datetime.now(timezone.utc).isoformat()}),
-                          'severity': 'high',
-                          'resolved': False,
-                          'created_at': datetime.now(timezone.utc).isoformat()
-                      }).execute()
-                      # Trigger content-engine
-                      repo = os.environ.get('GITHUB_REPOSITORY', '')
-                      if repo:
-                          subprocess.run(
-                              ['gh', 'workflow', 'run', 'content-engine.yml'],
-                              capture_output=True, text=True, timeout=15
-                          )
-                          print('  Content-engine triggered')
-                          healed += 1
-
-                  # Also check articles freshness
-                  recent_articles = db.client.table('generated_articles').select('id', count='exact') \
-                      .gte('created_at', cutoff_24h).execute()
-                  article_count = recent_articles.count if recent_articles.count is not None else len(recent_articles.data or [])
-                  print(f'  Articles in last 24h: {article_count}')
-              except Exception as e:
-                  print(f'  Content freshness check: {e}')
-
               # ── Phase 7: Cleanup old data ──
               print('\n=== Phase 7: Cleanup ===')
               try:
@@ -408,6 +373,89 @@ jobs:
                           print(f'  Storage list failed: {resp.status_code}')
               except Exception as e:
                   print(f'  Storage cleanup: {e}')
+
+              # ── Phase 9: Affiliate Link Validation ──
+              print('\n=== Phase 9: Affiliate Link Validation ===')
+              try:
+                  import json as _json_aff
+                  with open('monetization/affiliate_config.json') as _f_aff:
+                      _aff_config = _json_aff.load(_f_aff)
+                  _broken_links = []
+                  for _aff_brand, _aff_data in _aff_config.items():
+                      for _aff_cat_val in _aff_data.values():
+                          if not isinstance(_aff_cat_val, list):
+                              continue
+                          for _aff_item in _aff_cat_val:
+                              if not isinstance(_aff_item, dict):
+                                  continue
+                              _aff_url = _aff_item.get('url', '')
+                              if _aff_url and not _aff_url.startswith('PLACEHOLDER'):
+                                  try:
+                                      _aff_resp = requests.get(
+                                          _aff_url, timeout=8, allow_redirects=True,
+                                          headers={'User-Agent': 'Mozilla/5.0'}
+                                      )
+                                      if _aff_resp.status_code >= 400:
+                                          _broken_links.append(
+                                              f'{_aff_brand}/{_aff_item.get("name","")}: HTTP {_aff_resp.status_code}'
+                                          )
+                                  except Exception as _aff_e:
+                                      _broken_links.append(
+                                          f'{_aff_brand}/{_aff_item.get("name","")}: {_aff_e}'
+                                      )
+                  if _broken_links:
+                      print(f'  BROKEN affiliate links ({len(_broken_links)}):')
+                      for _bl in _broken_links:
+                          print(f'    - {_bl}')
+                          unresolvable.append(f'Broken affiliate link: {_bl}')
+                  else:
+                      print(f'  All affiliate links valid')
+                      healed += 1
+              except Exception as e:
+                  print(f'  Affiliate validation: {e}')
+
+              # ── Phase 10: Revenue Zero Alert ──
+              print('\n=== Phase 10: Revenue Zero Alert ===')
+              try:
+                  _cutoff_48h = (datetime.now(timezone.utc) - timedelta(hours=48)).isoformat()
+                  _recent_pins = db.client.table('content_history').select('id').gte(
+                      'created_at', _cutoff_48h
+                  ).execute()
+                  _pin_count = len(_recent_pins.data) if _recent_pins.data else 0
+                  if _pin_count == 0:
+                      _zero_msg = 'No pins posted in last 48 hours — content engine may be failing'
+                      print(f'  WARNING: {_zero_msg}')
+                      unresolvable.append(_zero_msg)
+                  else:
+                      print(f'  {_pin_count} pins in last 48h — pipeline active')
+                      healed += 1
+              except Exception as e:
+                  print(f'  Revenue zero check: {e}')
+
+              # ── Phase 11: Make.com Scenario Health ──
+              print('\n=== Phase 11: Make.com Scenario Health ===')
+              _webhook_brands = {
+                  'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
+                  'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
+                  'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+              }
+              for _wb_brand, _wb_url in _webhook_brands.items():
+                  if not _wb_url:
+                      print(f'  {_wb_brand}: webhook not configured in secrets')
+                      continue
+                  try:
+                      _wb_resp = requests.post(
+                          _wb_url, json={'_health_check': True}, timeout=10
+                      )
+                      if _wb_resp.status_code < 400:
+                          print(f'  {_wb_brand}: webhook OK ({_wb_resp.status_code})')
+                          healed += 1
+                      else:
+                          _wb_msg = f'Make.com webhook for {_wb_brand}: HTTP {_wb_resp.status_code}'
+                          print(f'  WARNING: {_wb_msg}')
+                          unresolvable.append(_wb_msg)
+                  except Exception as _wb_e:
+                      print(f'  {_wb_brand} webhook check failed: {_wb_e}')
 
               # ── Phase 8: Log self-healing activity ──
               try:
