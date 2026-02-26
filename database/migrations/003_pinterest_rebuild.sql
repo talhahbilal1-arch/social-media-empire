@@ -2,6 +2,13 @@
 -- Safe to run multiple times (all ADD COLUMN IF NOT EXISTS)
 -- Run in Supabase SQL Editor, then restart project (Settings > General, 5-8 min)
 
+-- Add core brand/content columns (missing from original affiliate-product schema)
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS brand TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS title TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS destination_url TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS pexels_search_term TEXT;
+
 -- Add columns needed for Make.com-driven pipeline
 ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS account TEXT;
 ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS pin_type TEXT DEFAULT 'image';
