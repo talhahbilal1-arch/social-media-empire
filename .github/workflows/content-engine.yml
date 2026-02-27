@@ -65,6 +65,9 @@ jobs:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
+          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           BRAND_INPUT: ${{ github.event.inputs.brand || '' }}
         run: |
@@ -193,6 +196,80 @@ jobs:
                       pass
 
           print(f'  Rendered {len(rendered_pins)}/{len(content_ready_pins)} pins')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 1b: Post rendered pins to Pinterest via Make.com webhooks
+          # ══════════════════════════════════════════════════════════════
+          import urllib.request
+          import urllib.error
+
+          WEBHOOKS = {
+              'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
+              'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
+              'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+          }
+
+          print('\n=== PHASE 1b: Posting pins to Pinterest ===')
+          posted_count = 0
+          for pin in rendered_pins:
+              pin_id = pin['id']
+              brand = pin['brand']
+              webhook_url = WEBHOOKS.get(brand, '')
+              if not webhook_url:
+                  print(f'  [{brand}] No webhook URL configured, skipping')
+                  continue
+              if dry_run:
+                  print(f'  [{brand}] DRY RUN — would POST to webhook: {pin.get("title","")[:50]}')
+                  continue
+              payload = {
+                  'pin_id': str(pin_id),
+                  'brand': brand,
+                  'title': pin.get('title', '')[:100],
+                  'description': pin.get('description', '')[:500],
+                  'image_url': pin.get('image_url', ''),
+                  'link': pin.get('destination_url', ''),
+                  'board_id': str(pin.get('board_id', '')),
+              }
+              try:
+                  db.client.table('pinterest_pins').update({'status': 'posting'}).eq('id', pin_id).execute()
+                  import json as _json
+                  body = _json.dumps(payload).encode('utf-8')
+                  req = urllib.request.Request(
+                      webhook_url,
+                      data=body,
+                      headers={'Content-Type': 'application/json'},
+                      method='POST'
+                  )
+                  with urllib.request.urlopen(req, timeout=30) as resp:
+                      resp_body = resp.read().decode('utf-8', errors='replace')
+                      print(f'  [{brand}] Posted: {pin.get("title","")[:50]} → HTTP {resp.status}')
+                  db.client.table('pinterest_pins').update({
+                      'status': 'posted',
+                      'posted_at': datetime.now(timezone.utc).isoformat()
+                  }).eq('id', pin_id).execute()
+                  posted_count += 1
+              except urllib.error.HTTPError as e:
+                  err_body = e.read().decode('utf-8', errors='replace')[:200]
+                  print(f'  [{brand}] Webhook HTTP error {e.code}: {err_body}')
+                  try:
+                      db.client.table('pinterest_pins').update({
+                          'status': 'failed',
+                          'error_message': f'Webhook HTTP {e.code}: {err_body}',
+                      }).eq('id', pin_id).execute()
+                  except Exception:
+                      pass
+              except Exception as e:
+                  print(f'  [{brand}] Webhook error: {e}')
+                  try:
+                      db.client.table('pinterest_pins').update({
+                          'status': 'failed',
+                          'error_message': str(e)[:200],
+                      }).eq('id', pin_id).execute()
+                  except Exception:
+                      pass
+          if not dry_run:
+              print(f'  Posted {posted_count}/{len(rendered_pins)} pins to Pinterest')
+
 
           # ══════════════════════════════════════════════════════════════
           # PHASE 2: Generate articles for rendered pins (parallel)

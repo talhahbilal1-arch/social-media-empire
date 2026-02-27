@@ -1,29 +1,26 @@
-# Make.com Scenario Inventory — Rebuild v2
-*Updated: 2026-02-26*
+# Make.com Scenario Inventory — Rebuild v3
+*Updated: 2026-02-27*
 
 ## Architecture Overview
 
-3-stage hybrid pipeline. Make.com handles content generation + Pinterest posting; GitHub Actions handles image rendering + article generation + Vercel deploy.
+2-stage pipeline. GitHub Actions handles ALL content generation + image rendering + Pinterest posting via Make.com webhooks + article generation + Vercel deploy.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ STAGE 1: Make.com Content Generator (every 4h)                          │
-│   → Claude API generates 3 pins (one per brand)                         │
-│   → HTTP POST to Supabase pinterest_pins (status='content_ready')       │
-└────────────────────────────┬────────────────────────────────────────────┘
-                             │
-┌────────────────────────────▼────────────────────────────────────────────┐
-│ STAGE 2: GitHub Actions content-engine.yml (3x/day: 8AM/2PM/8PM PST)   │
-│   Phase 1 — Reads content_ready pins → Pexels fetch → PIL render        │
-│              → Supabase Storage upload → status='ready'                 │
+│ STAGE 1: GitHub Actions content-engine.yml (3x/day: 8AM/2PM/8PM PST)   │
+│   Phase 0 — Claude generates pin content → status='content_ready'       │
+│   Phase 1 — PIL render → Supabase Storage upload → status='ready'       │
+│   Phase 1b— POST to Make.com webhook per brand → Pinterest Create Pin   │
+│              → status='posted' | 'failed'                               │
 │   Phase 2 — Generate SEO article per pin → save to outputs/             │
 │   Phase 3 — Git commit + push articles → Vercel auto-deploy             │
 └────────────────────────────┬────────────────────────────────────────────┘
                              │
 ┌────────────────────────────▼────────────────────────────────────────────┐
-│ STAGE 3: Make.com Pin Posters × 3 (every 3h per brand)                  │
-│   → Read status='ready' pins → status='posting' lock                    │
-│   → Pinterest Create Pin → status='posted' | 'failed'                  │
+│ STAGE 2: Make.com Webhook Posters × 3 (triggered by GH Actions)         │
+│   Deals (4251934)    → receives POST → Pinterest Create Pin (conn 6738173)│
+│   Menopause (4251935)→ receives POST → Pinterest Create Pin (conn 6857103)│
+│   Fitness (4251937)  → receives POST → Pinterest Create Pin (conn 7146197)│
 └─────────────────────────────────────────────────────────────────────────┘
                              │
 ┌────────────────────────────▼────────────────────────────────────────────┐
@@ -39,76 +36,76 @@
 
 ## Active Scenarios — Rebuild v2
 
-### 1. Pin Content Generator v2
+### 1. Pin Content Generator — GitHub Actions Phase 0
 | Field | Value |
 |-------|-------|
-| **Scenario ID** | 4243147 |
-| **Make.com URL** | `https://us2.make.com/1686661/scenarios/4243147/edit` |
-| **Schedule** | Every 4 hours (14400s) |
-| **Status** | ✅ Active — created + activated 2026-02-26 |
-| **Ops/month** | ~1,260 (7 ops/run × 6 runs/day × 30 days) |
+| **Where** | `.github/workflows/content-engine.yml` Phase 0 |
+| **Schedule** | 3x/day (8 AM, 2 PM, 8 PM PST) — same as content-engine.yml |
+| **Status** | ✅ Active — verified 2026-02-27 (3/3 brands, 3/3 articles) |
 
-**Flow** (4 modules):
-1. HTTP POST → Anthropic API (`/v1/messages`, claude-sonnet-4-6) — generate 3 pins as JSON object
-2. HTTP POST → Supabase `pinterest_pins` (deals, `status='content_ready'`)
-3. HTTP POST → Supabase `pinterest_pins` (menopause, `status='content_ready'`)
-4. HTTP POST → Supabase `pinterest_pins` (fitness, `status='content_ready'`)
+**Flow**: `generate_pin_content(brand, db)` → insert `pinterest_pins` (`status='content_ready'`) → Phase 1 renders same run
 
-**Claude output parsed inline** using Make.com `json()` function:
-`{{json(1.data.content[0].text).deals.title}}`
+**Note**: Make.com scenarios (4243147, 4251297, 4251305) replaced by GH Actions Phase 0.
+Make.com API-created scheduled scenarios cannot execute due to a Make.com platform limitation
+(`BundleValidationError` affects all API-created scheduled scenarios — fix requires UI save).
+Deactivate Make.com scenarios 4243147, 4251297, 4251305 to avoid confusion.
 
 ---
 
-### 2. Pin Poster — DailyDealDarling v2
+### 2. Pin Poster — DailyDealDarling v3 (Webhook)
 | Field | Value |
 |-------|-------|
-| **Scenario ID** | 4243032 |
-| **Make.com URL** | `https://us2.make.com/1686661/scenarios/4243032/edit` |
+| **Scenario ID** | **4251934** |
+| **Make.com URL** | `https://us2.make.com/1686661/scenarios/4251934/edit` |
 | **Brand** | `deals` |
 | **Pinterest Connection** | Daily Deal Darling (conn 6738173) |
-| **Schedule** | Every 3 hours (10800s) |
-| **Status** | ✅ Active — created + activated 2026-02-26 |
-| **Ops/month** | ~1,000 |
+| **Trigger** | Webhook (called by GitHub Actions Phase 1b) |
+| **Webhook URL** | `https://hook.us2.make.com/s5r2hm41lnupten8e1k5fn6uagpqdhmk` |
+| **GitHub Secret** | `MAKE_WEBHOOK_DEALS` |
+| **Status** | ✅ Active — VERIFIED 2026-02-27 (status=1, 2 ops) |
+| **Ops/month** | ~90 (3 runs/day × 30 days) |
 
-**Flow** (5 modules + error handler):
-1. HTTP GET → Supabase `pinterest_pins?brand=eq.deals&status=eq.ready&order=created_at.asc&limit=1`
-2. HTTP PATCH → set `status='posting'` (filter: result not empty)
-3. Pinterest Create Pin (conn 6738173) — `image_url`, `title`, `description`, `link`, `board_id` from pin row
-4. HTTP PATCH → set `status='posted'`, `pinterest_pin_id`, `posted_at`
-5. Error handler: HTTP PATCH → set `status='failed'`, `error_message`, `retry_count+1` + Break (3 retries, 5s interval)
+**Flow** (2 modules):
+1. `gateway:CustomWebHook` — receives `{pin_id, brand, title, description, image_url, link, board_id}`
+2. `pinterest:createPin` (conn 6738173) — posts pin to Pinterest
+
+**Status tracking**: GitHub Actions sets `status='posting'` before call, `status='posted'` after HTTP 200.
+
+*Replaced broken scheduled scenario 4243032 (BundleValidationError). Old scenario deactivated.*
 
 ---
 
-### 3. Pin Poster — MenopausePlanner v2
+### 3. Pin Poster — MenopausePlanner v3 (Webhook)
 | Field | Value |
 |-------|-------|
-| **Scenario ID** | 4243035 |
-| **Make.com URL** | `https://us2.make.com/1686661/scenarios/4243035/edit` |
+| **Scenario ID** | **4251935** |
+| **Make.com URL** | `https://us2.make.com/1686661/scenarios/4251935/edit` |
 | **Brand** | `menopause` |
 | **Pinterest Connection** | TheMenopausePlanner (conn 6857103) |
-| **Schedule** | Every 3 hours (10800s) |
-| **Status** | ✅ Active — created + activated 2026-02-26 |
-| **Ops/month** | ~1,000 |
+| **Trigger** | Webhook (called by GitHub Actions Phase 1b) |
+| **Webhook URL** | `https://hook.us2.make.com/h712u9ydn9w5ur1ekyqbglvdevnes6sa` |
+| **GitHub Secret** | `MAKE_WEBHOOK_MENOPAUSE` |
+| **Status** | ✅ Active — VERIFIED 2026-02-27 (status=1, 2 ops) |
+| **Ops/month** | ~90 |
 
-**Flow**: Same as DailyDealDarling v2, filtered to `brand=eq.menopause`.
+**Flow**: Same as DDD v3. *Replaced 4243035.*
 
 ---
 
-### 4. Pin Poster — FitOver35 v2
+### 4. Pin Poster — FitOver35 v3 (Webhook)
 | Field | Value |
 |-------|-------|
-| **Scenario ID** | 4243036 |
-| **Make.com URL** | `https://us2.make.com/1686661/scenarios/4243036/edit` |
+| **Scenario ID** | **4251937** |
+| **Make.com URL** | `https://us2.make.com/1686661/scenarios/4251937/edit` |
 | **Brand** | `fitness` |
 | **Pinterest Connection** | Fitness Made Easy (conn 7146197) |
-| **Schedule** | Every 3 hours (10800s) |
-| **Status** | ⏸ INACTIVE — pending Pinterest connection re-auth |
-| **Ops/month** | ~1,000 (once active) |
+| **Trigger** | Webhook (called by GitHub Actions Phase 1b) |
+| **Webhook URL** | `https://hook.us2.make.com/4mwp49ymhkdfjcx8puc21d00s62s753f` |
+| **GitHub Secret** | `MAKE_WEBHOOK_FITNESS` |
+| **Status** | ✅ Active — VERIFIED 2026-02-27 (status=1, 2 ops) |
+| **Ops/month** | ~90 |
 
-**Action required**: Go to Make.com → Connections → "Fitness Made Easy" (ID 7146197) → Re-authorize.
-Then activate: `POST /api/v2/scenarios/4243036/start?teamId=1686661`
-
-**Flow**: Same as DailyDealDarling v2, filtered to `brand=eq.fitness`.
+**Flow**: Same as DDD v3. *Replaced 4243036.*
 
 ---
 
@@ -199,3 +196,9 @@ After 24h verified posting from DDD + TMP (and FO35 once re-authed):
 | 2026-02-26 | Scenario 4243036 (FO35 poster) created but left inactive — conn 7146197 needs re-auth |
 | 2026-02-26 | Scenario 4243206 (Health Monitor) activated |
 | 2026-02-26 | content-engine.yml modified: 3x/day schedule, Phase 1 reads content_ready pins, Vercel deploy retained |
+| 2026-02-27 | **Rebuild v3**: Replaced all broken scheduled poster scenarios with webhook-triggered ones |
+| 2026-02-27 | Root cause: Make.com API-created scheduled scenarios always get BundleValidationError — unfixable without UI save |
+| 2026-02-27 | Fix: 3 new webhook scenarios (4251934/4251935/4251937) created + activated — ALL VERIFIED working |
+| 2026-02-27 | content-engine.yml: added Phase 1b — GitHub Actions calls webhook after rendering each pin |
+| 2026-02-27 | GitHub secrets MAKE_WEBHOOK_FITNESS/DEALS/MENOPAUSE updated with new webhook URLs |
+| 2026-02-27 | End-to-end test: 1 pin per brand posted to Pinterest successfully |
