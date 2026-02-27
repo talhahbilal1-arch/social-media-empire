@@ -66,6 +66,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          BRAND_INPUT: ${{ github.event.inputs.brand || '' }}
         run: |
           python3 << 'PYEOF'
           import os
@@ -83,11 +84,50 @@ jobs:
               generate_article_for_pin, article_to_html, save_and_register_article,
               BRAND_SITE_CONFIG, _make_slug
           )
+          from video_automation.content_brain import generate_pin_content, log_pin_to_history
+          from video_automation.pinterest_boards import get_board_id
 
           dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
 
           from database.supabase_client import get_supabase_client
           db = get_supabase_client()
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 0: Generate fresh pin content → insert as content_ready
+          # ══════════════════════════════════════════════════════════════
+          print('=== PHASE 0: Generating pin content ===')
+          ALL_BRANDS = ['fitness', 'deals', 'menopause']
+          brand_filter = os.environ.get('BRAND_INPUT', '').strip()
+          brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ALL_BRANDS
+
+          for brand in brands_to_generate:
+              try:
+                  print(f'  Generating content for {brand}...')
+                  pin_data = generate_pin_content(brand, db.client)
+                  board_id = get_board_id(brand, pin_data.get('board', ''))
+                  tips = pin_data.get('tips', [])
+                  insert_row = {
+                      'brand': brand,
+                      'title': pin_data.get('title', ''),
+                      'description': pin_data.get('description', ''),
+                      'overlay_headline': pin_data.get('title', '')[:60],
+                      'overlay_subtext': tips[0] if tips else '',
+                      'tips': tips,
+                      'pexels_search_term': pin_data.get('image_search_query', ''),
+                      'board_id': board_id,
+                      'destination_url': pin_data.get('destination_url', ''),
+                      'topic': pin_data.get('topic', ''),
+                      'niche': pin_data.get('category', ''),
+                      'status': 'content_ready',
+                  }
+                  if not dry_run:
+                      db.client.table('pinterest_pins').insert(insert_row).execute()
+                      log_pin_to_history(pin_data, db.client)
+                  print(f'  [{brand}] Content ready: {pin_data.get("title", "")[:50]}')
+              except Exception as e:
+                  print(f'  ERROR generating content for {brand}: {e}')
+                  import traceback; traceback.print_exc()
+          print()
 
           # ══════════════════════════════════════════════════════════════
           # PHASE 1: Render content_ready pins → upload images → set ready
