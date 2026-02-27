@@ -739,6 +739,16 @@ Each tip MUST be:
 - Teasing — give enough to intrigue but not the full answer (the article has the details)
 - Each tip should cover a DIFFERENT angle/aspect of the topic
 
+═══ GRAPHIC TITLE RULES (text printed ON the pin image — DIFFERENT from title) ═══
+The graphic_title is the large text overlaid directly on the image. Rules:
+- 30-50 characters MAX (must be readable as large bold text in a 1000×1500 image)
+- Written for the PERSON scrolling, NOT the algorithm — stop the scroll
+- Use "you", specific numbers, or a direct call-out: WHO it's for / WHAT problem / WHY NOW
+- Pattern interrupt: contrast with what they expect, create tension or curiosity
+- DIFFERENT from the title — can be shorter, punchier, more human
+- GOOD: "Why Fat Loss Stops After 35", "Hot Flash Fix (It's Not What You Think)", "Amazon Finds Under $20"
+- BAD: "5 Proven Methods for Building Strength After 35 in 2024" (too long, algorithm-speak)
+
 ═══ IMAGE + OVERLAY RULES ═══
 - Image search query: SPECIFIC and VIVID — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic side lighting"
 - Query must match THIS topic specifically, not be generic stock photo terms
@@ -751,6 +761,7 @@ Never use: "unlock", "transform your", "game-changer", "must-have", "you won't b
 OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
 {{
     "title": "...",
+    "graphic_title": "...",
     "description": "...",
     "image_search_query": "...",
     "tips": ["tip 1 text", "tip 2 text", "tip 3 text", "tip 4 text", "tip 5 text"],

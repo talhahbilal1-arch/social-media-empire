@@ -113,7 +113,7 @@ jobs:
                       'brand': brand,
                       'title': pin_data.get('title', ''),
                       'description': pin_data.get('description', ''),
-                      'overlay_headline': pin_data.get('title', '')[:60],
+                      'overlay_headline': pin_data.get('graphic_title', pin_data.get('title', ''))[:60],
                       'overlay_subtext': tips[0] if tips else '',
                       'tips': tips,
                       'pexels_search_term': pin_data.get('image_search_query', ''),

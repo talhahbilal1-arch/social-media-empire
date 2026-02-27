@@ -219,6 +219,28 @@ PIN TIPS (expand on each of these in the article):
 
     seo_keywords = ', '.join(config.get('seo_keywords', [])[:6])
 
+    if brand_key == 'menopause':
+        etsy_cta_section = (
+            '\n5. ETSY PLANNER CTA (menopause brand only): In the conclusion section, naturally'
+            ' mention and link to the Menopause Wellness Planner Bundle on Etsy. Frame it as a'
+            ' practical next step — a printable digital planner to track symptoms, sleep,'
+            ' supplements, and mood all in one place.\n'
+            '   Use this exact link: https://www.etsy.com/listing/4435219468/'
+            'menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic\n'
+            '   Format: [Menopause Wellness Planner Bundle](https://www.etsy.com/listing/'
+            '4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic)\n'
+            '   Keep it natural — one sentence, benefit-driven (e.g. "If you want a structured'
+            ' way to track what\'s helping, the [Menopause Wellness Planner Bundle](link) on Etsy'
+            ' gives you a printable symptom tracker, sleep log, and supplement guide in one'
+            ' instant download.")'
+        )
+        req_num_seo = '6'
+        req_num_filler = '7'
+    else:
+        etsy_cta_section = ''
+        req_num_seo = '5'
+        req_num_filler = '6'
+
     prompt = f"""Write a focused, valuable blog article for the {config['name']} website.
 
 BRAND VOICE:
@@ -244,9 +266,9 @@ REQUIREMENTS:
    NEVER use Amazon search URLs (/s?k=...) — these are broken and don't convert to sales.
    Format: **[Product Name]**({amazon_url}) — honest 1-sentence review of why this product helps.
    Available products with Amazon links:
-{products_text}
-5. SEO KEYWORDS: Naturally include: {seo_keywords}
-6. FILLER BAN: Never use "in today's fast-paced world", "it's important to note",
+{products_text}{etsy_cta_section}
+{req_num_seo}. SEO KEYWORDS: Naturally include: {seo_keywords}
+{req_num_filler}. FILLER BAN: Never use "in today's fast-paced world", "it's important to note",
    "when it comes to", "at the end of the day", "it goes without saying"
 
 OUTPUT FORMAT — Return as Markdown with frontmatter:
