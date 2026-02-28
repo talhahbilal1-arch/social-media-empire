@@ -358,12 +358,13 @@ REQUIREMENTS:
 3. EMAIL CTA: After the 2nd section, include on its own line:
    [SIGNUP_FORM_PLACEHOLDER]
 4. AMAZON PRODUCT RECOMMENDATIONS: Include 3-5 product recommendations woven naturally into the article — one near the top (early hook), at least one mid-article, and one near the bottom (final CTA). Each product must feel like a genuine, helpful suggestion.
-   Link each product to its Amazon page using markdown links.
-   CRITICAL: All Amazon links must be DIRECT PRODUCT LINKS in format: https://www.amazon.com/dp/[ASIN]?tag=dailydealdarl-20
-   NEVER use Amazon search URLs (/s?k=...) — these are broken and don't convert to sales.
-   Format: **[Product Name]**({amazon_url}) — honest 1-2 sentence review explaining exactly WHY this product helps for this specific topic.
-   End the article with a brief "Best Picks" or "My Top Recommendations" section that summarises 2-3 of the products with direct links — this dramatically increases click-through.
-   Available products with Amazon links:
+   MANDATORY LINK RULES:
+   - For products in the list below: use the EXACT URL provided, character-for-character.
+   - For any product NOT in the list: use Amazon search format — https://www.amazon.com/s?k=product+name+here&tag=dailydealdarl-20
+   - NEVER invent /dp/ASIN URLs for products not in the list — invalid ASINs return error pages.
+   Format: **[Product Name](amazon_url)** — honest 1-2 sentence review explaining exactly WHY this product helps for this specific topic.
+   End the article with a brief "Best Picks" or "My Top Recommendations" section that lists 2-3 of the products with links — this dramatically increases click-through.
+   Approved products with direct Amazon links (use these exact URLs):
 {products_text}{etsy_cta_section}
 {req_num_seo}. SEO KEYWORDS: Naturally include: {seo_keywords}
 {req_num_filler}. FILLER BAN: Never use "in today's fast-paced world", "it's important to note",
@@ -484,11 +485,23 @@ def _markdown_to_html_body(markdown_content):
 
 def _inline_format(text):
     """Apply inline markdown formatting (bold, italic, links)."""
+    global _APPROVED_ASINS
+
     # Links [text](url) — Amazon affiliate links get nofollow + new tab
     def _link_replace(match):
+        global _APPROVED_ASINS
         link_text = match.group(1)
         url = match.group(2)
         if 'amazon.com' in url and 'tag=' in url:
+            # Sanitize: if Claude invented a /dp/ASIN not in our approved list,
+            # replace with a search URL that always works.
+            asin_m = re.search(r'/dp/([A-Z0-9]{10})', url)
+            if asin_m:
+                if _APPROVED_ASINS is None:
+                    _APPROVED_ASINS = _get_approved_asins()
+                if asin_m.group(1) not in _APPROVED_ASINS:
+                    search_q = urllib.parse.quote_plus(link_text.strip())
+                    url = f"https://www.amazon.com/s?k={search_q}&tag=dailydealdarl-20"
             return f'<a href="{url}" target="_blank" rel="nofollow sponsored">{link_text}</a>'
         return f'<a href="{url}">{link_text}</a>'
     text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', _link_replace, text)
@@ -499,7 +512,7 @@ def _inline_format(text):
     return text
 
 
-def article_to_html(markdown_content, brand_key, slug):
+def article_to_html(markdown_content, brand_key, slug, pin_data=None):
     """Convert markdown article to a complete HTML page."""
     site = BRAND_SITE_CONFIG[brand_key]
     title, meta_desc = _extract_frontmatter(markdown_content)
@@ -509,6 +522,23 @@ def article_to_html(markdown_content, brand_key, slug):
         meta_desc = f"{title} - {site['site_name']}"
 
     body_html = _markdown_to_html_body(markdown_content)
+
+    # Inject product cards (with Amazon images) for bolded product links
+    body_html = _inject_product_cards(body_html, brand_key)
+
+    # Fetch hero image from Pexels using pin's search term
+    hero_html = ''
+    pexels_query = (pin_data or {}).get('pexels_search_term', '') or slug.replace('-', ' ')
+    hero_url = _fetch_pexels_image(pexels_query)
+    if hero_url:
+        hero_html = (
+            f'<img src="{hero_url}" alt="{title}" '
+            f'style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin:24px 0 32px;" '
+            f'loading="lazy">'
+        )
+    # Insert hero image right after the H1
+    if hero_html:
+        body_html = re.sub(r'(<h1>[^<]*(?:<[^<]*<[^<]*)?</h1>)', r'\1\n' + hero_html, body_html, count=1)
 
     # Replace email signup placeholder with actual form
     signup_html = (

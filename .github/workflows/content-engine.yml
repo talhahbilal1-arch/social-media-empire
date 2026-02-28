@@ -261,7 +261,7 @@ jobs:
                   }
                   slug, article_md = generate_article_for_pin(brand, pin_data, db.client)
                   if slug and article_md:
-                      html = article_to_html(article_md, brand, slug)
+                      html = article_to_html(article_md, brand, slug, pin_data)
                       article_url = save_and_register_article(html, brand, slug, pin_data, db.client)
                       # Update in-memory pin so Phase 1b uses the article URL as the "Visit Site" link
                       pin['destination_url'] = article_url
