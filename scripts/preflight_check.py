@@ -128,24 +128,19 @@ def main():
         "MAKE_WEBHOOK_MENOPAUSE": "menopause",
         "MAKE_WEBHOOK_PINTEREST": "global-fallback",
     }
-    any_reachable = False
+    # IMPORTANT: Do NOT make HTTP requests to webhook URLs.
+    # Make.com fires the scenario on ANY HTTP method (HEAD, GET, POST, etc.).
+    # Calling the URL with an empty body causes Pinterest 400 errors, deactivating
+    # the scenario before the actual pin posting step runs.
+    any_configured = False
     for env_var, label in webhook_map.items():
         url = os.environ.get(env_var, "")
-        if not url:
-            check(f"webhook:{label}", False, "not configured")
-            continue
-        try:
-            # HEAD request to check reachability (won't trigger scenario)
-            resp = requests.head(url, timeout=10, allow_redirects=True)
-            # Make.com returns 405 (Method Not Allowed) for HEAD — that's fine, it's reachable
-            ok = resp.status_code in (200, 204, 400, 405)
-            if check(f"webhook:{label}", ok, f"HTTP {resp.status_code}"):
-                any_reachable = True
-        except requests.exceptions.RequestException as e:
-            check(f"webhook:{label}", False, str(e)[:80])
+        ok = bool(url and url.startswith("https://hook.us2.make.com/"))
+        if check(f"webhook:{label}", ok, "configured" if ok else "not configured"):
+            any_configured = True
 
-    if not any_reachable:
-        failures.append("No Make.com webhooks reachable")
+    if not any_configured:
+        failures.append("No Make.com webhooks configured")
 
     # ── Summary ──────────────────────────────────────────────────
     print(f"\n=== Pre-flight result: {len(failures)} issue(s) ===")
