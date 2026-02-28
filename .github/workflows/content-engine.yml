@@ -68,7 +68,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
-          MAKE_API_TOKEN: ${{ secrets.MAKE_API_TOKEN }}
+          MAKE_WEBHOOK_ACTIVATOR: ${{ secrets.MAKE_WEBHOOK_ACTIVATOR }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           BRAND_INPUT: ${{ github.event.inputs.brand || '' }}
         run: |
@@ -76,7 +76,10 @@ jobs:
           import os
           import sys
           import json
+          import time
           import subprocess
+          import urllib.request
+          import urllib.error
           from datetime import datetime, timezone, timedelta
           from concurrent.futures import ThreadPoolExecutor
 
@@ -95,6 +98,40 @@ jobs:
 
           from database.supabase_client import get_supabase_client
           db = get_supabase_client()
+
+          def log_pipeline_error(phase, brand, error, severity='medium'):
+              """Log pipeline errors to Supabase errors table for system-health tracking."""
+              try:
+                  import traceback as _tb
+                  db.client.table('errors').insert({
+                      'error_type': 'content_engine',
+                      'error_message': str(error)[:500],
+                      'context': json.dumps({'phase': phase, 'brand': brand, 'trace': _tb.format_exc()[-500:]}),
+                      'severity': severity,
+                      'created_at': datetime.now(timezone.utc).isoformat()
+                  }).execute()
+              except Exception:
+                  pass  # Never let error logging crash the pipeline
+
+          # ══════════════════════════════════════════════════════════════
+          # PRE-FLIGHT: Reactivate Make.com poster scenarios via Scenario
+          # Activator webhook (bypasses Cloudflare that blocks direct API).
+          # ══════════════════════════════════════════════════════════════
+          activator_url = os.environ.get('MAKE_WEBHOOK_ACTIVATOR', '')
+          if activator_url and not dry_run:
+              print('=== PRE-FLIGHT: Reactivating Make.com scenarios ===')
+              try:
+                  _req = urllib.request.Request(
+                      activator_url,
+                      data=json.dumps({'action': 'activate_all'}).encode(),
+                      headers={'Content-Type': 'application/json'},
+                      method='POST'
+                  )
+                  with urllib.request.urlopen(_req, timeout=15) as _r:
+                      print(f'  Scenario activator → HTTP {_r.status}')
+                  time.sleep(5)  # Give scenarios time to activate before posting
+              except Exception as _e:
+                  print(f'  Scenario activator skipped: {_e}')
 
           # ══════════════════════════════════════════════════════════════
           # PHASE 0: Generate fresh pin content → insert as content_ready
@@ -131,6 +168,7 @@ jobs:
               except Exception as e:
                   print(f'  ERROR generating content for {brand}: {e}')
                   import traceback; traceback.print_exc()
+                  log_pipeline_error('0', brand, e, severity='high')
           print()
 
           # ══════════════════════════════════════════════════════════════
@@ -147,6 +185,7 @@ jobs:
               content_ready_pins = query_result.data or []
           except Exception as e:
               print(f'  WARNING: Could not query content_ready pins: {e}')
+              log_pipeline_error('1', 'all', e, severity='high')
               content_ready_pins = []
 
           print(f'  Found {len(content_ready_pins)} content_ready pins')
@@ -191,6 +230,7 @@ jobs:
               except Exception as e:
                   print(f'  ERROR rendering pin {pin_id} ({brand}): {e}')
                   import traceback; traceback.print_exc()
+                  log_pipeline_error('1', brand, e, severity='medium')
                   try:
                       db.client.table('pinterest_pins').update({'status': 'content_ready'}).eq('id', pin_id).execute()
                   except Exception:
@@ -199,102 +239,8 @@ jobs:
           print(f'  Rendered {len(rendered_pins)}/{len(content_ready_pins)} pins')
 
           # ══════════════════════════════════════════════════════════════
-          # PHASE 1b: Post rendered pins to Pinterest via Make.com webhooks
-          # NOTE: Scenarios are kept alive because preflight_check.py no longer
-          # makes HTTP requests to webhook URLs (which previously triggered empty
-          # payload → Pinterest 400 → scenario deactivation on every run).
-          # ══════════════════════════════════════════════════════════════
-          import urllib.request
-          import urllib.error
-
-          WEBHOOKS = {
-              'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
-              'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
-              'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
-          }
-
-          print('\n=== PHASE 1b: Posting pins to Pinterest ===')
-          import json as _json
-          posted_count = 0
-          for pin in rendered_pins:
-              pin_id = pin['id']
-              brand = pin['brand']
-              webhook_url = WEBHOOKS.get(brand, '')
-              if not webhook_url:
-                  print(f'  [{brand}] SKIP — no webhook URL configured')
-                  continue
-              if dry_run:
-                  print(f'  [{brand}] DRY RUN — would POST: {pin.get("title","")[:50]}')
-                  continue
-
-              # CRITICAL: validate image_url — empty URL causes Pinterest 400 + scenario deactivation
-              image_url = pin.get('image_url', '') or ''
-              if not image_url.startswith('http'):
-                  print(f'  [{brand}] SKIP — image_url missing or invalid: "{image_url}"')
-                  try:
-                      db.client.table('pinterest_pins').update({
-                          'status': 'failed',
-                          'error_message': f'image_url missing: "{image_url}"',
-                      }).eq('id', pin_id).execute()
-                  except Exception:
-                      pass
-                  continue
-
-              payload = {
-                  'pin_id': str(pin_id),
-                  'brand': brand,
-                  'title': pin.get('title', '')[:100],
-                  'description': pin.get('description', '')[:500],
-                  'image_url': image_url,
-                  'link': pin.get('destination_url', ''),
-                  'board_id': str(pin.get('board_id', '')),
-              }
-              print(f'  [{brand}] Sending webhook — image_url: {image_url[:80]}')
-              print(f'  [{brand}]   board_id={payload["board_id"]} link={payload["link"][:60]}')
-              try:
-                  db.client.table('pinterest_pins').update({'status': 'posting'}).eq('id', pin_id).execute()
-                  body = _json.dumps(payload).encode('utf-8')
-                  req = urllib.request.Request(
-                      webhook_url,
-                      data=body,
-                      headers={'Content-Type': 'application/json'},
-                      method='POST'
-                  )
-                  with urllib.request.urlopen(req, timeout=30) as resp:
-                      resp_body = resp.read().decode('utf-8', errors='replace')
-                      print(f'  [{brand}] Webhook → HTTP {resp.status} body="{resp_body[:80]}"')
-                  # Make.com returns "Accepted" (HTTP 200) even for inactive scenarios.
-                  # We mark posted optimistically here — Make.com health monitor will catch failures.
-                  db.client.table('pinterest_pins').update({
-                      'status': 'posted',
-                      'posted_at': datetime.now(timezone.utc).isoformat()
-                  }).eq('id', pin_id).execute()
-                  posted_count += 1
-              except urllib.error.HTTPError as e:
-                  err_body = e.read().decode('utf-8', errors='replace')[:200]
-                  print(f'  [{brand}] FAILED — HTTP {e.code}: {err_body}')
-                  try:
-                      db.client.table('pinterest_pins').update({
-                          'status': 'failed',
-                          'error_message': f'Webhook HTTP {e.code}: {err_body}',
-                      }).eq('id', pin_id).execute()
-                  except Exception:
-                      pass
-              except Exception as e:
-                  print(f'  [{brand}] FAILED — {e}')
-                  try:
-                      db.client.table('pinterest_pins').update({
-                          'status': 'failed',
-                          'error_message': str(e)[:200],
-                      }).eq('id', pin_id).execute()
-                  except Exception:
-                      pass
-          if not dry_run:
-              print(f'  Posted {posted_count}/{len(rendered_pins)} pins to Pinterest')
-
-
-          # ══════════════════════════════════════════════════════════════
-          # PHASE 2: Generate articles for rendered pins (parallel)
+          # PHASE 2: Generate articles FIRST so pins link to articles
+          # (articles must exist before posting so "Visit Site" → article)
           # ══════════════════════════════════════════════════════════════
           print('\n=== PHASE 2: Generating articles ===')
           articles_generated = []
@@ -317,6 +263,8 @@ jobs:
                   if slug and article_md:
                       html = article_to_html(article_md, brand, slug)
                       article_url = save_and_register_article(html, brand, slug, pin_data, db.client)
+                      # Update in-memory pin so Phase 1b uses the article URL as the "Visit Site" link
+                      pin['destination_url'] = article_url
                       try:
                           db.client.table('pinterest_pins').update({
                               'destination_url': article_url,
@@ -326,23 +274,26 @@ jobs:
                           pass
                       with _articles_lock:
                           articles_generated.append(f'{brand}: {slug}')
-                      print(f'  Article saved: {slug}')
+                      print(f'  [{brand}] Article → {article_url}')
                   elif slug:
                       site = BRAND_SITE_CONFIG.get(brand, {})
                       base_url = site.get('base_url', pin_data.get('destination_url', ''))
+                      article_url = f'{base_url}/articles/{slug}.html'
+                      pin['destination_url'] = article_url  # Update in-memory
                       try:
                           db.client.table('pinterest_pins').update({
-                              'destination_url': f'{base_url}/articles/{slug}.html',
+                              'destination_url': article_url,
                               'article_generated': True
                           }).eq('id', pin['id']).execute()
                       except Exception:
                           pass
-                      print(f'  Article exists: {slug}')
+                      print(f'  [{brand}] Article exists: {article_url}')
                   else:
-                      print(f'  No topic, using homepage URL')
+                      print(f'  [{brand}] No topic — pin will link to homepage')
               except Exception as e:
                   print(f'  Article failed for {brand}: {e}')
                   import traceback; traceback.print_exc()
+                  log_pipeline_error('2', brand, e, severity='medium')
 
           if rendered_pins:
               with ThreadPoolExecutor(max_workers=3) as executor:
@@ -351,7 +302,8 @@ jobs:
               print('  No rendered pins — skipping article generation')
 
           # ══════════════════════════════════════════════════════════════
-          # PHASE 3: Git commit + push articles
+          # PHASE 3: Git commit + push articles (deploy before posting)
+          # Vercel auto-deploys on push so articles are live before pins.
           # ══════════════════════════════════════════════════════════════
           if articles_generated and not dry_run:
               print('\n=== PHASE 3: Publishing articles ===')
@@ -367,21 +319,146 @@ jobs:
                           check=True
                       )
                       subprocess.run(['git', 'push'], check=True)
-                      print(f'  Pushed {len(articles_generated)} articles')
+                      print(f'  Pushed {len(articles_generated)} articles — Vercel deploying...')
+                      time.sleep(20)  # Allow Vercel to start deploying before posting pins
                   else:
                       print('  No new article files to commit')
               except Exception as e:
                   print(f'  Git push failed: {e}')
                   import traceback; traceback.print_exc()
+                  log_pipeline_error('3', 'all', e, severity='high')
           else:
               print('\n=== PHASE 3: Skipped ===')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 1b: Post rendered pins to Pinterest via Make.com webhooks
+          # Runs AFTER articles are generated and pushed — so "Visit Site"
+          # links directly to the conversion article, not the homepage.
+          # Scenarios stay active via builtin:Ignore error handler.
+          # ══════════════════════════════════════════════════════════════
+          WEBHOOKS = {
+              'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
+              'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
+              'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+          }
+
+          print('\n=== PHASE 1b: Posting pins to Pinterest ===')
+          posted_count = 0
+          for pin in rendered_pins:
+              pin_id = pin['id']
+              brand = pin['brand']
+              webhook_url = WEBHOOKS.get(brand, '')
+              if not webhook_url:
+                  print(f'  [{brand}] SKIP — no webhook URL configured')
+                  continue
+              if dry_run:
+                  print(f'  [{brand}] DRY RUN — would POST to article: {pin.get("destination_url","")[:70]}')
+                  continue
+
+              # CRITICAL: validate image_url — empty URL causes Pinterest 400
+              image_url = pin.get('image_url', '') or ''
+              if not image_url.startswith('http'):
+                  print(f'  [{brand}] SKIP — image_url missing or invalid: "{image_url}"')
+                  try:
+                      db.client.table('pinterest_pins').update({
+                          'status': 'failed',
+                          'error_message': f'image_url missing: "{image_url}"',
+                      }).eq('id', pin_id).execute()
+                  except Exception:
+                      pass
+                  log_pipeline_error('1b', brand, f'image_url missing for pin {pin_id}', severity='high')
+                  continue
+
+              destination_url = pin.get('destination_url', '')
+              payload = {
+                  'pin_id': str(pin_id),
+                  'brand': brand,
+                  'title': pin.get('title', '')[:100],
+                  'description': pin.get('description', '')[:500],
+                  'image_url': image_url,
+                  'link': destination_url,
+                  'board_id': str(pin.get('board_id', '')),
+              }
+              print(f'  [{brand}] Posting → {destination_url[:70]}')
+              print(f'  [{brand}]   board_id={payload["board_id"]}')
+
+              # Retry logic: 3 attempts with exponential backoff
+              success = False
+              for attempt in range(3):
+                  try:
+                      if attempt == 0:
+                          db.client.table('pinterest_pins').update({'status': 'posting'}).eq('id', pin_id).execute()
+                      body = json.dumps(payload).encode('utf-8')
+                      req = urllib.request.Request(
+                          webhook_url,
+                          data=body,
+                          headers={'Content-Type': 'application/json'},
+                          method='POST'
+                      )
+                      with urllib.request.urlopen(req, timeout=30) as resp:
+                          resp_body = resp.read().decode('utf-8', errors='replace')
+                          print(f'  [{brand}] Webhook → HTTP {resp.status} "{resp_body[:60]}"')
+                      db.client.table('pinterest_pins').update({
+                          'status': 'posted',
+                          'posted_at': datetime.now(timezone.utc).isoformat()
+                      }).eq('id', pin_id).execute()
+                      posted_count += 1
+                      success = True
+                      break
+                  except urllib.error.HTTPError as e:
+                      err_body = e.read().decode('utf-8', errors='replace')[:200]
+                      print(f'  [{brand}] Attempt {attempt+1}/3 FAILED — HTTP {e.code}: {err_body}')
+                      if attempt < 2:
+                          time.sleep(5 * (attempt + 1))
+                      else:
+                          try:
+                              db.client.table('pinterest_pins').update({
+                                  'status': 'failed',
+                                  'error_message': f'Webhook HTTP {e.code}: {err_body}',
+                              }).eq('id', pin_id).execute()
+                          except Exception:
+                              pass
+                          log_pipeline_error('1b', brand, f'Webhook HTTP {e.code}: {err_body}', severity='high')
+                  except Exception as e:
+                      print(f'  [{brand}] Attempt {attempt+1}/3 FAILED — {e}')
+                      if attempt < 2:
+                          time.sleep(5 * (attempt + 1))
+                      else:
+                          try:
+                              db.client.table('pinterest_pins').update({
+                                  'status': 'failed',
+                                  'error_message': str(e)[:200],
+                              }).eq('id', pin_id).execute()
+                          except Exception:
+                              pass
+                          log_pipeline_error('1b', brand, e, severity='high')
+
+          print(f'  Posted {posted_count}/{len(rendered_pins)} pins to Pinterest')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 4: Verify results — log any lingering failures
+          # ══════════════════════════════════════════════════════════════
+          if not dry_run and rendered_pins:
+              print('\n=== PHASE 4: Verification ===')
+              try:
+                  fresh_cutoff = (datetime.now(timezone.utc) - timedelta(minutes=30)).isoformat()
+                  failed_pins = db.client.table('pinterest_pins').select('id,brand,error_message') \
+                      .eq('status', 'failed').gte('created_at', fresh_cutoff).execute()
+                  if failed_pins.data:
+                      for fp in failed_pins.data:
+                          print(f'  [{fp["brand"]}] FAILED pin {fp["id"]}: {fp.get("error_message","")[:80]}')
+                  else:
+                      print(f'  All pins posted successfully ({posted_count}/{len(rendered_pins)})')
+              except Exception as e:
+                  print(f'  Verification query failed: {e}')
 
           # Summary
           print(f'\n=== Content Engine Summary ===')
           print(f'  Rendered: {len(rendered_pins)} pins')
           print(f'  Articles: {len(articles_generated)}')
+          print(f'  Posted: {posted_count} pins')
           if not content_ready_pins:
-              print('  No content_ready pins — waiting for Make.com Content Generator')
+              print('  No content_ready pins — pipeline idle')
           try:
               db.client.table('agent_runs').upsert({
                   'agent_name': 'content_pipeline',

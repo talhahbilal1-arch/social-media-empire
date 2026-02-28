@@ -260,11 +260,12 @@ REQUIREMENTS:
    - Clear conclusion with next steps
 3. EMAIL CTA: After the 2nd section, include on its own line:
    [SIGNUP_FORM_PLACEHOLDER]
-4. AMAZON PRODUCT RECOMMENDATIONS: Include 2-3 product recommendations naturally within the article.
+4. AMAZON PRODUCT RECOMMENDATIONS: Include 3-5 product recommendations woven naturally into the article — one near the top (early hook), at least one mid-article, and one near the bottom (final CTA). Each product must feel like a genuine, helpful suggestion.
    Link each product to its Amazon page using markdown links.
    CRITICAL: All Amazon links must be DIRECT PRODUCT LINKS in format: https://www.amazon.com/dp/[ASIN]?tag=dailydealdarl-20
    NEVER use Amazon search URLs (/s?k=...) — these are broken and don't convert to sales.
-   Format: **[Product Name]**({amazon_url}) — honest 1-sentence review of why this product helps.
+   Format: **[Product Name]**({amazon_url}) — honest 1-2 sentence review explaining exactly WHY this product helps for this specific topic.
+   End the article with a brief "Best Picks" or "My Top Recommendations" section that summarises 2-3 of the products with direct links — this dramatically increases click-through.
    Available products with Amazon links:
 {products_text}{etsy_cta_section}
 {req_num_seo}. SEO KEYWORDS: Naturally include: {seo_keywords}
@@ -426,7 +427,7 @@ def article_to_html(markdown_content, brand_key, slug):
     )
     body_html = body_html.replace('<!-- email-signup-placeholder -->', signup_html)
 
-    # Menopause Planner: insert Etsy CTA before affiliate disclosure
+    # Menopause Planner: append Etsy CTA to article body (robust — no string matching)
     if brand_key == "menopause":
         etsy_cta = (
             '<div style="background:linear-gradient(135deg,#f3e8ff,#ede0f7);border:2px solid #c084fc;border-radius:14px;padding:28px;margin:36px 0;text-align:center;">'
@@ -437,7 +438,7 @@ def article_to_html(markdown_content, brand_key, slug):
             '<p style="margin:12px 0 0;font-size:0.82em;color:#777">Instant download • Print at home • One-time purchase</p>'
             '</div>'
         )
-        body_html = body_html.replace('<p style="font-size:12px;', f'{etsy_cta}\n    <p style="font-size:12px;')
+        body_html = body_html + etsy_cta
 
     # Build nav
     nav_html = '\n'.join(
@@ -507,6 +508,10 @@ def article_to_html(markdown_content, brand_key, slug):
     <p class="article-meta" style="color:#888;font-size:14px">{date_str}</p>
 {body_html}
     {disclosure}
+    <div style="background:{site['primary_color']};border-radius:12px;padding:24px;margin-top:32px;text-align:center;">
+      <p style="margin:0 0 8px;color:#fff;font-weight:700;font-size:1.1em">Want more tips like this?</p>
+      <a href="{site['base_url']}" style="display:inline-block;background:#fff;color:{site['primary_color']};padding:10px 24px;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.95em">Visit {site['site_name']} →</a>
+    </div>
   </article>
 
   <script type="application/ld+json">

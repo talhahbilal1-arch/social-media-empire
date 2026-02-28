@@ -153,6 +153,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK_ACTIVATOR: ${{ secrets.MAKE_WEBHOOK_ACTIVATOR }}
           CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
         run: |
           python3 << 'PYEOF'
@@ -302,6 +303,7 @@ jobs:
               sites = {
                   'dailydealdarling.com': 'https://dailydealdarling.com',
                   'fitover35.com': 'https://fitover35.com',
+                  'menopause-planner': 'https://menopause-planner-website.vercel.app',
               }
               for name, url in sites.items():
                   try:
@@ -433,29 +435,44 @@ jobs:
                   print(f'  Revenue zero check: {e}')
 
               # ── Phase 11: Make.com Scenario Health ──
+              # Calls the Scenario Activator webhook which reactivates all 3 poster
+              # scenarios via Make.com's internal API (bypasses Cloudflare block on
+              # direct api.make.com calls from GitHub Actions IPs).
+              # NOTE: Do NOT POST to poster webhook URLs — Make.com fires the scenario
+              # on ANY HTTP method, which would queue a bad payload and waste operations.
               print('\n=== Phase 11: Make.com Scenario Health ===')
-              _webhook_brands = {
-                  'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
-                  'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
-                  'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
-              }
-              for _wb_brand, _wb_url in _webhook_brands.items():
-                  if not _wb_url:
-                      print(f'  {_wb_brand}: webhook not configured in secrets')
-                      continue
+              _activator_url = os.environ.get('MAKE_WEBHOOK_ACTIVATOR', '')
+              if _activator_url:
                   try:
-                      _wb_resp = requests.post(
-                          _wb_url, json={'_health_check': True}, timeout=10
+                      _act_resp = requests.post(
+                          _activator_url,
+                          json={'action': 'activate_all'},
+                          timeout=15
                       )
-                      if _wb_resp.status_code < 400:
-                          print(f'  {_wb_brand}: webhook OK ({_wb_resp.status_code})')
+                      if _act_resp.status_code < 400:
+                          print(f'  Scenario activator → HTTP {_act_resp.status_code} (all scenarios reactivated)')
                           healed += 1
                       else:
-                          _wb_msg = f'Make.com webhook for {_wb_brand}: HTTP {_wb_resp.status_code}'
+                          _act_msg = f'Make.com Scenario Activator returned HTTP {_act_resp.status_code}'
+                          print(f'  WARNING: {_act_msg}')
+                          unresolvable.append(_act_msg)
+                  except Exception as _act_e:
+                      print(f'  Scenario activator failed: {_act_e}')
+              else:
+                  # Fallback: just verify webhook URLs are configured (no HTTP call to poster webhooks)
+                  _webhook_brands = {
+                      'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
+                      'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
+                      'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+                  }
+                  for _wb_brand, _wb_url in _webhook_brands.items():
+                      if _wb_url and _wb_url.startswith('https://hook.us2.make.com/'):
+                          print(f'  {_wb_brand}: webhook configured ✓')
+                          healed += 1
+                      else:
+                          _wb_msg = f'Make.com webhook for {_wb_brand} not configured'
                           print(f'  WARNING: {_wb_msg}')
                           unresolvable.append(_wb_msg)
-                  except Exception as _wb_e:
-                      print(f'  {_wb_brand} webhook check failed: {_wb_e}')
 
               # ── Phase 8: Log self-healing activity ──
               try:
