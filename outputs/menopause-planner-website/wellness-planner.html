@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free Menopause Symptom Tracker — discover if sugar, stress, or habits are fueling your hot flashes, mood swings, and insomnia. Plus the 34-page Menopause Wellness Planner Bundle.">
+    <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="3vrNJ7j-0jCY9cbkFDWgnRUJPkQ3pd-FBRDWMLGsVj0" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-02ZPS3H3GC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-02ZPS3H3GC');
+    </script>
+    <!-- Pinterest tag -->
+    <meta name="p:domain_verify" content="menopauseplanner"/>
+    <meta property="og:title" content="FREE Menopause Symptom Tracker — Stop the Triggers">
+    <meta property="og:description" content="Discover if sugar, stress, or hidden habits are making your menopause symptoms worse. Grab your free tracker + explore the 34-page Wellness Planner Bundle.">
+    <meta property="og:url" content="https://menopause-planner-website.vercel.app/wellness-planner">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://menopause-planner-website.vercel.app/og-wellness-planner.png">
+    <meta name="pinterest-rich-pin" content="true">
+    <title>Free Menopause Symptom Tracker | The Menopause Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ── Design Tokens ─────────────────────────── */
+        :root {
+            --sage:        #7c9a82;
+            --sage-light:  #a8c5ae;
+            --sage-dark:   #5a7a60;
+            --rose:        #c9918f;
+            --rose-light:  #e8c4c2;
+            --rose-dark:   #a06b69;
+            --cream:       #faf8f5;
+            --cream-warm:  #f5f0ea;
+            --charcoal:    #2d3436;
+            --text:        #3d3d3d;
+            --text-muted:  #6b7280;
+            --white:       #ffffff;
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body:    'Outfit', -apple-system, sans-serif;
+        }
+
+        /* ── Reset & Base ──────────────────────────── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: var(--font-body);
+            color: var(--text);
+            background: var(--cream);
+            line-height: 1.65;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+
+        /* ── Utility ───────────────────────────────── */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+        /* ── Scroll Reveal ─────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Topbar ────────────────────────────────── */
+        .topbar {
+            background: var(--sage-dark);
+            color: var(--white);
+            text-align: center;
+            padding: 0.55rem 1rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+        .topbar strong { color: var(--rose-light); }
+
+        /* ── Nav ───────────────────────────────────── */
+        .nav {
+            background: var(--white);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.92);
+        }
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            color: var(--charcoal);
+        }
+        .nav-logo span { color: var(--sage); }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.25s;
+        }
+        .nav-links a:hover { color: var(--sage-dark); }
+
+        /* ── HERO ──────────────────────────────────── */
+        .hero {
+            position: relative;
+            padding: 4.5rem 0 5rem;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(168,197,174,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(232,196,194,0.2) 0%, transparent 55%),
+                var(--cream);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -60px;
+            width: 320px;
+            height: 320px;
+            background: var(--sage-light);
+            opacity: 0.08;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: -40px;
+            width: 200px;
+            height: 200px;
+            background: var(--rose-light);
+            opacity: 0.1;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3.5rem;
+            align-items: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(124,154,130,0.12);
+            color: var(--sage-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+        .hero-badge::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            background: var(--sage);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.4); }
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.1rem, 4.5vw, 3.2rem);
+            line-height: 1.15;
+            color: var(--charcoal);
+            margin-bottom: 1.2rem;
+        }
+        .hero h1 em {
+            font-style: normal;
+            color: var(--rose-dark);
+        }
+        .hero-sub {
+            font-size: 1.08rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 440px;
+            line-height: 1.7;
+        }
+
+        /* Opt-in form */
+        .optin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 400px;
+        }
+        .optin-form input {
+            width: 100%;
+            padding: 0.9rem 1.15rem;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            background: var(--white);
+            transition: border-color 0.25s, box-shadow 0.25s;
+            outline: none;
+        }
+        .optin-form input:focus {
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(124,154,130,0.15);
+        }
+        .optin-form input::placeholder { color: #aaa; }
+        .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--sage);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+            box-shadow: 0 4px 14px rgba(124,154,130,0.3);
+        }
+        .btn-cta:hover {
+            background: var(--sage-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124,154,130,0.4);
+        }
+        .btn-cta:active { transform: translateY(0); }
+        .optin-fine {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* Hero visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        .hero-mockup {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 3/4;
+            background: linear-gradient(145deg, var(--sage-light), var(--sage));
+            border-radius: 20px;
+            box-shadow:
+                0 25px 60px rgba(90,122,96,0.25),
+                0 0 0 1px rgba(255,255,255,0.15) inset;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem;
+            text-align: center;
+            color: var(--white);
+        }
+        .mockup-icon {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 1.5rem;
+        }
+        .mockup-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+        .mockup-desc {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .mockup-lines {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .mockup-line {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.2);
+        }
+        .mockup-line:nth-child(1) { width: 90%; }
+        .mockup-line:nth-child(2) { width: 75%; }
+        .mockup-line:nth-child(3) { width: 85%; }
+        .mockup-line:nth-child(4) { width: 60%; }
+        .hero-float-card {
+            position: absolute;
+            bottom: -18px;
+            right: -20px;
+            background: var(--white);
+            border-radius: 14px;
+            padding: 0.9rem 1.2rem;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            animation: float-gentle 4s ease-in-out infinite;
+        }
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .float-check {
+            width: 36px;
+            height: 36px;
+            background: var(--sage);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .float-text { font-size: 0.8rem; font-weight: 600; color: var(--charcoal); line-height: 1.3; }
+        .float-text span { font-weight: 400; color: var(--text-muted); font-size: 0.72rem; display: block; }
+
+        /* ── EDUCATION BRIDGE ──────────────────────── */
+        .education {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+        .education-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .edu-graphic {
+            position: relative;
+        }
+        .glucose-chart {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: var(--cream-warm);
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.04);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+        }
+        .chart-label {
+            position: absolute;
+            top: 1.2rem;
+            left: 1.5rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.7rem;
+            height: 140px;
+        }
+        .chart-bar {
+            flex: 1;
+            border-radius: 6px 6px 0 0;
+            transition: height 1.2s cubic-bezier(.22,1,.36,1);
+        }
+        .chart-bar.sugar { background: var(--rose); }
+        .chart-bar.balanced { background: var(--sage); }
+        .chart-bar-label {
+            text-align: center;
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+        .chart-annotation {
+            position: absolute;
+            top: 1rem;
+            right: 1.2rem;
+            background: var(--rose);
+            color: var(--white);
+            padding: 0.35rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+        .edu-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.7rem, 3vw, 2.3rem);
+            color: var(--charcoal);
+            margin-bottom: 1.2rem;
+            line-height: 1.2;
+        }
+        .edu-lead {
+            font-size: 1.02rem;
+            color: var(--text-muted);
+            margin-bottom: 1.8rem;
+            line-height: 1.7;
+        }
+        .edu-points { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .edu-point {
+            display: flex;
+            gap: 0.9rem;
+            align-items: flex-start;
+        }
+        .edu-point-icon {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: rgba(124,154,130,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+        .edu-point-text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.15rem;
+        }
+        .edu-point-text p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ── PRODUCT SHOWCASE ──────────────────────── */
+        .product {
+            padding: 5rem 0;
+            background:
+                radial-gradient(ellipse at 70% 20%, rgba(232,196,194,0.15) 0%, transparent 50%),
+                var(--cream);
+        }
+        .product-label {
+            text-align: center;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--rose-dark);
+            margin-bottom: 0.6rem;
+        }
+        .product h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            text-align: center;
+            color: var(--charcoal);
+            margin-bottom: 0.8rem;
+        }
+        .product-subtitle {
+            text-align: center;
+            font-size: 1.02rem;
+            color: var(--text-muted);
+            max-width: 550px;
+            margin: 0 auto 3rem;
+        }
+        .product-card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .product-image {
+            background: linear-gradient(135deg, var(--rose-light), var(--sage-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+        }
+        .product-mockup-stack {
+            position: relative;
+            width: 220px;
+        }
+        .product-page {
+            width: 180px;
+            height: 240px;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            position: relative;
+        }
+        .product-page::before {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            height: 10px;
+            background: var(--sage-light);
+            border-radius: 3px;
+            opacity: 0.5;
+        }
+        .product-page::after {
+            content: '34';
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--sage);
+            opacity: 0.2;
+        }
+        .product-page-back {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            width: 180px;
+            height: 240px;
+            background: var(--cream);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            z-index: -1;
+            transform: rotate(4deg);
+        }
+        .product-page-back2 {
+            position: absolute;
+            top: -20px;
+            left: 36px;
+            width: 180px;
+            height: 240px;
+            background: var(--cream-warm);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: -2;
+            transform: rotate(8deg);
+        }
+        .product-page-lines {
+            position: absolute;
+            top: 40px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .product-page-line {
+            height: 6px;
+            background: var(--cream-warm);
+            border-radius: 3px;
+        }
+        .product-page-line:nth-child(1) { width: 85%; }
+        .product-page-line:nth-child(2) { width: 70%; }
+        .product-page-line:nth-child(3) { width: 90%; }
+        .product-page-line:nth-child(4) { width: 55%; }
+        .product-page-line:nth-child(5) { width: 80%; background: var(--rose-light); opacity: 0.4; }
+        .product-badge-float {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--charcoal);
+            color: var(--white);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+        .product-details {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .product-details h3 {
+            font-family: var(--font-display);
+            font-size: 1.65rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .stars { color: #f59e0b; font-size: 0.9rem; letter-spacing: 2px; }
+        .rating-text { font-size: 0.82rem; color: var(--text-muted); }
+        .product-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin-bottom: 1.8rem;
+        }
+        .product-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        .feature-check {
+            width: 20px;
+            height: 20px;
+            background: rgba(124,154,130,0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .product-pricing {
+            display: flex;
+            align-items: baseline;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+        .price-original {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        .price-current {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            color: var(--sage-dark);
+        }
+        .price-save {
+            background: rgba(124,154,130,0.12);
+            color: var(--sage-dark);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .btn-product {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--rose);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+            box-shadow: 0 4px 14px rgba(201,145,143,0.35);
+            text-decoration: none;
+        }
+        .btn-product:hover {
+            background: var(--rose-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201,145,143,0.45);
+        }
+        .product-guarantee {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ── AMAZON GRID ───────────────────────────── */
+        .toolkit {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+        .toolkit-label {
+            text-align: center;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--sage-dark);
+            margin-bottom: 0.6rem;
+        }
+        .toolkit h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.7rem, 3vw, 2.3rem);
+            text-align: center;
+            color: var(--charcoal);
+            margin-bottom: 0.6rem;
+        }
+        .toolkit-subtitle {
+            text-align: center;
+            font-size: 0.98rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+        }
+        .toolkit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .toolkit-card {
+            background: var(--cream);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .toolkit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.07);
+        }
+        .toolkit-card-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.2rem;
+            background: var(--white);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+        .toolkit-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+        .toolkit-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            line-height: 1.55;
+        }
+        .toolkit-card .btn-toolkit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--white);
+            color: var(--sage-dark);
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1.5px solid var(--sage-light);
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .toolkit-card .btn-toolkit:hover {
+            background: var(--sage);
+            color: var(--white);
+            border-color: var(--sage);
+        }
+
+        /* ── SOCIAL PROOF ──────────────────────────── */
+        .proof {
+            padding: 5rem 0;
+            background:
+                radial-gradient(ellipse at 30% 50%, rgba(168,197,174,0.12) 0%, transparent 50%),
+                var(--cream);
+        }
+        .proof h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.7rem, 3vw, 2.3rem);
+            text-align: center;
+            color: var(--charcoal);
+            margin-bottom: 2.5rem;
+        }
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .proof-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+        }
+        .proof-card::before {
+            content: '\201C';
+            font-family: var(--font-display);
+            font-size: 4rem;
+            color: var(--sage-light);
+            position: absolute;
+            top: 0.5rem;
+            left: 1.2rem;
+            line-height: 1;
+            opacity: 0.5;
+        }
+        .proof-stars {
+            color: #f59e0b;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+        .proof-text {
+            font-size: 0.92rem;
+            color: var(--text);
+            line-height: 1.65;
+            margin-bottom: 1.2rem;
+            font-style: italic;
+        }
+        .proof-author {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .proof-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--white);
+        }
+        .proof-avatar.green { background: var(--sage); }
+        .proof-avatar.rose { background: var(--rose); }
+        .proof-avatar.dark { background: var(--charcoal); }
+        .proof-name { font-size: 0.85rem; font-weight: 600; color: var(--charcoal); }
+        .proof-verified { font-size: 0.72rem; color: var(--text-muted); }
+
+        /* ── FINAL CTA ─────────────────────────────── */
+        .final-cta {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+        .final-cta h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .final-cta p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        .final-cta .optin-form {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .final-cta .optin-form input {
+            border: none;
+            background: rgba(255,255,255,0.95);
+        }
+        .final-cta .btn-cta {
+            background: var(--rose);
+            box-shadow: 0 4px 14px rgba(201,145,143,0.4);
+            width: 100%;
+        }
+        .final-cta .btn-cta:hover {
+            background: var(--rose-dark);
+        }
+
+        /* ── FOOTER ────────────────────────────────── */
+        .footer {
+            background: var(--charcoal);
+            color: rgba(255,255,255,0.7);
+            padding: 2.5rem 0;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .footer a { color: var(--sage-light); }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ── MOBILE RESPONSIVE ─────────────────────── */
+        @media (max-width: 768px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2.5rem;
+            }
+            .hero-sub { margin-left: auto; margin-right: auto; }
+            .optin-form { margin: 0 auto; max-width: 100%; }
+            .hero-visual { order: -1; }
+            .hero-mockup { max-width: 260px; }
+            .hero-float-card { right: 0; bottom: -12px; }
+            .education-inner {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .edu-graphic { order: -1; }
+            .product-card {
+                grid-template-columns: 1fr;
+            }
+            .product-image { padding: 2rem; min-height: 280px; }
+            .product-details { padding: 2rem; }
+            .toolkit-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            .proof-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            .nav-links { gap: 1.2rem; }
+            .nav-links a { font-size: 0.82rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { padding: 3rem 0 3.5rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .topbar { font-size: 0.75rem; }
+            .hero-mockup { max-width: 220px; padding: 1.5rem; }
+            .mockup-title { font-size: 1.2rem; }
+            .product-mockup-stack { width: 160px; }
+            .product-page { width: 140px; height: 190px; }
+            .product-page-back { width: 140px; height: 190px; }
+            .product-page-back2 { width: 140px; height: 190px; }
+        }
+
+        /* ── Accessibility ─────────────────────────── */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { transition: none; opacity: 1; transform: none; }
+            .hero-float-card { animation: none; }
+            @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Urgency topbar -->
+    <div class="topbar">
+        <strong>FREE for a limited time</strong> &mdash; Download your Menopause Symptom Tracker before it goes into the paid bundle
+    </div>
+
+    <!-- Nav -->
+    <nav class="nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">The Menopause <span>Planner</span></a>
+            <div class="nav-links">
+                <a href="/blog">Articles</a>
+                <a href="/about">About</a>
+                <a href="#get-tracker">Free Tracker</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <section class="hero" id="get-tracker">
+        <div class="container">
+            <div class="hero-inner">
+                <div class="hero-text">
+                    <div class="hero-badge">Free Download</div>
+                    <h1>Stop the Menopause Mayhem. Start Tracking the <em>Triggers.</em></h1>
+                    <p class="hero-sub">Grab your FREE Menopause Symptom Tracker and discover if sugar, stress, or hidden habits are fueling your hot flashes, mood swings, and sleepless nights.</p>
+
+                    <!-- Email capture form — posts to ConvertKit via hidden iframe -->
+                    <form class="optin-form" action="https://app.convertkit.com/forms/5641382/subscriptions" method="POST" target="ck-target" onsubmit="handleFormSubmit(this)">
+                        <input type="text" name="fields[first_name]" placeholder="Your first name" required aria-label="First name">
+                        <input type="email" name="email_address" placeholder="Your email address" required aria-label="Email address">
+                        <button type="submit" class="btn-cta">
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            <span>Send My Free Tracker</span>
+                        </button>
+                        <p class="optin-fine">
+                            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            100% free. No spam. Unsubscribe anytime.
+                        </p>
+                    </form>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-mockup" role="img" aria-label="Preview of the free Menopause Symptom Tracker printable">
+                        <svg class="mockup-icon" viewBox="0 0 56 56" fill="none">
+                            <circle cx="28" cy="28" r="26" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                            <path d="M20 30l5 5 11-14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="mockup-title">Menopause Symptom Tracker</div>
+                        <div class="mockup-desc">Track triggers, patterns & progress daily</div>
+                        <div class="mockup-lines">
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line"></div>
+                        </div>
+                    </div>
+                    <div class="hero-float-card">
+                        <div class="float-check">
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <div class="float-text">
+                            2,400+ downloads
+                            <span>Trusted by women worldwide</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ EDUCATION BRIDGE ═══════════ -->
+    <section class="education">
+        <div class="container">
+            <div class="education-inner">
+                <div class="edu-graphic reveal">
+                    <div class="glucose-chart">
+                        <div class="chart-label">Symptom Intensity</div>
+                        <div class="chart-annotation">Sugar spike zone</div>
+                        <div class="chart-bars" id="chart-bars">
+                            <div>
+                                <div class="chart-bar sugar" style="height: 110px;"></div>
+                                <div class="chart-bar-label">High<br>sugar</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar sugar" style="height: 85px;"></div>
+                                <div class="chart-bar-label">Moderate<br>sugar</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar balanced" style="height: 40px;"></div>
+                                <div class="chart-bar-label">Balanced<br>diet</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar balanced" style="height: 25px;"></div>
+                                <div class="chart-bar-label">Low<br>sugar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="edu-content reveal">
+                    <h2>Is Sugar Making Your Symptoms Worse?</h2>
+                    <p class="edu-lead">Research shows a direct link between blood sugar spikes and the intensity of menopause symptoms. Here's what's actually happening in your body:</p>
+                    <ul class="edu-points">
+                        <li class="edu-point">
+                            <div class="edu-point-icon">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            </div>
+                            <div class="edu-point-text">
+                                <h4>Glucose Spikes Trigger Hot Flashes</h4>
+                                <p>A sudden blood sugar rise signals your body to cool down, triggering vasodilation &mdash; the same mechanism behind hot flashes.</p>
+                            </div>
+                        </li>
+                        <li class="edu-point">
+                            <div class="edu-point-icon">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                            </div>
+                            <div class="edu-point-text">
+                                <h4>Insulin Resistance Disrupts Estrogen</h4>
+                                <p>During menopause, insulin sensitivity drops. Sugar intake amplifies this, accelerating estrogen decline and worsening mood swings.</p>
+                            </div>
+                        </li>
+                        <li class="edu-point">
+                            <div class="edu-point-icon">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+                            </div>
+                            <div class="edu-point-text">
+                                <h4>Cortisol Cascades Ruin Sleep</h4>
+                                <p>Sugar crashes spike cortisol at 2&ndash;3 AM, causing the wide-awake insomnia that millions of menopausal women experience nightly.</p>
+                            </div>
+                        </li>
+                        <li class="edu-point">
+                            <div class="edu-point-icon">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+                            </div>
+                            <div class="edu-point-text">
+                                <h4>Inflammation Fuels Brain Fog</h4>
+                                <p>Excess sugar drives chronic inflammation, which crosses the blood-brain barrier and contributes to the "menopause fog" that disrupts your focus.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ PRODUCT SHOWCASE ═══════════ -->
+    <section class="product">
+        <div class="container">
+            <p class="product-label reveal">The Complete Solution</p>
+            <h2 class="reveal">The Menopause Wellness Planner Bundle</h2>
+            <p class="product-subtitle reveal">Everything you need to understand, track, and take control of your menopause journey &mdash; in one beautifully designed planner.</p>
+
+            <div class="product-card reveal">
+                <div class="product-image">
+                    <div class="product-badge-float">Printable + Digital</div>
+                    <div class="product-mockup-stack">
+                        <div class="product-page-back2"></div>
+                        <div class="product-page-back"></div>
+                        <div class="product-page">
+                            <div class="product-page-lines">
+                                <div class="product-page-line"></div>
+                                <div class="product-page-line"></div>
+                                <div class="product-page-line"></div>
+                                <div class="product-page-line"></div>
+                                <div class="product-page-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h3>Menopause Wellness Planner Bundle</h3>
+                    <div class="product-rating">
+                        <span class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                        <span class="rating-text">5.0 &middot; New Release</span>
+                    </div>
+                    <ul class="product-features">
+                        <li>
+                            <span class="feature-check"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+                            34-page printable planner (8.5&times;11)
+                        </li>
+                        <li>
+                            <span class="feature-check"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+                            Digital version for GoodNotes &amp; Notability
+                        </li>
+                        <li>
+                            <span class="feature-check"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+                            Daily symptom &amp; trigger logs
+                        </li>
+                        <li>
+                            <span class="feature-check"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+                            HRT tracking &amp; medication schedule
+                        </li>
+                        <li>
+                            <span class="feature-check"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+                            Medical appointment prep worksheets
+                        </li>
+                        <li>
+                            <span class="feature-check"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+                            Mood, sleep, &amp; energy trackers
+                        </li>
+                    </ul>
+                    <div class="product-pricing">
+                        <span class="price-original">$47</span>
+                        <span class="price-current">$19.99</span>
+                        <span class="price-save">Save 57%</span>
+                    </div>
+                    <a href="https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle" class="btn-product" target="_blank" rel="noopener">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+                        Get the Full 34-Page Planner Bundle
+                    </a>
+                    <div class="product-guarantee">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Instant download &middot; Satisfaction guaranteed
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ AMAZON TOOLKIT ═══════════ -->
+    <section class="toolkit">
+        <div class="container">
+            <p class="toolkit-label reveal">Curated by Our Community</p>
+            <h2 class="reveal">The Menopause Toolkit: Top Recommendations</h2>
+            <p class="toolkit-subtitle reveal">Pair your planner with these tried-and-tested essentials recommended by our community of 2,400+ women.</p>
+
+            <div class="toolkit-grid">
+                <!-- Cooling Comfort -->
+                <div class="toolkit-card reveal">
+                    <div class="toolkit-card-icon">
+                        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="var(--sage)" stroke-width="1.5">
+                            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/>
+                        </svg>
+                    </div>
+                    <h3>Cooling Comfort</h3>
+                    <p>Bamboo cooling pillowcases, portable fans, and cooling towels that actually work for hot flash relief.</p>
+                    <a href="https://www.amazon.com/s?k=menopause+cooling+products&tag=dailydealdarl-20" class="btn-toolkit" target="_blank" rel="noopener sponsored">
+                        Browse Picks
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+                    </a>
+                </div>
+
+                <!-- Natural Supplements -->
+                <div class="toolkit-card reveal">
+                    <div class="toolkit-card-icon">
+                        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="var(--rose)" stroke-width="1.5">
+                            <path d="M12 22c4.97 0 9-2.69 9-6s-4.03-6-9-6-9 2.69-9 6 4.03 6 9 6z"/>
+                            <path d="M12 10V2M8 6l4-4 4 4"/>
+                        </svg>
+                    </div>
+                    <h3>Natural Supplements</h3>
+                    <p>Magnesium glycinate for sleep, black cohosh for hot flashes, and omega-3s for brain fog &mdash; evidence-backed picks.</p>
+                    <a href="https://www.amazon.com/s?k=menopause+supplements+natural&tag=dailydealdarl-20" class="btn-toolkit" target="_blank" rel="noopener sponsored">
+                        Browse Picks
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+                    </a>
+                </div>
+
+                <!-- Educational Reads -->
+                <div class="toolkit-card reveal">
+                    <div class="toolkit-card-icon">
+                        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="var(--charcoal)" stroke-width="1.5">
+                            <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+                        </svg>
+                    </div>
+                    <h3>Educational Reads</h3>
+                    <p>"The Menopause Manifesto" and other doctor-recommended books that replace fear with facts.</p>
+                    <a href="https://www.amazon.com/s?k=menopause+books+women&tag=dailydealdarl-20" class="btn-toolkit" target="_blank" rel="noopener sponsored">
+                        Browse Picks
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ SOCIAL PROOF ═══════════ -->
+    <section class="proof">
+        <div class="container">
+            <h2 class="reveal">What Women Are Saying</h2>
+            <div class="proof-grid">
+                <div class="proof-card reveal">
+                    <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p class="proof-text">"I never connected my 3pm sugar cravings to my 2am wake-ups until I started tracking. This planner literally changed my sleep. I went from 4-hour nights to solid 7-hour stretches."</p>
+                    <div class="proof-author">
+                        <div class="proof-avatar green">S</div>
+                        <div>
+                            <div class="proof-name">Sarah M.</div>
+                            <div class="proof-verified">Verified Buyer &middot; Age 52</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="proof-card reveal">
+                    <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p class="proof-text">"Brought my tracker to my doctor and she was genuinely impressed. We identified patterns I'd missed for 3 years. Finally got a treatment plan that actually works for MY body."</p>
+                    <div class="proof-author">
+                        <div class="proof-avatar rose">R</div>
+                        <div>
+                            <div class="proof-name">Rachel K.</div>
+                            <div class="proof-verified">Verified Buyer &middot; Age 48</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="proof-card reveal">
+                    <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p class="proof-text">"The GoodNotes version is beautifully designed. I use it daily on my iPad and it's become my go-to for tracking everything from hot flashes to mood changes. Worth every penny."</p>
+                    <div class="proof-author">
+                        <div class="proof-avatar dark">J</div>
+                        <div>
+                            <div class="proof-name">Jennifer T.</div>
+                            <div class="proof-verified">Verified Buyer &middot; Age 55</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ FINAL CTA ═══════════ -->
+    <section class="final-cta">
+        <div class="container">
+            <h2 class="reveal">Ready to Take Control?</h2>
+            <p class="reveal">Start with the free tracker. Discover your triggers. Then decide if the full planner is right for you.</p>
+            <div class="reveal">
+                <form class="optin-form" action="https://app.convertkit.com/forms/5641382/subscriptions" method="POST" target="ck-target" onsubmit="handleFormSubmit(this)" style="margin:0 auto;">
+                    <input type="text" name="fields[first_name]" placeholder="Your first name" required aria-label="First name">
+                    <input type="email" name="email_address" placeholder="Your email address" required aria-label="Email address">
+                    <button type="submit" class="btn-cta" style="width:100%;background:var(--rose);box-shadow:0 4px 14px rgba(201,145,143,0.4);">
+                        <span>Send My Free Tracker</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/blog">Articles</a>
+                <a href="/about">About</a>
+            </div>
+            <p>&copy; 2026 The Menopause Planner. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.6;">
+                Affiliate Disclosure: Some links on this page are affiliate links. We may earn a small commission at no extra cost to you.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Free Menopause Symptom Tracker",
+        "description": "Download a free menopause symptom tracker to discover your triggers. Plus the 34-page Menopause Wellness Planner Bundle.",
+        "url": "https://menopause-planner-website.vercel.app/wellness-planner",
+        "publisher": {
+            "@type": "Organization",
+            "name": "The Menopause Planner"
+        },
+        "mainEntity": {
+            "@type": "Product",
+            "name": "Menopause Wellness Planner Bundle",
+            "description": "34-page printable and digital menopause wellness planner with symptom logs, HRT tracking, and medical appointment prep worksheets.",
+            "offers": {
+                "@type": "Offer",
+                "price": "19.99",
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle"
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "5.0",
+                "reviewCount": "12"
+            }
+        }
+    }
+    </script>
+
+    <!-- Scroll Reveal -->
+    <script>
+    (function() {
+        var reveals = document.querySelectorAll('.reveal');
+        if (!reveals.length) return;
+
+        if ('IntersectionObserver' in window) {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            reveals.forEach(function(el) { observer.observe(el); });
+        } else {
+            reveals.forEach(function(el) { el.classList.add('visible'); });
+        }
+    })();
+    </script>
+
+    <!-- ═══════════ POPUP MODAL ═══════════ -->
+    <div id="popup-overlay" class="popup-overlay" role="dialog" aria-modal="true" aria-label="Get your free symptom tracker">
+        <div class="popup-card">
+            <button class="popup-close" id="popup-close" aria-label="Close popup">&times;</button>
+            <div class="popup-icon">
+                <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>
+            </div>
+            <h2 class="popup-title">Wait! Don't miss your free tracker</h2>
+            <p class="popup-desc">Join 2,400+ women who discovered their symptom triggers with our 27-page Menopause Symptom Tracker.</p>
+            <form class="popup-form" action="https://app.convertkit.com/forms/5641382/subscriptions" method="POST" target="ck-target" onsubmit="handleFormSubmit(this)">
+                <input type="text" name="fields[first_name]" placeholder="Your first name" required aria-label="First name">
+                <input type="email" name="email_address" placeholder="Your email address" required aria-label="Email address">
+                <button type="submit" class="btn-cta popup-btn">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span>Get My Free Tracker (PDF)</span>
+                </button>
+            </form>
+            <p class="popup-fine">No spam, ever. Unsubscribe with one click.</p>
+        </div>
+    </div>
+
+    <style>
+        /* ── Popup Modal ───────────────────────────── */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(45,52,54,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            animation: fade-in 0.3s ease;
+        }
+        .popup-overlay.active { display: flex; }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        .popup-card {
+            background: var(--white);
+            border-radius: 20px;
+            max-width: 440px;
+            width: 100%;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.2);
+            animation: slide-up 0.4s cubic-bezier(.22,1,.36,1);
+        }
+        @keyframes slide-up { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .popup-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.2rem 0.5rem;
+            transition: color 0.2s;
+        }
+        .popup-close:hover { color: var(--charcoal); }
+        .popup-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--sage);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+        }
+        .popup-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+        .popup-desc {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.55;
+        }
+        .popup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+        .popup-form input {
+            width: 100%;
+            padding: 0.85rem 1.1rem;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .popup-form input:focus {
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(124,154,130,0.15);
+        }
+        .popup-btn { width: 100%; }
+        .popup-fine {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 0.6rem;
+        }
+        @media (max-width: 480px) {
+            .popup-card { padding: 2rem 1.5rem; }
+            .popup-title { font-size: 1.3rem; }
+        }
+    </style>
+
+    <!-- Hidden iframe for ConvertKit form submission -->
+    <iframe name="ck-target" style="display:none" aria-hidden="true"></iframe>
+
+    <!-- Form submission + Popup logic -->
+    <script>
+    // ── Handle form submit: show loading, track, redirect ──
+    function handleFormSubmit(form) {
+        var btn = form.querySelector('button[type="submit"]');
+        var btnSpan = btn.querySelector('span');
+
+        // Loading state
+        if (btnSpan) btnSpan.textContent = 'Sending...';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+
+        // Track in GA
+        if (typeof gtag === 'function') {
+            gtag('event', 'generate_lead', {
+                event_category: 'engagement',
+                event_label: 'symptom_tracker_optin'
+            });
+        }
+
+        // Mark as subscribed so popup doesn't show again
+        localStorage.setItem('mp_subscribed', '1');
+
+        // Redirect after brief delay (gives iframe time to POST)
+        setTimeout(function() {
+            window.location.href = '/thank-you';
+        }, 1200);
+    }
+
+    // ── Popup logic ──
+    (function() {
+        var overlay = document.getElementById('popup-overlay');
+        var closeBtn = document.getElementById('popup-close');
+
+        // Don't show if already subscribed or dismissed recently
+        var subscribed = localStorage.getItem('mp_subscribed');
+        var dismissed = localStorage.getItem('mp_popup_dismissed');
+        var dismissedAt = dismissed ? parseInt(dismissed) : 0;
+        var hoursSinceDismiss = (Date.now() - dismissedAt) / (1000 * 60 * 60);
+
+        if (subscribed) return;
+
+        // Show popup after 3 seconds (or on scroll 40% for fast readers)
+        var shown = false;
+        function showPopup() {
+            if (shown) return;
+            if (dismissed && hoursSinceDismiss < 24) return; // Don't show again for 24h after dismiss
+            shown = true;
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Timer trigger
+        setTimeout(showPopup, 3000);
+
+        // Scroll trigger (40% of page)
+        window.addEventListener('scroll', function() {
+            var scrollPercent = (window.scrollY + window.innerHeight) / document.body.scrollHeight;
+            if (scrollPercent > 0.4) showPopup();
+        }, { passive: true });
+
+        // Close handlers
+        function closePopup() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            localStorage.setItem('mp_popup_dismissed', Date.now().toString());
+        }
+
+        closeBtn.addEventListener('click', closePopup);
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closePopup();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) closePopup();
+        });
+    })();
+    </script>
+</body>
+</html>

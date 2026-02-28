@@ -10,6 +10,8 @@ import os
 import re
 import json
 import logging
+import urllib.request
+import urllib.parse
 from datetime import datetime, timezone
 
 import anthropic
@@ -35,7 +37,8 @@ def _get_client():
 #   fitness  -> tag=fitover35-20
 #   deals    -> tag=dailydealdarl-20
 #   menopause -> tag=menopauseplan-20
-# CRITICAL: Always use direct product links (/dp/ASIN?tag=...), never /s? search URLs
+# Direct /dp/ASIN links are preferred. For any product NOT in this list, the
+# code falls back to Amazon search URLs (/s?k=...) which always work.
 
 AMAZON_AFFILIATE_LINKS = {
     "fitness": {
@@ -50,11 +53,14 @@ AMAZON_AFFILIATE_LINKS = {
         "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20",
         "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=dailydealdarl-20",
         "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=dailydealdarl-20",
+        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=dailydealdarl-20",
+        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=dailydealdarl-20",
         "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=dailydealdarl-20",
         "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=dailydealdarl-20",
         "food scale": "https://www.amazon.com/dp/B004164SRA?tag=dailydealdarl-20",
         "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarl-20",
         "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=dailydealdarl-20",
+        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=dailydealdarl-20",
         "_default": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20",
     },
     "deals": {
@@ -143,6 +149,97 @@ BRAND_SITE_CONFIG = {
         "signup_button_text": "Get Free Guide",
     },
 }
+
+
+def _get_approved_asins():
+    """Build set of all ASINs in our approved product lists."""
+    asins = set()
+    for brand_links in AMAZON_AFFILIATE_LINKS.values():
+        for url in brand_links.values():
+            m = re.search(r'/dp/([A-Z0-9]{10})', url)
+            if m:
+                asins.add(m.group(1))
+    return asins
+
+
+_APPROVED_ASINS = None  # lazy-loaded
+
+
+def _fetch_pexels_image(query, orientation='landscape'):
+    """Fetch a stock photo URL from Pexels. Returns URL string or None."""
+    pexels_key = os.environ.get('PEXELS_API_KEY', '')
+    if not pexels_key or not query:
+        return None
+    try:
+        encoded = urllib.parse.quote(query)
+        url = f"https://api.pexels.com/v1/search?query={encoded}&per_page=5&orientation={orientation}"
+        req = urllib.request.Request(url, headers={"Authorization": pexels_key})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read())
+            photos = data.get('photos', [])
+            if photos:
+                return photos[0]['src']['large']
+    except Exception as e:
+        logger.debug(f"Pexels image fetch failed: {e}")
+    return None
+
+
+def _build_product_card(link_text, amazon_url, primary_color='#1565C0'):
+    """Build a styled product card div with Amazon product image."""
+    asin_match = re.search(r'/dp/([A-Z0-9]{10})', amazon_url)
+    img_html = ''
+    if asin_match:
+        asin = asin_match.group(1)
+        img_url = f"https://m.media-amazon.com/images/P/{asin}.01.LZZZZZZZ.jpg"
+        img_html = (
+            f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" style="flex-shrink:0;">'
+            f'<img src="{img_url}" alt="{link_text}" width="90" height="90" '
+            f'style="object-fit:contain;border-radius:8px;background:#f8f8f8;padding:4px;" loading="lazy" '
+            f'onerror="this.parentElement.style.display=\'none\'">'
+            f'</a>'
+        )
+    return (
+        f'<div style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin:16px 0;'
+        f'display:flex;gap:16px;align-items:center;background:#fafafa;">'
+        f'{img_html}'
+        f'<div>'
+        f'<strong style="display:block;margin-bottom:8px;font-size:1em;color:#111;">{link_text}</strong>'
+        f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" '
+        f'style="display:inline-block;background:#FF9900;color:#111;padding:7px 18px;'
+        f'border-radius:6px;text-decoration:none;font-weight:700;font-size:0.88em;">'
+        f'Check Price on Amazon →</a>'
+        f'</div></div>'
+    )
+
+
+def _inject_product_cards(body_html, brand_key):
+    """Replace bolded Amazon links and list-item Amazon links with product cards."""
+    primary_color = BRAND_SITE_CONFIG[brand_key]['primary_color']
+
+    def _card_from_match(url, link_text):
+        return _build_product_card(link_text, url, primary_color)
+
+    # 1. Replace <strong><a href="amazon_url">text</a></strong> → product card
+    body_html = re.sub(
+        r'<strong><a href="([^"]*amazon\.com[^"]*)"[^>]*>([^<]+)</a></strong>',
+        lambda m: _card_from_match(m.group(1), m.group(2)),
+        body_html,
+    )
+
+    # 2. Replace <li> elements whose primary content is an Amazon link → product card
+    def _upgrade_li(match):
+        li_content = match.group(1)
+        am = re.search(r'<a href="([^"]*amazon\.com[^"]*)"[^>]*>([^<]+)</a>', li_content)
+        if not am:
+            return match.group(0)
+        return _card_from_match(am.group(1), am.group(2))
+
+    body_html = re.sub(r'<li>(.*?)</li>', _upgrade_li, body_html, flags=re.DOTALL)
+
+    # 3. Remove empty <ul></ul> wrappers left behind after li upgrades
+    body_html = re.sub(r'<ul>\s*</ul>', '', body_html)
+
+    return body_html
 
 
 def _make_slug(topic):

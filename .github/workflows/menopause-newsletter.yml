@@ -1,0 +1,54 @@
+name: Menopause Weekly Newsletter
+
+on:
+  schedule:
+    # Every Wednesday at 10 AM PST (6 PM UTC)
+    - cron: '0 18 * * 3'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (generate but do not send)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install requests
+
+      - name: Send weekly newsletter
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
+          CONVERTKIT_API_SECRET: ${{ secrets.CONVERTKIT_API_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          IS_DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          if [ "$IS_DRY_RUN" = "true" ]; then
+            python3 -m email_marketing.menopause_newsletter --dry-run
+          else
+            python3 -m email_marketing.menopause_newsletter
+          fi
