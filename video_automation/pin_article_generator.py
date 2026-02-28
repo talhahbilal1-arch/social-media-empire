@@ -145,7 +145,7 @@ BRAND_SITE_CONFIG = {
         ],
         "has_css": False,
         "lead_magnet": "FREE Menopause Symptom Tracker & Relief Guide",
-        "signup_form_id": "9144859",
+        "signup_form_id": "9144926",
         "signup_button_text": "Get Free Guide",
     },
 }
@@ -546,7 +546,7 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
         f'<h3 style="margin:0 0 8px">{site["lead_magnet"]}</h3>'
         f'<p style="margin:0 0 16px;color:#555">Join our community for weekly tips and guides.</p>'
         f'<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>'
-        f'<form action="https://app.convertkit.com/forms/{site["signup_form_id"]}/subscriptions" method="post" data-sv-form="{site["signup_form_id"]}">'
+        f'<form action="https://app.kit.com/forms/{site["signup_form_id"]}/subscriptions" method="post" data-sv-form="{site["signup_form_id"]}">'
         f'<input type="email" name="email_address" placeholder="Enter your email" required style="padding:12px;border:1px solid #ddd;border-radius:6px;width:60%;margin-right:8px">'
         f'<button type="submit" style="padding:12px 24px;background:{site["primary_color"]};color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold">{site["signup_button_text"]}</button>'
         f'</form>'
