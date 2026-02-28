@@ -675,19 +675,25 @@ Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 Adapt this framework creatively (do NOT copy it word-for-word):
 {selected_angle}
 
-═══ TITLE RULES (CRITICAL — this determines if anyone clicks) ═══
-Your title MUST be a LISTICLE with the number 5:
-- Format: "5 [Things/Ways/Secrets/Signs/Mistakes] That [Outcome]"
-- Be 40-60 characters (optimal Pinterest display length, HARD LIMIT 70 chars)
-- Create an irresistible CURIOSITY GAP — the reader MUST click to get all 5
-- Use ONE of these proven listicle patterns:
-  * "5 Things That [Outcome] (#3 Surprised Me)"
-  * "5 [Topic] Mistakes You're Making After 35"
-  * "5 Proven [Things] for [Outcome] (Most People Miss #4)"
-  * "5 [Adjective] [Things] That Actually [Result]"
-  * "5 Signs Your [Thing] Needs This (Don't Ignore #2)"
-- Include at least ONE power word: secret, proven, simple, essential, surprising, honest, finally, actually
-- NEVER be generic. NEVER give away all the answers in the title.
+═══ TITLE RULES (signals Pinterest's algorithm + earns the click) ═══
+The pin title is read by BOTH the algorithm AND the human. It must do two jobs at once:
+  JOB 1 → Tell Pinterest's algorithm exactly what this pin is about (keyword clarity)
+  JOB 2 → Give the person a reason to click (value or curiosity)
+
+RULES:
+- 40-70 characters (HARD LIMIT — longer titles are cut off in feed)
+- PRIMARY KEYWORD must appear in the first half of the title — this is how Pinterest knows who to distribute this pin to
+- Choose the format that fits the topic best (variety is good — NOT every pin should be "5 X"):
+  * Listicle: "7 Morning Mobility Moves That Prevent Back Pain After 35"
+  * How-to: "How to Lose Belly Fat After 35 Without Cutting Carbs"
+  * Problem/Solution: "Why Your Metabolism Slows After 35 (And the Real Fix)"
+  * Curiosity gap: "The Supplement Men Over 35 Actually Need (Most Skip It)"
+  * Specific number: "12 Easy Dinner Ideas Under $10 That Feel Expensive"
+  * Audience call-out: "Pantry Organization for People Who've Tried Everything"
+- Include ONE power word: proven, simple, essential, surprising, honest, finally, actually, real
+- Create a VALUE PROMISE or CURIOSITY GAP — they need a reason to click over the 50 other pins
+- NEVER give away all the answers in the title (leave something for the article)
+- ALIGNMENT: Title keyword must match graphic_title topic and image — all three pointing to the same idea tells Pinterest exactly who to show this to
 
 ═══ DESCRIPTION RULES (SEO + click-through) ═══
 Opening style: {selected_opener}
@@ -704,15 +710,16 @@ Opening style: {selected_opener}
 
 DESCRIPTION REQUIREMENTS:
 1. FIRST 50 CHARACTERS must contain your primary SEO keyword (front-load for search)
-2. Total length: 150-300 characters (before hashtags)
-3. Weave in 3-5 of these keywords naturally: {', '.join(selected_keywords)}
-4. Include an EMOTIONAL TRIGGER relevant to the audience:
+2. SENTENCE 1-2 = VALUE PREVIEW: tell them exactly what they'll get after clicking — a specific outcome, technique, or insight. Not vague ("great tips!") but specific ("the exact 3-step routine that stops joint pain before it starts").
+3. Total length: 150-300 characters (before hashtags)
+4. Weave in 2-4 of these related keywords naturally (no stuffing — they must read like a sentence a real person would write): {', '.join(selected_keywords)}
+5. Include an EMOTIONAL TRIGGER relevant to the audience:
    - Fitness: urgency about health, pride in transformation, fear of wasted effort
    - Deals: FOMO on savings, satisfaction of smart buying, joy of a great find
    - Menopause: validation and relief, hope for improvement, "you're not alone"
-5. End with a compelling CTA: "Click for the full guide" / "Save this — you'll need it" / "Full breakdown at the link"
-6. After the CTA, on a NEW LINE, append 5-8 hashtags: {' '.join(selected_hashtags)}
-7. If a product naturally fits, mention its BENEFIT (not just the name): "the cooling pillow that actually stopped my night sweats" not "cooling pillow"
+6. End with a specific CTA: "Save this for your next workout" / "Full guide at the link" / "Click to see all [X]" — make the action clear
+7. After the CTA, on a NEW LINE, append 5-8 hashtags: {' '.join(selected_hashtags)}
+8. If a product naturally fits, mention its BENEFIT (not just the name): "the cooling pillow that actually stopped my night sweats" not "cooling pillow"
 
 ═══ AFFILIATE PRODUCT INTEGRATION ═══
 If the topic naturally relates to any of these products, weave ONE into the description with a benefit-driven mention.
@@ -739,18 +746,20 @@ Each tip MUST be:
 - Teasing — give enough to intrigue but not the full answer (the article has the details)
 - Each tip should cover a DIFFERENT angle/aspect of the topic
 
-═══ GRAPHIC TITLE RULES (text printed ON the pin image — DIFFERENT from title) ═══
-The graphic_title is the large text overlaid directly on the image. Rules:
-- 30-50 characters MAX (must be readable as large bold text in a 1000×1500 image)
-- Written for the PERSON scrolling, NOT the algorithm — stop the scroll
-- Use "you", specific numbers, or a direct call-out: WHO it's for / WHAT problem / WHY NOW
-- Pattern interrupt: contrast with what they expect, create tension or curiosity
-- DIFFERENT from the title — can be shorter, punchier, more human
-- GOOD: "Why Fat Loss Stops After 35", "Hot Flash Fix (It's Not What You Think)", "Amazon Finds Under $20"
-- BAD: "5 Proven Methods for Building Strength After 35 in 2024" (too long, algorithm-speak)
+═══ GRAPHIC TITLE RULES (text printed ON the pin image — the human scroll-stopper) ═══
+This is the large bold text visible on the image itself. It serves a completely different purpose than the pin title:
+- 30-50 characters MAX (must be legible as oversized bold text in a 1000×1500 image)
+- Written for the PERSON SCROLLING, not for Pinterest's algorithm
+- Goal: STOP THE SCROLL by calling out WHO this is for, WHAT problem it solves, or WHY this is different
+- Use "you", direct numbers, specific audience call-outs, or surprising statements
+- Must feel HUMAN — like something a real person would say, not an SEO title
+- GOOD: "Why Fat Loss Stops After 35", "Hot Flash Fix (It's Not What You Think)", "Amazon Finds Under $20", "Stop Wasting Money on This"
+- BAD: "5 Proven Methods for Building Strength After 35 in 2024" (too long, reads like a title tag)
+- The graphic_title and title cover the same topic but speak to different audiences: image title = human hook, pin title = algorithm signal
 
 ═══ IMAGE + OVERLAY RULES ═══
 - Image search query: SPECIFIC and VIVID — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic side lighting"
+- The image must IMMEDIATELY communicate the topic at a glance — if someone covered the title, they could still guess the subject from the image alone
 - Query must match THIS topic specifically, not be generic stock photo terms
 - For Fitness Made Easy: image query MUST feature men/male subjects. Include "man", "male", or "guy" in the query. NEVER use gender-neutral terms that could return female images.
 - Alt text: brief accessible description for screen readers
