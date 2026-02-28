@@ -14,6 +14,12 @@ import { BRAND_CONFIG, BrandConfig } from '../config/brands';
 
 export interface SlideshowVideoProps {
   brand?: string;
+  hook?: string;
+  title?: string;
+  points?: string[];
+  cta?: string;
+  images?: string[];
+  voiceover?: string;
 }
 
 /**
@@ -25,18 +31,28 @@ export interface SlideshowVideoProps {
  * - 5.5-11.5s (165-345): 3 points (2s each) with images 3-4 alternating
  * - 11.5-15s (345-450): CTA with image 1 (loop back)
  */
-export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({ brand = 'daily_deal_darling' }) => {
+export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({
+  brand = 'daily_deal_darling',
+  hook,
+  title,
+  points,
+  cta,
+  images,
+  voiceover,
+}) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
-  const config = BRAND_CONFIG[brand];
+  const config = BRAND_CONFIG[brand] || BRAND_CONFIG['daily_deal_darling'];
 
-  if (!config) {
-    return (
-      <AbsoluteFill style={{ backgroundColor: '#000', color: '#fff', justifyContent: 'center', alignItems: 'center' }}>
-        <div>Brand not found: {brand}</div>
-      </AbsoluteFill>
-    );
-  }
+  // Merge dynamic props with static brand config fallback
+  const content = {
+    hook: hook || config.content.hook,
+    title: title || config.content.title,
+    points: (points && points.length > 0) ? points : config.content.points,
+    cta: cta || config.content.cta,
+  };
+  const imageList = (images && images.length > 0) ? images : config.images;
+  const voiceoverSrc = voiceover || config.voiceover;
 
   // Timing configuration (15-second video)
   const HOOK_START = 0;
@@ -45,7 +61,7 @@ export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({ brand = 'daily_d
   const TITLE_DURATION = 2.5 * fps; // 2.5 seconds
   const POINTS_START = TITLE_START + TITLE_DURATION;
   const POINT_DURATION = 2 * fps; // 2 seconds each
-  const CTA_START = POINTS_START + config.content.points.length * POINT_DURATION;
+  const CTA_START = POINTS_START + content.points.length * POINT_DURATION;
 
   // Image timing: which image to show at each frame
   const getActiveImageIndex = (currentFrame: number): number => {
@@ -63,7 +79,7 @@ export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({ brand = 'daily_d
     <AbsoluteFill style={{ backgroundColor: '#000' }}>
       {/* Layer 1: Multi-image slideshow background with fade transitions */}
       <SlideshowBackground
-        images={config.images}
+        images={imageList}
         activeIndex={activeImageIndex}
         frame={frame}
         fps={fps}
@@ -92,14 +108,14 @@ export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({ brand = 'daily_d
 
       {/* Layer 4: Content sections */}
       <Sequence from={HOOK_START} durationInFrames={HOOK_DURATION}>
-        <HookSection hook={config.content.hook} theme={config.theme} fps={fps} />
+        <HookSection hook={content.hook} theme={config.theme} fps={fps} />
       </Sequence>
 
       <Sequence from={TITLE_START} durationInFrames={TITLE_DURATION}>
-        <TitleSection title={config.content.title} theme={config.theme} fps={fps} />
+        <TitleSection title={content.title} theme={config.theme} fps={fps} />
       </Sequence>
 
-      {config.content.points.map((point, index) => (
+      {content.points.map((point, index) => (
         <Sequence
           key={index}
           from={POINTS_START + index * POINT_DURATION}
@@ -115,7 +131,7 @@ export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({ brand = 'daily_d
       ))}
 
       <Sequence from={CTA_START}>
-        <CTASection cta={config.content.cta} theme={config.theme} fps={fps} />
+        <CTASection cta={content.cta} theme={config.theme} fps={fps} />
       </Sequence>
 
       {/* Layer 5: Brand watermark */}
@@ -124,18 +140,20 @@ export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({ brand = 'daily_d
       {/* Layer 6: Progress bar */}
       <ProgressBar frame={frame} durationInFrames={durationInFrames} theme={config.theme} />
 
-      {/* Audio: Voiceover */}
-      <Audio
-        src={staticFile(config.voiceover)}
-        volume={(f) =>
-          interpolate(
-            f,
-            [0, fps * 0.3, durationInFrames - fps * 0.3, durationInFrames],
-            [0, 1, 1, 0],
-            { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
-          )
-        }
-      />
+      {/* Audio: Voiceover (conditionally rendered — omitted if no audio available) */}
+      {voiceoverSrc && (
+        <Audio
+          src={voiceoverSrc.startsWith('http') ? voiceoverSrc : staticFile(voiceoverSrc)}
+          volume={(f) =>
+            interpolate(
+              f,
+              [0, fps * 0.3, durationInFrames - fps * 0.3, durationInFrames],
+              [0, 1, 1, 0],
+              { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+            )
+          }
+        />
+      )}
     </AbsoluteFill>
   );
 };
@@ -208,7 +226,7 @@ const SlideshowBackground: React.FC<{
               }}
             >
               <Img
-                src={staticFile(imagePath)}
+                src={imagePath.startsWith('http') ? imagePath : staticFile(imagePath)}
                 style={{
                   width: '100%',
                   height: '100%',

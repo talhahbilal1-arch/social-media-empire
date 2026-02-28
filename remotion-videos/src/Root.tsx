@@ -44,6 +44,12 @@ export const RemotionRoot: React.FC = () => {
           height={VERTICAL_HEIGHT}
           defaultProps={{
             brand: 'daily_deal_darling',
+            hook: '',
+            title: '',
+            points: [],
+            cta: '',
+            images: [],
+            voiceover: '',
           }}
         />
         <Composition
@@ -55,6 +61,12 @@ export const RemotionRoot: React.FC = () => {
           height={VERTICAL_HEIGHT}
           defaultProps={{
             brand: 'fitnessmadeasy',
+            hook: '',
+            title: '',
+            points: [],
+            cta: '',
+            images: [],
+            voiceover: '',
           }}
         />
         <Composition
@@ -66,6 +78,12 @@ export const RemotionRoot: React.FC = () => {
           height={VERTICAL_HEIGHT}
           defaultProps={{
             brand: 'menopause_planner',
+            hook: '',
+            title: '',
+            points: [],
+            cta: '',
+            images: [],
+            voiceover: '',
           }}
         />
       </Folder>
