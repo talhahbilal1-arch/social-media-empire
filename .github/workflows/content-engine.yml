@@ -68,6 +68,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_API_TOKEN: ${{ secrets.MAKE_API_TOKEN }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           BRAND_INPUT: ${{ github.event.inputs.brand || '' }}
         run: |
@@ -198,11 +199,38 @@ jobs:
           print(f'  Rendered {len(rendered_pins)}/{len(content_ready_pins)} pins')
 
           # ══════════════════════════════════════════════════════════════
-          # PHASE 1b: Post rendered pins to Pinterest via Make.com webhooks
+          # PHASE 1a: Ensure Make.com poster scenarios are active
+          # (scenarios auto-deactivate on any Pinterest API error — reactivate before posting)
           # ══════════════════════════════════════════════════════════════
           import urllib.request
           import urllib.error
 
+          MAKE_API_TOKEN = os.environ.get('MAKE_API_TOKEN', '')
+          MAKE_SCENARIO_IDS = {
+              'fitness':   4261143,
+              'deals':     4261146,
+              'menopause': 4261147,
+          }
+
+          if MAKE_API_TOKEN and not dry_run:
+              print('\n=== PHASE 1a: Activating Make.com scenarios ===')
+              for brand_key, scenario_id in MAKE_SCENARIO_IDS.items():
+                  try:
+                      req = urllib.request.Request(
+                          f'https://us2.make.com/api/v2/scenarios/{scenario_id}/start',
+                          data=b'',
+                          headers={'Authorization': f'Token {MAKE_API_TOKEN}'},
+                          method='POST'
+                      )
+                      with urllib.request.urlopen(req, timeout=15) as resp:
+                          resp.read()
+                          print(f'  [{brand_key}] scenario {scenario_id} active')
+                  except Exception as e:
+                      print(f'  [{brand_key}] WARNING: could not activate scenario {scenario_id}: {e}')
+
+          # ══════════════════════════════════════════════════════════════
+          # PHASE 1b: Post rendered pins to Pinterest via Make.com webhooks
+          # ══════════════════════════════════════════════════════════════
           WEBHOOKS = {
               'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
               'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
@@ -210,29 +238,45 @@ jobs:
           }
 
           print('\n=== PHASE 1b: Posting pins to Pinterest ===')
+          import json as _json
           posted_count = 0
           for pin in rendered_pins:
               pin_id = pin['id']
               brand = pin['brand']
               webhook_url = WEBHOOKS.get(brand, '')
               if not webhook_url:
-                  print(f'  [{brand}] No webhook URL configured, skipping')
+                  print(f'  [{brand}] SKIP — no webhook URL configured')
                   continue
               if dry_run:
-                  print(f'  [{brand}] DRY RUN — would POST to webhook: {pin.get("title","")[:50]}')
+                  print(f'  [{brand}] DRY RUN — would POST: {pin.get("title","")[:50]}')
                   continue
+
+              # CRITICAL: validate image_url — empty URL causes Pinterest 400 + scenario deactivation
+              image_url = pin.get('image_url', '') or ''
+              if not image_url.startswith('http'):
+                  print(f'  [{brand}] SKIP — image_url missing or invalid: "{image_url}"')
+                  try:
+                      db.client.table('pinterest_pins').update({
+                          'status': 'failed',
+                          'error_message': f'image_url missing: "{image_url}"',
+                      }).eq('id', pin_id).execute()
+                  except Exception:
+                      pass
+                  continue
+
               payload = {
                   'pin_id': str(pin_id),
                   'brand': brand,
                   'title': pin.get('title', '')[:100],
                   'description': pin.get('description', '')[:500],
-                  'image_url': pin.get('image_url', ''),
+                  'image_url': image_url,
                   'link': pin.get('destination_url', ''),
                   'board_id': str(pin.get('board_id', '')),
               }
+              print(f'  [{brand}] Sending webhook — image_url: {image_url[:80]}')
+              print(f'  [{brand}]   board_id={payload["board_id"]} link={payload["link"][:60]}')
               try:
                   db.client.table('pinterest_pins').update({'status': 'posting'}).eq('id', pin_id).execute()
-                  import json as _json
                   body = _json.dumps(payload).encode('utf-8')
                   req = urllib.request.Request(
                       webhook_url,
@@ -242,7 +286,9 @@ jobs:
                   )
                   with urllib.request.urlopen(req, timeout=30) as resp:
                       resp_body = resp.read().decode('utf-8', errors='replace')
-                      print(f'  [{brand}] Posted: {pin.get("title","")[:50]} → HTTP {resp.status}')
+                      print(f'  [{brand}] Webhook → HTTP {resp.status} body="{resp_body[:80]}"')
+                  # Make.com returns "Accepted" (HTTP 200) even for inactive scenarios.
+                  # We mark posted optimistically here — Make.com health monitor will catch failures.
                   db.client.table('pinterest_pins').update({
                       'status': 'posted',
                       'posted_at': datetime.now(timezone.utc).isoformat()
@@ -250,7 +296,7 @@ jobs:
                   posted_count += 1
               except urllib.error.HTTPError as e:
                   err_body = e.read().decode('utf-8', errors='replace')[:200]
-                  print(f'  [{brand}] Webhook HTTP error {e.code}: {err_body}')
+                  print(f'  [{brand}] FAILED — HTTP {e.code}: {err_body}')
                   try:
                       db.client.table('pinterest_pins').update({
                           'status': 'failed',
@@ -259,7 +305,7 @@ jobs:
                   except Exception:
                       pass
               except Exception as e:
-                  print(f'  [{brand}] Webhook error: {e}')
+                  print(f'  [{brand}] FAILED — {e}')
                   try:
                       db.client.table('pinterest_pins').update({
                           'status': 'failed',
