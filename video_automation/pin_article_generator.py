@@ -128,7 +128,7 @@ BRAND_SITE_CONFIG = {
         ],
         "has_css": True,
         "lead_magnet": "FREE Weekly Deals Digest",
-        "signup_form_id": "5641382",
+        "signup_form_id": "9144859",
         "signup_button_text": "Join Free",
     },
     "menopause": {
@@ -145,7 +145,7 @@ BRAND_SITE_CONFIG = {
         ],
         "has_css": False,
         "lead_magnet": "FREE Menopause Symptom Tracker & Relief Guide",
-        "signup_form_id": "5641382",
+        "signup_form_id": "9144859",
         "signup_button_text": "Get Free Guide",
     },
 }
