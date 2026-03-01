@@ -43,5 +43,6 @@ jobs:
           git add outputs/
           git diff --staged --quiet && echo "No new content to commit" || (
             git commit -m "content: SEO machine — new articles + internal links $(date -u +%Y-%m-%d)"
+            git pull --rebase origin main
             git push
           )

@@ -1,0 +1,310 @@
+# Copy this file to social-media-empire/.github/workflows/rescue-poster.yml
+#
+# Uses Late API (getlate.dev) to post pins — same integration already in the repo.
+# Requires: LATE_API_KEY_2 (deals), LATE_API_KEY_3 (fitness), LATE_API_KEY_4 (menopause)
+# These should already be set if cross_platform_poster.py was working.
+# Also needs: SUPABASE_URL, SUPABASE_KEY (already set for Content Engine)
+name: Pinterest Rescue Poster
+
+on:
+  schedule:
+    # Every 2 hours during business hours (PST: 8AM-8PM = UTC: 16-04)
+    - cron: '30 16,18,20,22,0,2,4 * * *'
+  workflow_dispatch:
+    inputs:
+      hours_back:
+        description: 'Hours to look back for failed pins (default: 48)'
+        required: false
+        type: number
+        default: 48
+
+permissions:
+  contents: read
+
+jobs:
+  rescue-pins:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Rescue failed pins via Late API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+          PINTEREST_DEALS_ACCOUNT_ID: ${{ secrets.PINTEREST_DEALS_ACCOUNT_ID }}
+          PINTEREST_FITNESS_ACCOUNT_ID: ${{ secrets.PINTEREST_FITNESS_ACCOUNT_ID }}
+          PINTEREST_MENOPAUSE_ACCOUNT_ID: ${{ secrets.PINTEREST_MENOPAUSE_ACCOUNT_ID }}
+          PINTEREST_DEALS_BOARD_ID: ${{ secrets.PINTEREST_DEALS_BOARD_ID }}
+          PINTEREST_FITNESS_BOARD_ID: ${{ secrets.PINTEREST_FITNESS_BOARD_ID }}
+          PINTEREST_MENOPAUSE_BOARD_ID: ${{ secrets.PINTEREST_MENOPAUSE_BOARD_ID }}
+          HOURS_BACK: ${{ github.event.inputs.hours_back || '48' }}
+        run: |
+          python3 << 'PYEOF'
+          import os, sys, json, time
+          from datetime import datetime, timezone, timedelta
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError
+
+          sys.path.insert(0, '.')
+
+          SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
+          SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
+          HOURS_BACK = int(os.environ.get('HOURS_BACK', '48'))
+
+          # Brand → Late API key env var mapping (from cross_platform_poster.py)
+          BRAND_LATE_CONFIG = {
+              'fitness': {
+                  'key_env': 'LATE_API_KEY_3',
+                  'account_env': 'PINTEREST_FITNESS_ACCOUNT_ID',
+                  'board_env': 'PINTEREST_FITNESS_BOARD_ID',
+              },
+              'deals': {
+                  'key_env': 'LATE_API_KEY_2',
+                  'account_env': 'PINTEREST_DEALS_ACCOUNT_ID',
+                  'board_env': 'PINTEREST_DEALS_BOARD_ID',
+              },
+              'menopause': {
+                  'key_env': 'LATE_API_KEY_4',
+                  'account_env': 'PINTEREST_MENOPAUSE_ACCOUNT_ID',
+                  'board_env': 'PINTEREST_MENOPAUSE_BOARD_ID',
+              },
+          }
+
+          if not SUPABASE_URL or not SUPABASE_KEY:
+              print('ERROR: Missing SUPABASE_URL or SUPABASE_KEY secrets')
+              sys.exit(1)
+
+          # Check which brands have Late API keys configured
+          available_brands = {}
+          for brand, cfg in BRAND_LATE_CONFIG.items():
+              key = os.environ.get(cfg['key_env'], '')
+              account_id = os.environ.get(cfg['account_env'], '')
+              if key:
+                  available_brands[brand] = {
+                      'api_key': key,
+                      'account_id': account_id,
+                      'board_id': os.environ.get(cfg['board_env'], ''),
+                  }
+                  print(f'  [{brand}] Late API key: configured ✓')
+              else:
+                  print(f'  [{brand}] Late API key: NOT SET ({cfg["key_env"]})')
+
+          if not available_brands:
+              print('\nERROR: No Late API keys configured!')
+              print('Set LATE_API_KEY_2 (deals), LATE_API_KEY_3 (fitness), LATE_API_KEY_4 (menopause)')
+              print('Sign up at https://getlate.dev and connect your Pinterest accounts')
+              sys.exit(1)
+
+          def supabase_request(path, method='GET', body=None):
+              """Make a request to Supabase REST API."""
+              url = f'{SUPABASE_URL}/rest/v1/{path}'
+              headers = {
+                  'apikey': SUPABASE_KEY,
+                  'Authorization': f'Bearer {SUPABASE_KEY}',
+                  'Content-Type': 'application/json',
+                  'Prefer': 'return=representation',
+              }
+              data = json.dumps(body).encode() if body else None
+              req = Request(url, data=data, headers=headers, method=method)
+              try:
+                  with urlopen(req, timeout=30) as resp:
+                      return json.loads(resp.read().decode())
+              except HTTPError as e:
+                  err = e.read().decode()[:300]
+                  print(f'  Supabase error: {e.code} {err}')
+                  return None
+
+          def post_via_late_api(api_key, account_id, board_id, title, description, image_url, link):
+              """Post a pin via Late API (getlate.dev)."""
+              url = 'https://getlate.dev/api/v1/posts'
+
+              # Build platform-specific data
+              platform_data = {
+                  'platform': 'pinterest',
+                  'accountId': account_id,
+              }
+              if board_id:
+                  platform_data['platformSpecificData'] = {'boardId': board_id}
+              if link:
+                  platform_data.setdefault('platformSpecificData', {})['link'] = link
+
+              content = f'{title}\n\n{description}' if description else title
+
+              payload = {
+                  'content': content[:500],
+                  'platforms': [platform_data],
+                  'mediaItems': [{'type': 'image', 'url': image_url}],
+                  'publishNow': True,
+              }
+
+              headers = {
+                  'Content-Type': 'application/json',
+                  'Authorization': f'Bearer {api_key}',
+              }
+
+              req = Request(url, data=json.dumps(payload).encode(), headers=headers, method='POST')
+              try:
+                  with urlopen(req, timeout=60) as resp:
+                      result = json.loads(resp.read().decode())
+                      post_id = result.get('id') or result.get('postId', '')
+                      return {'ok': True, 'post_id': str(post_id), 'data': result}
+              except HTTPError as e:
+                  err = e.read().decode()[:300]
+                  return {'ok': False, 'error': f'Late API HTTP {e.code}: {err}'}
+              except Exception as e:
+                  return {'ok': False, 'error': str(e)}
+
+          # Also try the repo's built-in Late API client as a second method
+          late_client_available = False
+          try:
+              from src.clients.late_api import LateAPIClient
+              late_client_available = True
+              print('\n  Built-in Late API client: available ✓')
+          except ImportError:
+              print('\n  Built-in Late API client: not importable (using direct API calls)')
+
+          # ── Query Supabase for pins that need rescue ──
+          cutoff = (datetime.now(timezone.utc) - timedelta(hours=HOURS_BACK)).isoformat()
+          statuses = 'failed,ready,content_ready'
+          path = f'pinterest_pins?select=*&status=in.({statuses})&created_at=gte.{cutoff}&order=created_at.desc'
+
+          print(f'\n=== Pinterest Rescue Poster (Late API) ===')
+          print(f'Looking back {HOURS_BACK} hours (since {cutoff[:19]})')
+
+          pins = supabase_request(path)
+          if pins is None:
+              print('ERROR: Failed to query Supabase')
+              sys.exit(1)
+
+          print(f'Found {len(pins)} pins to rescue\n')
+          if not pins:
+              print('Nothing to rescue — all pins are posted or no recent pins exist')
+              sys.exit(0)
+
+          posted = 0
+          skipped = 0
+          failed = 0
+
+          for pin in pins:
+              pin_id = pin['id']
+              brand = pin.get('brand', 'unknown')
+              title = pin.get('title', '')
+              description = pin.get('description', '')
+              image_url = pin.get('image_url') or pin.get('generated_image_url', '')
+              board_id = pin.get('board_id', '')
+              link = pin.get('destination_url', '')
+
+              if brand not in available_brands:
+                  print(f'  [{brand}] SKIP (no Late API key for this brand): {title[:40]}')
+                  skipped += 1
+                  continue
+
+              if not image_url:
+                  print(f'  [{brand}] SKIP (no image): {title[:40]}')
+                  skipped += 1
+                  continue
+
+              brand_cfg = available_brands[brand]
+              # Use board_id from pin, or fall back to brand default
+              effective_board_id = board_id or brand_cfg.get('board_id', '')
+
+              print(f'  [{brand}] Posting: {title[:50]}...')
+
+              # Mark as posting
+              supabase_request(
+                  f'pinterest_pins?id=eq.{pin_id}',
+                  method='PATCH',
+                  body={'status': 'posting'}
+              )
+
+              # Try built-in Late API client first
+              result = None
+              if late_client_available:
+                  try:
+                      client = LateAPIClient(api_key=brand_cfg['api_key'])
+                      # Use create_pinterest_video_pin but with image — Late API handles both
+                      late_result = client.create_pinterest_video_pin(
+                          video_url=image_url,  # Late API accepts image URLs too
+                          title=title[:100],
+                          description=description[:500],
+                          link=link,
+                          board_id=effective_board_id,
+                          publish_now=True,
+                          account_id=brand_cfg.get('account_id', None),
+                      )
+                      if late_result.success:
+                          result = {'ok': True, 'post_id': late_result.post_id or 'pending'}
+                      else:
+                          print(f'    Built-in client failed: {late_result.error}, trying direct API...')
+                  except Exception as e:
+                      print(f'    Built-in client error: {e}, trying direct API...')
+
+              # Fallback to direct Late API call
+              if result is None:
+                  result = post_via_late_api(
+                      api_key=brand_cfg['api_key'],
+                      account_id=brand_cfg.get('account_id', ''),
+                      board_id=effective_board_id,
+                      title=title,
+                      description=description,
+                      image_url=image_url,
+                      link=link,
+                  )
+
+              if result['ok']:
+                  supabase_request(
+                      f'pinterest_pins?id=eq.{pin_id}',
+                      method='PATCH',
+                      body={
+                          'status': 'posted',
+                          'posted_at': datetime.now(timezone.utc).isoformat(),
+                          'pinterest_pin_id': result.get('post_id', ''),
+                      }
+                  )
+                  posted += 1
+                  print(f'    ✓ Posted via Late API! Post ID: {result.get("post_id", "pending")}')
+              else:
+                  supabase_request(
+                      f'pinterest_pins?id=eq.{pin_id}',
+                      method='PATCH',
+                      body={
+                          'status': 'failed',
+                          'error_message': f'Late API: {result["error"][:200]}',
+                      }
+                  )
+                  failed += 1
+                  print(f'    ✗ Failed: {result["error"][:100]}')
+
+              # Rate limiting — don't hammer Late API
+              time.sleep(2)
+
+          print(f'\n=== Rescue Summary ===')
+          print(f'  Posted:  {posted}')
+          print(f'  Skipped: {skipped}')
+          print(f'  Failed:  {failed}')
+          print(f'  Total:   {len(pins)}')
+
+          if failed > 0 and posted == 0:
+              print('\nAll posts failed — possible issues:')
+              print('  1. Late API keys may be expired → check https://getlate.dev dashboard')
+              print('  2. Pinterest accounts may be disconnected → reconnect in Late dashboard')
+              print('  3. Board IDs may be invalid → check PINTEREST_*_BOARD_ID secrets')
+          PYEOF

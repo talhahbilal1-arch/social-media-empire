@@ -108,6 +108,7 @@ jobs:
           else
             TITLE="${{ steps.generate.outputs.title }}"
             git commit -m "Publish FitOver35 article: ${TITLE}"
+            git pull --rebase origin main
             git push
           fi
 
