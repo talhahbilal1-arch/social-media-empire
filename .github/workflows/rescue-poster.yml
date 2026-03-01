@@ -141,10 +141,13 @@ jobs:
                   'platform': 'pinterest',
                   'accountId': account_id,
               }
+              platform_specific = {}
               if board_id:
-                  platform_data['platformSpecificData'] = {'boardId': board_id}
+                  platform_specific['boardId'] = board_id
               if link:
-                  platform_data.setdefault('platformSpecificData', {})['link'] = link
+                  platform_specific['link'] = link
+              if platform_specific:
+                  platform_data['platformSpecificData'] = platform_specific
 
               content = f'{title}\n\n{description}' if description else title
 
@@ -182,7 +185,7 @@ jobs:
               print('\n  Built-in Late API client: not importable (using direct API calls)')
 
           # ── Query Supabase for pins that need rescue ──
-          cutoff = (datetime.now(timezone.utc) - timedelta(hours=HOURS_BACK)).isoformat()
+          cutoff = (datetime.now(timezone.utc) - timedelta(hours=HOURS_BACK)).strftime('%Y-%m-%dT%H:%M:%SZ')
           statuses = 'failed,ready,content_ready'
           path = f'pinterest_pins?select=*&status=in.({statuses})&created_at=gte.{cutoff}&order=created_at.desc'
 
