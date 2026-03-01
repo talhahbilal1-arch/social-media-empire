@@ -40,6 +40,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python3 << 'PYEOF'
@@ -50,41 +51,64 @@ jobs:
 
           print('=== YouTube Fitness Shorts ===')
 
-          # Generate video script content via Claude
+          # Generate video content via Claude
           try:
               from video_automation.video_content_generator import VideoContentGenerator
               generator = VideoContentGenerator()
-              script = generator.generate_script('fitness')
-              print(f'Generated script: {script.get("title", "untitled")}')
+              content = generator.generate_content('fitnessmadeasy')
+              print(f'Generated content: {content.topic}')
+              print(f'Hook: {content.hook}')
+              print(f'CTA: {content.cta}')
+              print(f'Hashtags: {", ".join(content.hashtags)}')
           except Exception as e:
-              print(f'Script generation failed: {e}')
+              import traceback
+              print(f'Content generation failed: {e}')
+              traceback.print_exc()
               sys.exit(1)
 
           if dry_run:
-              print(f'[DRY RUN] Would post: {script.get("title", "")}')
-              print(f'[DRY RUN] Hook: {script.get("hook", "")}')
+              print(f'\n[DRY RUN] Would post: {content.topic}')
+              print(f'[DRY RUN] Hook: {content.hook}')
+              print(f'[DRY RUN] Body: {content.body_points}')
               sys.exit(0)
+
+          # Store content in Supabase for tracking
+          try:
+              from database.supabase_client import get_supabase_client
+              db = get_supabase_client()
+              from datetime import datetime, timezone
+              db.client.table('video_content').insert({
+                  'brand': 'fitnessmadeasy',
+                  'topic': content.topic,
+                  'hook': content.hook,
+                  'body_points': content.body_points,
+                  'cta': content.cta,
+                  'hashtags': content.hashtags,
+                  'status': 'generated',
+                  'created_at': datetime.now(timezone.utc).isoformat(),
+              }).execute()
+              print('Content saved to Supabase')
+          except Exception as e:
+              print(f'Supabase save warning (non-fatal): {e}')
 
           # Try to upload to YouTube if credentials available
           yt_client_id = os.environ.get('YOUTUBE_CLIENT_ID', '')
           yt_refresh = os.environ.get('YOUTUBE_REFRESH_TOKEN', '')
 
           if not yt_client_id or not yt_refresh:
-              print('YouTube credentials not configured — skipping upload')
+              print('\nYouTube credentials not configured — content saved, skipping upload')
               print('Set YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN to enable')
-              sys.exit(0)
+          else:
+              try:
+                  from video_automation.youtube_shorts import YouTubeShortsUploader
+                  uploader = YouTubeShortsUploader()
+                  if uploader.is_configured():
+                      print('\nYouTube uploader configured — upload would proceed here')
+                      print('Note: Full video rendering requires CREATOMATE_API_KEY')
+                  else:
+                      print('\nYouTube uploader not fully configured')
+              except Exception as e:
+                  print(f'YouTube upload setup failed: {e}')
 
-          try:
-              from video_automation.youtube_shorts import YouTubeShortsUploader
-              uploader = YouTubeShortsUploader()
-              if uploader.is_configured():
-                  print('YouTube uploader configured — upload would proceed here')
-                  # Video rendering requires ffmpeg + Creatomate; log for now
-                  print('Note: Full video rendering requires CREATOMATE_API_KEY')
-              else:
-                  print('YouTube uploader not fully configured')
-          except Exception as e:
-              print(f'YouTube upload setup failed: {e}')
-
-          print('YouTube Fitness Shorts complete.')
+          print('\nYouTube Fitness Shorts complete.')
           PYEOF

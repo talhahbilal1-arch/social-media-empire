@@ -1,0 +1,124 @@
+name: Video Automation - Morning (6 AM PST)
+
+on:
+  schedule:
+    # 6 AM PST = 2 PM UTC (during PST) or 1 PM UTC (during PDT)
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Specific brand to generate for (optional)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Generate but do not post'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-videos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check critical configuration
+        env:
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+        run: |
+          echo "=============================================="
+          echo "CONFIGURATION CHECK"
+          echo "=============================================="
+
+          if [ -z "$CREATOMATE_API_KEY" ]; then
+            echo "WARNING: CREATOMATE_API_KEY is NOT SET"
+            echo "   Videos cannot be rendered - only placeholder URLs will be used"
+            echo ""
+          else
+            echo "CREATOMATE_API_KEY is configured"
+          fi
+
+          # Late API is preferred for Pinterest video posting
+          if [ -n "$LATE_API_KEY" ]; then
+            echo "LATE_API_KEY is configured (preferred for Pinterest)"
+          else
+            echo "LATE_API_KEY not set, using Make.com webhook fallback"
+          fi
+
+          echo "=============================================="
+
+      - name: Generate and post videos
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
+          LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
+          LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+          PINTEREST_DEALS_ACCOUNT_ID: ${{ secrets.PINTEREST_DEALS_ACCOUNT_ID }}
+          PINTEREST_FITNESS_ACCOUNT_ID: ${{ secrets.PINTEREST_FITNESS_ACCOUNT_ID }}
+          PINTEREST_MENOPAUSE_ACCOUNT_ID: ${{ secrets.PINTEREST_MENOPAUSE_ACCOUNT_ID }}
+        run: |
+          echo "=== LATE API KEYS STATUS ==="
+          [ -n "$LATE_API_KEY" ] && echo "LATE_API_KEY: SET" || echo "LATE_API_KEY: NOT SET"
+          [ -n "$LATE_API_KEY_2" ] && echo "LATE_API_KEY_2: SET" || echo "LATE_API_KEY_2: NOT SET"
+          [ -n "$LATE_API_KEY_3" ] && echo "LATE_API_KEY_3: SET" || echo "LATE_API_KEY_3: NOT SET"
+          [ -n "$LATE_API_KEY_4" ] && echo "LATE_API_KEY_4: SET" || echo "LATE_API_KEY_4: NOT SET"
+          echo ""
+          echo "=== BRAND SLOT CONFIGURATION ==="
+          python3 -c "from video_automation.cross_platform_poster import get_brands_for_slot; brands = get_brands_for_slot('morning'); print(f'Brands for morning slot: {brands}'); print(f'Total videos to generate: {len(brands)}')"
+          echo ""
+          ARGS="--slot morning"
+          if [ "${{ github.event.inputs.brand }}" != "" ]; then
+            ARGS="--brand ${{ github.event.inputs.brand }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          echo "=== RUNNING VIDEO GENERATOR ==="
+          echo "Args: $ARGS"
+
+          # Run generation - capture exit code but don't fail on partial failures
+          python -m video_automation.daily_video_generator $ARGS || exit_code=$?
+
+          # Only fail if exit code is 2 (no videos generated at all)
+          # Exit code 1 means videos generated but posting partially failed (acceptable)
+          if [ "${exit_code:-0}" -eq 2 ]; then
+            echo "::error::No videos were generated - check API keys"
+            exit 1
+          fi
+
+          echo "Video generation completed"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morning-generation-logs
+          path: |
+            *.log
+          retention-days: 7
