@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-20",
+  "last_updated": "2026-03-02",
   "items": [
     {
       "id": 1,
@@ -435,6 +435,42 @@
       "slug": "best-ai-audio-tools",
       "keyword": "best ai audio tools 2026",
       "title": "6 Best AI Audio & Voice Tools in 2026"
+    },
+    {
+      "id": 60,
+      "type": "review",
+      "priority": "high",
+      "status": "pending",
+      "slug": "bolt-new",
+      "tool_name": "Bolt.new",
+      "category": "coding",
+      "keyword": "bolt.new review 2026"
+    },
+    {
+      "id": 61,
+      "type": "comparison",
+      "priority": "high",
+      "status": "pending",
+      "slug": "perplexity-vs-chatgpt",
+      "tools": [
+        "perplexity",
+        "chatgpt"
+      ],
+      "tool_names": [
+        "Perplexity",
+        "ChatGPT"
+      ],
+      "keyword": "perplexity vs chatgpt 2026"
+    },
+    {
+      "id": 62,
+      "type": "listicle",
+      "priority": "high",
+      "status": "pending",
+      "slug": "best-ai-tools-freelancers-2026",
+      "title": "Best AI Tools for Freelancers 2026: Increase Your Income & Win More Clients",
+      "keyword": "best ai tools for freelancers 2026",
+      "money_angle": "Shows freelancers how to 3x their output, reduce project time by 50%, and take on more high-paying clients using AI automation across writing, design, coding, and video services"
     }
   ]
 }

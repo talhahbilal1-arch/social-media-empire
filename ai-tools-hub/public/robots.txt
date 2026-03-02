@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://toolpilot-hub.netlify.app/sitemap.xml
+Sitemap: https://ai-tools-hub-lilac.vercel.app/sitemap.xml
