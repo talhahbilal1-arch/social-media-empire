@@ -76,6 +76,7 @@ package-lock.json
 .agent/
 .agents/
 .claude/
+.playwright-mcp/
 .gemini/
 .mcp.json
 
