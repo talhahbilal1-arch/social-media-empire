@@ -316,7 +316,30 @@ PIN TIPS (expand on each of these in the article):
 
     seo_keywords = ', '.join(config.get('seo_keywords', [])[:6])
 
-    if brand_key == 'menopause':
+    # ── Brand-specific template structure instructions ──
+    if brand_key == 'fitness':
+        template_section = (
+            '\nTEMPLATE-SPECIFIC SECTIONS (The Iron Standard — dark, data-heavy):\n'
+            '- Include a "Pro-Coach Insight" blockquote (use > **Pro-Coach Insight:**) '
+            'explaining specific timing, dosage, or technique for maximum results.\n'
+            '- If reviewing a product, include a "Pros vs Cons" section with clear bullet points '
+            'comparing to 1-2 alternatives.\n'
+            '- Write with high confidence and data-backed authority. Cite specific numbers, '
+            'studies, or personal experience metrics where possible.'
+        )
+        etsy_cta_section = ''
+        req_num_seo = '5'
+        req_num_filler = '6'
+    elif brand_key == 'menopause':
+        template_section = (
+            '\nTEMPLATE-SPECIFIC SECTIONS (The Wellness Whisper — empathetic, editorial):\n'
+            '- Include a "Symptom Checklist" section with a bulleted list of specific symptoms '
+            'this topic/product addresses (e.g., night sweats, fatigue, brain fog, mood changes).\n'
+            '- Include a "What to Look For" or "Clean Label Breakdown" section highlighting '
+            'ingredients, non-GMO status, certifications, or material safety.\n'
+            '- Write with warmth and empathy — acknowledge the struggle, then provide hope '
+            'and practical solutions.'
+        )
         etsy_cta_section = (
             '\n5. ETSY PLANNER CTA (menopause brand only): In the conclusion section, naturally'
             ' mention and link to the Menopause Wellness Planner Bundle on Etsy. Frame it as a'
@@ -333,7 +356,16 @@ PIN TIPS (expand on each of these in the article):
         )
         req_num_seo = '6'
         req_num_filler = '7'
-    else:
+    else:  # deals
+        template_section = (
+            '\nTEMPLATE-SPECIFIC SECTIONS (The Aesthetic Edit — minimalist, magazine-style):\n'
+            '- Include a "Why It\'s Trending" or "Social Proof" section mentioning star ratings, '
+            'review counts, Pinterest saves, or TikTok virality.\n'
+            '- Include practical details like dimensions, color options, compatibility, '
+            'or how the product fits into a modern home aesthetic.\n'
+            '- Write in a curated, editorial tone — like a boutique magazine recommending '
+            'the best of the best.'
+        )
         etsy_cta_section = ''
         req_num_seo = '5'
         req_num_filler = '6'
@@ -346,12 +378,13 @@ BRAND VOICE:
 ARTICLE TOPIC: {topic}
 PIN TITLE: {pin_data.get('title', '')}
 CATEGORY: {category}
-{tips_section}
+{tips_section}{template_section}
+
 REQUIREMENTS:
 1. LENGTH: 800-1200 words. Substantial enough to rank, no filler.
 2. STRUCTURE:
-   - H1 title (include primary keyword, click-worthy)
-   - Meta description (155 chars max, includes keyword)
+   - H1 title (include primary keyword, click-worthy, format: "[Topic]: Does it actually work for [Goal]?" for fitness, "Managing [Topic]: Why [Product] is a Game Changer for Women 40+" for menopause, "The {datetime.now(timezone.utc).year} Glow-Up: Why [Topic] is Trending on Pinterest" for deals)
+   - Meta description (155 chars max, includes keyword + "Best of {datetime.now(timezone.utc).year}" or "Expert Verified")
    - 3-5 H2 sections with standalone value — if tips were provided above, dedicate a section to each tip with deeper detail
    - Conversational, authoritative tone matching the brand voice
    - Clear conclusion with next steps
@@ -362,6 +395,7 @@ REQUIREMENTS:
    - For products in the list below: use the EXACT URL provided, character-for-character.
    - For any product NOT in the list: use Amazon search format — https://www.amazon.com/s?k=product+name+here&tag=dailydealdarl-20
    - NEVER invent /dp/ASIN URLs for products not in the list — invalid ASINs return error pages.
+   - ALL Amazon links must include tag=dailydealdarl-20
    Format: **[Product Name](amazon_url)** — honest 1-2 sentence review explaining exactly WHY this product helps for this specific topic.
    End the article with a brief "Best Picks" or "My Top Recommendations" section that lists 2-3 of the products with links — this dramatically increases click-through.
    Approved products with direct Amazon links (use these exact URLs):
@@ -513,7 +547,15 @@ def _inline_format(text):
 
 
 def article_to_html(markdown_content, brand_key, slug, pin_data=None):
-    """Convert markdown article to a complete HTML page."""
+    """Convert markdown article to a complete bridge-page HTML.
+
+    Uses brand-specific templates from article_templates module:
+    - fitness  → 'The Iron Standard'  (dark, gritty, data-heavy)
+    - menopause → 'The Wellness Whisper' (clean, empathetic, editorial)
+    - deals    → 'The Aesthetic Edit'  (minimalist, boutique, magazine)
+    """
+    from .article_templates import render_article_page
+
     site = BRAND_SITE_CONFIG[brand_key]
     title, meta_desc = _extract_frontmatter(markdown_content)
     if not title:
@@ -527,141 +569,20 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
     body_html = _inject_product_cards(body_html, brand_key)
 
     # Fetch hero image from Pexels using pin's search term
-    hero_html = ''
     pexels_query = (pin_data or {}).get('pexels_search_term', '') or slug.replace('-', ' ')
     hero_url = _fetch_pexels_image(pexels_query)
-    if hero_url:
-        hero_html = (
-            f'<img src="{hero_url}" alt="{title}" '
-            f'style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin:24px 0 32px;" '
-            f'loading="lazy">'
-        )
-    # Insert hero image right after the H1
-    if hero_html:
-        body_html = re.sub(r'(<h1>[^<]*(?:<[^<]*<[^<]*)?</h1>)', r'\1\n' + hero_html, body_html, count=1)
 
-    # Replace email signup placeholder with actual form
-    signup_html = (
-        f'<div style="background:#f0f4f8;padding:24px;border-radius:12px;margin:32px 0;text-align:center;">'
-        f'<h3 style="margin:0 0 8px">{site["lead_magnet"]}</h3>'
-        f'<p style="margin:0 0 16px;color:#555">Join our community for weekly tips and guides.</p>'
-        f'<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>'
-        f'<form action="https://app.kit.com/forms/{site["signup_form_id"]}/subscriptions" method="post" data-sv-form="{site["signup_form_id"]}">'
-        f'<input type="email" name="email_address" placeholder="Enter your email" required style="padding:12px;border:1px solid #ddd;border-radius:6px;width:60%;margin-right:8px">'
-        f'<button type="submit" style="padding:12px 24px;background:{site["primary_color"]};color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold">{site["signup_button_text"]}</button>'
-        f'</form>'
-        f'</div>'
+    # Delegate full page rendering to brand-specific template
+    return render_article_page(
+        brand_key=brand_key,
+        title=title,
+        meta_desc=meta_desc,
+        body_html=body_html,
+        hero_url=hero_url,
+        site_config=site,
+        slug=slug,
+        pin_data=pin_data,
     )
-    body_html = body_html.replace('<!-- email-signup-placeholder -->', signup_html)
-
-    # Menopause Planner: append Etsy CTA to article body (robust — no string matching)
-    if brand_key == "menopause":
-        etsy_cta = (
-            '<div style="background:linear-gradient(135deg,#f3e8ff,#ede0f7);border:2px solid #c084fc;border-radius:14px;padding:28px;margin:36px 0;text-align:center;">'
-            '<p style="font-size:0.8em;font-weight:700;letter-spacing:0.08em;color:#7B1FA2;text-transform:uppercase;margin:0 0 8px">The Menopause Planner — Digital Download</p>'
-            '<h3 style="margin:0 0 10px;font-size:1.3em;color:#111">Track Every Symptom. Reclaim Your Sleep.</h3>'
-            '<p style="margin:0 0 18px;color:#444;font-size:0.97em">A printable digital planner built specifically for women navigating menopause — track symptoms, sleep patterns, supplements, and mood in one place. Instant download, print at home.</p>'
-            '<a href="https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&amp;utm_medium=organic" target="_blank" rel="noopener" style="display:inline-block;background:#7B1FA2;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1em">Get the Planner on Etsy →</a>'
-            '<p style="margin:12px 0 0;font-size:0.82em;color:#777">Instant download • Print at home • One-time purchase</p>'
-            '</div>'
-        )
-        body_html = body_html + etsy_cta
-
-    # Build nav
-    nav_html = '\n'.join(
-        f'        <a href="{url}" style="color:#333;text-decoration:none;margin:0 12px">{label}</a>'
-        for label, url in site['nav_links']
-    )
-
-    # Affiliate disclosure
-    disclosure = (
-        '<p style="font-size:12px;color:#888;margin-top:40px;padding-top:16px;'
-        'border-top:1px solid #eee"><em>This article contains affiliate links. '
-        'If you purchase through these links, we may earn a small commission at '
-        'no extra cost to you. This helps us continue creating free content.</em></p>'
-    )
-
-    date_str = datetime.now(timezone.utc).strftime('%B %d, %Y')
-    og_url = f"{site['base_url']}/articles/{slug}.html"
-
-    if site.get('has_css'):
-        # FitOver35 uses external stylesheet
-        style_tag = '  <link rel="stylesheet" href="../css/styles.css">'
-    else:
-        # Inline minimal styles for other brands
-        style_tag = f'''  <style>
-    body {{ font-family: 'Inter', -apple-system, sans-serif; color: #333; line-height: 1.7; margin: 0; padding: 0; }}
-    .header {{ background: #fff; border-bottom: 1px solid #eee; padding: 16px 0; }}
-    .container {{ max-width: 800px; margin: 0 auto; padding: 0 20px; }}
-    h1 {{ font-size: 2em; line-height: 1.2; margin: 32px 0 16px; color: #111; }}
-    h2 {{ font-size: 1.4em; margin: 28px 0 12px; color: #222; }}
-    p {{ margin: 0 0 16px; }}
-    ul {{ margin: 0 0 16px; padding-left: 24px; }}
-    li {{ margin-bottom: 8px; }}
-    a {{ color: {site["primary_color"]}; }}
-    strong {{ color: #111; }}
-    .article-meta {{ color: #888; font-size: 14px; margin-bottom: 24px; }}
-  </style>'''
-
-    html = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{meta_desc}">
-  <meta name="author" content="{site['site_name']}">
-  <meta name="robots" content="index, follow">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="{og_url}">
-  <meta property="og:title" content="{title}">
-  <meta property="og:description" content="{meta_desc[:160]}">
-  <title>{title} - {site['site_name']}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-{style_tag}
-</head>
-<body>
-  <header class="header">
-    <div class="container" style="display:flex;align-items:center;justify-content:space-between">
-      <a href="../index.html" style="font-size:1.4em;font-weight:700;text-decoration:none;color:#111">{site['logo_html']}</a>
-      <nav>
-{nav_html}
-      </nav>
-    </div>
-  </header>
-
-  <article class="container" style="padding-top:32px;padding-bottom:48px">
-    <p class="article-meta" style="color:#888;font-size:14px">{date_str}</p>
-{body_html}
-    {disclosure}
-    <div style="background:{site['primary_color']};border-radius:12px;padding:24px;margin-top:32px;text-align:center;">
-      <p style="margin:0 0 8px;color:#fff;font-weight:700;font-size:1.1em">Want more tips like this?</p>
-      <a href="{site['base_url']}" style="display:inline-block;background:#fff;color:{site['primary_color']};padding:10px 24px;border-radius:6px;text-decoration:none;font-weight:700;font-size:0.95em">Visit {site['site_name']} →</a>
-    </div>
-  </article>
-
-  <script type="application/ld+json">
-  {{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "{title}",
-    "datePublished": "{datetime.now(timezone.utc).strftime('%Y-%m-%d')}",
-    "author": {{
-      "@type": "Organization",
-      "name": "{site['site_name']}"
-    }},
-    "publisher": {{
-      "@type": "Organization",
-      "name": "{site['site_name']}"
-    }},
-    "description": "{meta_desc}"
-  }}
-  </script>
-</body>
-</html>'''
-
-    return html
 
 
 def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_client):
