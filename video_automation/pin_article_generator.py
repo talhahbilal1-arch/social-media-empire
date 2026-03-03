@@ -10,10 +10,10 @@ import os
 import re
 import json
 import logging
-import urllib.request
 import urllib.parse
 from datetime import datetime, timezone
 
+import requests
 import anthropic
 
 logger = logging.getLogger(__name__)
@@ -178,17 +178,21 @@ def _fetch_pexels_image(query, orientation='landscape'):
     if len(words) > 6:
         query = ' '.join(words[:6])
     try:
-        encoded = urllib.parse.quote(query)
-        url = f"https://api.pexels.com/v1/search?query={encoded}&per_page=5&orientation={orientation}"
-        req = urllib.request.Request(url, headers={"Authorization": pexels_key})
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read())
-            photos = data.get('photos', [])
+        resp = requests.get(
+            "https://api.pexels.com/v1/search",
+            headers={"Authorization": pexels_key},
+            params={"query": query, "per_page": 5, "orientation": orientation},
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            photos = resp.json().get('photos', [])
             if photos:
                 img_url = photos[0]['src']['large']
                 logger.info(f"Hero image found for '{query}': {img_url[:80]}...")
                 return img_url
             logger.warning(f"No Pexels results for query: '{query}'")
+        else:
+            logger.warning(f"Pexels API returned {resp.status_code} for '{query}'")
     except Exception as e:
         logger.warning(f"Pexels hero image fetch failed for '{query}': {e}")
     return None
