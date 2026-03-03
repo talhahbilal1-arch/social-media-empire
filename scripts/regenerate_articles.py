@@ -19,13 +19,14 @@ import os
 import sys
 import re
 import glob
+import time
 from typing import Optional, Tuple
 
 # Add repo root to path for imports
 sys.path.insert(0, '/Users/homefolder/Desktop/social-media-empire')
 
 from video_automation.article_templates import render_article_page
-from video_automation.pin_article_generator import BRAND_SITE_CONFIG
+from video_automation.pin_article_generator import BRAND_SITE_CONFIG, _fetch_pexels_image
 
 
 # Brand mappings: directory pattern -> brand_key
@@ -166,6 +167,13 @@ def process_article(filepath, brand_key):
         hero_url = extract_hero_image_url(original_html)
         slug = slug_from_filename(filepath)
 
+        # Fetch Pexels hero image if none found in existing HTML
+        if not hero_url and os.environ.get('PEXELS_API_KEY'):
+            pexels_query = slug.replace('-', ' ')
+            hero_url = _fetch_pexels_image(pexels_query)
+            if hero_url:
+                time.sleep(0.25)  # Rate-limit Pexels API (200 req/hr)
+
         # Get site config
         site_config = BRAND_SITE_CONFIG.get(brand_key)
         if not site_config:
@@ -198,6 +206,10 @@ def main():
     print("=" * 80)
     print("ARTICLE REGENERATION WITH BRIDGE PAGE TEMPLATES")
     print("=" * 80)
+    if os.environ.get('PEXELS_API_KEY'):
+        print("  Pexels API key detected — will fetch hero images for articles missing them")
+    else:
+        print("  No PEXELS_API_KEY — hero images will only be preserved from existing HTML")
     print()
 
     total_processed = 0

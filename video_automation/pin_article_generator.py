@@ -168,8 +168,15 @@ _APPROVED_ASINS = None  # lazy-loaded
 def _fetch_pexels_image(query, orientation='landscape'):
     """Fetch a stock photo URL from Pexels. Returns URL string or None."""
     pexels_key = os.environ.get('PEXELS_API_KEY', '')
-    if not pexels_key or not query:
+    if not pexels_key:
+        logger.info("No PEXELS_API_KEY — skipping hero image fetch")
         return None
+    if not query:
+        return None
+    # Shorten overly long queries (Pexels works best with 3-5 words)
+    words = query.split()
+    if len(words) > 6:
+        query = ' '.join(words[:6])
     try:
         encoded = urllib.parse.quote(query)
         url = f"https://api.pexels.com/v1/search?query={encoded}&per_page=5&orientation={orientation}"
@@ -178,9 +185,12 @@ def _fetch_pexels_image(query, orientation='landscape'):
             data = json.loads(resp.read())
             photos = data.get('photos', [])
             if photos:
-                return photos[0]['src']['large']
+                img_url = photos[0]['src']['large']
+                logger.info(f"Hero image found for '{query}': {img_url[:80]}...")
+                return img_url
+            logger.warning(f"No Pexels results for query: '{query}'")
     except Exception as e:
-        logger.debug(f"Pexels image fetch failed: {e}")
+        logger.warning(f"Pexels hero image fetch failed for '{query}': {e}")
     return None
 
 
@@ -568,9 +578,17 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
     # Inject product cards (with Amazon images) for bolded product links
     body_html = _inject_product_cards(body_html, brand_key)
 
-    # Fetch hero image from Pexels using pin's search term
-    pexels_query = (pin_data or {}).get('pexels_search_term', '') or slug.replace('-', ' ')
+    # Fetch hero image — try multiple sources
+    hero_url = None
+    pexels_query = (pin_data or {}).get('pexels_search_term', '') \
+        or (pin_data or {}).get('image_search_query', '') \
+        or slug.replace('-', ' ')
     hero_url = _fetch_pexels_image(pexels_query)
+    # Fallback: use the pin's own Pexels image if article fetch failed
+    if not hero_url and pin_data:
+        hero_url = pin_data.get('image_url', '') or pin_data.get('pexels_image_url', '')
+        if hero_url:
+            logger.info(f"Using pin's existing image as hero: {hero_url[:80]}...")
 
     # Delegate full page rendering to brand-specific template
     return render_article_page(
