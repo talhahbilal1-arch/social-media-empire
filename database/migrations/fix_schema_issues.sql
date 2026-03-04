@@ -57,10 +57,9 @@ CREATE TABLE IF NOT EXISTS errors (
 GRANT ALL ON errors TO anon, authenticated, service_role;
 GRANT USAGE, SELECT ON SEQUENCE errors_id_seq TO anon, authenticated, service_role;
 
--- RLS policy for errors
+-- RLS: enable (service_role bypasses via BYPASSRLS=true — no permissive policy needed)
 ALTER TABLE errors ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Service role full access errors" ON errors;
-CREATE POLICY "Service role full access errors" ON errors FOR ALL USING (true);
 
 CREATE INDEX IF NOT EXISTS idx_errors_type ON errors(error_type);
 CREATE INDEX IF NOT EXISTS idx_errors_resolved ON errors(resolved);
@@ -85,10 +84,9 @@ CREATE TABLE IF NOT EXISTS agent_runs (
 GRANT ALL ON agent_runs TO anon, authenticated, service_role;
 GRANT USAGE, SELECT ON SEQUENCE agent_runs_id_seq TO anon, authenticated, service_role;
 
--- RLS for service role access
+-- RLS: enable (service_role bypasses via BYPASSRLS=true — no permissive policy needed)
 ALTER TABLE agent_runs ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Service role full access" ON agent_runs;
-CREATE POLICY "Service role full access" ON agent_runs FOR ALL USING (true);
 
 -- Upsert function for agent runs
 CREATE OR REPLACE FUNCTION update_agent_run(

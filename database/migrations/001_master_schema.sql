@@ -209,20 +209,21 @@ CREATE TABLE IF NOT EXISTS pinterest_pins (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── RLS: disable on all tables (service_role bypasses anyway, but explicit for safety) ──
-ALTER TABLE videos DISABLE ROW LEVEL SECURITY;
-ALTER TABLE content_bank DISABLE ROW LEVEL SECURITY;
-ALTER TABLE agent_runs DISABLE ROW LEVEL SECURITY;
-ALTER TABLE subscribers DISABLE ROW LEVEL SECURITY;
-ALTER TABLE analytics DISABLE ROW LEVEL SECURITY;
-ALTER TABLE errors DISABLE ROW LEVEL SECURITY;
-ALTER TABLE email_sequences DISABLE ROW LEVEL SECURITY;
-ALTER TABLE posting_schedule DISABLE ROW LEVEL SECURITY;
-ALTER TABLE content_history DISABLE ROW LEVEL SECURITY;
-ALTER TABLE daily_trending DISABLE ROW LEVEL SECURITY;
-ALTER TABLE weekly_calendar DISABLE ROW LEVEL SECURITY;
-ALTER TABLE generated_articles DISABLE ROW LEVEL SECURITY;
-ALTER TABLE pinterest_pins DISABLE ROW LEVEL SECURITY;
+-- ── RLS: enable on all tables (service_role bypasses RLS via BYPASSRLS=true) ──
+-- anon + authenticated are blocked. Python scripts use service_role key — unaffected.
+ALTER TABLE videos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE content_bank ENABLE ROW LEVEL SECURITY;
+ALTER TABLE agent_runs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE subscribers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE analytics ENABLE ROW LEVEL SECURITY;
+ALTER TABLE errors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE email_sequences ENABLE ROW LEVEL SECURITY;
+ALTER TABLE posting_schedule ENABLE ROW LEVEL SECURITY;
+ALTER TABLE content_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE daily_trending ENABLE ROW LEVEL SECURITY;
+ALTER TABLE weekly_calendar ENABLE ROW LEVEL SECURITY;
+ALTER TABLE generated_articles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pinterest_pins ENABLE ROW LEVEL SECURITY;
 
 -- ── GRANT ALL to anon + authenticated + service_role on all tables ──
 GRANT ALL ON videos TO anon, authenticated, service_role;

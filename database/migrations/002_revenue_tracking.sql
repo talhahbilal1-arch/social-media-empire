@@ -85,10 +85,10 @@ GRANT USAGE, SELECT ON SEQUENCE email_conversions_id_seq TO anon, authenticated,
 GRANT USAGE, SELECT ON SEQUENCE content_performance_id_seq TO anon, authenticated, service_role;
 GRANT USAGE, SELECT ON SEQUENCE affiliate_programs_id_seq TO anon, authenticated, service_role;
 
-ALTER TABLE affiliate_revenue DISABLE ROW LEVEL SECURITY;
-ALTER TABLE email_conversions DISABLE ROW LEVEL SECURITY;
-ALTER TABLE content_performance DISABLE ROW LEVEL SECURITY;
-ALTER TABLE affiliate_programs DISABLE ROW LEVEL SECURITY;
+ALTER TABLE affiliate_revenue ENABLE ROW LEVEL SECURITY;
+ALTER TABLE email_conversions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE content_performance ENABLE ROW LEVEL SECURITY;
+ALTER TABLE affiliate_programs ENABLE ROW LEVEL SECURITY;
 
 -- Seed affiliate_programs with all known programs from affiliate_config.json
 INSERT INTO affiliate_programs (brand, program_name, network, signup_url, commission_rate, status) VALUES

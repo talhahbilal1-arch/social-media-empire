@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS newsletter_sends (
 GRANT ALL ON newsletter_sends TO anon, authenticated, service_role;
 GRANT USAGE, SELECT ON SEQUENCE newsletter_sends_id_seq TO anon, authenticated, service_role;
 
--- Disable RLS (free tier pattern)
-ALTER TABLE newsletter_sends DISABLE ROW LEVEL SECURITY;
+-- Enable RLS (service_role bypasses via BYPASSRLS=true — no policies needed)
+ALTER TABLE newsletter_sends ENABLE ROW LEVEL SECURITY;

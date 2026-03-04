@@ -40,9 +40,9 @@ CREATE INDEX IF NOT EXISTS idx_pins_brand_status ON pinterest_pins(brand, status
 CREATE INDEX IF NOT EXISTS idx_pins_created_desc ON pinterest_pins(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_pins_retry ON pinterest_pins(status, retry_count);
 
--- Ensure access (RLS already disabled for this table)
+-- Ensure access (service_role bypasses RLS — no policies needed)
 GRANT ALL ON pinterest_pins TO anon, authenticated, service_role;
-ALTER TABLE pinterest_pins DISABLE ROW LEVEL SECURITY;
+ALTER TABLE pinterest_pins ENABLE ROW LEVEL SECURITY;
 
 -- Reload PostgREST schema cache
 NOTIFY pgrst, 'reload schema';

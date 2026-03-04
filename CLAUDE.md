@@ -116,7 +116,7 @@ Make.com payload uses hyphenated names: `fitness-made-easy`, `daily-deal-darling
 - **Pins not posting**: Check Make.com scenario is ON; verify per-brand webhook secrets
 - **Font download crash**: Fixed in `pin_image_generator.py` — returns None gracefully
 - **Article timeout**: 3 articles via Claude ~15-20 min; workflow timeout is 45 min
-- **Supabase new tables**: Always `GRANT ALL` + disable RLS + restart project (5-8 min)
+- **Supabase new tables**: Always `GRANT ALL` + **ENABLE RLS** (not disable — service_role bypasses RLS, anon is blocked) + restart project (5-8 min)
 - **Python**: Use `python3`, not `python` (macOS default)
 - **Workflow git push**: Needs `permissions: contents: write`
 
