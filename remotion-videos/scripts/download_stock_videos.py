@@ -21,7 +21,7 @@ STOCK_VIDEOS = {
         "fallback": "https://videos.pexels.com/video-files/5750737/5750737-uhd_1440_2560_24fps.mp4",
         "file": "daily-deal-darling-bg.mp4"
     },
-    "fitnessmadeasy": {
+    "fitness": {
         # Fitness/workout from Pexels
         "url": "https://videos.pexels.com/video-files/4761440/4761440-hd_1080_1920_25fps.mp4",
         "fallback": "https://videos.pexels.com/video-files/4761671/4761671-hd_1080_1920_25fps.mp4",

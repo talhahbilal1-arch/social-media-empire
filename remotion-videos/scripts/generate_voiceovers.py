@@ -44,7 +44,7 @@ BRAND_CONFIG = {
         },
         "voiceover_file": "daily-deal-darling-voice.mp3",
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "content": {
             "hook": "Over 35? Try this...",
             "title": "Boost Your Metabolism!",

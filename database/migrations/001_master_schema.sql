@@ -1,0 +1,12 @@
+-- ============================================================
+-- 001_master_schema.sql — Consolidated idempotent master schema
+-- This is a pointer to database/schemas.sql (the single source of truth).
+-- Safe to re-run at any time. All DDL uses IF NOT EXISTS.
+--
+-- IMPORTANT: For deployment, copy the contents of database/schemas.sql
+-- into this file (Supabase SQL Editor doesn't support file includes).
+-- The authoritative schema lives in database/schemas.sql.
+-- ============================================================
+
+-- To deploy: paste the full contents of database/schemas.sql here and run
+-- in Supabase SQL Editor. Then restart the Supabase project (5-8 min).

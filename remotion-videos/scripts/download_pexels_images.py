@@ -27,8 +27,8 @@ BRAND_IMAGES = {
             'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&w=1080&h=1920&fit=crop',  # Shopping/lifestyle
         ],
     },
-    'fitnessmadeasy': {
-        'folder': 'fitnessmadeasy',
+    'fitness': {
+        'folder': 'fitness',
         'images': [
             # Fitness/workout images
             'https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=1080&h=1920&fit=crop',  # Woman workout

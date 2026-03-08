@@ -38,13 +38,13 @@ BRAND_PINTEREST_CONFIG = {
         "link": "https://dailydealdarling.com",
         "hashtags": "#beautyfinds #skincare #beautytips #womensfashion #homedecor #giftsforher",
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "api_key_envs": ["LATE_API_KEY", "LATE_API_KEY_3"],
         "account_id_env": "PINTEREST_FITNESS_ACCOUNT_ID",
         "account_id_env_alt": None,
         "board_id_env": "PINTEREST_FITNESS_BOARD_ID",
         "board_id_env_alt": None,
-        "link": "https://fitnessmadeasy.com",
+        "link": "https://fitover35.com",
         "hashtags": "#fitover35 #metabolismboost #womenshealth #homeworkout #fitnessover40",
     },
     "menopause_planner": {

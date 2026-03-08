@@ -796,7 +796,7 @@ const BrandWatermark: React.FC<{
 }> = ({ brand, theme }) => {
   const brandNames: Record<string, string> = {
     daily_deal_darling: 'DailyDealDarling',
-    fitnessmadeasy: 'FitOver35',
+    fitness: 'FitOver35',
     menopause_planner: 'MenopausePlanner',
   };
 

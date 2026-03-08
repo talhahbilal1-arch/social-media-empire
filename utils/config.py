@@ -56,7 +56,7 @@ class Config:
     # Note: per-brand video counts and posting slots are in cross_platform_poster.py
     brands: list = field(default_factory=lambda: [
         "daily_deal_darling",   # Women's beauty, fashion, home decor - 3 videos/day
-        "fitnessmadeasy",       # Men's fitness/health 35+ - 6 videos/day
+        "fitness",       # Men's fitness/health 35+ - 6 videos/day
         "menopause_planner",    # Women's menopause wellness - 3 videos/day
     ])
 

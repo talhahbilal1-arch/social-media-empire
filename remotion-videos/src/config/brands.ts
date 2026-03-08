@@ -74,8 +74,8 @@ export const BRAND_CONFIG: Record<string, BrandConfig> = {
     },
   },
 
-  fitnessmadeasy: {
-    id: 'fitnessmadeasy',
+  fitness: {
+    id: 'fitness',
     displayName: 'FitOver35',
     theme: {
       primary: '#1DB954',
@@ -83,10 +83,10 @@ export const BRAND_CONFIG: Record<string, BrandConfig> = {
       accent: '#4ECDC4',
     },
     images: [
-      'assets/images/fitnessmadeasy/slide1.jpg',
-      'assets/images/fitnessmadeasy/slide2.jpg',
-      'assets/images/fitnessmadeasy/slide3.jpg',
-      'assets/images/fitnessmadeasy/slide4.jpg',
+      'assets/images/fitness/slide1.jpg',
+      'assets/images/fitness/slide2.jpg',
+      'assets/images/fitness/slide3.jpg',
+      'assets/images/fitness/slide4.jpg',
     ],
     fallbackImage: 'assets/images/fitness-made-easy-bg.jpg',
     voiceover: 'assets/audio/fitness-made-easy-voice.mp3',
@@ -104,7 +104,7 @@ export const BRAND_CONFIG: Record<string, BrandConfig> = {
       accountId: process.env.PINTEREST_FITNESS_ACCOUNT_ID || '',
       boardId: process.env.PINTEREST_FITNESS_BOARD_ID || '',
       apiKey: process.env.LATE_API_KEY || '',
-      link: 'https://fitnessmadeasy.com',
+      link: 'https://fitover35.com',
     },
   },
 
@@ -174,7 +174,7 @@ export const buildPinterestDescription = (brandId: string): string => {
   const hashtags: Record<string, string> = {
     daily_deal_darling:
       '#amazonfinds #kitchengadgets #morningroutine #deals #dailydealdarling',
-    fitnessmadeasy:
+    fitness:
       '#fitness #workout #abs #homeworkout #fitover35',
     menopause_planner:
       '#menopause #wellness #hotflashes #womenshealth #naturalremedy',

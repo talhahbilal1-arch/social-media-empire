@@ -32,13 +32,13 @@ ACCOUNTS = [
         "link": "https://dailydealdarling.com"
     },
     {
-        "brand": "fitnessmadeasy",
+        "brand": "fitness",
         "api_key": _first_env("LATE_API_KEY", "LATE_API_KEY_3"),
         "account_id": _first_env("PINTEREST_FITNESS_ACCOUNT_ID"),
         "board_id": _first_env("PINTEREST_FITNESS_BOARD_ID"),
         "title": "5-Minute Ab Workout - No Equipment Needed!",
         "description": "Quick and effective core workout you can do anywhere! Perfect for busy days. Save this for later!\n\n#fitness #abworkout #homeworkout #fitover35 #exercise",
-        "link": "https://fitnessmadeasy.com"
+        "link": "https://fitover35.com"
     },
     {
         "brand": "menopause_planner",

@@ -27,7 +27,7 @@ EVERGREEN_TOPICS = {
         "Coupon organization",
         "Budget meal planning deals"
     ],
-    "fitnessmadeasy": [
+    "fitness": [
         "Muscle building over 35",
         "Best protein sources for men",
         "Home gym essentials",
@@ -93,7 +93,7 @@ SEASONAL_TOPICS = {
         11: ["Black Friday strategy", "Cyber Monday prep", "Holiday gift guides"],
         12: ["Last-minute gift deals", "After Christmas sales"]
     },
-    "fitnessmadeasy": {
+    "fitness": {
         1: ["New Year fitness goals", "Winter bulk season tips", "Home workout essentials"],
         2: ["Valentine's fitness gifts", "Heart health workouts"],
         3: ["Spring cut season prep", "Outdoor workout transition"],

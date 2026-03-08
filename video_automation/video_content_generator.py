@@ -44,7 +44,7 @@ BRAND_CONFIG = {
             "This was in last week's deals email. Get on the list - bio link!"
         ]
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "name": "Fitness Made Easy",
         "niche": "fitness tips, health hacks, workout routines for men over 35",
         "tone": "motivational, practical, no-nonsense, masculine, results-focused",
@@ -360,7 +360,7 @@ The background_query MUST be specifically relevant to {brand_config['niche']} â€
         # Brand-specific background preferences
         brand_backgrounds = {
             "daily_deal_darling": ["beauty aesthetic", "fashion flatlay", "home decor", "feminine lifestyle"],
-            "fitnessmadeasy": ["gym workout", "man exercising", "fitness motivation", "healthy lifestyle man"],
+            "fitness": ["gym workout", "man exercising", "fitness motivation", "healthy lifestyle man"],
             "menopause_planner": ["calm wellness", "mature woman", "self care", "peaceful nature"],
             "nurse_planner": ["healthcare", "hospital", "medical professional", "coffee break"],
             "adhd_planner": ["organized desk", "planner", "productivity", "colorful workspace"]

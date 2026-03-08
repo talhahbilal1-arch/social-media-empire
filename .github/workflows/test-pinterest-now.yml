@@ -79,12 +79,12 @@ jobs:
                   'video_desc': 'Under \$25 on Amazon with over 50,000 5-star reviews! Link in bio for the deal!\n\n#amazonfinds #kitchenhacks #deals #dailydealdarling',
                   'image_query': 'kitchen gadgets aesthetic flat lay',
               },
-              'fitnessmadeasy': {
+              'fitness': {
                   'display': 'FitOver35',
                   'api_key_envs': ['LATE_API_KEY', 'LATE_API_KEY_3'],
                   'account_id_envs': ['PINTEREST_FITNESS_ACCOUNT_ID'],
                   'board_id_envs': ['PINTEREST_FITNESS_BOARD_ID'],
-                  'link': 'https://fitnessmadeasy.com',
+                  'link': 'https://fitover35.com',
                   'image_title': '5-Minute Morning Stretch Routine',
                   'image_desc': 'Start your day right with this simple stretch routine. No equipment needed!\n\n#fitness #morningroutine #stretching #fitover35 #homeworkout',
                   'video_title': '5-Minute Ab Workout - No Equipment!',

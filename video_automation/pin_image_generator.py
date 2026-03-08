@@ -74,7 +74,6 @@ GOOGLE_FONT_BOLD_URLS = {
 BRAND_CONTENT_DIRS = {
     "daily_deal_darling": "dailydealdarling",
     "deals": "dailydealdarling",
-    "fitnessmadeasy": "fitover35",
     "fitness": "fitover35",
     "menopause_planner": "menopauseplanner",
     "menopause": "menopauseplanner",

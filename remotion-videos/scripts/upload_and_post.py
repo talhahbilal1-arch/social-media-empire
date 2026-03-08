@@ -60,8 +60,8 @@ BRAND_CONFIG = {
         },
         "hashtags": "#beautyfinds #skincare #beautytips #womensfashion #homedecor #giftsforher",
     },
-    "fitnessmadeasy": {
-        "id": "fitnessmadeasy",
+    "fitness": {
+        "id": "fitness",
         "displayName": "FitOver35",
         "content": {
             "hook": "Over 35? Try this...",
@@ -77,7 +77,7 @@ BRAND_CONFIG = {
             "accountId": os.environ.get("PINTEREST_FITNESS_ACCOUNT_ID", ""),
             "boardId": os.environ.get("PINTEREST_FITNESS_BOARD_ID", ""),
             "apiKey": os.environ.get("LATE_API_KEY", ""),
-            "link": "https://fitnessmadeasy.com",
+            "link": "https://fitover35.com",
         },
         "video": {
             "file": "fitness-made-easy.mp4",

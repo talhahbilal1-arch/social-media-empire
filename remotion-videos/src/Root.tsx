@@ -54,7 +54,7 @@ export const RemotionRoot: React.FC = () => {
           width={VERTICAL_WIDTH}
           height={VERTICAL_HEIGHT}
           defaultProps={{
-            brand: 'fitnessmadeasy',
+            brand: 'fitness',
           }}
         />
         <Composition
@@ -128,16 +128,16 @@ export const RemotionRoot: React.FC = () => {
       </Folder>
 
       {/* ============= FITNESS MADE EASY / FITOVER35 ============= */}
-      <Folder name="FitnessMadeEasy">
+      <Folder name="FitOver35">
         <Composition
-          id="FitnessMadeEasy"
+          id="FitOver35"
           component={ProfessionalVideo}
           durationInFrames={DURATION_SECONDS * FPS}
           fps={FPS}
           width={VERTICAL_WIDTH}
           height={VERTICAL_HEIGHT}
           defaultProps={{
-            brand: 'fitnessmadeasy',
+            brand: 'fitness',
             hook: 'No equipment needed...',
             title: '5-Minute Ab Workout',
             points: [
@@ -158,14 +158,14 @@ export const RemotionRoot: React.FC = () => {
         />
 
         <Composition
-          id="FitnessMadeEasy-Yoga"
+          id="FitOver35-Yoga"
           component={ProfessionalVideo}
           durationInFrames={DURATION_SECONDS * FPS}
           fps={FPS}
           width={VERTICAL_WIDTH}
           height={VERTICAL_HEIGHT}
           defaultProps={{
-            brand: 'fitnessmadeasy',
+            brand: 'fitness',
             hook: 'Try this morning stretch...',
             title: 'Wake Up Energized',
             points: [
@@ -184,14 +184,14 @@ export const RemotionRoot: React.FC = () => {
         />
 
         <Composition
-          id="FitnessMadeEasy-Gym"
+          id="FitOver35-Gym"
           component={ProfessionalVideo}
           durationInFrames={DURATION_SECONDS * FPS}
           fps={FPS}
           width={VERTICAL_WIDTH}
           height={VERTICAL_HEIGHT}
           defaultProps={{
-            brand: 'fitnessmadeasy',
+            brand: 'fitness',
             hook: 'Over 35? Try this...',
             title: 'Build Muscle After 35',
             points: [

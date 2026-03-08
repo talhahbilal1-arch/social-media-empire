@@ -47,8 +47,8 @@ BRAND_IMAGE_PROMPTS = {
             "Cozy home scene with decorative items candles and plants, lifestyle aesthetic, warm golden tones, Pinterest-worthy composition, vertical format",
         ],
     },
-    'fitnessmadeasy': {
-        'folder': 'fitnessmadeasy',
+    'fitness': {
+        'folder': 'fitness',
         'prompts': [
             "Fit woman over 35 doing ab exercises at home in living room, bright natural lighting, motivational fitness photography, athletic wear, vertical 9:16 format",
             "Athletic mature woman stretching in modern home setting, healthy lifestyle, natural light, empowering pose, vertical format, clean background",

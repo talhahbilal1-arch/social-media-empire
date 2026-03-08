@@ -7,7 +7,7 @@ This script posts a test video to each Pinterest account to verify:
 3. The multi-API-key setup works correctly
 
 Current setup:
-- fitnessmadeasy: 1uy77rvyo4c0mmr Pinterest -> "Fitness Goods" board (LATE_API_KEY_3)
+- fitness: 1uy77rvyo4c0mmr Pinterest -> "Fitness Goods" board (LATE_API_KEY_3)
 - menopause_planner: TheMenopausePlanner Pinterest -> "Menopause Wellness Tips" board (LATE_API_KEY_4)
 - daily_deal_darling: DISABLED (Pinterest not connected)
 
@@ -37,7 +37,7 @@ TEST_CONTENT = {
         "description": "Discover natural ways to manage menopause symptoms. These science-backed tips can help you feel better every day.",
         "hashtags": ["#menopause", "#wellness", "#womenshealth", "#naturalremedies", "#selfcare"]
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "title": "Quick 10-Minute Morning Workout",
         "description": "Start your day right with this energizing workout routine. No equipment needed - perfect for busy mornings!",
         "hashtags": ["#fitness", "#workout", "#morningroutine", "#exercise", "#healthylifestyle"]
@@ -119,7 +119,7 @@ def main():
 
     # Test each enabled brand
     results = {}
-    brands_to_test = ["menopause_planner", "fitnessmadeasy", "daily_deal_darling"]
+    brands_to_test = ["menopause_planner", "fitness", "daily_deal_darling"]
 
     for brand in brands_to_test:
         result = test_pinterest_account(brand, poster)
