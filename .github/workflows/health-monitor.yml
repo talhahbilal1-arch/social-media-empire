@@ -158,6 +158,44 @@ jobs:
           python -m agents.self_healer
         continue-on-error: true
 
+      - name: Run preventive validators
+        id: validators
+        run: |
+          python -c "
+          import sys, json
+          sys.path.insert(0, '.')
+          from monitoring.validators import run_all
+
+          results = run_all()
+          errors = []
+          for r in results:
+              for e in r.errors:
+                  errors.append(f'{r.name}: {e}')
+              for w in r.warnings:
+                  print(f'  WARN: {r.name}: {w}')
+
+          if errors:
+              print(f'\n=== Validation Errors ({len(errors)}) ===')
+              for e in errors:
+                  print(f'  ERROR: {e}')
+              # Log to database so self-healer can track it
+              try:
+                  from database.supabase_client import get_supabase_client
+                  from datetime import datetime
+                  db = get_supabase_client()
+                  db.client.table('analytics').insert({
+                      'event_type': 'validation_failure',
+                      'brand': 'system',
+                      'platform': 'all',
+                      'data': {'errors': errors, 'timestamp': datetime.utcnow().isoformat()}
+                  }).execute()
+              except Exception:
+                  pass
+          else:
+              print('All validators passed')
+          "
+        continue-on-error: true
+
       - name: Self-healing — comprehensive auto-fix
         id: heal
         env:
