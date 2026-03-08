@@ -879,7 +879,7 @@ P.S. Use code NURSELIFE for 15% off this week!
             }
         ]
     },
-    "fitover35": {
+    "fitness": {
         "name": "Fit Over 35",
         "from_name": "Fit Over 35",
         "from_email": "hello@fitover35.com",

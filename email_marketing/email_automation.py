@@ -284,7 +284,7 @@ FORM_CONFIGS = {
             "placeholder": "Your email"
         }
     },
-    "fitover35": {
+    "fitness": {
         "popup": {
             "title": "Free 12-Week Workout Program",
             "subtitle": "Build real strength after 35 with our proven 3-phase program",
@@ -311,7 +311,7 @@ def generate_form_html(brand: str, form_type: str = "inline") -> str:
         "menopause_planner": {"primary": "#9C27B0", "secondary": "#E1BEE7"},
         "nurse_planner": {"primary": "#00BCD4", "secondary": "#B2EBF2"},
         "adhd_planner": {"primary": "#FF9800", "secondary": "#FFE0B2"},
-        "fitover35": {"primary": "#e94560", "secondary": "#1a1a2e"}
+        "fitness": {"primary": "#e94560", "secondary": "#1a1a2e"}
     }
     colors = brand_colors.get(brand, brand_colors["daily_deal_darling"])
 

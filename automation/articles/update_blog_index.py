@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 # Brand configurations
 BRANDS = {
-    "fitover35": {
+    "fitness": {
         "blog_path": "outputs/fitover35-website/blog.html",
         "insert_marker": '<div class="blog-list">',
         "template": "fitover35",
@@ -117,7 +117,7 @@ def update_blog_html(
     excerpt: str,
     read_time: int,
     image_url: str,
-    brand: str = "fitover35",
+    brand: str = "fitness",
 ) -> bool:
     """
     Update the blog listing page with a new article entry.
@@ -133,7 +133,7 @@ def update_blog_html(
         excerpt: Short description/excerpt
         read_time: Estimated read time in minutes
         image_url: URL for the article thumbnail/hero image
-        brand: Brand identifier ("fitover35" or "dailydealdarling")
+        brand: Brand identifier ("fitness" or "dailydealdarling")
 
     Returns:
         True if update was successful, False otherwise
@@ -153,7 +153,7 @@ def update_blog_html(
         return False
 
     # Generate the new blog item HTML
-    if brand == "fitover35":
+    if brand == "fitness":
         new_item = generate_fitover35_blog_item(
             article_path, title, category, excerpt, read_time, image_url
         )
@@ -201,7 +201,7 @@ def main():
     parser.add_argument(
         '--brand',
         required=True,
-        choices=['fitover35', 'dailydealdarling'],
+        choices=['fitness', 'dailydealdarling'],
         help='Brand to update'
     )
     parser.add_argument(
