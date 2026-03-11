@@ -1508,6 +1508,77 @@ def _escape_attr(text: str) -> str:
             .replace('>', '&gt;'))
 
 
+# ── Post-generation affiliate link validation ─────────────────────────────────
+
+
+def validate_affiliate_links(html_file_path: str) -> None:
+    """Check that affiliate links in a generated article resolve to valid Amazon pages.
+
+    This is a best-effort check — it will never raise or block the pipeline.
+    Warnings are logged for any ASIN whose product page returns an error or
+    redirects to an Amazon error/dog page.
+    """
+    try:
+        import time
+        from pathlib import Path
+        from automation.links.extract_asins import extract_asins_from_file
+
+        extracted = extract_asins_from_file(Path(html_file_path))
+        if not extracted:
+            logger.info("Affiliate link validation: no ASINs found in generated file.")
+            return
+
+        # Deduplicate ASINs while preserving first-seen order
+        seen: set[str] = set()
+        unique_asins: list[str] = []
+        for link in extracted:
+            if link.asin not in seen:
+                seen.add(link.asin)
+                unique_asins.append(link.asin)
+
+        logger.info(f"Validating {len(unique_asins)} unique affiliate ASIN(s)...")
+
+        headers = {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/124.0.0.0 Safari/537.36"
+            ),
+        }
+
+        bad_asins: list[str] = []
+        for idx, asin in enumerate(unique_asins):
+            if idx > 0:
+                time.sleep(1)  # rate limit
+
+            url = f"https://www.amazon.com/dp/{asin}"
+            try:
+                resp = requests.head(
+                    url, headers=headers, timeout=10, allow_redirects=True
+                )
+                final_url = resp.url if hasattr(resp, "url") else ""
+                if resp.status_code >= 400 or "/errors/" in final_url or "dogsofamazon" in final_url:
+                    logger.warning(
+                        f"Affiliate link may be broken: ASIN {asin} — "
+                        f"HTTP {resp.status_code}, final URL: {final_url}"
+                    )
+                    bad_asins.append(asin)
+            except requests.RequestException as exc:
+                logger.warning(f"Could not validate ASIN {asin}: {exc}")
+                bad_asins.append(asin)
+
+        if not bad_asins:
+            logger.info("All affiliate links validated successfully.")
+        else:
+            logger.warning(
+                f"{len(bad_asins)}/{len(unique_asins)} affiliate link(s) may be broken: "
+                f"{', '.join(bad_asins)}"
+            )
+
+    except Exception as exc:
+        logger.warning(f"Affiliate link validation skipped due to error: {exc}")
+
+
 # ── Main CLI ─────────────────────────────────────────────────────────────────
 
 def main():
@@ -1568,6 +1639,9 @@ def main():
     # Write file
     output_path.write_text(html, encoding='utf-8')
     logger.info(f"Article written to: {output_path}")
+
+    # Validate affiliate links in the generated file
+    validate_affiliate_links(str(output_path))
 
     # Output summary
     print(f"\n{'='*60}")

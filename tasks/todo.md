@@ -87,3 +87,33 @@ Design Direction: Moved from generic pink/red template to editorial magazine aes
 - [ ] Deploy subdomain sites
 - [ ] Build Pinterest Analytics
 - [ ] List remaining Etsy products
+
+---
+
+## Affiliate Link Health Check System (March 11, 2026)
+
+### Status: COMPLETE
+
+### Step 1 — Create `automation/links/check_links.py`
+- [x] Create standalone link checker that reuses `extract_asins.py`
+- [x] HTTP HEAD check for ASIN-based URLs (no API key needed)
+- [x] Optional Rainforest API verification if `RAINFOREST_API_KEY` is set
+- [x] Output JSON report + markdown summary
+- [x] Exit code 1 if broken links found
+
+### Step 2 — Create `.github/workflows/check-affiliate-links.yml`
+- [x] Weekly cron (Monday 8 AM UTC) + manual `workflow_dispatch`
+- [x] Runs `check_links.py` against both website directories
+- [x] Auto-creates GitHub issue if broken links found
+
+### Step 3 — Add pre-publish validation to article generators
+- [x] Add `validate_affiliate_links()` to `fitover35_article_generator.py`
+- [x] Add `validate_affiliate_links()` to `dailydealdarling_article_generator.py`
+- [x] Warn on broken links but don't block publishing
+
+### Review
+Changes made:
+1. **`automation/links/check_links.py`** (NEW, 407 lines) — Standalone CLI link checker. Reuses `extract_asins.py` for ASIN discovery and `verify_asins.py`'s `generate_github_issue_body()` for issue formatting. Two modes: HTTP HEAD (default, no API key) or Rainforest API (if `RAINFOREST_API_KEY` set). Outputs `link_report.json`, `link_report.md`, and `github_issue_body.md` to `automation/links/reports/`. 1s rate limit between HTTP requests.
+2. **`.github/workflows/check-affiliate-links.yml`** (NEW, 47 lines) — Weekly cron (Monday 8am UTC) + manual trigger. Scans both website dirs, auto-creates GitHub issue via `peter-evans/create-issue-from-file@v5` when broken links found, uploads reports as artifacts (30-day retention).
+3. **`automation/articles/fitover35_article_generator.py`** (MODIFIED) — Added `validate_affiliate_links()` function (~60 lines) before `main()`. Called after article HTML is written to disk. HTTP HEAD checks each ASIN with 1s rate limit, logs warnings for broken links. Never blocks the pipeline.
+4. **`automation/articles/dailydealdarling_article_generator.py`** (MODIFIED) — Same `validate_affiliate_links()` pattern as FitOver35. Added before `main()`, called after file write.
