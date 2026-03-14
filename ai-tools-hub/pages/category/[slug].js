@@ -3,7 +3,7 @@ import ToolCard from '../../components/ToolCard'
 import Link from 'next/link'
 import { getAllCategories, getCategoryBySlug, getToolsByCategory } from '../../lib/tools'
 
-const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
+const SITE_URL = 'https://pilottools.ai'
 
 export default function CategoryPage({ category, tools }) {
   if (!category) return null

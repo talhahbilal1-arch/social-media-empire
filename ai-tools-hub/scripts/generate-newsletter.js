@@ -13,7 +13,7 @@ const path = require('path')
 const https = require('https')
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
-const SITE_URL = 'https://toolpilot-hub.netlify.app'
+const SITE_URL = 'https://pilottools.ai'
 
 // Parse CLI args
 const args = process.argv.slice(2)

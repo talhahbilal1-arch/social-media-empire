@@ -8,7 +8,7 @@
 
 const https = require('https')
 
-const SITE_URL = 'https://ai-tools-hub-lilac.vercel.app'
+const SITE_URL = 'https://pilottools.ai'
 const SITEMAP_URL = `${SITE_URL}/sitemap.xml`
 
 function pingGoogle() {

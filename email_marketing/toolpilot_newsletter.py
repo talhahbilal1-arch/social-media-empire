@@ -51,7 +51,7 @@ def send_newsletter(newsletter_path: str) -> dict:
     <p style="font-size: 12px; color: #9ca3af; margin: 0;">
       You received this email because you subscribed to ToolPilot AI Weekly.<br>
       <a href="{{{{ unsubscribe_url }}}}" style="color: #6366f1;">Unsubscribe</a> |
-      <a href="https://toolpilot-hub.netlify.app" style="color: #6366f1;">Visit ToolPilot</a>
+      <a href="https://pilottools.ai" style="color: #6366f1;">Visit ToolPilot</a>
     </p>
   </div>
 </div>

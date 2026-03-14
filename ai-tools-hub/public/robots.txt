@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://ai-tools-hub-lilac.vercel.app/sitemap.xml
+Sitemap: https://pilottools.ai/sitemap.xml
