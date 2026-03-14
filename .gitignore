@@ -98,3 +98,4 @@ build/
 .venv/
 venv/
 .env
+*_keyword_state.json
