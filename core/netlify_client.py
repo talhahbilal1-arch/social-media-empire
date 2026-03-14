@@ -5,7 +5,7 @@ import os
 import json
 import hashlib
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Optional
 
 
@@ -107,7 +107,7 @@ class NetlifyClient:
                 'success': True,
                 'deploy_id': deploy_id,
                 'published_url': published_url,
-                'published_at': datetime.utcnow().isoformat()
+                'published_at': datetime.now(timezone.utc).isoformat()
             }
 
         except requests.exceptions.RequestException as e:
@@ -207,7 +207,7 @@ class NetlifyClient:
 
         <article>
             <h1>{title}</h1>
-            <p class="meta">Published {datetime.utcnow().strftime('%B %d, %Y')}</p>
+            <p class="meta">Published {datetime.now(timezone.utc).strftime('%B %d, %Y')}</p>
 
             {f'<img src="{featured_image}" alt="{title}" class="featured-image">' if featured_image else ''}
 
@@ -221,7 +221,7 @@ class NetlifyClient:
         </article>
 
         <footer>
-            <p>&copy; {datetime.utcnow().year} {brand_config.get('display_name', '')}. All rights reserved.</p>
+            <p>&copy; {datetime.now(timezone.utc).year} {brand_config.get('display_name', '')}. All rights reserved.</p>
             <p><a href="/privacy">Privacy Policy</a> | <a href="/affiliate-disclosure">Affiliate Disclosure</a></p>
         </footer>
     </div>

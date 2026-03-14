@@ -29,46 +29,23 @@ ROOT = Path(__file__).resolve().parent.parent
 # Brand Registry — THE single source of truth
 # ─────────────────────────────────────────────
 
+# Import from the single source of truth
+from core.brands import (
+    BRAND_REGISTRY as _BRAND_REGISTRY_OBJ,
+    ACTIVE_BRANDS,
+    DEPRECATED_ALIAS_MAP as STALE_ALIASES,
+)
+
+# Convert BrandConfig objects to dicts for backward compatibility with this module
 BRAND_REGISTRY = {
-    "daily_deal_darling": {
-        "active": True,
-        "aliases": [],  # No aliases — this is the canonical name
-        "content_bank_file": "deal_topics.json",
-        "display_name": "Daily Deal Darling",
-    },
-    "fitness": {
-        "active": True,
-        "aliases": ["fitover35"],  # Historical alias — flag if found in code
-        "content_bank_file": "fitness_topics.json",
-        "display_name": "Fitness Over 35",
-    },
-    "menopause_planner": {
-        "active": True,
-        "aliases": [],
-        "content_bank_file": "menopause_topics.json",
-        "display_name": "Menopause Planner",
-    },
-    "nurse_planner": {
-        "active": False,
-        "aliases": [],
-        "content_bank_file": None,
-        "display_name": "Nurse Planner",
-    },
-    "adhd_planner": {
-        "active": False,
-        "aliases": [],
-        "content_bank_file": None,
-        "display_name": "ADHD Planner",
-    },
+    name: {
+        "active": cfg.active,
+        "aliases": list(cfg.aliases),
+        "content_bank_file": cfg.content_bank_file,
+        "display_name": cfg.display_name,
+    }
+    for name, cfg in _BRAND_REGISTRY_OBJ.items()
 }
-
-ACTIVE_BRANDS = [b for b, cfg in BRAND_REGISTRY.items() if cfg["active"]]
-
-# All known aliases that should NOT appear in code (use canonical name instead)
-STALE_ALIASES = {}
-for brand, cfg in BRAND_REGISTRY.items():
-    for alias in cfg["aliases"]:
-        STALE_ALIASES[alias] = brand
 
 
 class ValidationResult:
@@ -495,6 +472,170 @@ def validate_syntax() -> ValidationResult:
 
 
 # ─────────────────────────────────────────────
+# Validator 6: Placeholder / Stub Detection
+# ─────────────────────────────────────────────
+
+def validate_placeholders() -> ValidationResult:
+    """Detect placeholder or stub code that shipped to production."""
+    result = ValidationResult("Placeholder Detection")
+
+    # Patterns that indicate unfinished code
+    PLACEHOLDER_PATTERNS = [
+        (r"#\s*(?:TODO|FIXME|HACK|XXX)\b", "TODO/FIXME comment"),
+        (r"(?:to be implemented|not yet implemented|placeholder)", "placeholder text"),
+        (r"\bpass\s*$", None),  # only flag bare `pass` inside non-empty functions (checked separately)
+    ]
+
+    # Only scan production code, not test files or this validator
+    this_file = Path(__file__).resolve()
+    scan_dirs = [
+        ROOT / "video_automation",
+        ROOT / "core",
+        ROOT / "agents",
+        ROOT / "database",
+        ROOT / "email_marketing",
+    ]
+
+    for scan_dir in scan_dirs:
+        if not scan_dir.exists():
+            continue
+        for fpath in scan_dir.rglob("*.py"):
+            if fpath.resolve() == this_file or "__pycache__" in str(fpath):
+                continue
+            try:
+                text = fpath.read_text()
+            except Exception:
+                continue
+
+            rel = fpath.relative_to(ROOT)
+            for line_num, line in enumerate(text.splitlines(), 1):
+                stripped = line.strip()
+                # Check for "to be implemented" or "placeholder" in non-comment lines
+                lower = stripped.lower()
+                if any(phrase in lower for phrase in [
+                    "to be implemented", "not yet implemented",
+                    "placeholder for", "stub for", "will be implemented",
+                ]):
+                    result.warn(f"Placeholder code in {rel}:{line_num}: {stripped[:80]}")
+
+    # Also check workflow files for stub steps
+    workflows_dir = ROOT / ".github" / "workflows"
+    if workflows_dir.exists():
+        for fpath in workflows_dir.glob("*.yml"):
+            text = fpath.read_text()
+            for line_num, line in enumerate(text.splitlines(), 1):
+                lower = line.strip().lower()
+                if any(phrase in lower for phrase in [
+                    "to be implemented", "placeholder",
+                    "stub", "will be implemented",
+                ]):
+                    result.warn(f"Placeholder in workflow {fpath.name}:{line_num}: {line.strip()[:80]}")
+
+    return result
+
+
+# ─────────────────────────────────────────────
+# Validator 7: Config Completeness
+# ─────────────────────────────────────────────
+
+def validate_config_completeness() -> ValidationResult:
+    """Check that env vars referenced in workflows exist in config.py."""
+    result = ValidationResult("Config Completeness")
+
+    config_path = ROOT / "utils" / "config.py"
+    if not config_path.exists():
+        result.error("utils/config.py not found")
+        return result
+
+    config_text = config_path.read_text()
+
+    # Extract all env var names that config.py loads via os.getenv()
+    config_env_vars = set(re.findall(r'os\.getenv\(["\'](\w+)["\']', config_text))
+
+    # Extract all secrets.XXX references from workflow files
+    workflows_dir = ROOT / ".github" / "workflows"
+    if not workflows_dir.exists():
+        return result
+
+    workflow_secrets: dict[str, list[str]] = {}  # env_var -> [workflow files]
+    for fpath in workflows_dir.glob("*.yml"):
+        # Skip archived workflows
+        if "archive" in str(fpath):
+            continue
+        text = fpath.read_text()
+        for match in re.finditer(r'secrets\.(\w+)', text):
+            secret = match.group(1)
+            # Skip GitHub's built-in secrets
+            if secret in ("GITHUB_TOKEN",):
+                continue
+            workflow_secrets.setdefault(secret, []).append(fpath.name)
+
+    # Check each workflow secret has a corresponding config.py entry
+    for secret, files in sorted(workflow_secrets.items()):
+        if secret not in config_env_vars:
+            file_list = ", ".join(sorted(set(files)))
+            result.warn(
+                f"Secret '{secret}' used in [{file_list}] but not loaded in config.py"
+            )
+
+    return result
+
+
+# ─────────────────────────────────────────────
+# Validator 8: Deprecated API Detection
+# ─────────────────────────────────────────────
+
+def validate_deprecated_apis() -> ValidationResult:
+    """Check for deprecated Python API usage that will break in future versions."""
+    result = ValidationResult("Deprecated API Check")
+
+    DEPRECATED_PATTERNS = [
+        (r"\bdatetime\.utcnow\(\)", "datetime.utcnow() is deprecated in Python 3.12+ — use datetime.now(timezone.utc)"),
+        (r"\bdatetime\.utcfromtimestamp\(", "datetime.utcfromtimestamp() is deprecated — use datetime.fromtimestamp(ts, tz=timezone.utc)"),
+    ]
+
+    scan_dirs = [
+        ROOT / "video_automation",
+        ROOT / "utils",
+        ROOT / "monitoring",
+        ROOT / "database",
+        ROOT / "email_marketing",
+        ROOT / "agents",
+        ROOT / "core",
+    ]
+
+    this_file = Path(__file__).resolve()
+    for scan_dir in scan_dirs:
+        if not scan_dir.exists():
+            continue
+        for fpath in scan_dir.rglob("*.py"):
+            if fpath.resolve() == this_file or "__pycache__" in str(fpath):
+                continue
+            try:
+                text = fpath.read_text()
+            except Exception:
+                continue
+
+            rel = fpath.relative_to(ROOT)
+            for line_num, line in enumerate(text.splitlines(), 1):
+                for pattern, message in DEPRECATED_PATTERNS:
+                    if re.search(pattern, line):
+                        result.warn(f"{rel}:{line_num} — {message}")
+
+    # Also scan workflow inline Python
+    workflows_dir = ROOT / ".github" / "workflows"
+    if workflows_dir.exists():
+        for fpath in workflows_dir.glob("*.yml"):
+            text = fpath.read_text()
+            for line_num, line in enumerate(text.splitlines(), 1):
+                for pattern, message in DEPRECATED_PATTERNS:
+                    if re.search(pattern, line):
+                        result.warn(f"Workflow {fpath.name}:{line_num} — {message}")
+
+    return result
+
+
+# ─────────────────────────────────────────────
 # Run all validators
 # ─────────────────────────────────────────────
 
@@ -506,6 +647,9 @@ def run_all(auto_fix: bool = False, checks: Optional[list[str]] = None) -> list[
         "schema": validate_schema,
         "workflows": validate_workflows,
         "syntax": validate_syntax,
+        "placeholders": validate_placeholders,
+        "config": validate_config_completeness,
+        "deprecated": validate_deprecated_apis,
     }
 
     if checks:

@@ -14,7 +14,7 @@ Saves to analytics table for Self-Improvement agent to analyze.
 import os
 import sys
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 
 # Add parent directory to path for imports
@@ -134,7 +134,7 @@ class AnalyticsCollector:
             'shares': 0,
             'saves': 0,
             'clicks': 0,
-            'recorded_at': datetime.utcnow().isoformat()
+            'recorded_at': datetime.now(timezone.utc).isoformat()
         }
 
     def _collect_youtube(self, post: Dict) -> Optional[Dict]:
@@ -176,7 +176,7 @@ class AnalyticsCollector:
                     'shares': 0,
                     'saves': 0,
                     'clicks': 0,
-                    'recorded_at': datetime.utcnow().isoformat()
+                    'recorded_at': datetime.now(timezone.utc).isoformat()
                 }
         except Exception as e:
             print(f"  YouTube API error: {e}")
@@ -202,7 +202,7 @@ class AnalyticsCollector:
             'shares': 0,
             'saves': 0,
             'clicks': 0,
-            'recorded_at': datetime.utcnow().isoformat()
+            'recorded_at': datetime.now(timezone.utc).isoformat()
         }
 
     def _collect_instagram(self, post: Dict) -> Optional[Dict]:
@@ -222,7 +222,7 @@ class AnalyticsCollector:
             'shares': 0,
             'saves': 0,
             'clicks': 0,
-            'recorded_at': datetime.utcnow().isoformat()
+            'recorded_at': datetime.now(timezone.utc).isoformat()
         }
 
     def _update_daily_aggregates(self) -> None:
@@ -234,7 +234,7 @@ class AnalyticsCollector:
 
 def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Analytics Collector at {datetime.utcnow().isoformat()}")
+    print(f"Starting Analytics Collector at {datetime.now(timezone.utc).isoformat()}")
 
     collector = AnalyticsCollector()
     results = collector.run()

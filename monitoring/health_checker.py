@@ -40,6 +40,7 @@ class HealthChecker:
             self.check_pexels_video(),
             self.check_creatomate(),
             self.check_resend(),
+            self.check_email_delivery(),
             self.check_convertkit(),
             self.check_youtube(),
             self.check_make_webhook_deals(),
@@ -342,6 +343,50 @@ class HealthChecker:
                 service="resend",
                 status="unhealthy",
                 error=str(e)
+            )
+
+    def check_email_delivery(self) -> HealthCheckResult:
+        """Verify email delivery is possible through at least one transport.
+
+        Checks that either Resend or Gmail SMTP credentials are fully configured,
+        so alert emails can actually be sent when needed.
+        """
+        import os
+        config = get_config()
+
+        resend_ok = bool(config.resend_api_key and config.alert_email)
+        smtp_ok = bool(
+            os.environ.get("ALERT_EMAIL_FROM")
+            and os.environ.get("ALERT_EMAIL_PASSWORD")
+            and os.environ.get("ALERT_EMAIL_TO")
+        )
+
+        if resend_ok and smtp_ok:
+            return HealthCheckResult(
+                service="email_delivery",
+                status="healthy",
+                details={"resend": True, "smtp": True, "transports": 2}
+            )
+        elif resend_ok:
+            return HealthCheckResult(
+                service="email_delivery",
+                status="healthy",
+                details={"resend": True, "smtp": False, "transports": 1}
+            )
+        elif smtp_ok:
+            return HealthCheckResult(
+                service="email_delivery",
+                status="degraded",
+                error="Only Gmail SMTP configured — Resend (primary) is missing",
+                details={"resend": False, "smtp": True, "transports": 1}
+            )
+        else:
+            return HealthCheckResult(
+                service="email_delivery",
+                status="unhealthy",
+                error="No email transport configured — alerts cannot be sent. "
+                      "Set RESEND_API_KEY + ALERT_EMAIL, or ALERT_EMAIL_FROM/PASSWORD/TO",
+                details={"resend": False, "smtp": False, "transports": 0}
             )
 
     def check_convertkit(self) -> HealthCheckResult:

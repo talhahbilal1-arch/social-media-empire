@@ -57,7 +57,7 @@ jobs:
         run: |
           python -c "
           import os, sys, json, requests, time
-          from datetime import datetime
+          from datetime import datetime, timezone
 
           dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
           post_type = os.environ.get('POST_TYPE', 'both')
@@ -178,7 +178,7 @@ jobs:
 
           # Run tests
           print('=' * 60)
-          print(f'PINTEREST POSTING TEST - {datetime.utcnow().strftime(\"%Y-%m-%d %H:%M UTC\")}')
+          print(f'PINTEREST POSTING TEST - {datetime.now(timezone.utc).strftime(\"%Y-%m-%d %H:%M UTC\")}')
           print(f'Mode: {post_type} | Dry run: {dry_run}')
           print('=' * 60)
 

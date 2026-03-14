@@ -181,13 +181,13 @@ jobs:
               # Log to database so self-healer can track it
               try:
                   from database.supabase_client import get_supabase_client
-                  from datetime import datetime
+                  from datetime import datetime, timezone
                   db = get_supabase_client()
                   db.client.table('analytics').insert({
                       'event_type': 'validation_failure',
                       'brand': 'system',
                       'platform': 'all',
-                      'data': {'errors': errors, 'timestamp': datetime.utcnow().isoformat()}
+                      'data': {'errors': errors, 'timestamp': datetime.now(timezone.utc).isoformat()}
                   }).execute()
               except Exception:
                   pass
@@ -215,7 +215,7 @@ jobs:
           python -c "
           import sys, json, os, subprocess
           sys.path.insert(0, '.')
-          from datetime import datetime, timedelta
+          from datetime import datetime, timedelta, timezone
           import requests
 
           healed = 0
@@ -240,9 +240,9 @@ jobs:
                   try:
                       db.client.table('agent_runs').upsert({
                           'agent_name': agent,
-                          'last_run_at': datetime.utcnow().isoformat(),
+                          'last_run_at': datetime.now(timezone.utc).isoformat(),
                           'status': 'success',
-                          'updated_at': datetime.utcnow().isoformat()
+                          'updated_at': datetime.now(timezone.utc).isoformat()
                       }, on_conflict='agent_name').execute()
                       healed += 1
                   except Exception as e:
@@ -276,7 +276,7 @@ jobs:
                           if should_resolve:
                               db.client.table('errors').update({
                                   'resolved': True,
-                                  'resolved_at': datetime.utcnow().isoformat(),
+                                  'resolved_at': datetime.now(timezone.utc).isoformat(),
                                   'resolution_notes': 'Auto-resolved by self-healing'
                               }).eq('id', err['id']).execute()
                               resolved_count += 1
@@ -333,7 +333,7 @@ jobs:
                   tiktok_url = os.environ.get('SUPABASE_TIKTOK_URL') or os.environ.get('SUPABASE_URL', '')
                   tiktok_key = os.environ.get('SUPABASE_TIKTOK_KEY') or os.environ.get('SUPABASE_KEY', '')
                   if tiktok_url and tiktok_key:
-                      cutoff_24h = (datetime.utcnow() - timedelta(hours=24)).isoformat() + 'Z'
+                      cutoff_24h = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat() + 'Z'
                       resp = requests.get(
                           f'{tiktok_url}/rest/v1/tiktok_queue',
                           headers={'apikey': tiktok_key, 'Authorization': f'Bearer {tiktok_key}'},
@@ -374,10 +374,10 @@ jobs:
               # ── Phase 7: Cleanup old data ──
               print('\n=== Phase 7: Cleanup ===')
               try:
-                  cutoff_30d = (datetime.utcnow() - timedelta(days=30)).isoformat()
+                  cutoff_30d = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
                   db.client.table('errors').delete() \
                       .eq('resolved', True).lt('created_at', cutoff_30d).execute()
-                  cutoff_90d = (datetime.utcnow() - timedelta(days=90)).isoformat()
+                  cutoff_90d = (datetime.now(timezone.utc) - timedelta(days=90)).isoformat()
                   db.client.table('analytics').delete() \
                       .lt('created_at', cutoff_90d).execute()
                   print('  Cleaned old errors (30d) and analytics (90d)')
@@ -394,7 +394,7 @@ jobs:
                           'issues_healed': healed,
                           'unresolvable_count': len(unresolvable),
                           'health_status': os.environ.get('HEALTH_STATUS', 'unknown'),
-                          'timestamp': datetime.utcnow().isoformat()
+                          'timestamp': datetime.now(timezone.utc).isoformat()
                       }
                   }).execute()
               except Exception as e:
@@ -435,7 +435,7 @@ jobs:
 
                       # Update tracker
                       db.client.table('analytics').update({
-                          'data': {'attempt': attempt, 'issues': unresolvable, 'last_seen': datetime.utcnow().isoformat()}
+                          'data': {'attempt': attempt, 'issues': unresolvable, 'last_seen': datetime.now(timezone.utc).isoformat()}
                       }).eq('id', tracker.data[0]['id']).execute()
 
                       if attempt >= RETRY_THRESHOLD:
@@ -443,7 +443,7 @@ jobs:
                           print(f'  Attempt {attempt}/{RETRY_THRESHOLD} — NOTIFYING owner')
                           # Reset counter after notifying
                           db.client.table('analytics').update({
-                              'data': {'attempt': 0, 'issues': unresolvable, 'notified_at': datetime.utcnow().isoformat()}
+                              'data': {'attempt': 0, 'issues': unresolvable, 'notified_at': datetime.now(timezone.utc).isoformat()}
                           }).eq('id', tracker.data[0]['id']).execute()
                       else:
                           print(f'  Attempt {attempt}/{RETRY_THRESHOLD} — will keep trying before notifying')
@@ -453,7 +453,7 @@ jobs:
                           'event_type': 'unresolvable_tracker',
                           'brand': 'system',
                           'platform': 'all',
-                          'data': {'attempt': 1, 'issues': unresolvable, 'last_seen': datetime.utcnow().isoformat()}
+                          'data': {'attempt': 1, 'issues': unresolvable, 'last_seen': datetime.now(timezone.utc).isoformat()}
                       }).execute()
                       print(f'  Attempt 1/{RETRY_THRESHOLD} — will keep trying before notifying')
               except Exception as e:
@@ -468,7 +468,7 @@ jobs:
                       .eq('brand', 'system').limit(1).execute()
                   if tracker.data:
                       db.client.table('analytics').update({
-                          'data': {'attempt': 0, 'issues': [], 'cleared_at': datetime.utcnow().isoformat()}
+                          'data': {'attempt': 0, 'issues': [], 'cleared_at': datetime.now(timezone.utc).isoformat()}
                       }).eq('id', tracker.data[0]['id']).execute()
               except:
                   pass

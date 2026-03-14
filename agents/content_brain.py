@@ -13,7 +13,7 @@ Outputs to content_bank table for Video Factory and Multi-Platform Poster.
 import os
 import sys
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Optional
 
 # Add parent directory to path for imports
@@ -446,7 +446,7 @@ Return a JSON array of exactly {count} items. Each must be unique and engaging."
             'status': 'pending',
             'performance_score': 0,
             'metadata': {
-                'generated_at': datetime.utcnow().isoformat(),
+                'generated_at': datetime.now(timezone.utc).isoformat(),
                 'generator': 'content_brain_v1'
             }
         }
@@ -473,7 +473,7 @@ Return a JSON array of exactly {count} items. Each must be unique and engaging."
 
 def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Content Brain at {datetime.utcnow().isoformat()}")
+    print(f"Starting Content Brain at {datetime.now(timezone.utc).isoformat()}")
 
     brain = ContentBrain()
     results = brain.run()

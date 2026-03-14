@@ -42,6 +42,10 @@ class Config:
     late_api_key_3: str = ""    # fitness (fallback)
     late_api_key_4: str = ""    # menopause_planner
 
+    # Late API keys (alternate naming used by video-factory)
+    late_api_key_ddd: str = ""   # daily_deal_darling (alias for late_api_key_2)
+    late_api_key_meno: str = ""  # menopause_planner (alias for late_api_key_4)
+
     # Pinterest account/board IDs (per brand)
     pinterest_fitness_account_id: str = ""
     pinterest_fitness_board_id: str = ""
@@ -49,21 +53,40 @@ class Config:
     pinterest_deals_board_id: str = ""
     pinterest_menopause_account_id: str = ""
     pinterest_menopause_board_id: str = ""
+    # Alternate naming used by video-factory/test-pinterest-now
+    pinterest_ddd_account_id: str = ""
+    pinterest_ddd_board_id: str = ""
+    pinterest_meno_account_id: str = ""
+    pinterest_meno_board_id: str = ""
 
     # TikTok / Audio
     elevenlabs_api_key: str = ""
     supabase_tiktok_url: str = ""
     supabase_tiktok_key: str = ""
 
-    # Deployment
+    # Deployment — Netlify
     netlify_api_token: str = ""
     netlify_site_id: str = ""
+
+    # Deployment — Vercel (website hosting)
+    vercel_brand_token: str = ""
+    vercel_org_id: str = ""
+    vercel_deals_project_id: str = ""
+    vercel_fitover35_project_id: str = ""
+    vercel_menopause_project_id: str = ""
+
+    # YouTube Analytics
+    youtube_api_key: str = ""
 
     # GitHub
     github_token: str = ""
 
     # Notifications
     alert_email: str = ""
+    # Gmail SMTP (legacy fallback for core/notifications.py)
+    alert_email_from: str = ""
+    alert_email_password: str = ""
+    alert_email_to: str = ""
 
     # Brands configuration (active Pinterest brands)
     # Note: per-brand video counts and posting slots are in cross_platform_poster.py
@@ -131,21 +154,41 @@ class Config:
             pinterest_deals_board_id=os.getenv("PINTEREST_DEALS_BOARD_ID", ""),
             pinterest_menopause_account_id=os.getenv("PINTEREST_MENOPAUSE_ACCOUNT_ID", ""),
             pinterest_menopause_board_id=os.getenv("PINTEREST_MENOPAUSE_BOARD_ID", ""),
+            # Alternate naming used by video-factory/test-pinterest-now
+            late_api_key_ddd=os.getenv("LATE_API_KEY_DDD", "") or os.getenv("LATE_API_KEY_2", ""),
+            late_api_key_meno=os.getenv("LATE_API_KEY_MENO", "") or os.getenv("LATE_API_KEY_4", ""),
+            pinterest_ddd_account_id=os.getenv("PINTEREST_DDD_ACCOUNT_ID", "") or os.getenv("PINTEREST_DEALS_ACCOUNT_ID", ""),
+            pinterest_ddd_board_id=os.getenv("PINTEREST_DDD_BOARD_ID", "") or os.getenv("PINTEREST_DEALS_BOARD_ID", ""),
+            pinterest_meno_account_id=os.getenv("PINTEREST_MENO_ACCOUNT_ID", "") or os.getenv("PINTEREST_MENOPAUSE_ACCOUNT_ID", ""),
+            pinterest_meno_board_id=os.getenv("PINTEREST_MENO_BOARD_ID", "") or os.getenv("PINTEREST_MENOPAUSE_BOARD_ID", ""),
 
             # TikTok / Audio
             elevenlabs_api_key=os.getenv("ELEVENLABS_API_KEY", ""),
             supabase_tiktok_url=os.getenv("SUPABASE_TIKTOK_URL", "") or os.getenv("SUPABASE_URL", ""),
             supabase_tiktok_key=os.getenv("SUPABASE_TIKTOK_KEY", "") or os.getenv("SUPABASE_KEY", ""),
 
-            # Deployment
+            # Deployment — Netlify
             netlify_api_token=os.getenv("NETLIFY_API_TOKEN", ""),
-            netlify_site_id=os.getenv("NETLIFY_SITE_ID", "616e7bf4-fe47-495b-b13e-934e51546d4c"),
+            netlify_site_id=os.getenv("NETLIFY_SITE_ID", ""),
+
+            # Deployment — Vercel
+            vercel_brand_token=os.getenv("VERCEL_BRAND_TOKEN", ""),
+            vercel_org_id=os.getenv("VERCEL_ORG_ID", ""),
+            vercel_deals_project_id=os.getenv("VERCEL_DEALS_PROJECT_ID", ""),
+            vercel_fitover35_project_id=os.getenv("VERCEL_FITOVER35_PROJECT_ID", ""),
+            vercel_menopause_project_id=os.getenv("VERCEL_MENOPAUSE_PROJECT_ID", ""),
+
+            # YouTube Analytics
+            youtube_api_key=os.getenv("YOUTUBE_API_KEY", ""),
 
             # GitHub
             github_token=os.getenv("GITHUB_TOKEN", "") or os.getenv("GH_TOKEN", ""),
 
             # Notifications
             alert_email=os.getenv("ALERT_EMAIL", ""),
+            alert_email_from=os.getenv("ALERT_EMAIL_FROM", ""),
+            alert_email_password=os.getenv("ALERT_EMAIL_PASSWORD", ""),
+            alert_email_to=os.getenv("ALERT_EMAIL_TO", ""),
         )
 
     def validate(self) -> list[str]:

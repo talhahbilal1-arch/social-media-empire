@@ -51,6 +51,7 @@ jobs:
 
           sys.path.insert(0, '.')
           from database.supabase_client import get_supabase_client
+          from core.brands import ACTIVE_BRANDS, get_brand_aliases
 
           db = get_supabase_client()
           today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
@@ -162,16 +163,12 @@ jobs:
               problems.append('One or more posting services are down or misconfigured')
 
           # Check if specific brands are completely missing
-          # Use canonical brand names as stored in content_history
-          EXPECTED_BRANDS = {
-              'fitness': ['fitness'],
-              'daily_deal_darling': ['daily_deal_darling', 'deals'],
-              'menopause_planner': ['menopause_planner', 'menopause'],
-          }
-          for canonical, aliases in EXPECTED_BRANDS.items():
-              total = sum(brand_counts.get(a, 0) for a in aliases)
+          # Uses core/brands.py as the single source of truth
+          for brand in ACTIVE_BRANDS:
+              all_names = get_brand_aliases(brand)
+              total = sum(brand_counts.get(a, 0) for a in all_names)
               if total == 0:
-                  problems.append(f'ZERO pins for {canonical} today')
+                  problems.append(f'ZERO pins for {brand} today')
 
           if not problems:
               print(f'\n=== ALL GOOD: {len(today_pins)} pins posted, all services healthy ===')

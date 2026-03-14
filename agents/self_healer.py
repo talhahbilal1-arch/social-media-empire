@@ -26,7 +26,7 @@ import sys
 import json
 import time
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Callable, Any
 
 # Add parent directory to path for imports
@@ -79,7 +79,7 @@ class SelfHealer:
         for any issues found, and only sends email alerts when consecutive
         failures reach 10 or a critical agent has been down 48+ hours.
         """
-        print(f"Running self-healer at {datetime.utcnow().isoformat()}")
+        print(f"Running self-healer at {datetime.now(timezone.utc).isoformat()}")
 
         results = {
             'status': 'healthy',
@@ -181,7 +181,7 @@ class SelfHealer:
         and error_message.
         """
         issues = []
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         for agent_name in self.AGENT_WORKFLOW_MAP.keys():
             last_run = self.db.get_last_agent_run(agent_name)
@@ -461,7 +461,7 @@ class SelfHealer:
                     'heal_success': success,
                     'heal_details': details,
                     'healed_by': 'self_healer',
-                    'timestamp': datetime.utcnow().isoformat()
+                    'timestamp': datetime.now(timezone.utc).isoformat()
                 }
             })
         except Exception as e:
@@ -487,7 +487,7 @@ class SelfHealer:
                 last_run_time = datetime.fromisoformat(
                     last_run['started_at'].replace('Z', '+00:00')
                 ).replace(tzinfo=None)
-                hours_since = (datetime.utcnow() - last_run_time).total_seconds() / 3600
+                hours_since = (datetime.now(timezone.utc) - last_run_time).total_seconds() / 3600
                 if hours_since >= 48:
                     return True
 
@@ -582,7 +582,7 @@ logs and Supabase dashboard for more details.
 
 def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Self-Healer at {datetime.utcnow().isoformat()}")
+    print(f"Starting Self-Healer at {datetime.now(timezone.utc).isoformat()}")
 
     healer = SelfHealer()
     results = healer.run()

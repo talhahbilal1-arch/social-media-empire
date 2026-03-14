@@ -16,7 +16,7 @@ import os
 import sys
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
 import requests
 
@@ -439,7 +439,7 @@ class VideoFactory:
                         'platform_post_id': post_id,
                         'video_url': video_url,
                         'status': 'posted',
-                        'posted_at': datetime.utcnow().isoformat()
+                        'posted_at': datetime.now(timezone.utc).isoformat()
                     })
                 except Exception as e:
                     print(f"  DB log error: {e}")
@@ -483,7 +483,7 @@ class VideoFactory:
 
 def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Video Factory at {datetime.utcnow().isoformat()}")
+    print(f"Starting Video Factory at {datetime.now(timezone.utc).isoformat()}")
 
     factory = VideoFactory()
     results = factory.run()

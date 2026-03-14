@@ -19,7 +19,7 @@ Logs all changes for audit trail.
 import os
 import sys
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 
 # Add parent directory to path for imports
@@ -334,7 +334,7 @@ Review the system_changes table for full details.
 
 def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Self-Improvement Engine at {datetime.utcnow().isoformat()}")
+    print(f"Starting Self-Improvement Engine at {datetime.now(timezone.utc).isoformat()}")
 
     engine = SelfImprovementEngine()
     results = engine.run()

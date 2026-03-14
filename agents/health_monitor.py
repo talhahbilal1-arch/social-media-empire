@@ -15,7 +15,7 @@ Silence = everything is working.
 import os
 import sys
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Tuple
 import requests
 
@@ -55,7 +55,7 @@ class HealthMonitor:
 
     def run(self) -> Dict:
         """Run all health checks."""
-        print(f"Running health check at {datetime.utcnow().isoformat()}")
+        print(f"Running health check at {datetime.now(timezone.utc).isoformat()}")
 
         results = {
             'status': 'healthy',
@@ -110,7 +110,7 @@ class HealthMonitor:
     def _check_agent_runs(self) -> Dict:
         """Check if all agents ran successfully on schedule."""
         result = {'agents': {}, 'missed_runs': [], 'failed_runs': []}
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         for agent_name, schedule in self.AGENT_SCHEDULES.items():
             # Get last run
@@ -161,9 +161,9 @@ class HealthMonitor:
 
         # Check Supabase (already connected via self.db)
         try:
-            start = datetime.utcnow()
+            start = datetime.now(timezone.utc)
             brands = self.db.get_active_brands()
-            duration = (datetime.utcnow() - start).total_seconds() * 1000
+            duration = (datetime.now(timezone.utc) - start).total_seconds() * 1000
             result['apis']['supabase'] = {
                 'status': 'connected',
                 'response_time_ms': round(duration),
@@ -188,14 +188,14 @@ class HealthMonitor:
         claude_api_key = os.environ.get('ANTHROPIC_API_KEY')
         if claude_api_key:
             try:
-                start = datetime.utcnow()
+                start = datetime.now(timezone.utc)
                 # Just check if we can reach the API
                 response = requests.get(
                     "https://api.anthropic.com/v1/messages",
                     headers={"x-api-key": claude_api_key, "anthropic-version": "2023-06-01"},
                     timeout=10
                 )
-                duration = (datetime.utcnow() - start).total_seconds() * 1000
+                duration = (datetime.now(timezone.utc) - start).total_seconds() * 1000
                 # 401 is expected for GET, 405 means server is responding
                 result['apis']['claude'] = {
                     'status': 'connected' if response.status_code in [401, 405] else 'unknown',
@@ -284,7 +284,7 @@ class HealthMonitor:
             if old_pending:
                 oldest = min(datetime.fromisoformat(p['created_at'].replace('Z', '+00:00')).replace(tzinfo=None)
                             for p in old_pending)
-                hours_old = (datetime.utcnow() - oldest).total_seconds() / 3600
+                hours_old = (datetime.now(timezone.utc) - oldest).total_seconds() / 3600
                 brand_result['oldest_pending_hours'] = round(hours_old)
 
                 if hours_old > self.THRESHOLDS['max_hours_without_content']:
@@ -403,7 +403,7 @@ class HealthMonitor:
                     last_run_time = datetime.fromisoformat(
                         last_run['started_at'].replace('Z', '+00:00')
                     ).replace(tzinfo=None)
-                    hours_down = (datetime.utcnow() - last_run_time).total_seconds() / 3600
+                    hours_down = (datetime.now(timezone.utc) - last_run_time).total_seconds() / 3600
             except Exception:
                 pass
 
@@ -422,7 +422,7 @@ class HealthMonitor:
 
 def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Health Monitor at {datetime.utcnow().isoformat()}")
+    print(f"Starting Health Monitor at {datetime.now(timezone.utc).isoformat()}")
 
     monitor = HealthMonitor()
     results = monitor.run()

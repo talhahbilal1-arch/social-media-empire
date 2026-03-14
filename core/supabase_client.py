@@ -2,7 +2,7 @@
 Supabase Client - Database operations for all agents
 """
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, List, Dict, Any
 from supabase import create_client, Client
 
@@ -54,7 +54,7 @@ class SupabaseClient:
         response = self.client.table('trending_discoveries').select('*')\
             .eq('brand_id', brand_id)\
             .eq('used', False)\
-            .gt('expires_at', datetime.utcnow().isoformat())\
+            .gt('expires_at', datetime.now(timezone.utc).isoformat())\
             .order('relevance_score', desc=True)\
             .order('discovered_at', desc=True)\
             .limit(limit)\
@@ -65,12 +65,12 @@ class SupabaseClient:
         """Mark a trend as used."""
         self.client.table('trending_discoveries').update({
             'used': True,
-            'used_at': datetime.utcnow().isoformat()
+            'used_at': datetime.now(timezone.utc).isoformat()
         }).eq('id', trend_id).execute()
 
     def cleanup_expired_trends(self) -> int:
         """Delete trends older than 14 days."""
-        cutoff = (datetime.utcnow() - timedelta(days=14)).isoformat()
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=14)).isoformat()
         response = self.client.table('trending_discoveries')\
             .delete()\
             .lt('discovered_at', cutoff)\
@@ -137,7 +137,7 @@ class SupabaseClient:
         """Update content status."""
         self.client.table('content_bank').update({
             'status': status,
-            'updated_at': datetime.utcnow().isoformat()
+            'updated_at': datetime.now(timezone.utc).isoformat()
         }).eq('id', content_id).execute()
 
     # ==========================================
@@ -163,7 +163,7 @@ class SupabaseClient:
         """Update blog article status."""
         update_data = {
             'status': status,
-            'updated_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.now(timezone.utc).isoformat(),
             **kwargs
         }
         self.client.table('blog_articles').update(update_data).eq('id', blog_id).execute()
@@ -224,7 +224,7 @@ class SupabaseClient:
 
     def get_posts_for_analytics(self, hours_ago: int = 24) -> List[Dict]:
         """Get recent posts that need analytics collection."""
-        cutoff = (datetime.utcnow() - timedelta(hours=hours_ago)).isoformat()
+        cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours_ago)).isoformat()
         response = self.client.table('posts_log').select('*')\
             .eq('status', 'posted')\
             .gt('posted_at', cutoff)\
@@ -301,7 +301,7 @@ class SupabaseClient:
             'config_key': config_key,
             'config_value': config_value,
             'updated_by': updated_by,
-            'updated_at': datetime.utcnow().isoformat()
+            'updated_at': datetime.now(timezone.utc).isoformat()
         }, on_conflict='brand_id,config_key').execute()
 
     # ==========================================
@@ -322,7 +322,7 @@ class SupabaseClient:
 
     def get_recent_health_checks(self, agent_name: str = None, hours: int = 24) -> List[Dict]:
         """Get recent health checks."""
-        cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+        cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
         query = self.client.table('health_checks').select('*')\
             .gt('checked_at', cutoff)
 
@@ -351,7 +351,7 @@ class SupabaseClient:
             'agent_name': agent_name,
             'run_id': run_id,
             'status': 'started',
-            'started_at': datetime.utcnow().isoformat()
+            'started_at': datetime.now(timezone.utc).isoformat()
         }).execute()
         return response.data[0]['id'] if response.data else None
 
@@ -368,7 +368,7 @@ class SupabaseClient:
         duration = None
         if started.data:
             start_time = datetime.fromisoformat(started.data['started_at'].replace('Z', '+00:00'))
-            duration = int((datetime.utcnow().replace(tzinfo=start_time.tzinfo) - start_time).total_seconds())
+            duration = int((datetime.now(timezone.utc) - start_time).total_seconds())
 
         self.client.table('agent_runs').update({
             'status': status,
@@ -376,6 +376,6 @@ class SupabaseClient:
             'items_created': items_created,
             'items_failed': items_failed,
             'error_log': error_log or [],
-            'completed_at': datetime.utcnow().isoformat(),
+            'completed_at': datetime.now(timezone.utc).isoformat(),
             'duration_seconds': duration
         }).eq('id', run_id).execute()
