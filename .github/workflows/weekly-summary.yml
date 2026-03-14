@@ -197,14 +197,13 @@ jobs:
           wf_failures = summary.get('workflow_failures', {})
           email_stats = summary.get('email', {})
 
-          # Only send email if there are issues that need attention
+          # Always send the weekly report — it's the only scheduled notification
           unresolved = errors.get('unresolved', 0)
           total_wf_failures = wf_failures.get('total', 0)
           if health_score >= 80 and unresolved == 0 and total_wf_failures <= 3:
-              print(f'System healthy (score={health_score}, unresolved={unresolved}, wf_failures={total_wf_failures}) — no email needed')
-              sys.exit(0)
-
-          print(f'Issues detected (score={health_score}, unresolved={unresolved}, wf_failures={total_wf_failures}) — sending email')
+              print(f'System healthy (score={health_score}) — sending positive weekly report')
+          else:
+              print(f'Issues detected (score={health_score}, unresolved={unresolved}, wf_failures={total_wf_failures}) — sending weekly report')
 
           # Health score color
           if health_score >= 80:
@@ -290,7 +289,7 @@ jobs:
 
           try:
               resend.Emails.send({
-                  'from': 'reports@socialmediaempire.com',
+                  'from': 'Weekly Report <alerts@updates.fitover35.com>',
                   'to': [alert_email],
                   'subject': f'Weekly Report: Health {health_score}/100 | {pins.get(\"total\", 0)} Pins | {wf_failures.get(\"total\", 0)} Failures',
                   'html': html

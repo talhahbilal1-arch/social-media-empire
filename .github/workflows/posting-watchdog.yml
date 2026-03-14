@@ -38,6 +38,7 @@ jobs:
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
+          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
           MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
         run: |
@@ -112,7 +113,7 @@ jobs:
               services_ok = False
 
           # Check Late API keys
-          for key_name in ['LATE_API_KEY', 'LATE_API_KEY_2', 'LATE_API_KEY_4']:
+          for key_name in ['LATE_API_KEY', 'LATE_API_KEY_2', 'LATE_API_KEY_3', 'LATE_API_KEY_4']:
               key = os.environ.get(key_name, '')
               if key:
                   try:
@@ -161,9 +162,16 @@ jobs:
               problems.append('One or more posting services are down or misconfigured')
 
           # Check if specific brands are completely missing
-          for expected_brand in ['fitness', 'deals', 'menopause']:
-              if brand_counts.get(expected_brand, 0) == 0:
-                  problems.append(f'ZERO pins for {expected_brand} today')
+          # Use canonical brand names as stored in content_history
+          EXPECTED_BRANDS = {
+              'fitness': ['fitness'],
+              'daily_deal_darling': ['daily_deal_darling', 'deals'],
+              'menopause_planner': ['menopause_planner', 'menopause'],
+          }
+          for canonical, aliases in EXPECTED_BRANDS.items():
+              total = sum(brand_counts.get(a, 0) for a in aliases)
+              if total == 0:
+                  problems.append(f'ZERO pins for {canonical} today')
 
           if not problems:
               print(f'\n=== ALL GOOD: {len(today_pins)} pins posted, all services healthy ===')

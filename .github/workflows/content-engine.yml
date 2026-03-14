@@ -55,7 +55,9 @@ jobs:
           CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          # MAKE_WEBHOOK_DEALS is the primary Make.com webhook for all Pinterest posting
           MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}

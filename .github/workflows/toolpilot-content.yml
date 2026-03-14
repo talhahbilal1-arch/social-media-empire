@@ -63,7 +63,7 @@ jobs:
           deploy-message: "Content update - ${{ github.sha }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
-          NETLIFY_SITE_ID: '616e7bf4-fe47-495b-b13e-934e51546d4c'
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Commit generated content
         run: |

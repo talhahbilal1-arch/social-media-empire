@@ -35,7 +35,20 @@ class Config:
     make_com_pinterest_webhook: str = ""
     make_webhook_deals: str = ""
     make_webhook_menopause: str = ""
-    late_api_key: str = ""
+
+    # Late API keys (one per brand)
+    late_api_key: str = ""      # Primary / fitness
+    late_api_key_2: str = ""    # daily_deal_darling
+    late_api_key_3: str = ""    # fitness (fallback)
+    late_api_key_4: str = ""    # menopause_planner
+
+    # Pinterest account/board IDs (per brand)
+    pinterest_fitness_account_id: str = ""
+    pinterest_fitness_board_id: str = ""
+    pinterest_deals_account_id: str = ""
+    pinterest_deals_board_id: str = ""
+    pinterest_menopause_account_id: str = ""
+    pinterest_menopause_board_id: str = ""
 
     # TikTok / Audio
     elevenlabs_api_key: str = ""
@@ -109,6 +122,15 @@ class Config:
             make_webhook_deals=os.getenv("MAKE_WEBHOOK_DEALS", ""),
             make_webhook_menopause=os.getenv("MAKE_WEBHOOK_MENOPAUSE", ""),
             late_api_key=os.getenv("LATE_API_KEY", "") or os.getenv("LATE_API_KEY_3", ""),
+            late_api_key_2=os.getenv("LATE_API_KEY_2", ""),
+            late_api_key_3=os.getenv("LATE_API_KEY_3", ""),
+            late_api_key_4=os.getenv("LATE_API_KEY_4", ""),
+            pinterest_fitness_account_id=os.getenv("PINTEREST_FITNESS_ACCOUNT_ID", ""),
+            pinterest_fitness_board_id=os.getenv("PINTEREST_FITNESS_BOARD_ID", ""),
+            pinterest_deals_account_id=os.getenv("PINTEREST_DEALS_ACCOUNT_ID", ""),
+            pinterest_deals_board_id=os.getenv("PINTEREST_DEALS_BOARD_ID", ""),
+            pinterest_menopause_account_id=os.getenv("PINTEREST_MENOPAUSE_ACCOUNT_ID", ""),
+            pinterest_menopause_board_id=os.getenv("PINTEREST_MENOPAUSE_BOARD_ID", ""),
 
             # TikTok / Audio
             elevenlabs_api_key=os.getenv("ELEVENLABS_API_KEY", ""),
