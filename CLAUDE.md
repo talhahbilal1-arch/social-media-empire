@@ -1,6 +1,7 @@
 # CLAUDE.md - Social Media Empire Project Context
 
-## Project Overview
+## Owner
+Tall (talhahbilal1@gmail.com) — ISSA Certified Personal Trainer building automated online income systems.
 
 Automated Pinterest content system for 3 lifestyle brands. Generates pin content via Claude (Sonnet),
 renders images with PIL, uploads to Supabase Storage, and posts to Pinterest via Make.com webhooks.
@@ -8,11 +9,11 @@ renders images with PIL, uploads to Supabase Storage, and posts to Pinterest via
 
 ## Active Brands (3 only)
 
-| Brand key | Site | Niche | Pins/day |
-|-----------|------|-------|----------|
-| `fitness` | fitover35.com | Men's fitness over 35 | 5 |
-| `deals` | dailydealdarling.com | Budget home & lifestyle | 5 |
-| `menopause` | menopause-planner-website.vercel.app | Menopause wellness | 5 |
+| Brand key | Site | Niche | Pins/day | Amazon Tag |
+|-----------|------|-------|----------|------------|
+| `fitness` | fitover35.com | Men's fitness over 35 | 5 | fitover35-20 |
+| `deals` | dailydealdarling.com | Budget home & lifestyle | 5 | dailydealdarling1-20 |
+| `menopause` | menopause-planner-website.vercel.app | Menopause wellness | 5 | — |
 
 ## Pipeline Architecture (content-engine.yml — 5x daily)
 
@@ -169,3 +170,29 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 3. Set all GitHub secrets (see table above)
 4. Verify Make.com scenario "Pinterest Pin Publisher - All Brands" is ON
 5. Trigger content-engine.yml manually with `dry_run=true` to validate
+
+## Current Status
+<!-- UPDATE THIS AFTER EVERY WORK SESSION — just tell Claude "update CLAUDE.md status" -->
+- Pinterest posting: NEEDS CHECK
+- Affiliate sites indexed: NO
+- Affiliate tags correct: NEEDS VERIFICATION (was cross-contaminated before)
+- Last verified working: Unknown — needs full diagnostic
+
+## Active Priorities (March 2026)
+1. Desmond Wong creator services — delivering free short-form + website, tracking results for paid conversion
+2. Prompt packs — listed on Gumroad/Etsy, needs distribution and promotion
+3. Pinterest system — fix any broken workflows, correct affiliate tags, submit to Google Search Console
+4. QuantConnect trading algo — on hold until $1K/month online revenue achieved
+
+## Known Issues
+- Schema-code mismatches have occurred (missing columns, malformed PostgREST filters)
+- Affiliate tags were cross-contaminated (FitOver35 pages using dailydealdarling1-20 tag)
+- Neither affiliate site has Google indexing
+- Pinterest content had message-to-product mismatch (bedroom imagery → menopause planners)
+
+## Development Rules
+- NEVER commit API keys or secrets
+- Auto-checkpoint hooks are active — commits happen automatically
+- Always git pull before starting work on any device
+- When session ends, update the "Current Status" section of this file before closing
+- Use conventional commit messages for manual commits (feat:, fix:, refactor:)
