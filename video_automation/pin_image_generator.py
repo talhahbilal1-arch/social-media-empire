@@ -3,12 +3,14 @@
 Generates 1000x1500px (2:3) pin images with text overlays on Pexels backgrounds.
 Uses brand styling from video_templates.py for colors and fonts.
 
-5 overlay styles:
+7 overlay styles:
   - gradient: Black gradient bottom 60%, white bold text
   - box_dark: Dark semi-transparent box, centered text
   - numbered_list: Shows numbered items with a teaser
   - big_stat: Large number/percentage + short text
   - split_layout: Top 60% image, bottom 40% brand-color block
+  - checklist: Checkbox items (checked/unchecked) for save-worthy lists
+  - comparison: Side-by-side VS layout for before/after, product comparisons
 
 Usage:
     # Single pin
@@ -24,6 +26,7 @@ Usage:
 """
 
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -89,12 +92,19 @@ VISUAL_STYLE_MAP = {
     "editorial_magazine": "box_dark",
     "split_color_block": "split_layout",
     "step_by_step": "numbered_list",
+    "checklist": "checklist",
+    "comparison": "comparison",
 }
 
 
 def map_visual_style(content_brain_style):
     """Map a content_brain visual style name to a PIL overlay style."""
     return VISUAL_STYLE_MAP.get(content_brain_style, "gradient")
+
+
+def compute_image_hash(image_bytes):
+    """Compute SHA256 hash of rendered image bytes for deduplication."""
+    return hashlib.sha256(image_bytes).hexdigest()
 
 
 def _font_filename(name, bold=False):
@@ -415,7 +425,7 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     elif overlay_style == "big_stat":
         text_area_top = int(PIN_HEIGHT * 0.20)
         text_area_bottom = PIN_HEIGHT - 60
-    elif overlay_style == "numbered_list":
+    elif overlay_style in ("numbered_list", "checklist", "comparison"):
         text_area_top = int(PIN_HEIGHT * 0.08)
         text_area_bottom = PIN_HEIGHT - 60
     else:  # box_dark
@@ -438,6 +448,26 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     if overlay_style == "numbered_list":
         _render_numbered_list(draw, headline, subheadline, heading_font, sub_font,
                               text_color, sub_color, colors, max_text_width, text_margin)
+        _draw_cta(draw, cta_font, colors, PIN_HEIGHT - 130)
+        bbox = watermark_font.getbbox(watermark)
+        wm_w = bbox[2] - bbox[0]
+        draw.text(((PIN_WIDTH - wm_w) // 2, PIN_HEIGHT - 50), watermark, fill=wm_color, font=watermark_font)
+        return img
+
+    # ── Checklist special layout ──
+    if overlay_style == "checklist":
+        _render_checklist(draw, headline, subheadline, heading_font, sub_font,
+                          text_color, sub_color, colors, max_text_width, text_margin)
+        _draw_cta(draw, cta_font, colors, PIN_HEIGHT - 130)
+        bbox = watermark_font.getbbox(watermark)
+        wm_w = bbox[2] - bbox[0]
+        draw.text(((PIN_WIDTH - wm_w) // 2, PIN_HEIGHT - 50), watermark, fill=wm_color, font=watermark_font)
+        return img
+
+    # ── Comparison special layout ──
+    if overlay_style == "comparison":
+        _render_comparison(draw, headline, subheadline, heading_font, sub_font,
+                           text_color, sub_color, colors, max_text_width, text_margin)
         _draw_cta(draw, cta_font, colors, PIN_HEIGHT - 130)
         bbox = watermark_font.getbbox(watermark)
         wm_w = bbox[2] - bbox[0]
@@ -612,6 +642,167 @@ def _render_numbered_list(draw, headline, subheadline, heading_font, sub_font,
         draw, ((PIN_WIDTH - tw) // 2, y + 10),
         teaser_text, teaser_font, accent, shadow_offset=1
     )
+
+
+def _render_checklist(draw, headline, subheadline, heading_font, sub_font,
+                      text_color, sub_color, colors, max_text_width, text_margin):
+    """Render a checkbox-style checklist. Great for symptom trackers, routines, shopping lists."""
+    accent = hex_to_rgb(colors.get("accent", "#FFD700"))
+
+    # Headline at top
+    title_font = load_font(
+        next((n for n in GOOGLE_FONT_URLS if n.lower().replace(" ", "_") in
+              str(getattr(heading_font, 'path', '')).lower()), "Oswald"),
+        56, bold=True
+    )
+    title_lines = _wrap_text(headline, title_font, max_text_width)
+    y = int(PIN_HEIGHT * 0.07)
+    for line in title_lines:
+        bbox = title_font.getbbox(line)
+        line_w = bbox[2] - bbox[0]
+        x = (PIN_WIDTH - line_w) // 2
+        _draw_text_with_shadow(draw, (x, y), line, title_font, text_color)
+        y += 68
+
+    # Accent divider
+    y += 10
+    draw.line([(text_margin, y), (PIN_WIDTH - text_margin, y)], fill=accent, width=3)
+    y += 30
+
+    # Parse items from subheadline
+    import re
+    items = []
+    if subheadline:
+        parts = re.split(r'\d+[\.\)]\s*', subheadline)
+        items = [p.strip() for p in parts if p.strip()]
+    if not items:
+        items = [subheadline or headline]
+
+    # Render up to 5 items with checkboxes
+    item_font = load_font(
+        next((n for n in GOOGLE_FONT_URLS if n.lower().replace(" ", "_") in
+              str(getattr(sub_font, 'path', '')).lower()), "Open Sans"),
+        34, bold=False
+    )
+
+    for i, item in enumerate(items[:5]):
+        box_x = text_margin + 10
+        box_size = 36
+        # Draw checkbox — first 2 checked, rest unchecked (teaser effect)
+        if i < 2:
+            draw.rectangle([(box_x, y), (box_x + box_size, y + box_size)], fill=accent, outline=accent, width=2)
+            # Checkmark
+            check_font = load_font("Oswald", 30, bold=True)
+            draw.text((box_x + 6, y + 2), "\u2713", fill=(0, 0, 0), font=check_font)
+        else:
+            draw.rectangle([(box_x, y), (box_x + box_size, y + box_size)], outline=text_color, width=2)
+
+        # Item text
+        item_x = box_x + box_size + 18
+        item_max_w = PIN_WIDTH - item_x - text_margin
+        item_lines = _wrap_text(item, item_font, item_max_w)
+        item_y = y + 2
+        for line in item_lines:
+            _draw_text_with_shadow(draw, (item_x, item_y), line, item_font, text_color, shadow_offset=1)
+            item_y += 44
+        y = max(item_y, y + box_size) + 22
+
+    # "Save this checklist" teaser
+    teaser_font = load_font("Open Sans", 32, bold=False)
+    teaser_text = "Save this checklist \u2192"
+    bbox = teaser_font.getbbox(teaser_text)
+    tw = bbox[2] - bbox[0]
+    _draw_text_with_shadow(
+        draw, ((PIN_WIDTH - tw) // 2, y + 10),
+        teaser_text, teaser_font, accent, shadow_offset=1
+    )
+
+
+def _render_comparison(draw, headline, subheadline, heading_font, sub_font,
+                       text_color, sub_color, colors, max_text_width, text_margin):
+    """Render a comparison/VS layout. Left side = problem, right side = solution."""
+    accent = hex_to_rgb(colors.get("accent", "#FFD700"))
+    primary = hex_to_rgb(colors.get("primary", "#3498DB"))
+
+    # Headline at top (centered)
+    title_font = load_font(
+        next((n for n in GOOGLE_FONT_URLS if n.lower().replace(" ", "_") in
+              str(getattr(heading_font, 'path', '')).lower()), "Oswald"),
+        52, bold=True
+    )
+    title_lines = _wrap_text(headline, title_font, max_text_width)
+    y = int(PIN_HEIGHT * 0.06)
+    for line in title_lines:
+        bbox = title_font.getbbox(line)
+        line_w = bbox[2] - bbox[0]
+        x = (PIN_WIDTH - line_w) // 2
+        _draw_text_with_shadow(draw, (x, y), line, title_font, text_color)
+        y += 64
+
+    # VS divider — vertical line down the middle
+    divider_top = y + 20
+    divider_x = PIN_WIDTH // 2
+    divider_bottom = int(PIN_HEIGHT * 0.85)
+    draw.line([(divider_x, divider_top), (divider_x, divider_bottom)], fill=accent, width=4)
+
+    # VS badge in center
+    vs_font = load_font("Oswald", 44, bold=True)
+    vs_y = (divider_top + divider_bottom) // 2 - 30
+    draw.ellipse([(divider_x - 35, vs_y), (divider_x + 35, vs_y + 60)], fill=accent)
+    vs_bbox = vs_font.getbbox("VS")
+    vs_w = vs_bbox[2] - vs_bbox[0]
+    draw.text((divider_x - vs_w // 2, vs_y + 8), "VS", fill=(0, 0, 0), font=vs_font)
+
+    # Parse items: try to split into two groups (before | after)
+    import re
+    items = []
+    if subheadline:
+        parts = re.split(r'\d+[\.\)]\s*', subheadline)
+        items = [p.strip() for p in parts if p.strip()]
+    if not items:
+        items = [subheadline or "Problem", "Solution"]
+
+    # Split items: first half = left (problem), second half = right (solution)
+    mid = max(1, len(items) // 2)
+    left_items = items[:mid]
+    right_items = items[mid:]
+
+    # Column labels
+    label_font = load_font("Oswald", 38, bold=True)
+    label_y = divider_top + 10
+
+    # Left label (problem)
+    left_label = "\u2717 Before"
+    left_bbox = label_font.getbbox(left_label)
+    left_lw = left_bbox[2] - left_bbox[0]
+    draw.text(((divider_x - left_lw) // 2, label_y), left_label, fill=(220, 80, 80), font=label_font)
+
+    # Right label (solution)
+    right_label = "\u2713 After"
+    right_bbox = label_font.getbbox(right_label)
+    right_lw = right_bbox[2] - right_bbox[0]
+    draw.text((divider_x + (divider_x - right_lw) // 2, label_y), right_label, fill=accent, font=label_font)
+
+    # Render left items
+    item_font = load_font("Open Sans", 30, bold=False)
+    col_width = divider_x - text_margin - 20
+    item_y = label_y + 60
+
+    for item in left_items[:4]:
+        lines = _wrap_text(item, item_font, col_width)
+        for line in lines:
+            _draw_text_with_shadow(draw, (text_margin + 10, item_y), line, item_font, sub_color, shadow_offset=1)
+            item_y += 40
+        item_y += 12
+
+    # Render right items
+    item_y = label_y + 60
+    for item in right_items[:4]:
+        lines = _wrap_text(item, item_font, col_width)
+        for line in lines:
+            _draw_text_with_shadow(draw, (divider_x + 20, item_y), line, item_font, text_color, shadow_offset=1)
+            item_y += 40
+        item_y += 12
 
 
 # ═══════════════════════════════════════════════════════════════

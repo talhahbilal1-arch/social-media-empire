@@ -44,6 +44,19 @@ def _get_client():
 BRAND_CONFIGS = {
     "fitness": {
         "name": "Fitness Made Easy",
+        "problem_solution_matrix": {
+            "problems": [
+                "Injury risk increases after 35 — wrong form, wrong shoes, wrong load",
+                "Size 12+ gear scarcity — hard to find quality training shoes and gloves in larger sizes",
+                "Training plateaus — doing the same routine for months with zero progress",
+            ],
+            "solution": "Authority-led fixes backed by experience, plus specific gear recommendations that actually solve the problem.",
+        },
+        "text_overlay_hooks": [
+            "Stop Squatting in the Wrong Shoes: Best Size 12 Trainers.",
+            "Can't Hit Your Protein Goal? 3 Amazon Finds for Busy Lifters.",
+            "Fix Your Form: The Amazon Gear Every Bodybuilder Needs.",
+        ],
         "voice": """You are a 38-year-old man who's been through the fitness journey himself.
 You gained weight in your early 30s, got serious at 35, and now you're in the best shape of your life.
 You talk like a real person — direct, honest, sometimes funny, never preachy.
@@ -188,6 +201,19 @@ Be specific. Use real exercises, real foods, real numbers.""",
 
     "deals": {
         "name": "Daily Deal Darling",
+        "problem_solution_matrix": {
+            "problems": [
+                "Inflation and rising prices — everything costs more but paychecks haven't changed",
+                "Fast fashion quality issues — cheap products that break or fall apart after one use",
+                "Choice paralysis — thousands of options on Amazon with no way to know what's actually good",
+            ],
+            "solution": "Curated, high-value-for-money Amazon 'finds' — personally tested, honestly reviewed, budget-friendly.",
+        },
+        "text_overlay_hooks": [
+            "Stop Overpaying for [Niche]: This Amazon Dupe is 60% Less.",
+            "Tired of Low Quality? These 5-Star Finds Actually Last.",
+            "Don't Miss the Drop: Today's Best Deals for Your Home.",
+        ],
         "voice": """You are a 32-year-old woman who loves finding amazing products at great prices.
 You're genuine — you only share things you'd actually buy or have bought yourself.
 You're warm, enthusiastic but never fake. Like texting your best friend about a great find.
@@ -320,6 +346,19 @@ Be conversational, relatable, and helpful.""",
 
     "menopause": {
         "name": "The Menopause Planner",
+        "problem_solution_matrix": {
+            "problems": [
+                "Brain fog — forgetting appointments, losing track of symptoms, feeling mentally scattered",
+                "Hot flashes — unpredictable, disruptive, embarrassing episodes that derail your day",
+                "Feeling overwhelmed and unorganized — menopause adds chaos to an already full life",
+            ],
+            "solution": "The 'Menopause Success Planner' — organization as relief. Track symptoms, plan appointments, regain control with a system designed for this stage of life.",
+        },
+        "text_overlay_hooks": [
+            "Stop Forgetting Your Symptoms: Track Your Journey Like a Pro.",
+            "Feeling Overwhelmed by Menopause? This Planner is Your Roadmap.",
+            "3 Tips to Manage Hot Flashes + The Ultimate Daily Checklist.",
+        ],
         "voice": """You are a 52-year-old woman who has been through perimenopause and is now in menopause.
 You combine personal experience with well-researched information.
 You're empathetic, warm, and practical. You normalize the experience — no shame, no drama.
@@ -506,6 +545,18 @@ PIN_VISUAL_STYLES = [
         "description": "3-4 numbered steps shown as a mini visual guide. Each step has an icon and short text. 'Full guide at link' footer. Tutorial format that drives clicks for the complete version.",
         "creatomate_template": "TEMPLATE_ID_7",
         "engagement_weight": 4  # How-to content drives clicks
+    },
+    {
+        "name": "checklist",
+        "description": "Checkbox-style items (✓ done / ☐ todo) on a clean background. Title at top, 4-5 items with checkboxes. Perfect for symptom trackers, shopping lists, routine checklists. 'Save-worthy' format that drives massive saves.",
+        "creatomate_template": "TEMPLATE_ID_8",
+        "engagement_weight": 4  # Checklists are highly saveable
+    },
+    {
+        "name": "comparison",
+        "description": "Side-by-side or top/bottom 'VS' comparison layout. Left = problem/old way, Right = solution/new way. Clear divider with 'VS' badge. Bold labels on each side. Great for product comparisons, before/after, myth vs fact.",
+        "creatomate_template": "TEMPLATE_ID_9",
+        "engagement_weight": 4  # Comparisons drive engagement
     }
 ]
 
@@ -556,16 +607,33 @@ TOPIC_TO_BOARD_MAP = {
 }
 
 
-def _get_board_for_topic(brand_key, category):
-    """Get the best board for a given topic category.
+def _get_board_for_topic(brand_key, category, topic_text=""):
+    """Get the best board for a given topic category, with keyword matching.
 
-    Uses deterministic mapping by category, but when a category maps to
-    a lower-priority board, occasionally promotes to a higher-follower
-    board if the content is relevant. Board priority lists are ordered
-    by follower count (highest first).
+    Priority:
+    1. If topic_text keywords match a board name, use that board (SEO alignment)
+    2. Otherwise, use deterministic category → board mapping
+    3. Fall back to brand default board
     """
     brand_map = TOPIC_TO_BOARD_MAP.get(brand_key, {})
-    return brand_map.get(category, brand_map.get('_default', BRAND_CONFIGS[brand_key]['pinterest_boards'][0]))
+    boards = BRAND_CONFIGS[brand_key].get('pinterest_boards', [])
+
+    # Try keyword matching: if the topic text contains words from a board name, prefer it
+    if topic_text and boards:
+        topic_words = set(topic_text.lower().split())
+        best_match = None
+        best_score = 0
+        for board in boards:
+            board_words = set(board.lower().replace('&', '').split())
+            overlap = len(topic_words & board_words)
+            if overlap > best_score:
+                best_score = overlap
+                best_match = board
+        # Only use keyword match if at least 2 words overlap (avoid false positives)
+        if best_score >= 2 and best_match:
+            return best_match
+
+    return brand_map.get(category, brand_map.get('_default', boards[0] if boards else ''))
 
 
 def _select_visual_style_weighted(recent_styles):
@@ -637,7 +705,7 @@ def generate_pin_content(brand_key, supabase_client):
     selected_style = _select_visual_style_weighted(recent_styles)
 
     # ── Step 5: Select board (deterministic mapping by topic category) ──
-    selected_board = _get_board_for_topic(brand_key, selected_topic['category'])
+    selected_board = _get_board_for_topic(brand_key, selected_topic['category'], selected_topic['topic'])
 
     # ── Step 6: Select description opener (not used in last 5 pins) ──
     available_openers = [o for o in DESCRIPTION_OPENERS if o not in recent_openers]
@@ -662,11 +730,28 @@ def generate_pin_content(brand_key, supabase_client):
         category_products = category_products + affiliate_products.get(bonus_cat, [])[:2]
 
     # ── Step 8: Call Claude to generate the content ──
+    # Build problem-solution context for the prompt
+    psm = config.get('problem_solution_matrix', {})
+    psm_problems = '\n'.join(f'  - {p}' for p in psm.get('problems', []))
+    psm_solution = psm.get('solution', '')
+    overlay_hooks = config.get('text_overlay_hooks', [])
+    overlay_hooks_text = '\n'.join(f'  - "{h}"' for h in overlay_hooks)
+
     prompt = f"""You are creating a Pinterest pin for the brand "{config['name']}".
 Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 
 ═══ YOUR VOICE/PERSONA ═══
 {config['voice']}
+
+═══ PROBLEM-SOLUTION MATRIX ═══
+Your audience's core problems:
+{psm_problems}
+Your solution approach: {psm_solution}
+Every pin should address ONE of these problems or present the solution. This is what makes your content resonate.
+
+═══ TEXT OVERLAY HOOK TEMPLATES ═══
+Use these as inspiration for the graphic_title (adapt, don't copy verbatim):
+{overlay_hooks_text}
 
 ═══ TODAY'S TOPIC ═══
 {selected_topic['topic']} (category: {selected_topic['category']})
@@ -710,7 +795,7 @@ Opening style: {selected_opener}
 
 DESCRIPTION REQUIREMENTS:
 1. FIRST 50 CHARACTERS must contain your primary SEO keyword (front-load for search)
-2. SENTENCE 1-2 = VALUE PREVIEW: tell them exactly what they'll get after clicking — a specific outcome, technique, or insight. Not vague ("great tips!") but specific ("the exact 3-step routine that stops joint pain before it starts").
+2. SENTENCE 1-2 = INTENT-BASED VALUE PREVIEW: Frame as a problem → solution using 2-3 natural sentences that solve a real problem from the PROBLEM-SOLUTION MATRIX above. Not vague ("great tips!") but specific ("the exact 3-step routine that stops joint pain before it starts"). Example for menopause: "Manage menopause brain fog with these simple tracking tips from our Etsy planner."
 3. Total length: 150-300 characters (before hashtags)
 4. Weave in 2-4 of these related keywords naturally (no stuffing — they must read like a sentence a real person would write): {', '.join(selected_keywords)}
 5. Include an EMOTIONAL TRIGGER relevant to the audience:
@@ -751,11 +836,14 @@ This is the large bold text visible on the image itself. It serves a completely 
 - 30-50 characters MAX (must be legible as oversized bold text in a 1000×1500 image)
 - Written for the PERSON SCROLLING, not for Pinterest's algorithm
 - Goal: STOP THE SCROLL by calling out WHO this is for, WHAT problem it solves, or WHY this is different
+- MUST contain the PRIMARY SEO KEYWORD — Pinterest's computer vision reads text on images to determine relevance. If the keyword is in the image text, Pinterest shows it to the right audience.
 - Use "you", direct numbers, specific audience call-outs, or surprising statements
 - Must feel HUMAN — like something a real person would say, not an SEO title
+- Reference the PROBLEM-SOLUTION MATRIX above — frame the graphic title around a specific problem or its solution
 - GOOD: "Why Fat Loss Stops After 35", "Hot Flash Fix (It's Not What You Think)", "Amazon Finds Under $20", "Stop Wasting Money on This"
 - BAD: "5 Proven Methods for Building Strength After 35 in 2024" (too long, reads like a title tag)
 - The graphic_title and title cover the same topic but speak to different audiences: image title = human hook, pin title = algorithm signal
+- ALIGNMENT RULE: graphic_title keyword + pin title keyword + image subject must all point to the same idea — this triple-signal tells Pinterest exactly who to show this to
 
 ═══ IMAGE + OVERLAY RULES ═══
 - Image search query: SPECIFIC and VIVID — not "man exercising" but "close up muscular forearms gripping barbell gym dramatic side lighting"
@@ -811,10 +899,32 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
     return pin_data
 
 
+def validate_destination_link(url, timeout=10):
+    """Check if a destination URL returns HTTP 200 OK.
+
+    Returns the URL if valid, or None if the link is broken.
+    Used before posting to prevent pins from linking to dead pages.
+    """
+    if not url or url == 'NEEDS_LANDING_PAGE':
+        return None
+    try:
+        import urllib.request
+        req = urllib.request.Request(url, method='HEAD')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Pinterest Pin Validator)')
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            if resp.status == 200:
+                return url
+            logger.warning(f"Link validation: {url} returned HTTP {resp.status}")
+            return None
+    except Exception as e:
+        logger.warning(f"Link validation failed for {url}: {e}")
+        return None
+
+
 def log_pin_to_history(pin_data, supabase_client):
     """Log generated pin to content_history for variety tracking."""
     try:
-        supabase_client.table('content_history').insert({
+        row = {
             'brand': pin_data['brand'],
             'title': pin_data['title'],
             'description': pin_data['description'],
@@ -831,9 +941,26 @@ def log_pin_to_history(pin_data, supabase_client):
             'trending_topic': pin_data.get('trending_topic', ''),
             'status': pin_data.get('posting_method', 'posted') or 'posted',
             'created_at': datetime.now(timezone.utc).isoformat()
-        }).execute()
+        }
+        # Include image hash for deduplication if available
+        if pin_data.get('image_hash'):
+            row['image_hash'] = pin_data['image_hash']
+        supabase_client.table('content_history').insert(row).execute()
     except Exception as e:
         logger.error(f"Failed to log pin to history: {e}")
+
+
+def check_image_hash_exists(image_hash, supabase_client):
+    """Check if an image hash already exists in content_history (deduplication)."""
+    try:
+        result = supabase_client.table('content_history') \
+            .select('id') \
+            .eq('image_hash', image_hash) \
+            .limit(1) \
+            .execute()
+        return bool(result.data)
+    except Exception:
+        return False  # If check fails, allow the image (don't block pipeline)
 
 
 def generate_pin_from_daily_trend(brand_key, run_index, supabase_client):
@@ -918,11 +1045,28 @@ def generate_pin_from_daily_trend(brand_key, run_index, supabase_client):
             all_products.extend(cat_products)
         trend_products = random.sample(all_products, min(5, len(all_products))) if all_products else []
 
+    # Build problem-solution context
+    psm = config.get('problem_solution_matrix', {})
+    psm_problems = '\n'.join(f'  - {p}' for p in psm.get('problems', []))
+    psm_solution = psm.get('solution', '')
+    overlay_hooks = config.get('text_overlay_hooks', [])
+    overlay_hooks_text = '\n'.join(f'  - "{h}"' for h in overlay_hooks)
+
     prompt = f"""You are creating a Pinterest pin for "{config['name']}".
 Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 
 ═══ YOUR VOICE ═══
 {config['voice']}
+
+═══ PROBLEM-SOLUTION MATRIX ═══
+Your audience's core problems:
+{psm_problems}
+Your solution approach: {psm_solution}
+Every pin should address ONE of these problems or present the solution.
+
+═══ TEXT OVERLAY HOOK TEMPLATES ═══
+Use these as inspiration for the graphic_title:
+{overlay_hooks_text}
 
 ═══ TODAY'S TRENDING TOPIC ═══
 Topic: {selected_trend['topic']}
@@ -1128,12 +1272,29 @@ def generate_pin_from_calendar(brand_key, supabase_client):
         all_products.extend(cat_products)
     sample_products = random.sample(all_products, min(5, len(all_products))) if all_products else []
 
+    # Build problem-solution context
+    psm = config.get('problem_solution_matrix', {})
+    psm_problems = '\n'.join(f'  - {p}' for p in psm.get('problems', []))
+    psm_solution = psm.get('solution', '')
+    overlay_hooks = config.get('text_overlay_hooks', [])
+    overlay_hooks_text = '\n'.join(f'  - "{h}"' for h in overlay_hooks)
+
     # Call Claude with the specific calendar assignment
     prompt = f"""You are creating a Pinterest pin for "{config['name']}".
 Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 
 ═══ YOUR VOICE ═══
 {config['voice']}
+
+═══ PROBLEM-SOLUTION MATRIX ═══
+Your audience's core problems:
+{psm_problems}
+Your solution approach: {psm_solution}
+Every pin should address ONE of these problems or present the solution.
+
+═══ TEXT OVERLAY HOOK TEMPLATES ═══
+Use these as inspiration for the graphic_title:
+{overlay_hooks_text}
 
 ═══ CALENDAR ASSIGNMENT ═══
 - Trending Topic: {pin_assignment.get('trending_topic', 'general')}

@@ -85,13 +85,13 @@ jobs:
 
           sys.path.insert(0, '.')
           from video_automation.image_selector import get_unique_pexels_image
-          from video_automation.pin_image_generator import render_pin_to_bytes
+          from video_automation.pin_image_generator import render_pin_to_bytes, compute_image_hash
           from video_automation.supabase_storage import upload_pin_image
           from video_automation.pin_article_generator import (
               generate_article_for_pin, article_to_html, save_and_register_article,
               BRAND_SITE_CONFIG, _make_slug
           )
-          from video_automation.content_brain import generate_pin_content, log_pin_to_history
+          from video_automation.content_brain import generate_pin_content, log_pin_to_history, check_image_hash_exists, validate_destination_link
           from video_automation.pinterest_boards import get_board_id
 
           dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
@@ -141,8 +141,25 @@ jobs:
           brand_filter = os.environ.get('BRAND_INPUT', '').strip()
           brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ALL_BRANDS
 
+          MAX_PINS_PER_DAY = 5  # Pinterest best practice: 1-5 pins/day/account
+          today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+
           for brand in brands_to_generate:
               try:
+                  # Guardrail: check daily pin count before generating
+                  try:
+                      today_count = db.client.table('content_history') \
+                          .select('id', count='exact') \
+                          .eq('brand', brand) \
+                          .gte('created_at', today_str + 'T00:00:00Z') \
+                          .execute()
+                      pin_count = today_count.count if hasattr(today_count, 'count') else len(today_count.data or [])
+                      if pin_count >= MAX_PINS_PER_DAY:
+                          print(f'  [{brand}] SKIP — already {pin_count} pins today (max {MAX_PINS_PER_DAY})')
+                          continue
+                  except Exception as _e:
+                      print(f'  [{brand}] Pin count check failed ({_e}), continuing...')
+
                   print(f'  Generating content for {brand}...')
                   pin_data = generate_pin_content(brand, db.client)
                   board_id = get_board_id(brand, pin_data.get('board', ''))
@@ -200,22 +217,30 @@ jobs:
                   pass
               try:
                   search_term = pin.get('pexels_search_term') or pin.get('title', 'lifestyle photo')
-                  image = get_unique_pexels_image(search_term, brand, db.client)
-
                   headline = pin.get('overlay_headline') or pin.get('title', '')
                   subheadline = pin.get('overlay_subtext') or ''
 
-                  image_bytes = render_pin_to_bytes(
-                      brand=brand,
-                      headline=headline,
-                      subheadline=subheadline,
-                      keyword_or_url=image['url'],
-                      style='gradient',
-                  )
+                  # Render with deduplication: retry up to 3 times with different backgrounds
+                  image_bytes = None
+                  img_hash = None
+                  for _attempt in range(3):
+                      image = get_unique_pexels_image(search_term, brand, db.client)
+                      image_bytes = render_pin_to_bytes(
+                          brand=brand,
+                          headline=headline,
+                          subheadline=subheadline,
+                          keyword_or_url=image['url'],
+                          style='gradient',
+                      )
+                      img_hash = compute_image_hash(image_bytes)
+                      if not check_image_hash_exists(img_hash, db.client):
+                          break
+                      print(f'  [{brand}] Duplicate image hash detected, retrying...')
 
                   timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
                   filename = f"{brand}_{pin_id}_{timestamp}.jpg"
                   image_url = upload_pin_image(image_bytes, filename)
+                  pin['image_hash'] = img_hash  # Pass to log_pin_to_history later
 
                   db.client.table('pinterest_pins').update({
                       'image_url': image_url,
@@ -237,6 +262,18 @@ jobs:
                       pass
 
           print(f'  Rendered {len(rendered_pins)}/{len(content_ready_pins)} pins')
+
+          # ── Video pin hook (future) ──
+          from video_automation.video_pin_generator import is_video_pin_enabled
+          if is_video_pin_enabled():
+              from video_automation.video_pin_generator import generate_video_pin
+              print('\n=== PHASE 1v: Generating video pins ===')
+              for pin in rendered_pins:
+                  video_bytes = generate_video_pin(pin['brand'], pin)
+                  if video_bytes:
+                      print(f'  [{pin["brand"]}] Video pin generated')
+          else:
+              print('  Video pins: disabled (static only)')
 
           # ══════════════════════════════════════════════════════════════
           # PHASE 2: Generate articles FIRST so pins link to articles
@@ -357,6 +394,14 @@ jobs:
               if dry_run:
                   print(f'  [{brand}] DRY RUN — would POST to article: {pin.get("destination_url","")[:70]}')
                   continue
+
+              # Guardrail: validate destination link before posting
+              dest_url = pin.get('destination_url', '')
+              if dest_url and not validate_destination_link(dest_url):
+                  from video_automation.content_brain import BRAND_CONFIGS
+                  fallback = BRAND_CONFIGS.get(brand, {}).get('destination_base_url', '')
+                  print(f'  [{brand}] WARN — destination link broken, falling back to homepage: {fallback}')
+                  pin['destination_url'] = fallback
 
               # CRITICAL: validate image_url — empty URL causes Pinterest 400
               image_url = pin.get('image_url', '') or ''
