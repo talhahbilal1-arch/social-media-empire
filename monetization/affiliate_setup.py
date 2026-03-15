@@ -50,7 +50,7 @@ AFFILIATE_PROGRAMS = {
 # Brand-specific affiliate configurations
 BRAND_AFFILIATES = {
     "daily_deal_darling": {
-        "amazon_tag": "dailydealdarl-20",
+        "amazon_tag": "dailydealdarling1-20",
         "primary_categories": [
             "Home & Kitchen",
             "Beauty & Personal Care",

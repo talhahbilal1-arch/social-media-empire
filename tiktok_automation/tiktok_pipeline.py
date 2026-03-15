@@ -186,7 +186,7 @@ def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]
         "caption": script_data["caption"],
         "hashtags": script_data["hashtags"],
         "affiliate_products": [script_data["affiliate_product"]],
-        "amazon_tag": "dailydealdarl-20",
+        "amazon_tag": "dailydealdarling1-20",
         "audio_url": audio_url,
         "video_url": video_url,
         "status": status,

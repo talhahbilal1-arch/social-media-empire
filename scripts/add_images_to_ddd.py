@@ -249,7 +249,7 @@ def extract_asins(html):
             result.append(a)
     return result
 
-def build_shop_section(asins, affiliate_tag="dailydealdarl-20"):
+def build_shop_section(asins, affiliate_tag="dailydealdarling1-20"):
     """Build HTML for the Shop the Products section."""
     if not asins:
         return ""

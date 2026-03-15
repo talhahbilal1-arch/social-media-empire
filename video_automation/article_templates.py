@@ -7,7 +7,7 @@ Three mobile-first templates optimized for Pinterest traffic and Google Search:
 
 All use Tailwind CSS (CDN), Schema.org JSON-LD (Article + Product),
 expert reviewer bios, geo-SEO, and mobile-first sticky CTAs.
-Amazon Associate ID: dailydealdarl-20 on all links.
+Amazon Associate ID: dailydealdarling1-20 on all links.
 """
 
 import json
@@ -95,7 +95,7 @@ TEMPLATE_CONFIG = {
 
 def _find_first_amazon_url(body_html):
     """Extract first Amazon affiliate URL from body HTML."""
-    m = re.search(r'href="(https://www\.amazon\.com[^"]*tag=dailydealdarl-20[^"]*)"', body_html)
+    m = re.search(r'href="(https://www\.amazon\.com[^"]*tag=dailydealdarling1-20[^"]*)"', body_html)
     return m.group(1) if m else None
 
 
@@ -212,7 +212,7 @@ def render_article_page(brand_key, title, meta_desc, body_html, hero_url,
     article_url = site_config['base_url'] + '/articles/' + slug + '.html'
     cta_url = first_amazon or (
         'https://www.amazon.com/s?k=' + slug.replace('-', '+')
-        + '&tag=dailydealdarl-20'
+        + '&tag=dailydealdarling1-20'
     )
 
     # Replace email signup placeholder with brand-styled form
