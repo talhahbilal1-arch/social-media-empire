@@ -1438,3 +1438,120 @@ def build_destination_url(base_url, brand, posting_method, campaign="pins",
     if utm_term:
         url += f"&utm_term={utm_term}"
     return url
+
+
+# ═══════════════════════════════════════════════════════════════
+# VIDEO PIN CONTENT GENERATION
+# ═══════════════════════════════════════════════════════════════
+
+def generate_video_pin_content(brand_key, supabase_client):
+    """Generate content specifically for a video pin (hook/solution/CTA format).
+
+    Uses Claude to create short, punchy text optimized for 8-second video pins
+    where each text frame is on screen for ~2.5 seconds.
+
+    Returns dict with: hook, solution, cta, title, description, board_id,
+    search_query, topic, category.
+    """
+    config = BRAND_CONFIGS[brand_key]
+
+    # ── Select topic (avoid recent) ──
+    try:
+        recent = supabase_client.table('content_history') \
+            .select('topic') \
+            .eq('brand', brand_key) \
+            .order('created_at', desc=True) \
+            .limit(25) \
+            .execute()
+        recent_topics = [r.get('topic', '') for r in (recent.data or [])]
+    except Exception:
+        recent_topics = []
+
+    all_topics = []
+    for category, topics in config['topics_by_category'].items():
+        for topic in topics:
+            all_topics.append({"category": category, "topic": topic})
+
+    available_topics = [t for t in all_topics if t['topic'] not in recent_topics]
+    if not available_topics:
+        available_topics = all_topics
+    selected_topic = random.choice(available_topics)
+
+    # ── Board selection ──
+    selected_board = _get_board_for_topic(brand_key, selected_topic['category'], selected_topic['topic'])
+
+    # ── Problem-solution matrix for context ──
+    psm = config.get('problem_solution_matrix', {})
+    problems = psm.get('problems', [])
+    selected_problem = random.choice(problems) if problems else "a common challenge"
+
+    # ── Call Claude for video-specific copy ──
+    prompt = f"""You are creating text for a Pinterest VIDEO pin for "{config['name']}".
+
+The video is 8 seconds. There are 3 text screens:
+- Screen 1 (0-3s): HOOK — grab attention, state the problem. 5-8 words MAX.
+- Screen 2 (3-6s): SOLUTION — the payoff/benefit. 6-10 words MAX.
+- Screen 3 (6-8s): CTA — action phrase. 4-6 words MAX.
+
+═══ BRAND VOICE ═══
+{config['voice']}
+
+═══ TODAY'S TOPIC ═══
+{selected_topic['topic']} (category: {selected_topic['category']})
+
+═══ PROBLEM TO ADDRESS ═══
+{selected_problem}
+
+═══ RULES ═══
+1. hook: MUST be a question or bold statement that creates curiosity. 5-8 words.
+2. solution: MUST deliver value or a surprising benefit. 6-10 words.
+3. cta: MUST be action-oriented. Use "Save", "Try", "Click", "Get". 4-6 words.
+4. title: Pinterest SEO title, 40-60 chars, include primary keyword.
+5. description: 2-3 sentences, problem→solution format, include keyword naturally.
+6. search_query: 2-3 word Pexels search term for a PORTRAIT video background.
+
+Respond in JSON only:
+{{
+  "hook": "...",
+  "solution": "...",
+  "cta": "...",
+  "title": "...",
+  "description": "...",
+  "search_query": "..."
+}}"""
+
+    response = _get_client().messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=500,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    content = response.content[0].text.strip()
+
+    try:
+        pin_data = json.loads(content)
+    except json.JSONDecodeError:
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        if json_match:
+            pin_data = json.loads(json_match.group())
+        else:
+            logger.error(f"[{brand_key}] Video pin content parse failed")
+            # Fallback: hardcoded content
+            pin_data = {
+                "hook": "Are You Making This Mistake?",
+                "solution": f"Here's What {config['name']} Recommends Instead",
+                "cta": "Save This For Later",
+                "title": f"{selected_topic['topic']} Tips",
+                "description": f"Quick tips about {selected_topic['topic']}.",
+                "search_query": selected_topic['topic'].lower(),
+            }
+
+    # Add metadata
+    pin_data['brand'] = brand_key
+    pin_data['topic'] = selected_topic['topic']
+    pin_data['category'] = selected_topic['category']
+    pin_data['board'] = selected_board
+    pin_data['destination_url'] = config.get('destination_base_url', '')
+    pin_data['content_type'] = 'video_pin'
+
+    return pin_data
