@@ -2,8 +2,8 @@ name: Fitness & Deals Articles
 
 on:
   schedule:
-    # Daily at 11 PM PST (7 AM UTC), Mon-Fri
-    - cron: '0 7 * * 1-5'
+    # Daily at 11:30 PM PST (7:30 AM UTC), Mon-Fri (staggered from blog-factory)
+    - cron: '30 7 * * 1-5'
   workflow_dispatch:
     inputs:
       brand:

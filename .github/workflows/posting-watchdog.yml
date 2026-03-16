@@ -7,7 +7,7 @@ name: Posting Watchdog
 
 on:
   schedule:
-    - cron: '0 7 * * *'  # 7 AM UTC = 11 PM PST
+    - cron: '20 7 * * *'  # 7:20 AM UTC = 11:20 PM PST (staggered from blog-factory)
   workflow_dispatch:
 
 jobs:

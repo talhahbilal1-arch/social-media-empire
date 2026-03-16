@@ -449,7 +449,11 @@ jobs:
                       'deals': 'daily-deal-darling',
                       'menopause': 'menopause-planner',
                   }
-                  webhook = os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
+                  # Menopause uses its own webhook; fitness/deals share MAKE_WEBHOOK_PINTEREST
+                  if brand == 'menopause':
+                      webhook = os.environ.get('MAKE_WEBHOOK_MENOPAUSE', '')
+                  else:
+                      webhook = os.environ.get('MAKE_WEBHOOK_PINTEREST', '')
                   if webhook:
                       payload = {
                           'brand': brand_map.get(brand, brand),
