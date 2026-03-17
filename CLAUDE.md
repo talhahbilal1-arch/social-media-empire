@@ -45,7 +45,7 @@ Phase 4: Render PIL image → upload Supabase Storage → post via Make.com webh
 
 | Secret | Purpose |
 |--------|---------|
-| `ANTHROPIC_API_KEY` | Claude API |
+| `GEMINI_API_KEY` | Google Gemini API (primary AI — gemini-2.0-flash) |
 | `PEXELS_API_KEY` | Background images |
 | `SUPABASE_URL` | Database |
 | `SUPABASE_KEY` | Database |
@@ -173,10 +173,12 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 
 ## Current Status
 <!-- UPDATE THIS AFTER EVERY WORK SESSION — just tell Claude "update CLAUDE.md status" -->
-- Pinterest posting: NEEDS CHECK
-- Affiliate sites indexed: NO
-- Affiliate tags correct: NEEDS VERIFICATION (was cross-contaminated before)
-- Last verified working: Unknown — needs full diagnostic
+- **AI API**: Fully migrated from Anthropic to Gemini (gemini-2.0-flash). All 16 Python/JS files + 19 workflows use GEMINI_API_KEY.
+- **Pinterest posting**: Active (content-engine runs 3x daily via Gemini)
+- **Affiliate sites indexed**: NO
+- **Affiliate tags correct**: Standardized (fitover35-20, dailydealdarling1-20)
+- **Stale branches/PRs**: Cleaned up (PR #26 closed, 11 branches deleted)
+- **Last session**: March 17, 2026 — full Anthropic→Gemini migration, workflow audit, branch cleanup
 
 ## Active Priorities (March 2026)
 1. Desmond Wong creator services — delivering free short-form + website, tracking results for paid conversion
