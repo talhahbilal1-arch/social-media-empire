@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 _client = None
 
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-2.0-flash"
 
 
 def _get_client():
