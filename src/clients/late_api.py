@@ -182,8 +182,10 @@ class LateAPIClient(BaseClient):
             "mediaItems": [{"type": "video", "url": video_url}],
         }
 
-        # Set status based on publish_now
-        if not publish_now:
+        # Publish immediately or save as draft
+        if publish_now:
+            payload["publishNow"] = True
+        else:
             payload["status"] = "draft"
 
         try:
@@ -206,7 +208,7 @@ class LateAPIClient(BaseClient):
 
             # Check if successful
             status = post.get('status', '')
-            if status in ['published', 'queued', 'processing']:
+            if status in ['published', 'queued', 'processing', 'draft']:
                 platform_url = None
                 if pinterest_result:
                     platform_url = pinterest_result.get('platformPostUrl')
