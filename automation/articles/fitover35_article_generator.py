@@ -1,5 +1,5 @@
 """
-FitOver35 article generator using Anthropic Claude API.
+FitOver35 article generator using Google Gemini API.
 
 Generates SEO-optimized fitness articles for men over 35 with:
 - Meta tags, Open Graph, and Twitter Card tags
@@ -23,9 +23,9 @@ from pathlib import Path
 from typing import Optional
 
 try:
-    import anthropic as _anthropic
+    from google import genai as _genai
 except ImportError:
-    _anthropic = None
+    _genai = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -344,53 +344,55 @@ FALLBACK_IMAGES = {
 # ── Article Generator ────────────────────────────────────────────────────────
 
 class FitOver35ArticleGenerator:
-    """Generate SEO-optimized fitness articles using Anthropic Claude API."""
+    """Generate SEO-optimized fitness articles using Google Gemini API."""
 
     def __init__(self, api_key: Optional[str] = None, pexels_key: Optional[str] = None):
-        """Initialize with Anthropic API key and optional Pexels key."""
+        """Initialize with Gemini API key and optional Pexels key."""
         self.pexels_key = pexels_key or os.getenv("PEXELS_API_KEY")
-        anthropic_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        gemini_key = api_key or os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY')
 
-        if anthropic_key and _anthropic:
-            self._anthropic_client = _anthropic.Anthropic(api_key=anthropic_key)
-            logger.info("Using Anthropic Claude backend for article generation")
+        if gemini_key and _genai:
+            self._gemini_client = _genai.Client(api_key=gemini_key)
+            logger.info("Using Google Gemini backend for article generation")
         else:
             raise ValueError(
-                "ANTHROPIC_API_KEY is not set or anthropic package is not installed. "
-                "Install with: pip install anthropic"
+                "GEMINI_API_KEY is not set or google-genai package is not installed. "
+                "Install with: pip install google-genai"
             )
 
     def _call_llm(self, prompt: str, json_mode: bool = False) -> str:
-        """Make an Anthropic Claude API call with retry.
+        """Make a Google Gemini API call with retry.
 
         Args:
             prompt: The prompt text to send.
-            json_mode: If True, instruct Claude to return only valid JSON.
+            json_mode: If True, instruct Gemini to return only valid JSON.
 
         Returns:
-            The text response from Claude.
+            The text response from Gemini.
         """
-        system_msg = None
         if json_mode:
-            system_msg = "You are a helpful assistant. Return ONLY valid JSON with no markdown formatting, no ```json blocks, and no extra text."
+            prompt = "You are a helpful assistant. Return ONLY valid JSON with no markdown formatting, no ```json blocks, and no extra text.\n\n" + prompt
 
         for attempt in range(3):
             try:
-                kwargs = {
-                    "model": "claude-sonnet-4-5-20250929",
-                    "max_tokens": 8000,
-                    "messages": [{"role": "user", "content": prompt}],
-                }
-                if system_msg:
-                    kwargs["system"] = system_msg
-                response = self._anthropic_client.messages.create(**kwargs)
-                return response.content[0].text
+                response = self._gemini_client.models.generate_content(
+                    model="gemini-2.0-flash",
+                    contents=prompt,
+                    config={"max_output_tokens": 8000, "temperature": 0.7},
+                )
+                return response.text
             except Exception as e:
-                logger.error(f"Anthropic API error (attempt {attempt + 1}): {e}")
-                if attempt == 2:
+                logger.error(f"Gemini API error (attempt {attempt + 1}): {e}")
+                if "429" in str(e) and attempt < 2:
+                    import time
+                    wait = 15 * (attempt + 1)
+                    logger.warning(f"Rate limited — waiting {wait}s")
+                    time.sleep(wait)
+                elif attempt == 2:
                     raise
-                import time
-                time.sleep(2 ** attempt)
+                else:
+                    import time
+                    time.sleep(2 ** attempt)
 
     def _repair_json(self, text: str) -> Optional[str]:
         """Attempt to repair common JSON issues from LLM responses."""

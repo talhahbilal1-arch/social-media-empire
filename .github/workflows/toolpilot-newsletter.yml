@@ -33,7 +33,7 @@ jobs:
       - name: Generate newsletter
         working-directory: ai-tools-hub
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate-newsletter.js --output /tmp/newsletter.json
 
       - name: Send via ConvertKit

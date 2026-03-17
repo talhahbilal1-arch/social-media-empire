@@ -19,6 +19,8 @@ from html.parser import HTMLParser
 from typing import Optional
 
 import requests
+import time as _time
+from google import genai
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger(__name__)
@@ -26,7 +28,7 @@ logger = logging.getLogger(__name__)
 # ── Config ────────────────────────────────────────
 CONVERTKIT_API_KEY = os.environ.get('CONVERTKIT_API_KEY', '')
 CONVERTKIT_API_SECRET = os.environ.get('CONVERTKIT_API_SECRET', '')
-ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY', '')
 SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
 
@@ -213,9 +215,9 @@ def pick_next_article():
 
 # ── Generate Newsletter via Claude ────────────────
 def generate_newsletter_email(article):
-    """Use Claude to generate a warm, engaging newsletter email from article content."""
-    if not ANTHROPIC_API_KEY:
-        logger.warning("No ANTHROPIC_API_KEY — using template fallback")
+    """Use Gemini to generate a warm, engaging newsletter email from article content."""
+    if not GEMINI_API_KEY:
+        logger.warning("No GEMINI_API_KEY — using template fallback")
         return generate_template_fallback(article)
 
     prompt = f"""Write a warm, conversational newsletter email for "The Menopause Planner" weekly newsletter.
@@ -246,33 +248,32 @@ Return JSON only:
 {{"subject": "...", "preview_text": "...", "html": "..."}}"""
 
     try:
-        resp = requests.post(
-            'https://api.anthropic.com/v1/messages',
-            headers={
-                'x-api-key': ANTHROPIC_API_KEY,
-                'anthropic-version': '2023-06-01',
-                'content-type': 'application/json',
-            },
-            json={
-                'model': 'claude-sonnet-4-5-20241022',
-                'max_tokens': 2000,
-                'messages': [{'role': 'user', 'content': prompt}],
-            },
-            timeout=60
-        )
-        resp.raise_for_status()
-        content = resp.json()['content'][0]['text']
+        client = genai.Client(api_key=GEMINI_API_KEY)
+        for attempt in range(3):
+            try:
+                resp = client.models.generate_content(
+                    model="gemini-2.0-flash",
+                    contents=prompt,
+                    config={"max_output_tokens": 2000, "temperature": 0.7},
+                )
+                break
+            except Exception as api_err:
+                if "429" in str(api_err) and attempt < 2:
+                    _time.sleep(15 * (attempt + 1))
+                else:
+                    raise
+        content = resp.text
 
         # Extract JSON from response
         json_match = re.search(r'\{[\s\S]*\}', content)
         if json_match:
             return json.loads(json_match.group())
 
-        logger.warning("Could not parse Claude response as JSON")
+        logger.warning("Could not parse Gemini response as JSON")
         return generate_template_fallback(article)
 
     except Exception as e:
-        logger.error(f"Claude API error: {e}")
+        logger.error(f"Gemini API error: {e}")
         return generate_template_fallback(article)
 
 

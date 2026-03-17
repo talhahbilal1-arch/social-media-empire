@@ -7,7 +7,7 @@ Usage:
     python3 tiktok_automation/tiktok_pipeline.py [--count 3] [--category beauty_hack]
 """
 
-import anthropic
+from google import genai
 import requests
 import json
 import os
@@ -41,6 +41,18 @@ PEXELS_SEARCH_MAP = {
 }
 
 ELEVENLABS_VOICE_ID = "EXAVITQu4vr4xnSDxMaL"  # Sarah - friendly female
+GEMINI_MODEL = "gemini-2.0-flash"
+
+_gemini_client = None
+
+def _get_gemini_client():
+    global _gemini_client
+    if _gemini_client is None:
+        key = os.environ.get("GEMINI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY", "")
+        if not key:
+            raise ValueError("GEMINI_API_KEY not set — cannot generate scripts")
+        _gemini_client = genai.Client(api_key=key)
+    return _gemini_client
 
 
 def _supabase_creds() -> tuple:
@@ -50,42 +62,48 @@ def _supabase_creds() -> tuple:
     return url, key
 
 
-def generate_script(client: anthropic.Anthropic, category: Optional[str] = None) -> dict:
-    """Generate a TikTok script via Claude API."""
+def generate_script(category: Optional[str] = None) -> dict:
+    """Generate a TikTok script via Gemini API."""
     if category is None:
         category = random.choice(CATEGORIES)
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=1500,
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    f"Create a viral TikTok short video script for the {category.replace('_', ' ')} niche. "
-                    "TARGET AUDIENCE: U.S. women aged 25-44 interested in quick workouts, beauty hacks, and lifestyle tips. "
-                    f"CATEGORY: {category}. "
-                    "REQUIREMENTS: "
-                    "1) Hook (first 3 seconds) that stops the scroll and creates curiosity. "
-                    "2) Problem or Pain point that is relatable. "
-                    "3) Solution or Tips with 2-3 actionable points. "
-                    "4) CTA that is subtle and engagement-focused. "
-                    "5) Duration 20-45 seconds when spoken. "
-                    "Generate these fields: "
-                    "topic (catchy max 100 chars), "
-                    "script (natural conversational voiceover, no stage directions), "
-                    "voice_prompt (ElevenLabs voice direction with tone pace emotion), "
-                    "video_prompt (scene description for stock video search), "
-                    "caption (TikTok caption with emoji hooks max 150 chars), "
-                    "hashtags (array of 7 hashtags including #fyp), "
-                    "affiliate_product (object with name, asin starting with B0, estimated_price as number). "
-                    "Return ONLY valid JSON with these exact keys and no markdown formatting or code blocks."
-                ),
-            }
-        ],
+    prompt = (
+        f"Create a viral TikTok short video script for the {category.replace('_', ' ')} niche. "
+        "TARGET AUDIENCE: U.S. women aged 25-44 interested in quick workouts, beauty hacks, and lifestyle tips. "
+        f"CATEGORY: {category}. "
+        "REQUIREMENTS: "
+        "1) Hook (first 3 seconds) that stops the scroll and creates curiosity. "
+        "2) Problem or Pain point that is relatable. "
+        "3) Solution or Tips with 2-3 actionable points. "
+        "4) CTA that is subtle and engagement-focused. "
+        "5) Duration 20-45 seconds when spoken. "
+        "Generate these fields: "
+        "topic (catchy max 100 chars), "
+        "script (natural conversational voiceover, no stage directions), "
+        "voice_prompt (ElevenLabs voice direction with tone pace emotion), "
+        "video_prompt (scene description for stock video search), "
+        "caption (TikTok caption with emoji hooks max 150 chars), "
+        "hashtags (array of 7 hashtags including #fyp), "
+        "affiliate_product (object with name, asin starting with B0, estimated_price as number). "
+        "Return ONLY valid JSON with these exact keys and no markdown formatting or code blocks."
     )
 
-    text = response.content[0].text.strip()
+    for attempt in range(3):
+        try:
+            response = _get_gemini_client().models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config={"max_output_tokens": 1500},
+            )
+            text = response.text.strip()
+            break
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                import time
+                time.sleep(15 * (attempt + 1))
+                continue
+            raise
+
     if text.startswith("```"):
         text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
 
@@ -217,14 +235,8 @@ def save_to_supabase(script_data: dict, audio_url: str, video_url: Optional[str]
 
 def run_pipeline(category: Optional[str] = None) -> dict:
     """Run the full TikTok content pipeline for one video."""
-    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if not api_key:
-        raise ValueError("ANTHROPIC_API_KEY not set — cannot generate scripts")
-
-    claude_client = anthropic.Anthropic(api_key=api_key)
-
     # Step 1: Generate script
-    script = generate_script(claude_client, category)
+    script = generate_script(category)
 
     # Step 2: Generate audio (optional — skipped if ELEVENLABS_API_KEY not set)
     audio_url = None
@@ -274,8 +286,7 @@ def main():
     args = parser.parse_args()
 
     if args.dry_run:
-        client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
-        script = generate_script(client, args.category)
+        script = generate_script(args.category)
         print(json.dumps(script, indent=2))
         return
 

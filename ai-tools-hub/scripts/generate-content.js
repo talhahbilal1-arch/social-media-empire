@@ -5,17 +5,17 @@
  * generates content via Claude API, and writes to the appropriate data file.
  *
  * Usage:
- *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js
- *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js --type comparison
- *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js --type review --count 3
- *   ANTHROPIC_API_KEY=xxx node scripts/generate-content.js --topic "github-copilot"
+ *   GEMINI_API_KEY=xxx node scripts/generate-content.js
+ *   GEMINI_API_KEY=xxx node scripts/generate-content.js --type comparison
+ *   GEMINI_API_KEY=xxx node scripts/generate-content.js --type review --count 3
+ *   GEMINI_API_KEY=xxx node scripts/generate-content.js --topic "github-copilot"
  */
 
 const fs = require('fs')
 const path = require('path')
 const https = require('https')
 
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY
 const TOOLS_FILE = path.join(__dirname, '..', 'content', 'tools.json')
 const COMPARISONS_FILE = path.join(__dirname, '..', 'content', 'comparisons.json')
 const CALENDAR_FILE = path.join(__dirname, '..', 'config', 'content-calendar.json')
@@ -31,49 +31,45 @@ const requestedType = getArg('type') || 'auto'
 const requestedTopic = getArg('topic') || ''
 const maxCount = parseInt(getArg('count') || '1', 10)
 
-// ---------- Claude API ----------
+// ---------- Gemini API ----------
 
 async function callClaude(prompt, maxTokens = 3000) {
-  return new Promise((resolve, reject) => {
-    const data = JSON.stringify({
-      model: 'claude-sonnet-4-5-20250929',
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: prompt }]
-    })
+  // Function name kept as callClaude for backward compatibility with callers
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`
 
-    const options = {
-      hostname: 'api.anthropic.com',
-      path: '/v1/messages',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'Content-Length': Buffer.byteLength(data)
-      }
-    }
-
-    const req = https.request(options, (res) => {
-      let body = ''
-      res.on('data', chunk => body += chunk)
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(body)
-          if (parsed.content && parsed.content[0]) {
-            resolve(parsed.content[0].text)
-          } else {
-            reject(new Error(`Unexpected API response: ${body.substring(0, 300)}`))
-          }
-        } catch (e) {
-          reject(new Error(`Failed to parse API response: ${e.message}`))
-        }
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: maxTokens, temperature: 0.7 }
+        })
       })
-    })
 
-    req.on('error', reject)
-    req.write(data)
-    req.end()
-  })
+      if (resp.status === 429 && attempt < 2) {
+        const wait = 15000 * (attempt + 1)
+        console.log(`Gemini 429 rate limit — waiting ${wait / 1000}s (attempt ${attempt + 1}/3)`)
+        await new Promise(r => setTimeout(r, wait))
+        continue
+      }
+
+      const json = await resp.json()
+      if (json.candidates && json.candidates[0] && json.candidates[0].content) {
+        return json.candidates[0].content.parts[0].text
+      } else {
+        throw new Error(`Unexpected API response: ${JSON.stringify(json).substring(0, 300)}`)
+      }
+    } catch (e) {
+      if (attempt === 2) throw e
+      if (e.message && e.message.includes('429')) {
+        await new Promise(r => setTimeout(r, 15000 * (attempt + 1)))
+        continue
+      }
+      throw e
+    }
+  }
 }
 
 function extractJson(text) {

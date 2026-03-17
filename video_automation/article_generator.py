@@ -11,22 +11,41 @@ import re
 import logging
 from datetime import datetime, timezone
 
-import anthropic
+from google import genai
+import time as _time
 
 logger = logging.getLogger(__name__)
 
+GEMINI_MODEL = "gemini-2.0-flash"
 _client = None
 
 
 def _get_client():
-    """Lazy-initialize the Anthropic client to prevent import-time failures."""
+    """Lazy-initialize the Gemini client."""
     global _client
     if _client is None:
-        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY', '')
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
-        _client = anthropic.Anthropic(api_key=api_key)
+            raise ValueError("GEMINI_API_KEY environment variable is not set")
+        _client = genai.Client(api_key=api_key)
     return _client
+
+
+def _generate_text(prompt, max_tokens=2000):
+    """Call Gemini API with retry logic for 429 errors."""
+    for attempt in range(3):
+        try:
+            response = _get_client().models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config={"max_output_tokens": max_tokens},
+            )
+            return response.text.strip()
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                _time.sleep(15 * (attempt + 1))
+                continue
+            raise
 
 # Load affiliate config
 AFFILIATE_CONFIG_PATH = os.path.join(
@@ -283,12 +302,7 @@ def _research_topic(brand_key, brand_config, trending_topic):
         why_trending=trending_topic.get('why_trending', trending_topic.get('reason', 'Currently popular'))
     )
     try:
-        response = _get_client().messages.create(
-            model="claude-sonnet-4-5-20250929",
-            max_tokens=2000,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        text = response.content[0].text.strip()
+        text = _generate_text(prompt, max_tokens=2000)
         # Parse JSON from response
         try:
             return json.loads(text)
@@ -310,12 +324,7 @@ def _review_article(brand_config, article_content):
         article_content=article_content
     )
     try:
-        response = _get_client().messages.create(
-            model="claude-sonnet-4-5-20250929",
-            max_tokens=4000,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        reviewed = response.content[0].text.strip()
+        reviewed = _generate_text(prompt, max_tokens=4000)
         # Safety: if review output is suspiciously short, keep original
         if len(reviewed) < len(article_content) * 0.6:
             logger.warning("Review output too short, keeping original")
@@ -362,29 +371,22 @@ def generate_article_for_trend(brand_key, trending_topic, article_slug, supabase
     # Step 2: Generate article (with or without research)
     research_json = json.dumps(research, indent=2) if research else "No research data — use your expertise."
 
-    response = _get_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=4000,
-        messages=[{
-            "role": "user",
-            "content": ARTICLE_GENERATION_PROMPT.format(
-                brand_name=brand_config['name'],
-                topic=trending_topic['topic'],
-                why_trending=trending_topic.get('why_trending', trending_topic.get('reason', 'Currently popular')),
-                article_slug=article_slug,
-                voice=brand_config['voice'],
-                best_hook=best_hook or "Write a compelling opening hook that immediately grabs the reader.",
-                research_json=research_json,
-                lead_magnet=lead_magnets.get(brand_key, 'FREE guide'),
-                brand_key=brand_key,
-                affiliate_names=json.dumps([p.get('name', '') for p in brand_affiliates]),
-                seo_keywords=', '.join(brand_config['seo_keywords'][:8]),
-                date_today=datetime.now(timezone.utc).strftime('%Y-%m-%d'),
-            )
-        }]
+    article_prompt = ARTICLE_GENERATION_PROMPT.format(
+        brand_name=brand_config['name'],
+        topic=trending_topic['topic'],
+        why_trending=trending_topic.get('why_trending', trending_topic.get('reason', 'Currently popular')),
+        article_slug=article_slug,
+        voice=brand_config['voice'],
+        best_hook=best_hook or "Write a compelling opening hook that immediately grabs the reader.",
+        research_json=research_json,
+        lead_magnet=lead_magnets.get(brand_key, 'FREE guide'),
+        brand_key=brand_key,
+        affiliate_names=json.dumps([p.get('name', '') for p in brand_affiliates]),
+        seo_keywords=', '.join(brand_config['seo_keywords'][:8]),
+        date_today=datetime.now(timezone.utc).strftime('%Y-%m-%d'),
     )
 
-    article_content = response.content[0].text.strip()
+    article_content = _generate_text(article_prompt, max_tokens=4000)
 
     # Step 3: Editorial Review (skip if not enhanced)
     if enhanced:

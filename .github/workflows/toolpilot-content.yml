@@ -44,7 +44,7 @@ jobs:
 
       - name: Generate content from calendar
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           node scripts/generate-content.js \
             --type "${{ github.event.inputs.content_type || 'auto' }}" \
@@ -71,6 +71,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ai-tools-hub/content/ ai-tools-hub/config/content-calendar.json ai-tools-hub/public/sitemap.xml
           git diff --staged --quiet || git commit -m "content: auto-generated $(date +%Y-%m-%d)"
+          git pull --rebase origin main
           git push
 
       - name: Ping search engines

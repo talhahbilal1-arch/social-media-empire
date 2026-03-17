@@ -13,26 +13,44 @@ class WorkflowGuardian:
 
     REPO = 'talhahbilal1-arch/social-media-empire'
 
-    # All active workflows ranked by priority
+    # All active workflows ranked by priority (30 total, updated March 2026)
     CRITICAL_WORKFLOWS = [
-        'content-engine.yml',       # 5x daily — core pipeline
+        'content-engine.yml',       # 3x daily — core pipeline
         'fitness-articles.yml',     # Article generation
         'system-health.yml',        # Self-healing (this workflow)
+        'rescue-poster.yml',        # Every 2 hrs — rescue failed pins
     ]
 
     IMPORTANT_WORKFLOWS = [
-        'weekly-discovery.yml',     # Sunday trend discovery
-        'email-automation.yml',     # ConvertKit sequences
+        'weekly-discovery.yml',     # Monday trend discovery
+        'daily-trend-scout.yml',    # Daily trend scouting
+        'seo-content-machine.yml',  # MWF SEO content
+        'video-automation-morning.yml',  # Daily video generation
+        'video-pins.yml',           # Daily Remotion video pins
+        'tiktok-content.yml',       # 3x daily TikTok content
+        'tiktok-poster.yml',        # Daily TikTok posting
+        'menopause-newsletter.yml', # Weekly menopause newsletter
         'toolpilot-deploy.yml',     # ToolPilot site deploy
+        'toolpilot-content.yml',    # Mon-Fri content generation
         'toolpilot-newsletter.yml', # Weekly newsletter
         'youtube-fitness.yml',      # YouTube Shorts
     ]
 
     OPERATIONAL_WORKFLOWS = [
-        'weekly-maintenance.yml',   # Sunday cleanup
-        'analytics-collector.yml',  # Daily analytics
+        'deploy-brand-sites.yml',   # Manual Vercel deploy
+        'pinterest-analytics.yml',  # Weekly analytics
+        'emergency-alert.yml',      # Daily alerts
         'self-improve.yml',         # Weekly self-improvement
+        'weekly-summary.yml',       # Weekly report
+        'analytics-collector.yml',  # Daily analytics
+        'revenue-activation.yml',   # Weekly revenue analysis
+        'revenue-intelligence.yml', # Daily revenue intelligence
+        'check-affiliate-links.yml',  # Weekly link validation
+        'toolpilot-report.yml',     # Weekly health report
+        'toolpilot-weekly.yml',     # Weekly tasks
         'auto-merge.yml',           # PR auto-merge
+        'subdomain-deploy.yml',     # Subdomain deploys
+        'validate-workflows.yml',   # CI workflow validation
     ]
 
     # Max retries per workflow within a 6-hour window

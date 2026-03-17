@@ -90,6 +90,43 @@ Design Direction: Moved from generic pink/red template to editorial magazine aes
 
 ---
 
+## Anthropic to Gemini Migration (March 17, 2026)
+
+### Status: COMPLETE
+
+Migrated ALL Python + JS files from Anthropic Claude SDK to Google Gemini SDK.
+Pattern: `from google import genai` + `genai.Client(api_key=...)` + `client.models.generate_content(model="gemini-2.0-flash", ...)` + `response.text`
+All files have 429 retry logic (3 attempts, 15s/30s/45s waits) and GEMINI_API_KEY fallback to ANTHROPIC_API_KEY.
+
+**Python files migrated (12):**
+- [x] 1. `automation/articles/fitover35_article_generator.py`
+- [x] 2. `video_automation/seo_content_machine.py`
+- [x] 3. `video_automation/daily_trend_scout.py`
+- [x] 4. `video_automation/trend_discovery.py`
+- [x] 5. `video_automation/video_content_generator.py`
+- [x] 6. `video_automation/pin_article_generator.py` — ALREADY DONE (uses Gemini)
+- [x] 7. `email_marketing/menopause_newsletter.py`
+- [x] 8. `video_automation/revenue_intelligence.py`
+- [x] 9. `video_automation/revenue_activation.py`
+- [x] 10. `tiktok_automation/tiktok_pipeline.py`
+- [x] 11. `video_automation/article_generator.py`
+- [x] 12. `core/claude_client.py`
+- [x] 13. `monitoring/health_checker.py` — removed check_anthropic(), uses existing check_gemini()
+
+**JS files migrated (4):**
+- [x] `ai-tools-hub/scripts/generate-content.js`
+- [x] `ai-tools-hub/scripts/generate-newsletter.js`
+- [x] `ai-tools-hub/scripts/discover-ai-trends.js`
+- [x] `ai-tools-hub/scripts/generate-blog-posts.js`
+
+**Workflow YAML files:** All 19 active workflows already used GEMINI_API_KEY. Only archived workflows reference ANTHROPIC_API_KEY.
+
+**Other fixes applied:**
+- Fixed `fitness-articles.yml` broken day-of-week filtering (removed broken `contains()` check)
+- Verified `check-affiliate-links.yml` paths are correct
+
+---
+
 ## Affiliate Link Health Check System (March 11, 2026)
 
 ### Status: COMPLETE

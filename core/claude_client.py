@@ -1,44 +1,65 @@
 """
-Claude Client - AI content generation for all agents
+LLM Client - AI content generation for all agents.
+Migrated from Anthropic Claude to Google Gemini (free tier).
+The class name and interface remain the same to avoid breaking downstream code.
 """
 import os
 import json
+import time
 from typing import Dict, List, Optional, Any
-import anthropic
+from google import genai
 
 
 class ClaudeClient:
-    """Wrapper for Claude API operations."""
+    """Wrapper for Gemini API operations.
+
+    Kept as 'ClaudeClient' for backward compatibility with all importers.
+    """
 
     def __init__(self):
-        api_key = os.environ.get('ANTHROPIC_API_KEY')
+        api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY')
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable required")
+            raise ValueError("GEMINI_API_KEY environment variable required")
 
-        self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-sonnet-4-20250514"  # Good balance of quality and cost
+        self.client = genai.Client(api_key=api_key)
+        self.model = "gemini-2.0-flash"
 
     def generate(self,
                  system_prompt: str,
                  user_prompt: str,
                  max_tokens: int = 4096,
                  temperature: float = 0.7) -> str:
-        """Generate text response from Claude."""
-        message = self.client.messages.create(
-            model=self.model,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_prompt}]
-        )
-        return message.content[0].text
+        """Generate text response from Gemini."""
+        # Gemini doesn't have a separate system prompt param — merge into prompt
+        if system_prompt:
+            full_prompt = f"{system_prompt}\n\n{user_prompt}"
+        else:
+            full_prompt = user_prompt
+
+        for attempt in range(3):
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model,
+                    contents=full_prompt,
+                    config={
+                        "max_output_tokens": max_tokens,
+                        "temperature": temperature,
+                    },
+                )
+                return response.text
+            except Exception as e:
+                if "429" in str(e) and attempt < 2:
+                    wait = 15 * (attempt + 1)
+                    time.sleep(wait)
+                else:
+                    raise
 
     def generate_json(self,
                       system_prompt: str,
                       user_prompt: str,
                       max_tokens: int = 4096,
                       temperature: float = 0.7) -> Dict:
-        """Generate and parse JSON response from Claude."""
+        """Generate and parse JSON response from Gemini."""
         # Add JSON instruction to system prompt
         json_system = f"""{system_prompt}
 
@@ -46,7 +67,7 @@ IMPORTANT: Your response must be valid JSON only. No markdown, no explanation, j
 
         response = self.generate(json_system, user_prompt, max_tokens, temperature)
 
-        # Clean up response in case Claude adds markdown
+        # Clean up response in case model adds markdown
         clean_response = response.strip()
         if clean_response.startswith('```json'):
             clean_response = clean_response[7:]

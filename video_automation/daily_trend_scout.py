@@ -18,7 +18,8 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-import anthropic
+from google import genai
+import time as _time
 import feedparser
 import requests
 from pytrends.request import TrendReq
@@ -28,14 +29,14 @@ logger = logging.getLogger(__name__)
 _client = None
 
 
-def _get_anthropic_client():
-    """Lazy initialization of Anthropic client."""
+def _get_gemini_client():
+    """Lazy initialization of Gemini client."""
     global _client
     if _client is None:
-        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY', '')
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable is required")
-        _client = anthropic.Anthropic(api_key=api_key)
+            raise ValueError("GEMINI_API_KEY environment variable is required")
+        _client = genai.Client(api_key=api_key)
     return _client
 
 
@@ -273,12 +274,7 @@ def synthesize_daily_trends(brand_key, raw_trends, yesterday_topics):
     for cat_products in affiliate_products.values():
         all_products.extend(cat_products)
 
-    response = _get_anthropic_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=2000,
-        messages=[{
-            "role": "user",
-            "content": f"""You are a Pinterest content strategist selecting today's trending topics.
+    prompt = f"""You are a Pinterest content strategist selecting today's trending topics.
 
 BRAND: {brand_key} — {brand_config['name']}
 DATE: {datetime.now(timezone.utc).strftime('%A, %B %d, %Y')}
@@ -331,10 +327,22 @@ Return ONLY this JSON array (no markdown, no backticks):
         ...
     }}
 ]"""
-        }]
-    )
 
-    content = response.content[0].text.strip()
+    for attempt in range(3):
+        try:
+            response = _get_gemini_client().models.generate_content(
+                model="gemini-2.0-flash",
+                contents=prompt,
+                config={"max_output_tokens": 2000, "temperature": 0.7},
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                _time.sleep(15 * (attempt + 1))
+            else:
+                raise
+
+    content = response.text.strip()
     try:
         topics = json.loads(content)
     except json.JSONDecodeError:

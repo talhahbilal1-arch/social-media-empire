@@ -42,13 +42,13 @@ jobs:
       - name: Discover AI trends
         if: github.event.inputs.skip_discovery != 'true'
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/discover-ai-trends.js
 
       # Step 2: Generate discovered content
       - name: Generate new content
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate-content.js --count ${{ github.event.inputs.content_count || '3' }}
 
       # Step 3: Build site
@@ -74,4 +74,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ai-tools-hub/content/ ai-tools-hub/config/ ai-tools-hub/public/sitemap.xml ai-tools-hub/public/robots.txt
           git diff --cached --quiet || git commit -m "content: weekly discovery + auto-generated content"
+          git pull --rebase origin main
           git push

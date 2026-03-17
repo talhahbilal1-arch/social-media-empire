@@ -24,7 +24,7 @@ jobs:
         env:
           RAINFOREST_API_KEY: ${{ secrets.RAINFOREST_API_KEY }}
         run: |
-          python automation/links/check_links.py --source outputs/fitover35-website/ dailydealdarling_website/
+          python automation/links/check_links.py --source outputs/fitover35-website/ outputs/dailydealdarling-website/
         continue-on-error: true
 
       - name: Create issue if broken links found

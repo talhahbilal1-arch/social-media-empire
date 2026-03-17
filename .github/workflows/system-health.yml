@@ -45,7 +45,6 @@ jobs:
       - name: Run health check
         id: check
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           CREATOMATE_API_KEY: ${{ secrets.CREATOMATE_API_KEY }}
@@ -135,6 +134,15 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run self-healer agent (schedule checks + workflow re-triggering)
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 -m agents.self_healer
+
       - name: Self-healing — comprehensive auto-fix
         id: heal
         env:
@@ -143,7 +151,7 @@ jobs:
           SUPABASE_TIKTOK_URL: ${{ secrets.SUPABASE_TIKTOK_URL }}
           SUPABASE_TIKTOK_KEY: ${{ secrets.SUPABASE_TIKTOK_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}

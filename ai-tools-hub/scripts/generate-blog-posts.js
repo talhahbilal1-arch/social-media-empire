@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 /**
  * Generates 5 new blog posts with images and appends them to articles.json
- * Usage: ANTHROPIC_API_KEY=xxx node scripts/generate-blog-posts.js
+ * Usage: GEMINI_API_KEY=xxx node scripts/generate-blog-posts.js
  */
 
 const fs = require('fs')
 const path = require('path')
 const https = require('https')
 
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY
 const ARTICLES_FILE = path.join(__dirname, '..', 'content', 'articles.json')
 const IMAGES_DIR = path.join(__dirname, '..', 'public', 'images', 'blog')
 
-if (!ANTHROPIC_API_KEY) {
-  console.error('ANTHROPIC_API_KEY is required')
+if (!GEMINI_API_KEY) {
+  console.error('GEMINI_API_KEY is required')
   process.exit(1)
 }
 
@@ -64,43 +64,43 @@ ${caption ? `<figcaption style="text-align:center;font-size:0.85em;color:#888;">
 </figure>\n`
 }
 
-function callClaude(prompt, maxTokens = 6000) {
-  return new Promise((resolve, reject) => {
-    const data = JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: prompt }],
-    })
+async function callClaude(prompt, maxTokens = 6000) {
+  // Function name kept as callClaude for backward compatibility with callers
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`
 
-    const options = {
-      hostname: 'api.anthropic.com',
-      path: '/v1/messages',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'Content-Length': Buffer.byteLength(data),
-      },
-    }
-
-    const req = https.request(options, (res) => {
-      let body = ''
-      res.on('data', (chunk) => (body += chunk))
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(body)
-          if (parsed.error) return reject(new Error(parsed.error.message))
-          resolve(parsed.content[0].text)
-        } catch (e) {
-          reject(new Error(`Parse error: ${e.message}\nBody: ${body.slice(0, 200)}`))
-        }
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: maxTokens, temperature: 0.7 }
+        })
       })
-    })
-    req.on('error', reject)
-    req.write(data)
-    req.end()
-  })
+
+      if (resp.status === 429 && attempt < 2) {
+        const wait = 15000 * (attempt + 1)
+        console.log(`Gemini 429 rate limit — waiting ${wait / 1000}s (attempt ${attempt + 1}/3)`)
+        await new Promise(r => setTimeout(r, wait))
+        continue
+      }
+
+      const json = await resp.json()
+      if (json.candidates && json.candidates[0] && json.candidates[0].content) {
+        return json.candidates[0].content.parts[0].text
+      } else {
+        throw new Error(`Unexpected API response: ${JSON.stringify(json).substring(0, 300)}`)
+      }
+    } catch (e) {
+      if (attempt === 2) throw e
+      if (e.message && e.message.includes('429')) {
+        await new Promise(r => setTimeout(r, 15000 * (attempt + 1)))
+        continue
+      }
+      throw e
+    }
+  }
 }
 
 const ARTICLES_TO_GENERATE = [

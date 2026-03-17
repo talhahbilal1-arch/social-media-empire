@@ -1,13 +1,14 @@
-"""AI-powered content generation for video scripts using Claude API."""
+"""AI-powered content generation for video scripts using Google Gemini API."""
 from __future__ import annotations
 
 import json
 import os
 import random
+import time as _time
 from typing import Optional
 from dataclasses import dataclass, field
 
-import anthropic
+from google import genai
 
 from utils.config import get_config
 from utils.api_clients import PexelsClient
@@ -172,28 +173,34 @@ class VideoContent:
 
 @dataclass
 class VideoContentGenerator:
-    """Generates video content using Claude API and stock media."""
+    """Generates video content using Google Gemini API and stock media."""
 
-    claude_client: anthropic.Anthropic = field(default=None)
+    gemini_client: genai.Client = field(default=None)
     pexels_client: PexelsClient = field(default=None)
 
     def __post_init__(self):
         config = get_config()
-        if self.claude_client is None:
-            self.claude_client = anthropic.Anthropic(
-                api_key=os.environ.get('ANTHROPIC_API_KEY', config.anthropic_api_key if hasattr(config, 'anthropic_api_key') else '')
-            )
+        if self.gemini_client is None:
+            api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY', getattr(config, 'anthropic_api_key', ''))
+            self.gemini_client = genai.Client(api_key=api_key)
         if self.pexels_client is None:
             self.pexels_client = PexelsClient(api_key=config.pexels_api_key)
 
     def _call_claude(self, prompt: str, max_tokens: int = 500) -> str:
-        """Call Claude API and return text response."""
-        response = self.claude_client.messages.create(
-            model="claude-sonnet-4-5-20250929",
-            max_tokens=max_tokens,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return response.content[0].text.strip()
+        """Call Gemini API and return text response."""
+        for attempt in range(3):
+            try:
+                response = self.gemini_client.models.generate_content(
+                    model="gemini-2.0-flash",
+                    contents=prompt,
+                    config={"max_output_tokens": max_tokens, "temperature": 0.7},
+                )
+                return response.text.strip()
+            except Exception as e:
+                if "429" in str(e) and attempt < 2:
+                    _time.sleep(15 * (attempt + 1))
+                else:
+                    raise
 
     def generate_content(
         self,

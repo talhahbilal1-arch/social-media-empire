@@ -40,7 +40,7 @@ jobs:
 
       - name: Send weekly newsletter
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
           CONVERTKIT_API_SECRET: ${{ secrets.CONVERTKIT_API_SECRET }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

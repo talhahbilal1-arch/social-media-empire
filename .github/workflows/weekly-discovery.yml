@@ -34,7 +34,7 @@ jobs:
 
       - name: Run trend discovery for all brands
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -70,7 +70,7 @@ jobs:
 
       - name: Generate articles for all trending topics
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -126,7 +126,8 @@ jobs:
           git config user.email 'bot@fitover35.com'
           git add outputs/
           git diff --staged --quiet || git commit -m "Weekly articles: $(date +%Y-%m-%d) trending topics"
-          git push || echo "Nothing to push"
+          git pull --rebase origin main
+          git push
 
       - name: Weekly planning summary
         if: always()

@@ -21,7 +21,8 @@ Agents (run in parallel via ThreadPoolExecutor):
 import os
 import sys
 import json
-import anthropic
+from google import genai
+import time as _time
 from datetime import datetime, timedelta, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -37,11 +38,11 @@ BRAND_NICHES = {
 }
 
 
-def _get_anthropic_client():
-    key = os.environ.get('ANTHROPIC_API_KEY', '')
+def _get_gemini_client():
+    key = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY', '')
     if not key:
-        raise ValueError('ANTHROPIC_API_KEY not set')
-    return anthropic.Anthropic(api_key=key)
+        raise ValueError('GEMINI_API_KEY not set')
+    return genai.Client(api_key=key)
 
 
 # ─── Agent 1: Analytics Reader ───────────────────────────────────────────────
@@ -164,12 +165,20 @@ Return JSON only — no commentary:
 }}"""
 
         try:
-            response = client.messages.create(
-                model='claude-sonnet-4-5',
-                max_tokens=1500,
-                messages=[{'role': 'user', 'content': prompt}]
-            )
-            text = response.content[0].text.strip()
+            for attempt in range(3):
+                try:
+                    response = client.models.generate_content(
+                        model='gemini-2.0-flash',
+                        contents=prompt,
+                        config={'max_output_tokens': 1500, 'temperature': 0.7},
+                    )
+                    break
+                except Exception as api_err:
+                    if '429' in str(api_err) and attempt < 2:
+                        _time.sleep(15 * (attempt + 1))
+                    else:
+                        raise
+            text = response.text.strip()
             if '```json' in text:
                 text = text.split('```json')[1].split('```')[0].strip()
             elif '```' in text:
@@ -250,7 +259,7 @@ def run_revenue_intelligence():
     print(f'Timestamp: {datetime.now(timezone.utc).isoformat()}')
 
     db = get_supabase_client()
-    client = _get_anthropic_client()
+    client = _get_gemini_client()
 
     # Step 1: Read analytics (sequential — must complete before analysis)
     analytics_data = analytics_reader_agent(db)

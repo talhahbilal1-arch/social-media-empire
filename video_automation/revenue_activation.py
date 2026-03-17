@@ -21,7 +21,8 @@ import os
 import sys
 import json
 import requests
-import anthropic
+from google import genai
+import time as _time
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -37,11 +38,34 @@ BRAND_NICHES = {
 }
 
 
-def _get_anthropic_client():
-    key = os.environ.get('ANTHROPIC_API_KEY', '')
-    if not key:
-        raise ValueError('ANTHROPIC_API_KEY not set')
-    return anthropic.Anthropic(api_key=key)
+GEMINI_MODEL = "gemini-2.0-flash"
+_gemini_client = None
+
+def _get_gemini_client():
+    global _gemini_client
+    if _gemini_client is None:
+        key = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY', '')
+        if not key:
+            raise ValueError('GEMINI_API_KEY not set')
+        _gemini_client = genai.Client(api_key=key)
+    return _gemini_client
+
+
+def _generate_text(prompt, max_tokens=1000):
+    """Call Gemini API with retry logic for 429 errors."""
+    for attempt in range(3):
+        try:
+            response = _get_gemini_client().models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config={"max_output_tokens": max_tokens},
+            )
+            return response.text.strip()
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                _time.sleep(15 * (attempt + 1))
+                continue
+            raise
 
 
 # ─── Agent 1: Email Activator ────────────────────────────────────────────────
@@ -130,8 +154,8 @@ def email_activator_agent():
 
 # ─── Agent 2: Affiliate Discoverer ──────────────────────────────────────────
 
-def affiliate_discoverer_agent(db, client):
-    """Use Claude to find real affiliate programs to replace placeholders."""
+def affiliate_discoverer_agent(db):
+    """Use Gemini to find real affiliate programs to replace placeholders."""
     print('[affiliate_discoverer] Discovering real affiliate programs...')
     results = {}
 
@@ -178,12 +202,7 @@ Return JSON only:
 }}"""
 
         try:
-            response = client.messages.create(
-                model='claude-sonnet-4-5',
-                max_tokens=1000,
-                messages=[{'role': 'user', 'content': prompt}]
-            )
-            text = response.content[0].text.strip()
+            text = _generate_text(prompt, max_tokens=1000)
             if '```json' in text:
                 text = text.split('```json')[1].split('```')[0].strip()
             elif '```' in text:
@@ -389,12 +408,11 @@ def run_revenue_activation():
     print(f'Timestamp: {datetime.now(timezone.utc).isoformat()}')
 
     db = get_supabase_client()
-    client = _get_anthropic_client()
 
     # Run first 3 agents in parallel — they're independent
     with ThreadPoolExecutor(max_workers=3) as executor:
         f_email = executor.submit(email_activator_agent)
-        f_affiliate = executor.submit(affiliate_discoverer_agent, db, client)
+        f_affiliate = executor.submit(affiliate_discoverer_agent, db)
         f_validate = executor.submit(affiliate_validator_agent, db)
 
         email_result = f_email.result()

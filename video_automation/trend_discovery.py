@@ -11,21 +11,22 @@ import logging
 import requests
 from datetime import datetime, timedelta, timezone
 
-import anthropic
+from google import genai
+import time as _time
 from pytrends.request import TrendReq
 
 logger = logging.getLogger(__name__)
 
 _client = None
 
-def _get_anthropic_client():
-    """Lazy initialization of Anthropic client to avoid empty API key at import time."""
+def _get_gemini_client():
+    """Lazy initialization of Gemini client to avoid empty API key at import time."""
     global _client
     if _client is None:
-        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY', '')
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable is required")
-        _client = anthropic.Anthropic(api_key=api_key)
+            raise ValueError("GEMINI_API_KEY environment variable is required")
+        _client = genai.Client(api_key=api_key)
     return _client
 
 # ═══════════════════════════════════════════════════════════════
@@ -243,12 +244,7 @@ def fetch_pinterest_trends(brand_key):
     """Discover what's trending on Pinterest for this niche via Claude analysis."""
     config = NICHE_CONFIGS[brand_key]
 
-    response = _get_anthropic_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=1500,
-        messages=[{
-            "role": "user",
-            "content": f"""You are a Pinterest trends analyst. Based on your knowledge of what's
+    pinterest_prompt = f"""You are a Pinterest trends analyst. Based on your knowledge of what's
 currently popular and trending on Pinterest, identify the top 10 trending topics
 in this niche: {brand_key}
 
@@ -267,11 +263,23 @@ Return ONLY a JSON array, no other text:
     {{"topic": "...", "reason": "...", "score": 85}},
     ...
 ]"""
-        }]
-    )
+
+    for attempt in range(3):
+        try:
+            response = _get_gemini_client().models.generate_content(
+                model="gemini-2.0-flash",
+                contents=pinterest_prompt,
+                config={"max_output_tokens": 1500, "temperature": 0.7},
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                _time.sleep(15 * (attempt + 1))
+            else:
+                raise
 
     try:
-        content = response.content[0].text.strip()
+        content = response.text.strip()
         if content.startswith('```'):
             content = content.split('\n', 1)[1].rsplit('```', 1)[0]
         trends = json.loads(content)
@@ -296,12 +304,7 @@ def fetch_web_trends(brand_key):
     """Use Claude to synthesize trending topics from web knowledge."""
     config = NICHE_CONFIGS[brand_key]
 
-    response = _get_anthropic_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=1500,
-        messages=[{
-            "role": "user",
-            "content": f"""You are a content strategist researching what's trending RIGHT NOW
+    web_prompt = f"""You are a content strategist researching what's trending RIGHT NOW
 (the current week of {datetime.now().strftime('%B %Y')}) in the {brand_key} niche.
 
 Think about:
@@ -327,11 +330,23 @@ RULES:
 - Score should reflect how timely and trending this is (100 = viral right now, 50 = moderately popular, 25 = emerging)
 
 Return ONLY the JSON array, no other text."""
-        }]
-    )
+
+    for attempt in range(3):
+        try:
+            response = _get_gemini_client().models.generate_content(
+                model="gemini-2.0-flash",
+                contents=web_prompt,
+                config={"max_output_tokens": 1500, "temperature": 0.7},
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                _time.sleep(15 * (attempt + 1))
+            else:
+                raise
 
     try:
-        content = response.content[0].text.strip()
+        content = response.text.strip()
         if content.startswith('```'):
             content = content.split('\n', 1)[1].rsplit('```', 1)[0]
         trends = json.loads(content)
@@ -387,12 +402,7 @@ def discover_weekly_trends(brand_key):
     # Use Claude to filter, deduplicate, rank, and select the best trends
     pins_per_week = {"fitness": 21, "deals": 14, "menopause": 14}
 
-    response = _get_anthropic_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=2000,
-        messages=[{
-            "role": "user",
-            "content": f"""You are a content strategist selecting the best trending topics for a Pinterest brand.
+    ranking_prompt = f"""You are a content strategist selecting the best trending topics for a Pinterest brand.
 
 BRAND: {brand_key}
 RELEVANCE FILTER: {config['relevance_filter']}
@@ -441,11 +451,23 @@ Return ONLY this JSON:
 
 The "pins_to_assign" should total up to {pins_per_week[brand_key]} pins/week.
 Distribute more pins to higher-ranked (more trending) topics."""
-        }]
-    )
+
+    for attempt in range(3):
+        try:
+            response = _get_gemini_client().models.generate_content(
+                model="gemini-2.0-flash",
+                contents=ranking_prompt,
+                config={"max_output_tokens": 2000, "temperature": 0.7},
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                _time.sleep(15 * (attempt + 1))
+            else:
+                raise
 
     try:
-        content = response.content[0].text.strip()
+        content = response.text.strip()
         if content.startswith('```'):
             content = content.split('\n', 1)[1].rsplit('```', 1)[0]
         weekly_trends = json.loads(content)
@@ -557,12 +579,7 @@ def build_weekly_calendar(weekly_trends, brand_key, supabase_client):
     week_start = datetime.now(timezone.utc) + timedelta(days=(7 - datetime.now(timezone.utc).weekday()) % 7)
     week_start_str = week_start.strftime('%Y-%m-%d')
 
-    response = _get_anthropic_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=6000,
-        messages=[{
-            "role": "user",
-            "content": f"""Create a detailed 7-day Pinterest content calendar for the {brand_key} brand.
+    calendar_prompt = f"""Create a detailed 7-day Pinterest content calendar for the {brand_key} brand.
 
 PINS PER DAY: {daily_count}
 TOTAL PINS THIS WEEK: {daily_count * 7}
@@ -607,11 +624,23 @@ Return ONLY this JSON:
         }}
     ]
 }}"""
-        }]
-    )
+
+    for attempt in range(3):
+        try:
+            response = _get_gemini_client().models.generate_content(
+                model="gemini-2.0-flash",
+                contents=calendar_prompt,
+                config={"max_output_tokens": 6000, "temperature": 0.7},
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                _time.sleep(15 * (attempt + 1))
+            else:
+                raise
 
     try:
-        content = response.content[0].text.strip()
+        content = response.text.strip()
         if content.startswith('```'):
             content = content.split('\n', 1)[1].rsplit('```', 1)[0]
         calendar = json.loads(content)
