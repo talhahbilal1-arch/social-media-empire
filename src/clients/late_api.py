@@ -208,7 +208,7 @@ class LateAPIClient(BaseClient):
 
             # Check if successful
             status = post.get('status', '')
-            if status in ['published', 'queued', 'processing', 'draft']:
+            if status in ['published', 'queued', 'processing', 'draft', 'scheduled']:
                 platform_url = None
                 if pinterest_result:
                     platform_url = pinterest_result.get('platformPostUrl')
