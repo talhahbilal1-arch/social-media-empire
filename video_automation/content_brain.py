@@ -18,6 +18,7 @@ import random
 import os
 import re
 import logging
+import time
 from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
@@ -39,16 +40,25 @@ def _get_client():
 
 
 def _generate_text(prompt, max_tokens=1000):
-    """Call Gemini API and return the text response."""
-    response = _get_client().models.generate_content(
-        model=GEMINI_MODEL,
-        contents=prompt,
-        config={
-            "response_mime_type": "application/json",
-            "max_output_tokens": max_tokens,
-        },
-    )
-    return response.text.strip()
+    """Call Gemini API and return the text response. Retries on 429 rate limit."""
+    for attempt in range(3):
+        try:
+            response = _get_client().models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config={
+                    "response_mime_type": "application/json",
+                    "max_output_tokens": max_tokens,
+                },
+            )
+            return response.text.strip()
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                wait = 15 * (attempt + 1)
+                logger.warning(f"Gemini 429 rate limit — waiting {wait}s (attempt {attempt + 1}/3)")
+                time.sleep(wait)
+            else:
+                raise
 
 # ═══════════════════════════════════════════════════════════════
 # BRAND CONFIGURATIONS

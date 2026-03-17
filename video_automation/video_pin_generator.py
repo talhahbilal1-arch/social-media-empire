@@ -395,45 +395,56 @@ def _render_text_on_frame(frame, frame_num, brand_style, hook, solution, cta, wa
 # ═══════════════════════════════════════════════════════════════
 
 def _encode_frames_to_mp4(frames):
-    """Pipe PIL frames to ffmpeg, return MP4 bytes."""
-    cmd = [
-        "ffmpeg", "-y",
-        "-f", "rawvideo",
-        "-pix_fmt", "rgb24",
-        "-s", f"{VIDEO_WIDTH}x{VIDEO_HEIGHT}",
-        "-r", str(VIDEO_FPS),
-        "-i", "pipe:0",
-        "-c:v", "libx264",
-        "-preset", "medium",
-        "-crf", "18",
-        "-pix_fmt", "yuv420p",
-        "-movflags", "+faststart",
-        "-loglevel", "error",
-        "-f", "mp4",
-        "pipe:1",
-    ]
+    """Pipe PIL frames to ffmpeg, return MP4 bytes.
 
-    proc = subprocess.Popen(
-        cmd,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
+    Uses a temp file for output because MP4 container needs seeking
+    (pipe:1 causes broken pipe errors with movflags/faststart).
+    """
+    with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as tmp:
+        tmp_path = tmp.name
 
-    # Write all frames to stdin
-    for frame in frames:
-        proc.stdin.write(frame.tobytes())
-    proc.stdin.close()
+    try:
+        cmd = [
+            "ffmpeg", "-y",
+            "-f", "rawvideo",
+            "-pix_fmt", "rgb24",
+            "-s", f"{VIDEO_WIDTH}x{VIDEO_HEIGHT}",
+            "-r", str(VIDEO_FPS),
+            "-i", "pipe:0",
+            "-c:v", "libx264",
+            "-preset", "medium",
+            "-crf", "18",
+            "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart",
+            "-loglevel", "error",
+            tmp_path,
+        ]
 
-    mp4_bytes = proc.stdout.read()
-    stderr = proc.stderr.read()
-    proc.wait()
+        proc = subprocess.Popen(
+            cmd,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
 
-    if proc.returncode != 0:
-        raise RuntimeError(f"ffmpeg encoding failed: {stderr.decode()[:300]}")
+        # Write all frames to stdin
+        for frame in frames:
+            proc.stdin.write(frame.tobytes())
+        proc.stdin.close()
 
-    logger.info(f"Encoded video: {len(mp4_bytes) / 1024:.0f}KB, {len(frames)} frames")
-    return mp4_bytes
+        stderr = proc.stderr.read()
+        proc.wait()
+
+        if proc.returncode != 0:
+            raise RuntimeError(f"ffmpeg encoding failed: {stderr.decode()[:300]}")
+
+        with open(tmp_path, "rb") as f:
+            mp4_bytes = f.read()
+
+        logger.info(f"Encoded video: {len(mp4_bytes) / 1024:.0f}KB, {len(frames)} frames")
+        return mp4_bytes
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
 
 
 # ═══════════════════════════════════════════════════════════════
