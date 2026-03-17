@@ -28,7 +28,7 @@ def main():
     # ── Required env vars ────────────────────────────────────────
     print("\n[1] Environment variables")
     required = [
-        ("ANTHROPIC_API_KEY", "Claude content generation"),
+        ("GEMINI_API_KEY", "Gemini content generation"),
         ("PEXELS_API_KEY", "Pexels image fetching"),
         ("SUPABASE_URL", "Supabase database"),
         ("SUPABASE_KEY", "Supabase database"),
@@ -98,27 +98,23 @@ def main():
     else:
         check("Pexels API", False, "skipped (key missing)")
 
-    # ── Anthropic API (lightweight header check) ─────────────────
-    print("\n[4] Anthropic API")
-    anthropic_key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if anthropic_key:
+    # ── Gemini API (lightweight check) ────────────────────────────
+    print("\n[4] Gemini API")
+    gemini_key = os.environ.get("GEMINI_API_KEY", "")
+    if gemini_key:
         try:
             resp = requests.get(
-                "https://api.anthropic.com/v1/models",
-                headers={
-                    "x-api-key": anthropic_key,
-                    "anthropic-version": "2023-06-01",
-                },
+                f"https://generativelanguage.googleapis.com/v1beta/models?key={gemini_key}",
                 timeout=10,
             )
-            ok = resp.status_code in (200, 404)  # 404 = endpoint may not exist but key is valid
-            if not check("Anthropic API", ok, f"HTTP {resp.status_code}"):
-                failures.append("Anthropic API unreachable or invalid key")
+            ok = resp.status_code == 200
+            if not check("Gemini API", ok, f"HTTP {resp.status_code}"):
+                failures.append("Gemini API unreachable or invalid key")
         except requests.exceptions.RequestException as e:
-            check("Anthropic API", False, str(e)[:80])
-            failures.append("Anthropic API request error")
+            check("Gemini API", False, str(e)[:80])
+            failures.append("Gemini API request error")
     else:
-        check("Anthropic API", False, "skipped (key missing)")
+        check("Gemini API", False, "skipped (key missing)")
 
     # ── Make.com webhook reachability ────────────────────────────
     print("\n[5] Make.com webhooks")

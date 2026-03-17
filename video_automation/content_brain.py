@@ -1,6 +1,6 @@
-"""Claude-powered content brain for all 3 Pinterest brands.
+"""Gemini-powered content brain for all 3 Pinterest brands.
 
-Generates unique, high-quality pin content using Claude API (Sonnet 4.5).
+Generates unique, high-quality pin content using Google Gemini API (2.5 Flash — free tier).
 Tracks content history in Supabase to ensure variety across topics, angles,
 visual styles, boards, and description openers.
 
@@ -10,11 +10,9 @@ Optimized for maximum Pinterest clicks, engagement, and affiliate revenue:
 - Strategic visual style rotation prioritizing high-engagement formats
 - Natural affiliate product integration per brand niche
 - Board selection weighted toward highest-follower boards
-
-Replaces all Gemini-based content generation.
 """
 
-import anthropic
+from google import genai
 import json
 import random
 import os
@@ -26,16 +24,31 @@ logger = logging.getLogger(__name__)
 
 _client = None
 
+GEMINI_MODEL = "gemini-2.5-flash"
+
 
 def _get_client():
-    """Lazy-initialize the Anthropic client to prevent import-time failures."""
+    """Lazy-initialize the Gemini client to prevent import-time failures."""
     global _client
     if _client is None:
-        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        api_key = os.environ.get('GEMINI_API_KEY', '')
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
-        _client = anthropic.Anthropic(api_key=api_key)
+            raise ValueError("GEMINI_API_KEY environment variable is not set")
+        _client = genai.Client(api_key=api_key)
     return _client
+
+
+def _generate_text(prompt, max_tokens=1000):
+    """Call Gemini API and return the text response."""
+    response = _get_client().models.generate_content(
+        model=GEMINI_MODEL,
+        contents=prompt,
+        config={
+            "response_mime_type": "application/json",
+            "max_output_tokens": max_tokens,
+        },
+    )
+    return response.text.strip()
 
 # ═══════════════════════════════════════════════════════════════
 # BRAND CONFIGURATIONS
@@ -865,24 +878,18 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
     "alt_text": "..."
 }}"""
 
-    response = _get_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=1000,
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    content = response.content[0].text.strip()
+    content = _generate_text(prompt, max_tokens=1000)
 
     # Parse the JSON response
     try:
         pin_data = json.loads(content)
     except json.JSONDecodeError:
-        # Try to extract JSON if Claude added extra text
+        # Try to extract JSON if model added extra text
         json_match = re.search(r'\{.*\}', content, re.DOTALL)
         if json_match:
             pin_data = json.loads(json_match.group())
         else:
-            raise ValueError(f"Claude did not return valid JSON: {content[:200]}")
+            raise ValueError(f"Model did not return valid JSON: {content[:200]}")
 
     # ── Step 9: Add metadata ──
     pin_data['brand'] = brand_key
@@ -1131,13 +1138,7 @@ OUTPUT ONLY THIS JSON:
     "alt_text": "..."
 }}"""
 
-    response = _get_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=1000,
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    content = response.content[0].text.strip()
+    content = _generate_text(prompt, max_tokens=1000)
 
     try:
         pin_data = json.loads(content)
@@ -1377,13 +1378,7 @@ OUTPUT ONLY THIS JSON:
     "alt_text": "..."
 }}"""
 
-    response = _get_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=1000,
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    content = response.content[0].text.strip()
+    content = _generate_text(prompt, max_tokens=1000)
 
     try:
         pin_data = json.loads(content)
@@ -1520,13 +1515,7 @@ Respond in JSON only:
   "search_query": "..."
 }}"""
 
-    response = _get_client().messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=500,
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    content = response.content[0].text.strip()
+    content = _generate_text(prompt, max_tokens=500)
 
     try:
         pin_data = json.loads(content)

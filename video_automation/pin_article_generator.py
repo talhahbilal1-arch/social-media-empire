@@ -1,7 +1,7 @@
 """Lightweight article generator for per-pin blog posts.
 
 Generates a short SEO article (800-1200 words) for each pin during
-the content-engine run. One Claude API call per article.
+the content-engine run. One Gemini API call per article.
 Articles are saved as HTML to the brand's website directory and
 registered in the generated_articles Supabase table.
 """
@@ -14,20 +14,22 @@ import urllib.parse
 from datetime import datetime, timezone
 
 import requests
-import anthropic
+from google import genai
 
 logger = logging.getLogger(__name__)
 
 _client = None
 
+GEMINI_MODEL = "gemini-2.5-flash"
+
 
 def _get_client():
     global _client
     if _client is None:
-        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+        api_key = os.environ.get('GEMINI_API_KEY', '')
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
-        _client = anthropic.Anthropic(api_key=api_key)
+            raise ValueError("GEMINI_API_KEY environment variable is not set")
+        _client = genai.Client(api_key=api_key)
     return _client
 
 
@@ -431,12 +433,12 @@ keywords: ["keyword1", "keyword2", "keyword3"]
 [Article content in Markdown]"""
 
     try:
-        response = _get_client().messages.create(
-            model="claude-sonnet-4-5-20250929",
-            max_tokens=3000,
-            messages=[{"role": "user", "content": prompt}]
+        response = _get_client().models.generate_content(
+            model=GEMINI_MODEL,
+            contents=prompt,
+            config={"max_output_tokens": 3000},
         )
-        article_md = response.content[0].text.strip()
+        article_md = response.text.strip()
         return slug, article_md
     except Exception as e:
         logger.error(f"Article generation failed for '{topic}': {e}")
