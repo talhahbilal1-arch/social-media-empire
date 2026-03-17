@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-09",
+  "last_updated": "2026-02-13",
   "items": [
     {
       "id": 1,
@@ -244,34 +244,31 @@
       "id": 33,
       "type": "review",
       "priority": "medium",
-      "status": "published",
+      "status": "pending",
       "slug": "otter-ai",
       "tool_name": "Otter.ai",
       "category": "productivity",
-      "keyword": "otter ai review 2026",
-      "published_date": "2026-02-17"
+      "keyword": "otter ai review 2026"
     },
     {
       "id": 34,
       "type": "review",
       "priority": "medium",
-      "status": "published",
+      "status": "pending",
       "slug": "stable-diffusion",
       "tool_name": "Stable Diffusion",
       "category": "image",
-      "keyword": "stable diffusion review 2026",
-      "published_date": "2026-02-19"
+      "keyword": "stable diffusion review 2026"
     },
     {
       "id": 35,
       "type": "review",
       "priority": "medium",
-      "status": "published",
+      "status": "pending",
       "slug": "luma-ai",
       "tool_name": "Luma AI",
       "category": "video",
-      "keyword": "luma ai review 2026",
-      "published_date": "2026-02-20"
+      "keyword": "luma ai review 2026"
     },
     {
       "id": 36,
@@ -435,78 +432,6 @@
       "slug": "best-ai-audio-tools",
       "keyword": "best ai audio tools 2026",
       "title": "6 Best AI Audio & Voice Tools in 2026"
-    },
-    {
-      "id": 60,
-      "type": "review",
-      "priority": "high",
-      "status": "pending",
-      "slug": "bolt-new",
-      "tool_name": "Bolt.new",
-      "category": "coding",
-      "keyword": "bolt.new review 2026"
-    },
-    {
-      "id": 61,
-      "type": "comparison",
-      "priority": "high",
-      "status": "pending",
-      "slug": "perplexity-vs-chatgpt",
-      "tools": [
-        "perplexity",
-        "chatgpt"
-      ],
-      "tool_names": [
-        "Perplexity",
-        "ChatGPT"
-      ],
-      "keyword": "perplexity vs chatgpt 2026"
-    },
-    {
-      "id": 62,
-      "type": "listicle",
-      "priority": "high",
-      "status": "pending",
-      "slug": "best-ai-tools-freelancers-2026",
-      "title": "Best AI Tools for Freelancers 2026: Increase Your Income & Win More Clients",
-      "keyword": "best ai tools for freelancers 2026",
-      "money_angle": "Shows freelancers how to 3x their output, reduce project time by 50%, and take on more high-paying clients using AI automation across writing, design, coding, and video services"
-    },
-    {
-      "id": 63,
-      "type": "review",
-      "priority": "high",
-      "status": "pending",
-      "slug": "v0-dev",
-      "tool_name": "v0.dev",
-      "category": "coding",
-      "keyword": "v0 dev review 2026"
-    },
-    {
-      "id": 64,
-      "type": "comparison",
-      "priority": "high",
-      "status": "pending",
-      "slug": "v0-dev-vs-cursor",
-      "tools": [
-        "v0-dev",
-        "cursor"
-      ],
-      "tool_names": [
-        "v0.dev",
-        "Cursor"
-      ],
-      "keyword": "v0 vs cursor 2026"
-    },
-    {
-      "id": 65,
-      "type": "listicle",
-      "priority": "high",
-      "status": "pending",
-      "slug": "best-ai-tools-etsy-sellers-2026",
-      "title": "Best AI Tools for Etsy Sellers 2026: Boost Sales & Cut Costs",
-      "keyword": "best ai tools for etsy sellers",
-      "money_angle": "Help Etsy shop owners generate product descriptions, create listing images, design printables, and automate customer service to increase sales 30-50% while reducing design costs by 70%"
     }
   ]
 }

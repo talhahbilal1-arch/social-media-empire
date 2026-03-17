@@ -122,7 +122,7 @@ LANDING_PAGE_CONFIG = {
         "cta_button": "DOWNLOAD FREE SHEETS",
         "footer_text": "Your brain is different, not broken. Let's build systems that work for YOU."
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "name": "Fit Over 35",
         "tagline": "Build Strength. Burn Fat. Feel Unstoppable.",
         "hero_headline": "FREE 12-Week Workout Program for Men 35+",

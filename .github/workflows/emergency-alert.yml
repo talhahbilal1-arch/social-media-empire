@@ -2,8 +2,8 @@ name: Emergency Alert (Dead Man's Switch)
 
 on:
   schedule:
-    # Midnight PST daily (8 AM UTC)
-    - cron: '0 8 * * *'
+    # 12:15 AM PST daily (8:15 AM UTC, staggered from video-factory)
+    - cron: '15 8 * * *'
   workflow_dispatch:
 
 jobs:

@@ -216,7 +216,7 @@ Sarah 💕
 P.S. These deals won't last - some expire in 24 hours!
 """,
                 "cta_text": "Shop These Deals",
-                "cta_url": "https://www.amazon.com/shop/dailydealdarling?tag=dailydealdarling1-20"
+                "cta_url": "{{affiliate_url}}"
             },
             {
                 "day": 14,
@@ -245,7 +245,7 @@ I created something special for serious savers - my complete Deal Mastery System
 ✓ Private community access
 ✓ Weekly live deal alerts
 
-Check it out here: https://dailydealdarling.com/deal-tracker-pro
+[LINK TO PRODUCT/SERVICE]
 
 Whether you go deeper or just use the free tracker, I'm cheering you on!
 
@@ -541,7 +541,7 @@ I created The Complete Menopause Planner specifically for women who want to take
 
 This isn't just a planner - it's a companion through this journey.
 
-Check it out here: https://menopauseplanner.com/planner
+[LINK TO PRODUCT]
 
 Whether you continue with the free resources or go deeper, I'm here for you.
 
@@ -650,7 +650,7 @@ What's in YOUR bag? Reply and share!
 Jessica 💙
 """,
                 "cta_text": "My Amazon Nurse Essentials",
-                "cta_url": "https://www.amazon.com/dp/B07D3N8C8M?tag=dailydealdarling1-20"
+                "cta_url": "{{affiliate_url}}"
             },
             {
                 "day": 3,
@@ -863,7 +863,7 @@ I created The Complete Nurse Planner for nurses who are serious about thriving:
 
 This is the planner I wish existed when I was drowning.
 
-Check it out here: https://www.amazon.com/dp/B0CPQZ7TFS?tag=dailydealdarling1-20
+[LINK TO PRODUCT]
 
 Whether you use the free resources or go deeper, please know: you matter. Your health matters. Your career matters.
 
@@ -879,7 +879,7 @@ P.S. Use code NURSELIFE for 15% off this week!
             }
         ]
     },
-    "fitover35": {
+    "fitness": {
         "name": "Fit Over 35",
         "from_name": "Fit Over 35",
         "from_email": "hello@fitover35.com",
@@ -1065,7 +1065,7 @@ Your time-challenged friend,
 Mike 🧠
 """,
                 "cta_text": "My Favorite Visual Timer",
-                "cta_url": "https://www.amazon.com/dp/B07K2KYDXJ?tag=dailydealdarling1-20"
+                "cta_url": "{{affiliate_url}}"
             },
             {
                 "day": 5,
@@ -1237,7 +1237,7 @@ I created The Complete ADHD Planner specifically for brains like ours:
 
 This isn't another planner that'll guilt you. It's designed FOR your brain.
 
-Check it out here: https://www.amazon.com/dp/B0D61V1YLM?tag=dailydealdarling1-20
+[LINK TO PRODUCT]
 
 Whether you stick with the free brain dumps or go deeper, you're on the right path.
 

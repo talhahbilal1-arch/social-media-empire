@@ -114,53 +114,6 @@ def upload_pin_image(image_bytes, filename):
     )
 
 
-def upload_pin_video(video_bytes, filename):
-    """Upload a rendered pin video to Supabase Storage.
-
-    Args:
-        video_bytes: MP4 video as bytes
-        filename: Target filename (e.g. 'fitness_video_20260316_143022.mp4')
-
-    Returns:
-        Public URL string for the uploaded video.
-    """
-    url, key = _get_storage_config()
-    ensure_bucket(url, key)
-
-    headers = _storage_headers(key)
-    headers["Content-Type"] = "video/mp4"
-
-    upload_url = f"{url}/storage/v1/object/{BUCKET_NAME}/{filename}"
-    resp = requests.post(
-        upload_url,
-        headers=headers,
-        data=video_bytes,
-        timeout=120,  # Longer timeout for video
-    )
-
-    if resp.status_code in (200, 201):
-        public_url = f"{url}/storage/v1/object/public/{BUCKET_NAME}/{filename}"
-        logger.info(f"Uploaded pin video: {public_url}")
-        return public_url
-
-    # Try upsert if file already exists
-    if resp.status_code == 409:
-        headers["x-upsert"] = "true"
-        resp = requests.post(
-            upload_url,
-            headers=headers,
-            data=video_bytes,
-            timeout=120,
-        )
-        if resp.status_code in (200, 201):
-            public_url = f"{url}/storage/v1/object/public/{BUCKET_NAME}/{filename}"
-            return public_url
-
-    raise RuntimeError(
-        f"Failed to upload pin video: {resp.status_code} {resp.text[:300]}"
-    )
-
-
 def cleanup_old_images(max_age_days=7):
     """Delete pin images older than max_age_days from Supabase Storage.
 

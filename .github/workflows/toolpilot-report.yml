@@ -48,15 +48,11 @@ jobs:
           echo "health=$HEALTH" >> $GITHUB_OUTPUT
 
       - name: Send email report
+        if: env.RESEND_API_KEY != '' && env.ALERT_EMAIL != ''
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
-        run: |
-          if [ -z "$RESEND_API_KEY" ] || [ -z "$ALERT_EMAIL" ]; then
-            echo "Email not configured — skipping report email"
-            exit 0
-          fi
-          cat /tmp/report.json | node scripts/send-report-email.js
+        run: cat /tmp/report.json | node scripts/send-report-email.js
 
       - name: Job summary
         run: |
@@ -64,6 +60,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Health:** ${{ steps.health.outputs.health }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Total pages:** ${{ steps.health.outputs.total_pages }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Site:** https://pilottools.ai" >> $GITHUB_STEP_SUMMARY
+          echo "- **Site:** https://toolpilot-hub.netlify.app" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Full report printed in step logs above." >> $GITHUB_STEP_SUMMARY

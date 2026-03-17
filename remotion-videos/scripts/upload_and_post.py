@@ -49,9 +49,9 @@ BRAND_CONFIG = {
             "cta": "Link in Bio!",
         },
         "pinterest": {
-            "accountId": os.environ.get("PINTEREST_DDD_ACCOUNT_ID", ""),
-            "boardId": os.environ.get("PINTEREST_DDD_BOARD_ID", ""),
-            "apiKey": os.environ.get("LATE_API_KEY_DDD", ""),
+            "accountId": os.environ.get("PINTEREST_DDD_ACCOUNT_ID") or os.environ.get("PINTEREST_DEALS_ACCOUNT_ID", ""),
+            "boardId": os.environ.get("PINTEREST_DDD_BOARD_ID") or os.environ.get("PINTEREST_DEALS_BOARD_ID", ""),
+            "apiKey": os.environ.get("LATE_API_KEY_DDD") or os.environ.get("LATE_API_KEY_2") or os.environ.get("LATE_API_KEY", ""),
             "link": "https://dailydealdarling.com",
         },
         "video": {
@@ -60,8 +60,8 @@ BRAND_CONFIG = {
         },
         "hashtags": "#beautyfinds #skincare #beautytips #womensfashion #homedecor #giftsforher",
     },
-    "fitnessmadeasy": {
-        "id": "fitnessmadeasy",
+    "fitness": {
+        "id": "fitness",
         "displayName": "FitOver35",
         "content": {
             "hook": "Over 35? Try this...",
@@ -77,7 +77,7 @@ BRAND_CONFIG = {
             "accountId": os.environ.get("PINTEREST_FITNESS_ACCOUNT_ID", ""),
             "boardId": os.environ.get("PINTEREST_FITNESS_BOARD_ID", ""),
             "apiKey": os.environ.get("LATE_API_KEY", ""),
-            "link": "https://fitnessmadeasy.com",
+            "link": "https://fitover35.com",
         },
         "video": {
             "file": "fitness-made-easy.mp4",
@@ -99,9 +99,9 @@ BRAND_CONFIG = {
             "cta": "Get the Guide!",
         },
         "pinterest": {
-            "accountId": os.environ.get("PINTEREST_MENO_ACCOUNT_ID", ""),
-            "boardId": os.environ.get("PINTEREST_MENO_BOARD_ID", ""),
-            "apiKey": os.environ.get("LATE_API_KEY_MENO", ""),
+            "accountId": os.environ.get("PINTEREST_MENO_ACCOUNT_ID") or os.environ.get("PINTEREST_MENOPAUSE_ACCOUNT_ID", ""),
+            "boardId": os.environ.get("PINTEREST_MENO_BOARD_ID") or os.environ.get("PINTEREST_MENOPAUSE_BOARD_ID", ""),
+            "apiKey": os.environ.get("LATE_API_KEY_MENO") or os.environ.get("LATE_API_KEY_4") or os.environ.get("LATE_API_KEY", ""),
             "link": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle",
         },
         "video": {

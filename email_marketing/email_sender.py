@@ -26,7 +26,7 @@ BRAND_EMAIL_CONFIG = {
         "reply_to": "support@menopauseplanner.com",
         "footer": "You're receiving this because you signed up for menopause wellness tips."
     },
-    "fitover35": {
+    "fitness": {
         "from_name": "Fit Over 35",
         "from_email": "hello@fitover35.com",
         "reply_to": "hello@fitover35.com",

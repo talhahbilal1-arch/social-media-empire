@@ -3,7 +3,7 @@ Premium Lead Magnet PDF Generator with Real Amazon Product Images
 
 Creates a stunning visual guide with:
 - Real product images fetched from Amazon
-- Clickable affiliate links (dailydealdarling1-20)
+- Clickable affiliate links (dailydealdarl-20)
 - Professional magazine-style layout
 """
 
@@ -54,7 +54,7 @@ class C:
 # =============================================================================
 # AFFILIATE TAG
 # =============================================================================
-AFFILIATE_TAG = "dailydealdarling1-20"
+AFFILIATE_TAG = "dailydealdarl-20"
 
 def get_affiliate_url(asin):
     return f"https://www.amazon.com/dp/{asin}?tag={AFFILIATE_TAG}"

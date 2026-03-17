@@ -8,7 +8,7 @@ Run this after setting the LATE_API_KEY environment variables.
 Usage:
     # Set the API keys first
     export LATE_API_KEY_2="sk_..."  # DailyDealDarling
-    export LATE_API_KEY_3="sk_..."  # FitnessMadeEasy
+    export LATE_API_KEY_3="sk_..."  # FitOver35
     export LATE_API_KEY_4="sk_..."  # MenopausePlanner
 
     # Then run the script
@@ -35,12 +35,12 @@ Link in bio for the deal!
 
 #amazonfinds #kitchengadgets #morningroutine #deals #dailydealdarling"""
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "video_url": "https://bjacmhjtpkdcxngkasux.supabase.co/storage/v1/object/public/videos/fitness-made-easy.mp4",
         "api_key_env": "LATE_API_KEY_3",
         "account_id": "697bb4b893a320156c4221ab",
         "board_id": "756745612325868912",
-        "link": "https://fitnessmadeasy.com",
+        "link": "https://fitover35.com",
         "content": """5-Minute Ab Workout
 
 No equipment needed - burns belly fat fast! Perfect for beginners. Do it anywhere, anytime.

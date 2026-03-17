@@ -30,7 +30,7 @@ BRANDS = {
         "video_file": "daily-deal-darling-bg.mp4",
         "audio_file": "daily-deal-darling-voice.mp3"
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "search_query": "fitness workout exercise gym",
         "voiceover_text": "No equipment needed. 5-Minute Ab Workout. Burns belly fat fast. Perfect for beginners. Do it anywhere. Save for Later!",
         "video_file": "fitness-made-easy-bg.mp4",
@@ -47,7 +47,7 @@ BRANDS = {
 # Alternative free stock video URLs (Pixabay - no API key required for direct downloads)
 PIXABAY_VIDEOS = {
     "daily_deal_darling": "https://cdn.pixabay.com/video/2020/05/25/40302-424305562_large.mp4",  # Kitchen/cooking
-    "fitnessmadeasy": "https://cdn.pixabay.com/video/2019/06/18/24584-343490337_large.mp4",  # Fitness/workout
+    "fitness": "https://cdn.pixabay.com/video/2019/06/18/24584-343490337_large.mp4",  # Fitness/workout
     "menopause_planner": "https://cdn.pixabay.com/video/2020/07/30/46026-446001566_large.mp4"   # Nature/wellness
 }
 

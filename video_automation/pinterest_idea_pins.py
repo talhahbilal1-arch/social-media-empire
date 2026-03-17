@@ -127,7 +127,7 @@ class PinterestIdeaPinCreator:
 
         # Try Late API first (preferred for video pins)
         if late_client is not None:
-            return self._create_via_late_api(
+            result = self._create_via_late_api(
                 board_id=board_id,
                 title=title,
                 description=description,
@@ -136,9 +136,28 @@ class PinterestIdeaPinCreator:
                 account_id=pinterest_account_id,
                 late_client=late_client
             )
+            if result.get("success"):
+                return result
+            # Late API failed — try fallback to default Late API key if using a secondary key
+            if api_key_env and api_key_env != "LATE_API_KEY" and self.late_client is not None:
+                logger.warning(f"Late API failed with {api_key_env}, retrying with default LATE_API_KEY")
+                fallback_result = self._create_via_late_api(
+                    board_id=board_id,
+                    title=title,
+                    description=description,
+                    video_url=video_url,
+                    link=link,
+                    account_id=pinterest_account_id,
+                    late_client=self.late_client
+                )
+                if fallback_result.get("success"):
+                    return fallback_result
+            # Late API exhausted — fall through to Make.com webhook
+            logger.warning(f"Late API failed: {result.get('error')}. Trying Make.com webhook fallback.")
 
-        # Fallback to Make.com webhook
+        # Fallback to Make.com webhook (note: unreliable for video pins)
         if self.pinterest_client is not None:
+            logger.warning("Using Make.com webhook fallback — may fail for video pins (error 235)")
             return self._create_via_webhook(
                 board_id=board_id,
                 title=title,

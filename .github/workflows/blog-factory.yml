@@ -1,0 +1,54 @@
+# Agent 8: Blog Factory
+# Runs daily at 7:00 AM UTC to create and publish blog articles
+
+name: Blog Factory
+
+on:
+  schedule:
+    # 7:00 AM UTC daily (1 hour after Content Brain)
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Brand to create blog for (leave empty for all)'
+        required: false
+        default: ''
+
+env:
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  NETLIFY_API_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+jobs:
+  create-blogs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Blog Factory
+        run: |
+          python -m agents.blog_factory
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Blog Factory Run Complete" >> $GITHUB_STEP_SUMMARY
+          echo "Run ID: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY

@@ -3,7 +3,7 @@ import ToolCard from '../../components/ToolCard'
 import Link from 'next/link'
 import { getAllCategories, getCategoryBySlug, getToolsByCategory } from '../../lib/tools'
 
-const SITE_URL = 'https://pilottools.ai'
+const SITE_URL = 'https://toolpilot-hub.netlify.app'
 
 export default function CategoryPage({ category, tools }) {
   if (!category) return null

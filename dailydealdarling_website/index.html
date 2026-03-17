@@ -12,39 +12,76 @@
   <title>Daily Deal Darling | Expert Product Recommendations & Best Deals 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F49D;</text></svg>">
-  <meta name="robots" content="index, follow">
-  <meta name="pinterest-rich-pin" content="true">
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVCLZPEYNS"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-HVCLZPEYNS');
-  </script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
 </head>
 <body>
-  <!-- Announcement Bar -->
+  <!-- Urgency Announcement Bar -->
   <div class="announcement-bar">
     <div class="announcement-content">
       <span class="announcement-pulse"></span>
-      <span><strong>The Spring Edit:</strong> Up to 40% off top-rated picks &bull; Limited time</span>
-      <a href="#deals" class="announcement-cta">Shop Now</a>
+      <span>🔥 <strong>January Flash Sale:</strong> Up to 40% off top-rated products • Ends soon!</span>
+      <a href="#deals" class="announcement-cta">Shop Deals →</a>
     </div>
   </div>
 
-  <header class="header" id="header">
+  <style>
+    .announcement-bar {
+      background: linear-gradient(90deg, #232f3e 0%, #37475a 100%);
+      color: white;
+      padding: 10px 16px;
+      text-align: center;
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 1001;
+    }
+    .announcement-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .announcement-pulse {
+      width: 8px;
+      height: 8px;
+      background: #ff9900;
+      border-radius: 50%;
+      animation: pulse-glow 1.5s infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,153,0,0.6); }
+      50% { box-shadow: 0 0 0 8px rgba(255,153,0,0); }
+    }
+    .announcement-cta {
+      background: #ff9900;
+      color: #232f3e;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .announcement-cta:hover {
+      background: #ffad33;
+      transform: scale(1.05);
+    }
+    @media (max-width: 600px) {
+      .announcement-bar { font-size: 0.8rem; padding: 8px 12px; }
+      .announcement-content { gap: 8px; }
+    }
+  </style>
+
+  <header class="header" id="header" style="top: 42px;">
     <div class="header-inner">
       <a href="/" class="logo">
-        <span class="logo-icon">&#x1F49D;</span>
+        <span class="logo-icon">💝</span>
         <span>Daily Deal Darling</span>
       </a>
       <nav class="nav">
         <ul class="nav-list">
-          <li><a href="#categories" class="nav-link">Categories</a></li>
+          <li><a href="#categories" class="nav-link">Shop by Category</a></li>
           <li><a href="#bestsellers" class="nav-link">Best Sellers</a></li>
           <li><a href="#guides" class="nav-link">Buying Guides</a></li>
           <li><a href="#deals" class="nav-link">Today's Deals</a></li>
@@ -56,7 +93,7 @@
     </div>
     <nav class="mobile-nav" id="mobileNav">
       <ul class="mobile-nav-list">
-        <li><a href="#categories" class="mobile-nav-link">Categories</a></li>
+        <li><a href="#categories" class="mobile-nav-link">Shop by Category</a></li>
         <li><a href="#bestsellers" class="mobile-nav-link">Best Sellers</a></li>
         <li><a href="#guides" class="mobile-nav-link">Buying Guides</a></li>
         <li><a href="#deals" class="mobile-nav-link">Today's Deals</a></li>
@@ -67,36 +104,36 @@
 
   <main>
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" style="padding-top: calc(112px + var(--space-2xl));">
       <div class="hero-content">
         <div class="hero-text">
           <div class="hero-badge">
             <span class="hero-badge-dot"></span>
-            Updated March 2026
+            Updated January 2026
           </div>
-          <h1>Find Products You'll <em>Actually Love</em></h1>
-          <p class="hero-description">We test hundreds of products so you don't have to. Honest recommendations from real experts, not paid promoters.</p>
+          <h1>Find Products You'll <span class="text-gradient">Actually Love</span></h1>
+          <p class="hero-description">We test hundreds of products so you don't have to. Get honest recommendations from real experts, not paid promoters.</p>
           <div class="hero-cta">
             <a href="#bestsellers" class="btn btn-primary btn-lg">See Best Sellers</a>
             <a href="quizzes/skincare-routine.html" class="btn btn-secondary btn-lg">Take a Quiz</a>
           </div>
           <div class="hero-trust">
             <div class="trust-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
               <span>50,000+ Happy Shoppers</span>
             </div>
             <div class="trust-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
               <span>100% Unbiased Reviews</span>
             </div>
             <div class="trust-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
               <span>Updated Daily</span>
             </div>
           </div>
         </div>
         <div class="hero-visual">
-          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&h=500&fit=crop&q=80" alt="Curated product collection">
+          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&h=500&fit=crop&q=80" alt="Curated product collection" style="border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
         </div>
       </div>
     </section>
@@ -104,16 +141,13 @@
     <!-- Categories Section -->
     <section class="section" id="categories">
       <div class="container">
-        <div class="section-divider">
-          <span class="section-number">No. 01 &mdash; Browse</span>
-        </div>
         <div class="section-header">
           <h2>Shop by Category</h2>
-          <p>Expert-curated collections across the categories that matter most</p>
+          <p>Browse our expert-curated collections across the most popular categories</p>
         </div>
-        <div class="categories-grid reveal-stagger">
+        <div class="grid grid-3">
           <a href="articles/best-skincare-products-2026.html" class="category-card">
-            <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=750&fit=crop&q=80" alt="Skincare & Beauty">
+            <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&h=375&fit=crop&q=80" alt="Skincare & Beauty">
             <div class="category-overlay">
               <h3 class="category-title">Skincare & Beauty</h3>
               <span class="category-count">32 products reviewed</span>
@@ -159,63 +193,60 @@
     </section>
 
     <!-- Best Sellers Section -->
-    <section class="section section-cream" id="bestsellers">
+    <section class="section" id="bestsellers" style="background: var(--color-bg-warm);">
       <div class="container">
-        <div class="section-divider">
-          <span class="section-number">No. 02 &mdash; Trending</span>
-        </div>
         <div class="section-header">
-          <h2>This Week's Best Sellers</h2>
+          <h2>🔥 This Week's Best Sellers</h2>
           <p>Top-rated products our readers are loving right now</p>
         </div>
-        <div class="grid grid-4 reveal-stagger">
+        <div class="grid grid-4">
           <div class="product-card">
             <span class="product-badge bestseller">#1 Best Seller</span>
-            <div class="product-image">
-              <img src="https://m.media-amazon.com/images/I/61S7BrCBj7L._SL500_.jpg" alt="CeraVe Moisturizing Cream 16oz">
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/61S7BrCBj7L._SL500_.jpg" alt="CeraVe Moisturizing Cream 16oz" style="object-fit: contain;">
             </div>
             <div class="product-content">
               <span class="product-category">Skincare</span>
               <h4 class="product-title">CeraVe Moisturizing Cream 16oz</h4>
               <div class="product-rating">
-                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div class="stars">★★★★★</div>
                 <span class="rating-count">127,000+ reviews</span>
               </div>
               <div class="product-price">
                 <span class="price-current">$15.99</span>
-                <span class="prime-badge">&#10003; Prime</span>
+                <span class="prime-badge" style="background: #232f3e; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 8px;">✓ Prime</span>
               </div>
-              <a href="https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon</a>
+              <a href="https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon →</a>
             </div>
           </div>
           <div class="product-card">
             <span class="product-badge trending">Trending</span>
-            <div class="product-image">
-              <img src="https://m.media-amazon.com/images/I/51bHKet2shL._SX522_.jpg" alt="Laneige Lip Sleeping Mask Berry">
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/51k+hnqOuWL._SL500_.jpg" alt="Laneige Lip Sleeping Mask Berry" style="object-fit: contain;">
             </div>
             <div class="product-content">
               <span class="product-category">Beauty</span>
               <h4 class="product-title">Laneige Lip Sleeping Mask Berry</h4>
               <div class="product-rating">
-                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div class="stars">★★★★★</div>
                 <span class="rating-count">89,000+ reviews</span>
               </div>
               <div class="product-price">
                 <span class="price-current">$24.00</span>
-                <span class="prime-badge">&#10003; Prime</span>
+                <span class="prime-badge" style="background: #232f3e; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 8px;">✓ Prime</span>
               </div>
-              <a href="https://www.amazon.com/dp/B07XXPHQZK?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon</a>
+              <a href="https://www.amazon.com/dp/B07XXPHQZK?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon →</a>
             </div>
           </div>
           <div class="product-card">
-            <div class="product-image">
-              <img src="https://m.media-amazon.com/images/I/518QAf7NLDL._AC_SX569_.jpg" alt="Lodge 10.25 Inch Cast Iron Skillet">
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/81QG2olLVCL._AC_SL500_.jpg" alt="Lodge 10.25 Inch Cast Iron Skillet" style="object-fit: contain;">
             </div>
             <div class="product-content">
               <span class="product-category">Kitchen</span>
               <h4 class="product-title">Lodge 10.25" Cast Iron Skillet</h4>
               <div class="product-rating">
-                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div class="stars">★★★★★</div>
                 <span class="rating-count">152,000+ reviews</span>
               </div>
               <div class="product-price">
@@ -223,31 +254,31 @@
                 <span class="price-original">$26.68</span>
                 <span class="price-discount">25% off</span>
               </div>
-              <a href="https://www.amazon.com/dp/B00006JSUB?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon</a>
+              <a href="https://www.amazon.com/dp/B00006JSUB?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon →</a>
             </div>
           </div>
           <div class="product-card">
             <span class="product-badge">Editor's Pick</span>
-            <div class="product-image">
-              <img src="https://m.media-amazon.com/images/I/71JJLJnwREL._AC_SX569_.jpg" alt="Anker PowerCore 10000mAh Portable Charger">
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/71n0L5TdOYL._AC_SL500_.jpg" alt="Anker PowerCore 10000mAh Portable Charger" style="object-fit: contain;">
             </div>
             <div class="product-content">
               <span class="product-category">Tech</span>
               <h4 class="product-title">Anker PowerCore 10000mAh</h4>
               <div class="product-rating">
-                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div class="stars">★★★★★</div>
                 <span class="rating-count">95,000+ reviews</span>
               </div>
               <div class="product-price">
                 <span class="price-current">$21.99</span>
-                <span class="prime-badge">&#10003; Prime</span>
+                <span class="prime-badge" style="background: #232f3e; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 8px;">✓ Prime</span>
               </div>
-              <a href="https://www.amazon.com/dp/B0D5CLSMFB?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon</a>
+              <a href="https://www.amazon.com/dp/B07QXV6N1B?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">View on Amazon →</a>
             </div>
           </div>
         </div>
         <div class="text-center mt-xl">
-          <a href="articles/best-amazon-products-2026.html" class="btn btn-primary btn-lg">See All Best Sellers</a>
+          <a href="articles/best-amazon-products-2026.html" class="btn btn-primary btn-lg">See All Best Sellers →</a>
         </div>
       </div>
     </section>
@@ -255,51 +286,48 @@
     <!-- Social Proof Section -->
     <section class="section">
       <div class="container">
-        <div class="section-divider">
-          <span class="section-number">No. 03 &mdash; Voices</span>
-        </div>
         <div class="section-header">
           <h2>Why Shoppers Trust Us</h2>
           <p>Real reviews from real people who found products they love</p>
         </div>
-        <div class="grid grid-3 reveal-stagger">
+        <div class="grid grid-3">
           <div class="testimonial-card">
-            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="testimonial-stars">★★★★★</div>
             <p class="testimonial-text">"Found the perfect skincare routine thanks to their quiz. The CeraVe recommendation cleared up my skin in 2 weeks!"</p>
             <div class="testimonial-author">
               <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&q=80" alt="Sarah M." class="testimonial-avatar">
               <div>
                 <div class="testimonial-name">Sarah M.</div>
                 <div class="testimonial-verified">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                   Verified Purchase
                 </div>
               </div>
             </div>
           </div>
           <div class="testimonial-card">
-            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="testimonial-stars">★★★★★</div>
             <p class="testimonial-text">"The kitchen gadgets guide saved me so much time researching. The air fryer they recommended is amazing!"</p>
             <div class="testimonial-author">
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80" alt="Michael T." class="testimonial-avatar">
               <div>
                 <div class="testimonial-name">Michael T.</div>
                 <div class="testimonial-verified">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                   Verified Purchase
                 </div>
               </div>
             </div>
           </div>
           <div class="testimonial-card">
-            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="testimonial-stars">★★★★★</div>
             <p class="testimonial-text">"Love the under $25 finds! I've bought at least 10 things from their lists and every single one has been worth it."</p>
             <div class="testimonial-author">
               <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&q=80" alt="Emily R." class="testimonial-avatar">
               <div>
                 <div class="testimonial-name">Emily R.</div>
                 <div class="testimonial-verified">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                   Verified Purchase
                 </div>
               </div>
@@ -310,16 +338,13 @@
     </section>
 
     <!-- Buying Guides Section -->
-    <section class="section section-cream" id="guides">
+    <section class="section" id="guides" style="background: var(--color-bg-warm);">
       <div class="container">
-        <div class="section-divider">
-          <span class="section-number">No. 04 &mdash; Guides</span>
-        </div>
         <div class="section-header">
-          <h2>Expert Buying Guides</h2>
+          <h2>📚 Expert Buying Guides</h2>
           <p>In-depth reviews and comparisons to help you make the right choice</p>
         </div>
-        <div class="grid grid-3 reveal-stagger">
+        <div class="grid grid-3">
           <a href="articles/best-skincare-products-2026.html" class="article-card">
             <div class="article-image">
               <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&h=300&fit=crop&q=80" alt="Best Skincare Products">
@@ -331,7 +356,7 @@
               </div>
               <h3 class="article-title">Best Skincare Products for Every Skin Type (2026)</h3>
               <p class="article-excerpt">From drugstore gems to luxury splurges, we tested 50+ products to find the best cleansers, serums, and moisturizers for every budget and skin concern.</p>
-              <span class="article-link">Read Full Guide &rarr;</span>
+              <span class="article-link">Read Full Guide →</span>
             </div>
           </a>
           <a href="articles/best-home-organization-2026.html" class="article-card">
@@ -345,7 +370,7 @@
               </div>
               <h3 class="article-title">Best Home Organization Products That Actually Work</h3>
               <p class="article-excerpt">Transform cluttered spaces into organized havens. Our top picks for closets, kitchens, bathrooms, and more.</p>
-              <span class="article-link">Read Full Guide &rarr;</span>
+              <span class="article-link">Read Full Guide →</span>
             </div>
           </a>
           <a href="articles/best-kitchen-gadgets-2026.html" class="article-card">
@@ -359,7 +384,7 @@
               </div>
               <h3 class="article-title">25 Kitchen Gadgets That Are Actually Worth It</h3>
               <p class="article-excerpt">From air fryers to vegetable choppers, these gadgets will level up your cooking game without cluttering your drawers.</p>
-              <span class="article-link">Read Full Guide &rarr;</span>
+              <span class="article-link">Read Full Guide →</span>
             </div>
           </a>
           <a href="articles/best-self-care-products-2026.html" class="article-card">
@@ -373,7 +398,7 @@
               </div>
               <h3 class="article-title">Self-Care Sunday: The Best Products for Relaxation</h3>
               <p class="article-excerpt">Create the ultimate at-home spa experience with these massagers, aromatherapy tools, and pampering essentials.</p>
-              <span class="article-link">Read Full Guide &rarr;</span>
+              <span class="article-link">Read Full Guide →</span>
             </div>
           </a>
           <a href="articles/amazon-finds-under-25.html" class="article-card">
@@ -387,7 +412,7 @@
               </div>
               <h3 class="article-title">50 Amazing Amazon Finds Under $25</h3>
               <p class="article-excerpt">Quality doesn't have to break the bank. These affordable gems have thousands of 5-star reviews for a reason.</p>
-              <span class="article-link">Read Full Guide &rarr;</span>
+              <span class="article-link">Read Full Guide →</span>
             </div>
           </a>
           <a href="articles/best-fitness-gear-2026.html" class="article-card">
@@ -401,7 +426,7 @@
               </div>
               <h3 class="article-title">Best Home Workout Equipment for Every Budget</h3>
               <p class="article-excerpt">Build your perfect home gym without breaking the bank. From resistance bands to dumbbells to yoga mats.</p>
-              <span class="article-link">Read Full Guide &rarr;</span>
+              <span class="article-link">Read Full Guide →</span>
             </div>
           </a>
         </div>
@@ -409,52 +434,87 @@
     </section>
 
     <!-- Today's Deals Section -->
-    <section class="section section-parchment" id="deals">
+    <section class="section" id="deals">
       <div class="container">
-        <div class="section-divider">
-          <span class="section-number">No. 05 &mdash; Deals</span>
-        </div>
         <div class="section-header">
-          <h2>Today's Best Deals</h2>
-          <p>Real-time deals verified on Amazon &bull; Updated every 4 hours</p>
+          <h2>⚡ Today's Best Deals</h2>
+          <p>Limited-time offers on our favorite products</p>
         </div>
-        <div class="grid grid-4 reveal-stagger">
+        <div class="grid grid-4">
           <div class="product-card">
-            <span class="product-badge deal-hot">40% OFF</span>
-            <div class="product-image">
-              <img src="https://m.media-amazon.com/images/I/61DvtaqAWML._AC_SX569_.jpg" alt="Ninja Professional Blender 1000W">
+            <span class="product-badge" style="background: #E74C3C;">40% OFF</span>
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/616TLHB+3RL._AC_SL500_.jpg" alt="Ninja Professional Blender 1000W" style="object-fit: contain;">
             </div>
             <div class="product-content">
               <span class="product-category">Kitchen</span>
               <h4 class="product-title">Ninja Professional Blender 1000W</h4>
               <div class="product-rating">
-                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <span class="rating-count">Verified Deal</span>
+                <div class="stars">★★★★★</div>
+                <span class="rating-count">45,000+ reviews</span>
               </div>
               <div class="product-price">
                 <span class="price-current">$59.99</span>
                 <span class="price-original">$99.99</span>
               </div>
-              <a href="https://www.amazon.com/dp/B00NGV4506?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">Grab This Deal</a>
+              <a href="https://www.amazon.com/dp/B00NGV4506?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">Grab This Deal →</a>
             </div>
           </div>
           <div class="product-card">
-            <span class="product-badge deal-value">25% OFF</span>
-            <div class="product-image">
-              <img src="https://m.media-amazon.com/images/I/41mGJ-qvF0L._AC_SX522_.jpg" alt="Theragun Mini Handheld Massage Gun">
+            <span class="product-badge" style="background: #E74C3C;">35% OFF</span>
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/51nGW9FUhSL._AC_SL500_.jpg" alt="Theragun Mini Massage Gun" style="object-fit: contain;">
             </div>
             <div class="product-content">
               <span class="product-category">Wellness</span>
-              <h4 class="product-title">Theragun Relief Massage Gun</h4>
+              <h4 class="product-title">Theragun Mini Massage Gun</h4>
               <div class="product-rating">
-                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <span class="rating-count">Verified Deal</span>
+                <div class="stars">★★★★★</div>
+                <span class="rating-count">12,000+ reviews</span>
               </div>
               <div class="product-price">
                 <span class="price-current">$149.00</span>
                 <span class="price-original">$199.00</span>
               </div>
-              <a href="https://www.amazon.com/dp/B086Z6LNVS?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">Grab This Deal</a>
+              <a href="https://www.amazon.com/dp/B086Z6LNVS?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">Grab This Deal →</a>
+            </div>
+          </div>
+          <div class="product-card">
+            <span class="product-badge" style="background: #E74C3C;">30% OFF</span>
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/71N2N4D7IaL._AC_SL500_.jpg" alt="Fabric Storage Bins 6-Pack" style="object-fit: contain;">
+            </div>
+            <div class="product-content">
+              <span class="product-category">Organization</span>
+              <h4 class="product-title">Fabric Storage Bins 6-Pack</h4>
+              <div class="product-rating">
+                <div class="stars">★★★★★</div>
+                <span class="rating-count">32,000+ reviews</span>
+              </div>
+              <div class="product-price">
+                <span class="price-current">$21.99</span>
+                <span class="price-original">$31.99</span>
+              </div>
+              <a href="https://www.amazon.com/dp/B07D8HJ22H?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">Grab This Deal →</a>
+            </div>
+          </div>
+          <div class="product-card">
+            <span class="product-badge" style="background: #E74C3C;">25% OFF</span>
+            <div class="product-image" style="background: #f8f8f8; padding: 10px;">
+              <img src="https://m.media-amazon.com/images/I/81nFWi5B4jL._AC_SL500_.jpg" alt="BalanceFrom Yoga Mat with Strap" style="object-fit: contain;">
+            </div>
+            <div class="product-content">
+              <span class="product-category">Fitness</span>
+              <h4 class="product-title">BalanceFrom Yoga Mat with Strap</h4>
+              <div class="product-rating">
+                <div class="stars">★★★★★</div>
+                <span class="rating-count">67,000+ reviews</span>
+              </div>
+              <div class="product-price">
+                <span class="price-current">$18.99</span>
+                <span class="price-original">$24.99</span>
+              </div>
+              <a href="https://www.amazon.com/dp/B00FO9ZRYG?tag=dailydealdarl-20" class="btn btn-amazon product-cta" target="_blank" rel="noopener sponsored">Grab This Deal →</a>
             </div>
           </div>
         </div>
@@ -462,60 +522,181 @@
     </section>
 
     <!-- Quiz CTA Section -->
-    <section class="section quiz-section">
+    <section class="section" style="background: linear-gradient(135deg, var(--color-primary) 0%, #D4A574 100%); color: white;">
       <div class="container text-center">
-        <p class="editorial-label">Personalized for You</p>
-        <h2>Not Sure What You Need?</h2>
-        <p>Take our 2-minute quiz and get personalized product recommendations based on your unique needs and preferences.</p>
-        <div class="quiz-buttons">
-          <a href="quizzes/skincare-routine.html" class="btn">Skincare Quiz</a>
-          <a href="quizzes/gift-finder.html" class="btn">Gift Finder Quiz</a>
-          <a href="quizzes/home-organization.html" class="btn">Organization Quiz</a>
+        <h2 style="color: white; margin-bottom: var(--space-md);">Not Sure What You Need?</h2>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; max-width: 600px; margin: 0 auto var(--space-lg);">Take our 2-minute quiz and get personalized product recommendations based on your unique needs and preferences.</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm);">
+          <a href="quizzes/skincare-routine.html" class="btn" style="background: white; color: var(--color-primary);">Skincare Quiz</a>
+          <a href="quizzes/gift-finder.html" class="btn" style="background: white; color: var(--color-primary);">Gift Finder Quiz</a>
+          <a href="quizzes/home-organization.html" class="btn" style="background: white; color: var(--color-primary);">Organization Quiz</a>
         </div>
       </div>
     </section>
 
-    <!-- Newsletter Section -->
+    <!-- Newsletter Section with Lead Magnet -->
     <section class="newsletter">
       <div class="container">
-        <p class="editorial-label">Join the Edit</p>
-        <h2>Get Our Free Shopping Guide + Weekly Deals</h2>
-        <p>Join 10,000+ smart shoppers. Get our <strong>50 Ways to Save on Beauty, Home & Decor</strong> guide instantly, plus weekly curated deals.</p>
-        <form class="newsletter-form" action="https://app.convertkit.com/forms/5641382/subscriptions" method="POST">
-          <input type="text" name="fields[first_name]" class="newsletter-input" placeholder="First Name" required>
-          <input type="email" name="email_address" class="newsletter-input" placeholder="Email Address" required>
-          <button type="submit" class="btn btn-primary btn-lg">Get Free Guide</button>
+        <div class="newsletter-badge">🎁 FREE GIFT</div>
+        <h2>Get 50 Hidden Amazon Gems (FREE!)</h2>
+        <p>Join 15,000+ smart shoppers and get my exclusive list of amazing finds under $25 that most people don't know about - plus weekly deal alerts!</p>
+        <form class="newsletter-form" action="https://app.convertkit.com/forms/5641382/subscriptions" method="post">
+          <input type="email" name="email_address" class="newsletter-input" placeholder="Enter your best email" required>
+          <button type="submit" class="btn btn-primary btn-lg">Send Me the Free Guide →</button>
         </form>
         <div class="newsletter-perks">
           <div class="perk">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Free PDF guide (50 tips + products)
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            50 secret finds under $25
           </div>
           <div class="perk">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Weekly deal roundups (Tuesdays)
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Weekly deal alerts (before they sell out)
           </div>
           <div class="perk">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            No spam, unsubscribe anytime
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Zero spam, unsubscribe anytime
           </div>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- Exit Intent Popup -->
+  <div class="exit-popup-overlay" id="exitPopup">
+    <div class="exit-popup-modal">
+      <button class="exit-popup-close" id="exitPopupClose">&times;</button>
+      <div class="exit-popup-content">
+        <div class="exit-popup-badge">🎁 WAIT! FREE GIFT</div>
+        <h2>Don't Leave Empty-Handed!</h2>
+        <p>Grab my <strong>50 Hidden Gems Under $25</strong> guide FREE - the secret Amazon finds I don't share anywhere else!</p>
+        <ul class="exit-popup-benefits">
+          <li>✓ 50 amazing products under $25</li>
+          <li>✓ Weekly deal alerts before they sell out</li>
+          <li>✓ Early access to flash sales</li>
+        </ul>
+        <form action="https://app.convertkit.com/forms/5641382/subscriptions" method="post" class="exit-popup-form">
+          <input type="email" name="email_address" placeholder="Your best email" required>
+          <button type="submit" class="btn btn-primary">Send My Free Guide →</button>
+        </form>
+        <p class="exit-popup-privacy">Join 15,000+ smart shoppers. No spam, ever.</p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .newsletter-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    /* Exit Intent Popup */
+    .exit-popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+    .exit-popup-overlay.active { display: flex; }
+    .exit-popup-modal {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 450px;
+      width: 90%;
+      position: relative;
+      text-align: center;
+      animation: popupSlideIn 0.3s ease;
+    }
+    @keyframes popupSlideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .exit-popup-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 1.75rem;
+      cursor: pointer;
+      color: #9ca3af;
+    }
+    .exit-popup-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .exit-popup-content h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+      color: #1a1a2e;
+    }
+    .exit-popup-content p {
+      color: #4a4a6a;
+      margin-bottom: 1rem;
+    }
+    .exit-popup-benefits {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.5rem 0;
+      text-align: left;
+    }
+    .exit-popup-benefits li {
+      padding: 6px 0;
+      color: #374151;
+    }
+    .exit-popup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .exit-popup-form input {
+      padding: 0.875rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .exit-popup-form button {
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+    }
+    .exit-popup-privacy {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-top: 1rem;
+    }
+  </style>
+
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="/" class="logo">
-            <span class="logo-icon">&#x1F49D;</span>
+            <span class="logo-icon">💝</span>
             <span>Daily Deal Darling</span>
           </a>
           <p>Your trusted guide to the best products online. We test, review, and recommend so you can shop with confidence.</p>
-          <div class="footer-social">
+          <div class="footer-social" style="margin-top: var(--space-md);">
             <a href="https://pinterest.com/dailydealdarling" class="social-link" aria-label="Pinterest">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
             </a>
           </div>
         </div>
@@ -551,7 +732,7 @@
       </div>
       <div class="footer-bottom">
         <p class="footer-disclosure"><strong>Affiliate Disclosure:</strong> Daily Deal Darling is a participant in the Amazon Services LLC Associates Program. When you click links and make purchases, we may earn a commission at no extra cost to you. We only recommend products we genuinely believe in.</p>
-        <p class="footer-copyright">&copy; 2026 Daily Deal Darling. All rights reserved.</p>
+        <p class="footer-copyright">© 2026 Daily Deal Darling. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -559,27 +740,68 @@
   <!-- Mobile Sticky CTA Bar -->
   <div class="mobile-sticky-cta" id="mobileCTA">
     <div class="mobile-sticky-content">
-      <span class="mobile-sticky-text">Today's Deals Are Live</span>
-      <a href="#deals" class="mobile-sticky-btn">Shop Deals</a>
+      <span class="mobile-sticky-text">🔥 Today's Deals Are Live!</span>
+      <a href="#deals" class="mobile-sticky-btn">Shop Deals →</a>
     </div>
   </div>
 
+  <style>
+    /* Mobile Sticky CTA */
+    .mobile-sticky-cta {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, var(--color-primary) 0%, #D14940 100%);
+      padding: 12px 16px;
+      z-index: 999;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    }
+    .mobile-sticky-cta.visible { transform: translateY(0); }
+    .mobile-sticky-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .mobile-sticky-text {
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .mobile-sticky-btn {
+      background: white;
+      color: var(--color-primary);
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: transform 0.2s ease;
+    }
+    .mobile-sticky-btn:hover { transform: scale(1.05); }
+    @media (max-width: 768px) {
+      .mobile-sticky-cta { display: block; }
+      body { padding-bottom: 70px; }
+    }
+  </style>
+
   <script>
-    // Mobile menu
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileNav = document.getElementById('mobileNav');
     mobileMenuBtn.addEventListener('click', () => mobileNav.classList.toggle('active'));
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
       link.addEventListener('click', () => mobileNav.classList.remove('active'));
     });
-
-    // Header scroll state
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 50);
     });
-
-    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -587,97 +809,73 @@
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
-
-    // Mobile CTA visibility
+    // Show mobile CTA after scrolling past hero
     const mobileCTA = document.getElementById('mobileCTA');
     window.addEventListener('scroll', () => {
-      mobileCTA.classList.toggle('visible', window.scrollY > 400);
+      if (window.scrollY > 400) {
+        mobileCTA.classList.add('visible');
+      } else {
+        mobileCTA.classList.remove('visible');
+      }
     });
 
-    // Scroll reveal with IntersectionObserver
-    const revealElements = document.querySelectorAll('.reveal, .reveal-stagger');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-    revealElements.forEach(el => revealObserver.observe(el));
-  </script>
-
-  <!-- Lead Magnet Popup Modal -->
-  <div id="lead-magnet-popup" class="popup-overlay">
-    <div class="popup-content">
-      <button class="popup-close" onclick="closePopup()" aria-label="Close popup">&times;</button>
-      <div class="popup-body">
-        <div class="popup-icon">&#x1F381;</div>
-        <h2>Wait! Don't Miss Out on Savings</h2>
-        <p class="popup-subtitle">Get our <strong>FREE guide</strong> with 50 ways to save on beauty, home & decor &mdash; plus weekly deals sent to your inbox!</p>
-        <form action="https://app.convertkit.com/forms/5641382/subscriptions" method="POST" class="popup-form">
-          <input type="text" name="fields[first_name]" placeholder="First Name" required>
-          <input type="email" name="email_address" placeholder="Email Address" required>
-          <button type="submit" class="btn btn-primary btn-lg popup-btn">Send Me the Free Guide</button>
-        </form>
-        <p class="popup-trust">Join 10,000+ smart shoppers. Unsubscribe anytime.</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Lead Magnet Popup Logic
+    // Exit Intent Popup
     (function() {
-      const POPUP_DELAY = 5000;
-      const SCROLL_THRESHOLD = 0.5;
-      const DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000;
-
+      const exitPopup = document.getElementById('exitPopup');
+      const exitPopupClose = document.getElementById('exitPopupClose');
       let popupShown = false;
-      const popup = document.getElementById('lead-magnet-popup');
 
-      function showPopup() {
+      function showExitPopup() {
         if (popupShown) return;
-        const dismissedAt = localStorage.getItem('popupDismissed');
-        if (dismissedAt && (Date.now() - parseInt(dismissedAt)) < DISMISS_DURATION) return;
-        popup.classList.add('active');
+        if (sessionStorage.getItem('exitPopupDismissed')) return;
+        if (sessionStorage.getItem('emailSubscribed')) return;
         popupShown = true;
-        document.body.style.overflow = 'hidden';
+        exitPopup.classList.add('active');
       }
 
-      window.closePopup = function() {
-        popup.classList.remove('active');
-        document.body.style.overflow = '';
-        localStorage.setItem('popupDismissed', Date.now().toString());
-      };
+      function closeExitPopup() {
+        exitPopup.classList.remove('active');
+        sessionStorage.setItem('exitPopupDismissed', 'true');
+      }
 
-      setTimeout(showPopup, POPUP_DELAY);
+      if (exitPopupClose) {
+        exitPopupClose.addEventListener('click', closeExitPopup);
+      }
 
-      window.addEventListener('scroll', function() {
-        const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-        if (scrollPercent > SCROLL_THRESHOLD) showPopup();
-      });
-
-      popup.addEventListener('click', function(e) {
-        if (e.target === popup) closePopup();
-      });
+      if (exitPopup) {
+        exitPopup.addEventListener('click', function(e) {
+          if (e.target === exitPopup) closeExitPopup();
+        });
+      }
 
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && popup.classList.contains('active')) closePopup();
+        if (e.key === 'Escape') closeExitPopup();
       });
 
-      const popupForm = popup.querySelector('.popup-form');
-      popupForm.addEventListener('submit', function(e) {
+      // Exit intent detection (desktop only)
+      if (window.matchMedia('(pointer: fine)').matches) {
+        document.addEventListener('mouseout', function(e) {
+          if (!popupShown && e.clientY <= 0) {
+            showExitPopup();
+          }
+        });
+      }
+
+      // Show after 60 seconds on mobile
+      if (window.matchMedia('(max-width: 768px)').matches) {
         setTimeout(function() {
-          popup.querySelector('.popup-body').innerHTML =
-            '<div class="popup-icon">&#x2705;</div>' +
-            '<h2>You\'re In!</h2>' +
-            '<p class="popup-subtitle">Check your inbox for your free guide.<br>Your first weekly deals email arrives Tuesday!</p>' +
-            '<button onclick="closePopup()" class="btn btn-primary">Start Shopping</button>';
-        }, 1000);
+          if (!popupShown) showExitPopup();
+        }, 60000);
+      }
+
+      // Track form submissions
+      document.querySelectorAll('form').forEach(function(form) {
+        form.addEventListener('submit', function() {
+          sessionStorage.setItem('emailSubscribed', 'true');
+          if (exitPopup) exitPopup.classList.remove('active');
+        });
       });
     })();
   </script>
-<!-- Last deployed: 2026-03-11 -->
 </body>
 </html>

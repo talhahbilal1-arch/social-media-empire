@@ -16,7 +16,7 @@ import os
 import sys
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Optional
 
 # Add parent directory to path for imports
@@ -219,7 +219,7 @@ class BlogFactory:
                             'published',
                             published_url=publish_result['published_url'],
                             netlify_deploy_id=publish_result.get('deploy_id'),
-                            published_at=datetime.utcnow().isoformat()
+                            published_at=datetime.now(timezone.utc).isoformat()
                         )
                         saved_article['published_url'] = publish_result['published_url']
                         results['published'] += 1
@@ -249,7 +249,7 @@ class BlogFactory:
     def _get_daily_article_count(self, weekly_frequency: int) -> int:
         """Determine how many articles to create today based on weekly frequency."""
         # Map day of week (0=Mon, 6=Sun) to publish days
-        day = datetime.utcnow().weekday()
+        day = datetime.now(timezone.utc).weekday()
 
         # Spread articles across the week
         if weekly_frequency >= 7:
@@ -435,7 +435,7 @@ The content_markdown should be a complete, publish-ready article with:
                 'status': 'pending',
                 'metadata': {
                     'blog_article_id': article['id'],
-                    'generated_at': datetime.utcnow().isoformat()
+                    'generated_at': datetime.now(timezone.utc).isoformat()
                 }
             }
             processed.append(content)
@@ -460,7 +460,7 @@ The content_markdown should be a complete, publish-ready article with:
 
 def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Blog Factory at {datetime.utcnow().isoformat()}")
+    print(f"Starting Blog Factory at {datetime.now(timezone.utc).isoformat()}")
 
     factory = BlogFactory()
     results = factory.run()

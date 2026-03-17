@@ -2,6 +2,7 @@ name: YouTube Fitness Shorts
 
 on:
   schedule:
+    # Post 1 fitness video per day at 12 PM PST (8 PM UTC)
     - cron: '0 20 * * *'
   workflow_dispatch:
     inputs:
@@ -20,6 +21,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -28,11 +34,12 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python3 -m pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Generate fitness video content
+      - name: Generate and post fitness video to YouTube
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -40,75 +47,14 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-          LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
-          python3 << 'PYEOF'
-          import sys, os
-          sys.path.insert(0, '.')
+          POST_FLAGS="--post-youtube"
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            POST_FLAGS=""
+          fi
 
-          dry_run = os.environ.get('DRY_RUN', 'false') == 'true'
-
-          print('=== YouTube Fitness Shorts ===')
-
-          # Generate video content via Claude
-          try:
-              from video_automation.video_content_generator import VideoContentGenerator
-              generator = VideoContentGenerator()
-              content = generator.generate_content('fitnessmadeasy')
-              print(f'Generated content: {content.topic}')
-              print(f'Hook: {content.hook}')
-              print(f'CTA: {content.cta}')
-              print(f'Hashtags: {", ".join(content.hashtags)}')
-          except Exception as e:
-              import traceback
-              print(f'Content generation failed: {e}')
-              traceback.print_exc()
-              sys.exit(1)
-
-          if dry_run:
-              print(f'\n[DRY RUN] Would post: {content.topic}')
-              print(f'[DRY RUN] Hook: {content.hook}')
-              print(f'[DRY RUN] Body: {content.body_points}')
-              sys.exit(0)
-
-          # Store content in Supabase for tracking
-          try:
-              from database.supabase_client import get_supabase_client
-              db = get_supabase_client()
-              from datetime import datetime, timezone
-              db.client.table('video_content').insert({
-                  'brand': 'fitnessmadeasy',
-                  'topic': content.topic,
-                  'hook': content.hook,
-                  'body_points': content.body_points,
-                  'cta': content.cta,
-                  'hashtags': content.hashtags,
-                  'status': 'generated',
-                  'created_at': datetime.now(timezone.utc).isoformat(),
-              }).execute()
-              print('Content saved to Supabase')
-          except Exception as e:
-              print(f'Supabase save warning (non-fatal): {e}')
-
-          # Try to upload to YouTube if credentials available
-          yt_client_id = os.environ.get('YOUTUBE_CLIENT_ID', '')
-          yt_refresh = os.environ.get('YOUTUBE_REFRESH_TOKEN', '')
-
-          if not yt_client_id or not yt_refresh:
-              print('\nYouTube credentials not configured — content saved, skipping upload')
-              print('Set YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN to enable')
-          else:
-              try:
-                  from video_automation.youtube_shorts import YouTubeShortsUploader
-                  uploader = YouTubeShortsUploader()
-                  if uploader.is_configured():
-                      print('\nYouTube uploader configured — upload would proceed here')
-                      print('Note: Full video rendering requires CREATOMATE_API_KEY')
-                  else:
-                      print('\nYouTube uploader not fully configured')
-              except Exception as e:
-                  print(f'YouTube upload setup failed: {e}')
-
-          print('\nYouTube Fitness Shorts complete.')
-          PYEOF
+          # ONLY post fitness-made-easy to YouTube (never other brands)
+          python cli.py \
+            --brand "fitness-made-easy" \
+            --count 1 \
+            $POST_FLAGS

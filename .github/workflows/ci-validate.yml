@@ -1,0 +1,93 @@
+name: CI Validation
+
+# Runs on every push and PR to catch configuration drift, placeholder code,
+# deprecated APIs, and brand name mismatches BEFORE they reach production.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+      - '**.yml'
+      - 'requirements.txt'
+  pull_request:
+    paths:
+      - '**.py'
+      - '**.yml'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run all validators
+        run: |
+          python -m monitoring.validators --json | tee validation_report.json
+          # The validator exits with code 1 if there are errors (not warnings)
+
+      - name: Create summary from results
+        if: always()
+        run: |
+          python3 << 'PYEOF'
+          import json, sys
+
+          try:
+              with open("validation_report.json") as f:
+                  results = json.load(f)
+          except Exception:
+              print("Could not read validation report")
+              sys.exit(0)
+
+          print("## Validation Report")
+          print("")
+
+          total_errors = 0
+          total_warnings = 0
+
+          for r in results:
+              status = "PASS" if r["ok"] else "FAIL"
+              icon = "✅" if r["ok"] else "❌"
+              print(f"### {icon} {r['name']} — {status}")
+
+              if r.get("errors"):
+                  total_errors += len(r["errors"])
+                  for e in r["errors"]:
+                      print(f"- ❌ {e}")
+              if r.get("warnings"):
+                  total_warnings += len(r["warnings"])
+                  for w in r["warnings"][:10]:  # Cap at 10 per validator
+                      print(f"- ⚠️ {w}")
+                  if len(r["warnings"]) > 10:
+                      print(f"- ... and {len(r['warnings']) - 10} more warnings")
+              if not r.get("errors") and not r.get("warnings"):
+                  print("- All checks passed")
+              print("")
+
+          print(f"**Summary:** {total_errors} errors, {total_warnings} warnings")
+          PYEOF
+          >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report-${{ github.run_number }}
+          path: validation_report.json
+          retention-days: 30

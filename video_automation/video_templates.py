@@ -34,25 +34,6 @@ BRAND_VIDEO_STYLES = {
         "watermark_text": "Fitness Made Easy",
         "style_preset": "bold_athletic"
     },
-    "fitnessmadeasy": {
-        "template_id": CREATOMATE_TEMPLATE_ID,
-        "colors": {
-            "primary": "#1B5E20",
-            "secondary": "#4CAF50",
-            "accent": "#FF6F00",
-            "text_primary": "#FFFFFF",
-            "text_secondary": "#E8F5E9",
-            "background": "#0D1B0E"
-        },
-        "fonts": {
-            "heading": "Oswald",
-            "body": "Open Sans",
-            "cta": "Oswald"
-        },
-        "logo_url": None,
-        "watermark_text": "Fitness Made Easy",
-        "style_preset": "bold_athletic"
-    },
     "deals": {
         "template_id": CREATOMATE_TEMPLATE_ID,
         "colors": {

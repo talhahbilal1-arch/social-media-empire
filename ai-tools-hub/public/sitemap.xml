@@ -1,297 +1,231 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pilottools.ai/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/chatgpt-vs-claude/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/chatgpt-vs-claude/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/jasper-vs-writesonic/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/jasper-vs-writesonic/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/midjourney-vs-runway/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/midjourney-vs-runway/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/cursor-vs-chatgpt/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/cursor-vs-chatgpt/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/grammarly-vs-chatgpt/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/grammarly-vs-chatgpt/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/notion-ai-vs-chatgpt/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/notion-ai-vs-chatgpt/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/runway-vs-descript/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/runway-vs-descript/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/writesonic-vs-copy-ai/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/writesonic-vs-copy-ai/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/compare/synthesia-vs-runway/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/compare/synthesia-vs-runway/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/chatgpt/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/chatgpt/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/claude/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/claude/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/jasper/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/jasper/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/midjourney/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/midjourney/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/cursor/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/cursor/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/writesonic/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/writesonic/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/copy-ai/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/copy-ai/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/synthesia/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/synthesia/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/grammarly/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/grammarly/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/notion-ai/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/notion-ai/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/elevenlabs/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/elevenlabs/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/canva/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/canva/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/descript/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/descript/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/runway/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/runway/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/perplexity/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/perplexity/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/scalenut/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/scalenut/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/surfer-seo/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/tools/surfer-seo/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/tools/otter-ai/</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/tools/stable-diffusion/</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/tools/luma-ai/</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/category/writing/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/writing/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/coding/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/coding/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/image/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/image/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/video/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/video/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/marketing/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/marketing/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/productivity/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/productivity/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/audio/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/audio/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/seo/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/seo/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/research/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/research/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://pilottools.ai/category/design/</loc>
-    <lastmod>2026-03-04</lastmod>
+    <loc>https://toolpilot-hub.netlify.app/category/design/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/best-ai-coding-tools-2026-github-copilot-vs-cursor-vs-tabnine/</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/best-ai-image-generators-2026-midjourney-vs-dalle-vs-stable-diffusion/</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/best-ai-marketing-tools-2026-complete-guide/</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/best-ai-productivity-tools-2026-notion-ai-vs-chatgpt-vs-copilot/</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/best-ai-voice-audio-tools-2026-elevenlabs-vs-murf-vs-descript/</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/best-ai-writing-tools-for-bloggers-2026-the-ultimate-buyers-guide/</loc>
-    <lastmod>2026-02-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pilottools.ai/blog/best-ai-video-tools-2026-synthesia-descript-runway-compared/</loc>
-    <lastmod>2026-02-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>

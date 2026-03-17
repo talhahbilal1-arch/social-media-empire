@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const SITE_URL = 'https://pilottools.ai'
+const SITE_URL = 'https://toolpilot-hub.netlify.app'
 
 const tools = require('../content/tools.json')
 const categories = require('../content/categories.json')

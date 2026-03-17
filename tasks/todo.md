@@ -16,104 +16,144 @@
   - All in `dailydealdarling_website/articles/kitchen-tools-every-home-cook-needs.html`
 - [x] **Standardize Amazon affiliate tags** - Replaced `dailydealdarling1-20` → `dailydealdarl-20` across 27 files (131 occurrences). All active code now uses the registered tag.
 
----
+## This Week
 
-## DailyDealDarling.com — 5-Hack Visual Upgrade Plan (March 11, 2026)
+- [x] **Build visual pin generator** - Pillow-based text overlay pins for Pinterest
+  - [x] Create `video_automation/pin_image_generator.py` - 3 overlay styles (gradient, box_light, box_dark), auto-downloads Google Fonts, batch mode from content JSON
+  - [x] Add `assets/fonts/*.ttf` to `.gitignore`
+  - [x] Test single pin generation - all 3 styles verified at 1000x1500px
+  - [x] Test batch mode - tested with mock backgrounds (real Pexels needs API key in .env)
+- [x] **Generate Etsy product PDFs** - 6 menopause planner PDFs generated via Playwright Chromium:
+  - product1_sleep_log (402 KB), product2_perimenopause_journal (618 KB), product3_hot_flash_tracker (456 KB)
+  - product4_selfcare_planner (548 KB), product5_hormone_health_journal (600 KB), digital_planner landscape (725 KB)
+- [x] **Deploy ConvertKit email forms** - Verified and fixed:
+  - DDD site (index.html): form ID 5641382 ✓ (was placeholder, fixed)
+  - DDD pages (about, contact, privacy, disclosure): copied to root for GitHub Pages ✓
+  - FitOver35 site: form ID 8946984 ✓ (already correct)
+  - 3 email template components (popup/inline/footer): updated from placeholder to 5641382 ✓
+- [ ] **Connect FitOver35 Pinterest** - Set up Make.com for the established account (469 followers)
 
-### Status: COMPLETE
+## This Month
 
-### Hack 1 — Typography & White Space
-- [x] Verify Playfair Display + Source Sans 3 loading correctly (weights 400/600/700 + italic, with preconnect hints)
-- [x] Section padding already 80px (`--space-2xl: 5rem`) — sufficient for editorial feel
-- [x] Heading hierarchy verified: h1 (clamp 2.25-3.75rem) → h2 (1.75-2.75rem) → h3 (1.2-1.6rem) → h4 (1.05-1.2rem)
-- [x] Body line-height 1.7 ✓, paragraph 1.75 ✓, heading line-height 1.15 ✓, hero h1 1.08 ✓
+- [x] **Consolidate agent systems** - Archived dead code: moved automation/{deals,email,links,affiliate,amazon} → archive/deprecated/automation/ (14 files). Kept automation/articles/ (used by fitness-articles.yml). PR #16 includes these moves.
+- [ ] **Deploy subdomain sites** - 10 subdomain landing pages have HTML ready
+- [x] **Activate YouTube Shorts** - Already working! Workflow posted 1 video on Feb 13. Hits Gemini rate limits but retries and succeeds.
+- [ ] **Build Pinterest Analytics** - Replace placeholder zeros with real API data
+- [ ] **List remaining Etsy products** - PDFs generated ✓, need to upload to Etsy store
+- [x] **Nurse Planner digital PDF** - Already landscape (11x8.5in, 22 pages). Landscape copy created at `Etsy Planners./Nurse Planner pdf/nurse_planner_digital_landscape.pdf`
 
-### Hack 2 — Color & Contrast
-- [x] Hero description (#6B6B6B on #F7F3ED): 5.14:1 — passes AA
-- [x] Editorial labels: changed from brass (#B8956A, 2.75:1) to brass-text (#7D6544, ~4.97:1) — passes AA
-- [x] Hero badge: changed from brass-dark (#9A7B55, 3.92:1) to brass-text (#7D6544) — passes AA
-- [x] Section numbers: changed from brass-dark to brass-text — passes AA
-- [x] Product categories: changed from brass-dark to brass-text — passes AA on white
-- [x] Announcement CTA: changed from forest-on-brass (3.80:1) to forest-on-cream (10.44:1) — passes AA
-- [x] Newsletter button: changed from forest-on-brass to forest-on-cream — passes AA
-- [x] Announcement bar text (cream on forest): 10.44:1 — passes AA
-- [x] Newsletter text (rgba 0.65 on forest): 5.53:1 — passes AA
-- [x] Rating count: changed from pewter (#999, 2.85:1) to slate (#6B6B6B, 5.14:1) — passes AA
-- [x] Footer brand text: bumped rgba opacity from 0.45 to 0.55
-- [x] Footer disclosure: bumped rgba opacity from 0.35 to 0.55
-- [x] Footer copyright: bumped rgba opacity from 0.3 to 0.55
-- [x] Deal badges: added explicit text colors (white on terracotta, ink on brass)
+## Also Completed (Feb 13-14, 2026)
 
-### Hack 3 — Micro-Interactions & Animations
-- [x] Scroll-reveal IntersectionObserver verified (opacity 0→1, translateY 24px→0, 0.7s)
-- [x] Card hover states: product (-6px + shadow-lg), article (-4px), category (scale 1.06)
-- [x] Button hover/active states present on all .btn variants
-- [x] Announcement pulse animation verified (subtle 2s infinite)
-- [x] Added `:focus-visible` global state with forest outline for keyboard accessibility
-- [x] Added `@media (prefers-reduced-motion: reduce)` to disable animations for accessibility
+- [x] **Cleaned up 10 stale git branches** - Deleted all except main + active PRs
+- [x] **Merged PR #14** (fitover35-netlify-deploy) - Resolved 15 merge conflicts, merged to main
+- [x] **Created PR #16** (toolpilot-newsletter) - Newsletter system with bug fixes:
+  - Fixed ConvertKit API key bug in NewsletterSignup.js (was passing form ID as api_key)
+  - Fixed schedule conflict (moved newsletter cron to 5PM UTC, 2hrs after discovery)
+  - 17 files: signup component, discovery script, newsletter generator, workflows, etc.
 
-### Hack 4 — Component Polish
-- [x] Category cards: border-radius, shadows, overlay gradients, internal spacing verified
-- [x] Product cards: moved product-image and prime-badge inline styles to CSS
-- [x] Buttons: min-height 44px+ via padding, consistent hover transitions
-- [x] Newsletter inputs: styled with focus states, brand-matching dark theme
-- [x] Quiz CTA buttons: moved inline styles to CSS (.quiz-buttons class)
-- [x] Removed ALL inline styles from index.html (11 occurrences)
+## Remaining (Requires Manual Action)
 
-### Hack 5 — Layout & Spacing
-- [x] Max content width 1200px on .container, 1400px on header — consistent
-- [x] Responsive tested at 375px and 1440px via Puppeteer screenshots
-- [x] Section background classes (.section-cream, .section-parchment) replace inline styles
-- [x] Footer social margin moved to CSS
-- [x] Mobile-first breakpoints: 480px, 600px, 640px, 768px, 960px — all verified
-
-### Review
-Changes made:
-1. **Contrast fixes** (css/styles.css): Added `--color-brass-text: #7D6544` for all decorative text on light backgrounds. Updated `.editorial-label`, `.hero-badge`, `.section-number`, `.product-category` to use it. Changed announcement CTA and newsletter button from brass bg to cream bg. Bumped footer text opacities (0.30-0.45 → 0.55). Changed `.rating-count` from pewter to slate.
-2. **Focus-visible** (css/styles.css): Added global `:focus-visible` rule with forest outline
-3. **Reduced motion** (css/styles.css): Added `@media (prefers-reduced-motion: reduce)` query
-4. **Inline style cleanup** (index.html + css/styles.css): Removed all 11 remaining inline styles, moved to CSS classes (`.section-cream`, `.section-parchment`, `.deal-hot`, `.deal-value`, `.quiz-buttons`, `.newsletter .editorial-label`, `.newsletter p strong`, `.footer-social` margin)
-5. **Product/badge fixes** (css/styles.css): Added `.product-image` bg/padding, `.prime-badge`, explicit text colors on deal badges
+- [ ] **Deploy 10 subdomain sites** - HTML ready in `outputs/infrastructure/`, need 10 Netlify sites + DNS CNAME records
+- [ ] **FitOver35 Pinterest via Make.com** - Need to create Make.com scenario for existing Pinterest account (469 followers)
+- [ ] **Upload 6 Etsy products** - PDFs generated, need manual Etsy store listing
+- [ ] **Pinterest Analytics API** - Needs Pinterest OAuth token to replace placeholder data
+- [ ] **DNS for fitover35.com** - A record → 75.2.60.5, CNAME www → fitover35.netlify.app (Namecheap)
+- [ ] **Check affiliate approvals** - Writesonic, ElevenLabs, Descript (pending since Feb 7)
+- [ ] **Grammarly + Synthesia signups** - Need manual signup (automation blocked)
+- [ ] **Merge PR #16** - Newsletter system ready for review
 
 ---
 
-## Previous Work (preserved below)
+## Review - Audit Summary
 
-### DDD Redesign - Initial Pass (March 11, 2026)
-Design Direction: Moved from generic pink/red template to editorial magazine aesthetic ("The Edit") — warm, tactile, distinctive. See changes summary in previous entry.
+### What Exists and Works
+- 580 files on GitHub with daily auto-commits
+- 8+ Python agents running on GitHub Actions schedules
+- 800+ Pinterest pins posted via Make.com across 2 brands
+- FitOver35 articles auto-publishing daily
+- 18+ Supabase tables with RLS
+- 16 GitHub secrets configured
+- Health monitoring with email alerts
+- Video automation system (Creatomate + Remotion)
+- Email marketing templates and ConvertKit integration
+- 2 Etsy products live
 
-### Remaining Tasks (from prior sessions)
-- [ ] Connect FitOver35 Pinterest via Make.com
-- [ ] Deploy subdomain sites
-- [ ] Build Pinterest Analytics
-- [ ] List remaining Etsy products
+### What's Missing
+- No visual pin image generation (Pillow/PIL)
+- No Pinterest Analytics API integration
+- ~~posts_log may be empty (Make.com not logging)~~ FIXED: Added posts_log HTTP modules to all 3 Pinterest scenarios
+- 6 Etsy products have mockups but no PDFs
+- ~~Local repo severely outdated~~ FIXED: Synced with remote
+- Subdomain sites not deployed
+- Overlapping agent code needs consolidation
 
 ---
 
-## Affiliate Link Health Check System (March 11, 2026)
+# GitHub Repository Audit Report
+**Date:** February 12, 2026
 
-### Status: COMPLETE
+## Repositories Found (3 total)
 
-### Step 1 — Create `automation/links/check_links.py`
-- [x] Create standalone link checker that reuses `extract_asins.py`
-- [x] HTTP HEAD check for ASIN-based URLs (no API key needed)
-- [x] Optional Rainforest API verification if `RAINFOREST_API_KEY` is set
-- [x] Output JSON report + markdown summary
-- [x] Exit code 1 if broken links found
+| Repo | Visibility | Language | Last Updated | Status |
+|------|-----------|----------|-------------|--------|
+| social-media-empire | Public | HTML/Python | Feb 12, 2026 | ACTIVE - 580+ files |
+| dailydealdarling.com | Public | N/A | Feb 11, 2026 | EMPTY - zero commits |
+| fitover35 | Public | HTML | Feb 9, 2026 | ACTIVE - static site |
 
-### Step 2 — Create `.github/workflows/check-affiliate-links.yml`
-- [x] Weekly cron (Monday 8 AM UTC) + manual `workflow_dispatch`
-- [x] Runs `check_links.py` against both website directories
-- [x] Auto-creates GitHub issue if broken links found
+## Repo 1: social-media-empire (MAIN HUB)
 
-### Step 3 — Add pre-publish validation to article generators
-- [x] Add `validate_affiliate_links()` to `fitover35_article_generator.py`
-- [x] Add `validate_affiliate_links()` to `dailydealdarling_article_generator.py`
-- [x] Warn on broken links but don't block publishing
+**580+ tracked files** across Python, HTML, YAML, JSON, TypeScript.
 
-### Review
-Changes made:
-1. **`automation/links/check_links.py`** (NEW, 407 lines) — Standalone CLI link checker. Reuses `extract_asins.py` for ASIN discovery and `verify_asins.py`'s `generate_github_issue_body()` for issue formatting. Two modes: HTTP HEAD (default, no API key) or Rainforest API (if `RAINFOREST_API_KEY` set). Outputs `link_report.json`, `link_report.md`, and `github_issue_body.md` to `automation/links/reports/`. 1s rate limit between HTTP requests.
-2. **`.github/workflows/check-affiliate-links.yml`** (NEW, 47 lines) — Weekly cron (Monday 8am UTC) + manual trigger. Scans both website dirs, auto-creates GitHub issue via `peter-evans/create-issue-from-file@v5` when broken links found, uploads reports as artifacts (30-day retention).
-3. **`automation/articles/fitover35_article_generator.py`** (MODIFIED) — Added `validate_affiliate_links()` function (~60 lines) before `main()`. Called after article HTML is written to disk. HTTP HEAD checks each ASIN with 1s rate limit, logs warnings for broken links. Never blocks the pipeline.
-4. **`automation/articles/dailydealdarling_article_generator.py`** (MODIFIED) — Same `validate_affiliate_links()` pattern as FitOver35. Added before `main()`, called after file write.
+### Built & Active
+- Pinterest automation via Make.com (800+ pins across DDD + TMP)
+- Article auto-generation (DDD + FitOver35, daily via GitHub Actions)
+- 12+ GitHub Actions workflows running
+- Supabase database (18+ tables with RLS)
+- Email marketing system (ConvertKit + Resend)
+- 3 websites (dailydealdarling.com, fitover35.com, ai-tools-hub)
+- Amazon affiliate links (tag: dailydealdarl-20)
+- 2 Etsy products live
+
+### Built But Not Active
+- TikTok pipeline (4 Make.com scenario JSONs, not imported)
+- YouTube Shorts uploader
+- Remotion video system
+- 10 subdomain landing pages (HTML only)
+- 6 additional Etsy product mockups
+
+### Make.com Scenario Exports in Repo
+- `tiktok_automation/make_scenarios/1_content_generator.json`
+- `tiktok_automation/make_scenarios/2_video_renderer.json`
+- `tiktok_automation/make_scenarios/3_tiktok_poster.json`
+- `tiktok_automation/make_scenarios/4_analytics_monitor.json`
+- `outputs/automation/agent2a_listicle_creator_blueprint.json`
+- `outputs/automation/agent2b_scheduled_pinner_blueprint.json`
+
+## Repo 2: dailydealdarling.com - EMPTY
+Zero commits. Website files live inside social-media-empire/dailydealdarling_website/.
+
+## Repo 3: fitover35 (STATIC WEBSITE)
+- 8 published articles, gear page, 12-week program lead magnet
+- Amazon tag: dailydealdarl-20 (same as DDD - should have own tag)
+- ConvertKit form IDs still placeholder
+- Pinterest social link: pinterest.com/fitover35
+
+## Security Audit: CLEAN
+- No hardcoded API keys or secrets
+- All credentials use env vars or GitHub Secrets (16 configured)
+- Only minor items: hardcoded Netlify Site ID (616e7bf4-fe47-495b-b13e-934e51546d4c) in 2 workflow files
+
+## Affiliate Programs Status
+- Amazon Associates: ACTIVE (dailydealdarl-20)
+- Etsy: ACTIVE (2 products)
+- ClickBank, ShareASale, Impact, Rakuten, Bodybuilding.com: ALL PLACEHOLDER
+
+## Issues Flagged
+1. dailydealdarling.com repo empty (website lives in social-media-empire)
+2. FitOver35 uses DDD's Amazon tag instead of its own
+3. ConvertKit form IDs still placeholder in fitover35
+4. Most affiliate programs at PLACEHOLDER status
+5. TikTok pipeline built but not deployed
+6. Duplicate tiktok_automation folders (active + archive)
+7. No visual pin generation system
+8. posts_log table was empty (FIXED in prior session)

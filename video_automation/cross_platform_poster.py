@@ -30,17 +30,17 @@ BRAND_PLATFORM_CONFIG = {
         "tiktok_account": "dailydealdarling",
         "instagram_account": "dailydealdarling",
         "link_url": "https://dailydealdarling.com",
-        "videos_per_day": 2,
-        "posting_slots": ["morning", "afternoon"],
+        "videos_per_day": 3,
+        "posting_slots": ["morning", "noon", "evening"],
         "enabled": True
     },
-    "fitnessmadeasy": {
+    "fitness": {
         "pinterest_account_id": os.environ.get("PINTEREST_FITNESS_ACCOUNT_ID", ""),
         "late_api_key_env": "LATE_API_KEY_3",
         "pinterest_board_id": os.environ.get("PINTEREST_FITNESS_BOARD_ID", ""),
         "youtube_playlist_id": None,
-        "tiktok_account": "fitnessmadeasy",
-        "instagram_account": "fitnessmadeasy",
+        "tiktok_account": "fitness",
+        "instagram_account": "fitness",
         "link_url": "https://fitover35.com",
         "videos_per_day": 3,
         "posting_slots": ["morning", "afternoon", "evening"],
@@ -54,8 +54,8 @@ BRAND_PLATFORM_CONFIG = {
         "tiktok_account": "menopauseplanner",
         "instagram_account": "menopauseplanner",
         "link_url": "https://linktr.ee/menopauseplanner",
-        "videos_per_day": 2,
-        "posting_slots": ["morning", "evening"],
+        "videos_per_day": 3,
+        "posting_slots": ["morning", "noon", "evening"],
         "enabled": True
     },
     "nurse_planner": {

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://pilottools.ai/sitemap.xml
+Sitemap: https://toolpilot-hub.netlify.app/sitemap.xml

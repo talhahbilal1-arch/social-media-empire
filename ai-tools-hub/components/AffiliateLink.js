@@ -3,40 +3,8 @@
  * - rel="noopener noreferrer nofollow sponsored" (Google + FTC compliant)
  * - target="_blank"
  * - data-tool for analytics tracking
- * - Click tracking via GA4 + localStorage
  */
-
-/**
- * Track affiliate link clicks for analytics and conversion optimization.
- * Fires GA4 event and stores in localStorage for local analytics.
- */
-export function trackAffiliateClick(toolName, placement) {
-  if (typeof window !== 'undefined') {
-    // GA4 event
-    if (window.gtag) {
-      window.gtag('event', 'affiliate_click', {
-        tool_name: toolName,
-        placement: placement,
-        page_type: window.location.pathname.includes('/compare/') ? 'comparison' : 'review'
-      });
-    }
-    // Local storage tracking for conversion analytics
-    try {
-      const clicks = JSON.parse(localStorage.getItem('affiliate_clicks') || '[]');
-      clicks.push({
-        tool: toolName,
-        placement,
-        timestamp: new Date().toISOString(),
-        page: window.location.pathname
-      });
-      localStorage.setItem('affiliate_clicks', JSON.stringify(clicks.slice(-100)));
-    } catch (e) {
-      // Silently fail if localStorage is unavailable
-    }
-  }
-}
-
-export default function AffiliateLink({ href, tool, className, children, placement = 'inline' }) {
+export default function AffiliateLink({ href, tool, className, children }) {
   return (
     <a
       href={href}
@@ -44,7 +12,6 @@ export default function AffiliateLink({ href, tool, className, children, placeme
       rel="noopener noreferrer nofollow sponsored"
       className={className}
       data-tool={tool}
-      onClick={() => trackAffiliateClick(tool, placement)}
     >
       {children}
     </a>

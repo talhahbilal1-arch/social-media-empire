@@ -2,8 +2,8 @@ name: Fitness & Deals Articles
 
 on:
   schedule:
-    # Daily at 11 PM PST (7 AM UTC), Mon-Fri
-    - cron: '0 7 * * 1-5'
+    # Daily at 11:30 PM PST (7:30 AM UTC), Mon-Fri (staggered from blog-factory)
+    - cron: '30 7 * * 1-5'
   workflow_dispatch:
     inputs:
       brand:
@@ -29,10 +29,11 @@ jobs:
   generate-fitover35-article:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    # Always run for fitover35
+    # Run for fitover35 (on schedule, or when manually triggered for fitover35/both)
     if: >
-      github.event.inputs.brand != 'deals' ||
-      github.event_name == 'schedule'
+      github.event_name == 'schedule' ||
+      github.event.inputs.brand == 'fitover35' ||
+      github.event.inputs.brand == 'both'
 
     steps:
       - name: Checkout repository
@@ -70,6 +71,7 @@ jobs:
         id: generate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: |
           KEYWORD="${{ steps.keyword.outputs.keyword }}"
@@ -108,7 +110,6 @@ jobs:
           else
             TITLE="${{ steps.generate.outputs.title }}"
             git commit -m "Publish FitOver35 article: ${TITLE}"
-            git pull --rebase origin main
             git push
           fi
 
@@ -121,45 +122,90 @@ jobs:
   generate-deals-article:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    # Only run on Mon/Wed/Fri for deals
+    # Run on Mon/Wed/Fri via schedule or when manually triggered for deals/both
     if: >
       github.event.inputs.brand == 'deals' ||
       github.event.inputs.brand == 'both' ||
-      (github.event_name == 'schedule' && (
-        contains('1,3,5', github.event.schedule)
-      ))
+      github.event_name == 'schedule'
 
     steps:
+      - name: Check if today is Mon/Wed/Fri (skip Tue/Thu for deals)
+        id: day_check
+        run: |
+          DAY=$(date -u +%u)
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$DAY" != "1" ] && [ "$DAY" != "3" ] && [ "$DAY" != "5" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Today is day $DAY — skipping deals (only Mon/Wed/Fri)"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout repository
+        if: steps.day_check.outputs.skip != 'true'
         uses: actions/checkout@v4
 
       - name: Set up Python
+        if: steps.day_check.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
 
       - name: Install dependencies
+        if: steps.day_check.outputs.skip != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Generate deals article
+        if: steps.day_check.outputs.skip != 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           python -c "
-          import sys
+          import sys, os, json
           sys.path.insert(0, '.')
 
-          # Placeholder for deals article generation
-          # Will use Claude API to generate lifestyle/home articles
-          print('Deals article generation - to be implemented')
-          print('Will generate articles for dailydealdarling.com')
+          from database.supabase_client import get_supabase_client
+          db = get_supabase_client()
+
+          # Use the same article generator as fitness, but for deals brand
+          try:
+              from video_automation.article_generator import generate_articles_for_weekly_calendar, publish_article_to_website
+
+              result = db.client.table('weekly_calendar').select('calendar_data, trends_data') \
+                  .eq('brand', 'deals').order('created_at', desc=True).limit(1).execute()
+
+              if result.data:
+                  calendar = result.data[0].get('calendar_data', {})
+                  if isinstance(calendar, str):
+                      calendar = json.loads(calendar)
+
+                  trends_data = result.data[0].get('trends_data')
+                  if trends_data:
+                      if isinstance(trends_data, str):
+                          trends_data = json.loads(trends_data)
+                      calendar['trending_topics'] = trends_data.get('trending_topics', [])
+
+                  articles = generate_articles_for_weekly_calendar(calendar, 'daily_deal_darling', db.client)
+                  for slug, content in articles.items():
+                      if content:
+                          publish_article_to_website(content, 'daily_deal_darling', slug)
+                          print(f'Published deals article: {slug}')
+              else:
+                  print('No weekly calendar for deals — skipping article generation')
+                  print('Run trend-discovery first to populate the calendar')
+          except ImportError:
+              print('article_generator not available — skipping')
+          except Exception as e:
+              print(f'Deals article generation error: {e}')
           "
 
       - name: Summary
+        if: steps.day_check.outputs.skip != 'true'
         run: |
           echo "## Daily Deal Darling Article" >> $GITHUB_STEP_SUMMARY
-          echo "Deals article generation placeholder" >> $GITHUB_STEP_SUMMARY
+          echo "Deals article generated from weekly calendar" >> $GITHUB_STEP_SUMMARY

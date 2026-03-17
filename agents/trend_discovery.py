@@ -18,7 +18,7 @@ import sys
 import json
 import asyncio
 import aiohttp
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Optional
 from bs4 import BeautifulSoup
 import feedparser
@@ -115,7 +115,11 @@ class TrendDiscoveryEngine:
         }
 
         try:
-            brands = self.db.get_active_brands()
+            try:
+                brands = self.db.get_active_brands()
+            except Exception as e:
+                print(f"[trend_discovery] Database error fetching active brands: {e}")
+                brands = []
             print(f"Discovering trends for {len(brands)} brands...")
 
             for brand in brands:
@@ -139,7 +143,11 @@ class TrendDiscoveryEngine:
                 results['errors'].extend(brand_results.get('errors', []))
 
             # Cleanup old trends
-            cleaned = self.db.cleanup_expired_trends()
+            try:
+                cleaned = self.db.cleanup_expired_trends()
+            except Exception as e:
+                print(f"[trend_discovery] Database error cleaning up expired trends: {e}")
+                cleaned = 0
             print(f"\nCleaned up {cleaned} expired trends")
 
             self.db.complete_agent_run(
@@ -207,8 +215,11 @@ class TrendDiscoveryEngine:
 
         # Save to database
         if unique_discoveries:
-            saved = self.db.save_trends_batch(unique_discoveries)
-            results['total'] = len(saved)
+            try:
+                saved = self.db.save_trends_batch(unique_discoveries)
+                results['total'] = len(saved)
+            except Exception as e:
+                print(f"[trend_discovery] Database error saving trends batch: {e}")
 
         return results
 
@@ -238,7 +249,7 @@ class TrendDiscoveryEngine:
                                     'asin': self._extract_asin(entry.get('link', ''))
                                 },
                                 'relevance_score': 0.7,
-                                'expires_at': (datetime.utcnow() + timedelta(days=7)).isoformat()
+                                'expires_at': (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
                             })
             except Exception as e:
                 print(f"    Amazon {category} error: {e}")
@@ -282,7 +293,7 @@ class TrendDiscoveryEngine:
                                     'num_comments': post_data.get('num_comments', 0)
                                 },
                                 'relevance_score': min(0.9, 0.5 + (score / 1000)),
-                                'expires_at': (datetime.utcnow() + timedelta(days=3)).isoformat()
+                                'expires_at': (datetime.now(timezone.utc) + timedelta(days=3)).isoformat()
                             })
 
                 # Be nice to Reddit's API
@@ -319,7 +330,7 @@ class TrendDiscoveryEngine:
                                     'published': entry.get('published', '')
                                 },
                                 'relevance_score': 0.6,
-                                'expires_at': (datetime.utcnow() + timedelta(days=2)).isoformat()
+                                'expires_at': (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
                             })
             except Exception as e:
                 print(f"    News {topic} error: {e}")
@@ -361,7 +372,7 @@ class TrendDiscoveryEngine:
                                     'traffic': entry.get('ht_approx_traffic', 'N/A')
                                 },
                                 'relevance_score': 0.8,
-                                'expires_at': (datetime.utcnow() + timedelta(days=1)).isoformat()
+                                'expires_at': (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
                             })
         except Exception as e:
             print(f"    Google Trends error: {e}")
@@ -377,7 +388,7 @@ class TrendDiscoveryEngine:
                 'source_url': f"https://trends.google.com/trends/explore?q={keyword.replace(' ', '%20')}",
                 'source_data': {'type': 'evergreen_keyword'},
                 'relevance_score': 0.5,
-                'expires_at': (datetime.utcnow() + timedelta(days=14)).isoformat()
+                'expires_at': (datetime.now(timezone.utc) + timedelta(days=14)).isoformat()
             })
 
         return discoveries
@@ -453,7 +464,7 @@ Only return the JSON array, nothing else."""
 
 async def main():
     """Entry point for GitHub Actions."""
-    print(f"Starting Trend Discovery at {datetime.utcnow().isoformat()}")
+    print(f"Starting Trend Discovery at {datetime.now(timezone.utc).isoformat()}")
 
     async with TrendDiscoveryEngine() as engine:
         results = await engine.run()

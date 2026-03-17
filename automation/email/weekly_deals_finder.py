@@ -256,7 +256,7 @@ def create_mock_deals() -> list[EmailDeal]:
             rating=4.7,
             review_count=127000,
             image_url="https://m.media-amazon.com/images/I/61S7BrCBj7L._SL500_.jpg",
-            affiliate_url="https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarling1-20",
+            affiliate_url="https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20",
             why_buy="Stock up on skincare essentials - 32% off"
         ),
         EmailDeal(
@@ -269,7 +269,7 @@ def create_mock_deals() -> list[EmailDeal]:
             rating=4.6,
             review_count=45000,
             image_url="https://m.media-amazon.com/images/I/51k+hnqOuWL._SL500_.jpg",
-            affiliate_url="https://www.amazon.com/dp/B07XXPHQZK?tag=dailydealdarling1-20",
+            affiliate_url="https://www.amazon.com/dp/B07XXPHQZK?tag=dailydealdarl-20",
             why_buy="TikTok-viral lip product now 25% off"
         ),
         EmailDeal(
@@ -282,7 +282,7 @@ def create_mock_deals() -> list[EmailDeal]:
             rating=4.5,
             review_count=15000,
             image_url="https://m.media-amazon.com/images/I/81yW0OBUTOL._AC_SL500_.jpg",
-            affiliate_url="https://www.amazon.com/dp/B09QMF91LK?tag=dailydealdarling1-20",
+            affiliate_url="https://www.amazon.com/dp/B09QMF91LK?tag=dailydealdarl-20",
             why_buy="Declutter for less: 33% off"
         ),
         EmailDeal(
@@ -295,7 +295,7 @@ def create_mock_deals() -> list[EmailDeal]:
             rating=4.6,
             review_count=12000,
             image_url="https://m.media-amazon.com/images/I/71LdvqKBqjL._AC_SL500_.jpg",
-            affiliate_url="https://www.amazon.com/dp/B076B3R3QF?tag=dailydealdarling1-20",
+            affiliate_url="https://www.amazon.com/dp/B076B3R3QF?tag=dailydealdarl-20",
             why_buy="Kitchen organization made easy - 24% off"
         ),
         EmailDeal(
@@ -308,7 +308,7 @@ def create_mock_deals() -> list[EmailDeal]:
             rating=4.5,
             review_count=18000,
             image_url="https://m.media-amazon.com/images/I/81CxV7OT1QL._AC_SL500_.jpg",
-            affiliate_url="https://www.amazon.com/dp/B08HYF4J6N?tag=dailydealdarling1-20",
+            affiliate_url="https://www.amazon.com/dp/B08HYF4J6N?tag=dailydealdarl-20",
             why_buy="Instant room refresh at 29% off"
         ),
     ]

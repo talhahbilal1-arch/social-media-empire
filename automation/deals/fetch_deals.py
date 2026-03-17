@@ -225,7 +225,7 @@ def main():
                 deal_type='best_deal',
                 image_url='https://m.media-amazon.com/images/I/616TLHB+3RL._AC_SL500_.jpg',
                 end_time=None,
-                affiliate_url='https://www.amazon.com/dp/B00NGV4506?tag=dailydealdarling1-20',
+                affiliate_url='https://www.amazon.com/dp/B00NGV4506?tag=dailydealdarl-20',
             ),
             Deal(
                 asin='B00TTD9BRC',
@@ -236,7 +236,7 @@ def main():
                 deal_type='deal',
                 image_url='https://m.media-amazon.com/images/I/61S7BrCBj7L._SL500_.jpg',
                 end_time=None,
-                affiliate_url='https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarling1-20',
+                affiliate_url='https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20',
             ),
         ]
         deals = mock_deals

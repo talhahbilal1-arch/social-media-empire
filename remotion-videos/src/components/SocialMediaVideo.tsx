@@ -372,7 +372,7 @@ const CTASection: React.FC<{
 const BrandWatermark: React.FC<{brand: string}> = ({brand}) => {
   const brandNames: Record<string, string> = {
     daily_deal_darling: 'Daily Deal Darling',
-    fitnessmadeasy: 'FitnessMadeEasy',
+    fitness: 'FitOver35',
     menopause_planner: 'Menopause Planner',
   };
 

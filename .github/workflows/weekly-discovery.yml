@@ -58,9 +58,9 @@ jobs:
           try:
               db.client.table('agent_runs').upsert({
                   'agent_name': 'trend_discovery',
-                  'last_run_at': __import__('datetime').datetime.utcnow().isoformat(),
+                  'last_run_at': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(),
                   'status': 'success',
-                  'updated_at': __import__('datetime').datetime.utcnow().isoformat()
+                  'updated_at': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat()
               }, on_conflict='agent_name').execute()
           except:
               pass

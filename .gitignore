@@ -70,15 +70,12 @@ logs/
 # Node
 node_modules/
 package-lock.json
-!remotion-videos/package-lock.json
 
 # AI tool configs
 .agent/
 .agents/
 .claude/
-.playwright-mcp/
 .gemini/
-.mcp.json
 
 # Misc local files
 Documents:Claude:/
@@ -98,4 +95,3 @@ build/
 .venv/
 venv/
 .env
-*_keyword_state.json

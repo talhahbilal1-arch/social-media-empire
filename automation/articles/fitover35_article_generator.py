@@ -1,11 +1,11 @@
 """
-FitOver35 article generator using Anthropic Claude API.
+FitOver35 article generator using Google Gemini AI.
 
 Generates SEO-optimized fitness articles for men over 35 with:
 - Meta tags, Open Graph, and Twitter Card tags
 - Article schema JSON-LD + FAQ schema JSON-LD
 - Proper heading hierarchy (H1, H2, H3)
-- Product recommendations with Amazon affiliate links (tag: fitover35-20)
+- Product recommendations with Amazon affiliate links (tag: dailydealdarl-20)
 - FAQ section with schema markup
 - Pexels hero image integration
 - ConvertKit email signup integration
@@ -23,6 +23,11 @@ from pathlib import Path
 from typing import Optional
 
 try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
+
+try:
     import anthropic as _anthropic
 except ImportError:
     _anthropic = None
@@ -36,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-AFFILIATE_TAG = "fitover35-20"
+AFFILIATE_TAG = "dailydealdarl-20"
 CONVERTKIT_FORM_ID = "8946984"
 SITE_URL = "https://fitover35.com"
 SITE_NAME = "FitOver35"
@@ -344,46 +349,61 @@ FALLBACK_IMAGES = {
 # ── Article Generator ────────────────────────────────────────────────────────
 
 class FitOver35ArticleGenerator:
-    """Generate SEO-optimized fitness articles using Anthropic Claude API."""
+    """Generate SEO-optimized fitness articles using Gemini AI."""
 
     def __init__(self, api_key: Optional[str] = None, pexels_key: Optional[str] = None):
-        """Initialize with Anthropic API key and optional Pexels key."""
+        """Initialize with API keys. Falls back to Anthropic if Gemini unavailable."""
         self.pexels_key = pexels_key or os.getenv("PEXELS_API_KEY")
-        anthropic_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        gemini_key = api_key or os.getenv("GEMINI_API_KEY")
+        anthropic_key = os.getenv("ANTHROPIC_API_KEY")
 
-        if anthropic_key and _anthropic:
+        if gemini_key and genai:
+            genai.configure(api_key=gemini_key)
+            self.model = genai.GenerativeModel('gemini-2.0-flash-lite')
+            self.backend = 'gemini'
+            logger.info("Using Gemini backend for article generation")
+        elif anthropic_key and _anthropic:
             self._anthropic_client = _anthropic.Anthropic(api_key=anthropic_key)
-            logger.info("Using Anthropic Claude backend for article generation")
+            self.backend = 'anthropic'
+            logger.info("GEMINI_API_KEY not set, using Anthropic backend")
         else:
             raise ValueError(
-                "ANTHROPIC_API_KEY is not set or anthropic package is not installed. "
-                "Install with: pip install anthropic"
+                "Neither GEMINI_API_KEY nor ANTHROPIC_API_KEY is set. "
+                "At least one AI API key is required for article generation."
             )
 
-    def _call_llm(self, prompt: str, json_mode: bool = False) -> str:
-        """Make an Anthropic Claude API call with retry.
-
-        Args:
-            prompt: The prompt text to send.
-            json_mode: If True, instruct Claude to return only valid JSON.
-
-        Returns:
-            The text response from Claude.
-        """
-        system_msg = None
-        if json_mode:
-            system_msg = "You are a helpful assistant. Return ONLY valid JSON with no markdown formatting, no ```json blocks, and no extra text."
-
+    def _call_gemini(self, prompt: str, json_mode: bool = False) -> str:
+        """Make an AI API call with retry. Dispatches to Gemini or Anthropic."""
+        if self.backend == 'anthropic':
+            return self._call_anthropic(prompt)
+        generation_config = None
+        if json_mode and genai:
+            generation_config = genai.types.GenerationConfig(
+                response_mime_type="application/json"
+            )
         for attempt in range(3):
             try:
-                kwargs = {
-                    "model": "claude-sonnet-4-5-20250929",
-                    "max_tokens": 8000,
-                    "messages": [{"role": "user", "content": prompt}],
-                }
-                if system_msg:
-                    kwargs["system"] = system_msg
-                response = self._anthropic_client.messages.create(**kwargs)
+                response = self.model.generate_content(
+                    prompt,
+                    generation_config=generation_config
+                )
+                return response.text
+            except Exception as e:
+                logger.error(f"Gemini API error (attempt {attempt + 1}): {e}")
+                if attempt == 2:
+                    raise
+                import time
+                time.sleep(2 ** attempt)
+
+    def _call_anthropic(self, prompt: str) -> str:
+        """Make an Anthropic API call with retry."""
+        for attempt in range(3):
+            try:
+                response = self._anthropic_client.messages.create(
+                    model="claude-sonnet-4-5-20250929",
+                    max_tokens=4000,
+                    messages=[{"role": "user", "content": prompt}]
+                )
                 return response.content[0].text
             except Exception as e:
                 logger.error(f"Anthropic API error (attempt {attempt + 1}): {e}")
@@ -414,7 +434,7 @@ class FitOver35ArticleGenerator:
             return repaired
         except json.JSONDecodeError:
             pass
-        # Try truncating to last valid closing brace (LLM sometimes appends garbage)
+        # Try truncating to last valid closing brace (Gemini sometimes appends garbage)
         last_brace = repaired.rfind('}')
         if last_brace != -1:
             candidate = repaired[:last_brace + 1]
@@ -426,7 +446,7 @@ class FitOver35ArticleGenerator:
         return None
 
     def _parse_json(self, text: str) -> dict:
-        """Extract and parse JSON from LLM response."""
+        """Extract and parse JSON from Gemini response."""
         # Clean the text first
         text = text.strip()
 
@@ -470,7 +490,7 @@ class FitOver35ArticleGenerator:
                         logger.info("JSON repair succeeded on extracted object")
                         return json.loads(repaired)
 
-        # Fourth try: maybe LLM didn't add the closing ```
+        # Fourth try: maybe Gemini didn't add the closing ```
         if '```json' in text:
             start = text.find('```json') + 7
             # Find the first { after ```json
@@ -501,7 +521,7 @@ class FitOver35ArticleGenerator:
         prompt = RESEARCH_AND_OUTLINE_PROMPT.format(keyword=keyword)
         last_error = None
         for attempt in range(3):
-            response = self._call_llm(prompt, json_mode=True)
+            response = self._call_gemini(prompt, json_mode=True)
             try:
                 return self._parse_json(response)
             except ValueError as e:
@@ -521,7 +541,7 @@ class FitOver35ArticleGenerator:
             data_hook=hooks.get('data_hook', '')
         )
         try:
-            response = self._call_llm(prompt, json_mode=True)
+            response = self._call_gemini(prompt, json_mode=True)
             result = self._parse_json(response)
             # Validate required keys
             if 'polished_hook' in result and 'winner' in result:
@@ -560,7 +580,7 @@ class FitOver35ArticleGenerator:
             research_json=research_json,
             internal_links=internal_links
         )
-        return self._call_llm(prompt)
+        return self._call_gemini(prompt)
 
     def review_and_polish(self, keyword: str, title: str, content_html: str) -> str:
         """Editorial review pass — checks flow, voice, unsupported claims, filler."""
@@ -571,7 +591,7 @@ class FitOver35ArticleGenerator:
             content_html=content_html
         )
         try:
-            reviewed = self._call_llm(prompt)
+            reviewed = self._call_gemini(prompt)
             # Safety check: if output is suspiciously short, keep original
             if len(reviewed.strip()) < len(content_html.strip()) * 0.6:
                 logger.warning("Review output too short, keeping original content")
@@ -591,7 +611,7 @@ class FitOver35ArticleGenerator:
             keyword=keyword,
             products_json=json.dumps(products, indent=2)
         )
-        response = self._call_llm(prompt, json_mode=True)
+        response = self._call_gemini(prompt, json_mode=True)
         try:
             return self._parse_json(response)
         except (ValueError, json.JSONDecodeError):
@@ -608,7 +628,7 @@ class FitOver35ArticleGenerator:
             keyword=keyword,
             faq_json=json.dumps(faq_items, indent=2)
         )
-        response = self._call_llm(prompt, json_mode=True)
+        response = self._call_gemini(prompt, json_mode=True)
         try:
             return self._parse_json(response)
         except (ValueError, json.JSONDecodeError):
@@ -762,7 +782,7 @@ def generate_html(article_data: dict) -> str:
     slug = article_data['keyword'].lower().replace(' ', '-').replace('?', '').replace("'", '')
     slug = ''.join(c for c in slug if c.isalnum() or c == '-')[:60]
 
-    # Clean up content HTML -- strip any wrapping tags the LLM might add
+    # Clean up content HTML -- strip any wrapping tags Gemini might add
     content_html = content_html.strip()
     if content_html.startswith('```html'):
         content_html = content_html[7:]
@@ -1151,66 +1171,6 @@ def _escape_attr(text: str) -> str:
             .replace('>', '&gt;'))
 
 
-# ── Post-generation validation ────────────────────────────────────────────────
-
-def validate_affiliate_links(html_file_path: str) -> None:
-    """Check that every Amazon affiliate link in the generated file is reachable.
-
-    Does HTTP HEAD requests with a 1-second rate limit.  Never raises — logs
-    warnings on failures so the pipeline is never blocked.
-    """
-    try:
-        import time
-        import requests as _req
-        from pathlib import Path
-        from automation.links.extract_asins import extract_asins_from_file
-
-        links = extract_asins_from_file(Path(html_file_path))
-        if not links:
-            logger.info("No affiliate links found to validate.")
-            return
-
-        seen: set[str] = set()
-        unique_asins: list[str] = []
-        for link in links:
-            if link.asin not in seen:
-                seen.add(link.asin)
-                unique_asins.append(link.asin)
-
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
-        }
-
-        bad: list[str] = []
-        for i, asin in enumerate(unique_asins):
-            if i > 0:
-                time.sleep(1)
-            url = f"https://www.amazon.com/dp/{asin}"
-            try:
-                resp = _req.head(url, headers=headers, timeout=10, allow_redirects=True)
-                final_url = resp.url if resp.url else ""
-                if resp.status_code >= 400 or "/errors/" in final_url or "dogsofamazon" in final_url:
-                    logger.warning(
-                        "Affiliate link may be broken: ASIN=%s  status=%s  url=%s",
-                        asin, resp.status_code, final_url,
-                    )
-                    bad.append(asin)
-            except Exception as req_err:
-                logger.warning("Could not reach affiliate link ASIN=%s: %s", asin, req_err)
-                bad.append(asin)
-
-        if not bad:
-            logger.info("All %d affiliate link(s) validated successfully.", len(unique_asins))
-        else:
-            logger.warning("%d/%d affiliate link(s) may be broken.", len(bad), len(unique_asins))
-    except Exception as exc:
-        logger.warning("Affiliate link validation skipped due to error: %s", exc)
-
-
 # ── Main CLI ─────────────────────────────────────────────────────────────────
 
 def main():
@@ -1271,9 +1231,6 @@ def main():
     # Write file
     output_path.write_text(html, encoding='utf-8')
     logger.info(f"Article written to: {output_path}")
-
-    # Validate affiliate links in the generated file
-    validate_affiliate_links(str(output_path))
 
     # Output summary
     print(f"\n{'='*60}")

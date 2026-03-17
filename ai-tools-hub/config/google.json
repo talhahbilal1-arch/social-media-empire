@@ -1,11 +1,11 @@
 {
   "search_console": {
-    "verification_tag": "3vrNJ7j-0jCY9cbkFDWgnRUJPkQ3pd-FBRDWMLGsVj0",
-    "instructions": "Go to https://search.google.com/search-console → Add Property → URL prefix → https://pilottools.ai → HTML tag method → Copy just the content value (e.g., 'abc123xyz') → Paste it above"
+    "verification_tag": "PASTE_YOUR_VERIFICATION_CODE_HERE",
+    "instructions": "Go to https://search.google.com/search-console → Add Property → URL prefix → https://toolpilot-hub.netlify.app → HTML tag method → Copy just the content value (e.g., 'abc123xyz') → Paste it above"
   },
   "analytics": {
-    "ga4_measurement_id": "G-0FGLVKVERF",
+    "ga4_measurement_id": "PASTE_YOUR_GA4_ID_HERE",
     "instructions": "Go to https://analytics.google.com → Create GA4 property → Get Measurement ID (starts with G-) → Paste it above"
   },
-  "site_url": "https://pilottools.ai"
+  "site_url": "https://toolpilot-hub.netlify.app"
 }

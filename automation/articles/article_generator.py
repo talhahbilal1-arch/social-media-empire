@@ -92,7 +92,7 @@ Return just the answer text.
 class ArticleGenerator:
     """Generate SEO articles using Gemini AI."""
 
-    AFFILIATE_TAG = "dailydealdarling1-20"
+    AFFILIATE_TAG = "dailydealdarl-20"
 
     def __init__(self, api_key: Optional[str] = None):
         """Initialize with Gemini API key."""
