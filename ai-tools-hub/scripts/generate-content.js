@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ToolPilot Content Generation Script
+ * PilotTools Content Generation Script
  * Reads from content-calendar.json, picks the next pending item,
  * generates content via Claude API, and writes to the appropriate data file.
  *

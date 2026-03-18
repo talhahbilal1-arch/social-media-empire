@@ -144,10 +144,10 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
       {/* SEO Content Block */}
       <section className="bg-gray-50 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg">
-          <h2>Why Use ToolPilot to Find AI Tools?</h2>
+          <h2>Why Use PilotTools to Find AI Tools?</h2>
           <p>
             The AI tools landscape is evolving rapidly, with new products launching every week.
-            ToolPilot cuts through the noise with honest, data-driven reviews and side-by-side
+            PilotTools cuts through the noise with honest, data-driven reviews and side-by-side
             comparisons that help you make informed decisions &mdash; and save you money.
           </p>
           <h3>What Makes Our Reviews Different</h3>
@@ -175,7 +175,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            "name": "ToolPilot",
+            "name": "PilotTools",
             "description": "Find the perfect AI tool with honest reviews and comparisons",
             "url": "https://pilottools.ai"
           })

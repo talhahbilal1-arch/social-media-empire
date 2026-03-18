@@ -11,7 +11,7 @@
 | **Overall Status** | YELLOW - Operational but fragmented |
 | **Repo Files (Remote)** | 580 files |
 | **Repo Files (Local)** | ~20 files (SEVERELY OUTDATED) |
-| **Active Brands** | 3 (DDD, TMP, FitOver35) + 1 extra (ToolPilot) |
+| **Active Brands** | 3 (DDD, TMP, FitOver35) + 1 extra (PilotTools) |
 | **GitHub Actions Running** | YES - auto-content commits as of Feb 12 |
 | **Pinterest Posting** | YES - via Make.com (800+ total pins) |
 | **Biggest Risk** | Local repo 150+ commits behind remote |
@@ -106,7 +106,7 @@ The local clone at `C:\Users\talha\Desktop\social-media-empire` has only **3 com
 |------|--------|-----------|-------|
 | dailydealdarling.com | ACTIVE | GitHub Pages / Netlify | Has quizzes + articles sections |
 | fitover35.com | ACTIVE | GitHub Pages | CNAME configured, articles publishing |
-| ToolPilot Hub (AI Tools) | BUILT | Next.js on Netlify | `ai-tools-hub/` folder |
+| PilotTools Hub (AI Tools) | BUILT | Next.js on Netlify | `ai-tools-hub/` folder |
 | DDD Subdomains (beauty, home, kitchen, selfcare, mom) | HTML ONLY | Not deployed | Files at `outputs/infrastructure/dailydealdarling/` |
 | FO35 Subdomains (workouts, nutrition, recovery, mindset, homegym) | HTML ONLY | Not deployed | Files at `outputs/infrastructure/fitover35/` |
 
@@ -292,7 +292,7 @@ The local clone at `C:\Users\talha\Desktop\social-media-empire` has only **3 com
 | Daily Deal Darling | @dailydealdarling (587+ pins) | dailydealdarling.com | dailydealdarl-20 | No | ACTIVE |
 | The Menopause Planner | @TheMenopausePlanner (226+ pins, 4 boards) | themenopauseplanner.com | N/A | YES - LIVE | ACTIVE |
 | FitOver35 / Fitness Made Easy | @1uy77rvyo4c0mmr (469 followers) | fitover35.com | fitover35-20 | No | ACTIVE (articles publishing) |
-| ToolPilot Hub | N/A | ai-tools-hub (Netlify) | N/A | No | BUILT |
+| PilotTools Hub | N/A | ai-tools-hub (Netlify) | N/A | No | BUILT |
 
 ---
 

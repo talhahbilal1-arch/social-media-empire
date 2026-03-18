@@ -54,7 +54,7 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools }) {
       },
       "review": {
         "@type": "Review",
-        "author": { "@type": "Organization", "name": "ToolPilot" },
+        "author": { "@type": "Organization", "name": "PilotTools" },
         "datePublished": "2026-02-06",
         "dateModified": "2026-02-13",
         "reviewRating": {

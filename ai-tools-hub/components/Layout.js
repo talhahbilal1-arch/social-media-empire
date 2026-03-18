@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import googleConfig from '../config/google.json'
 
-const SITE_NAME = 'ToolPilot'
+const SITE_NAME = 'PilotTools'
 const SITE_TAGLINE = 'Find the Perfect AI Tool'
 const SITE_URL = 'https://pilottools.ai'
 
@@ -56,7 +56,7 @@ export default function Layout({ children, title, description, canonical, ogType
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <Link href="/" className="flex items-center space-x-2">
-                <span className="text-2xl font-bold text-primary-600">ToolPilot</span>
+                <span className="text-2xl font-bold text-primary-600">PilotTools</span>
                 <span className="text-sm text-gray-500 hidden sm:inline">{SITE_TAGLINE}</span>
               </Link>
 
@@ -110,7 +110,7 @@ export default function Layout({ children, title, description, canonical, ogType
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4">About</h3>
                 <p className="text-gray-600 text-sm mb-4">
-                  ToolPilot helps you find the perfect AI tool for your needs with honest reviews and detailed comparisons.
+                  PilotTools helps you find the perfect AI tool for your needs with honest reviews and detailed comparisons.
                 </p>
                 <p className="text-gray-500 text-xs">
                   Affiliate disclosure: Some links on this site are affiliate links. If you purchase through these links, we may earn a commission at no additional cost to you. This does not influence our reviews or recommendations.
@@ -118,7 +118,7 @@ export default function Layout({ children, title, description, canonical, ogType
               </div>
             </div>
             <div className="mt-8 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
-              &copy; {new Date().getFullYear()} ToolPilot. All rights reserved.
+              &copy; {new Date().getFullYear()} PilotTools. All rights reserved.
             </div>
           </div>
         </footer>

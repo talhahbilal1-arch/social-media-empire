@@ -109,7 +109,7 @@ Make.com payload uses hyphenated names: `fitness-made-easy`, `daily-deal-darling
 6. `weekly-maintenance.yml` — Sunday cleanup + DB vacuum
 7. `emergency-alert.yml` — Critical failure alerts
 8. `auto-merge.yml` — Auto-merge passing PRs
-9. `toolpilot-deploy.yml` — ToolPilot AI directory deploy
+9. `toolpilot-deploy.yml` — PilotTools AI directory deploy
 
 ## Common Issues & Fixes
 

@@ -1,11 +1,11 @@
-# ToolPilot - AI Tools Directory & Comparison Site
+# PilotTools - AI Tools Directory & Comparison Site
 
 **Live URL**: https://pilottools.ai
 **Revenue Model**: AI SaaS affiliate commissions (25-50% recurring)
 
 ## Executive Summary
 
-ToolPilot is an SEO-optimized AI tools comparison directory that earns recurring affiliate commissions from AI SaaS products. The site helps users find and compare AI tools across 10 categories, driving revenue through affiliate links on tool review pages, comparison pages, and "try it free" CTAs.
+PilotTools is an SEO-optimized AI tools comparison directory that earns recurring affiliate commissions from AI SaaS products. The site helps users find and compare AI tools across 10 categories, driving revenue through affiliate links on tool review pages, comparison pages, and "try it free" CTAs.
 
 ### Why This Will Make Money
 

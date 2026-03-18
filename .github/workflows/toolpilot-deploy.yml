@@ -1,4 +1,4 @@
-name: ToolPilot Deploy
+name: PilotTools Deploy
 
 on:
   push:

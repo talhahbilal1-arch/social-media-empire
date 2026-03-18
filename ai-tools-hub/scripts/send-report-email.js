@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Sends the ToolPilot weekly health report via Resend email.
+ * Sends the PilotTools weekly health report via Resend email.
  * Reads JSON report from stdin (piped from site-health-check.js --json).
  *
  * Usage:
@@ -24,7 +24,7 @@ if (!RESEND_API_KEY || !ALERT_EMAIL) {
 function sendEmail(to, subject, html) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify({
-      from: 'ToolPilot Reports <onboarding@resend.dev>',
+      from: 'PilotTools Reports <onboarding@resend.dev>',
       to: [to],
       subject,
       html
@@ -81,7 +81,7 @@ function buildEmailHtml(report) {
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;padding:20px;color:#1f2937;">
 
 <div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;padding:24px;border-radius:12px;margin-bottom:24px;">
-  <h1 style="margin:0;font-size:22px;">ToolPilot Weekly Report</h1>
+  <h1 style="margin:0;font-size:22px;">PilotTools Weekly Report</h1>
   <p style="margin:8px 0 0;opacity:0.9;font-size:14px;">${new Date(report.generated).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
 </div>
 
@@ -137,7 +137,7 @@ ${report.affiliateLinks.broken.length > 0 ? `
 ` : ''}
 
 <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;text-align:center;">
-  <p>ToolPilot Health Report • <a href="${report.site}" style="color:#2563eb;">${report.site}</a></p>
+  <p>PilotTools Health Report • <a href="${report.site}" style="color:#2563eb;">${report.site}</a></p>
   <p>Completed in ${report.duration}</p>
 </div>
 
@@ -154,7 +154,7 @@ async function main() {
   }
 
   const report = JSON.parse(input)
-  const subject = `ToolPilot Report: ${report.overallHealth.toUpperCase()} — ${report.content.totalPages} pages`
+  const subject = `PilotTools Report: ${report.overallHealth.toUpperCase()} — ${report.content.totalPages} pages`
 
   console.log(`Sending report email to ${ALERT_EMAIL}...`)
   const result = await sendEmail(ALERT_EMAIL, subject, buildEmailHtml(report))

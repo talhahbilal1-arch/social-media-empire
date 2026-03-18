@@ -8,12 +8,12 @@ export default function BlogIndex({ articles }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "ToolPilot Blog",
+    "name": "PilotTools Blog",
     "description": "In-depth guides, reviews, and buyer's guides for the best AI tools in 2026.",
     "url": `${SITE_URL}/blog/`,
     "publisher": {
       "@type": "Organization",
-      "name": "ToolPilot"
+      "name": "PilotTools"
     }
   }
 

@@ -1,4 +1,4 @@
-"""ToolPilot weekly newsletter sender via ConvertKit broadcast API."""
+"""PilotTools weekly newsletter sender via ConvertKit broadcast API."""
 
 import json
 import sys
@@ -28,7 +28,7 @@ def send_newsletter(newsletter_path: str) -> dict:
     with open(newsletter_path, 'r') as f:
         newsletter = json.load(f)
 
-    subject = newsletter.get('subject', 'ToolPilot AI Weekly')
+    subject = newsletter.get('subject', 'PilotTools AI Weekly')
     html_content = newsletter.get('html_content', '')
     preview_text = newsletter.get('preview_text', '')
 
@@ -41,7 +41,7 @@ def send_newsletter(newsletter_path: str) -> dict:
     full_html = f"""
 <div style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1f2937;">
   <div style="background: linear-gradient(135deg, #4f46e5, #3b82f6); padding: 24px; text-align: center; border-radius: 12px 12px 0 0;">
-    <h1 style="color: white; font-size: 24px; margin: 0;">ToolPilot AI Weekly</h1>
+    <h1 style="color: white; font-size: 24px; margin: 0;">PilotTools AI Weekly</h1>
     <p style="color: #c7d2fe; font-size: 14px; margin: 4px 0 0;">Make Money & Save Money with AI</p>
   </div>
   <div style="padding: 24px; background: #ffffff; border: 1px solid #e5e7eb; border-top: none;">
@@ -49,9 +49,9 @@ def send_newsletter(newsletter_path: str) -> dict:
   </div>
   <div style="padding: 16px; text-align: center; background: #f9fafb; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
     <p style="font-size: 12px; color: #9ca3af; margin: 0;">
-      You received this email because you subscribed to ToolPilot AI Weekly.<br>
+      You received this email because you subscribed to PilotTools AI Weekly.<br>
       <a href="{{{{ unsubscribe_url }}}}" style="color: #6366f1;">Unsubscribe</a> |
-      <a href="https://pilottools.ai" style="color: #6366f1;">Visit ToolPilot</a>
+      <a href="https://pilottools.ai" style="color: #6366f1;">Visit PilotTools</a>
     </p>
   </div>
 </div>
@@ -62,7 +62,7 @@ def send_newsletter(newsletter_path: str) -> dict:
     result = manager.create_broadcast(
         subject=subject,
         content=full_html,
-        description=f"ToolPilot Weekly - {newsletter.get('week_of', 'auto')}",
+        description=f"PilotTools Weekly - {newsletter.get('week_of', 'auto')}",
         preview_text=preview_text,
         public=True,
     )

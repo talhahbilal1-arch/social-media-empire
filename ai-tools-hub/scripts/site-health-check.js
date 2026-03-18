@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ToolPilot Site Health Check & Weekly Report Generator
+ * PilotTools Site Health Check & Weekly Report Generator
  *
  * Checks:
  *  1. Total pages on site (tools, comparisons, categories, static)
@@ -30,7 +30,7 @@ const SKIP_LIVE = args.includes('--skip-live')
 function httpGet(url, method = 'GET', timeout = 10000) {
   return new Promise((resolve) => {
     const mod = url.startsWith('https') ? https : http
-    const req = mod.request(url, { method, timeout, headers: { 'User-Agent': 'ToolPilot-HealthCheck/1.0' } }, (res) => {
+    const req = mod.request(url, { method, timeout, headers: { 'User-Agent': 'PilotTools-HealthCheck/1.0' } }, (res) => {
       let body = ''
       res.on('data', chunk => body += chunk)
       res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body }))

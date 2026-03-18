@@ -544,7 +544,7 @@ class HealthChecker:
             )
 
     def check_netlify(self) -> HealthCheckResult:
-        """Check Netlify deployment API (ToolPilot site)."""
+        """Check Netlify deployment API (PilotTools site)."""
         config = get_config()
 
         if not config.netlify_api_token:

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Pinterest Pin Generator for ToolPilot
+ * Pinterest Pin Generator for PilotTools
  * Generates pin content for each AI tool review and comparison.
  * Integrates with the existing social-media-empire Pinterest automation.
  *

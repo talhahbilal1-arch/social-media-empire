@@ -17,10 +17,10 @@ export default function ArticlePage({ article }) {
       "@type": "Article",
       "headline": article.title,
       "description": article.meta_description || article.excerpt,
-      "author": { "@type": "Organization", "name": "ToolPilot" },
+      "author": { "@type": "Organization", "name": "PilotTools" },
       "publisher": {
         "@type": "Organization",
-        "name": "ToolPilot",
+        "name": "PilotTools",
         "url": SITE_URL
       },
       "datePublished": article.published_date,

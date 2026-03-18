@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ToolPilot AI Trend Discovery
+ * PilotTools AI Trend Discovery
  * Calls Claude to analyze current AI tool trends, then auto-adds new content items
  * to the content calendar and saves newsletter highlights.
  *
@@ -79,7 +79,7 @@ async function main() {
 
   const existingToolNames = existingTools.map(t => t.name).join(', ')
 
-  const prompt = `You are an AI tools market analyst. Analyze current AI tool trends for ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} and suggest new content for ToolPilot, an AI tools review site focused on "Make Money & Save Money with AI."
+  const prompt = `You are an AI tools market analyst. Analyze current AI tool trends for ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} and suggest new content for PilotTools, an AI tools review site focused on "Make Money & Save Money with AI."
 
 EXISTING TOOLS WE ALREADY COVER: ${existingToolNames}
 

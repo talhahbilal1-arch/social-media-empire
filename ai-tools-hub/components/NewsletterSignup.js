@@ -1,5 +1,5 @@
 /**
- * NewsletterSignup — email capture component for ToolPilot.
+ * NewsletterSignup — email capture component for PilotTools.
  * Variants: 'inline' (within content), 'banner' (full-width), 'compact' (sidebar).
  */
 import { useState } from 'react'
@@ -24,7 +24,7 @@ export default function NewsletterSignup({ variant = 'inline', className = '' })
 
     try {
       // ConvertKit form submission
-      const formId = '7195499' // ToolPilot newsletter form
+      const formId = '7195499' // PilotTools newsletter form
       const res = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

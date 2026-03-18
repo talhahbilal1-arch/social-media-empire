@@ -636,7 +636,7 @@ If one API goes down, here is what breaks and what continues:
 | Revenue Stream | Current Status | Monthly Estimate |
 |---------------|---------------|-----------------|
 | Pinterest affiliate clicks | Active (being set up) | $0-50 |
-| ToolPilot affiliate commissions | Live, pending affiliate approvals | $0-100 |
+| PilotTools affiliate commissions | Live, pending affiliate approvals | $0-100 |
 | Website ad revenue (Mediavine/Ezoic) | Requires 10K-50K sessions/mo | $0 (future) |
 | Email affiliate promotions | Subscriber base building | $0 (future) |
 | Digital product sales (planners) | Planned | $0 (future) |

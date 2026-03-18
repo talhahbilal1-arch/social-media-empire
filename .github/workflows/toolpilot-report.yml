@@ -1,4 +1,4 @@
-name: ToolPilot Weekly Report
+name: PilotTools Weekly Report
 
 on:
   schedule:
@@ -60,7 +60,7 @@ jobs:
 
       - name: Job summary
         run: |
-          echo "### ToolPilot Weekly Health Report" >> $GITHUB_STEP_SUMMARY
+          echo "### PilotTools Weekly Health Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Health:** ${{ steps.health.outputs.health }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Total pages:** ${{ steps.health.outputs.total_pages }}" >> $GITHUB_STEP_SUMMARY

@@ -10,6 +10,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[redirects]]
-  from = "/go/:tool"
-  to = "/tools/:tool/"
+  from = "/*"
+  to = "https://pilottools.ai/:splat"
   status = 301
+  force = true

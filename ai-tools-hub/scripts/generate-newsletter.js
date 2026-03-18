@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ToolPilot Weekly Newsletter Generator
+ * PilotTools Weekly Newsletter Generator
  * Reads recent content + newsletter highlights, generates a weekly digest via Claude API.
  *
  * Usage:
@@ -99,7 +99,7 @@ async function main() {
     month: 'long', day: 'numeric', year: 'numeric'
   })
 
-  const prompt = `Generate a weekly newsletter for ToolPilot AI Tools, themed "Make Money & Save Money with AI."
+  const prompt = `Generate a weekly newsletter for PilotTools AI Tools, themed "Make Money & Save Money with AI."
 
 Week of: ${weekOf}
 Site URL: ${SITE_URL}
@@ -122,14 +122,14 @@ Write the newsletter with these sections:
 2. **Free Tool Spotlight** — Highlight one tool with a great free tier
 3. **Quick Comparison** — Summarize the most interesting comparison with a clear winner
 4. **Money-Saving Tip** — A practical tip for saving money with AI tools
-5. **New on ToolPilot** — 2-3 bullet points linking to new content
+5. **New on PilotTools** — 2-3 bullet points linking to new content
 
 RULES:
 - Write in a friendly, concise, actionable tone
 - Use HTML formatting (h2, p, ul/li, a, strong)
 - Include real links to ${SITE_URL}/tools/slug/ and ${SITE_URL}/compare/slug/ and ${SITE_URL}/blog/slug/
 - Keep total length under 600 words
-- Include a CTA to visit ToolPilot at the end
+- Include a CTA to visit PilotTools at the end
 
 Return ONLY valid JSON:
 {

@@ -30,7 +30,7 @@ class WorkflowGuardian:
         'tiktok-content.yml',       # 3x daily TikTok content
         'tiktok-poster.yml',        # Daily TikTok posting
         'menopause-newsletter.yml', # Weekly menopause newsletter
-        'toolpilot-deploy.yml',     # ToolPilot site deploy
+        'toolpilot-deploy.yml',     # PilotTools site deploy
         'toolpilot-content.yml',    # Mon-Fri content generation
         'toolpilot-newsletter.yml', # Weekly newsletter
         'youtube-fitness.yml',      # YouTube Shorts

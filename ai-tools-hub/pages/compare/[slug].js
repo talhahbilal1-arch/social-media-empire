@@ -68,8 +68,8 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
       "description": comparison.meta_description,
       "datePublished": "2026-02-06",
       "dateModified": "2026-02-13",
-      "author": { "@type": "Organization", "name": "ToolPilot" },
-      "publisher": { "@type": "Organization", "name": "ToolPilot" }
+      "author": { "@type": "Organization", "name": "PilotTools" },
+      "publisher": { "@type": "Organization", "name": "PilotTools" }
     },
     {
       "@context": "https://schema.org",

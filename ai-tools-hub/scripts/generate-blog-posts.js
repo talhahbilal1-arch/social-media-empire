@@ -152,7 +152,7 @@ const ARTICLES_TO_GENERATE = [
 ]
 
 function buildPrompt(article) {
-  return `Write a comprehensive, high-quality blog article for ToolPilot, an AI tools review site. The article should be authoritative, honest, and genuinely useful.
+  return `Write a comprehensive, high-quality blog article for PilotTools, an AI tools review site. The article should be authoritative, honest, and genuinely useful.
 
 Title: ${article.title}
 Category: ${article.category}
@@ -216,7 +216,7 @@ async function generateArticle(article) {
     tags: article.tags,
     word_count: wordCount,
     published_date: today,
-    author: 'ToolPilot Team',
+    author: 'PilotTools Team',
     featured: false,
     meta_title: article.title,
     meta_description: article.excerpt,
@@ -226,7 +226,7 @@ async function generateArticle(article) {
 }
 
 async function main() {
-  console.log('🚀 ToolPilot Blog Post Generator')
+  console.log('🚀 PilotTools Blog Post Generator')
   console.log(`📚 Generating ${ARTICLES_TO_GENERATE.length} articles...\n`)
 
   // Ensure images dir exists
