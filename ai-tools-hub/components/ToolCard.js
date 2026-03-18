@@ -8,15 +8,15 @@ export default function ToolCard({ tool, rank }) {
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
           {rank && (
-            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 text-primary-700 font-bold text-sm flex items-center justify-center">
+            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-accent/10 text-accent font-bold text-sm flex items-center justify-center border border-accent/20">
               {rank}
             </span>
           )}
           <div>
-            <Link href={`/tools/${tool.slug}/`} className="text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+            <Link href={`/tools/${tool.slug}/`} className="text-lg font-bold text-dt group-hover:text-accent transition-colors">
               {tool.name}
             </Link>
-            <p className="text-sm text-gray-500">{tool.company}</p>
+            <p className="text-sm text-dt-muted">{tool.company}</p>
           </div>
         </div>
         {tool.pricing.free_tier && (
@@ -24,12 +24,12 @@ export default function ToolCard({ tool, rank }) {
         )}
       </div>
 
-      <p className="text-gray-600 text-sm mb-4 line-clamp-2">{tool.tagline}</p>
+      <p className="text-dt-muted text-sm mb-4 line-clamp-2">{tool.tagline}</p>
 
       <div className="flex items-center space-x-2 mb-4">
         <StarRating rating={tool.rating} />
-        <span className="text-sm font-medium text-gray-700">{tool.rating}</span>
-        <span className="text-sm text-gray-400">({tool.review_count.toLocaleString()})</span>
+        <span className="text-sm font-medium text-dt">{tool.rating}</span>
+        <span className="text-sm text-dt-muted">({tool.review_count.toLocaleString()})</span>
       </div>
 
       <div className="flex flex-wrap gap-1 mb-4">
@@ -38,18 +38,16 @@ export default function ToolCard({ tool, rank }) {
         ))}
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+      <div className="flex items-center justify-between pt-4 border-t border-dark-border">
         <div>
-          <span className="text-sm text-gray-500">Starting at </span>
-          <span className="font-bold text-gray-900">
+          <span className="text-sm text-dt-muted">Starting at </span>
+          <span className="font-bold text-dt">
             {formatPrice(tool.pricing.starting_price)}
           </span>
         </div>
-        <div className="flex space-x-2">
-          <Link href={`/tools/${tool.slug}/`} className="text-sm text-primary-600 hover:text-primary-700 font-medium">
-            Full Review &rarr;
-          </Link>
-        </div>
+        <Link href={`/tools/${tool.slug}/`} className="text-sm text-accent hover:text-cyan-300 font-medium transition-colors">
+          Full Review &rarr;
+        </Link>
       </div>
     </div>
   )
