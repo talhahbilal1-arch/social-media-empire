@@ -213,8 +213,8 @@ function markPublished(calendar, itemId) {
 // ---------- Main ----------
 
 async function main() {
-  if (!ANTHROPIC_API_KEY) {
-    console.error('Error: ANTHROPIC_API_KEY environment variable is required')
+  if (!GEMINI_API_KEY) {
+    console.error('Error: GEMINI_API_KEY environment variable is required')
     process.exit(1)
   }
 
