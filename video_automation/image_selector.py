@@ -35,17 +35,25 @@ BRAND_IMAGE_RULES = {
     "deals": {
         "name": "Daily Deal Darling",
         "allowed_themes": [
-            "beauty products", "skincare", "home organization", "kitchen gadgets",
-            "self care", "cozy home", "lifestyle products", "women accessories",
-            "home decor modern", "bath products", "candles", "planner",
-            "desk organization", "gift ideas", "shopping", "unboxing"
+            "amazon finds", "product flat lay", "organized shelf", "home organization",
+            "kitchen gadgets", "skincare products", "beauty essentials",
+            "bathroom organization", "desk accessories", "gift wrapping",
+            "shopping haul", "product review", "clean aesthetic home",
+            "modern kitchen", "closet organization", "laundry room",
+            "pantry organization", "vanity setup", "cozy bedroom decor",
+            "minimalist home"
         ],
         "blocked_terms": [
             "gym", "weightlifting", "bodybuilding", "menopause", "hormone",
             "hot flash", "supplement", "protein powder", "dumbbell",
-            "barbell", "crossfit", "medical", "prescription"
+            "barbell", "crossfit", "medical", "prescription",
+            "christmas", "tree", "holiday", "construction", "industrial",
+            "chef", "cooking", "baking", "factory", "warehouse",
+            "snow", "winter", "food prep", "restaurant", "building site",
+            "hard hat", "concrete", "machinery", "dark moody",
+            "black and white", "abandoned"
         ],
-        "fallback_query": "lifestyle products women aesthetic"
+        "fallback_query": "clean organized home shelf products flat lay bright"
     },
     "menopause": {
         "name": "The Menopause Planner",
@@ -96,6 +104,13 @@ def validate_image_query(query, brand):
         if not any(term in query_lower for term in male_terms):
             logger.info(f"Fitness query '{query}' missing male terms. Prepending 'man'.")
             query = f"man {query}"
+
+    # Deals brand enforcement: ensure product/home-oriented imagery
+    if brand == "deals":
+        product_terms = {"product", "home", "kitchen", "organized", "shelf", "clean", "decor", "gift", "beauty", "skincare"}
+        if not any(term in query_lower for term in product_terms):
+            logger.info(f"Deals query '{query}' missing product terms. Appending 'product flat lay'.")
+            query = f"{query} product flat lay"
 
     return query
 

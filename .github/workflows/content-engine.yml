@@ -452,7 +452,7 @@ jobs:
                       )
                       subprocess.run(['git', 'push'], check=True)
                       print(f'  Pushed {len(articles_generated)} articles — Vercel deploying...')
-                      time.sleep(20)  # Allow Vercel to start deploying before posting pins
+                      time.sleep(60)  # Allow Vercel to start deploying before posting pins
                   else:
                       print('  No new article files to commit')
               except Exception as e:
@@ -488,12 +488,18 @@ jobs:
                   continue
 
               # Guardrail: validate destination link before posting
+              # SKIP validation for article URLs generated in this run —
+              # Vercel deploy takes 30-90s and the article won't be live yet,
+              # causing false negatives that fall back to the homepage.
               dest_url = pin.get('destination_url', '')
-              if dest_url and not validate_destination_link(dest_url):
+              is_fresh_article = '/articles/' in dest_url and dest_url != pin.get('_original_base_url', '')
+              if dest_url and not is_fresh_article and not validate_destination_link(dest_url):
                   from video_automation.content_brain import BRAND_CONFIGS
                   fallback = BRAND_CONFIGS.get(brand, {}).get('destination_base_url', '')
                   print(f'  [{brand}] WARN — destination link broken, falling back to homepage: {fallback}')
                   pin['destination_url'] = fallback
+              elif is_fresh_article:
+                  print(f'  [{brand}] Article URL — skipping validation (just deployed): {dest_url[:70]}')
 
               # CRITICAL: validate image_url — empty URL causes Pinterest 400
               image_url = pin.get('image_url', '') or ''
