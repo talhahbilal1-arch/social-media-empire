@@ -10,6 +10,17 @@ const articles = require('../content/articles.json')
 
 const today = new Date().toISOString().split('T')[0]
 
+// Collect all use cases for /best/ pages
+const useCasesSet = new Set()
+tools.forEach(t => {
+  if (t.use_cases) t.use_cases.forEach(uc => useCasesSet.add(uc))
+})
+const useCases = [...useCasesSet].sort()
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -24,6 +35,42 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>${SITE_URL}/quiz/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/pricing/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/about/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/affiliate-disclosure/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/privacy/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/contact/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 ${comparisons.map(c => `  <url>
     <loc>${SITE_URL}/compare/${c.slug}/</loc>
     <lastmod>${today}</lastmod>
@@ -35,11 +82,29 @@ ${tools.map(t => `  <url>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/pricing/${t.slug}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/alternatives/${t.slug}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>`).join('\n')}
 ${categories.map(c => `  <url>
     <loc>${SITE_URL}/category/${c.slug}/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`).join('\n')}
+${useCases.map(uc => `  <url>
+    <loc>${SITE_URL}/best/${slugify(uc)}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`).join('\n')}
   <url>
@@ -58,13 +123,36 @@ ${articles.map(a => `  <url>
 
 const outDir = path.join(__dirname, '..', 'public')
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap)
-console.log(`Sitemap generated with ${tools.length + categories.length + comparisons.length + articles.length + 3} URLs`)
+
+const totalUrls = 8 + comparisons.length + (tools.length * 3) + categories.length + useCases.length + 1 + articles.length
+console.log(`Sitemap generated with ${totalUrls} URLs`)
 
 const robots = `User-agent: *
 Allow: /
 Disallow: /api/
 
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
 Sitemap: ${SITE_URL}/sitemap.xml`
 
 fs.writeFileSync(path.join(outDir, 'robots.txt'), robots)
-console.log('robots.txt generated')
+console.log('robots.txt generated (GEO-optimized)')
