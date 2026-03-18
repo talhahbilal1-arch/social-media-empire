@@ -28,6 +28,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from video_automation.content_brain import generate_pin_content
 from video_automation.pinterest_boards import get_board_id, DEFAULT_BOARDS
+from video_automation.pin_article_generator import (
+    generate_article_for_pin, article_to_html, save_and_register_article,
+)
 from database.supabase_client import get_supabase_client
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
@@ -377,11 +380,41 @@ def process_brand(brand, db_client):
         log_error(db_client, 'upload', brand, e, 'high')
         return False
 
-    # ── Step 6: POST to Make.com webhook ──
+    # ── Step 6: Generate article (v3 buying guide) ──
+    # Same article system as regular pins — video pins should link to
+    # high-converting articles, not the homepage.
+    print('\n  [6/8] Generating article...')
+    article_url = destination_url  # fallback to homepage
+    try:
+        slug, article_content = generate_article_for_pin(brand, pin_data, db_client)
+        if slug and article_content:
+            # Pass video_url in pin_data so article can embed it
+            pin_data['video_url'] = video_url
+            html = article_to_html(article_content, brand, slug, pin_data)
+            if html:
+                article_url = save_and_register_article(html, brand, slug, pin_data, db_client)
+                print('    Article: {}'.format(article_url))
+            else:
+                print('    Article HTML generation failed — using homepage')
+        elif slug:
+            # Article already exists for this topic
+            from video_automation.pin_article_generator import BRAND_SITE_CONFIG
+            article_url = '{}/articles/{}.html'.format(
+                BRAND_SITE_CONFIG[brand]['base_url'], slug
+            )
+            print('    Article exists: {}'.format(article_url))
+        else:
+            print('    Article skipped (no topic) — using homepage')
+    except Exception as e:
+        logger.warning('[{}] Article generation failed, using homepage: {}'.format(brand, e))
+
+    destination_url = article_url
+
+    # ── Step 7: POST to Make.com webhook ──
     # Uses first Pexels portrait as the pin image (Pinterest image pin).
     # The rendered video is stored in Supabase for article embedding / future
     # native video pin support (which requires Pinterest media upload flow).
-    print('\n  [6/7] Posting to Make.com...')
+    print('\n  [7/8] Posting to Make.com...')
     cover_image = image_urls[0] if image_urls else ''
     webhook_payload = {
         'brand': BRAND_NAMES_HYPHEN.get(brand, brand),
@@ -396,8 +429,8 @@ def process_brand(brand, db_client):
 
     posted = post_to_webhook(brand, webhook_payload)
 
-    # ── Step 7: Log to pinterest_pins table ──
-    print('\n  [7/7] Logging to database...')
+    # ── Step 8: Log to pinterest_pins table ──
+    print('\n  [8/8] Logging to database...')
     try:
         db_client.table('pinterest_pins').insert({
             'brand': brand,
@@ -448,6 +481,27 @@ def main():
             traceback.print_exc()
             log_error(db.client, 'pipeline', brand, e, 'high')
             results[brand] = False
+
+    # Git push articles so Vercel deploys them before pins go live
+    print('\n  Pushing articles to git...')
+    try:
+        subprocess.run(['git', 'config', 'user.name', 'Video Pin Bot'], check=True)
+        subprocess.run(['git', 'config', 'user.email', 'bot@fitover35.com'], check=True)
+        subprocess.run(['git', 'add', 'outputs/'], check=True)
+        diff_result = subprocess.run(['git', 'diff', '--staged', '--quiet'])
+        if diff_result.returncode != 0:
+            timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
+            subprocess.run(
+                ['git', 'commit', '-m', 'content: publish video pin articles {}'.format(timestamp)],
+                check=True,
+            )
+            subprocess.run(['git', 'push'], check=True)
+            print('  Articles pushed — Vercel deploying...')
+            time.sleep(60)  # Allow Vercel to deploy before pins post
+        else:
+            print('  No new articles to push')
+    except Exception as e:
+        logger.warning('Git push failed (articles may not deploy): {}'.format(e))
 
     # Summary
     print('\n' + '=' * 60)
