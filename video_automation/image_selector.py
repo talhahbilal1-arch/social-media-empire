@@ -43,7 +43,10 @@ BRAND_IMAGE_RULES = {
         "blocked_terms": [
             "gym", "weightlifting", "bodybuilding", "menopause", "hormone",
             "hot flash", "supplement", "protein powder", "dumbbell",
-            "barbell", "crossfit", "medical", "prescription"
+            "barbell", "crossfit", "medical", "prescription",
+            "christmas", "tree", "construction", "industrial", "chef",
+            "cooking", "baking", "factory", "warehouse", "snow",
+            "winter holiday"
         ],
         "fallback_query": "lifestyle products women aesthetic"
     },
