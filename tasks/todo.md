@@ -1,84 +1,59 @@
 # Article System v3 Overhaul — Todo
 
 **Created:** March 18, 2026
-**Scope:** Rewrite 3 files to produce Sleep Foundation / Wirecutter-style product pages
+**Status:** COMPLETE ✅
 
 ---
 
-## Phase 1: Helpers + Image Functions (low risk)
+## Phase 1: Helpers + Image Functions ✅
 
-- [ ] Add `get_pexels_portrait_photos()` to `image_selector.py`
-- [ ] Add `_fetch_pexels_video()` to `pin_article_generator.py`
-- [ ] Add `_fetch_pexels_batch()` to `pin_article_generator.py` (batch image fetcher, reuse for thumbnails/related)
-- [ ] Verify: `python3 -m py_compile` both files
+- [x] Add `get_pexels_portrait_photos()` to `image_selector.py`
+- [x] Add `_fetch_pexels_video()` to `pin_article_generator.py`
+- [x] Add `_fetch_pexels_batch()` to `pin_article_generator.py`
+- [x] Verify: `python3 -m py_compile` both files
 
-## Phase 2: JSON Prompt + Enrichment Pipeline (medium risk)
+## Phase 2: JSON Prompt + Enrichment Pipeline ✅
 
-- [ ] Rewrite `generate_article_for_pin()` — JSON prompt with structured output
-- [ ] Add `_try_parse_json()` helper — strips code fences, handles Gemini quirks
-- [ ] Rewrite `article_to_html()` — detect JSON vs markdown, route accordingly
-  - JSON path: parse → resolve Amazon URLs → fetch Pexels images/video/portraits → pass structured data to template
-  - Markdown fallback: existing v2 path (product cards, FAQ schema, etc.) stays intact
-- [ ] Keep Pexels API calls ≤ 10 per article:
-  - 1 hero image + 1 hero video = 2
-  - Per product (×3 max): 1 image query (hero + thumbnails from same result) + 1 benefit image = 6
-  - 1 portrait batch + 1 related products batch = 2
-  - Total: 10
-- [ ] Verify: `python3 -m py_compile pin_article_generator.py`
+- [x] Rewrite `generate_article_for_pin()` — JSON prompt with structured output
+- [x] Add `_try_parse_json()` helper — strips code fences, handles Gemini quirks
+- [x] Rewrite `article_to_html()` — detect JSON vs markdown, route accordingly
+- [x] JSON path: parse → resolve Amazon URLs → fetch Pexels images/video/portraits → pass structured data
+- [x] Markdown fallback: existing v2 path preserved intact
+- [x] Pexels API calls ≤ 10 per article
+- [x] Verify: `python3 -m py_compile pin_article_generator.py`
 
-## Phase 3: v3 HTML Template (high complexity)
+## Phase 3: v3 HTML Template ✅
 
-- [ ] Update `TEMPLATE_CONFIG` menopause colors: accent=#3D6B4F, bg=#FDFBF7
-- [ ] Update `LEAD_MAGNET_OVERRIDES` with new copy
-- [ ] Add routing in `render_article_page()` — check for `_article_data` in pin_data
-- [ ] Build `_render_v3_page()` with 22 section helpers:
-  1. Sticky nav (brand + EXPERT TESTED badge + share)
-  2. Breadcrumbs
-  3. Social proof banner
-  4. Hero (video/image + dark overlay + metadata)
-  5. Before/After cards
-  6. Quick verdict box
-  7. Urgency banner
-  8. Quick picks (clickable product cards)
-  9. Trust bar pills
-  10. As seen in logos
-  11. Email signup (real ConvertKit form_id)
-  12. Product sections ×3 (hero image, thumbnails, benefits, pros/cons, testimonials with photos, CTA + payment logos)
-  13. Comparison table
-  14. How we chose grid
-  15. Price drop alert (secondary email capture)
-  16. Etsy CTA (menopause only)
-  17. FAQ with JSON-LD schema
-  18. Related products grid
-  19. Share bar (Pinterest, Facebook, WhatsApp)
-  20. Expert bio
-  21. Final CTA box + payment logos
-  22. Footer (disclosure + copyright)
-- [ ] All sections use brand colors/fonts from TEMPLATE_CONFIG
-- [ ] Verify: `python3 -m py_compile article_templates.py`
+- [x] Update `TEMPLATE_CONFIG` menopause colors: accent=#3D6B4F, bg=#FDFBF7
+- [x] Update `LEAD_MAGNET_OVERRIDES` with new copy
+- [x] Add routing in `render_article_page()` — check for `_article_data` in pin_data
+- [x] Build `_render_v3_page()` with 22 section helpers
+- [x] All sections use brand colors/fonts from TEMPLATE_CONFIG
+- [x] Verify: `python3 -m py_compile article_templates.py`
 
-## Phase 4: Validation + Ship
+## Phase 4: Validation + Ship ✅
 
-- [ ] `python3 -m py_compile video_automation/pin_article_generator.py`
-- [ ] `python3 -m py_compile video_automation/article_templates.py`
-- [ ] `python3 -m py_compile video_automation/image_selector.py`
-- [ ] `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.yml'))"`
-- [ ] Quick test: JSON parsing + product card regex
-- [ ] Commit and push to main
+- [x] `python3 -m py_compile video_automation/pin_article_generator.py` ✅
+- [x] `python3 -m py_compile video_automation/article_templates.py` ✅
+- [x] `python3 -m py_compile video_automation/image_selector.py` ✅
+- [x] `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.yml'))"` ✅
+- [x] Quick test: JSON parsing + v3 template rendering ✅
+- [x] Commit and push to main ✅
+- [x] Saved to project memory for persistence ✅
 
 ---
 
-## Key Constraints
+## Review
 
-- Function signatures for `generate_article_for_pin()`, `article_to_html()`, `save_and_register_article()` MUST NOT change
-- `BRAND_SITE_CONFIG` structure MUST NOT change
-- `AMAZON_AFFILIATE_LINKS` data MUST NOT change
-- Markdown fallback path MUST work (existing v2 articles still render)
-- Pexels API calls ≤ 10 per article (avoid rate limiting at 15 articles/day)
-- ConvertKit forms use real form_ids from BRAND_SITE_CONFIG
+### Changes made:
+1. **`pin_article_generator.py`** (+117 lines): JSON-first Gemini prompt with `response_mime_type: "application/json"`, `_fetch_pexels_video()`, `_fetch_pexels_batch()`, `_try_parse_json()` with code fence stripping, `_build_v3_article()` enrichment pipeline (resolves Amazon URLs, fetches images/video/portraits), `_build_v2_article()` markdown fallback. All existing code preserved.
 
-## Estimated Size
+2. **`article_templates.py`** (+505 lines): `_render_v3_page()` with 22-section template (sticky nav, breadcrumbs, social proof, hero video/image, before/after, quick verdict, urgency, quick picks, trust bar, as-seen-in, email signup, product sections with testimonials/pros-cons/CTA/payment logos, comparison table, methodology grid, price alert, Etsy CTA, FAQ with JSON-LD, related products, share bar, expert bio, final CTA, footer, mobile sticky). Updated fonts (Fraunces), menopause colors (#3D6B4F), lead magnets. All v2 code preserved as fallback.
 
-- `pin_article_generator.py`: ~850 lines (from 739)
-- `article_templates.py`: ~1300 lines (from 817 — adding ~500 lines of v3 template)
-- `image_selector.py`: ~240 lines (from 208 — adding 1 function)
+3. **`image_selector.py`** (+38 lines): `get_pexels_portrait_photos()` for brand-specific testimonial headshots.
+
+### System preserved for all future articles:
+- v3 template architecture saved to `memory/article_system_v3.md`
+- MEMORY.md updated with v3 system summary
+- All future articles automatically route to v3 when JSON output succeeds
+- v2 fallback ensures zero pipeline disruption if JSON parsing fails
