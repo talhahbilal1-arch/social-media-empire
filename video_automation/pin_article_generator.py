@@ -1,7 +1,7 @@
-"""Lightweight article generator for per-pin blog posts.
+"""High-converting affiliate buying guide generator for per-pin articles.
 
-Generates a short SEO article (800-1200 words) for each pin during
-the content-engine run. One Gemini API call per article.
+Generates a Wirecutter-style buying guide (1200-1800 words) for each pin
+during the content-engine run. One Gemini API call per article.
 Articles are saved as HTML to the brand's website directory and
 registered in the generated_articles Supabase table.
 """
@@ -34,11 +34,7 @@ def _get_client():
 
 
 # ── Amazon Associates affiliate links ──────────────────────────────────────────
-# NOTE: All brands currently use tag=dailydealdarling1-20 (single Associates account).
-# When separate Associates accounts are set up per brand, update tags here:
-#   fitness  -> tag=fitover35-20
-#   deals    -> tag=dailydealdarling1-20
-#   menopause -> tag=menopauseplan-20
+# Fitness uses tag=fitover35-20, deals and menopause use tag=dailydealdarling1-20.
 # Direct /dp/ASIN links are preferred. For any product NOT in this list, the
 # code falls back to Amazon search URLs (/s?k=...) which always work.
 
@@ -92,6 +88,12 @@ AMAZON_AFFILIATE_LINKS = {
         "collagen powder": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarling1-20",
         "_default": "https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20",
     },
+}
+
+BRAND_AFFILIATE_TAGS = {
+    "fitness": "fitover35-20",
+    "deals": "dailydealdarling1-20",
+    "menopause": "dailydealdarling1-20",
 }
 
 
@@ -223,7 +225,7 @@ def _build_product_card(link_text, amazon_url, primary_color='#1565C0'):
         f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" '
         f'style="display:inline-block;background:#FF9900;color:#111;padding:7px 18px;'
         f'border-radius:6px;text-decoration:none;font-weight:700;font-size:0.88em;">'
-        f'Check Price on Amazon →</a>'
+        f'Check Price on Amazon \u2192</a>'
         f'</div></div>'
     )
 
@@ -268,7 +270,7 @@ def _make_slug(topic):
 
 
 def generate_article_for_pin(brand_key, pin_data, supabase_client):
-    """Generate a short blog article matching a pin's topic.
+    """Generate a high-converting affiliate buying guide matching a pin's topic.
 
     Returns (slug, markdown_content) or (None, None) if skipped.
     """
@@ -331,62 +333,50 @@ PIN TIPS (expand on each of these in the article):
 """
 
     seo_keywords = ', '.join(config.get('seo_keywords', [])[:6])
+    year = datetime.now(timezone.utc).year
+    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
 
-    # ── Brand-specific template structure instructions ──
+    # Brand-specific trust section
+    trust_text = {
+        'fitness': 'Written by Talhah Bilal, ISSA-certified personal trainer with 6+ years experience training men over 35.',
+        'menopause': "Reviewed by our editorial team in consultation with women's health practitioners.",
+        'deals': 'Our team tests and compares dozens of products monthly.',
+    }.get(brand_key, 'Our team tests and compares dozens of products monthly.')
+
+    # Brand-specific writing style notes
     if brand_key == 'fitness':
-        template_section = (
-            '\nTEMPLATE-SPECIFIC SECTIONS (The Iron Standard — dark, data-heavy):\n'
-            '- Include a "Pro-Coach Insight" blockquote (use > **Pro-Coach Insight:**) '
-            'explaining specific timing, dosage, or technique for maximum results.\n'
-            '- If reviewing a product, include a "Pros vs Cons" section with clear bullet points '
-            'comparing to 1-2 alternatives.\n'
-            '- Write with high confidence and data-backed authority. Cite specific numbers, '
-            'studies, or personal experience metrics where possible.'
+        style_notes = (
+            'Include a "Pro-Coach Insight" blockquote (use > **Pro-Coach Insight:**) '
+            'with specific timing, dosage, or technique advice. '
+            'Write with high confidence and data-backed authority. '
+            'Cite specific numbers or studies where possible.'
         )
-        etsy_cta_section = ''
-        req_num_seo = '5'
-        req_num_filler = '6'
     elif brand_key == 'menopause':
-        template_section = (
-            '\nTEMPLATE-SPECIFIC SECTIONS (The Wellness Whisper — empathetic, editorial):\n'
-            '- Include a "Symptom Checklist" section with a bulleted list of specific symptoms '
-            'this topic/product addresses (e.g., night sweats, fatigue, brain fog, mood changes).\n'
-            '- Include a "What to Look For" or "Clean Label Breakdown" section highlighting '
-            'ingredients, non-GMO status, certifications, or material safety.\n'
-            '- Write with warmth and empathy — acknowledge the struggle, then provide hope '
-            'and practical solutions.'
+        style_notes = (
+            'Include a "Symptom Checklist" section with specific symptoms this addresses '
+            '(night sweats, fatigue, brain fog, mood changes). '
+            'Write with warmth and empathy — acknowledge the struggle, then provide solutions.'
         )
-        etsy_cta_section = (
-            '\n5. ETSY PLANNER CTA (menopause brand only): In the conclusion section, naturally'
-            ' mention and link to the Menopause Wellness Planner Bundle on Etsy. Frame it as a'
-            ' practical next step — a printable digital planner to track symptoms, sleep,'
-            ' supplements, and mood all in one place.\n'
-            '   Use this exact link: https://www.etsy.com/listing/4435219468/'
-            'menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic\n'
-            '   Format: [Menopause Wellness Planner Bundle](https://www.etsy.com/listing/'
-            '4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic)\n'
-            '   Keep it natural — one sentence, benefit-driven (e.g. "If you want a structured'
-            ' way to track what\'s helping, the [Menopause Wellness Planner Bundle](link) on Etsy'
-            ' gives you a printable symptom tracker, sleep log, and supplement guide in one'
-            ' instant download.")'
+    else:
+        style_notes = (
+            'Include a "Why It\'s Trending" or "Social Proof" mention (star ratings, '
+            'review counts, Pinterest saves). '
+            'Write in a curated, editorial tone — like a boutique magazine recommending the best.'
         )
-        req_num_seo = '6'
-        req_num_filler = '7'
-    else:  # deals
-        template_section = (
-            '\nTEMPLATE-SPECIFIC SECTIONS (The Aesthetic Edit — minimalist, magazine-style):\n'
-            '- Include a "Why It\'s Trending" or "Social Proof" section mentioning star ratings, '
-            'review counts, Pinterest saves, or TikTok virality.\n'
-            '- Include practical details like dimensions, color options, compatibility, '
-            'or how the product fits into a modern home aesthetic.\n'
-            '- Write in a curated, editorial tone — like a boutique magazine recommending '
-            'the best of the best.'
-        )
-        etsy_cta_section = ''
-        req_num_seo = '5'
-        req_num_filler = '6'
 
-    prompt = f"""Write a focused, valuable blog article for the {config['name']} website.
+    # Etsy CTA for menopause brand only
+    etsy_section = ''
+    if brand_key == 'menopause':
+        etsy_section = (
+            '\n\nETSY PLANNER CTA: In the conclusion, naturally mention and link to the '
+            'Menopause Wellness Planner Bundle on Etsy as a practical next step.\n'
+            'Use this exact link: https://www.etsy.com/listing/4435219468/'
+            'menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic\n'
+            'Format: [Menopause Wellness Planner Bundle](link) — one sentence, benefit-driven.'
+        )
+
+    prompt = f"""Write a high-converting affiliate buying guide for the {config['name']} website.
+This is NOT a generic blog post. It answers: "Which one should I buy?"
 
 BRAND VOICE:
 {config['voice']}
@@ -394,33 +384,74 @@ BRAND VOICE:
 ARTICLE TOPIC: {topic}
 PIN TITLE: {pin_data.get('title', '')}
 CATEGORY: {category}
-{tips_section}{template_section}
+{tips_section}
+BRAND STYLE: {style_notes}
 
-REQUIREMENTS:
-1. LENGTH: 800-1200 words. Substantial enough to rank, no filler.
-2. STRUCTURE:
-   - H1 title (include primary keyword, click-worthy, format: "[Topic]: Does it actually work for [Goal]?" for fitness, "Managing [Topic]: Why [Product] is a Game Changer for Women 40+" for menopause, "The {datetime.now(timezone.utc).year} Glow-Up: Why [Topic] is Trending on Pinterest" for deals)
-   - Meta description (155 chars max, includes keyword + "Best of {datetime.now(timezone.utc).year}" or "Expert Verified")
-   - 3-5 H2 sections with standalone value — if tips were provided above, dedicate a section to each tip with deeper detail
-   - Conversational, authoritative tone matching the brand voice
-   - Clear conclusion with next steps
-3. EMAIL CTA: After the 2nd section, include on its own line:
-   [SIGNUP_FORM_PLACEHOLDER]
-4. AMAZON PRODUCT RECOMMENDATIONS: Include 3-5 product recommendations woven naturally into the article — one near the top (early hook), at least one mid-article, and one near the bottom (final CTA). Each product must feel like a genuine, helpful suggestion.
-   MANDATORY LINK RULES:
-   - For products in the list below: use the EXACT URL provided, character-for-character.
-   - For any product NOT in the list: use Amazon search format — https://www.amazon.com/s?k=product+name+here&tag=dailydealdarling1-20
-   - NEVER invent /dp/ASIN URLs for products not in the list — invalid ASINs return error pages.
-   - ALL Amazon links must include tag=dailydealdarling1-20
-   Format: **[Product Name](amazon_url)** — honest 1-2 sentence review explaining exactly WHY this product helps for this specific topic.
-   End the article with a brief "Best Picks" or "My Top Recommendations" section that lists 2-3 of the products with links — this dramatically increases click-through.
-   Approved products with direct Amazon links (use these exact URLs):
-{products_text}{etsy_cta_section}
-{req_num_seo}. SEO KEYWORDS: Naturally include: {seo_keywords}
-{req_num_filler}. FILLER BAN: Never use "in today's fast-paced world", "it's important to note",
-   "when it comes to", "at the end of the day", "it goes without saying"
+REQUIRED STRUCTURE (follow EXACTLY):
 
-OUTPUT FORMAT — Return as Markdown with frontmatter:
+1. HERO + QUICK VERDICT (first 200 words, above the fold)
+   - H1 title with buyer-intent keyword: "Best [Product] for [Audience] ({year})"
+   - One-sentence expert verdict: "After researching X options, [Top Pick] is the best for most [audience] because [specific reason]."
+   - QUICK PICKS BOX with 2-3 products:
+     * Our Pick: [Product Name] — [one-line why]
+     * Also Great: [Product Name] — [one-line why]
+     * Budget Pick: [Product Name] — [one-line why]
+   - Each pick must include its Amazon link from the APPROVED PRODUCTS list
+
+2. WHY TRUST THIS GUIDE (50-100 words)
+   {trust_text}
+
+3. On its own line exactly: [SIGNUP_FORM_PLACEHOLDER]
+
+4. DETAILED REVIEW FOR EACH PRODUCT (200-300 words each, 2-4 products)
+   For EACH product include ALL of the following:
+   - H2: "[Product Name] — Best for [specific use case]"
+   - A product card comment on its OWN LINE (the template renders this as a visual card):
+     <!--PRODUCT_CARD: name="Product Name" | url="amazon_url" | rating="4.7" | reviews="12400" | price_range="$30-50" | badge="Our Pick" -->
+   - WHO IT'S FOR: Best for [specific audience/scenario]
+   - WHAT WE LIKE: 3 specific, testable pros (NOT generic praise)
+   - WHAT WE DON'T: 1-2 honest cons (builds trust, increases conversion)
+   - BOTTOM LINE: One sentence summary with embedded Amazon link
+
+5. COMPARISON TABLE (use markdown table format):
+   | Feature | Product 1 | Product 2 | Product 3 |
+   |---------|-----------|-----------|-----------|
+   | Price Range | ... | ... | ... |
+   | Best For | ... | ... | ... |
+   | Our Rating | ... | ... | ... |
+
+6. HOW WE CHOSE (100-150 words)
+   What criteria matter and why we chose these products.
+
+7. FAQ SECTION (3-5 questions)
+   Format each EXACTLY as:
+   **Q: [Question with long-tail keyword]?**
+   A: [Concise 2-3 sentence answer]
+
+8. FINAL VERDICT + CTA (100 words)
+   Restate the top pick with its Amazon link.
+   End with specific CTA: "Check today's price on Amazon" — NOT "pick what works for you"
+
+CRITICAL RULES:
+- ALL Amazon links must use DIRECT /dp/ASIN URLs from the approved list below. NEVER invent /dp/ URLs.
+- If a product is NOT in the approved list, DO NOT LINK IT. Only recommend products we have links for.
+- ALL Amazon links must include tag={affiliate_tag}
+- For non-product articles (e.g. "benefits of creatine"), STILL end with 1-2 specific product recommendations with PRODUCT_CARD data.
+- EVERY product mention must include the <!--PRODUCT_CARD: ...--> comment on its own line.
+- Star ratings: realistic range 4.3-4.8 (never 5.0)
+- Review counts: realistic range 1,000-50,000
+- Price ranges: approximate but realistic
+- badge values: "Our Pick", "Also Great", "Budget Pick", or "Best Value"
+
+APPROVED PRODUCTS WITH AMAZON LINKS (use these EXACT URLs):
+{products_text}
+
+SEO KEYWORDS: Naturally include: {seo_keywords}
+
+BANNED PHRASES: "In today's world", "it's important to note", "when it comes to",
+"let's dive in", "without further ado", "at the end of the day", "it goes without saying"
+{etsy_section}
+OUTPUT FORMAT — Markdown with frontmatter:
 ---
 title: "Article Title"
 slug: "{slug}"
@@ -436,7 +467,7 @@ keywords: ["keyword1", "keyword2", "keyword3"]
         response = _get_client().models.generate_content(
             model=GEMINI_MODEL,
             contents=prompt,
-            config={"max_output_tokens": 3000},
+            config={"max_output_tokens": 4000},
         )
         article_md = response.text.strip()
         return slug, article_md
@@ -461,11 +492,11 @@ def _extract_frontmatter(markdown_content):
     return title, meta_desc
 
 
-def _markdown_to_html_body(markdown_content):
-    """Simple markdown to HTML conversion for article body.
+def _markdown_to_html_body(markdown_content, brand_key='deals'):
+    """Convert markdown article body to HTML.
 
-    Handles: headings, bold, italic, paragraphs, lists, links,
-    and the SIGNUP_FORM_PLACEHOLDER.
+    Handles: headings, bold, italic, paragraphs, lists, links, tables,
+    PRODUCT_CARD comments, and the SIGNUP_FORM_PLACEHOLDER.
     """
     # Strip frontmatter
     body = re.sub(r'^---\s*\n.*?\n---\s*\n?', '', markdown_content, flags=re.DOTALL)
@@ -474,6 +505,9 @@ def _markdown_to_html_body(markdown_content):
     lines = body.split('\n')
     html_lines = []
     in_list = False
+    in_table = False
+    first_table_row = True
+    table_body_started = False
 
     for line in lines:
         stripped = line.strip()
@@ -483,32 +517,87 @@ def _markdown_to_html_body(markdown_content):
             if in_list:
                 html_lines.append('</ul>')
                 in_list = False
+            if in_table:
+                if table_body_started:
+                    html_lines.append('</tbody>')
+                html_lines.append('</table></div>')
+                in_table = False
+            continue
+
+        # Product card comment — pass through without wrapping in <p>
+        if stripped.startswith('<!--PRODUCT_CARD:'):
+            if in_list:
+                html_lines.append('</ul>')
+                in_list = False
+            html_lines.append(stripped)
             continue
 
         # Signup form placeholder
         if '[SIGNUP_FORM_PLACEHOLDER]' in stripped:
-            html_lines.append(stripped.replace('[SIGNUP_FORM_PLACEHOLDER]', '<!-- email-signup-placeholder -->'))
-            continue
-
-        # Headings
-        if stripped.startswith('# '):
             if in_list:
                 html_lines.append('</ul>')
                 in_list = False
-            level = len(stripped.split(' ')[0])
-            text = stripped.lstrip('#').strip()
-            text = _inline_format(text)
-            html_lines.append(f'<h{level}>{text}</h{level}>')
+            html_lines.append(stripped.replace('[SIGNUP_FORM_PLACEHOLDER]', '<!-- email-signup-placeholder -->'))
             continue
 
+        # Table rows
+        if stripped.startswith('|') and '|' in stripped[1:]:
+            if in_list:
+                html_lines.append('</ul>')
+                in_list = False
+            if not in_table:
+                html_lines.append('<div style="overflow-x:auto"><table>')
+                in_table = True
+                first_table_row = True
+                table_body_started = False
+            # Skip separator rows like | --- | --- |
+            if re.match(r'^\|[\s\-:|]+\|$', stripped):
+                continue
+            cells = [c.strip() for c in stripped.strip('|').split('|')]
+            cells = [c for c in cells if c]
+            if first_table_row:
+                html_lines.append(
+                    '<thead><tr>'
+                    + ''.join(f'<th>{_inline_format(c, brand_key)}</th>' for c in cells)
+                    + '</tr></thead>'
+                )
+                first_table_row = False
+            else:
+                if not table_body_started:
+                    html_lines.append('<tbody>')
+                    table_body_started = True
+                html_lines.append(
+                    '<tr>'
+                    + ''.join(f'<td>{_inline_format(c, brand_key)}</td>' for c in cells)
+                    + '</tr>'
+                )
+            continue
+
+        # Close table if we hit a non-table line
+        if in_table:
+            if table_body_started:
+                html_lines.append('</tbody>')
+            html_lines.append('</table></div>')
+            in_table = False
+
+        # Headings
         heading_match = re.match(r'^(#{1,6})\s+(.+)$', stripped)
         if heading_match:
             if in_list:
                 html_lines.append('</ul>')
                 in_list = False
             level = len(heading_match.group(1))
-            text = _inline_format(heading_match.group(2))
+            text = _inline_format(heading_match.group(2), brand_key)
             html_lines.append(f'<h{level}>{text}</h{level}>')
+            continue
+
+        # Blockquotes
+        if stripped.startswith('> '):
+            if in_list:
+                html_lines.append('</ul>')
+                in_list = False
+            text = _inline_format(stripped[2:], brand_key)
+            html_lines.append(f'<blockquote>{text}</blockquote>')
             continue
 
         # List items
@@ -516,7 +605,7 @@ def _markdown_to_html_body(markdown_content):
             if not in_list:
                 html_lines.append('<ul>')
                 in_list = True
-            text = _inline_format(stripped[2:])
+            text = _inline_format(stripped[2:], brand_key)
             html_lines.append(f'  <li>{text}</li>')
             continue
 
@@ -524,18 +613,24 @@ def _markdown_to_html_body(markdown_content):
         if in_list:
             html_lines.append('</ul>')
             in_list = False
-        text = _inline_format(stripped)
+        text = _inline_format(stripped, brand_key)
         html_lines.append(f'<p>{text}</p>')
 
     if in_list:
         html_lines.append('</ul>')
+    if in_table:
+        if table_body_started:
+            html_lines.append('</tbody>')
+        html_lines.append('</table></div>')
 
     return '\n'.join(html_lines)
 
 
-def _inline_format(text):
+def _inline_format(text, brand_key='deals'):
     """Apply inline markdown formatting (bold, italic, links)."""
     global _APPROVED_ASINS
+
+    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
 
     # Links [text](url) — Amazon affiliate links get nofollow + new tab
     def _link_replace(match):
@@ -551,7 +646,7 @@ def _inline_format(text):
                     _APPROVED_ASINS = _get_approved_asins()
                 if asin_m.group(1) not in _APPROVED_ASINS:
                     search_q = urllib.parse.quote_plus(link_text.strip())
-                    url = f"https://www.amazon.com/s?k={search_q}&tag=dailydealdarling1-20"
+                    url = f"https://www.amazon.com/s?k={search_q}&tag={affiliate_tag}"
             return f'<a href="{url}" target="_blank" rel="nofollow sponsored">{link_text}</a>'
         return f'<a href="{url}">{link_text}</a>'
     text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', _link_replace, text)
@@ -579,7 +674,7 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
     if not meta_desc:
         meta_desc = f"{title} - {site['site_name']}"
 
-    body_html = _markdown_to_html_body(markdown_content)
+    body_html = _markdown_to_html_body(markdown_content, brand_key)
 
     # Inject product cards (with Amazon images) for bolded product links
     body_html = _inject_product_cards(body_html, brand_key)

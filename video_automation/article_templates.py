@@ -5,9 +5,9 @@ Three mobile-first templates optimized for Pinterest traffic and Google Search:
 - 'The Wellness Whisper' (menopause) — Clean, empathetic, editorial
 - 'The Aesthetic Edit' (deals) — Minimalist, boutique, magazine-style
 
-All use Tailwind CSS (CDN), Schema.org JSON-LD (Article + Product),
-expert reviewer bios, geo-SEO, and mobile-first sticky CTAs.
-Amazon Associate ID: dailydealdarling1-20 on all links.
+All use Tailwind CSS (CDN), Schema.org JSON-LD (Article + Product + FAQPage),
+expert reviewer bios, geo-SEO, product cards, comparison tables,
+and mobile-first sticky CTAs.
 """
 
 import json
@@ -90,12 +90,31 @@ TEMPLATE_CONFIG = {
     },
 }
 
+# Brand-specific lead magnet overrides for signup forms
+LEAD_MAGNET_OVERRIDES = {
+    'fitness': 'Free: Home Gym Setup Checklist (PDF)',
+    'deals': 'Free: Weekly Top 10 Deals Newsletter',
+    'menopause': 'Free: Menopause Symptom Tracker (Printable PDF)',
+}
+
+# Brand affiliate tags
+_BRAND_TAGS = {
+    'fitness': 'fitover35-20',
+    'deals': 'dailydealdarling1-20',
+    'menopause': 'dailydealdarling1-20',
+}
+
 
 # ── Shared helpers ─────────────────────────────────────────────────────────
 
+def _get_brand_tag(brand_key):
+    """Get Amazon affiliate tag for a brand."""
+    return _BRAND_TAGS.get(brand_key, 'dailydealdarling1-20')
+
+
 def _find_first_amazon_url(body_html):
     """Extract first Amazon affiliate URL from body HTML."""
-    m = re.search(r'href="(https://www\.amazon\.com[^"]*tag=dailydealdarling1-20[^"]*)"', body_html)
+    m = re.search(r'href="(https://www\.amazon\.com[^"]*)"', body_html)
     return m.group(1) if m else None
 
 
@@ -158,9 +177,170 @@ ETSY_CTA_HTML = (
 )
 
 
-def _signup_form(site_config, tpl):
+# ── Product card parsing and rendering ────────────────────────────────────
+
+def _replace_product_cards(body_html, tpl):
+    """Parse <!--PRODUCT_CARD: ...--> comments and replace with styled HTML cards.
+
+    Returns (modified_body_html, list_of_card_dicts).
+    """
+    cards = []
+    pattern = (
+        r'(?:<p>\s*)?'
+        r'<!--PRODUCT_CARD:\s*'
+        r'name="([^"]*?)"\s*\|\s*'
+        r'url="([^"]*?)"\s*\|\s*'
+        r'rating="([^"]*?)"\s*\|\s*'
+        r'reviews="([^"]*?)"\s*\|\s*'
+        r'price_range="([^"]*?)"\s*\|\s*'
+        r'badge="([^"]*?)"\s*'
+        r'-->'
+        r'(?:\s*</p>)?'
+    )
+
+    def _replacer(m):
+        card = {
+            'name': m.group(1),
+            'url': m.group(2),
+            'rating': m.group(3),
+            'reviews': m.group(4),
+            'price_range': m.group(5),
+            'badge': m.group(6),
+        }
+        cards.append(card)
+        return _render_product_card_html(card, tpl)
+
+    body_html = re.sub(pattern, _replacer, body_html)
+    return body_html, cards
+
+
+def _render_product_card_html(card, tpl):
+    """Render a single product card as styled HTML."""
+    c = tpl['colors']
+    return (
+        f'<div class="product-card" style="border:2px solid {c["accent"]};border-radius:12px;'
+        f'padding:20px;margin:24px 0;background:{c["surface"]};">'
+        f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">'
+        f'<span style="background:{c["accent"]};color:{tpl["cta_text_color"]};padding:4px 12px;'
+        f'border-radius:20px;font-size:0.8em;font-weight:700;">{card["badge"]}</span>'
+        f'<span style="color:{c["muted"]};font-size:0.85em;">'
+        f'\u2b50 {card["rating"]} ({card["reviews"]} reviews)</span></div>'
+        f'<h3 style="margin:0 0 8px;font-size:1.3em;">{card["name"]}</h3>'
+        f'<p style="color:{c["muted"]};margin:0 0 16px;font-size:0.9em;">'
+        f'Typical price: {card["price_range"]}</p>'
+        f'<a href="{card["url"]}" target="_blank" rel="nofollow sponsored noopener" '
+        f'style="display:block;text-align:center;background:{tpl["cta_bg"]};'
+        f'color:{tpl["cta_text_color"]};padding:14px 24px;border-radius:8px;'
+        f'text-decoration:none;font-weight:700;font-size:1.05em;">'
+        f'Check Current Price on Amazon \u2192</a></div>'
+    )
+
+
+def _render_quick_picks_box(cards, tpl):
+    """Render a summary box with the first 3 product picks."""
+    if not cards:
+        return ''
+    c = tpl['colors']
+    picks_html = ''
+    for card in cards[:3]:
+        picks_html += (
+            f'<div style="display:flex;justify-content:space-between;align-items:center;'
+            f'padding:10px 0;border-bottom:1px solid {c["border"]};">'
+            f'<div><span style="font-weight:700;font-size:0.85em;margin-right:8px;">'
+            f'{card["badge"]}</span>'
+            f'<span style="font-size:0.95em;">{card["name"]}</span></div>'
+            f'<a href="{card["url"]}" target="_blank" rel="nofollow sponsored noopener" '
+            f'style="background:{tpl["cta_bg"]};color:{tpl["cta_text_color"]};'
+            f'padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;'
+            f'font-size:0.85em;white-space:nowrap;">Check Price</a></div>'
+        )
+    return (
+        f'<div style="border:2px solid {c["accent"]};border-radius:12px;padding:20px;'
+        f'margin:24px 0;background:{c["surface"]};">'
+        f'<h3 style="margin:0 0 12px;font-size:1.1em;">\U0001f3af Quick Picks</h3>'
+        f'{picks_html}</div>'
+    )
+
+
+# ── FAQ parsing and schema ────────────────────────────────────────────────
+
+def _parse_faq_pairs(body_html):
+    """Extract Q&A pairs from HTML body.
+
+    Expects format: <p><strong>Q: question?</strong></p> followed by <p>A: answer</p>
+    """
+    pairs = []
+    pattern = r'<p><strong>Q:\s*(.+?)</strong></p>\s*<p>A:\s*(.+?)</p>'
+    for m in re.finditer(pattern, body_html):
+        question = m.group(1).strip().rstrip('?') + '?'
+        answer = re.sub(r'<[^>]+>', '', m.group(2).strip())  # strip inner HTML tags
+        pairs.append((question, answer))
+    return pairs
+
+
+def _build_faq_schema(faq_pairs):
+    """Build FAQPage Schema.org JSON-LD."""
+    if not faq_pairs:
+        return ''
+    entries = []
+    for q, a in faq_pairs:
+        entries.append({
+            "@type": "Question",
+            "name": q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": a,
+            },
+        })
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": entries,
+    }
+    return f'<script type="application/ld+json">{json.dumps(schema, indent=2)}</script>'
+
+
+# ── Mobile sticky CTA ────────────────────────────────────────────────────
+
+def _render_mobile_sticky_cta(top_pick, tpl):
+    """Build mobile-only sticky bottom CTA bar for the top-pick product."""
+    if not top_pick:
+        return ''
+    c = tpl['colors']
+    return (
+        f'<style>.sticky-cta{{display:none}}'
+        f'@media(max-width:768px){{.sticky-cta{{display:flex}}}}</style>'
+        f'<div class="sticky-cta" style="position:fixed;bottom:0;left:0;right:0;'
+        f'background:{c["surface"]};border-top:2px solid {c["accent"]};padding:12px 16px;'
+        f'z-index:1000;align-items:center;justify-content:space-between;">'
+        f'<div><strong style="font-size:0.9em;">{top_pick["name"]}</strong>'
+        f'<span style="color:{c["muted"]};font-size:0.8em;display:block;">'
+        f'{top_pick["price_range"]}</span></div>'
+        f'<a href="{top_pick["url"]}" target="_blank" rel="nofollow sponsored noopener" '
+        f'style="background:{tpl["cta_bg"]};color:{tpl["cta_text_color"]};'
+        f'padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;'
+        f'font-size:0.9em;white-space:nowrap;">Check Price \u2192</a></div>'
+    )
+
+
+def _fallback_sticky_cta(tpl, cta_url):
+    """Build generic sticky bottom CTA bar (fallback when no product cards)."""
+    return (
+        f'<div style="position:fixed;bottom:0;left:0;right:0;background:{tpl["cta_bg"]};'
+        f'z-index:50;box-shadow:0 -2px 10px rgba(0,0,0,0.15)">'
+        f'<a href="{cta_url}" target="_blank" rel="nofollow sponsored" '
+        f'style="display:block;text-align:center;color:{tpl["cta_text_color"]};'
+        f'font-weight:700;font-size:1.05em;padding:14px 16px;text-decoration:none">'
+        f'{tpl["cta_text"]} &rarr;</a></div>'
+    )
+
+
+# ── Signup form ───────────────────────────────────────────────────────────
+
+def _signup_form(site_config, tpl, brand_key='deals'):
     """Build email signup form matching brand template."""
     c = tpl['colors']
+    lead_magnet = LEAD_MAGNET_OVERRIDES.get(brand_key, site_config['lead_magnet'])
     return (
         '<div style="background:{bg};border:1px solid {border};border-radius:12px;'
         'padding:24px;margin:32px 0;text-align:center">'
@@ -178,7 +358,7 @@ def _signup_form(site_config, tpl):
         '{btn}</button></form></div>'
     ).format(
         bg=c['surface'], border=c['border'], heading=c.get('text', '#111'),
-        muted=c['muted'], accent=c['accent'], lead=site_config['lead_magnet'],
+        muted=c['muted'], accent=c['accent'], lead=lead_magnet,
         form_id=site_config['signup_form_id'], btn=site_config['signup_button_text'],
         btn_text=tpl['cta_text_color'],
         input_bg='#1A1A1A' if c['bg'] == '#0A0A0A' else '#FFFFFF',
@@ -193,10 +373,31 @@ def render_article_page(brand_key, title, meta_desc, body_html, hero_url,
     """Render a complete bridge-page HTML for the given brand.
 
     Replaces the old article_to_html page wrapper. body_html should already
-    have product cards injected and inline formatting applied. The
+    have inline product cards injected and inline formatting applied. The
     <!-- email-signup-placeholder --> will be replaced with a brand-styled form.
+    <!--PRODUCT_CARD: ...--> comments will be replaced with visual product cards.
     """
     tpl = TEMPLATE_CONFIG.get(brand_key, TEMPLATE_CONFIG['deals'])
+
+    # Parse and render PRODUCT_CARD comments into styled HTML cards
+    body_html, product_cards = _replace_product_cards(body_html, tpl)
+
+    # Insert quick picks summary box before first <h2>
+    if product_cards:
+        quick_picks = _render_quick_picks_box(product_cards[:3], tpl)
+        first_h2_pos = body_html.find('<h2')
+        if first_h2_pos != -1:
+            body_html = body_html[:first_h2_pos] + quick_picks + body_html[first_h2_pos:]
+        else:
+            # No <h2> found — insert after first closing paragraph
+            first_p_end = body_html.find('</p>')
+            if first_p_end != -1:
+                body_html = body_html[:first_p_end + 4] + quick_picks + body_html[first_p_end + 4:]
+
+    # Parse FAQ pairs and build schema
+    faq_pairs = _parse_faq_pairs(body_html)
+    faq_schema_tag = _build_faq_schema(faq_pairs)
+
     first_amazon = _find_first_amazon_url(body_html)
     article_schema = _build_article_schema(
         title, meta_desc, slug, site_config, tpl['expert']['name'])
@@ -210,18 +411,23 @@ def render_article_page(brand_key, title, meta_desc, body_html, hero_url,
 
     date_str = datetime.now(timezone.utc).strftime('%B %d, %Y')
     article_url = site_config['base_url'] + '/articles/' + slug + '.html'
+    affiliate_tag = _get_brand_tag(brand_key)
     cta_url = first_amazon or (
         'https://www.amazon.com/s?k=' + slug.replace('-', '+')
-        + '&tag=dailydealdarling1-20'
+        + '&tag=' + affiliate_tag
     )
 
     # Replace email signup placeholder with brand-styled form
-    form_html = _signup_form(site_config, tpl)
+    form_html = _signup_form(site_config, tpl, brand_key)
     body_html = body_html.replace('<!-- email-signup-placeholder -->', form_html)
 
     # Append Etsy CTA for menopause brand
     if brand_key == 'menopause':
         body_html += ETSY_CTA_HTML
+
+    # Build mobile sticky CTA for top-pick product
+    top_pick = product_cards[0] if product_cards else None
+    mobile_sticky_html = _render_mobile_sticky_cta(top_pick, tpl)
 
     # Dispatch to brand template
     ctx = dict(
@@ -229,6 +435,7 @@ def render_article_page(brand_key, title, meta_desc, body_html, hero_url,
         hero_url=hero_url, site_config=site_config, slug=slug,
         date_str=date_str, article_url=article_url, cta_url=cta_url,
         article_schema=article_schema, product_schema_tag=product_schema_tag,
+        faq_schema_tag=faq_schema_tag, mobile_sticky_html=mobile_sticky_html,
     )
     if brand_key == 'fitness':
         return _render_iron_standard(**ctx)
@@ -240,7 +447,7 @@ def render_article_page(brand_key, title, meta_desc, body_html, hero_url,
 # ── Shared page parts ──────────────────────────────────────────────────────
 
 def _head(tpl, title, meta_desc, article_url, site_config, article_schema,
-          product_schema_tag, article_css):
+          product_schema_tag, article_css, faq_schema_tag=''):
     """Build <head> section shared across all templates."""
     c = tpl['colors']
     tw_config = json.dumps({
@@ -276,6 +483,7 @@ def _head(tpl, title, meta_desc, article_url, site_config, article_schema,
         '</noscript> -->\n'
         f'  <script type="application/ld+json">{article_schema}</script>\n'
         f'  {product_schema_tag}\n'
+        f'  {faq_schema_tag}\n'
         f'  <style>{article_css}</style>\n'
         '</head>\n'
     )
@@ -341,18 +549,6 @@ def _geo_badge(tpl):
     )
 
 
-def _sticky_cta(tpl, cta_url):
-    """Build sticky bottom CTA bar."""
-    return (
-        f'<div style="position:fixed;bottom:0;left:0;right:0;background:{tpl["cta_bg"]};'
-        f'z-index:50;box-shadow:0 -2px 10px rgba(0,0,0,0.15)">'
-        f'<a href="{cta_url}" target="_blank" rel="nofollow sponsored" '
-        f'style="display:block;text-align:center;color:{tpl["cta_text_color"]};'
-        f'font-weight:700;font-size:1.05em;padding:14px 16px;text-decoration:none">'
-        f'{tpl["cta_text"]} &rarr;</a></div>'
-    )
-
-
 def _disclosure(tpl):
     """Affiliate disclosure text."""
     c = tpl['colors']
@@ -364,11 +560,24 @@ def _disclosure(tpl):
     )
 
 
+def _table_css(tpl):
+    """CSS rules for styled comparison tables."""
+    c = tpl['colors']
+    return (
+        f'.article-body table {{ width:100%;border-collapse:collapse;margin:24px 0;font-size:0.9em }}'
+        f'.article-body thead th {{ background:{c["accent"]};color:{tpl["cta_text_color"]};'
+        f'padding:12px;text-align:left;font-weight:600;white-space:nowrap }}'
+        f'.article-body td {{ padding:10px 12px;border-bottom:1px solid {c["border"]} }}'
+        f'.article-body tr:nth-child(even) td {{ background:{c["surface"]} }}'
+    )
+
+
 # ── Template 1: The Iron Standard (Fitness) ────────────────────────────────
 
 def _render_iron_standard(tpl, title, meta_desc, body_html, hero_url, site_config,
                           slug, date_str, article_url, cta_url,
-                          article_schema, product_schema_tag):
+                          article_schema, product_schema_tag,
+                          faq_schema_tag='', mobile_sticky_html=''):
     c = tpl['colors']
     article_css = (
         f'.article-body h1 {{ font-family:{tpl["heading_font"]},sans-serif; '
@@ -386,10 +595,11 @@ def _render_iron_standard(tpl, title, meta_desc, body_html, hero_url, site_confi
         f'padding:16px 20px; margin:24px 0; background:{c["surface"]}; '
         f'border-radius:0 8px 8px 0 }}'
         f'body {{ font-family:{tpl["body_font"]},sans-serif; padding-bottom:60px }}'
+        + _table_css(tpl)
     )
 
     head = _head(tpl, title, meta_desc, article_url, site_config,
-                 article_schema, product_schema_tag, article_css)
+                 article_schema, product_schema_tag, article_css, faq_schema_tag)
     nav = _nav(tpl, site_config, dark=True)
 
     # Hero — full bleed with dark overlay
@@ -423,6 +633,8 @@ def _render_iron_standard(tpl, title, meta_desc, body_html, hero_url, site_confi
             f'</div>'
         )
 
+    sticky = mobile_sticky_html if mobile_sticky_html else _fallback_sticky_cta(tpl, cta_url)
+
     return (
         head
         + f'<body style="background:{c["bg"]};color:{c["text"]}">\n'
@@ -441,7 +653,7 @@ def _render_iron_standard(tpl, title, meta_desc, body_html, hero_url, site_confi
         f'padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700">'
         f'Visit {site_config["site_name"]} &rarr;</a></div>\n'
         + '</main>\n'
-        + _sticky_cta(tpl, cta_url) + '\n'
+        + sticky + '\n'
         + GEO_SCRIPT + '\n'
         + '</body>\n</html>'
     )
@@ -451,7 +663,8 @@ def _render_iron_standard(tpl, title, meta_desc, body_html, hero_url, site_confi
 
 def _render_wellness_whisper(tpl, title, meta_desc, body_html, hero_url, site_config,
                              slug, date_str, article_url, cta_url,
-                             article_schema, product_schema_tag):
+                             article_schema, product_schema_tag,
+                             faq_schema_tag='', mobile_sticky_html=''):
     c = tpl['colors']
     article_css = (
         f'.article-body h1 {{ font-family:{tpl["heading_font"]},serif; '
@@ -469,10 +682,11 @@ def _render_wellness_whisper(tpl, title, meta_desc, body_html, hero_url, site_co
         f'padding:16px 20px; margin:24px 0; background:#fff; '
         f'border-radius:0 12px 12px 0; font-style:italic }}'
         f'body {{ font-family:{tpl["body_font"]},sans-serif; padding-bottom:60px }}'
+        + _table_css(tpl)
     )
 
     head = _head(tpl, title, meta_desc, article_url, site_config,
-                 article_schema, product_schema_tag, article_css)
+                 article_schema, product_schema_tag, article_css, faq_schema_tag)
     nav = _nav(tpl, site_config, dark=False)
 
     # Hero — centered editorial with soft image
@@ -496,6 +710,8 @@ def _render_wellness_whisper(tpl, title, meta_desc, body_html, hero_url, site_co
         f'{hero_img}</div>'
     )
 
+    sticky = mobile_sticky_html if mobile_sticky_html else _fallback_sticky_cta(tpl, cta_url)
+
     return (
         head
         + f'<body style="background:{c["bg"]};color:{c["text"]}">\n'
@@ -514,7 +730,7 @@ def _render_wellness_whisper(tpl, title, meta_desc, body_html, hero_url, site_co
         f'padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700">'
         f'Visit {site_config["site_name"]} &rarr;</a></div>\n'
         + '</main>\n'
-        + _sticky_cta(tpl, cta_url) + '\n'
+        + sticky + '\n'
         + GEO_SCRIPT + '\n'
         + '</body>\n</html>'
     )
@@ -524,7 +740,8 @@ def _render_wellness_whisper(tpl, title, meta_desc, body_html, hero_url, site_co
 
 def _render_aesthetic_edit(tpl, title, meta_desc, body_html, hero_url, site_config,
                            slug, date_str, article_url, cta_url,
-                           article_schema, product_schema_tag):
+                           article_schema, product_schema_tag,
+                           faq_schema_tag='', mobile_sticky_html=''):
     c = tpl['colors']
     article_css = (
         f'.article-body h1 {{ font-family:{tpl["heading_font"]},serif; '
@@ -542,10 +759,11 @@ def _render_aesthetic_edit(tpl, title, meta_desc, body_html, hero_url, site_conf
         f'.article-body blockquote {{ border-left:3px solid {c["accent"]}; '
         f'padding:16px 20px; margin:24px 0; background:#fff; border-radius:0 8px 8px 0 }}'
         f'body {{ font-family:{tpl["body_font"]},sans-serif; padding-bottom:60px }}'
+        + _table_css(tpl)
     )
 
     head = _head(tpl, title, meta_desc, article_url, site_config,
-                 article_schema, product_schema_tag, article_css)
+                 article_schema, product_schema_tag, article_css, faq_schema_tag)
     nav = _nav(tpl, site_config, dark=False)
 
     # Hero — vertical Pinterest-style image
@@ -572,6 +790,8 @@ def _render_aesthetic_edit(tpl, title, meta_desc, body_html, hero_url, site_conf
         f'{hero_img}</div>'
     )
 
+    sticky = mobile_sticky_html if mobile_sticky_html else _fallback_sticky_cta(tpl, cta_url)
+
     return (
         head
         + f'<body style="background:{c["bg"]};color:{c["text"]}">\n'
@@ -590,7 +810,7 @@ def _render_aesthetic_edit(tpl, title, meta_desc, body_html, hero_url, site_conf
         f'padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700">'
         f'Visit {site_config["site_name"]} &rarr;</a></div>\n'
         + '</main>\n'
-        + _sticky_cta(tpl, cta_url) + '\n'
+        + sticky + '\n'
         + GEO_SCRIPT + '\n'
         + '</body>\n</html>'
     )
