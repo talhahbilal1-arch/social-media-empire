@@ -57,8 +57,8 @@ export default function AffiliateLink({ href, tool, className, children, placeme
  */
 export function AffiliateDisclosure() {
   return (
-    <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-6 text-sm text-amber-800">
-      <strong>Disclosure:</strong> This article contains affiliate links. If you purchase through
+    <div className="bg-amber-900/20 border border-amber-800/30 rounded-lg px-4 py-3 mb-6 text-sm text-amber-300">
+      <strong>Disclosure:</strong> This page contains affiliate links. If you purchase through
       these links, we may earn a commission at no additional cost to you.
     </div>
   )
