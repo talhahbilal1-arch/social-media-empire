@@ -202,6 +202,77 @@ def _fetch_pexels_image(query, orientation='landscape'):
     return None
 
 
+def _fetch_pexels_video(query, orientation='landscape'):
+    """Fetch a short Pexels stock video URL for article hero."""
+    api_key = os.environ.get('PEXELS_API_KEY', '')
+    if not api_key:
+        return None
+    if not query:
+        return None
+    words = query.split()
+    if len(words) > 6:
+        query = ' '.join(words[:6])
+    try:
+        resp = requests.get(
+            "https://api.pexels.com/videos/search",
+            headers={"Authorization": api_key},
+            params={"query": query, "per_page": 5, "orientation": orientation, "size": "medium"},
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            videos = resp.json().get('videos', [])
+            if videos:
+                for vf in videos[0].get('video_files', []):
+                    if vf.get('quality') == 'hd' and vf.get('width', 0) <= 1920:
+                        return vf['link']
+                if videos[0].get('video_files'):
+                    return videos[0]['video_files'][0]['link']
+    except Exception as e:
+        logger.warning(f"Pexels video fetch failed: {e}")
+    return None
+
+
+def _fetch_pexels_batch(query, count=5, orientation='landscape'):
+    """Fetch multiple Pexels image URLs for a query. Returns list of URL strings."""
+    api_key = os.environ.get('PEXELS_API_KEY', '')
+    if not api_key or not query:
+        return []
+    words = query.split()
+    if len(words) > 6:
+        query = ' '.join(words[:6])
+    try:
+        resp = requests.get(
+            "https://api.pexels.com/v1/search",
+            headers={"Authorization": api_key},
+            params={"query": query, "per_page": count, "orientation": orientation},
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            return [p['src']['large'] for p in resp.json().get('photos', [])]
+    except Exception as e:
+        logger.warning(f"Pexels batch fetch failed for '{query}': {e}")
+    return []
+
+
+def _try_parse_json(content):
+    """Try to parse content as JSON, stripping code fences if present."""
+    if not content:
+        return None
+    text = content.strip()
+    # Strip markdown code fences
+    if text.startswith('```'):
+        text = re.sub(r'^```(?:json)?\s*\n?', '', text)
+        text = re.sub(r'\n?```\s*$', '', text)
+    text = text.strip()
+    if not text.startswith('{'):
+        return None
+    try:
+        return json.loads(text)
+    except (json.JSONDecodeError, ValueError):
+        logger.warning("JSON parse failed, falling back to markdown path")
+        return None
+
+
 def _build_product_card(link_text, amazon_url, primary_color='#1565C0'):
     """Build a styled product card div with Amazon product image."""
     asin_match = re.search(r'/dp/([A-Z0-9]{10})', amazon_url)
@@ -272,7 +343,8 @@ def _make_slug(topic):
 def generate_article_for_pin(brand_key, pin_data, supabase_client):
     """Generate a high-converting affiliate buying guide matching a pin's topic.
 
-    Returns (slug, markdown_content) or (None, None) if skipped.
+    Returns (slug, content) where content is either JSON (v3) or markdown (v2 fallback).
+    Or (None, None) if skipped.
     """
     from .content_brain import BRAND_CONFIGS
 
@@ -375,7 +447,92 @@ PIN TIPS (expand on each of these in the article):
             'Format: [Menopause Wellness Planner Bundle](link) — one sentence, benefit-driven.'
         )
 
-    prompt = f"""Write a high-converting affiliate buying guide for the {config['name']} website.
+    # ── Try JSON generation first ──────────────────────────────────────────
+    available_keys = [k for k in brand_amazon.keys() if k != '_default']
+    available_keys_str = ', '.join(available_keys) if available_keys else 'none available'
+
+    json_prompt = f"""You are a high-converting buying guide expert. Generate ONLY valid JSON (no markdown, no backticks).
+
+AVAILABLE PRODUCT KEYS: {available_keys_str}
+
+BRAND VOICE:
+{config['voice']}
+
+ARTICLE TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+CATEGORY: {category}
+{tips_section}
+
+AFFILIATE TAG: {affiliate_tag}
+
+Output EXACTLY this JSON structure (no markdown, no code fences, ONLY valid JSON):
+{{
+  "title": "Best [Product] for [Audience] ({year})",
+  "meta_description": "155 chars max, SEO-optimized",
+  "read_time": "4 min",
+  "brands_tested": 8,
+  "reviews_analyzed": "14,000+",
+  "verdict": "Bold one-sentence finding after testing.",
+  "before": {{"emoji": "😰", "title": "Before", "text": "The problem"}},
+  "after": {{"emoji": "😴", "title": "After", "text": "The solution"}},
+  "urgency_text": "Currently 15% off with Subscribe & Save on Amazon",
+  "products": [
+    {{
+      "name": "Product Name",
+      "badge": "Our Pick",
+      "badge_type": "top",
+      "price_low": 28,
+      "price_high": 38,
+      "rating": 4.6,
+      "review_count": "12,400+",
+      "subscribe_save": "15% off",
+      "pexels_image_query": "vivid specific query for Pexels",
+      "pexels_thumb_queries": ["query1", "query2", "query3"],
+      "benefit_icons": [{{"emoji": "💧", "text": "Benefit"}}],
+      "benefit_image_query": "detail image query",
+      "benefit_headline": "Why X beats Y",
+      "benefit_description": "Explanation.",
+      "pros": ["Pro 1", "Pro 2", "Pro 3", "Pro 4"],
+      "cons": ["Con 1", "Con 2"],
+      "testimonials": [
+        {{"name": "Sarah M.", "quote": "Authentic Amazon-style review."}},
+        {{"name": "Linda R.", "quote": "Another real customer voice."}}
+      ],
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS"
+    }}
+  ],
+  "comparison_extra_rows": [{{"label": "Subscribe & Save", "values": ["✓ 15%", "✓ 10%", "✗"]}}],
+  "methodology": ["Point 1", "Point 2", "Point 3", "Point 4"],
+  "faq": [{{"q": "Question?", "a": "Answer."}}],
+  "related_product_keys": ["key1", "key2", "key3"]
+}}
+
+RULES:
+- 2-3 products only, use ONLY keys from AVAILABLE PRODUCT KEYS
+- Ratings: 4.3-4.8 range (never 5.0)
+- Review counts: realistic 1000-50000 range
+- Testimonials: sound like real Amazon reviews from different customers
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "unlock your potential"
+- Output ONLY JSON, no markdown, no backticks, no code fences"""
+
+    try:
+        response = _get_client().models.generate_content(
+            model=GEMINI_MODEL,
+            contents=json_prompt,
+            config={"response_mime_type": "application/json", "max_output_tokens": 4000},
+        )
+        article_json = response.text.strip()
+        parsed = _try_parse_json(article_json)
+        if parsed and isinstance(parsed, dict):
+            logger.info(f"JSON article generated successfully for '{topic}'")
+            return slug, article_json
+        else:
+            logger.warning(f"JSON parsing failed, falling back to markdown for '{topic}'")
+    except Exception as e:
+        logger.warning(f"JSON generation failed: {e}, falling back to markdown")
+
+    # ── Fallback to markdown generation ──────────────────────────────────
+    markdown_prompt = f"""Write a high-converting affiliate buying guide for the {config['name']} website.
 This is NOT a generic blog post. It answers: "Which one should I buy?"
 
 BRAND VOICE:
@@ -466,7 +623,7 @@ keywords: ["keyword1", "keyword2", "keyword3"]
     try:
         response = _get_client().models.generate_content(
             model=GEMINI_MODEL,
-            contents=prompt,
+            contents=markdown_prompt,
             config={"max_output_tokens": 4000},
         )
         article_md = response.text.strip()
@@ -657,14 +814,110 @@ def _inline_format(text, brand_key='deals'):
     return text
 
 
-def article_to_html(markdown_content, brand_key, slug, pin_data=None):
-    """Convert markdown article to a complete bridge-page HTML.
+def _build_v3_article(article_data, brand_key, slug, pin_data=None):
+    """Build v3 article from structured JSON data.
 
-    Uses brand-specific templates from article_templates module:
-    - fitness  → 'The Iron Standard'  (dark, gritty, data-heavy)
-    - menopause → 'The Wellness Whisper' (clean, empathetic, editorial)
-    - deals    → 'The Aesthetic Edit'  (minimalist, boutique, magazine)
+    Fetches images from Pexels and returns complete HTML.
     """
+    from .article_templates import render_article_page
+
+    site = BRAND_SITE_CONFIG[brand_key]
+
+    # Resolve amazon_product_key → actual Amazon URLs
+    brand_amazon = AMAZON_AFFILIATE_LINKS.get(brand_key, {})
+
+    # Fetch hero image + optional video
+    hero_query = article_data.get('title', slug)
+    hero_url = _fetch_pexels_image(hero_query)
+    video_url = _fetch_pexels_video(hero_query)
+
+    # Enrich products with images
+    for product in article_data.get('products', []):
+        product_key = product.get('amazon_product_key', '')
+        if product_key and product_key in brand_amazon:
+            product['amazon_url'] = brand_amazon[product_key]
+        else:
+            product['amazon_url'] = brand_amazon.get('_default', '')
+
+        # Fetch hero image for this product
+        hero_img_query = product.get('pexels_image_query', product.get('name', ''))
+        hero_img = _fetch_pexels_image(hero_img_query) if hero_img_query else None
+        product['hero_image'] = hero_img
+
+        # Fetch thumbnail images
+        thumb_queries = product.get('pexels_thumb_queries', [])
+        thumb_images = []
+        for tq in thumb_queries[:3]:
+            ti = _fetch_pexels_image(tq) if tq else None
+            if ti:
+                thumb_images.append(ti)
+        product['thumb_images'] = thumb_images
+
+        # Fetch benefit image
+        benefit_img_query = product.get('benefit_image_query', '')
+        benefit_img = _fetch_pexels_image(benefit_img_query) if benefit_img_query else None
+        product['benefit_image'] = benefit_img
+
+        # Add placeholder photos to testimonials
+        testimonials = product.get('testimonials', [])
+        for testimonial in testimonials:
+            if 'photo' not in testimonial:
+                testimonial['photo'] = None
+
+    # Fetch portrait photos for testimonials (brand-specific queries)
+    if brand_key == 'fitness':
+        portrait_query = 'man portrait confident professional'
+    elif brand_key == 'menopause':
+        portrait_query = 'middle aged woman portrait warm confident'
+    else:
+        portrait_query = 'woman portrait friendly lifestyle'
+
+    portrait_batch = _fetch_pexels_batch(portrait_query, count=5)
+    portrait_idx = 0
+    for product in article_data.get('products', []):
+        for testimonial in product.get('testimonials', []):
+            if portrait_idx < len(portrait_batch):
+                testimonial['photo'] = portrait_batch[portrait_idx]
+                portrait_idx += 1
+
+    # Fetch related product images
+    related_products = []
+    for key in article_data.get('related_product_keys', [])[:3]:
+        if key in brand_amazon:
+            img = _fetch_pexels_image(key)
+            related_products.append({
+                'name': key,
+                'amazon_url': brand_amazon[key],
+                'image': img,
+            })
+
+    # Build enriched article data
+    enriched_data = dict(article_data)
+    enriched_data['hero_url'] = hero_url
+    enriched_data['video_url'] = video_url
+    enriched_data['category'] = pin_data.get('category', '') if pin_data else ''
+    enriched_data['related_products'] = related_products
+
+    # Store in pin_data for template
+    if pin_data is None:
+        pin_data = {}
+    pin_data['_article_data'] = enriched_data
+
+    # Delegate to template
+    return render_article_page(
+        brand_key=brand_key,
+        title=enriched_data.get('title', ''),
+        meta_desc=enriched_data.get('meta_description', ''),
+        body_html='',  # v3 template handles rendering
+        hero_url=hero_url,
+        site_config=site,
+        slug=slug,
+        pin_data=pin_data,
+    )
+
+
+def _build_v2_article(markdown_content, brand_key, slug, pin_data=None):
+    """Build v2 article from markdown (fallback path)."""
     from .article_templates import render_article_page
 
     site = BRAND_SITE_CONFIG[brand_key]
@@ -702,6 +955,21 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
         slug=slug,
         pin_data=pin_data,
     )
+
+
+def article_to_html(markdown_content, brand_key, slug, pin_data=None):
+    """Convert article content to complete bridge-page HTML.
+
+    Handles two paths:
+    - JSON (v3): Structured data → fetch images → v3 template with enhanced sections
+    - Markdown (v2 fallback): Existing path with product cards + FAQ schema
+    """
+    article_data = _try_parse_json(markdown_content)
+
+    if article_data and isinstance(article_data, dict):
+        return _build_v3_article(article_data, brand_key, slug, pin_data)
+    else:
+        return _build_v2_article(markdown_content, brand_key, slug, pin_data)
 
 
 def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_client):

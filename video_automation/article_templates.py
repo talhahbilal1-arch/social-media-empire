@@ -8,6 +8,8 @@ Three mobile-first templates optimized for Pinterest traffic and Google Search:
 All use Tailwind CSS (CDN), Schema.org JSON-LD (Article + Product + FAQPage),
 expert reviewer bios, geo-SEO, product cards, comparison tables,
 and mobile-first sticky CTAs.
+
+V3 Template System: Structured article data rendering with 22-section layout.
 """
 
 import json
@@ -21,8 +23,8 @@ TEMPLATE_CONFIG = {
     'fitness': {
         'name': 'The Iron Standard',
         'tagline': 'Expert Verified',
-        'font_import': 'family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700',
-        'heading_font': 'Oswald',
+        'font_import': 'family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700',
+        'heading_font': 'Fraunces',
         'body_font': 'Inter',
         'colors': {
             'bg': '#0A0A0A', 'surface': '#111111', 'border': '#2A2A2A',
@@ -45,12 +47,12 @@ TEMPLATE_CONFIG = {
     'menopause': {
         'name': 'The Wellness Whisper',
         'tagline': 'Wellness Guide',
-        'font_import': 'family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700',
-        'heading_font': 'Lora',
+        'font_import': 'family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700',
+        'heading_font': 'Fraunces',
         'body_font': 'Inter',
         'colors': {
-            'bg': '#FDF5E6', 'surface': '#FFFFFF', 'border': '#D2B48C',
-            'accent': '#6B8E23', 'text': '#4A4A4A', 'muted': '#8B7355',
+            'bg': '#FDFBF7', 'surface': '#FFFFFF', 'border': '#D2C4A8',
+            'accent': '#3D6B4F', 'text': '#4A4A4A', 'muted': '#8B7355',
         },
         'expert': {
             'name': 'Editorial Team',
@@ -58,18 +60,18 @@ TEMPLATE_CONFIG = {
             'bio': ("Reviewed by our editorial team in consultation with certified "
                     "women's health practitioners and menopause specialists."),
             'initials': 'MP',
-            'bg': '#6B8E23',
+            'bg': '#3D6B4F',
             'text_color': '#FFFFFF',
         },
         'cta_text': "View Today's Amazon Deal",
-        'cta_bg': '#6B8E23',
+        'cta_bg': '#3D6B4F',
         'cta_text_color': '#FFFFFF',
     },
     'deals': {
         'name': 'The Aesthetic Edit',
         'tagline': 'Trending on Pinterest',
-        'font_import': 'family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700',
-        'heading_font': 'Playfair Display',
+        'font_import': 'family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700',
+        'heading_font': 'Fraunces',
         'body_font': 'Inter',
         'colors': {
             'bg': '#FAF9F6', 'surface': '#FFFFFF', 'border': '#E5E5E5',
@@ -92,9 +94,9 @@ TEMPLATE_CONFIG = {
 
 # Brand-specific lead magnet overrides for signup forms
 LEAD_MAGNET_OVERRIDES = {
-    'fitness': 'Free: Home Gym Setup Checklist (PDF)',
-    'deals': 'Free: Weekly Top 10 Deals Newsletter',
-    'menopause': 'Free: Menopause Symptom Tracker (Printable PDF)',
+    'fitness': 'Free: 7-Day Fat Burn Kickstart Plan (PDF)',
+    'deals': "Free: This Week's Top 10 Deals (Newsletter)",
+    'menopause': 'Free: Night Sweat Symptom Tracker (Printable PDF)',
 }
 
 # Brand affiliate tags
@@ -376,7 +378,15 @@ def render_article_page(brand_key, title, meta_desc, body_html, hero_url,
     have inline product cards injected and inline formatting applied. The
     <!-- email-signup-placeholder --> will be replaced with a brand-styled form.
     <!--PRODUCT_CARD: ...--> comments will be replaced with visual product cards.
+
+    Routes to v3 template if structured article data is available in pin_data.
     """
+    # Route to v3 template if structured data available
+    article_data = (pin_data or {}).get('_article_data')
+    if article_data:
+        return _render_v3_page(brand_key, article_data, site_config, slug)
+
+    # Fallback: use v2 markdown-based templates
     tpl = TEMPLATE_CONFIG.get(brand_key, TEMPLATE_CONFIG['deals'])
 
     # Parse and render PRODUCT_CARD comments into styled HTML cards
@@ -813,4 +823,748 @@ def _render_aesthetic_edit(tpl, title, meta_desc, body_html, hero_url, site_conf
         + sticky + '\n'
         + GEO_SCRIPT + '\n'
         + '</body>\n</html>'
+    )
+
+
+# ── V3 Template System ──────────────────────────────────────────────────────
+
+def _render_v3_page(brand_key, article_data, site_config, slug):
+    """Render complete v3 article page with 22 sections.
+
+    article_data structure:
+    {
+        'title': str,
+        'meta_description': str,
+        'read_time': str,
+        'brands_tested': int,
+        'reviews_analyzed': str,
+        'verdict': str,
+        'before': {'emoji': str, 'title': str, 'text': str},
+        'after': {'emoji': str, 'title': str, 'text': str},
+        'urgency_text': str,
+        'hero_url': str,
+        'video_url': str or None,
+        'category': str,
+        'products': [...],
+        'comparison_extra_rows': [...],
+        'methodology': [str],
+        'faq': [{'q': str, 'a': str}],
+        'related_products': [...],
+    }
+    """
+    tpl = TEMPLATE_CONFIG.get(brand_key, TEMPLATE_CONFIG['deals'])
+    c = tpl['colors']
+
+    title = article_data.get('title', 'Untitled')
+    meta_desc = article_data.get('meta_description', '')
+    article_url = site_config['base_url'] + '/articles/' + slug + '.html'
+
+    # Build schemas
+    article_schema = _build_article_schema(
+        title, meta_desc, slug, site_config, tpl['expert']['name'])
+
+    products = article_data.get('products', [])
+    first_product_amazon = products[0].get('amazon_url', '') if products else ''
+    product_schema_tag = ''
+    if first_product_amazon:
+        product_schema_tag = (
+            '<script type="application/ld+json">'
+            + _build_product_schema(title, first_product_amazon)
+            + '</script>'
+        )
+
+    # Build FAQ schema
+    faq_pairs = [(q['q'], q['a']) for q in article_data.get('faq', [])]
+    faq_schema_tag = _build_faq_schema(faq_pairs)
+
+    # Build styles
+    v3_css = _build_v3_css(tpl)
+
+    # Build head
+    head = _head(tpl, title, meta_desc, article_url, site_config,
+                 article_schema, product_schema_tag, v3_css, faq_schema_tag)
+
+    # Build all 22 sections
+    sections = []
+    sections.append(_v3_sticky_nav(tpl, site_config, article_url))
+    sections.append(_v3_breadcrumbs(tpl, article_data.get('category', '')))
+    sections.append(_v3_social_proof(tpl, article_data.get('reviews_analyzed', '0')))
+    sections.append(_v3_hero(tpl, article_data, slug))
+    sections.append(_v3_before_after(tpl, article_data))
+    sections.append(_v3_quick_verdict(tpl, article_data.get('verdict', '')))
+    sections.append(_v3_urgency_banner(tpl, article_data.get('urgency_text', '')))
+    sections.append(_v3_quick_picks(tpl, products))
+    sections.append(_v3_trust_bar(tpl))
+    sections.append(_v3_as_seen_in(tpl))
+    sections.append(_v3_email_signup(site_config, tpl, brand_key))
+    sections.extend(_v3_product_sections(tpl, products))
+    sections.append(_v3_comparison_table(tpl, products, article_data.get('comparison_extra_rows', [])))
+    sections.append(_v3_how_we_chose(tpl, article_data.get('methodology', [])))
+    sections.append(_v3_price_drop_alert(site_config, tpl, brand_key))
+    if brand_key == 'menopause':
+        sections.append(ETSY_CTA_HTML)
+    sections.append(_v3_faq_section(tpl, article_data.get('faq', [])))
+    sections.append(_v3_related_products(tpl, article_data.get('related_products', [])))
+    sections.append(_v3_share_bar(tpl, article_url, title))
+    sections.append(_v3_expert_bio(tpl))
+    sections.append(_v3_final_cta_box(tpl, products))
+    sections.append(_v3_footer(tpl, site_config))
+
+    body_html = '\n'.join(sections)
+
+    # Mobile sticky CTA
+    mobile_sticky = ''
+    if products:
+        top_pick = products[0]
+        mobile_sticky = _v3_mobile_sticky_cta(tpl, top_pick)
+
+    return (
+        head
+        + f'<body style="background:{c["bg"]};color:{c["text"]}">\n'
+        + body_html
+        + mobile_sticky
+        + '\n' + GEO_SCRIPT + '\n'
+        + '</body>\n</html>'
+    )
+
+
+def _build_v3_css(tpl):
+    """Build CSS for v3 template."""
+    c = tpl['colors']
+    return (
+        f'* {{ box-sizing: border-box; }}'
+        f'body {{ font-family: {tpl["body_font"]}, sans-serif; margin: 0; padding: 0; }}'
+        f'h1, h2, h3, h4, h5, h6 {{ font-family: {tpl["heading_font"]}, sans-serif; }}'
+        f'a {{ color: {c["accent"]}; text-decoration: none; }}'
+        f'a:hover {{ opacity: 0.85; }}'
+        f'.container {{ max-width: 900px; margin: 0 auto; padding: 0 16px; }}'
+        f'@media (max-width: 768px) {{ .hide-mobile {{ display: none; }} }}'
+        f'.sticky-nav {{ position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }}'
+        f'.product-card {{ border: 1px solid {c["border"]}; border-radius: 12px; padding: 20px; margin: 20px 0; }}'
+        f'button, .btn {{ cursor: pointer; padding: 12px 24px; border: none; border-radius: 8px; }}'
+        f'.btn-primary {{ background: {c["accent"]}; color: {tpl["cta_text_color"]}; font-weight: 700; }}'
+        f'.star {{ color: #FFD700; }}'
+    )
+
+
+def _v3_sticky_nav(tpl, site_config, article_url):
+    """Section 1: Sticky navigation bar."""
+    c = tpl['colors']
+    return (
+        f'<nav class="sticky-nav" style="background: {c["bg"]}; border-bottom: 1px solid {c["border"]}; '
+        f'padding: 12px 16px;">'
+        f'<div class="container" style="display: flex; align-items: center; justify-content: space-between;">'
+        f'<div style="font-weight: 700; font-size: 0.85em; background: {c["accent"]}; '
+        f'color: {tpl["cta_text_color"]}; padding: 4px 12px; border-radius: 4px;">'
+        f'EXPERT TESTED</div>'
+        f'<a href="https://pinterest.com/pin/create/button/?url={_esc(article_url)}" '
+        f'target="_blank" style="font-size: 0.9em; color: {c["accent"]};">Pin</a>'
+        f'</div></nav>'
+    )
+
+
+def _v3_breadcrumbs(tpl, category):
+    """Section 2: Breadcrumb navigation."""
+    c = tpl['colors']
+    cat_name = _esc(category) if category else 'Products'
+    return (
+        f'<div style="background: {c["surface"]}; padding: 12px 16px; border-bottom: 1px solid {c["border"]};">'
+        f'<div class="container" style="font-size: 0.85em; color: {c["muted"]};">'
+        f'<a href="../index.html" style="color: {c["accent"]};">Home</a> / '
+        f'<span>{cat_name}</span></div></div>'
+    )
+
+
+def _v3_social_proof(tpl, reviews_analyzed):
+    """Section 3: Social proof banner."""
+    c = tpl['colors']
+    return (
+        f'<div style="background: {c["surface"]}; padding: 16px; margin: 0; text-align: center; '
+        f'border-bottom: 1px solid {c["border"]};">'
+        f'<p style="margin: 0; font-size: 0.9em; color: {c["text"]};">'
+        f'Trusted by {_esc(reviews_analyzed)} verified buyers</p></div>'
+    )
+
+
+def _v3_hero(tpl, article_data, slug):
+    """Section 4: Hero section with image or video."""
+    c = tpl['colors']
+    title = article_data.get('title', 'Untitled')
+    hero_url = article_data.get('hero_url', '')
+    video_url = article_data.get('video_url')
+    read_time = article_data.get('read_time', '5 min')
+    brands_tested = article_data.get('brands_tested', 0)
+    reviews_analyzed = article_data.get('reviews_analyzed', '0')
+
+    now = datetime.now(timezone.utc)
+    month_year = now.strftime('%B %Y')
+
+    media = ''
+    if video_url:
+        media = (
+            f'<video autoplay muted loop playsinline poster="{_esc(hero_url)}" '
+            f'style="width: 100%; height: 500px; object-fit: cover;">'
+            f'<source src="{_esc(video_url)}" type="video/mp4"></video>'
+        )
+    elif hero_url:
+        media = f'<img src="{_esc(hero_url)}" alt="{_esc(title)}" style="width: 100%; height: 500px; object-fit: cover;">'
+
+    return (
+        f'<div style="position: relative; background: {c["bg"]}; color: {c["text"]}; '
+        f'padding: 60px 16px; text-align: center;">'
+        f'{media}'
+        f'<div style="position: absolute; bottom: 0; left: 0; right: 0; '
+        f'background: linear-gradient(to top, {c["bg"]}, transparent); padding: 40px 16px;">'
+        f'<div class="container">'
+        f'<div style="font-size: 0.85em; color: {c["muted"]}; margin-bottom: 12px;">'
+        f'UPDATED {month_year.upper()} &bull; {brands_tested} BRANDS TESTED</div>'
+        f'<h1 style="margin: 0 0 12px; font-size: 2.5em; line-height: 1.2;">{_esc(title)}</h1>'
+        f'<p style="margin: 0; font-size: 0.9em; color: {c["muted"]};">'
+        f'By {tpl["expert"]["name"]} &bull; {read_time} read &bull; Based on {_esc(reviews_analyzed)} reviews</p>'
+        f'</div></div></div>'
+    )
+
+
+def _v3_before_after(tpl, article_data):
+    """Section 5: Before/After comparison cards."""
+    c = tpl['colors']
+    before = article_data.get('before', {})
+    after = article_data.get('after', {})
+
+    return (
+        f'<div class="container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; '
+        f'padding: 40px 16px;">'
+        f'<div style="background: rgba(255, 0, 0, 0.05); border: 1px solid #ffcccc; border-radius: 12px; '
+        f'padding: 24px; text-align: center;">'
+        f'<div style="font-size: 2em; margin-bottom: 8px;">{before.get("emoji", "")}</div>'
+        f'<h3 style="margin: 0 0 8px; color: {c["text"]};">{_esc(before.get("title", ""))}</h3>'
+        f'<p style="margin: 0; color: {c["muted"]};">{_esc(before.get("text", ""))}</p>'
+        f'</div>'
+        f'<div style="background: rgba(0, 255, 0, 0.05); border: 1px solid #ccffcc; border-radius: 12px; '
+        f'padding: 24px; text-align: center;">'
+        f'<div style="font-size: 2em; margin-bottom: 8px;">{after.get("emoji", "")}</div>'
+        f'<h3 style="margin: 0 0 8px; color: {c["text"]};">{_esc(after.get("title", ""))}</h3>'
+        f'<p style="margin: 0; color: {c["muted"]};">{_esc(after.get("text", ""))}</p>'
+        f'</div>'
+        f'</div>'
+    )
+
+
+def _v3_quick_verdict(tpl, verdict):
+    """Section 6: Quick verdict box."""
+    c = tpl['colors']
+    first_sent = verdict.split('.')[0] + '.' if '.' in verdict else verdict
+    rest = verdict[len(first_sent):].strip() if len(verdict) > len(first_sent) else ''
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<div style="background: {c["surface"]}; border-left: 4px solid {c["accent"]}; '
+        f'padding: 24px; border-radius: 8px;">'
+        f'<h2 style="margin: 0 0 12px; display: flex; align-items: center; gap: 8px;">'
+        f'✓ Quick Verdict</h2>'
+        f'<p style="margin: 0; line-height: 1.6;">'
+        f'<strong>{first_sent}</strong> {_esc(rest)}</p>'
+        f'</div></div>'
+    )
+
+
+def _v3_urgency_banner(tpl, urgency_text):
+    """Section 7: Urgency banner."""
+    if not urgency_text:
+        return ''
+    return (
+        f'<div style="background: linear-gradient(135deg, #ff6b6b, #ff8787); color: white; '
+        f'padding: 24px 16px; text-align: center; margin: 20px 0;">'
+        f'<div class="container">'
+        f'<p style="margin: 0; font-weight: 700;">DEAL: {_esc(urgency_text)}</p>'
+        f'</div></div>'
+    )
+
+
+def _v3_quick_picks(tpl, products):
+    """Section 8: Quick picks grid."""
+    if not products:
+        return ''
+    c = tpl['colors']
+    picks_html = ''
+    for product in products[:3]:
+        hero_img = product.get('hero_image', '')
+        name = product.get('name', '')
+        badge = product.get('badge', '')
+        rating = product.get('rating', 0)
+        amazon_url = product.get('amazon_url', '')
+
+        stars = '⭐' * int(rating)
+
+        picks_html += (
+            f'<div style="background: {c["surface"]}; border: 1px solid {c["border"]}; '
+            f'border-radius: 12px; padding: 16px; text-align: center;">'
+            f'<img src="{_esc(hero_img)}" alt="{_esc(name)}" style="width: 100%; '
+            f'height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 12px;" '
+            f'loading="lazy">'
+            f'<span style="background: {c["accent"]}; color: {tpl["cta_text_color"]}; '
+            f'padding: 4px 8px; font-size: 0.75em; border-radius: 4px; display: inline-block; '
+            f'margin-bottom: 8px;">{_esc(badge)}</span>'
+            f'<h3 style="margin: 8px 0; font-size: 0.95em;">{_esc(name)}</h3>'
+            f'<p style="margin: 0 0 12px; font-size: 0.85em;">{stars} {rating}</p>'
+            f'<a href="{_esc(amazon_url)}" target="_blank" rel="nofollow sponsored noopener" '
+            f'class="btn btn-primary">View →</a>'
+            f'</div>'
+        )
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<h2 style="text-align: center; margin: 0 0 24px;">Top Picks</h2>'
+        f'<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); '
+        f'gap: 20px;">{picks_html}</div></div>'
+    )
+
+
+def _v3_trust_bar(tpl):
+    """Section 9: Trust badges."""
+    c = tpl['colors']
+    return (
+        f'<div class="container" style="padding: 32px 16px; text-align: center;">'
+        f'<div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;">'
+        f'<div style="font-size: 0.85em;"><span style="color: {c["accent"]}; font-weight: 700;">✓</span> '
+        f'Verified Reviews</div>'
+        f'<div style="font-size: 0.85em;"><span style="color: {c["accent"]}; font-weight: 700;">✓</span> '
+        f'30-Day Returns</div>'
+        f'<div style="font-size: 0.85em;"><span style="color: {c["accent"]}; font-weight: 700;">✓</span> '
+        f'Free Prime Shipping</div>'
+        f'</div></div>'
+    )
+
+
+def _v3_as_seen_in(tpl):
+    """Section 10: 'As Seen In' logos."""
+    c = tpl['colors']
+    return (
+        f'<div class="container" style="padding: 32px 16px; text-align: center; '
+        f'border-top: 1px solid {c["border"]}; border-bottom: 1px solid {c["border"]};">'
+        f'<p style="margin: 0 0 16px; color: {c["muted"]}; font-size: 0.85em;">Referenced by</p>'
+        f'<div style="display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; '
+        f'color: {c["muted"]}; font-size: 0.9em;">'
+        f'Sleep Foundation &bull; Health.com &bull; Pinterest Trending'
+        f'</div></div>'
+    )
+
+
+def _v3_email_signup(site_config, tpl, brand_key):
+    """Section 11: Email signup form."""
+    c = tpl['colors']
+    lead_magnet = LEAD_MAGNET_OVERRIDES.get(brand_key, 'Free weekly tips')
+    form_id = site_config.get('signup_form_id', '')
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<div style="background: {c["surface"]}; border: 1px solid {c["border"]}; '
+        f'border-radius: 12px; padding: 32px; text-align: center;">'
+        f'<h3 style="margin: 0 0 8px;">{_esc(lead_magnet)}</h3>'
+        f'<p style="margin: 0 0 16px; color: {c["muted"]};">Join our community for exclusive tips.</p>'
+        f'<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>'
+        f'<form action="https://app.kit.com/forms/{form_id}/subscriptions" method="post" '
+        f'data-sv-form="{form_id}" style="display: flex; gap: 8px; justify-content: center; '
+        f'flex-wrap: wrap;">'
+        f'<input type="email" name="email_address" placeholder="Enter your email" required '
+        f'style="padding: 12px 16px; border: 1px solid {c["border"]}; border-radius: 8px; '
+        f'min-width: 250px;">'
+        f'<button type="submit" class="btn btn-primary">Subscribe</button>'
+        f'</form></div></div>'
+    )
+
+
+def _v3_product_sections(tpl, products):
+    """Sections 12: Individual product detail sections."""
+    sections = []
+    c = tpl['colors']
+
+    for product in products:
+        name = product.get('name', '')
+        badge = product.get('badge', '')
+        hero_img = product.get('hero_image', '')
+        thumb_images = product.get('thumb_images', [])
+        rating = product.get('rating', 0)
+        review_count = product.get('review_count', '0')
+        price_low = product.get('price_low', 0)
+        price_high = product.get('price_high', 0)
+        subscribe_save = product.get('subscribe_save', '')
+        amazon_url = product.get('amazon_url', '')
+        benefit_icons = product.get('benefit_icons', [])
+        benefit_img = product.get('benefit_image', '')
+        benefit_headline = product.get('benefit_headline', '')
+        benefit_desc = product.get('benefit_description', '')
+        pros = product.get('pros', [])
+        cons = product.get('cons', [])
+        testimonials = product.get('testimonials', [])
+
+        stars = '⭐' * int(rating)
+
+        # Hero image
+        section = f'<div class="container" style="padding: 40px 16px;">'
+        section += f'<h2 style="margin: 0 0 24px;">{_esc(name)} — Best for {_esc(badge)}</h2>'
+
+        # Full-width hero
+        section += (
+            f'<div style="position: relative; margin-bottom: 24px;">'
+            f'<img src="{_esc(hero_img)}" alt="{_esc(name)}" '
+            f'style="width: 100%; height: 400px; object-fit: cover; border-radius: 12px;" '
+            f'loading="lazy">'
+            f'<span style="position: absolute; top: 16px; left: 16px; background: {c["accent"]}; '
+            f'color: {tpl["cta_text_color"]}; padding: 8px 16px; border-radius: 6px; '
+            f'font-weight: 700; font-size: 0.85em;">{_esc(badge)}</span>'
+            f'</div>'
+        )
+
+        # Thumbnail strip
+        if thumb_images:
+            thumb_html = ''
+            for thumb in thumb_images[:4]:
+                thumb_html += f'<img src="{_esc(thumb)}" alt="detail" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer;" loading="lazy">'
+            section += f'<div style="display: flex; gap: 8px; margin-bottom: 24px;">{thumb_html}</div>'
+
+        # Product info
+        section += (
+            f'<h3 style="margin: 0 0 8px;">{_esc(name)}</h3>'
+            f'<p style="margin: 0 0 8px; color: {c["muted"]};">{stars} {rating} ({_esc(review_count)} reviews)</p>'
+            f'<p style="margin: 0 0 16px; font-size: 1.2em; font-weight: 700;">'
+            f'${price_low}–${price_high}</p>'
+        )
+
+        if subscribe_save:
+            section += f'<p style="margin: 0 0 16px; color: {c["accent"]}; font-weight: 600;">Subscribe & Save: {_esc(subscribe_save)}</p>'
+
+        # Benefit icons
+        if benefit_icons:
+            benefit_html = ''
+            for icon in benefit_icons[:3]:
+                benefit_html += f'<div style="text-align: center;"><div style="font-size: 2em; margin-bottom: 4px;">{icon.get("emoji", "")}</div><p style="margin: 0; font-size: 0.85em;">{_esc(icon.get("text", ""))}</p></div>'
+            section += f'<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">{benefit_html}</div>'
+
+        # Benefit section
+        if benefit_img:
+            section += (
+                f'<div style="position: relative; margin-bottom: 24px;">'
+                f'<img src="{_esc(benefit_img)}" alt="benefit" style="width: 100%; height: 300px; object-fit: cover; border-radius: 12px; opacity: 0.7;" loading="lazy">'
+                f'<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">'
+                f'<h3 style="margin: 0; font-size: 1.5em;">{_esc(benefit_headline)}</h3>'
+                f'<p style="margin: 12px 0 0;">{_esc(benefit_desc)}</p>'
+                f'</div></div>'
+            )
+
+        # Pros/Cons
+        if pros or cons:
+            section += (
+                f'<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">'
+                f'<div>'
+                f'<h4 style="margin: 0 0 12px; color: {c["accent"]};">Pros</h4>'
+            )
+            for pro in pros:
+                section += f'<p style="margin: 0 0 8px;">✓ {_esc(pro)}</p>'
+            section += f'</div><div><h4 style="margin: 0 0 12px; color: #d32f2f;">Cons</h4>'
+            for con in cons:
+                section += f'<p style="margin: 0 0 8px;">✗ {_esc(con)}</p>'
+            section += '</div></div>'
+
+        # Testimonials
+        if testimonials:
+            for testimonial in testimonials:
+                section += (
+                    f'<div style="background: {c["surface"]}; border: 1px solid {c["border"]}; '
+                    f'border-radius: 12px; padding: 20px; margin-bottom: 16px;">'
+                    f'<div style="display: flex; gap: 12px; margin-bottom: 12px;">'
+                    f'<img src="{_esc(testimonial.get("photo", ""))}" alt="reviewer" '
+                    f'style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" '
+                    f'loading="lazy">'
+                    f'<div>'
+                    f'<p style="margin: 0; font-weight: 700;">{_esc(testimonial.get("name", ""))}</p>'
+                    f'<p style="margin: 0; font-size: 0.85em; color: {c["muted"]};">Verified Amazon Purchase</p>'
+                    f'</div></div>'
+                    f'<p style="margin: 0 0 8px;">⭐⭐⭐⭐⭐</p>'
+                    f'<p style="margin: 0; color: {c["muted"]};">"{_esc(testimonial.get("quote", ""))}"</p>'
+                    f'</div>'
+                )
+
+        # Subscribe & Save callout
+        if subscribe_save:
+            section += (
+                f'<div style="background: {c["accent"]}; color: {tpl["cta_text_color"]}; '
+                f'padding: 16px; border-radius: 8px; margin-bottom: 24px; text-align: center;">'
+                f'<p style="margin: 0; font-weight: 700;">Subscribe & Save: {_esc(subscribe_save)}</p>'
+                f'</div>'
+            )
+
+        # CTA button
+        section += (
+            f'<a href="{_esc(amazon_url)}" target="_blank" rel="nofollow sponsored noopener" '
+            f'class="btn btn-primary" style="display: block; text-align: center; width: 100%; '
+            f'font-size: 1.05em; margin-bottom: 12px;">Check Today\'s Price on Amazon →</a>'
+            f'<p style="margin: 0; text-align: center; font-size: 0.85em; color: {c["muted"]};">'
+            f'Free returns • Prime eligible • 30-day guarantee</p>'
+        )
+
+        # Payment logos
+        section += (
+            f'<p style="margin: 24px 0 0; text-align: center; font-size: 0.85em; color: {c["muted"]};">'
+            f'Visa • Mastercard • PayPal • Amazon Pay • Apple Pay</p>'
+        )
+
+        section += '</div>'
+        sections.append(section)
+
+    return sections
+
+
+def _v3_comparison_table(tpl, products, extra_rows):
+    """Section 13: Comparison table."""
+    if not products:
+        return ''
+
+    c = tpl['colors']
+
+    table = f'<div class="container" style="padding: 40px 16px;"><h2>Product Comparison</h2>'
+    table += (
+        f'<table style="width: 100%; border-collapse: collapse; margin: 20px 0;">'
+        f'<thead><tr style="background: {c["accent"]}; color: {tpl["cta_text_color"]};">'
+        f'<th style="padding: 12px; text-align: left;">Product</th>'
+        f'<th style="padding: 12px;">Price Range</th>'
+        f'<th style="padding: 12px;">Rating</th>'
+        f'<th style="padding: 12px;">Reviews</th>'
+        f'<th style="padding: 12px;">Subscribe & Save</th>'
+        f'<th style="padding: 12px;">Buy?</th>'
+        f'</tr></thead><tbody>'
+    )
+
+    for i, product in enumerate(products):
+        bg = c["surface"] if i % 2 == 0 else 'transparent'
+        table += (
+            f'<tr style="background: {bg}; border-bottom: 1px solid {c["border"]};">'
+            f'<td style="padding: 12px;"><strong>{_esc(product.get("name", ""))}</strong> '
+            f'<span style="background: {c["accent"]}; color: {tpl["cta_text_color"]}; padding: 2px 6px; '
+            f'font-size: 0.75em; border-radius: 3px;">{_esc(product.get("badge", ""))}</span></td>'
+            f'<td style="padding: 12px; text-align: center;">${product.get("price_low", 0)}–${product.get("price_high", 0)}</td>'
+            f'<td style="padding: 12px; text-align: center;">⭐ {product.get("rating", 0)}</td>'
+            f'<td style="padding: 12px; text-align: center;">{_esc(product.get("review_count", "0"))}</td>'
+            f'<td style="padding: 12px; text-align: center;">{_esc(product.get("subscribe_save", "—"))}</td>'
+            f'<td style="padding: 12px; text-align: center;">'
+            f'<a href="{_esc(product.get("amazon_url", ""))}" target="_blank" rel="nofollow sponsored noopener" '
+            f'class="btn btn-primary" style="font-size: 0.85em; padding: 6px 12px;">View</a></td>'
+            f'</tr>'
+        )
+
+    for extra_row in extra_rows:
+        label = extra_row.get('label', '')
+        values = extra_row.get('values', [])
+        table += f'<tr style="border-bottom: 1px solid {c["border"]};">'
+        table += f'<td style="padding: 12px;"><strong>{_esc(label)}</strong></td>'
+        for val in values:
+            table += f'<td style="padding: 12px; text-align: center;">{_esc(val)}</td>'
+        table += '</tr>'
+
+    table += '</tbody></table></div>'
+    return table
+
+
+def _v3_how_we_chose(tpl, methodology):
+    """Section 14: Methodology section."""
+    if not methodology:
+        return ''
+
+    c = tpl['colors']
+    method_html = ''
+    for i, item in enumerate(methodology[:4], 1):
+        method_html += (
+            f'<div style="text-align: center;">'
+            f'<div style="font-size: 2em; font-weight: 700; color: {c["accent"]}; margin-bottom: 8px;">'
+            f'{i}</div>'
+            f'<p style="margin: 0;">{_esc(item)}</p>'
+            f'</div>'
+        )
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<h2 style="text-align: center; margin-bottom: 32px;">How We Chose These Products</h2>'
+        f'<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">'
+        f'{method_html}</div></div>'
+    )
+
+
+def _v3_price_drop_alert(site_config, tpl, brand_key):
+    """Section 15: Price drop alert signup."""
+    c = tpl['colors']
+    form_id = site_config.get('signup_form_id', '')
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<div style="background: {c["surface"]}; border: 1px solid {c["border"]}; '
+        f'border-radius: 12px; padding: 24px; text-align: center;">'
+        f'<h3 style="margin: 0 0 12px;">Price Drop Alert</h3>'
+        f'<p style="margin: 0 0 16px; color: {c["muted"]};">Get notified if the price drops on these products.</p>'
+        f'<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>'
+        f'<form action="https://app.kit.com/forms/{form_id}/subscriptions" method="post" '
+        f'data-sv-form="{form_id}" style="display: flex; gap: 8px; justify-content: center;">'
+        f'<input type="email" name="email_address" placeholder="Enter your email" required '
+        f'style="padding: 12px 16px; border: 1px solid {c["border"]}; border-radius: 8px; min-width: 250px;">'
+        f'<button type="submit" class="btn btn-primary">Notify Me</button>'
+        f'</form></div></div>'
+    )
+
+
+def _v3_faq_section(tpl, faq_items):
+    """Section 17: FAQ section with expandable items."""
+    if not faq_items:
+        return ''
+
+    c = tpl['colors']
+    faq_html = ''
+    for item in faq_items:
+        q = item.get('q', '')
+        a = item.get('a', '')
+        faq_html += (
+            f'<details style="margin-bottom: 12px; border: 1px solid {c["border"]}; '
+            f'border-radius: 8px; padding: 16px;">'
+            f'<summary style="cursor: pointer; font-weight: 700; color: {c["text"]};">{_esc(q)}</summary>'
+            f'<p style="margin: 12px 0 0; color: {c["muted"]};">{_esc(a)}</p>'
+            f'</details>'
+        )
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<h2 style="margin-bottom: 24px;">Frequently Asked Questions</h2>'
+        f'{faq_html}</div>'
+    )
+
+
+def _v3_related_products(tpl, related):
+    """Section 18: Related products."""
+    if not related:
+        return ''
+
+    c = tpl['colors']
+    related_html = ''
+    for prod in related[:3]:
+        related_html += (
+            f'<div style="background: {c["surface"]}; border: 1px solid {c["border"]}; '
+            f'border-radius: 12px; padding: 16px; text-align: center;">'
+            f'<img src="{_esc(prod.get("image", ""))}" alt="{_esc(prod.get("name", ""))}" '
+            f'style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 12px;" '
+            f'loading="lazy">'
+            f'<h4 style="margin: 0 0 12px;">{_esc(prod.get("name", ""))}</h4>'
+            f'<a href="{_esc(prod.get("amazon_url", ""))}" target="_blank" rel="nofollow sponsored noopener" '
+            f'class="btn btn-primary">View on Amazon →</a>'
+            f'</div>'
+        )
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<h2 style="margin-bottom: 24px;">Also Bought</h2>'
+        f'<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">'
+        f'{related_html}</div></div>'
+    )
+
+
+def _v3_share_bar(tpl, article_url, title):
+    """Section 19: Social share buttons."""
+    c = tpl['colors']
+    escaped_url = _esc(article_url)
+    escaped_title = _esc(title)
+
+    return (
+        f'<div class="container" style="padding: 32px 16px; text-align: center; '
+        f'border-top: 1px solid {c["border"]}; border-bottom: 1px solid {c["border"]};">'
+        f'<p style="margin: 0 0 16px; color: {c["muted"]};">Share this article</p>'
+        f'<div style="display: flex; justify-content: center; gap: 12px;">'
+        f'<a href="https://pinterest.com/pin/create/button/?url={escaped_url}&description={escaped_title}" '
+        f'target="_blank" style="padding: 8px 16px; background: {c["accent"]}; color: {tpl["cta_text_color"]}; '
+        f'border-radius: 6px; font-size: 0.85em;">Pinterest</a>'
+        f'<a href="https://www.facebook.com/sharer/sharer.php?u={escaped_url}" '
+        f'target="_blank" style="padding: 8px 16px; background: {c["accent"]}; color: {tpl["cta_text_color"]}; '
+        f'border-radius: 6px; font-size: 0.85em;">Facebook</a>'
+        f'<a href="https://api.whatsapp.com/send?text={escaped_title}%20{escaped_url}" '
+        f'target="_blank" style="padding: 8px 16px; background: {c["accent"]}; color: {tpl["cta_text_color"]}; '
+        f'border-radius: 6px; font-size: 0.85em;">WhatsApp</a>'
+        f'</div></div>'
+    )
+
+
+def _v3_expert_bio(tpl):
+    """Section 20: Expert bio card."""
+    e = tpl['expert']
+    c = tpl['colors']
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<div style="background: {c["surface"]}; border: 1px solid {c["border"]}; '
+        f'border-radius: 12px; padding: 24px; text-align: center;">'
+        f'<div style="width: 60px; height: 60px; border-radius: 50%; background: {e["bg"]}; '
+        f'color: {e["text_color"]}; display: flex; align-items: center; justify-content: center; '
+        f'font-weight: 700; font-size: 1.3em; margin: 0 auto 12px;">{e["initials"]}</div>'
+        f'<h3 style="margin: 0;">{e["name"]}</h3>'
+        f'<p style="margin: 4px 0 12px; color: {c["muted"]}; font-size: 0.85em;">{e["credentials"]}</p>'
+        f'<p style="margin: 0; color: {c["muted"]}; line-height: 1.6;">{e["bio"]}</p>'
+        f'</div></div>'
+    )
+
+
+def _v3_final_cta_box(tpl, products):
+    """Section 21: Final CTA box."""
+    c = tpl['colors']
+
+    if not products:
+        return ''
+
+    top = products[0]
+    name = top.get('name', '')
+    amazon_url = top.get('amazon_url', '')
+
+    return (
+        f'<div class="container" style="padding: 40px 16px;">'
+        f'<div style="background: {c["accent"]}; color: {tpl["cta_text_color"]}; '
+        f'border-radius: 12px; padding: 32px; text-align: center;">'
+        f'<h2 style="margin: 0 0 12px; color: {tpl["cta_text_color"]};">{_esc(name)}</h2>'
+        f'<a href="{_esc(amazon_url)}" target="_blank" rel="nofollow sponsored noopener" '
+        f'class="btn" style="background: {tpl["cta_text_color"]}; color: {c["accent"]}; '
+        f'display: inline-block; margin-bottom: 12px;">Check Today\'s Price on Amazon →</a>'
+        f'<p style="margin: 0; font-size: 0.85em;">Visa • Mastercard • PayPal • Amazon Pay • Apple Pay</p>'
+        f'</div></div>'
+    )
+
+
+def _v3_footer(tpl, site_config):
+    """Section 22: Footer."""
+    c = tpl['colors']
+    year = datetime.now(timezone.utc).year
+
+    return (
+        f'<footer style="background: {c["bg"]}; border-top: 1px solid {c["border"]}; '
+        f'padding: 40px 16px; margin-top: 60px;">'
+        f'<div class="container">'
+        f'<p style="margin: 0 0 12px; font-size: 0.75em; color: {c["muted"]};">'
+        f'This article contains affiliate links. If you purchase through these links, we may earn a '
+        f'small commission at no extra cost to you. This helps us continue creating free content.</p>'
+        f'<p style="margin: 0; font-size: 0.75em; color: {c["muted"]};">'
+        f'© {year} {site_config["site_name"]}. All rights reserved.</p>'
+        f'</div></footer>'
+    )
+
+
+def _v3_mobile_sticky_cta(tpl, top_product):
+    """Mobile sticky CTA for v3 template."""
+    c = tpl['colors']
+    name = top_product.get('name', '')
+    price_low = top_product.get('price_low', 0)
+    price_high = top_product.get('price_high', 0)
+    amazon_url = top_product.get('amazon_url', '')
+
+    return (
+        f'<style>@media (max-width: 768px) {{ .v3-mobile-sticky {{ display: flex !important; }} }}</style>'
+        f'<div class="v3-mobile-sticky" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; '
+        f'background: {c["surface"]}; border-top: 2px solid {c["accent"]}; padding: 12px 16px; '
+        f'z-index: 1000; align-items: center; justify-content: space-between;">'
+        f'<div><p style="margin: 0; font-weight: 700; font-size: 0.9em;">{_esc(name)}</p>'
+        f'<p style="margin: 0; color: {c["muted"]}; font-size: 0.8em;">${price_low}–${price_high}</p></div>'
+        f'<a href="{_esc(amazon_url)}" target="_blank" rel="nofollow sponsored noopener" '
+        f'style="background: {c["accent"]}; color: {tpl["cta_text_color"]}; padding: 10px 16px; '
+        f'border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.9em;">Check Price →</a>'
+        f'</div>'
     )

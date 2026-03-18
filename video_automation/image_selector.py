@@ -205,3 +205,52 @@ def get_unique_pexels_image(search_query, brand, supabase_client):
         "photographer": chosen['photographer'],
         "alt": chosen.get('alt', '')
     }
+
+
+def get_pexels_portrait_photos(brand, count=3):
+    """Fetch portrait headshot photos from Pexels for testimonial sections.
+
+    Args:
+        brand: Brand key (fitness/deals/menopause)
+        count: Number of unique photos to return
+
+    Returns:
+        List of image URL strings (may be shorter than count if API fails)
+    """
+    queries = {
+        "fitness": "man portrait confident headshot",
+        "deals": "woman portrait friendly headshot lifestyle",
+        "menopause": "middle aged woman portrait warm headshot",
+    }
+    query = queries.get(brand, "person portrait headshot")
+
+    api_key = os.environ.get('PEXELS_API_KEY', '')
+    if not api_key:
+        logger.info("No PEXELS_API_KEY — skipping portrait photo fetch")
+        return []
+
+    try:
+        resp = requests.get(
+            "https://api.pexels.com/v1/search",
+            headers={"Authorization": api_key},
+            params={
+                "query": query,
+                "per_page": count * 3,
+                "orientation": "portrait",
+                "size": "small",
+            },
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            photos = resp.json().get('photos', [])
+            if photos:
+                selected = random.sample(photos, min(count, len(photos)))
+                urls = [p['src']['medium'] for p in selected]
+                logger.info(f"Fetched {len(urls)} portrait photos for brand '{brand}'")
+                return urls
+            logger.warning(f"No Pexels portrait results for '{query}'")
+        else:
+            logger.warning(f"Pexels portrait API returned {resp.status_code}")
+    except Exception as e:
+        logger.warning(f"Pexels portrait fetch failed: {e}")
+    return []
