@@ -93,7 +93,54 @@
     ],
     "logo": "/logos/chatgpt.svg",
     "founded": 2022,
-    "company": "OpenAI"
+    "company": "OpenAI",
+    "tldr": "ChatGPT is OpenAI's most popular AI assistant for writing, coding, and research. Free tier available; Plus plan $20/month. Best for general AI tasks, coding help, and creative writing.",
+    "use_cases": [
+      "Blog writing and content creation",
+      "Code debugging and development",
+      "Research and analysis",
+      "Email writing and communication",
+      "Social media content",
+      "Brainstorming and ideation",
+      "Learning and tutorials"
+    ],
+    "faqs": [
+      {
+        "question": "Is ChatGPT free?",
+        "answer": "Yes, ChatGPT has a free tier with GPT-4o mini and limited messages. The Plus plan is $20/month and includes GPT-4o, image generation, and priority access."
+      },
+      {
+        "question": "What's the difference between ChatGPT Plus and Team?",
+        "answer": "Plus ($20/month) is for individuals. Team ($25/user/month) adds workspace collaboration, admin controls, and higher usage limits for teams."
+      },
+      {
+        "question": "ChatGPT vs Claude vs Perplexity?",
+        "answer": "ChatGPT leads in image generation and Custom GPTs. Claude excels at long-form analysis. Perplexity specializes in real-time web search. Choose based on your primary use case."
+      },
+      {
+        "question": "Is ChatGPT worth it in 2026?",
+        "answer": "Yes. GPT-4o remains the most versatile AI model, and the ecosystem of Custom GPTs, file analysis, and real-time web search justify the $20/month investment for serious users."
+      },
+      {
+        "question": "What are ChatGPT's main limitations?",
+        "answer": "Knowledge cutoff (not real-time for free users), rate limits on free tier, occasional accuracy issues on complex reasoning, and no native voice cloning."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "claude",
+        "reason": "Stronger at long-form analysis, research papers, and code review"
+      },
+      {
+        "slug": "perplexity",
+        "reason": "Better for real-time web search and current events"
+      },
+      {
+        "slug": "writesonic",
+        "reason": "Specialized for marketing copywriting and SEO content"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "claude",
@@ -188,7 +235,54 @@
     ],
     "logo": "/logos/claude.svg",
     "founded": 2023,
-    "company": "Anthropic"
+    "company": "Anthropic",
+    "tldr": "Claude is Anthropic's AI assistant known for thoughtful long-form analysis and code review. Free web version available; API pricing at $0.003/1K input tokens. Best for detailed research, complex problem-solving, and coding projects.",
+    "use_cases": [
+      "Long-form research and analysis",
+      "Code review and debugging",
+      "Technical documentation",
+      "Complex problem-solving",
+      "Content analysis and summarization",
+      "SEO article writing",
+      "API integration and automation"
+    ],
+    "faqs": [
+      {
+        "question": "Is Claude free?",
+        "answer": "Yes, Claude.ai is free with usage limits. The API charges $0.003 per 1K input tokens and $0.015 per 1K output tokens, significantly cheaper than ChatGPT's API."
+      },
+      {
+        "question": "Claude vs ChatGPT for coding?",
+        "answer": "Claude excels at code review and understanding existing codebases. ChatGPT is faster for new code generation. For complex debugging, Claude often provides deeper analysis."
+      },
+      {
+        "question": "What can Claude do better than ChatGPT?",
+        "answer": "Claude handles longer context (100K tokens), does better factual analysis, provides more detailed explanations, and has stronger reasoning on complex multi-step problems."
+      },
+      {
+        "question": "Is Claude worth the API cost?",
+        "answer": "Yes, especially for developers. The lower token costs ($0.003 vs $0.005 for ChatGPT) and better long-form handling make Claude ideal for documentation and code analysis at scale."
+      },
+      {
+        "question": "What are Claude's limitations?",
+        "answer": "No image generation, no web browsing, slower response times than ChatGPT-4o mini, and no fine-tuning options available."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "chatgpt",
+        "reason": "More versatile with image generation and web browsing"
+      },
+      {
+        "slug": "cursor",
+        "reason": "AI-powered IDE built specifically for coding"
+      },
+      {
+        "slug": "github-copilot",
+        "reason": "IDE-native code completion and generation"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "jasper",
@@ -274,7 +368,54 @@
     ],
     "logo": "/logos/jasper.svg",
     "founded": 2021,
-    "company": "Jasper AI"
+    "company": "Jasper AI",
+    "tldr": "Jasper is an AI content platform for marketers. Starting at $39/month for 1 editor, includes templates for blog posts, ads, and social media. Best for marketing teams needing brand-consistent content at scale.",
+    "use_cases": [
+      "Blog post writing",
+      "Email marketing copy",
+      "Social media captions",
+      "PPC ad copy",
+      "Product descriptions",
+      "Landing page copy",
+      "Brand voice customization"
+    ],
+    "faqs": [
+      {
+        "question": "Is Jasper free?",
+        "answer": "No, Jasper doesn't offer a free plan. Pricing starts at $39/month for Starter (1 editor) with 50K words/month."
+      },
+      {
+        "question": "Jasper vs ChatGPT for marketing?",
+        "answer": "Jasper is purpose-built for marketing with brand templates, SEO optimization, and batch content creation. ChatGPT is more flexible but requires more prompt engineering."
+      },
+      {
+        "question": "Is Jasper worth it for solo creators?",
+        "answer": "For solo creators, ChatGPT ($20) or Writesonic ($20) offer better value. Jasper shines for teams who need brand consistency and workflow automation across multiple editors."
+      },
+      {
+        "question": "What makes Jasper different from Writesonic?",
+        "answer": "Jasper focuses on brand voice and long-form content with templates. Writesonic is more affordable ($20) and includes AI images, while Jasper specializes in marketing copy quality."
+      },
+      {
+        "question": "What's included in the Jasper Starter plan?",
+        "answer": "50K words/month, 1 editor, 50+ templates, brand voice customization, email support, and basic integrations."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "writesonic",
+        "reason": "More affordable ($20/month) with AI image generation included"
+      },
+      {
+        "slug": "copy-ai",
+        "reason": "Budget-friendly marketing copywriting tool"
+      },
+      {
+        "slug": "chatgpt",
+        "reason": "More flexible and cost-effective for most use cases"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "midjourney",
@@ -365,7 +506,54 @@
     ],
     "logo": "/logos/midjourney.svg",
     "founded": 2022,
-    "company": "Midjourney Inc."
+    "company": "Midjourney Inc.",
+    "tldr": "Midjourney is a premium AI image generator producing high-quality artwork and designs. $20/month for Fast hours, $96/month for Unlimited. Best for professional designers, marketing, and creative projects.",
+    "use_cases": [
+      "Product photography and mockups",
+      "Marketing campaign visuals",
+      "Book cover design",
+      "Social media graphics",
+      "Logo and brand design",
+      "Concept art and illustration",
+      "Pinterest pin creation"
+    ],
+    "faqs": [
+      {
+        "question": "Is Midjourney free?",
+        "answer": "No paid free tier, but you get 25 free trial generations. Plans start at $20/month for 200 Fast hours and 10K Relax hours."
+      },
+      {
+        "question": "Midjourney vs DALL-E 3 vs Runway?",
+        "answer": "Midjourney excels at artistic quality and detail. DALL-E 3 (in ChatGPT Plus) is better for realistic photos. Runway is best for video generation and animation."
+      },
+      {
+        "question": "What's the difference between Fast and Relax hours?",
+        "answer": "Fast hours generate images in seconds with priority queue; Relax hours queue behind others but are cheaper. Most users find Fast sufficient for their needs."
+      },
+      {
+        "question": "Is Midjourney worth it for creators?",
+        "answer": "Yes, especially for Pinterest pins, book covers, and marketing visuals. The $20/month cost for 200 Fast generations is justified if you're creating 5+ images weekly."
+      },
+      {
+        "question": "What are Midjourney's limitations?",
+        "answer": "Discord-only interface, no native editing tools, occasional inconsistency with human hands/text, and usage resets monthly rather than offering unlimited overages."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "runway",
+        "reason": "Better for video generation and motion graphics"
+      },
+      {
+        "slug": "stable-diffusion",
+        "reason": "Open-source alternative with more control"
+      },
+      {
+        "slug": "canva",
+        "reason": "Simpler design with built-in templates and less learning curve"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "cursor",
@@ -449,7 +637,54 @@
     ],
     "logo": "/logos/cursor.svg",
     "founded": 2023,
-    "company": "Anysphere"
+    "company": "Anysphere",
+    "tldr": "Cursor is an AI-powered code editor (VSCode fork) with real-time code completion and generation. $20/month for Pro. Best for developers seeking seamless AI coding assistance in their IDE.",
+    "use_cases": [
+      "Full-stack web development",
+      "Debugging complex code",
+      "Refactoring legacy code",
+      "Learning new frameworks",
+      "API integration",
+      "Test-driven development",
+      "Rapid prototyping"
+    ],
+    "faqs": [
+      {
+        "question": "Is Cursor free?",
+        "answer": "Cursor has a free tier with limited daily requests. Pro is $20/month with unlimited code completions and generation."
+      },
+      {
+        "question": "Cursor vs GitHub Copilot?",
+        "answer": "Cursor is a full IDE built on VSCode. Copilot is a VSCode extension. Cursor offers deeper AI integration and better context understanding, while Copilot is more lightweight."
+      },
+      {
+        "question": "Does Cursor work offline?",
+        "answer": "Most Cursor features require internet (API calls to Claude or GPT-4). Local models are experimental."
+      },
+      {
+        "question": "Is Cursor worth it over GitHub Copilot?",
+        "answer": "If you want a complete AI-first IDE experience with deeper reasoning, yes. Copilot is better if you prefer Copilot Enterprise's organization features."
+      },
+      {
+        "question": "What are Cursor's main limitations?",
+        "answer": "Requires internet connection, limited offline capabilities, occasional lag with very large files, and context window limitations on free tier."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "github-copilot",
+        "reason": "Lightweight extension for VSCode with enterprise features"
+      },
+      {
+        "slug": "claude",
+        "reason": "Flexible AI assistant for ad-hoc code help and review"
+      },
+      {
+        "slug": "chatgpt",
+        "reason": "General-purpose AI for coding questions and debugging"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "writesonic",
@@ -544,7 +779,54 @@
     ],
     "logo": "/logos/writesonic.svg",
     "founded": 2021,
-    "company": "Writesonic Inc."
+    "company": "Writesonic Inc.",
+    "tldr": "Writesonic is an AI writing tool for marketing teams. Starting at $20/month, includes AI images, 50+ templates, and SEO optimization. Best for email, social media, and blog content at scale.",
+    "use_cases": [
+      "Email marketing campaigns",
+      "Social media content calendars",
+      "Blog post writing",
+      "Ad copy optimization",
+      "Product descriptions",
+      "Press releases",
+      "Landing page headlines"
+    ],
+    "faqs": [
+      {
+        "question": "Is Writesonic free?",
+        "answer": "Yes, free tier with 2,500 words/month. Paid plans start at $20/month for unlimited words, AI images, and 50+ templates."
+      },
+      {
+        "question": "How does Writesonic compare to Jasper?",
+        "answer": "Writesonic is 50% cheaper ($20 vs $39+), includes AI images, and is better for budget-conscious creators. Jasper excels at brand voice consistency for larger teams."
+      },
+      {
+        "question": "Can Writesonic generate images?",
+        "answer": "Yes, Writesonic includes AI image generation (powered by Stable Diffusion) in paid plans. This is a major advantage over ChatGPT for marketing professionals."
+      },
+      {
+        "question": "Is Writesonic worth it in 2026?",
+        "answer": "Excellent value. $20/month for unlimited words + AI images + 50+ marketing templates beats most competitors at this price point."
+      },
+      {
+        "question": "What are Writesonic's main limitations?",
+        "answer": "Image quality is lower than Midjourney, less customizable brand voice than Jasper, and generated content sometimes needs manual editing."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "jasper",
+        "reason": "Better brand voice and content quality, but more expensive"
+      },
+      {
+        "slug": "copy-ai",
+        "reason": "Similar price point with focus on copywriting"
+      },
+      {
+        "slug": "chatgpt",
+        "reason": "More flexible and general-purpose"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "copy-ai",
@@ -638,7 +920,54 @@
     ],
     "logo": "/logos/copyai.svg",
     "founded": 2020,
-    "company": "Copy.ai"
+    "company": "Copy.ai",
+    "tldr": "Copy.ai is a focused AI copywriting tool for marketing messages. Affordable at $19/month, includes templates for ads, emails, and sales copy. Best for small businesses and freelance copywriters.",
+    "use_cases": [
+      "Email subject lines",
+      "Ad headlines and body copy",
+      "Sales page copy",
+      "Product taglines",
+      "Social media posts",
+      "Call-to-action optimization",
+      "Cold outreach messages"
+    ],
+    "faqs": [
+      {
+        "question": "Is Copy.ai free?",
+        "answer": "Yes, free tier with limited generations. Paid plans start at $19/month for unlimited words and all copywriting templates."
+      },
+      {
+        "question": "Copy.ai vs Writesonic?",
+        "answer": "Copy.ai is more affordable ($19 vs $20) and laser-focused on copywriting. Writesonic is broader with more templates and AI image generation."
+      },
+      {
+        "question": "Is Copy.ai good for beginners?",
+        "answer": "Yes, the interface is simple and templates are intuitive. Great entry point for solopreneurs and small business owners."
+      },
+      {
+        "question": "Can Copy.ai match ChatGPT?",
+        "answer": "For targeted copywriting, yes. For general writing tasks, ChatGPT is more flexible. Copy.ai's templates give structured output that works better for novices."
+      },
+      {
+        "question": "What's included in Copy.ai's plan?",
+        "answer": "$19/month includes unlimited words, 90+ copywriting templates, brand voice customization, and integration with Zapier."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "writesonic",
+        "reason": "More features (AI images) and broader template library"
+      },
+      {
+        "slug": "jasper",
+        "reason": "More powerful for brand voice and long-form content"
+      },
+      {
+        "slug": "chatgpt",
+        "reason": "More flexible for custom copywriting needs"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "synthesia",
@@ -730,7 +1059,54 @@
     ],
     "logo": "/logos/synthesia.svg",
     "founded": 2017,
-    "company": "Synthesia Ltd."
+    "company": "Synthesia Ltd.",
+    "tldr": "Synthesia is an AI video generator creating professional videos from text or scripts. Plans start at $30/month for 1 video/month. Best for explainer videos, marketing, and training content.",
+    "use_cases": [
+      "Product demo videos",
+      "Marketing explainer videos",
+      "Training and onboarding videos",
+      "Testimonial videos",
+      "Educational content",
+      "Social media video posts",
+      "Sales presentation videos"
+    ],
+    "faqs": [
+      {
+        "question": "Is Synthesia free?",
+        "answer": "No free plan, but 1 free video to try. Starter plan is $30/month for 1 video/month with 50+ AI avatars and voice languages."
+      },
+      {
+        "question": "Synthesia vs Descript vs Runway?",
+        "answer": "Synthesia excels at AI avatar videos. Descript is better for podcast editing. Runway is best for creative video generation and effects."
+      },
+      {
+        "question": "Can I use real people in Synthesia videos?",
+        "answer": "Yes, you can upload custom avatars or use Synthesia's 150+ built-in AI avatars with 150+ voice options."
+      },
+      {
+        "question": "Is Synthesia worth it for creators?",
+        "answer": "Yes if you produce explainer or training videos regularly. $30/month for unlimited video editing and avatar use justifies the cost for content creators."
+      },
+      {
+        "question": "What are Synthesia's main limitations?",
+        "answer": "Avatars can look artificial, limited video length in lower tiers, requires script preparation, and rendering can take time."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "runway",
+        "reason": "More creative freedom for video generation and effects"
+      },
+      {
+        "slug": "descript",
+        "reason": "Better for podcast/voiceover editing with text-to-speech"
+      },
+      {
+        "slug": "elevenlabs",
+        "reason": "Superior voice generation quality for voiceovers"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "grammarly",
@@ -815,7 +1191,54 @@
     ],
     "logo": "/logos/grammarly.svg",
     "founded": 2009,
-    "company": "Grammarly Inc."
+    "company": "Grammarly Inc.",
+    "tldr": "Grammarly is an AI writing assistant catching grammar, tone, and clarity issues. Free browser extension available; Premium $12/month. Best for anyone writing professionally (emails, docs, social media).",
+    "use_cases": [
+      "Email writing",
+      "Document editing",
+      "Blog post proofreading",
+      "Social media captions",
+      "Resume and cover letter writing",
+      "Academic writing",
+      "Business communication"
+    ],
+    "faqs": [
+      {
+        "question": "Is Grammarly free?",
+        "answer": "Yes, basic features are free including grammar checking, tone detection, and plagiarism detection. Premium is $12/month for advanced suggestions."
+      },
+      {
+        "question": "What does Grammarly Premium add?",
+        "answer": "Advanced tone suggestions, style guidance, clarity improvements, and generative AI writing suggestions. Also includes plagiarism detection and tone adjustments."
+      },
+      {
+        "question": "Is Grammarly worth it?",
+        "answer": "The free version is solid. Premium is worthwhile if you write professionally and want AI-powered tone/style advice. Most users find free sufficient."
+      },
+      {
+        "question": "Does Grammarly work everywhere?",
+        "answer": "Yes, as a browser extension on Gmail, LinkedIn, Twitter, Medium, and any web form. Also supports Word, Google Docs integration."
+      },
+      {
+        "question": "What are Grammarly's limitations?",
+        "answer": "Doesn't generate new content (only edits), can be overly cautious with tone, and sometimes misses context-specific grammar rules."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "chatgpt",
+        "reason": "More powerful for rewriting and content generation"
+      },
+      {
+        "slug": "writesonic",
+        "reason": "Better for full content creation from scratch"
+      },
+      {
+        "slug": "claude",
+        "reason": "Superior for detailed editing and style feedback"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "notion-ai",
@@ -908,7 +1331,54 @@
     ],
     "logo": "/logos/notion.svg",
     "founded": 2013,
-    "company": "Notion Labs"
+    "company": "Notion Labs",
+    "tldr": "Notion AI is an integrated assistant inside Notion workspace. $10/month add-on per workspace member. Best for teams using Notion for documentation, wikis, and knowledge management.",
+    "use_cases": [
+      "Database content generation",
+      "Wiki and documentation writing",
+      "Meeting notes summarization",
+      "Team knowledge base creation",
+      "Project documentation",
+      "Content brainstorming",
+      "Email drafting from notes"
+    ],
+    "faqs": [
+      {
+        "question": "Is Notion AI free?",
+        "answer": "No, Notion AI is a $10/month add-on per workspace member. Notion base workspace access is free or paid depending on plan."
+      },
+      {
+        "question": "Is Notion AI worth it?",
+        "answer": "Only if your team is already heavily invested in Notion for documentation. For standalone writing, ChatGPT offers better value."
+      },
+      {
+        "question": "What can Notion AI do?",
+        "answer": "Generate page content, brainstorm ideas, translate text, improve writing tone, summarize notes, and respond to database fields."
+      },
+      {
+        "question": "Can I use ChatGPT inside Notion?",
+        "answer": "Notion AI is integrated natively. You can't embed ChatGPT directly, but third-party integrations (Zapier, Make) can connect ChatGPT to Notion."
+      },
+      {
+        "question": "What are Notion AI's limitations?",
+        "answer": "Limited to Notion environment, $10/person monthly adds up for teams, less powerful than standalone ChatGPT, and requires Notion subscription."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "chatgpt",
+        "reason": "More powerful and flexible, works everywhere"
+      },
+      {
+        "slug": "claude",
+        "reason": "Better for detailed documentation and analysis"
+      },
+      {
+        "slug": "writesonic",
+        "reason": "Better for marketing content inside your wiki"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "elevenlabs",
@@ -1000,7 +1470,54 @@
     ],
     "logo": "/logos/elevenlabs.svg",
     "founded": 2022,
-    "company": "ElevenLabs Inc."
+    "company": "ElevenLabs Inc.",
+    "tldr": "ElevenLabs is a premium text-to-speech and voice cloning platform. Free tier available; Pro $11/month for 100K characters/month. Best for voiceovers, audiobooks, and video narration.",
+    "use_cases": [
+      "YouTube video narration",
+      "Audiobook creation",
+      "Podcast intro/outro",
+      "Voice cloning for ads",
+      "E-learning course narration",
+      "Video game voiceovers",
+      "Accessibility features for websites"
+    ],
+    "faqs": [
+      {
+        "question": "Is ElevenLabs free?",
+        "answer": "Yes, free tier with 10K characters/month and basic voices. Pro is $11/month for 100K characters, Starter is $99/month for voice cloning."
+      },
+      {
+        "question": "How good is ElevenLabs voice quality?",
+        "answer": "Industry-leading. Natural inflection, emotion control, and 29+ languages. Often preferred over other TTS services by creators."
+      },
+      {
+        "question": "ElevenLabs vs Descript voice generation?",
+        "answer": "ElevenLabs is better for pure voice quality and voice cloning. Descript is better for full video editing with natural-sounding voiceovers integrated."
+      },
+      {
+        "question": "Is ElevenLabs worth it?",
+        "answer": "Yes, if you create video content regularly. $11/month for natural-sounding narration is vastly cheaper than hiring voice actors."
+      },
+      {
+        "question": "What's the difference between Pro and Starter?",
+        "answer": "Pro ($11) is for text-to-speech with 100K chars/month. Starter ($99) adds voice cloning and independent voice creation features."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "descript",
+        "reason": "Better integrated video editing with voiceover"
+      },
+      {
+        "slug": "murf-ai",
+        "reason": "Good alternative with video integration built-in"
+      },
+      {
+        "slug": "synthesia",
+        "reason": "Complete video solution with AI avatars"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "canva",
@@ -1086,7 +1603,54 @@
     ],
     "logo": "/logos/canva.svg",
     "founded": 2013,
-    "company": "Canva Pty Ltd"
+    "company": "Canva Pty Ltd",
+    "tldr": "Canva is a drag-and-drop design tool with AI features. Free version available; Pro $13/month. Best for social media graphics, presentations, and quick designs without design skills.",
+    "use_cases": [
+      "Social media graphics",
+      "Blog post featured images",
+      "Presentation slides",
+      "Pinterest pins",
+      "Infographics",
+      "Email marketing graphics",
+      "YouTube thumbnails"
+    ],
+    "faqs": [
+      {
+        "question": "Is Canva free?",
+        "answer": "Yes, Canva Free is fully functional with 250K+ templates. Pro ($13/month) adds brand kits, more elements, AI image generation, and team collaboration."
+      },
+      {
+        "question": "Canva vs Midjourney for pin design?",
+        "answer": "Canva is easier for quick pins with templates. Midjourney produces higher-quality art. For Pinterest, Canva's ease wins; for portfolio pieces, Midjourney wins."
+      },
+      {
+        "question": "Is Canva Pro worth it?",
+        "answer": "For content creators and solopreneurs, yes. $13/month for unlimited access to 100M+ elements, AI image generation, and brand consistency features is solid value."
+      },
+      {
+        "question": "Can Canva replace Figma?",
+        "answer": "For simple designs, yes. For complex UX/UI, Figma is better. Canva is easier to learn; Figma is more powerful for professionals."
+      },
+      {
+        "question": "What are Canva's limitations?",
+        "answer": "Limited advanced design tools, can feel generic (many people use same templates), and AI image generation is average compared to Midjourney."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "midjourney",
+        "reason": "Better for unique, high-quality artistic designs"
+      },
+      {
+        "slug": "runway",
+        "reason": "Better for video design and animation"
+      },
+      {
+        "slug": "pictory",
+        "reason": "Better for video content specifically"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "descript",
@@ -1171,7 +1735,54 @@
     ],
     "logo": "/logos/descript.svg",
     "founded": 2017,
-    "company": "Descript Inc."
+    "company": "Descript Inc.",
+    "tldr": "Descript is an all-in-one video and podcast editor with AI transcription and voiceover. $15/month for Starter. Best for podcast editing, video subtitles, and voiceover generation.",
+    "use_cases": [
+      "Podcast editing",
+      "Video subtitle generation",
+      "Voiceover creation",
+      "Audio transcription",
+      "YouTube video editing",
+      "Audio cleanup and enhancement",
+      "Multi-track podcast mixing"
+    ],
+    "faqs": [
+      {
+        "question": "Is Descript free?",
+        "answer": "Free tier with limited features (1 project, 1 hour/month). Starter is $15/month for unlimited projects and transcription."
+      },
+      {
+        "question": "Descript vs Adobe Audition?",
+        "answer": "Descript is easier, AI-powered, and cheaper. Adobe Audition has more pro features. For most creators, Descript wins."
+      },
+      {
+        "question": "Can Descript replace your voiceover artist?",
+        "answer": "For many projects, yes. The AI voiceover is natural-sounding. For critical narration, many prefer a human voice, but it's a great fast alternative."
+      },
+      {
+        "question": "Is Descript worth it for YouTubers?",
+        "answer": "Yes, absolutely. Auto-captioning, easy editing, voiceover generation, and clean audio for $15/month justifies the cost."
+      },
+      {
+        "question": "What are Descript's main limitations?",
+        "answer": "Can be slow on very long files, AI voiceover may need retakes, limited color grading, and video features are simpler than DaVinci Resolve."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "elevenlabs",
+        "reason": "Superior voice quality for voiceovers alone"
+      },
+      {
+        "slug": "otter-ai",
+        "reason": "Better for transcription-only use cases"
+      },
+      {
+        "slug": "runway",
+        "reason": "More powerful for creative video effects"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "runway",
@@ -1262,7 +1873,54 @@
     ],
     "logo": "/logos/runway.svg",
     "founded": 2018,
-    "company": "Runway AI Inc."
+    "company": "Runway AI Inc.",
+    "tldr": "Runway is an AI video generator for motion graphics, special effects, and creative video. $12.50/month for Creator. Best for video professionals, animators, and creative video production.",
+    "use_cases": [
+      "AI video generation from text",
+      "Motion graphics creation",
+      "Special effects and editing",
+      "Background removal and inpainting",
+      "Video frame interpolation",
+      "Logo animation",
+      "Film and commercial production"
+    ],
+    "faqs": [
+      {
+        "question": "Is Runway free?",
+        "answer": "Free tier with 25 credits/month (limited). Creator ($12.50/month) has unlimited video generation, motion brush, and more."
+      },
+      {
+        "question": "Runway vs Midjourney for video?",
+        "answer": "Runway is for video generation and effects. Midjourney is for images. Not directly comparable, but Runway is more powerful for video work."
+      },
+      {
+        "question": "Can Runway generate videos from scripts?",
+        "answer": "Yes, Runway can generate video from text prompts, images, or existing video clips. Quality varies based on prompt detail."
+      },
+      {
+        "question": "Is Runway worth it for creators?",
+        "answer": "Yes, for video creators and animators. $12.50/month for AI video generation, effects, and motion tools saves hundreds on plugins or software."
+      },
+      {
+        "question": "What are Runway's limitations?",
+        "answer": "Video generation can be inconsistent, rendering times are long, quality drops on complex scenarios, and credit system can be confusing."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "midjourney",
+        "reason": "Better for high-quality image generation"
+      },
+      {
+        "slug": "synthesia",
+        "reason": "Better for AI avatar video creation"
+      },
+      {
+        "slug": "luma-ai",
+        "reason": "Specialized in AI video with 3D capabilities"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "perplexity",
@@ -1336,7 +1994,54 @@
     ],
     "logo": "/logos/perplexity.svg",
     "founded": 2022,
-    "company": "Perplexity AI"
+    "company": "Perplexity AI",
+    "tldr": "Perplexity is an AI search engine with real-time web browsing and citations. Free version available; Pro $20/month for GPT-4o and unlimited searches. Best for research, current events, and fact-checking.",
+    "use_cases": [
+      "Real-time web research",
+      "Current events and news",
+      "Fact-checking and verification",
+      "Competitor analysis",
+      "Market research",
+      "Academic research",
+      "Trend discovery"
+    ],
+    "faqs": [
+      {
+        "question": "Is Perplexity free?",
+        "answer": "Yes, free version with basic search. Pro ($20/month) includes GPT-4o, unlimited searches, voice mode, and upload PDFs."
+      },
+      {
+        "question": "Perplexity vs ChatGPT for research?",
+        "answer": "Perplexity is better for current research (real-time web access). ChatGPT Plus also has web search but slower. Perplexity is faster and more citation-focused."
+      },
+      {
+        "question": "Does Perplexity replace Google?",
+        "answer": "For complex research questions, yes. It's faster and provides synthesized answers. For simple lookups, Google is still better."
+      },
+      {
+        "question": "Is Perplexity Pro worth it?",
+        "answer": "Yes, if you do heavy research. $20/month for unlimited searches, GPT-4o-powered answers, and better citations justifies the cost."
+      },
+      {
+        "question": "What are Perplexity's limitations?",
+        "answer": "Newer service (less stable), smaller knowledge base than ChatGPT, occasional hallucinations on niche topics, and free tier is limited."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "chatgpt",
+        "reason": "More versatile and larger user base"
+      },
+      {
+        "slug": "claude",
+        "reason": "Better for deep analysis of research papers"
+      },
+      {
+        "slug": "otter-ai",
+        "reason": "Better for recording and transcribing research meetings"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "scalenut",
@@ -1422,7 +2127,54 @@
     ],
     "logo": "/logos/scalenut.svg",
     "founded": 2020,
-    "company": "Scalenut"
+    "company": "Scalenut",
+    "tldr": "Scalenut is an AI SEO suite combining research, writing, and optimization. $199/month for Infinity plan. Best for content marketing teams focusing on organic search growth.",
+    "use_cases": [
+      "SEO keyword research and planning",
+      "AI content writing at scale",
+      "Content optimization and SERP analysis",
+      "Topic cluster mapping",
+      "Content calendar planning",
+      "Backlink research and analysis",
+      "Competitive intelligence"
+    ],
+    "faqs": [
+      {
+        "question": "Is Scalenut free?",
+        "answer": "No free plan. Plans start at $49/month for Basic. Infinity ($199/month) includes unlimited content generation, 500+ keywords, and all tools."
+      },
+      {
+        "question": "Scalenut vs Surfer SEO?",
+        "answer": "Scalenut is more affordable ($199 vs $400+ for Surfer Enterprise) and includes AI writing. Surfer has better SEO analysis. Scalenut wins for content teams."
+      },
+      {
+        "question": "Is Scalenut worth it for content marketing?",
+        "answer": "Yes, for teams creating 10+ articles monthly. $199/month for unlimited keyword research + AI writing + SEO optimization is excellent value."
+      },
+      {
+        "question": "Can Scalenut replace a content writer?",
+        "answer": "Partially. Scalenut generates decent first drafts optimized for SEO. Most teams still edit heavily. Best used as a writing assistant, not replacement."
+      },
+      {
+        "question": "What are Scalenut's main limitations?",
+        "answer": "AI content quality is good but not perfect, interface can be complex, requires SEO knowledge to use effectively, and high price for solo creators."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "surfer-seo",
+        "reason": "Better pure SEO analysis and optimization"
+      },
+      {
+        "slug": "writesonic",
+        "reason": "Much cheaper ($20) for general content writing"
+      },
+      {
+        "slug": "jasper",
+        "reason": "Better brand voice consistency for content teams"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "surfer-seo",
@@ -1518,7 +2270,54 @@
     ],
     "logo": "/logos/surfer-seo.svg",
     "founded": 2017,
-    "company": "Surfer SEO Sp. z o.o."
+    "company": "Surfer SEO Sp. z o.o.",
+    "tldr": "Surfer SEO is an SEO optimization platform. $99/month for Professional. Analyzes top-ranking pages, provides keyword research, and content optimization in real-time. Best for SEO-focused content creators.",
+    "use_cases": [
+      "SEO keyword research",
+      "Content optimization scoring",
+      "Competitor content analysis",
+      "Backlink research",
+      "Content brief generation",
+      "On-page SEO audit",
+      "Content gap analysis"
+    ],
+    "faqs": [
+      {
+        "question": "Is Surfer SEO free?",
+        "answer": "No free plan. Free trial available. Pro starts at $99/month with unlimited SEO audits, SERP analysis, and content optimization."
+      },
+      {
+        "question": "Surfer SEO vs Scalenut?",
+        "answer": "Surfer is more affordable ($99 vs $199) and stronger on SEO analysis. Scalenut includes more AI writing. For pure SEO, Surfer wins."
+      },
+      {
+        "question": "Is Surfer SEO worth it for bloggers?",
+        "answer": "Yes, if SEO is your priority. $99/month for data-driven content optimization can increase organic traffic by 30-50% long-term."
+      },
+      {
+        "question": "What data does Surfer use?",
+        "answer": "Surfer analyzes top 10 Google ranking pages for your keyword, pulls content length, keyword density, headings, and backlink data."
+      },
+      {
+        "question": "What are Surfer SEO's limitations?",
+        "answer": "No built-in content writing (requires integration), dashboard can be complex for beginners, and data updates are sometimes delayed."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "scalenut",
+        "reason": "Includes AI content writing alongside SEO optimization"
+      },
+      {
+        "slug": "writesonic",
+        "reason": "Budget-friendly alternative with SEO templates"
+      },
+      {
+        "slug": "chatgpt",
+        "reason": "Free alternative for content writing with manual SEO tweaking"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "otter-ai",
@@ -1614,7 +2413,54 @@
     ],
     "logo": "/logos/otter-ai.svg",
     "founded": 2016,
-    "company": "Otter.ai, Inc."
+    "company": "Otter.ai, Inc.",
+    "tldr": "Otter.ai is an AI transcription service for meetings, interviews, and audio. Free tier available; Pro $10/month for unlimited transcripts. Best for podcasters, journalists, and meeting note-takers.",
+    "use_cases": [
+      "Meeting transcription",
+      "Podcast transcription",
+      "Interview transcription",
+      "Live event coverage",
+      "Research interview notes",
+      "Video subtitle generation",
+      "Meeting summary generation"
+    ],
+    "faqs": [
+      {
+        "question": "Is Otter.ai free?",
+        "answer": "Yes, free tier with 600 mins/month of transcription. Pro ($10/month) includes unlimited transcription, speaker identification, and search."
+      },
+      {
+        "question": "How accurate is Otter.ai?",
+        "answer": "95%+ accuracy for clear English audio. Accuracy drops with background noise, accents, or multiple speakers. Generally the best on the market."
+      },
+      {
+        "question": "Otter.ai vs Rev or Descript?",
+        "answer": "Otter.ai is fastest and cheapest. Rev is more accurate but slower and pricier. Descript is better for video editing combined with transcription."
+      },
+      {
+        "question": "Is Otter.ai Pro worth it?",
+        "answer": "Yes, for podcasters and journalists. $10/month for unlimited transcription vs $5-10/audio minute from human services saves thousands annually."
+      },
+      {
+        "question": "What are Otter.ai's limitations?",
+        "answer": "Struggles with background noise, requires English language, occasional speaker misidentification, and exports can be messy."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "descript",
+        "reason": "Better for video editing with transcription"
+      },
+      {
+        "slug": "elevenlabs",
+        "reason": "Better for converting text to speech (opposite use case)"
+      },
+      {
+        "slug": "otter-ai",
+        "reason": "No direct competitor combines transcription + editing + voiceover"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "stable-diffusion",
@@ -1690,7 +2536,54 @@
     ],
     "logo": "/logos/stable-diffusion.svg",
     "founded": 2022,
-    "company": "Stability AI"
+    "company": "Stability AI",
+    "tldr": "Stable Diffusion is an open-source AI image generator. Free to run locally or free tier on various platforms. Best for developers, artists, and budget-conscious creators wanting image generation.",
+    "use_cases": [
+      "Custom image generation",
+      "Art and illustration",
+      "Style transfer and variations",
+      "Content creation",
+      "Experimental design",
+      "Educational projects",
+      "Open-source community projects"
+    ],
+    "faqs": [
+      {
+        "question": "Is Stable Diffusion free?",
+        "answer": "Yes, completely free and open-source. Can run locally (requires GPU) or use free tier on platforms like Hugging Face."
+      },
+      {
+        "question": "Stable Diffusion vs Midjourney?",
+        "answer": "Stable Diffusion is free but lower quality and requires technical setup. Midjourney is premium ($20/month) but much better results with zero setup."
+      },
+      {
+        "question": "Can I use Stable Diffusion commercially?",
+        "answer": "Yes, it's open-source and free for commercial use. However, you may need to disclose use of AI in some jurisdictions."
+      },
+      {
+        "question": "Is Stable Diffusion worth learning?",
+        "answer": "Yes, for developers and artists wanting full control. For non-technical users, Midjourney or Canva offers better value."
+      },
+      {
+        "question": "What are Stable Diffusion's limitations?",
+        "answer": "Requires technical knowledge to run locally, lower image quality than Midjourney, needs powerful GPU for fast generation, and model updates are frequent."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "midjourney",
+        "reason": "Premium quality with zero setup required"
+      },
+      {
+        "slug": "canva",
+        "reason": "Easier template-based design for non-artists"
+      },
+      {
+        "slug": "runway",
+        "reason": "Better for video generation"
+      }
+    ],
+    "updated_date": "2026-03-18"
   },
   {
     "slug": "luma-ai",
@@ -1786,6 +2679,53 @@
     ],
     "logo": "/logos/luma-ai.svg",
     "founded": 2021,
-    "company": "Luma AI, Inc."
+    "company": "Luma AI, Inc.",
+    "tldr": "Luma AI specializes in 3D video generation and volumetric video capture. $30/month for Creator. Best for 3D content creators, game developers, and immersive media production.",
+    "use_cases": [
+      "3D video generation",
+      "Volumetric video capture",
+      "3D product visualization",
+      "Game asset creation",
+      "Virtual environment design",
+      "Immersive content creation",
+      "Architecture visualization"
+    ],
+    "faqs": [
+      {
+        "question": "Is Luma AI free?",
+        "answer": "Free tier with limited credits. Creator ($30/month) for unlimited 3D generation and volumetric capture."
+      },
+      {
+        "question": "Luma AI vs Runway for video?",
+        "answer": "Luma specializes in 3D volumetric video. Runway is better for general video effects and animation. Different tools for different needs."
+      },
+      {
+        "question": "What can Luma AI generate?",
+        "answer": "3D scenes from text, volumetric videos, 360 immersive content, and 3D asset generation. Unique 3D capabilities not found elsewhere."
+      },
+      {
+        "question": "Is Luma AI worth it?",
+        "answer": "For 3D creators and game developers, yes. For general video, no. $30/month is expensive if you don't need 3D specifically."
+      },
+      {
+        "question": "What are Luma AI's limitations?",
+        "answer": "Niche use case, steep learning curve, expensive for casual creators, quality can be inconsistent, and rendering times are long."
+      }
+    ],
+    "alternatives": [
+      {
+        "slug": "runway",
+        "reason": "Better for 2D video and motion graphics"
+      },
+      {
+        "slug": "synthesia",
+        "reason": "Better for AI avatar video creation"
+      },
+      {
+        "slug": "canva",
+        "reason": "Better for non-3D design simplicity"
+      }
+    ],
+    "updated_date": "2026-03-18"
   }
 ]

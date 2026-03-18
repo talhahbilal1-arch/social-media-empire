@@ -57,16 +57,10 @@ export function generateStarRating(rating) {
   return { fullStars, hasHalf, emptyStars: 5 - fullStars - (hasHalf ? 1 : 0) }
 }
 
-/**
- * Get the affiliate URL for a tool with UTM tracking parameters.
- * Uses config/affiliate-links.json for real affiliate URLs,
- * falls back to the tool's affiliate_url from tools.json.
- */
 export function getAffiliateUrl(slug, campaign) {
   const config = affiliateConfig.tools[slug]
   const tool = getToolBySlug(slug)
 
-  // Priority: config affiliate_url (if set) > tool.affiliate_url > config fallback
   let url = tool?.affiliate_url || ''
   if (config && config.affiliate_url !== 'PASTE_LINK_HERE') {
     url = config.affiliate_url
@@ -74,8 +68,39 @@ export function getAffiliateUrl(slug, campaign) {
     url = config.fallback_url
   }
 
-  // Append UTM parameters for tracking
   const utm = campaign || 'review'
   const separator = url.includes('?') ? '&' : '?'
   return `${url}${separator}utm_source=toolpilot&utm_medium=${utm}&utm_campaign=${slug}`
+}
+
+// --- New helpers for Phase 3+ ---
+
+export function getAlternativesForTool(slug) {
+  const tool = getToolBySlug(slug)
+  if (!tool?.alternatives) return []
+  return tool.alternatives
+    .map(alt => {
+      const fullTool = getToolBySlug(alt.slug)
+      return fullTool ? { ...fullTool, reason: alt.reason } : null
+    })
+    .filter(Boolean)
+}
+
+export function getToolsByUseCase(useCase) {
+  const lc = useCase.toLowerCase()
+  return tools
+    .filter(t => t.use_cases && t.use_cases.some(uc => uc.toLowerCase() === lc))
+    .sort((a, b) => b.rating - a.rating)
+}
+
+export function getAllUseCases() {
+  const set = new Set()
+  tools.forEach(t => {
+    if (t.use_cases) t.use_cases.forEach(uc => set.add(uc))
+  })
+  return [...set].sort()
+}
+
+export function getRelatedComparisons(toolSlug) {
+  return comparisons.filter(c => c.tools.includes(toolSlug))
 }
