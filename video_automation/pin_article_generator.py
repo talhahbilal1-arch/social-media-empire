@@ -972,11 +972,49 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
         return _build_v2_article(markdown_content, brand_key, slug, pin_data)
 
 
+def _sanitize_affiliate_links(html_content, brand_key):
+    """Post-generation sanitization: fix truncated tags and fake ASINs."""
+    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
+
+    # Fix truncated affiliate tags (e.g. dailydealdarl-20 → dailydealdarling1-20)
+    html_content = html_content.replace('dailydealdarl-20', 'dailydealdarling1-20')
+    html_content = html_content.replace('menopauseplan-20', 'dailydealdarling1-20')
+
+    # Fix fake ASINs (X-padded placeholders) → convert to search URLs
+    approved = _get_approved_asins()
+
+    def _fix_fake_asin(m):
+        asin = m.group(1)
+        tag = m.group(2)
+        if asin in approved:
+            return m.group(0)  # Keep real ASINs
+        # Extract product name from surrounding context (next link text)
+        return f'amazon.com/s?k={asin.lower()}&tag={tag}'
+
+    html_content = re.sub(
+        r'amazon\.com/dp/([A-Z0-9]{10})\?tag=([a-z0-9-]+)',
+        _fix_fake_asin,
+        html_content,
+    )
+
+    # Ensure all Amazon links have the correct tag for this brand
+    html_content = re.sub(
+        r'(amazon\.com/[^"]*\?[^"]*tag=)[a-z0-9-]+',
+        rf'\g<1>{affiliate_tag}',
+        html_content,
+    )
+
+    return html_content
+
+
 def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_client):
     """Save article HTML to disk and register in Supabase.
 
     Returns the public article URL.
     """
+    # Sanitize affiliate links before saving
+    html_content = _sanitize_affiliate_links(html_content, brand_key)
+
     site = BRAND_SITE_CONFIG[brand_key]
 
     workspace = os.environ.get('GITHUB_WORKSPACE', os.path.dirname(os.path.dirname(__file__)))
