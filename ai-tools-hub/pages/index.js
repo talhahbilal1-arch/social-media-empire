@@ -81,7 +81,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
       {/* Social Proof Bar */}
       <section className="bg-dark-surface border-b border-dark-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 text-sm text-dt-muted">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center items-center gap-4 md:gap-12 text-sm text-dt-muted">
             {[
               { icon: '🔍', stat: `${totalTools}+`, label: 'AI tools reviewed' },
               { icon: '📊', stat: '10', label: 'categories' },
@@ -89,7 +89,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
               { icon: '✅', stat: '100%', label: 'independent & unbiased' },
               { icon: '🔄', stat: 'Weekly', label: 'updated' },
             ].map(item => (
-              <div key={item.label} className="flex items-center space-x-2">
+              <div key={item.label} className="flex items-center space-x-2 text-center sm:text-left">
                 <span className="text-lg">{item.icon}</span>
                 <span><strong className="text-dt">{item.stat}</strong> <span className="text-dt-muted">{item.label}</span></span>
               </div>
