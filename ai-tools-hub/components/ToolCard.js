@@ -59,7 +59,7 @@ export default function ToolCard({ tool, rank }) {
       <div className="flex items-center space-x-2 mb-4">
         <StarRating rating={tool.rating} />
         <span className="text-sm font-medium text-dt">{tool.rating}</span>
-        <span className="text-sm text-dt-muted">({tool.review_count.toLocaleString()})</span>
+        <span className="text-sm text-dt-muted">Expert reviewed</span>
       </div>
 
       <div className="flex flex-wrap gap-1 mb-4">
