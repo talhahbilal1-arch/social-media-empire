@@ -2,14 +2,25 @@ import Link from 'next/link'
 import { formatPrice } from '../lib/tools'
 import StarRating from './StarRating'
 
+function getLogoUrl(website) {
+  if (!website) return null
+  try {
+    const domain = new URL(website).hostname
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+  } catch {
+    return null
+  }
+}
+
 export default function ToolCard({ tool, rank }) {
-  // Determine rank badge color
   const getRankBadgeClass = () => {
     if (rank === 1) return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
     if (rank === 2) return 'bg-gray-400/20 text-gray-300 border-gray-400/30'
     if (rank === 3) return 'bg-amber-600/20 text-amber-500 border-amber-600/30'
     return 'bg-accent/10 text-accent border-accent/20'
   }
+
+  const logoUrl = getLogoUrl(tool.website)
 
   return (
     <div className="card group gradient-border">
@@ -19,6 +30,17 @@ export default function ToolCard({ tool, rank }) {
             <span className={`flex-shrink-0 w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center border ${getRankBadgeClass()}`}>
               {rank}
             </span>
+          )}
+          {/* Tool logo */}
+          {logoUrl && (
+            <img
+              src={logoUrl}
+              alt={`${tool.name} logo`}
+              width={32}
+              height={32}
+              className="w-8 h-8 rounded-lg bg-dark-surface-hover"
+              loading="lazy"
+            />
           )}
           <div>
             <Link href={`/tools/${tool.slug}/`} className="text-lg font-bold text-dt group-hover:text-accent transition-colors">
