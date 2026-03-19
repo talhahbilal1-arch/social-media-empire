@@ -6,11 +6,32 @@ import { getAllArticles, getReadingTime } from '../../lib/articles'
 const SITE_URL = 'https://pilottools.ai'
 
 export default function BlogIndex({ articles }) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    'name': 'PilotTools Blog',
+    'description': 'In-depth guides, buyer\'s guides, and expert reviews for the best AI tools.',
+    'url': `${SITE_URL}/blog/`,
+    'numberOfItems': articles.length,
+    'blogPost': articles.map(article => ({
+      '@type': 'BlogPosting',
+      'headline': article.title,
+      'description': article.excerpt,
+      'url': `${SITE_URL}/blog/${article.slug}/`,
+      'datePublished': article.published_date,
+      'author': {
+        '@type': 'Person',
+        'name': article.author,
+      },
+    })),
+  }
+
   return (
     <Layout
       title="Blog - AI Tool Guides & Reviews"
       description="In-depth guides, buyer's guides, and expert reviews for the best AI tools."
       canonical={`${SITE_URL}/blog/`}
+      structuredData={structuredData}
     >
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Blog' }]} />
 
