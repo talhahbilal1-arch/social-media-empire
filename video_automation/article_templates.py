@@ -101,7 +101,7 @@ LEAD_MAGNET_OVERRIDES = {
 
 # Brand affiliate tags
 _BRAND_TAGS = {
-    'fitness': 'fitover35-20',
+    'fitness': 'dailydealdarling1-20',
     'deals': 'dailydealdarling1-20',
     'menopause': 'dailydealdarling1-20',
 }

@@ -68,11 +68,11 @@ def _load_affiliate_config():
 
 AFFILIATE_LINKS = {
     'fitness': {
-        'supplements': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20',
-        'equipment': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20',
-        'protein': 'https://www.amazon.com/dp/B000QSNYGI?tag=fitover35-20',
-        'creatine': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20',
-        'default': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20',
+        'supplements': 'https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20',
+        'equipment': 'https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20',
+        'protein': 'https://www.amazon.com/dp/B000QSNYGI?tag=dailydealdarling1-20',
+        'creatine': 'https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20',
+        'default': 'https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20',
     },
     'deals': {
         'kitchen': 'https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarling1-20',

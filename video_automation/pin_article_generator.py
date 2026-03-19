@@ -34,32 +34,32 @@ def _get_client():
 
 
 # ── Amazon Associates affiliate links ──────────────────────────────────────────
-# Fitness uses tag=fitover35-20, deals and menopause use tag=dailydealdarling1-20.
+# All brands use tag=dailydealdarling1-20 (single Amazon Associates account).
 # Direct /dp/ASIN links are preferred. For any product NOT in this list, the
 # code falls back to Amazon search URLs (/s?k=...) which always work.
 
 AMAZON_AFFILIATE_LINKS = {
     "fitness": {
-        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20",
-        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=fitover35-20",
-        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=fitover35-20",
-        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=fitover35-20",
-        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=fitover35-20",
-        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover35-20",
-        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover35-20",
-        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=fitover35-20",
-        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
-        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=fitover35-20",
-        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=fitover35-20",
-        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=fitover35-20",
-        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=fitover35-20",
-        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=fitover35-20",
-        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=fitover35-20",
-        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=fitover35-20",
-        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=fitover35-20",
-        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=fitover35-20",
-        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=fitover35-20",
-        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
+        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20",
+        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarling1-20",
+        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarling1-20",
+        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=dailydealdarling1-20",
+        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=dailydealdarling1-20",
+        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=dailydealdarling1-20",
+        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarling1-20",
+        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=dailydealdarling1-20",
+        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20",
+        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=dailydealdarling1-20",
+        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=dailydealdarling1-20",
+        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=dailydealdarling1-20",
+        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=dailydealdarling1-20",
+        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=dailydealdarling1-20",
+        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=dailydealdarling1-20",
+        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=dailydealdarling1-20",
+        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarling1-20",
+        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=dailydealdarling1-20",
+        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=dailydealdarling1-20",
+        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20",
     },
     "deals": {
         "air fryer": "https://www.amazon.com/dp/B07FDJMC9Q?tag=dailydealdarling1-20",
@@ -91,7 +91,7 @@ AMAZON_AFFILIATE_LINKS = {
 }
 
 BRAND_AFFILIATE_TAGS = {
-    "fitness": "fitover35-20",
+    "fitness": "dailydealdarling1-20",
     "deals": "dailydealdarling1-20",
     "menopause": "dailydealdarling1-20",
 }
@@ -973,36 +973,77 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
 
 
 def _sanitize_affiliate_links(html_content, brand_key):
-    """Post-generation sanitization: fix truncated tags and fake ASINs."""
-    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
+    """Post-generation sanitization — triple-checks every Amazon link.
 
-    # Fix truncated affiliate tags (e.g. dailydealdarl-20 → dailydealdarling1-20)
-    html_content = html_content.replace('dailydealdarl-20', 'dailydealdarling1-20')
-    html_content = html_content.replace('menopauseplan-20', 'dailydealdarling1-20')
+    1. Enforces dailydealdarling1-20 tag on ALL Amazon links (single account)
+    2. Converts fake/placeholder ASINs to working search URLs
+    3. Fixes known AI-generated tag typos (truncated, wrong account)
+    4. Logs any issues found for monitoring
+    """
+    CANONICAL_TAG = 'dailydealdarling1-20'
+    issues = []
 
-    # Fix fake ASINs (X-padded placeholders) → convert to search URLs
+    # ── Pass 1: Fix known tag typos ──
+    typo_map = {
+        'dailydealdarl-20': CANONICAL_TAG,
+        'menopauseplan-20': CANONICAL_TAG,
+        'fitover35-20': CANONICAL_TAG,
+    }
+    for wrong, right in typo_map.items():
+        if wrong in html_content:
+            count = html_content.count(wrong)
+            issues.append(f'Fixed tag typo: {wrong} → {right} ({count}x)')
+            html_content = html_content.replace(wrong, right)
+
+    # ── Pass 2: Fix fake ASINs (X-padded placeholders, XYZ patterns) ──
     approved = _get_approved_asins()
 
-    def _fix_fake_asin(m):
+    def _fix_bad_asin(m):
+        full_match = m.group(0)
         asin = m.group(1)
-        tag = m.group(2)
         if asin in approved:
-            return m.group(0)  # Keep real ASINs
-        # Extract product name from surrounding context (next link text)
-        return f'amazon.com/s?k={asin.lower()}&tag={tag}'
+            return full_match
+        # Fake ASIN detected — convert /dp/ASIN to /s?k=ASIN (Amazon search)
+        issues.append(f'Replaced fake ASIN: {asin}')
+        return f'amazon.com/s?k={asin.lower()}&tag={CANONICAL_TAG}'
 
     html_content = re.sub(
-        r'amazon\.com/dp/([A-Z0-9]{10})\?tag=([a-z0-9-]+)',
-        _fix_fake_asin,
+        r'amazon\.com/dp/([A-Z0-9]{10})\?tag=[a-z0-9-]+',
+        _fix_bad_asin,
         html_content,
     )
 
-    # Ensure all Amazon links have the correct tag for this brand
+    # ── Pass 3: Force correct tag on ALL Amazon links (catch-all) ──
+    def _enforce_tag(m):
+        prefix = m.group(1)
+        current_tag = m.group(2)
+        if current_tag != CANONICAL_TAG:
+            issues.append(f'Corrected tag: {current_tag} → {CANONICAL_TAG}')
+        return f'{prefix}{CANONICAL_TAG}'
+
     html_content = re.sub(
-        r'(amazon\.com/[^"]*\?[^"]*tag=)[a-z0-9-]+',
-        rf'\g<1>{affiliate_tag}',
+        r'(amazon\.com/[^"]*[\?&]tag=)([a-z0-9-]+)',
+        _enforce_tag,
         html_content,
     )
+
+    # ── Pass 4: Ensure Amazon links WITHOUT a tag get one ──
+    def _add_missing_tag(m):
+        url = m.group(0)
+        if 'tag=' not in url:
+            sep = '&' if '?' in url else '?'
+            issues.append(f'Added missing tag to Amazon link')
+            return f'{url}{sep}tag={CANONICAL_TAG}'
+        return url
+
+    html_content = re.sub(
+        r'https://www\.amazon\.com/[^"]+',
+        _add_missing_tag,
+        html_content,
+    )
+
+    if issues:
+        logger.info(f'Affiliate sanitization ({brand_key}): {len(issues)} fixes — {"; ".join(issues[:5])}')
 
     return html_content
 
