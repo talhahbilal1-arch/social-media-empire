@@ -3,6 +3,7 @@ import ToolCard from '../components/ToolCard'
 import NewsletterSignup from '../components/NewsletterSignup'
 import Search from '../components/Search'
 import AdSlot from '../components/AdSlot'
+import HeroIllustration, { WaveDivider } from '../components/HeroIllustration'
 import Link from 'next/link'
 import { getAllTools, getAllCategories, getAllComparisons, getFeaturedTools } from '../lib/tools'
 
