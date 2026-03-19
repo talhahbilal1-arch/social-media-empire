@@ -111,6 +111,34 @@
       "affiliate_program": "Perplexity",
       "commission": "TBD",
       "fallback_url": "https://perplexity.ai"
+    },
+    "surfer-seo": {
+      "name": "Surfer SEO",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Surfer SEO",
+      "commission": "25% recurring",
+      "fallback_url": "https://surferseo.com"
+    },
+    "otter-ai": {
+      "name": "Otter.ai",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Otter.ai",
+      "commission": "TBD",
+      "fallback_url": "https://otter.ai"
+    },
+    "stable-diffusion": {
+      "name": "Stable Diffusion",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Stability AI",
+      "commission": "TBD",
+      "fallback_url": "https://stability.ai"
+    },
+    "luma-ai": {
+      "name": "Luma AI",
+      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_program": "Luma AI",
+      "commission": "TBD",
+      "fallback_url": "https://lumalabs.ai"
     }
   },
   "default_disclosure": "This page contains affiliate links. We may earn a commission at no extra cost to you when you purchase through our links.",
