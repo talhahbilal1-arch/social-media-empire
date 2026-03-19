@@ -250,6 +250,27 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
               </div>
             </section>
 
+            {/* Extended Review (long-form content for SEO/GEO) */}
+            {tool.extended_review && (
+              <div className="space-y-8">
+                {tool.extended_review.split(/^## /m).filter(Boolean).map((section, idx) => {
+                  const lines = section.trim().split('\n')
+                  const heading = lines[0]
+                  const body = lines.slice(1).join('\n').trim()
+                  return (
+                    <section key={idx}>
+                      <h2 className="text-2xl font-bold text-dt mb-4">{heading}</h2>
+                      <div className="prose prose-lg max-w-none">
+                        {body.split('\n\n').map((para, i) => (
+                          <p key={i}>{para}</p>
+                        ))}
+                      </div>
+                    </section>
+                  )
+                })}
+              </div>
+            )}
+
             {/* FAQ */}
             {tool.faqs && tool.faqs.length > 0 && (
               <section>
