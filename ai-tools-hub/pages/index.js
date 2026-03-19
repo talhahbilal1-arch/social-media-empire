@@ -7,6 +7,12 @@ import Link from 'next/link'
 import { getAllTools, getAllCategories, getAllComparisons, getFeaturedTools } from '../lib/tools'
 
 export default function Home({ featuredTools, categories, comparisons, totalTools, allTools }) {
+  // Category icons mapping
+  const CATEGORY_ICONS = {
+    writing: '✍️', coding: '💻', image: '🎨', video: '🎬', marketing: '📈',
+    productivity: '⚡', audio: '🎵', seo: '🔍', research: '🔬', design: '🎯'
+  }
+
   // WebSite schema - safe: hardcoded static values only
   const websiteSchema = JSON.stringify({
     "@context": "https://schema.org",
