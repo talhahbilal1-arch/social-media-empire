@@ -56,7 +56,7 @@ export default function Layout({ children, title, description, canonical, ogType
         />
       )}
 
-      <div className="min-h-screen flex flex-col" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div className="min-h-screen flex flex-col" style={{ fontFamily: "'DM Sans', sans-serif" }}>
         <Navigation />
 
         <main className="flex-1">
