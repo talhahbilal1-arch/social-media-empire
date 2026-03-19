@@ -117,7 +117,7 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
 
         <TLDRBox
           verdict={verdictText}
-          ctaUrl={tool1.affiliateUrlWithUtm}
+          ctaUrl={tool1Wins >= tool2Wins ? tool1.affiliateUrlWithUtm : tool2.affiliateUrlWithUtm}
           ctaText={`Try ${tool1Wins >= tool2Wins ? tool1.name : tool2.name}`}
         />
 
