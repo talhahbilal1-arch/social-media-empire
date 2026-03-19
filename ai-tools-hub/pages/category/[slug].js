@@ -12,11 +12,21 @@ export default function CategoryPage({ category, tools, relatedComparisons }) {
 
   const canonicalUrl = `${SITE_URL}/category/${category.slug}/`
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': `Best ${category.name} in 2026`,
+    'description': category.description,
+    'url': canonicalUrl,
+    'numberOfItems': tools.length,
+  }
+
   return (
     <Layout
       title={category.meta_title}
       description={category.meta_description}
       canonical={canonicalUrl}
+      structuredData={structuredData}
     >
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: category.name }]} />
 
