@@ -145,7 +145,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
             <Link
               key={comp.slug}
               href={`/compare/${comp.slug}/`}
-              className="card hover:border-accent/30"
+              className="card gradient-border hover:border-accent/30"
             >
               <div className="flex items-center justify-center space-x-4 mb-4">
                 <span className="font-bold text-lg text-dt">{comp.tools[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
