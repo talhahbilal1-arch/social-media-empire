@@ -51,11 +51,11 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
           </p>
 
           {/* Search */}
-          <div className="max-w-lg mx-auto mb-8">
+          <div className="max-w-lg mx-auto mb-8 animate-fade-in-up stagger-3">
             <Search tools={allTools} placeholder="Search 20+ AI tools..." />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up stagger-4">
             <Link href="/category/writing/" className="btn-primary font-bold">
               AI Writing Tools
             </Link>
