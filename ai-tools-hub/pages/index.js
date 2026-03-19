@@ -55,8 +55,8 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
           </p>
 
           {/* Search */}
-          <div className="max-w-lg mx-auto mb-8 animate-fade-in-up stagger-3">
-            <Search tools={allTools} placeholder="Search 20+ AI tools..." />
+          <div className="max-w-2xl mx-auto mb-8 animate-fade-in-up stagger-3">
+            <Search tools={allTools} placeholder={`Search ${totalTools}+ AI tools by name, category, or use case...`} />
           </div>
 
           <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up stagger-4">
@@ -69,6 +69,9 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
             <Link href="/compare/" className="btn-secondary font-bold">
               Compare Tools
             </Link>
+            <Link href="/submit/" className="btn-secondary font-bold border-accent/30 text-accent">
+              Submit Your Tool
+            </Link>
           </div>
         </div>
       </section>
@@ -80,16 +83,15 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 text-sm text-dt-muted">
             {[
-              { stat: `${totalTools}+`, label: 'AI tools reviewed' },
-              { stat: '10', label: 'categories covered' },
-              { stat: 'Updated', label: 'March 2026' },
-              { stat: '100%', label: 'independent reviews' },
+              { icon: '🔍', stat: `${totalTools}+`, label: 'AI tools reviewed' },
+              { icon: '📊', stat: '10', label: 'categories' },
+              { icon: '⚡', stat: '5K+', label: 'monthly readers' },
+              { icon: '✅', stat: '100%', label: 'independent & unbiased' },
+              { icon: '🔄', stat: 'Weekly', label: 'updated' },
             ].map(item => (
               <div key={item.label} className="flex items-center space-x-2">
-                <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span><strong className="text-dt">{item.stat}</strong> {item.label}</span>
+                <span className="text-lg">{item.icon}</span>
+                <span><strong className="text-dt">{item.stat}</strong> <span className="text-dt-muted">{item.label}</span></span>
               </div>
             ))}
           </div>
