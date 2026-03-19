@@ -617,6 +617,7 @@ jobs:
           PYEOF
 
       - name: Deploy brand sites to Vercel
+        id: deploy
         if: '!cancelled()'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
@@ -627,10 +628,8 @@ jobs:
         run: |
           npm install -g vercel@latest
           echo "=== Deploying brand sites in parallel ==="
+          rm -f /tmp/deploy_failures
 
-          # Create .vercel/project.json in each brand directory so CLI reads
-          # project config from file instead of env vars (avoids file upload bug
-          # when VERCEL_ORG_ID + VERCEL_PROJECT_ID are set as env vars)
           setup_vercel_project() {
             local dir="$1" project_id="$2" project_name="$3"
             mkdir -p "$dir/.vercel"
@@ -642,7 +641,7 @@ jobs:
             cd $GITHUB_WORKSPACE/outputs/fitover35-website
             vercel deploy --prod --yes --token "$VERCEL_TOKEN" . \
               > /tmp/vercel_fitness.log 2>&1 && echo "✅ fitover35 deployed" >> /tmp/vercel_fitness.log \
-              || echo "❌ fitover35 deploy failed" >> /tmp/vercel_fitness.log &
+              || { echo "❌ fitover35 deploy failed" >> /tmp/vercel_fitness.log; echo "fitness" >> /tmp/deploy_failures; } &
             cd $GITHUB_WORKSPACE
           else
             echo "⏭ fitover35: VERCEL_FITOVER35_PROJECT_ID not set, skipping"
@@ -653,7 +652,7 @@ jobs:
             cd $GITHUB_WORKSPACE/outputs/dailydealdarling-website
             vercel deploy --prod --yes --token "$VERCEL_TOKEN" . \
               > /tmp/vercel_deals.log 2>&1 && echo "✅ dailydealdarling deployed" >> /tmp/vercel_deals.log \
-              || echo "❌ deals deploy failed" >> /tmp/vercel_deals.log &
+              || { echo "❌ deals deploy failed" >> /tmp/vercel_deals.log; echo "deals" >> /tmp/deploy_failures; } &
             cd $GITHUB_WORKSPACE
           else
             echo "⏭ dailydealdarling: VERCEL_DEALS_PROJECT_ID not set, skipping"
@@ -664,7 +663,7 @@ jobs:
             cd $GITHUB_WORKSPACE/outputs/menopause-planner-website
             vercel deploy --prod --yes --token "$VERCEL_TOKEN" . \
               > /tmp/vercel_menopause.log 2>&1 && echo "✅ menopause-planner deployed" >> /tmp/vercel_menopause.log \
-              || echo "❌ menopause deploy failed" >> /tmp/vercel_menopause.log &
+              || { echo "❌ menopause deploy failed" >> /tmp/vercel_menopause.log; echo "menopause" >> /tmp/deploy_failures; } &
             cd $GITHUB_WORKSPACE
           else
             echo "⏭ menopause-planner: VERCEL_MENOPAUSE_PROJECT_ID not set, skipping"
@@ -674,6 +673,86 @@ jobs:
           wait
           echo "=== Deploy logs ==="
           cat /tmp/vercel_*.log 2>/dev/null || true
+
+          # Detect failures and expose to subsequent steps
+          if [ -f /tmp/deploy_failures ]; then
+            FAILED_BRANDS=$(cat /tmp/deploy_failures | tr '\n' ',' | sed 's/,$//')
+            echo "deploy_failed=true" >> $GITHUB_OUTPUT
+            echo "failed_brands=$FAILED_BRANDS" >> $GITHUB_OUTPUT
+            echo "⚠️ DEPLOY FAILED for: $FAILED_BRANDS"
+            echo "Articles committed but NOT live — pins will use homepage fallback"
+          else
+            echo "deploy_failed=false" >> $GITHUB_OUTPUT
+            echo "failed_brands=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update pin URLs if deploy failed
+        if: steps.deploy.outputs.deploy_failed == 'true' && !cancelled()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          FAILED_BRANDS: ${{ steps.deploy.outputs.failed_brands }}
+        run: |
+          python3 << 'PYEOF'
+          import os, json, sys
+          from datetime import datetime, timezone, timedelta
+          from urllib.request import Request, urlopen
+
+          SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
+          SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
+          FAILED_BRANDS = os.environ.get('FAILED_BRANDS', '').split(',')
+
+          BRAND_HOMEPAGES = {
+              'fitness': 'https://fitover35.com',
+              'deals': 'https://dailydealdarling.com',
+              'menopause': 'https://menopause-planner-website.vercel.app',
+          }
+
+          if not SUPABASE_URL or not SUPABASE_KEY:
+              print('No Supabase creds — skipping URL fix')
+              sys.exit(0)
+
+          cutoff = (datetime.now(timezone.utc) - timedelta(minutes=30)).strftime('%Y-%m-%dT%H:%M:%SZ')
+          headers = {
+              'apikey': SUPABASE_KEY,
+              'Authorization': f'Bearer {SUPABASE_KEY}',
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation',
+          }
+
+          for brand in FAILED_BRANDS:
+              brand = brand.strip()
+              if not brand or brand not in BRAND_HOMEPAGES:
+                  continue
+              homepage = BRAND_HOMEPAGES[brand]
+              print(f'[{brand}] Deploy failed — updating recent article-linked pins to homepage')
+
+              # Update pins that were just posted with article URLs to homepage
+              url = f'{SUPABASE_URL}/rest/v1/pinterest_pins?brand=eq.{brand}&status=in.(posting,posted)&created_at=gte.{cutoff}&destination_url=like.*articles*'
+              body = json.dumps({'destination_url': homepage}).encode()
+              req = Request(url, data=body, headers=headers, method='PATCH')
+              try:
+                  with urlopen(req, timeout=15) as resp:
+                      result = json.loads(resp.read().decode())
+                      print(f'  Updated {len(result)} pins to homepage fallback')
+              except Exception as e:
+                  print(f'  Failed to update pins: {e}')
+
+              # Log deploy failure to errors table
+              err_url = f'{SUPABASE_URL}/rest/v1/errors'
+              err_body = json.dumps({
+                  'error_type': 'deploy_failure',
+                  'error_message': f'Vercel deploy failed for {brand} — likely 100/day rate limit hit',
+                  'context': json.dumps({'brand': brand, 'workflow': 'content-engine'}),
+                  'severity': 'high',
+              }).encode()
+              req = Request(err_url, data=err_body, headers=headers, method='POST')
+              try:
+                  with urlopen(req, timeout=10) as resp:
+                      pass
+              except Exception:
+                  pass
+          PYEOF
 
       - name: Upload logs
         if: always()
