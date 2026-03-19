@@ -49,7 +49,7 @@ export default function PricingPage({ tool, affiliateUrl, alternatives }) {
         <section className="card">
           <h2 className="text-2xl font-bold text-dt mb-4">Is {tool.name} Worth the Price?</h2>
           <p className="text-dt-muted mb-4">
-            {tool.name} has a {tool.rating}/5 rating from {tool.review_count.toLocaleString()} reviews. It&apos;s best for {tool.best_for.slice(0, 3).join(', ')}.
+            {tool.name} has a {tool.rating}/5 rating based on our expert testing. It&apos;s best for {tool.best_for.slice(0, 3).join(', ')}.
             {tool.pricing.free_tier ? ` The free tier lets you try it risk-free before committing to a paid plan.` : ''}
           </p>
           <AffiliateLink href={affiliateUrl} tool={tool.slug} className="btn-primary" placement="pricing_verdict">
