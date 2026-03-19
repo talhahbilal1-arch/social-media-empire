@@ -79,6 +79,11 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
           <p className="text-sm text-dt-muted text-center mb-6">Last updated: March 2026</p>
           <div className="flex items-center justify-center space-x-8 md:space-x-16">
             <div className="text-center">
+              {tool1.website && (
+                <img src={`https://www.google.com/s2/favicons?domain=${new URL(tool1.website).hostname}&sz=64`}
+                  alt={`${tool1.name} logo`} width={48} height={48}
+                  className="w-12 h-12 rounded-xl bg-dark-surface-hover p-1 mx-auto mb-2" />
+              )}
               <p className="text-2xl font-bold text-dt">{tool1.name}</p>
               <div className="flex items-center justify-center mt-2">
                 <StarRating rating={tool1.rating} size="lg" />
@@ -91,6 +96,11 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
               {ties > 0 && <p className="text-sm text-dt-muted mt-1">{ties} tie{ties > 1 ? 's' : ''}</p>}
             </div>
             <div className="text-center">
+              {tool2.website && (
+                <img src={`https://www.google.com/s2/favicons?domain=${new URL(tool2.website).hostname}&sz=64`}
+                  alt={`${tool2.name} logo`} width={48} height={48}
+                  className="w-12 h-12 rounded-xl bg-dark-surface-hover p-1 mx-auto mb-2" />
+              )}
               <p className="text-2xl font-bold text-dt">{tool2.name}</p>
               <div className="flex items-center justify-center mt-2">
                 <StarRating rating={tool2.rating} size="lg" />
