@@ -22,11 +22,25 @@ export default function BestForPage({ useCase, useCaseSlug, tools }) {
     { question: `How do I choose an AI tool for ${displayName.toLowerCase()}?`, answer: `Consider your budget, the specific features you need, integration with your existing workflow, and output quality. Our reviews rate each tool on these factors.` },
   ]
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': `Best AI Tools for ${displayName}`,
+    'numberOfItems': tools.length,
+    'itemListElement': tools.map((tool, i) => ({
+      '@type': 'ListItem',
+      'position': i + 1,
+      'name': tool.name,
+      'url': `https://pilottools.ai/tools/${tool.slug}/`,
+    })),
+  }
+
   return (
     <Layout
       title={`Best AI Tools for ${displayName} in 2026`}
       description={`Compare the best AI tools for ${displayName.toLowerCase()} in 2026. Ranked by features, pricing, and real user ratings.`}
       canonical={`https://pilottools.ai/best/${useCaseSlug}/`}
+      structuredData={structuredData}
     >
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },
