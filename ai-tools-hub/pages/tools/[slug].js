@@ -86,7 +86,17 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
         <div className="bg-dark-surface border border-dark-border rounded-2xl p-8 md:p-12">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-              <div className="flex items-center space-x-3 mb-3">
+              <div className="flex items-center space-x-4 mb-3">
+                {/* Tool logo */}
+                {tool.website && (
+                  <img
+                    src={`https://www.google.com/s2/favicons?domain=${new URL(tool.website).hostname}&sz=64`}
+                    alt={`${tool.name} logo`}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 rounded-xl bg-dark-surface-hover p-1"
+                  />
+                )}
                 <h1 className="text-3xl md:text-4xl font-bold text-dt">{tool.name}</h1>
                 {tool.pricing.free_tier && <span className="badge-green">Free Tier</span>}
               </div>
