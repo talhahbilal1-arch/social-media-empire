@@ -9,11 +9,25 @@ import { getAllTools, getToolBySlug, formatPrice, getAffiliateUrl, getAlternativ
 export default function AlternativesPage({ tool, alternatives, affiliateUrl }) {
   if (!tool) return null
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': `Best ${tool.name} Alternatives`,
+    'numberOfItems': alternatives.length,
+    'itemListElement': alternatives.map((alt, i) => ({
+      '@type': 'ListItem',
+      'position': i + 1,
+      'name': alt.name,
+      'url': `https://pilottools.ai/tools/${alt.slug}/`,
+    })),
+  }
+
   return (
     <Layout
       title={`${alternatives.length + 1} Best ${tool.name} Alternatives in 2026`}
       description={`Looking for ${tool.name} alternatives? Compare the top ${alternatives.length} alternatives with pricing, features, and ratings.`}
       canonical={`https://pilottools.ai/alternatives/${tool.slug}/`}
+      structuredData={structuredData}
     >
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },
