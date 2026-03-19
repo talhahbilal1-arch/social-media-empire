@@ -4,11 +4,21 @@ import Link from 'next/link'
 import { getAllTools, formatPrice } from '../../lib/tools'
 
 export default function PricingIndex({ tools }) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': 'AI Tool Pricing Guide 2026',
+    'description': 'Compare pricing across all AI tools in one place. Find the best value for your budget.',
+    'url': 'https://pilottools.ai/pricing/',
+    'numberOfItems': tools.length,
+  }
+
   return (
     <Layout
       title="AI Tool Pricing Comparison 2026"
       description="Compare pricing for 20+ AI tools side by side. Free tiers, starting prices, and best plans compared."
       canonical="https://pilottools.ai/pricing/"
+      structuredData={structuredData}
     >
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Pricing' }]} />
 
