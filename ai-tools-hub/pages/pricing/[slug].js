@@ -13,7 +13,7 @@ export default function PricingPage({ tool, affiliateUrl, alternatives }) {
   const faqs = [
     { question: `Is ${tool.name} free?`, answer: tool.pricing.free_tier ? `Yes, ${tool.name} offers a free tier with limited features. Paid plans start at ${formatPrice(tool.pricing.starting_price)}.` : `No, ${tool.name} does not have a free tier. Plans start at ${formatPrice(tool.pricing.starting_price)}.` },
     { question: `What is the best ${tool.name} plan?`, answer: `For most users, the ${tool.pricing.plans.length > 1 ? tool.pricing.plans[1].name : tool.pricing.plans[0].name} plan offers the best value. It includes ${tool.pricing.plans.length > 1 ? tool.pricing.plans[1].features.slice(0, 2).join(' and ') : 'core features'}.` },
-    { question: `Is ${tool.name} worth the price?`, answer: `With a rating of ${tool.rating}/5 from ${tool.review_count.toLocaleString()} reviews, ${tool.name} is ${tool.rating >= 4.5 ? 'highly rated and generally considered excellent value' : 'well-regarded'} for ${tool.best_for.slice(0, 2).join(' and ')}.` },
+    { question: `Is ${tool.name} worth the price?`, answer: `With a rating of ${tool.rating}/5, ${tool.name} is ${tool.rating >= 4.5 ? 'highly rated and generally considered excellent value' : 'well-regarded'} for ${tool.best_for.slice(0, 2).join(' and ')}.` },
   ]
 
   return (
