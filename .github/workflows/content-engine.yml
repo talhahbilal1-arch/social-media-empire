@@ -434,6 +434,57 @@ jobs:
               print('  No rendered pins — skipping article generation')
 
           # ══════════════════════════════════════════════════════════════
+          # PHASE 2b: Triple-check ALL affiliate links in new articles
+          # Scans every Amazon link in every article generated this run.
+          # Fixes wrong tags, fake ASINs, and missing tags on the fly.
+          # ══════════════════════════════════════════════════════════════
+          CANONICAL_TAG = 'dailydealdarling1-20'
+          if articles_generated:
+              print('\n=== PHASE 2b: Affiliate link audit ===')
+              link_issues = 0
+              link_ok = 0
+              for pin in rendered_pins:
+                  brand = pin['brand']
+                  site = BRAND_SITE_CONFIG.get(brand, {})
+                  output_dir = site.get('output_dir', '')
+                  if not output_dir:
+                      continue
+                  workspace = os.environ.get('GITHUB_WORKSPACE', '.')
+                  full_dir = os.path.join(workspace, output_dir)
+                  # Check all HTML files in the output dir (not just new ones)
+                  import glob as _glob
+                  for html_path in _glob.glob(os.path.join(full_dir, '*.html')):
+                      with open(html_path, 'r') as f:
+                          content = f.read()
+                      # Find all Amazon links
+                      amazon_links = re.findall(r'https://www\.amazon\.com/[^"]+', content)
+                      needs_fix = False
+                      for link in amazon_links:
+                          # Check 1: correct tag
+                          if 'tag=' in link and f'tag={CANONICAL_TAG}' not in link:
+                              needs_fix = True
+                          # Check 2: has a tag at all
+                          elif 'tag=' not in link:
+                              needs_fix = True
+                          # Check 3: no placeholder ASINs
+                          elif re.search(r'/dp/[A-Z0-9]*X{3,}', link):
+                              needs_fix = True
+                          else:
+                              link_ok += 1
+                      if needs_fix:
+                          # Re-run sanitizer on this file
+                          from video_automation.pin_article_generator import _sanitize_affiliate_links
+                          fixed = _sanitize_affiliate_links(content, brand)
+                          if fixed != content:
+                              with open(html_path, 'w') as f:
+                                  f.write(fixed)
+                              link_issues += 1
+                              print(f'  [{brand}] FIXED: {os.path.basename(html_path)}')
+              print(f'  Audit complete: {link_ok} links OK, {link_issues} files fixed')
+          else:
+              print('\n=== PHASE 2b: Skipped (no new articles) ===')
+
+          # ══════════════════════════════════════════════════════════════
           # PHASE 3: Git commit + push articles (deploy before posting)
           # Vercel auto-deploys on push so articles are live before pins.
           # ══════════════════════════════════════════════════════════════
