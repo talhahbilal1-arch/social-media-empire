@@ -4,11 +4,21 @@ import Link from 'next/link'
 import { getAllComparisons } from '../../lib/tools'
 
 export default function ComparePage({ comparisons }) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': 'AI Tool Comparisons',
+    'description': 'Detailed side-by-side comparisons to help you choose the right AI tool for your needs.',
+    'url': 'https://pilottools.ai/compare/',
+    'numberOfItems': comparisons.length,
+  }
+
   return (
     <Layout
       title="AI Tool Comparisons - Side-by-Side Reviews"
       description="Compare the best AI tools side-by-side. ChatGPT vs Claude, Jasper vs Writesonic, Midjourney vs Runway, and more detailed comparisons."
       canonical="https://pilottools.ai/compare/"
+      structuredData={structuredData}
     >
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Compare' }]} />
 
