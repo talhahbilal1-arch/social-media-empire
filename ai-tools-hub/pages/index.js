@@ -125,6 +125,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
                 href={`/category/${cat.slug}/`}
                 className="card text-center hover:border-accent/30"
               >
+                <span className="text-3xl mb-2 block">{CATEGORY_ICONS[cat.slug] || '🤖'}</span>
                 <h3 className="font-semibold text-dt mb-2">{cat.name}</h3>
                 <p className="text-sm text-dt-muted line-clamp-2">{cat.description.split('.')[0]}.</p>
               </Link>
