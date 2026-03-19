@@ -452,7 +452,7 @@ jobs:
                       )
                       subprocess.run(['git', 'push'], check=True)
                       print(f'  Pushed {len(articles_generated)} articles — Vercel deploying...')
-                      time.sleep(60)  # Allow Vercel to start deploying before posting pins
+                      time.sleep(90)  # Allow Vercel deploy to propagate before posting pins
                   else:
                       print('  No new article files to commit')
               except Exception as e:
