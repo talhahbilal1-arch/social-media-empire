@@ -37,6 +37,9 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-accent-purple/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/3 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
 
+        {/* Neural network illustration — desktop only */}
+        <HeroIllustration />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center relative z-10">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent/10 text-accent border border-accent/20 mb-6">
             Updated March 2026 &mdash; {totalTools}+ tools reviewed
