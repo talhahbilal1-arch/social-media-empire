@@ -40,13 +40,13 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent/10 text-accent border border-accent/20 mb-6">
             Updated March 2026 &mdash; {totalTools}+ tools reviewed
           </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-dt mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-dt mb-6 leading-tight animate-fade-in-up">
             Stop Wasting Money on the<br className="hidden md:block" /> Wrong AI Tools
           </h1>
-          <p className="text-xl md:text-2xl text-dt-muted mb-4 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-dt-muted mb-4 max-w-3xl mx-auto animate-fade-in-up stagger-1">
             Find the perfect AI tool in minutes with honest reviews, real pricing data, and side-by-side comparisons.
           </p>
-          <p className="text-dt-muted mb-8 max-w-2xl mx-auto">
+          <p className="text-dt-muted mb-8 max-w-2xl mx-auto animate-fade-in-up stagger-2">
             Trusted by creators, marketers, and developers who need AI tools that actually deliver ROI.
           </p>
 
