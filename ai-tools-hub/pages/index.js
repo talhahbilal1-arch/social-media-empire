@@ -73,6 +73,8 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         </div>
       </section>
 
+      <WaveDivider color="#111118" />
+
       {/* Social Proof Bar */}
       <section className="bg-dark-surface border-b border-dark-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
