@@ -59,17 +59,17 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
             <Search tools={allTools} placeholder={`Search ${totalTools}+ AI tools by name, category, or use case...`} />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up stagger-4">
-            <Link href="/category/writing/" className="btn-primary font-bold">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-3 sm:gap-4 animate-fade-in-up stagger-4">
+            <Link href="/category/writing/" className="btn-primary font-bold w-full sm:w-auto text-center">
               AI Writing Tools
             </Link>
-            <Link href="/category/coding/" className="btn-secondary font-bold">
+            <Link href="/category/coding/" className="btn-secondary font-bold w-full sm:w-auto text-center">
               AI Coding Tools
             </Link>
-            <Link href="/compare/" className="btn-secondary font-bold">
+            <Link href="/compare/" className="btn-secondary font-bold w-full sm:w-auto text-center">
               Compare Tools
             </Link>
-            <Link href="/submit/" className="btn-secondary font-bold border-accent/30 text-accent">
+            <Link href="/submit/" className="btn-secondary font-bold border-accent/30 text-accent w-full sm:w-auto text-center">
               Submit Your Tool
             </Link>
           </div>
