@@ -105,7 +105,7 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
               <div className="flex items-center space-x-3 mt-3">
                 <StarRating rating={tool.rating} size="lg" />
                 <span className="text-lg font-bold text-dt">{tool.rating}/5</span>
-                <span className="text-dt-muted">({tool.review_count.toLocaleString()} reviews)</span>
+                <span className="text-dt-muted">Expert reviewed</span>
               </div>
             </div>
             <div className="mt-6 md:mt-0 flex flex-col items-start md:items-end space-y-3">
