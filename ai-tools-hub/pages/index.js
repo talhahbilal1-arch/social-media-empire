@@ -102,7 +102,9 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredTools.map((tool, idx) => (
-            <ToolCard key={tool.slug} tool={tool} rank={idx + 1} />
+            <div key={tool.slug} className="animate-scale-in" style={{ animationDelay: `${idx * 0.1}s` }}>
+              <ToolCard tool={tool} rank={idx + 1} />
+            </div>
           ))}
         </div>
       </section>
