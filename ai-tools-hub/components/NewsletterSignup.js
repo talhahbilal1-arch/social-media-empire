@@ -105,7 +105,7 @@ export default function NewsletterSignup({ variant = 'inline', className = '' })
             </button>
           </form>
           {status === 'error' && <p className="text-sm text-red-400 mt-3">Something went wrong. Please try again.</p>}
-          <p className="text-xs text-dt-muted mt-4">Join 2,000+ AI enthusiasts. No spam, unsubscribe anytime.</p>
+          <p className="text-xs text-dt-muted mt-4">Free weekly AI tool updates. No spam, unsubscribe anytime.</p>
         </div>
       </div>
     )
