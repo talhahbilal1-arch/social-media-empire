@@ -3,12 +3,20 @@ import { formatPrice } from '../lib/tools'
 import StarRating from './StarRating'
 
 export default function ToolCard({ tool, rank }) {
+  // Determine rank badge color
+  const getRankBadgeClass = () => {
+    if (rank === 1) return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+    if (rank === 2) return 'bg-gray-400/20 text-gray-300 border-gray-400/30'
+    if (rank === 3) return 'bg-amber-600/20 text-amber-500 border-amber-600/30'
+    return 'bg-accent/10 text-accent border-accent/20'
+  }
+
   return (
-    <div className="card group">
+    <div className="card group gradient-border">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
           {rank && (
-            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-accent/10 text-accent font-bold text-sm flex items-center justify-center border border-accent/20">
+            <span className={`flex-shrink-0 w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center border ${getRankBadgeClass()}`}>
               {rank}
             </span>
           )}
