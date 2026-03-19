@@ -16,11 +16,24 @@ export default function PricingPage({ tool, affiliateUrl, alternatives }) {
     { question: `Is ${tool.name} worth the price?`, answer: `With a rating of ${tool.rating}/5, ${tool.name} is ${tool.rating >= 4.5 ? 'highly rated and generally considered excellent value' : 'well-regarded'} for ${tool.best_for.slice(0, 2).join(' and ')}.` },
   ]
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    'name': `${tool.name} Plans`,
+    'description': `Pricing plans for ${tool.name}`,
+    'url': `https://pilottools.ai/pricing/${tool.slug}/`,
+    'brand': {
+      '@type': 'Brand',
+      'name': tool.name,
+    },
+  }
+
   return (
     <Layout
       title={`${tool.name} Pricing 2026: Plans, Costs & Best Value`}
       description={`${tool.name} pricing breakdown for 2026. Compare all plans, features, and costs. ${tool.pricing.free_tier ? 'Free tier available.' : `Starting at ${formatPrice(tool.pricing.starting_price)}.`}`}
       canonical={`https://pilottools.ai/pricing/${tool.slug}/`}
+      structuredData={structuredData}
     >
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },
