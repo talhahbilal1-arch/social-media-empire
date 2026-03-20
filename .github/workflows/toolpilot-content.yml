@@ -45,11 +45,14 @@ jobs:
       - name: Generate content from calendar
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CONTENT_TYPE: ${{ github.event.inputs.content_type || 'auto' }}
+          SPECIFIC_TOPIC: ${{ github.event.inputs.specific_topic || '' }}
+          CONTENT_COUNT: ${{ github.event.inputs.count || '3' }}
         run: |
           node scripts/generate-content.js \
-            --type "${{ github.event.inputs.content_type || 'auto' }}" \
-            --topic "${{ github.event.inputs.specific_topic || '' }}" \
-            --count "${{ github.event.inputs.count || '1' }}"
+            --type "$CONTENT_TYPE" \
+            --topic "$SPECIFIC_TOPIC" \
+            --count "$CONTENT_COUNT"
 
       - name: Build site
         run: npm run build
