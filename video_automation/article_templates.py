@@ -453,6 +453,7 @@ def render_article_page(brand_key, title, meta_desc, body_html, hero_url,
 
     # Fallback: use v2 markdown-based templates
     tpl = TEMPLATE_CONFIG.get(brand_key, TEMPLATE_CONFIG['deals'])
+    tpl['brand_key'] = brand_key
 
     # Parse and render PRODUCT_CARD comments into styled HTML cards
     body_html, product_cards = _replace_product_cards(body_html, tpl)
