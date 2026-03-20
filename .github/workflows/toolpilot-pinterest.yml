@@ -1,0 +1,55 @@
+name: PilotTools Pinterest Automation
+
+on:
+  schedule:
+    # Daily at 4PM UTC (8AM PST) and 10PM UTC (2PM PST)
+    - cron: '0 16 * * *'
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Number of pins to post (1-5)'
+        required: false
+        default: '3'
+
+permissions:
+  contents: write
+
+jobs:
+  post-pinterest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ai-tools-hub
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ai-tools-hub/package-lock.json
+
+      - run: npm ci
+
+      - name: Post Pinterest pins
+        env:
+          MAKE_WEBHOOK_PILOTTOOLS: ${{ secrets.MAKE_WEBHOOK_PILOTTOOLS }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PIN_COUNT: ${{ github.event.inputs.count || '3' }}
+        run: node scripts/pinterest-poster.js --count "$PIN_COUNT"
+        continue-on-error: true
+
+      - name: Commit history
+        run: |
+          cd ..
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ai-tools-hub/config/pinterest-history.json
+          git diff --staged --quiet || git commit -m "pinterest: auto-post $(date +%Y-%m-%d)"
+          git pull --rebase --autostash origin main
+          git push
