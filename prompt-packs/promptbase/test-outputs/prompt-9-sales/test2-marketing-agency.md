@@ -23,7 +23,7 @@
 **REFRAME:** The market doesn't wait — your competitors are already building their visibility while you're thinking about building yours.
 
 **RESPONSE SCRIPT:**
-"That's fair. (pause) Here's what I'll tell you honestly: most owners who say this end up deciding not to move forward, not because the value isn't there, but because it drops down their priority list. What typically helps is if we narrow down your biggest concern right now. Is it the budget, uncertainty about results, or do you want to compare this to other proposals?"
+"That's fair. (pause) Here's what I've seen: most owners who say this end up deciding not to move forward, not because the value isn't there, but because it drops down their priority list. What typically helps is if we narrow down your biggest concern right now. Is it the budget, uncertainty about results, or do you want to compare this to other proposals?"
 
 **BRIDGE QUESTION:** Is the hesitation about the budget, results, or do you want to review other options?
 
