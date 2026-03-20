@@ -1,0 +1,128 @@
+[
+  {
+    "id": 2,
+    "title": "6-Figure Fitness Business Blueprint",
+    "description": "Complete step-by-step system for building a six-figure coaching business. Includes pricing strategies, client acquisition, retention systems, and scaling playbook.",
+    "category": "business",
+    "tags": [
+      "coaching",
+      "business",
+      "fitness",
+      "scaling",
+      "revenue"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 3,
+    "title": "Pinterest Viral Pin Formula",
+    "description": "Proven formula for creating pins that go viral on Pinterest. Includes design principles, copy templates, psychological triggers, and A/B testing framework.",
+    "category": "marketing",
+    "tags": [
+      "pinterest",
+      "marketing",
+      "design",
+      "viral",
+      "growth"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 4,
+    "title": "Email Sequences That Convert",
+    "description": "5-email sequence framework that converts free subscribers into paying customers. Templates, psychology breakdowns, timing strategies, and case studies included.",
+    "category": "marketing",
+    "tags": [
+      "email",
+      "copywriting",
+      "conversion",
+      "marketing",
+      "sales"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 5,
+    "title": "AI Content Repurposing System",
+    "description": "Turn one piece of content into 20+ variations for different platforms. AI prompts for Twitter, LinkedIn, TikTok, Instagram, blogs, and email. Complete workflow.",
+    "category": "content",
+    "tags": [
+      "ai",
+      "content",
+      "repurposing",
+      "marketing",
+      "automation"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 6,
+    "title": "Product Photography Prompts Bundle",
+    "description": "40+ Midjourney and DALL-E prompts for professional product photography. Includes angles, lighting, backgrounds, lifestyle shots, and mockup variations.",
+    "category": "design",
+    "tags": [
+      "photography",
+      "product",
+      "midjourney",
+      "dalle",
+      "design"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 7,
+    "title": "YouTube Shorts Script Generator",
+    "description": "Framework for writing YouTube Shorts scripts that stop scrolls and drive views. Proven hook formulas, pacing structures, CTAs, and examples for multiple niches.",
+    "category": "content",
+    "tags": [
+      "youtube",
+      "shorts",
+      "video",
+      "script",
+      "content"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 8,
+    "title": "DM Sales Copywriting Formulas",
+    "description": "4 proven copywriting formulas for selling via DMs. Works for coaches, consultants, and digital products. Complete sequences, objection handlers, and conversion trackers.",
+    "category": "copywriting",
+    "tags": [
+      "sales",
+      "dm",
+      "copywriting",
+      "messaging",
+      "conversion"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 9,
+    "title": "Lead Magnet Creation System",
+    "description": "Complete system for creating high-converting lead magnets. PDF, checklist, challenge, course, and toolkit templates. Plus email capture optimization framework.",
+    "category": "marketing",
+    "tags": [
+      "lead-gen",
+      "marketing",
+      "email",
+      "conversion",
+      "sales"
+    ],
+    "price": 4.99
+  },
+  {
+    "id": 10,
+    "title": "Personal Brand Content Calendar",
+    "description": "90-day content calendar framework for building personal brand. Pre-written posts, posting schedule, platform strategies, and content themes for coaches and creators.",
+    "category": "content",
+    "tags": [
+      "content",
+      "personal-brand",
+      "calendar",
+      "marketing",
+      "strategy"
+    ],
+    "price": 4.99
+  }
+]
