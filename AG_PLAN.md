@@ -1,139 +1,39 @@
-# Antigravity Execution Plan: AI Prompt Pack Launch
-**Generated**: 2026-03-20
-**Status**: Ready for execution
-**Executor**: Antigravity
+# Task: Prompt Pack Traffic Flywheel — COMPLETE
 
----
+## Context
+Multi-channel traffic system to drive visitors to Gumroad prompt pack products. All 7 tasks completed and pushed to GitHub.
 
-## Phase 1: Image Generation & Persistence Setup
-**Goal**: Generate 28 test images and save each with permanent URLs
+## Completed Steps
+- [x] Step 1: Brainstormed traffic strategy — chose Approach C (Multi-Channel Flywheel)
+- [x] Step 2: Injected prompt pack CTAs into 140 existing fitness articles on fitover35.com
+- [x] Step 3: Added product pin injector (30% chance per content-engine run) to daily Pinterest rotation
+- [x] Step 4: Created `/prompt-packs/` page on PilotTools.ai with 4 product cards + FAQ
+- [x] Step 5: Added 3 SEO articles to PilotTools.ai targeting prompt-related keywords
+- [x] Step 6: Scheduled recurring product pin posting (Mon/Thu 11AM PST)
+- [x] Step 7: Optimized all 4 Gumroad listings with categories + tags
+- [x] Step 8: Pushed all changes to GitHub (triggers Vercel deployments)
 
-### Step 1.1 — Database Schema
-Create Supabase table to track all image generations:
+## Gumroad Optimization Summary
+| Product | Category | Tags |
+|---------|----------|------|
+| AI Fitness Coach Vault (lupkl) | Fitness & Health > Exercise & Workout | ai fitness prompts, chatgpt fitness, personal trainer tools, workout programming, fitness coaching |
+| Pinterest Automation Blueprint (epjybe) | Business & Money > Marketing & Sales | pinterest automation, AI marketing, social media tools, content creation, pinterest marketing, make.com automation |
+| Online Coach AI Client Machine (weaaa) | Business & Money > Entrepreneurship | online coaching, client acquisition, AI sales scripts, coaching business, discovery call scripts |
+| AI Automation Empire Bundle (rwzcy) | Business & Money > Entrepreneurship | AI automation, prompt engineering, online business, coaching tools, n8n workflows |
 
-```sql
-CREATE TABLE IF NOT EXISTS prompt_pack_generations (
-  id TEXT PRIMARY KEY,
-  prompt_name TEXT NOT NULL,
-  test_variant CHAR(1) NOT NULL,
-  ai_model TEXT NOT NULL,
-  blob_url TEXT,
-  status TEXT DEFAULT 'pending',
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+## Traffic Channels Now Active
+1. **SEO (fitover35.com)**: 140 articles with product CTAs → Gumroad
+2. **SEO (pilottools.ai)**: 3 articles + dedicated prompt-packs page → Gumroad
+3. **Pinterest**: Product pins in daily rotation (30% injection rate) + scheduled Mon/Thu posting
+4. **Gumroad Discover**: All products categorized + tagged for marketplace search
+5. **Email (Kit)**: 7-email launch sequence active
 
-### Step 1.2 — Generate Midjourney Images (6 prompts × 4 variants = 24 images)
-**Platform**: https://www.midjourney.com (Google SSO login)
-
-For each of the 6 prompt groups:
-1. Paste exact prompt text into /imagine command
-2. Wait for 4-image grid to generate
-3. Upscale the BEST image (U1, U2, U3, or U4)
-4. Download to: ~/Desktop/midjourney-test-images/prompt-[NUMBER]-test-[LETTER].png
-5. Record in Supabase
-
-**Prompts to generate**: Fitness Portrait, Floating Product, App Icon, Interior Design, Food Photography, Flat Lay
-
-### Step 1.3 — Generate DALL-E 3 Logo Images (4 images)
-**Platform**: https://chatgpt.com
-
-For each of the 4 logo prompts:
-1. Paste prompt into ChatGPT chat
-2. Wait for DALL-E 3 to generate
-3. Save to: ~/Desktop/dalle-test-images/prompt-3-test-[LETTER].png
-
-### Step 1.4 — Upload All Images to Vercel Blob
-For each of 28 images:
-1. Upload to Vercel Blob at: prompt-pack/prompt-[N]-test-[LETTER].png
-2. Get permanent URL: https://blob.vercel-storage.com/...
-3. Update Supabase with blob_url and status: "uploaded"
-
----
-
-## Phase 2: PromptBase Submissions (10 submissions)
-**Platform**: https://promptbase.com
-
-Submit 10 prompts with:
-- Full prompt text
-- 4 test images as cover photos (or screenshot of output)
-- 150-200 word description
-- Tags and price
-- Correct AI model
-
-**Submissions**:
-1. Fitness Portrait ($4.99, Midjourney)
-2. Floating Product ($4.99, Midjourney)
-3. Logo Mark ($4.99, DALL-E)
-4. Email Onboarding ($4.99, ChatGPT)
-5. App Icon ($3.99, Midjourney)
-6. Interior Design ($4.99, Midjourney)
-7. Content Strategy ($4.99, ChatGPT)
-8. Food Photography ($3.99, Midjourney)
-9. Sales Objection ($4.99, ChatGPT)
-10. Flat Lay ($3.99, Midjourney)
-
-Record each PromptBase URL to Supabase after publishing.
-
----
-
-## Phase 3: Gumroad Product Completion
-**Platform**: https://gumroad.com/products/nezsn/edit
-
-### Step 3.1 — Create Cover Collage
-Create 2×2 grid of 4 best Midjourney test images with text overlay
-
-### Step 3.2 — Convert PDF
-```bash
-pandoc ~/Desktop/social-media-empire/prompt-packs/promptbase/deliverable/The-Creators-AI-Prompt-Vault.md -o The-Creators-AI-Prompt-Vault.pdf
-```
-
-### Step 3.3 — Update Product
-1. Upload cover image and thumbnail (600x600px)
-2. Upload PDF to Content tab
-3. Change URL slug from "nezsn" to "ai-prompt-vault"
-4. Click Publish
-
-Record the live Gumroad URL to Supabase.
-
----
-
-## Phase 4: Etsy Listings (4 listings)
-**Platform**: https://www.etsy.com
-
-### Step 4.1 — Create Bundle Listing
-- **Title**: 10 Premium AI Prompt Pack Bundle | Midjourney DALL-E ChatGPT | Product Photography Content Marketing Sales | Digital Download
-- **Price**: $24.99
-- **Images**: Upload 4 best Midjourney test images
-- **Description**: Full bundle description from user spec
-- **Tags**: ai prompt, midjourney prompt, chatgpt prompt, dall e prompt, product photography prompt, content marketing, email template, sales script, digital download, business tools, prompt engineering, ai tools, social media
-- **Upload file**: The PDF from Gumroad
-- **Publish**
-
-### Step 4.2 — Create 3 Individual Listings
-1. **Floating Product** — $4.99, 4 images, Prompt 2
-2. **90-Day Content Strategy** — $4.99, mockup image, Prompt 7
-3. **Sales Objection Playbook** — $4.99, mockup image, Prompt 9
-
-Each with 200-word description, proper tags, and PDF/text file upload.
-
-Record each Etsy listing URL to Supabase after publishing.
-
----
-
-## Phase 5: Verification & Documentation
-- [ ] 28 images generated and uploaded to Vercel Blob with permanent URLs
-- [ ] Supabase prompt_pack_generations table fully populated
-- [ ] 10 PromptBase products submitted and visible
-- [ ] Gumroad product published at talhahbilal.gumroad.com/l/ai-prompt-vault
-- [ ] 4 Etsy listings published and searchable
-- [ ] All product URLs recorded in Supabase prompt_pack_listings table
-- [ ] Screenshots taken for each platform (save to ./proof-of-publication/)
-
----
-
-## Output Files to Commit
-- ./archive/test-images-generated/ — All 28 downloaded images
-- ./proof-of-publication/ — Screenshots of each published product
-- ./scripts/upload-to-blob.js — Node script for Vercel Blob upload
-- Supabase tables: prompt_pack_generations, prompt_pack_listings (populated with all data)
+## Key Files Modified
+- `video_automation/product_pin_injector.py` — standalone module, 6 templates, hour-based rotation
+- `scripts/inject-prompt-pack-ctas.py` — one-time script (already ran), idempotent
+- `video_automation/article_templates.py` — `_prompt_pack_cta()` auto-adds CTAs to future fitness articles
+- `.github/workflows/content-engine.yml` — imports product_pin_injector, injects promo pins between Phase 0 and Phase 1
+- `.github/workflows/post-product-pins.yml` — added cron schedule (Mon/Thu 7PM UTC)
+- `ai-tools-hub/pages/prompt-packs/index.js` — new dedicated landing page
+- `ai-tools-hub/components/Navigation.js` — added Prompt Packs nav link
+- `ai-tools-hub/content/articles.json` — 3 new SEO articles
