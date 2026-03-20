@@ -1,0 +1,28 @@
+{
+  "name": "social-media-empire",
+  "version": "1.0.0",
+  "description": "Automated content creation and distribution system for multiple brands across social media platforms.",
+  "main": "scripts.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talhahbilal1-arch/social-media-empire.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/talhahbilal1-arch/social-media-empire/issues"
+  },
+  "homepage": "https://github.com/talhahbilal1-arch/social-media-empire#readme",
+  "devDependencies": {
+    "puppeteer": "^24.40.0"
+  }
+}
