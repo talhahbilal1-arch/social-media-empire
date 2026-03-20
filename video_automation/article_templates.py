@@ -972,6 +972,9 @@ def _render_v3_page(brand_key, article_data, site_config, slug):
     if brand_key == 'menopause':
         sections.append(ETSY_CTA_HTML)
     sections.append(_v3_faq_section(tpl, article_data.get('faq', [])))
+    pack_cta = _prompt_pack_cta(tpl)
+    if pack_cta:
+        sections.append(pack_cta)
     sections.append(_v3_related_products(tpl, article_data.get('related_products', [])))
     sections.append(_v3_share_bar(tpl, article_url, title))
     sections.append(_v3_expert_bio(tpl))
