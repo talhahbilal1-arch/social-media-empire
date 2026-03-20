@@ -337,6 +337,71 @@ def _fallback_sticky_cta(tpl, cta_url):
     )
 
 
+# ── Prompt Pack CTA (fitness articles only) ───────────────────────────────
+
+PROMPT_PACK_CTA_MAP = {
+    'fitness': {
+        'products': [
+            {
+                'name': 'AI Fitness Coach Vault',
+                'url': 'https://talhahbilal.gumroad.com/l/lupkl',
+                'desc': '75 copy-paste prompts for programs, nutrition plans, and client management',
+                'price': '$27',
+                'old_price': '$37',
+            },
+            {
+                'name': 'FREE: 5 AI Fitness Prompts',
+                'url': 'https://talhahbilal.gumroad.com/l/dkschg',
+                'desc': 'Try before you buy — 5 prompts that save fitness coaches 5 hours/week',
+                'price': 'Free Download',
+                'old_price': '',
+            },
+        ],
+        'headline': 'AI-Powered Fitness Coaching Tools',
+        'subtext': 'Stop writing workout programs from scratch. These copy-paste AI prompt packs save fitness coaches 5+ hours every week.',
+    },
+}
+
+
+def _prompt_pack_cta(tpl):
+    """Return prompt pack CTA HTML for the brand, or empty string if none."""
+    brand = tpl.get('brand_key', '')
+    pack = PROMPT_PACK_CTA_MAP.get(brand)
+    if not pack:
+        return ''
+    c = tpl['colors']
+    cards = ''
+    for p in pack['products']:
+        old = f' <span style="color:#666;font-size:0.8em;text-decoration:line-through">{p["old_price"]}</span>' if p['old_price'] else ''
+        cards += (
+            f'<a href="{p["url"]}" target="_blank" rel="noopener" '
+            f'style="flex:1;min-width:220px;display:block;background:#1a1a1a;'
+            f'border:1px solid #333;border-radius:10px;padding:16px;text-decoration:none;'
+            f'transition:border-color 0.2s" '
+            f'onmouseover="this.style.borderColor=\'{c["accent"]}\'" '
+            f'onmouseout="this.style.borderColor=\'#333\'">'
+            f'<p style="margin:0 0 4px;color:{c["accent"]};font-weight:700;font-size:0.95em">'
+            f'{p["name"]}</p>'
+            f'<p style="margin:0 0 8px;color:#999;font-size:0.82em;line-height:1.5">'
+            f'{p["desc"]}</p>'
+            f'<span style="color:#fff;font-weight:700;font-size:0.95em">{p["price"]}</span>'
+            f'{old}</a>\n'
+        )
+    return (
+        f'<div id="prompt-pack-cta" style="border:2px solid {c["accent"]};'
+        f'border-radius:16px;padding:28px 24px;margin-top:36px;'
+        f'background:linear-gradient(135deg,#111 0%,#1a1a1a 100%)">'
+        f'<p style="margin:0 0 6px;font-family:Oswald,sans-serif;font-size:1.3em;'
+        f'font-weight:700;color:{c["accent"]}">AI-Powered Fitness Coaching Tools</p>'
+        f'<p style="margin:0 0 18px;color:#ccc;font-size:0.92em;line-height:1.6">'
+        f'{pack["subtext"]}</p>'
+        f'<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:18px">'
+        f'{cards}</div>'
+        f'<p style="margin:0;text-align:center;font-size:0.78em;color:#666">'
+        f'Used by 50+ fitness coaches and personal trainers</p></div>'
+    )
+
+
 # ── Signup form ───────────────────────────────────────────────────────────
 
 def _signup_form(site_config, tpl, brand_key='deals'):
