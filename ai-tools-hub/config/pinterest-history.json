@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "slug": "category-seo",
+    "pin_type": "category",
+    "title": "Future-Proof Your SEO: Best AI SEO Tools of 2026!",
+    "link": "https://pilottools.ai/category/seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-03-20T16:55:09.880Z",
+    "success": true
+  },
+  {
+    "slug": "writesonic-vs-copy-ai",
+    "pin_type": "comparison",
+    "title": "Writesonic vs Copy.ai: Which AI Writer Wins?",
+    "link": "https://pilottools.ai/compare/writesonic-vs-copy-ai/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-20T16:55:14.226Z",
+    "success": true
+  },
+  {
+    "slug": "category-image",
+    "pin_type": "category",
+    "title": "Top AI Image Generators of 2026: Create Stunning Visuals!",
+    "link": "https://pilottools.ai/category/image/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-03-20T16:55:18.481Z",
+    "success": true
+  }
+]
