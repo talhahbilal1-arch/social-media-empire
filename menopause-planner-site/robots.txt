@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://menopause-planner-website.vercel.app/sitemap.xml
