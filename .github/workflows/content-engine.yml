@@ -195,6 +195,31 @@ jobs:
                   log_pipeline_error('0', brand, e, severity='high')
           print()
 
+          # ── Product pin injection (30% chance per run, fitness only) ──
+          if should_inject_product_pin():
+              try:
+                  promo = get_product_pin()
+                  promo_board_id = get_board_id('fitness', promo.get('board', ''))
+                  promo_row = {
+                      'brand': 'fitness',
+                      'title': promo['title'],
+                      'description': promo['description'],
+                      'overlay_headline': promo['graphic_title'],
+                      'overlay_subtext': '',
+                      'tips': [],
+                      'pexels_search_term': promo['image_search_query'],
+                      'board_id': promo_board_id,
+                      'destination_url': promo['destination_url'],
+                      'visual_style': promo['visual_style'],
+                      'niche': 'product_promotion',
+                      'status': 'content_ready',
+                  }
+                  if not dry_run:
+                      db.client.table('pinterest_pins').insert(promo_row).execute()
+                  print(f'  [fitness] PROMO PIN injected: {promo["title"][:50]}')
+              except Exception as e:
+                  print(f'  Product pin injection skipped: {e}')
+
           # ══════════════════════════════════════════════════════════════
           # PHASE 1: Render content_ready pins → upload images → set ready
           # ══════════════════════════════════════════════════════════════
