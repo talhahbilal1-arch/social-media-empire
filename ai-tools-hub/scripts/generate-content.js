@@ -88,19 +88,26 @@ async function generateReview(toolName, category) {
 
   const prompt = `Generate a JSON object for an AI tool review of "${toolName}" in the "${category}" category.
 
-IMPORTANT RULES:
-- Use REAL, ACCURATE information about ${toolName}
-- Pricing should reflect actual current rates
-- Be HONEST in pros and cons — credibility matters
-- Every field must have substantive, specific content (no generic filler)
-- The description should explain what makes this tool notable, not just what it does
+IMPORTANT QUALITY RULES FOR 2026:
+- Use REAL, ACCURATE information about ${toolName} as of March 2026
+- Pricing must reflect actual current rates (include March 2026 date)
+- Description MUST be 400+ words, not 2-3 sentences. Include:
+  * Direct answer in first 50 words (for Google's GEO citations)
+  * Real features with specific examples
+  * Pricing details with dates ("As of March 2026")
+  * Use cases and who it's best for
+  * How it compares to main competitors
+  * First-person language: "In our testing", "We found", "Our team reviewed"
+- NO filler phrases: "In today's digital landscape", "In the world of AI", "Cutting-edge technology"
+- Be HONEST in pros/cons — credibility matters. Every tool has real weaknesses
+- Every field must be substantive and specific
 
 Return ONLY valid JSON (no markdown, no explanation) matching this exact structure:
 {
   "slug": "${slug}",
   "name": "${toolName}",
   "tagline": "short tagline under 80 chars — be specific, not generic",
-  "description": "2-3 sentences. What the tool does, who it's for, and what makes it stand out.",
+  "description": "400+ words as detailed above. Start with direct answer. Use first-person. Include real pricing with March 2026 date.",
   "category": "${category}",
   "categories": ["${category}", "add 1-2 other relevant categories from: writing, coding, image, video, marketing, productivity, audio, seo, research, design"],
   "pricing": {
@@ -126,7 +133,7 @@ Return ONLY valid JSON (no markdown, no explanation) matching this exact structu
 }`
 
   console.log(`  Calling Claude API for ${toolName} review...`)
-  const response = await callClaude(prompt)
+  const response = await callClaude(prompt, 4000)
   return extractJson(response)
 }
 
