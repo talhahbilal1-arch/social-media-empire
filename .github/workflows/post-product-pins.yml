@@ -1,6 +1,9 @@
 name: Post Product Pins
 
 on:
+  schedule:
+    # Every Monday and Thursday at 11 AM PST (7 PM UTC)
+    - cron: '0 19 * * 1,4'
   workflow_dispatch:
 
 jobs:
