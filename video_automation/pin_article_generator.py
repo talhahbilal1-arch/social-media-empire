@@ -199,7 +199,22 @@ def _fetch_pexels_image(query, orientation='landscape'):
             logger.warning(f"Pexels API returned {resp.status_code} for '{query}'")
     except Exception as e:
         logger.warning(f"Pexels hero image fetch failed for '{query}': {e}")
-    return None
+    # NEVER return None — use fallback image
+    logger.info(f"Using fallback image for query: '{query}'")
+    fallback_queries = {
+        'woman': 'https://images.pexels.com/photos/6585764/pexels-photo-6585764.jpeg?auto=compress&cs=tinysrgb&w=900',
+        'man': 'https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=900',
+        'product': 'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&w=900',
+        'home': 'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=900',
+        'kitchen': 'https://images.pexels.com/photos/2062426/pexels-photo-2062426.jpeg?auto=compress&cs=tinysrgb&w=900',
+        'sleep': 'https://images.pexels.com/photos/6585764/pexels-photo-6585764.jpeg?auto=compress&cs=tinysrgb&w=900',
+        'fitness': 'https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=900',
+    }
+    query_lower = query.lower() if query else ''
+    for keyword, url in fallback_queries.items():
+        if keyword in query_lower:
+            return url
+    return 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=900'
 
 
 def _fetch_pexels_video(query, orientation='landscape'):
