@@ -426,8 +426,15 @@ async function main() {
   const calendar = JSON.parse(fs.readFileSync(CALENDAR_FILE, 'utf8'))
   const existingTools = JSON.parse(fs.readFileSync(TOOLS_FILE, 'utf8'))
   const existingComparisons = JSON.parse(fs.readFileSync(COMPARISONS_FILE, 'utf8'))
+  let existingArticles = []
+  const ARTICLES_FILE = path.join(__dirname, '..', 'content', 'articles.json')
+  if (fs.existsSync(ARTICLES_FILE)) {
+    existingArticles = JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8'))
+  }
+
   const toolSlugs = new Set(existingTools.map(t => t.slug))
   const compSlugs = new Set(existingComparisons.map(c => c.slug))
+  const articleSlugs = new Set(existingArticles.map(a => a.slug))
 
   let generated = 0
 
@@ -476,20 +483,41 @@ async function main() {
         compSlugs.add(item.slug)
         console.log(`  Done: ${comparison.title}`)
 
+      } else if (item.type === 'article') {
+        if (articleSlugs.has(item.slug)) {
+          console.log(`  Skipping — ${item.slug} already exists in articles.json`)
+          markPublished(calendar, item.id)
+          continue
+        }
+
+        const article = await generateArticle(item, existingTools)
+        existingArticles.push(article)
+        fs.writeFileSync(ARTICLES_FILE, JSON.stringify(existingArticles, null, 2))
+        articleSlugs.add(item.slug)
+        console.log(`  Done: ${article.title}`)
+
       } else if (item.type === 'listicle') {
-        // Listicles are logged as TODO — they need a page template
-        console.log(`  Skipping listicle "${item.slug}" — listicle page template not yet implemented`)
-        // Don't mark as published
-        continue
+        if (articleSlugs.has(item.slug)) {
+          console.log(`  Skipping — ${item.slug} already exists in articles.json`)
+          markPublished(calendar, item.id)
+          continue
+        }
+
+        const listicle = await generateListicle(item, existingTools)
+        existingArticles.push(listicle)
+        fs.writeFileSync(ARTICLES_FILE, JSON.stringify(existingArticles, null, 2))
+        articleSlugs.add(item.slug)
+        console.log(`  Done: ${listicle.title}`)
+
       }
 
       markPublished(calendar, item.id)
       generated++
 
-      // Rate limit between API calls
+      // Rate limit between API calls (increased to 5s)
       if (i < maxCount - 1) {
-        console.log('  Waiting 3s (rate limit)...')
-        await new Promise(r => setTimeout(r, 3000))
+        console.log('  Waiting 5s (rate limit)...')
+        await new Promise(r => setTimeout(r, 5000))
       }
 
     } catch (err) {
@@ -509,6 +537,7 @@ async function main() {
   console.log(`Generated: ${generated} items`)
   console.log(`Total tools: ${existingTools.length}`)
   console.log(`Total comparisons: ${existingComparisons.length}`)
+  console.log(`Total articles: ${existingArticles.length}`)
   const remaining = calendar.items.filter(i => i.status === 'pending').length
   console.log(`Calendar items remaining: ${remaining}`)
 }
