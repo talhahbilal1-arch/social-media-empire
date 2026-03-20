@@ -25,5 +25,32 @@
     "board": "AI Image Generators",
     "posted_at": "2026-03-20T16:55:18.481Z",
     "success": true
+  },
+  {
+    "slug": "perplexity",
+    "pin_type": "tool-review",
+    "title": "Perplexity AI: The Research Tool That's Blowing Minds! (4.7/5)",
+    "link": "https://pilottools.ai/tools/perplexity/",
+    "board": "AI Research Tools",
+    "posted_at": "2026-03-20T22:16:58.421Z",
+    "success": true
+  },
+  {
+    "slug": "surfer-seo",
+    "pin_type": "tool-review",
+    "title": "Surfer SEO Review: Is It Worth the Hype? (4.5/5)",
+    "link": "https://pilottools.ai/tools/surfer-seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-03-20T22:17:02.458Z",
+    "success": true
+  },
+  {
+    "slug": "automate-pinterest-marketing-ai-2026",
+    "pin_type": "article",
+    "title": "Pinterest Automation in 2026: AI-Powered Growth!",
+    "link": "https://pilottools.ai/blog/automate-pinterest-marketing-ai-2026/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-03-20T22:17:06.424Z",
+    "success": true
   }
 ]
