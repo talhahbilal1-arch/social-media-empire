@@ -903,16 +903,13 @@ def _build_v3_article(article_data, brand_key, slug, pin_data=None):
         pin_data = {}
     pin_data['_article_data'] = enriched_data
 
-    # Delegate to template
-    return render_article_page(
+    # Use the new template-based renderer (permanent fix)
+    from .template_renderer import render_article_from_template
+    return render_article_from_template(
         brand_key=brand_key,
-        title=enriched_data.get('title', ''),
-        meta_desc=enriched_data.get('meta_description', ''),
-        body_html='',  # v3 template handles rendering
-        hero_url=hero_url,
+        article_data=enriched_data,
         site_config=site,
         slug=slug,
-        pin_data=pin_data,
     )
 
 
