@@ -137,6 +137,204 @@ Return ONLY valid JSON (no markdown, no explanation) matching this exact structu
   return extractJson(response)
 }
 
+// ---------- Article Generation (Pricing, Alternatives, "Is It Worth It") ----------
+
+async function generateArticle(item, existingTools) {
+  const slug = item.slug
+  let prompt = ''
+
+  if (item.slug.includes('pricing')) {
+    // Pricing page
+    const toolName = item.tool_name
+    prompt = `You are writing a detailed pricing guide article for "${toolName}" on an AI tools review site.
+
+Generate a JSON object with:
+- slug: "${slug}"
+- title: "${item.title}"
+- content: 2000+ words of HTML-formatted article with <h2>, <h3>, <p>, <ul>, <table> tags
+- meta_description: compelling 155-160 char description including "pricing 2026"
+- keywords: ["${toolName.toLowerCase()} pricing", "${toolName.toLowerCase()} plans 2026", "pricing comparison"]
+- published_date: "2026-03-20"
+
+Article structure (2000+ words):
+1. Intro (200 words) — Direct answer: What is ${toolName}'s pricing model? Why does it matter?
+2. Pricing Breakdown (400+ words) — All plans, features per plan, free tier details
+3. Annual vs Monthly (200 words) — Discounts, lock-in terms, flexibility
+4. ROI Analysis (400 words) — Cost per feature, value for [students/freelancers/agencies], ROI examples
+5. Comparison Table (200 words) — ${toolName} vs 3 competitors in pricing tiers, features, value
+6. FAQ Section (400 words) — 5-8 Q&A covering: free trial, refund policy, payment methods, discounts, hidden costs, upgrade process, enterprise options
+7. Verdict (200 words) — Final recommendation: who should choose ${toolName} at each price tier
+
+CONTENT RULES:
+- Use first-person: "We compared ${toolName} to 50+ tools", "In our testing"
+- Include real March 2026 pricing data
+- Add 2+ internal links to pilottools.ai tool pages (e.g. <a href="/tools/chatgpt">ChatGPT</a>)
+- Add affiliate CTAs: "Check current ${toolName} pricing"
+- NO filler phrases like "In today's world" or "Cutting-edge"
+- Use <table> for pricing comparison
+- Use <strong> for emphasis on key points
+
+Return ONLY valid JSON (no markdown).`
+
+  } else if (item.slug.includes('alternatives')) {
+    // Alternatives page
+    const toolName = item.tool_name
+    prompt = `You are writing an alternatives guide for "${toolName}" on an AI tools review site.
+
+Generate a JSON object with:
+- slug: "${slug}"
+- title: "${item.title}"
+- content: 2000+ words of HTML-formatted article
+- meta_description: compelling 155-160 char description
+- keywords: ["${toolName.toLowerCase()} alternatives", "best ${toolName.toLowerCase()} alternatives 2026", "tools like ${toolName.toLowerCase()}"]
+- published_date: "2026-03-20"
+
+Article structure (2000+ words):
+1. Intro (200 words) — Direct answer: What are the best ${toolName} alternatives in 2026? Why consider alternatives?
+2. Comparison Overview (300 words) — Quick matrix: tool, pricing, best for, top feature
+3. Top Alternatives (1200+ words) — 4-5 detailed alternatives, 200+ words each:
+   - Tool name, pricing, best for
+   - Key differences from ${toolName}
+   - Pros and cons
+   - Ideal use case
+   - Link to review page
+4. Feature Comparison Table (200 words) — ${toolName} vs 4 alternatives: price, free tier, ease of use, best feature
+5. How to Choose (300 words) — Decision factors: budget, features, learning curve, integrations
+6. FAQ (200 words) — 4-5 questions about finding alternatives, migration tips
+
+CONTENT RULES:
+- First-person: "We tested ${toolName} and 10 alternatives", "In our comparison"
+- Add 2+ internal links to pilottools.ai tool reviews
+- Add affiliate CTAs per tool: "Try [Alternative Tool]"
+- Real March 2026 pricing
+- Balanced recommendations — don't just say alternatives are better
+- Use <a> tags for internal links
+- Use <table> for feature comparison
+
+Return ONLY valid JSON (no markdown).`
+
+  } else if (item.slug.includes('worth-it')) {
+    // "Is it worth it" page
+    const toolName = item.tool_name
+    prompt = `You are writing a ROI analysis article: "Is ${toolName} Worth It in 2026?"
+
+Generate a JSON object with:
+- slug: "${slug}"
+- title: "${item.title}"
+- content: 2000+ words of HTML-formatted article
+- meta_description: compelling 155-160 char description
+- keywords: ["is ${toolName.toLowerCase()} worth it", "${toolName.toLowerCase()} value for money 2026"]
+- published_date: "2026-03-20"
+
+Article structure (2000+ words):
+1. Direct Answer (200 words) — Yes/no/maybe with conditions. What makes it worth it?
+2. Pricing Breakdown (300 words) — Cost analysis, free tier, pricing tiers, annual cost
+3. Real-World ROI (500 words) — Case study with 3 scenarios:
+   - Freelancer: cost vs time savings vs income boost
+   - Agency: team cost vs productivity gains vs billable hours increase
+   - Solo creator: subscription cost vs revenue generated
+   - Include real numbers and percentages
+4. Pros Worth the Cost (300 words) — 5-6 features that justify the price, with real examples
+5. Cons That Might Not Be Worth It (300 words) — Limitations, cheaper alternatives for specific needs
+6. Verdict (200 words) — Who should buy, who shouldn't, what to know first
+7. FAQ (200 words) — 5-6 questions about ROI, when it's worth it, free alternatives
+
+CONTENT RULES:
+- First-person: "In our testing", "We found", "Our analysis shows"
+- Real March 2026 pricing
+- Specific use case examples
+- Include 2+ internal links to competitor reviews
+- Add affiliate CTA
+- Be balanced — not every tool is worth it for everyone
+- Use realistic numbers/percentages
+
+Return ONLY valid JSON (no markdown).`
+  }
+
+  console.log(`  Calling Gemini API for article: ${slug}...`)
+  const response = await callClaude(prompt, 8000)
+  const article = extractJson(response)
+
+  // Ensure required fields
+  article.slug = article.slug || slug
+  article.published_date = article.published_date || new Date().toISOString().split('T')[0]
+
+  return article
+}
+
+// ---------- Listicle Generation ----------
+
+async function generateListicle(item, existingTools) {
+  const slug = item.slug
+  const title = item.title
+
+  // Extract profession or task from slug
+  const match = slug.match(/best-ai-tools-(.+)$/)
+  const subject = match ? match[1].replace(/-/g, ' ') : 'AI tools'
+
+  const prompt = `You are writing a listicle: "${title}" for an AI tools review site.
+
+The subject is: ${subject}
+
+Generate a JSON object with:
+- slug: "${slug}"
+- title: "${title}"
+- content: 2000+ words of HTML-formatted listicle with tool cards, comparison table, verdict
+- meta_description: compelling 155-160 char description
+- keywords: ["best ai tools for ${subject}", "${subject} ai tools 2026"]
+- published_date: "2026-03-20"
+
+Article structure (2000+ words):
+1. Intro (200 words) — Direct answer: What are the best AI tools for ${subject}? Why does this matter for [job/task]?
+2. Quick Comparison (300 words) — Table: tool name, price, best feature, rating
+3. Detailed Tool Reviews (1200+ words) — 4-6 tools, 150-200 words each:
+   - Tool name and logo
+   - Tagline
+   - Best for: specific use case for ${subject}
+   - Key features with [Feature: Description]
+   - Pricing: starting price, free tier
+   - Why we chose it for ${subject}
+   - Link to full review: <a href="/tools/[tool-slug]">[Tool Name] full review</a>
+4. Feature Comparison Table (200 words) — Tools vs features needed for ${subject}
+5. How to Choose (300 words) — Decision criteria: budget, features, learning curve, integrations
+6. Verdict (200 words) — Top pick recommendation with reasoning
+7. FAQ (300 words) — 5-6 common questions for ${subject}
+
+OUTPUT FORMAT for tool cards in content:
+<div class="tool-card">
+  <h3>[Tool Name]</h3>
+  <p><strong>Starting Price:</strong> \$X/month</p>
+  <p><strong>Best For:</strong> [Use case for ${subject}]</p>
+  <ul>
+    <li>[Feature 1]: [Benefit]</li>
+    <li>[Feature 2]: [Benefit]</li>
+    <li>[Feature 3]: [Benefit]</li>
+  </ul>
+  <p><a href="/tools/[tool-slug]">Read full [Tool Name] review</a></p>
+</div>
+
+CONTENT RULES:
+- First-person: "In our testing for ${subject}", "We found these tools help [job/task]"
+- Real March 2026 pricing
+- Specific ${subject} use cases and examples
+- Include 4+ internal links to pilottools.ai tool reviews
+- Add affiliate CTAs per tool
+- Focus on ROI for ${subject}: time saved, quality improvement, cost savings
+- No generic filler — be specific to ${subject}
+
+Return ONLY valid JSON (no markdown).`
+
+  console.log(`  Calling Gemini API for listicle: ${slug}...`)
+  const response = await callClaude(prompt, 8000)
+  const listicle = extractJson(response)
+
+  // Ensure required fields
+  listicle.slug = listicle.slug || slug
+  listicle.published_date = listicle.published_date || new Date().toISOString().split('T')[0]
+
+  return listicle
+}
+
 // ---------- Comparison Generation ----------
 
 async function generateComparison(tool1Name, tool2Name, tool1Data, tool2Data) {
