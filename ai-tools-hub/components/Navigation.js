@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { href: '/category/video/', label: 'Video' },
   { href: '/category/marketing/', label: 'Marketing' },
   { href: '/compare/', label: 'Compare' },
-  { href: '/submit/', label: 'Submit Tool' },
+  { href: '/prompt-packs/', label: 'Prompt Packs' },
   { href: '/blog/', label: 'Blog' },
 ]
 
