@@ -1,0 +1,80 @@
+name: Regenerate All Articles
+
+on:
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Brand to regenerate (or "all")'
+        required: true
+        type: choice
+        options:
+          - all
+          - deals
+          - fitness
+          - menopause
+      limit:
+        description: 'Limit articles per brand (blank = all)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run (preview only, no file changes)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install google-genai requests
+
+      - name: Run regeneration
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          BRAND: ${{ inputs.brand }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          ARGS=""
+
+          if [ "$BRAND" = "all" ]; then
+            ARGS="--all"
+          else
+            ARGS="--brand $BRAND"
+          fi
+
+          if [ "$DRY_RUN" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          if [ -n "$LIMIT" ]; then
+            ARGS="$ARGS --limit $LIMIT"
+          fi
+
+          python scripts/regenerate_all_articles.py $ARGS
+
+      - name: Commit and push
+        if: inputs.dry_run != true
+        env:
+          BRAND: ${{ inputs.brand }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/
+          git diff --cached --quiet || git commit -m "feat: regenerate ${BRAND} articles with new template"
+          git push
