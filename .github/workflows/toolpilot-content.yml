@@ -16,7 +16,7 @@ on:
       count:
         description: 'Number of items to generate (1-3)'
         required: false
-        default: '1'
+        default: '3'
 
 permissions:
   contents: write
