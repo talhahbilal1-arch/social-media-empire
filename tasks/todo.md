@@ -228,18 +228,47 @@ Alternatively, contact Gumroad support for batch upload API access.
 
 ---
 
-## Task B: List Products on PromptBase ⏳ PENDING
-Create PromptBase listings with ChatGPT example screenshots.
+## Task B: List Products on PromptBase ⚠️ BLOCKED (Manual Steps Required)
 
-- [ ] **B.1** Log into PromptBase, navigate to Sell dashboard
-- [ ] **B.2** For each pack: extract 1 sample prompt → run in ChatGPT → screenshot output
-- [ ] **B.3** Freelancer AI Toolkit — create listing with example screenshot
-- [ ] **B.4** AI Content Machine — create listing with example screenshot
-- [ ] **B.5** Digital Product Launch System — create listing with example screenshot
-- [ ] **B.6** AI Copywriter — create listing with example screenshot
-- [ ] **B.7** Side Hustle Finder — create listing with example screenshot
-- [ ] **B.8** Etsy eCommerce Assistant — create listing with example screenshot
-- [ ] **B.9** AI Business Automation Playbook — create listing with example screenshot
+**Status:** ChatGPT Share Link automation blocker — requires manual interaction.
+
+**Blocker Details:**
+PromptBase's 3-step listing wizard requires a valid ChatGPT "Share chat" link (format: `https://chatgpt.com/share/[UUID]`) to progress from Step 2/3 (Prompt File) to Step 3/3 (Finish). The form has strict client-side validation that will not accept placeholder or invalid URLs. The ChatGPT Share button itself is not accessible to browser automation.
+
+**Manual Steps to Complete Each Listing (B.1-B.8):**
+
+For **each of the 8 prompt packs**:
+1. Go to PromptBase: https://promptbase.com/sell
+2. Click "Create" → Start a new listing
+3. **Step 1/3 (Basics):** Fill title, description, price, category. Click "Next: Prompt File"
+4. **Step 2/3 (Prompt File):**
+   - Select GPT Type: "Chat (ChatGPT)"
+   - Select GPT Version: "gpt-5.4" (or latest)
+   - **Prompt Template:** Paste the main prompt from `prompt-packs/products/[PACK_NAME]/prompts.md`
+   - **Example Outputs:** Add 4 example outputs (use ChatGPT to generate these)
+   - **Example Prompts (SITUATION values):** Use the 4 [SITUATION] variants from the prompts file
+   - **Prompt Instructions:** Paste the instruction text
+   - **ChatGPT Share Link:**
+     - Open ChatGPT in a new tab: https://chatgpt.com/
+     - Go to your test conversation with this prompt
+     - Click "Share chat" button (top right of conversation)
+     - Click "Copy Link"
+     - Paste here and verify link format is `https://chatgpt.com/share/[valid-uuid]`
+   - Click "Next: Finish"
+5. **Step 3/3 (Finish):** Review and submit
+
+**Packs to List:**
+- [ ] **B.1** Freelancer AI Toolkit
+- [ ] **B.2** AI Content Machine
+- [ ] **B.3** Digital Product Launch System
+- [ ] **B.4** AI Copywriter
+- [ ] **B.5** Side Hustle Finder
+- [ ] **B.6** Etsy eCommerce Assistant
+- [ ] **B.7** AI Business Automation Playbook
+- [ ] **B.8** AI Money Maker Mega Bundle
+
+**Why Manual?**
+ChatGPT's Share button is a native UI element that cannot be triggered via browser automation (tried: accessibility tree, DOM selectors, JavaScript injection, hover/click detection). PromptBase's form validation is server-side strict and rejects any URL that doesn't match the exact share format.
 
 ---
 
