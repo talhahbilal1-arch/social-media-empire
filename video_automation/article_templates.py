@@ -920,6 +920,7 @@ def _render_v3_page(brand_key, article_data, site_config, slug):
     }
     """
     tpl = TEMPLATE_CONFIG.get(brand_key, TEMPLATE_CONFIG['deals'])
+    tpl['brand_key'] = brand_key
     c = tpl['colors']
 
     title = article_data.get('title', 'Untitled')
