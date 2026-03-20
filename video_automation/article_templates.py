@@ -654,6 +654,7 @@ def _render_iron_standard(tpl, title, meta_desc, body_html, hero_url, site_confi
         + f'<div class="article-body">\n{body_html}\n</div>\n'
         + _expert_card(tpl) + '\n'
         + _disclosure(tpl) + '\n'
+        + _prompt_pack_cta(tpl) + '\n'
         + f'<div style="background:{c["accent"]};border-radius:12px;padding:24px;'
         f'margin-top:32px;text-align:center">'
         f'<p style="margin:0 0 8px;color:#000;font-weight:700;font-size:1.1em">'
