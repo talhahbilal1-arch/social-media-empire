@@ -1,39 +1,48 @@
-# Task: Prompt Pack Traffic Flywheel — COMPLETE
+# AG_PLAN: PilotTools.ai Marketing Execution
 
 ## Context
-Multi-channel traffic system to drive visitors to Gumroad prompt pack products. All 7 tasks completed and pushed to GitHub.
+Scale PilotTools.ai from 0 to 50K+ monthly visitors using a multi-channel marketing engine. Full strategy in `tasks/todo.md`. 8 phases, prioritized by ROI vs effort.
 
-## Completed Steps
-- [x] Step 1: Brainstormed traffic strategy — chose Approach C (Multi-Channel Flywheel)
-- [x] Step 2: Injected prompt pack CTAs into 140 existing fitness articles on fitover35.com
-- [x] Step 3: Added product pin injector (30% chance per content-engine run) to daily Pinterest rotation
-- [x] Step 4: Created `/prompt-packs/` page on PilotTools.ai with 4 product cards + FAQ
-- [x] Step 5: Added 3 SEO articles to PilotTools.ai targeting prompt-related keywords
-- [x] Step 6: Scheduled recurring product pin posting (Mon/Thu 11AM PST)
-- [x] Step 7: Optimized all 4 Gumroad listings with categories + tags
-- [x] Step 8: Pushed all changes to GitHub (triggers Vercel deployments)
+## Current State
+- 80 tools, 100+ indexed pages, 5 GitHub Actions workflows running
+- SEO content generation Mon-Fri (Gemini 2.0)
+- Newsletter via ConvertKit (weekly)
+- Pinterest pins generated but NOT auto-posted for PilotTools
+- NO X/Twitter, Reddit, LinkedIn, YouTube automation
 
-## Gumroad Optimization Summary
-| Product | Category | Tags |
-|---------|----------|------|
-| AI Fitness Coach Vault (lupkl) | Fitness & Health > Exercise & Workout | ai fitness prompts, chatgpt fitness, personal trainer tools, workout programming, fitness coaching |
-| Pinterest Automation Blueprint (epjybe) | Business & Money > Marketing & Sales | pinterest automation, AI marketing, social media tools, content creation, pinterest marketing, make.com automation |
-| Online Coach AI Client Machine (weaaa) | Business & Money > Entrepreneurship | online coaching, client acquisition, AI sales scripts, coaching business, discovery call scripts |
-| AI Automation Empire Bundle (rwzcy) | Business & Money > Entrepreneurship | AI automation, prompt engineering, online business, coaching tools, n8n workflows |
+## Execution Order
 
-## Traffic Channels Now Active
-1. **SEO (fitover35.com)**: 140 articles with product CTAs → Gumroad
-2. **SEO (pilottools.ai)**: 3 articles + dedicated prompt-packs page → Gumroad
-3. **Pinterest**: Product pins in daily rotation (30% injection rate) + scheduled Mon/Thu posting
-4. **Gumroad Discover**: All products categorized + tagged for marketplace search
-5. **Email (Kit)**: 7-email launch sequence active
+### Phase 1: SEO Scale-Up (START HERE)
+1. Read `ai-tools-hub/content/tools.json` to get all 80 tool slugs
+2. Generate 135+ content calendar items covering:
+   - `[tool] pricing 2026` × 80 tools
+   - `[tool] alternatives` × 80 tools
+   - `best AI tools for [profession]` × 25
+   - `best AI tools for [task]` × 25
+3. Write items to `ai-tools-hub/config/content-calendar.json` (status: pending, priority: high/medium)
+4. Update `toolpilot-content.yml` default count from 1 to 3
+5. Update `scripts/generate-content.js` to enforce: 2000+ words, first-person, GEO-optimized first paragraph, 2+ internal links
 
-## Key Files Modified
-- `video_automation/product_pin_injector.py` — standalone module, 6 templates, hour-based rotation
-- `scripts/inject-prompt-pack-ctas.py` — one-time script (already ran), idempotent
-- `video_automation/article_templates.py` — `_prompt_pack_cta()` auto-adds CTAs to future fitness articles
-- `.github/workflows/content-engine.yml` — imports product_pin_injector, injects promo pins between Phase 0 and Phase 1
-- `.github/workflows/post-product-pins.yml` — added cron schedule (Mon/Thu 7PM UTC)
-- `ai-tools-hub/pages/prompt-packs/index.js` — new dedicated landing page
-- `ai-tools-hub/components/Navigation.js` — added Prompt Packs nav link
-- `ai-tools-hub/content/articles.json` — 3 new SEO articles
+### Phase 2: Pinterest (Add PilotTools as 4th Brand)
+1. Create `video_automation/pilottools_pin_generator.py` — reads tools.json, generates pin data
+2. Add PilotTools config to content_brain.py BRAND_CONFIGS (or separate module)
+3. User: Create Make.com webhook scenario + Pinterest biz account + 5 boards
+4. Add MAKE_WEBHOOK_PILOTTOOLS to GitHub secrets
+5. Add PilotTools posting phase to content-engine.yml or new workflow
+
+### Phase 3: X/Twitter
+1. User: Create X developer account, get API credentials
+2. Create `video_automation/twitter_poster.py` — 4 post types, Gemini copy
+3. Create `toolpilot-twitter.yml` — 2-3 posts/day schedule
+4. Create `twitter_posts` Supabase table
+5. Add GitHub secrets: TWITTER_API_KEY, TWITTER_API_SECRET, etc.
+
+### Phase 4: Content Repurposer
+1. Create `video_automation/content_repurposer.py` — article → multi-platform content
+2. Create `social_content_queue` Supabase table
+3. Integrate into toolpilot-content.yml post-generation step
+
+### Phase 5-8: LinkedIn, Email Growth, YouTube, Backlinks
+See `tasks/todo.md` for full details.
+
+## Status: AWAITING USER REVIEW
