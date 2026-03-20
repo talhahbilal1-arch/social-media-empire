@@ -66,13 +66,21 @@ jobs:
           npx vercel build --prod --token=$VERCEL_TOKEN
           npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
-      # Step 5: Commit new content to git
+      # Step 5: Generate lead magnet
+      - name: Generate lead magnet
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-lead-magnet.js
+        continue-on-error: true
+
+      # Step 6: Commit new content to git
       - name: Commit generated content
         run: |
           cd ..
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ai-tools-hub/content/ ai-tools-hub/config/ ai-tools-hub/public/sitemap.xml ai-tools-hub/public/robots.txt
+          git add ai-tools-hub/content/ ai-tools-hub/config/ ai-tools-hub/public/sitemap.xml ai-tools-hub/public/robots.txt ai-tools-hub/downloads/
           git diff --cached --quiet || git commit -m "content: weekly discovery + auto-generated content"
           git pull --rebase origin main
           git push
+        continue-on-error: true
