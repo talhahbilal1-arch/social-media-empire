@@ -83,9 +83,9 @@ export default function NewsletterSignup({ variant = 'inline', className = '' })
     return (
       <div className={`bg-gradient-to-r from-accent/10 to-accent-purple/10 border border-accent/20 rounded-2xl p-8 md:p-10 ${className}`}>
         <div className="max-w-2xl mx-auto text-center">
-          <h3 className="text-2xl md:text-3xl font-bold text-dt mb-3">Stay Ahead of the AI Curve</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-dt mb-3">Free: AI Tools Pricing Cheat Sheet</h3>
           <p className="text-dt-muted mb-6 text-lg">
-            Get our weekly roundup of the best AI tools, exclusive deals, and expert tips delivered to your inbox.
+            Compare pricing for 80+ AI tools in one page. Plus get weekly tool picks, deals, and expert tips.
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
