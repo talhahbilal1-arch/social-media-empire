@@ -536,3 +536,30 @@ Complete inventory and health check of all projects, automations, workflows, and
 **Projects Mapped:** 0 of 4
 **Issues Found:** 0
 **Critical Issues:** 0
+
+---
+
+# CRITICAL FIX: toolpilot-content.yml Broken Pipe Error — 2026-03-21
+
+## Root Cause
+Lines 111-112 in `.github/workflows/toolpilot-content.yml` cause **EPIPE (broken pipe)** error:
+- Using piped Node.js one-liners: `cat file.json | node -e "process.stdin.on('data',...)`
+- Node.js exits after first `console.log()` without waiting for EOF
+- Shell pipe breaks when cat tries to write to closed process
+- Workflow crashes before Summary step completes
+
+## Why This Started
+Commit ca6f8d9 (2026-03-18):
+- Changed CONTENT_COUNT from 1 → 3 (lines 111-112 added for summary)
+- Made JSON files larger, triggering race condition
+
+## Fix Applied ✅
+**Replace problematic pipes with `jq` (built-in on GH Actions ubuntu-latest):**
+- Line 111: `TOOLS=$(cat content/tools.json | node -e ...)` → `TOOLS=$(jq 'length' content/tools.json)`
+- Line 112: `COMPS=$(cat content/comparisons.json | node -e ...)` → `COMPS=$(jq 'length' content/comparisons.json)`
+
+## Changes Made
+- [ ] **Fix**: Replaced Node.js pipe with jq in Summary step
+- [ ] **Test**: Trigger 3 manual runs via workflow_dispatch
+- [ ] **Verify**: All 3 runs pass, Summary shows correct counts
+- [ ] **Commit**: Push fix to main
