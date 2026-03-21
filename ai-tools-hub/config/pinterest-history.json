@@ -52,5 +52,32 @@
     "board": "Best AI Tools 2026",
     "posted_at": "2026-03-20T22:17:06.424Z",
     "success": true
+  },
+  {
+    "slug": "category-design",
+    "pin_type": "category",
+    "title": "Futureproof Your Designs: Top AI Tools of 2026!",
+    "link": "https://pilottools.ai/category/design/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-03-21T16:39:14.074Z",
+    "success": true
+  },
+  {
+    "slug": "elevenlabs",
+    "pin_type": "tool-review",
+    "title": "ElevenLabs AI Voice Magic! 4.8/5 Audio Perfection",
+    "link": "https://pilottools.ai/tools/elevenlabs/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-03-21T16:39:18.152Z",
+    "success": true
+  },
+  {
+    "slug": "copy-ai",
+    "pin_type": "tool-review",
+    "title": "Copy.ai Review: Is it the BEST AI Marketing Tool?",
+    "link": "https://pilottools.ai/tools/copy-ai/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-03-21T16:39:22.150Z",
+    "success": true
   }
 ]
