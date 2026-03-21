@@ -122,11 +122,10 @@ class ErrorReporter:
             db.log_error(
                 error_type=report.error_type,
                 error_message=report.error_message,
+                severity=report.severity,
                 context={
-                    "severity": report.severity,
                     "context": report.context,
-                    "stack_trace": report.stack_trace,
-                    "timestamp": report.timestamp
+                    "stack_trace": report.stack_trace
                 }
             )
         except Exception as e:
