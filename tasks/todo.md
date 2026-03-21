@@ -338,3 +338,201 @@ Estimated time: 15-20 minutes per pack (share + verify link for each of 8 packs 
 
 ## Final Note
 The core product and marketing automation is **complete**. The remaining steps are UI interactions that require human judgment (uploading files, entering share links). All infrastructure, email sequences, and traffic pipelines are running and ready to support these product launches.
+
+---
+
+# GitHub Internal Audit — 2026-03-21
+
+## Audit Scope
+Complete inventory and health check of all projects, automations, workflows, and integrations across the social-media-empire GitHub repository.
+
+---
+
+## PHASE 1: Workflow Inventory & Status
+
+### 1.1 Active Workflows Audit (36 total)
+- [ ] List all active workflows with: schedule, last run, dependencies, project, status
+
+**Primary Systems:**
+- [ ] **Content Generation** (7): content-engine.yml, daily-trend-scout.yml, seo-content-machine.yml, revenue-intelligence.yml, revenue-activation.yml, fitness-articles.yml, youtube-fitness.yml
+- [ ] **Social Posting** (4): pinterest-analytics.yml, post-product-pins.yml, weekly-discovery.yml, analytics-collector.yml
+- [ ] **Video Pipeline** (3): video-pins.yml, video-automation-morning.yml, tiktok-content.yml, tiktok-poster.yml
+- [ ] **Deployment** (4): deploy-brand-sites.yml, subdomain-deploy.yml, toolpilot-deploy.yml, toolpilot-content.yml
+- [ ] **Monitoring** (3): system-health.yml, emergency-alert.yml, analytics-collector.yml
+- [ ] **Special Tasks** (6): auto-merge.yml, check-affiliate-links.yml, menopause-newsletter.yml, regenerate-articles.yml, rescue-poster.yml, self-improve.yml
+- [ ] **PilotTools** (9): toolpilot-pinterest.yml, toolpilot-linkedin.yml, toolpilot-twitter.yml, toolpilot-weekly.yml, toolpilot-newsletter.yml, toolpilot-report.yml, toolpilot-repurpose.yml, toolpilot-outreach.yml
+
+### 1.2 Archived Workflows (20 total)
+- [ ] Document what was archived and why
+- [ ] Verify none are still referenced by active workflows
+- [ ] Check if any should be recovered
+
+---
+
+## PHASE 2: Projects & Products Mapping
+
+### 2.1 Main Projects
+- [ ] **social-media-empire** — Core 3-brand automation, status: active/stable?
+- [ ] **ai-tools-hub** (PilotTools) — Revenue site at pilottools.ai, status: active/stable?
+- [ ] **anti_gravity** — Location: ./anti_gravity/site/, purpose: active/deprecated?
+- [ ] **project-claw** — Autonomous ops manager, ~/Desktop/project-claw/, last checked: 2026-02-22?
+
+### 2.2 Brand Sites (Vercel)
+- [ ] **fitover35.com** — prj_xJ3y2gstjJktWHGtMpVJPAAIUiFy, status: deployed/active?
+- [ ] **dailydealdarling.com** — prj_2y6pPE9KvBY76hr5WVL7Uv21V6tZ, status: deployed/active?
+- [ ] **menopause-planner-website.vercel.app** — prj_Z8gwdM8yH3SdAR7VAlY1KapLaFco, status: deployed/active?
+
+---
+
+## PHASE 3: Data Layer & Database Audit
+
+### 3.1 Supabase Projects
+- [ ] **Production** (epfoxpgrpsnhlsglxvsa)
+  - All 41 tables exist?
+  - RLS enabled on all tables (migration 005)?
+  - Current size/usage?
+
+- [ ] **Secondary** (bjacmhjtpkdcxngkasux)
+  - Purpose: TikTok only?
+  - Size/usage: ?
+
+### 3.2 GitHub Secrets Validation
+- [ ] All required secrets configured?
+- [ ] Check for expired credentials:
+  - LINKEDIN_ACCESS_TOKEN (expires ~2026-04-24)
+  - github-pat (marked EXPIRED in memory)
+- [ ] Verify no hardcoded secrets in code
+
+---
+
+## PHASE 4: Integration Health Check
+
+### 4.1 API Integrations Status
+- [ ] **AI/LLM**: Anthropic (balance?), Gemini (quota?)
+- [ ] **Media**: Pexels (quota?), Supabase Storage (usage?)
+- [ ] **Email**: Resend (verified?), ConvertKit (active?)
+- [ ] **Social**: Pinterest (API OK?), Make.com webhooks (all 5 active?)
+- [ ] **Analytics**: GA4 (tracking?), Search Console (indexed?)
+
+### 4.2 Make.com Webhooks Status (5 total)
+- [ ] Fitness poster (4261143) — isinvalid=false, isActive=true?
+- [ ] Deals poster (4261294) — isinvalid=false, isActive=true?
+- [ ] Menopause poster (4261296) — isinvalid=false, isActive=true?
+- [ ] Video posters (3) — all active?
+- [ ] Scenario Activator (4261421) — working?
+
+### 4.3 Vercel Deployment Status
+- [ ] All 3 brand sites deployed and live?
+- [ ] PilotTools site (pilottools.ai) deployed?
+- [ ] Daily deploy limits not exceeded?
+
+---
+
+## PHASE 5: Code Quality & Dead Code
+
+### 5.1 Python Modules (30+ files)
+- [ ] Identify active vs. dead code
+- [ ] Check all imports/dependencies present
+- [ ] Verify no circular dependencies
+
+### 5.2 Configuration Files
+- [ ] core/brands.py — all 3 brands defined?
+- [ ] config/settings.py — current?
+- [ ] All JSON configs valid format?
+
+### 5.3 Node.js Projects
+- [ ] ai-tools-hub/ — package.json dependencies current?
+- [ ] remotion-videos/ — build status?
+- [ ] anti-gravity site — build status?
+
+---
+
+## PHASE 6: Error Handling & Monitoring
+
+### 6.1 Recent Errors
+- [ ] Supabase errors table — recent errors logged?
+- [ ] GitHub Actions — recent failures?
+- [ ] System-health checks — passing?
+
+### 6.2 Health Metrics
+- [ ] Last successful content-engine.yml run: ?
+- [ ] Last successful brand site deployment: ?
+- [ ] Current error rate: ?
+
+---
+
+## PHASE 7: Security & Compliance
+
+### 7.1 Repository Security
+- [ ] Branch protection on main: enabled?
+- [ ] PR review requirement: enabled?
+- [ ] Status checks required: configured?
+
+### 7.2 Secrets Management
+- [ ] No hardcoded credentials?
+- [ ] All secrets used in workflows defined?
+- [ ] No config leaking sensitive data?
+
+### 7.3 Database Security
+- [ ] Supabase RLS: all 41 tables protected?
+- [ ] Service role: used only in backend?
+- [ ] Anon role: properly restricted?
+
+---
+
+## PHASE 8: Documentation Status
+
+### 8.1 Docs Accuracy
+- [ ] README.md: current/accurate?
+- [ ] WORKFLOW_GUIDE.md: current/accurate?
+- [ ] CLAUDE.md: up-to-date?
+
+### 8.2 Code Comments
+- [ ] Python modules: documented?
+- [ ] Workflows: documented?
+- [ ] Functions: have docstrings?
+
+---
+
+## PHASE 9: Performance & Cost
+
+### 9.1 Workflow Performance
+- [ ] Average run times per workflow
+- [ ] Any timeouts or long-running issues?
+- [ ] Parallelization opportunities?
+
+### 9.2 Cost Analysis
+- [ ] Anthropic: monthly spend?
+- [ ] Vercel: monthly cost?
+- [ ] Supabase: monthly cost?
+- [ ] Other APIs: monthly spend?
+
+---
+
+## PHASE 10: Summary & Recommendations
+
+### 10.1 Issues Found
+- [ ] List all broken items
+- [ ] Identify unused automation
+- [ ] Flag expired credentials
+- [ ] Document performance issues
+
+### 10.2 Priorities
+- [ ] High priority (breaking): ?
+- [ ] Medium priority (degraded): ?
+- [ ] Low priority (cleanup): ?
+
+### 10.3 Optimizations
+- [ ] Consolidation opportunities
+- [ ] Cost reduction strategies
+- [ ] Performance improvements
+
+---
+
+## AUDIT REVIEW SECTION
+
+**Audit Status:** NOT STARTED
+**Workflows Audited:** 0 of 36 active + 20 archived
+**Projects Mapped:** 0 of 4
+**Issues Found:** 0
+**Critical Issues:** 0
