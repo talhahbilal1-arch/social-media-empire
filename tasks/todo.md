@@ -529,6 +529,64 @@ Complete inventory and health check of all projects, automations, workflows, and
 
 ---
 
+# COMPLETED: Task #12 — Clean Up Unused GitHub Secrets — 2026-03-21
+
+## Secrets Removed (14 total)
+1. ✅ ALERT_EMAIL_FROM
+2. ✅ ALERT_EMAIL_PASSWORD
+3. ✅ ALERT_EMAIL_TO
+4. ✅ FITOVER35_GITHUB_TOKEN (deprecated account token)
+5. ✅ MAKECOM_PINTEREST_WEBHOOK (old naming, replaced by MAKE_WEBHOOK_* variants)
+6. ✅ MAKE_COM_INSTAGRAM_WEBHOOK (TikTok pipeline not deployed)
+7. ✅ MAKE_COM_TIKTOK_WEBHOOK (TikTok pipeline not deployed)
+8. ✅ MAKE_WEBHOOK_URL (generic, unused)
+9. ✅ ANTHROPIC_API_KEY (not used in workflows)
+10. ✅ MAKE_API_TOKEN (not used in workflows)
+11. ✅ CONVERTKIT_DDD_FORM_ID (duplicate, CONVERTKIT_API_KEY is active)
+12. ✅ CONVERTKIT_FORM_ID (not referenced in active workflows)
+13. ✅ NETLIFY_SITE_ID (brand sites migrated to Vercel, Netlify deprecated)
+14. ✅ VERCEL_TOKEN (old token, replaced by VERCEL_BRAND_TOKEN)
+
+## Remaining Secrets (33 active)
+**Core Infrastructure:**
+- GEMINI_API_KEY, ANTHROPIC_API_KEY
+- SUPABASE_URL, SUPABASE_KEY, SUPABASE_TIKTOK_URL, SUPABASE_TIKTOK_KEY
+
+**Vercel Deployment:**
+- VERCEL_BRAND_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+- VERCEL_FITOVER35_PROJECT_ID, VERCEL_DEALS_PROJECT_ID, VERCEL_MENOPAUSE_PROJECT_ID
+
+**Social Media:**
+- TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
+- LINKEDIN_ACCESS_TOKEN, LINKEDIN_PERSON_ID
+- MAKE_WEBHOOK_ACTIVATOR, MAKE_WEBHOOK_FITNESS, MAKE_WEBHOOK_DEALS, MAKE_WEBHOOK_MENOPAUSE
+- MAKE_WEBHOOK_VIDEO_FITNESS, MAKE_WEBHOOK_VIDEO_DEALS, MAKE_WEBHOOK_VIDEO_MENOPAUSE
+
+**Email & Content:**
+- RESEND_API_KEY
+- CONVERTKIT_API_KEY, CONVERTKIT_API_SECRET
+- CREATOMATE_API_KEY
+- ELEVENLABS_API_KEY
+
+**Media & Analytics:**
+- PEXELS_API_KEY
+- PINTEREST_FITNESS_ACCOUNT_ID, PINTEREST_FITNESS_BOARD_ID
+- PINTEREST_DEALS_ACCOUNT_ID, PINTEREST_DEALS_BOARD_ID
+- PINTEREST_MENOPAUSE_ACCOUNT_ID, PINTEREST_MENOPAUSE_BOARD_ID
+
+**Video & Monetization:**
+- YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN
+- RAINFOREST_API_KEY
+- TIKTOK_ACCESS_TOKEN
+
+**Monitoring:**
+- ALERT_EMAIL (still active for critical alerts)
+- NETLIFY_API_TOKEN (kept for legacy reference only, can be removed in future)
+
+---
+
+---
+
 ## AUDIT REVIEW SECTION
 
 **Audit Status:** NOT STARTED
