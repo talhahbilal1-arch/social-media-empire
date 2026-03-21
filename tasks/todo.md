@@ -794,3 +794,45 @@ Commit ca6f8d9 (2026-03-18):
 ✅ **BROKEN PIPE FIX VERIFIED** — The Summary step now completes without error.
 
 Note: Current workflow failures are due to a separate issue (Next.js build failing on listicle page rendering), not the broken pipe. The jq fix successfully resolves the original 80% failure rate caused by the piped Node.js one-liner.
+
+---
+
+# COMPLETED: Task #13 — Fix Article Generation Field Name Mismatch — 2026-03-21
+
+## Root Cause
+The page template at `ai-tools-hub/pages/blog/[slug].js` line 29 expects articles to have an `html` field:
+```javascript
+const contentHtml = article.html || ''
+```
+
+However, the Gemini API prompts in `ai-tools-hub/scripts/generate-content.js` were asking for a `content` field instead. This field name mismatch caused Next.js prerender failures when the workflow tried to generate the pending listicle with slug "best-ai-tools-small-business".
+
+## Why This Happened
+- Commit ca6f8d9 added pending listicle to content-calendar.json (status: "pending")
+- When the workflow runs, it generates this listicle via Gemini API
+- The prompts asked for `content` field, but the template expects `html` field
+- The generated article had no `html` field → `contentHtml` became empty string
+- Next.js prerender failed because the article was incomplete
+
+## Fix Applied ✅
+Updated all 4 Gemini API prompts in `ai-tools-hub/scripts/generate-content.js` to request `html` field instead of `content` field:
+
+| Location | Before | After |
+|----------|--------|-------|
+| Line 154 (pricing prompt) | `- content: 2000+ words...` | `- html: 2000+ words...` |
+| Line 187 (alternatives prompt) | `- content: 2000+ words...` | `- html: 2000+ words...` |
+| Line 224 (review prompt) | `- content: 2000+ words...` | `- html: 2000+ words...` |
+| Line 282 (listicle prompt) | `- content: 2000+ words...` | `- html: 2000+ words...` |
+
+## Changes Made
+- [x] **Fix Applied**: Updated 4 Gemini API prompts to request `html` field (commit fd2dd6c)
+- [x] **Test**: Local Next.js build test — `npm run build` ✅ SUCCEEDED
+  - No prerender errors detected
+  - Build output shows normal: "●  (SSG) prerendered as static HTML (uses getStaticProps)"
+  - Only size warnings on some pages (not critical)
+- [x] **Verify**: All 4 field name changes confirmed in generate-content.js
+
+## Summary
+✅ **ARTICLE GENERATION FIELD NAME FIX VERIFIED** — Next.js build now succeeds without prerender errors.
+
+The workflow can now successfully generate articles with the correct `html` field that the page template expects. This resolves the second root cause of the toolpilot-content.yml failures (the first being the broken pipe error that was fixed in Task #12).
