@@ -657,6 +657,38 @@ Complete inventory and health check of all projects, automations, workflows, and
 
 ---
 
+## ACTION ITEMS — IMMEDIATELY REQUIRED
+
+### 🔴 CRITICAL (Do This Now)
+- [ ] **Refresh github-pat**: Generate new GitHub PAT with scopes: `repo`, `workflow`, `contents:write`
+  - Location: GitHub Settings → Developer settings → Personal access tokens
+  - Action: Update GitHub Secret `github-pat` with new token
+  - Impact: Fixes workflow-health-check cron failures
+
+### 🟠 IMPORTANT (Do Before April 24, 2026)
+- [ ] **Refresh LINKEDIN_ACCESS_TOKEN**: Regenerate LinkedIn API credentials before expiration
+  - Location: LinkedIn Developer Portal → My apps → Credentials
+  - Action: Update GitHub Secret `LINKEDIN_ACCESS_TOKEN` with new token
+  - Impact: Prevents toolpilot-linkedin.yml failures in May
+
+### 🟡 OPTIONAL (Nice-to-have improvements)
+- [ ] Remove anti_gravity deprecated code (kept from earlier testing)
+- [ ] Archive core/netlify_client.py (Netlify deprecated, moved to Vercel)
+- [ ] Consolidate TikTok workflows into single workflow
+
+---
+
+## QUICK REFERENCE — EMERGENCY CONTACTS
+
+If something breaks:
+1. Check system-health.yml logs (runs every 2 hours)
+2. Review recent GitHub Actions failures
+3. Check Supabase errors table
+4. Verify Make.com scenarios are active (Scenario Activator runs every 2h)
+5. Confirm GitHub Secrets not expired (linkedin-token, github-pat)
+
+---
+
 # COMPLETED: Task #12 — Clean Up Unused GitHub Secrets — 2026-03-21
 
 ## Secrets Removed (14 total)
