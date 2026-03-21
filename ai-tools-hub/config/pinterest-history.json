@@ -79,5 +79,32 @@
     "board": "AI Marketing Tools",
     "posted_at": "2026-03-21T16:39:22.150Z",
     "success": true
+  },
+  {
+    "slug": "category-coding",
+    "pin_type": "category",
+    "title": "Top AI Coding Tools of 2026: Code Smarter, Not Harder!",
+    "link": "https://pilottools.ai/category/coding/",
+    "board": "AI Coding Tools",
+    "posted_at": "2026-03-21T22:12:58.422Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly",
+    "pin_type": "tool-review",
+    "title": "Grammarly Review: Is it Worth the Hype? (4.7/5 Rating)",
+    "link": "https://pilottools.ai/tools/grammarly/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-21T22:13:02.383Z",
+    "success": true
+  },
+  {
+    "slug": "otter-ai",
+    "pin_type": "tool-review",
+    "title": "Otter.ai Review: Boost Productivity with AI Transcription!",
+    "link": "https://pilottools.ai/tools/otter-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-03-21T22:13:06.411Z",
+    "success": true
   }
 ]
