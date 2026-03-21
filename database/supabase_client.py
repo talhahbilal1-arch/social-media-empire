@@ -221,13 +221,15 @@ class SupabaseClient:
         self,
         error_type: str,
         error_message: str,
-        context: dict
+        context: dict,
+        severity: str = "medium"
     ) -> dict:
         """Log an error to the database."""
         data = {
             "error_type": error_type,
             "error_message": error_message,
             "context": context,
+            "severity": severity,
             "resolved": False,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
