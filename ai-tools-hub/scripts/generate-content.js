@@ -184,7 +184,7 @@ Return ONLY valid JSON (no markdown).`
 Generate a JSON object with:
 - slug: "${slug}"
 - title: "${item.title}"
-- content: 2000+ words of HTML-formatted article
+- html: 2000+ words of HTML-formatted article
 - meta_description: compelling 155-160 char description
 - keywords: ["${toolName.toLowerCase()} alternatives", "best ${toolName.toLowerCase()} alternatives 2026", "tools like ${toolName.toLowerCase()}"]
 - published_date: "2026-03-20"
