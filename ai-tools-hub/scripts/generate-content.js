@@ -151,7 +151,7 @@ async function generateArticle(item, existingTools) {
 Generate a JSON object with:
 - slug: "${slug}"
 - title: "${item.title}"
-- content: 2000+ words of HTML-formatted article with <h2>, <h3>, <p>, <ul>, <table> tags
+- html: 2000+ words of HTML-formatted article with <h2>, <h3>, <p>, <ul>, <table> tags
 - meta_description: compelling 155-160 char description including "pricing 2026"
 - keywords: ["${toolName.toLowerCase()} pricing", "${toolName.toLowerCase()} plans 2026", "pricing comparison"]
 - published_date: "2026-03-20"
