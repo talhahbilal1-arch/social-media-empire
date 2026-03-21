@@ -279,7 +279,7 @@ The subject is: ${subject}
 Generate a JSON object with:
 - slug: "${slug}"
 - title: "${title}"
-- content: 2000+ words of HTML-formatted listicle with tool cards, comparison table, verdict
+- html: 2000+ words of HTML-formatted listicle with tool cards, comparison table, verdict
 - meta_description: compelling 155-160 char description
 - keywords: ["best ai tools for ${subject}", "${subject} ai tools 2026"]
 - published_date: "2026-03-20"
