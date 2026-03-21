@@ -108,8 +108,8 @@ jobs:
 
       - name: Summary
         run: |
-          TOOLS=$(cat content/tools.json | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).length))")
-          COMPS=$(cat content/comparisons.json | node -e "process.stdin.on('data',d=>console.log(JSON.parse(d).length))")
+          TOOLS=$(jq 'length' content/tools.json)
+          COMPS=$(jq 'length' content/comparisons.json)
           echo "### Content Generation Complete" >> $GITHUB_STEP_SUMMARY
           echo "- Total tools: $TOOLS" >> $GITHUB_STEP_SUMMARY
           echo "- Total comparisons: $COMPS" >> $GITHUB_STEP_SUMMARY
