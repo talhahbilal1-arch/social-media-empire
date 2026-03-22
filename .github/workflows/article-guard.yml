@@ -1,0 +1,63 @@
+name: Article Format Guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'outputs/*/articles/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for old-format articles
+        run: |
+          echo "=== Article Format Guard ==="
+          FAILED=0
+
+          # Check 1: No articles referencing ../styles.css (old bare HTML format)
+          OLD_CSS=$(grep -rl 'href="../styles.css"' outputs/*/articles/ 2>/dev/null || true)
+          if [ -n "$OLD_CSS" ]; then
+            echo "FAIL: Old format articles found (../styles.css):"
+            echo "$OLD_CSS"
+            FAILED=1
+          fi
+
+          # Check 2: No .md files in article directories
+          MD_FILES=$(find outputs/*/articles/ -name '*.md' 2>/dev/null || true)
+          if [ -n "$MD_FILES" ]; then
+            echo "FAIL: Markdown files found in articles directory:"
+            echo "$MD_FILES"
+            FAILED=1
+          fi
+
+          # Check 3: All articles use new template (have class="product" or class="verdict")
+          for dir in outputs/fitover35-website/articles outputs/dailydealdarling-website/articles outputs/menopause-planner-website/articles; do
+            if [ -d "$dir" ]; then
+              for f in "$dir"/*.html; do
+                if [ -f "$f" ] && ! grep -q 'class="verdict"\|class="nav-brand"\|class="hero"' "$f" 2>/dev/null; then
+                  echo "FAIL: Old template detected: $f"
+                  FAILED=1
+                fi
+              done
+            fi
+          done
+
+          # Check 4: Fitness articles must NOT have #CCFF00 (old green)
+          GREEN=$(grep -rl '#CCFF00\|CCFF00' outputs/fitover35-website/articles/ 2>/dev/null || true)
+          if [ -n "$GREEN" ]; then
+            echo "FAIL: Old green color (#CCFF00) found in fitness articles:"
+            echo "$GREEN" | head -5
+            FAILED=1
+          fi
+
+          if [ "$FAILED" = "1" ]; then
+            echo ""
+            echo "BLOCKED: Old-format articles detected. All articles must use the new template system."
+            echo "Run: python scripts/regenerate_all_articles.py --all"
+            exit 1
+          fi
+
+          echo "PASS: All articles use the new template format"
