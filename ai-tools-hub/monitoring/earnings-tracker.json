@@ -1,0 +1,89 @@
+{
+  "project": "PilotTools.ai",
+  "platform": "Ezoic",
+  "tracking_start_date": "2026-03-22",
+  "currency": "USD",
+  "weekly_entries": [
+    {
+      "week_of": "2026-03-22",
+      "status": "pending",
+      "daily_log": [
+        {
+          "date": "2026-03-22",
+          "day": "Monday",
+          "daily_revenue": null,
+          "page_views": null,
+          "rpm": null,
+          "notes": ""
+        },
+        {
+          "date": "2026-03-23",
+          "day": "Tuesday",
+          "daily_revenue": null,
+          "page_views": null,
+          "rpm": null,
+          "notes": ""
+        },
+        {
+          "date": "2026-03-24",
+          "day": "Wednesday",
+          "daily_revenue": null,
+          "page_views": null,
+          "rpm": null,
+          "notes": ""
+        },
+        {
+          "date": "2026-03-25",
+          "day": "Thursday",
+          "daily_revenue": null,
+          "page_views": null,
+          "rpm": null,
+          "notes": ""
+        },
+        {
+          "date": "2026-03-26",
+          "day": "Friday",
+          "daily_revenue": null,
+          "page_views": null,
+          "rpm": null,
+          "notes": ""
+        },
+        {
+          "date": "2026-03-27",
+          "day": "Saturday",
+          "daily_revenue": null,
+          "page_views": null,
+          "rpm": null,
+          "notes": ""
+        },
+        {
+          "date": "2026-03-28",
+          "day": "Sunday",
+          "daily_revenue": null,
+          "page_views": null,
+          "rpm": null,
+          "notes": ""
+        }
+      ],
+      "weekly_summary": {
+        "total_revenue": null,
+        "total_page_views": null,
+        "average_rpm": null,
+        "best_day": null,
+        "best_day_revenue": null
+      }
+    }
+  ],
+  "ytd_summary": {
+    "total_revenue": 0,
+    "total_page_views": 0,
+    "months_tracked": 0,
+    "average_monthly_revenue": 0,
+    "average_monthly_page_views": 0
+  },
+  "notes": [
+    "Fill in daily revenue after 5 PM Friday each week from Ezoic dashboard",
+    "RPM = (Revenue / Page Views) × 1000",
+    "Status: 'pending' (incomplete), 'complete' (all data filled in), 'archived' (processed for monthly report)"
+  ]
+}
