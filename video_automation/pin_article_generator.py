@@ -969,7 +969,6 @@ def _build_v2_article(markdown_content, brand_key, slug, pin_data=None):
         article_data=article_data,
         site_config=site,
         slug=slug,
-        pin_data=pin_data,
     )
 
 
