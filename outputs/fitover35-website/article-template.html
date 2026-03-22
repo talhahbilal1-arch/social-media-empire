@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags — UPDATE FOR EACH ARTICLE -->
+  <meta name="description" content="[WRITE A 150-160 CHARACTER DESCRIPTION — specific to this article, include primary keyword]">
+  <title>[Article Title] | Fit Over 35</title>
+  <meta name="keywords" content="[keyword1, keyword2, keyword3 — 5-8 relevant keywords]">
+  <meta name="author" content="Fit Over 35">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fitover35.com/articles/[article-slug].html">
+
+  <!-- Open Graph / Pinterest Sharing -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://fitover35.com/articles/[article-slug].html">
+  <meta property="og:title" content="[Article Title] | Fit Over 35">
+  <meta property="og:description" content="[Same as meta description or slightly different for social]">
+  <meta property="og:image" content="https://images.pexels.com/photos/[PHOTO-ID]/pexels-photo-[PHOTO-ID].jpeg?auto=compress&cs=tinysrgb&w=1200">
+  <meta property="og:site_name" content="Fit Over 35">
+  <meta property="article:published_time" content="[YYYY-MM-DD]">
+  <meta property="article:author" content="Fit Over 35">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="[Article Title]">
+  <meta name="twitter:description" content="[Short description for Twitter]">
+  <meta name="twitter:image" content="https://images.pexels.com/photos/[PHOTO-ID]/pexels-photo-[PHOTO-ID].jpeg?auto=compress&cs=tinysrgb&w=1200">
+
+  <!-- Pinterest Rich Pin -->
+  <meta name="pinterest-rich-pin" content="true">
+
+  <!-- Schema.org Article Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "[Article Title]",
+    "description": "[Article description]",
+    "image": "https://images.pexels.com/photos/[PHOTO-ID]/pexels-photo-[PHOTO-ID].jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "author": {"@type": "Organization", "name": "Fit Over 35", "url": "https://fitover35.com"},
+    "publisher": {"@type": "Organization", "name": "Fit Over 35", "logo": {"@type": "ImageObject", "url": "https://images.pexels.com/photos/4720788/pexels-photo-4720788.jpeg?auto=compress&cs=tinysrgb&w=1200"}},
+    "datePublished": "[YYYY-MM-DD]",
+    "dateModified": "[YYYY-MM-DD]",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://fitover35.com/articles/[article-slug].html"}
+  }
+  </script>
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
+
+  <style>
+    /* Article-specific styles — matches existing site design */
+    .article-hero {
+      padding: 140px 0 60px;
+      background: linear-gradient(135deg, var(--gray-100) 0%, var(--white) 100%);
+    }
+    .article-hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .article-category-tag {
+      display: inline-block;
+      background: var(--primary);
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: var(--space-lg);
+    }
+    .article-hero h1 {
+      font-size: 2.75rem;
+      color: var(--secondary);
+      margin-bottom: var(--space-lg);
+      line-height: 1.2;
+    }
+    .article-meta-info {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xl);
+      color: var(--gray-500);
+      font-size: 0.9rem;
+    }
+    .article-featured-image {
+      max-width: 900px;
+      margin: var(--space-2xl) auto;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+    }
+    .article-featured-image img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+    .article-body {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: var(--space-3xl) var(--space-lg);
+    }
+    .article-body h2 {
+      font-size: 1.75rem;
+      color: var(--secondary);
+      margin: var(--space-2xl) 0 var(--space-md);
+    }
+    .article-body h3 {
+      font-size: 1.35rem;
+      color: var(--secondary);
+      margin: var(--space-xl) 0 var(--space-md);
+    }
+    .article-body p {
+      color: var(--gray-700);
+      line-height: 1.8;
+      margin-bottom: var(--space-lg);
+    }
+    .article-body ul, .article-body ol {
+      margin: var(--space-lg) 0;
+      padding-left: var(--space-xl);
+    }
+    .article-body li {
+      color: var(--gray-700);
+      line-height: 1.7;
+      margin-bottom: var(--space-sm);
+    }
+    .article-cta-box {
+      background: var(--gray-100);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl);
+      text-align: center;
+      margin: var(--space-3xl) 0;
+    }
+    .article-cta-box h3 { margin-top: 0; }
+    @media (max-width: 768px) {
+      .article-hero h1 { font-size: 2rem; }
+      .article-meta-info { flex-direction: column; gap: var(--space-sm); }
+      .article-featured-image img { height: 250px; }
+    }
+  </style>
+
+  <!-- Google Analytics — REPLACE GA_MEASUREMENT_ID with actual ID -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script> -->
+</head>
+<body>
+  <!-- Header — matches existing site navigation -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">💪</span>
+        <span>Fit Over 35</span>
+      </a>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="/#workouts" class="nav-link">Workouts</a></li>
+          <li><a href="/#nutrition" class="nav-link">Nutrition</a></li>
+          <li><a href="/gear.html" class="nav-link">Gear</a></li>
+          <li><a href="/#articles" class="nav-link">Articles</a></li>
+        </ul>
+      </nav>
+      <a href="/#signup" class="btn btn-primary header-cta">Get Free Guide</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Article Hero -->
+  <section class="article-hero">
+    <div class="container">
+      <div class="article-hero-content">
+        <!-- UPDATE: Change category to match article topic (Training, Nutrition, Recovery, Hormones, Mindset) -->
+        <span class="article-category-tag">[Category]</span>
+        <h1>[Article Title — Make It Compelling and SEO-Friendly]</h1>
+        <div class="article-meta-info">
+          <span>[Month Day, Year]</span>
+          <span>[X] min read</span>
+          <span>By Fit Over 35 Team</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Image -->
+  <div class="article-featured-image">
+    <img src="https://images.pexels.com/photos/[PHOTO-ID]/pexels-photo-[PHOTO-ID].jpeg?auto=compress&cs=tinysrgb&w=1200" alt="[Descriptive alt text]" loading="eager">
+  </div>
+
+  <!-- Article Body -->
+  <article class="article-body">
+
+    <!-- FTC Affiliate Disclosure — Keep at top of every article -->
+    <p style="font-size: 13px; color: #888; font-style: italic; margin-bottom: 24px;">
+      This article contains affiliate links. If you purchase through these links, we may earn a commission at no extra cost to you.
+      <a href="/disclaimer.html" style="color: #888;">Full disclosure</a>
+    </p>
+
+    <!-- ARTICLE INTRO — First ~200 words. Hook the reader. -->
+    <p><strong>[Opening hook — a surprising stat, bold claim, or relatable problem that grabs attention.]</strong></p>
+
+    <p>[Second paragraph — expand on the problem or topic. Speak directly to men over 35. Make it personal.]</p>
+
+    <p>[Third paragraph — establish credibility. What will they learn? Why should they keep reading?]</p>
+
+    <!-- ============================================
+         PRIMARY PRODUCT RECOMMENDATION
+         Placed WITHIN first 300 words for early conversion.
+         Choose a product that matches THIS article's topic:
+         - Training articles → equipment (dumbbells, TRX, bands)
+         - Nutrition articles → protein powder, creatine, supplements
+         - Recovery articles → foam rollers, massage guns
+         - Hormone articles → testosterone support supplements
+         ============================================ -->
+    <div class="product-recommendation" style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 24px; margin: 24px 0; background: #f9f9f9;">
+      <p style="font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Our Top Pick</p>
+      <h3 style="margin-top: 0;">[Product Name]</h3>
+      <p>[2-3 sentences explaining why this product is specifically recommended for men over 35.]</p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <!-- REPLACE WITH ACTUAL AFFILIATE LINK -->
+        <a href="https://[HIGH-COMMISSION]-AFFILIATE-LINK-PLACEHOLDER" target="_blank" rel="nofollow sponsored"
+           style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; min-height: 48px; line-height: 24px;">
+          Check Current Price
+        </a>
+        <a href="https://www.amazon.com/dp/[ASIN]?tag=fitover35-20" target="_blank" rel="nofollow sponsored"
+           style="display: inline-block; background: #f0f0f0; color: #333; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 16px; min-height: 48px; line-height: 24px;">
+          Also Available on Amazon
+        </a>
+      </div>
+    </div>
+
+    <!-- ARTICLE BODY — Main content sections -->
+    <h2>[First Major Section Heading]</h2>
+    <p>[Content — write 2-4 paragraphs per section. Include actionable advice specific to men over 35.]</p>
+    <p>[Continue...]</p>
+
+    <h2>[Second Major Section Heading]</h2>
+    <p>[Content...]</p>
+
+    <ul>
+      <li>[Bullet point 1]</li>
+      <li>[Bullet point 2]</li>
+      <li>[Bullet point 3]</li>
+    </ul>
+
+    <!-- ============================================
+         MID-ARTICLE EMAIL CAPTURE
+         Uses the existing ConvertKit form
+         ============================================ -->
+    <div class="email-capture" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 12px; padding: 32px; margin: 32px 0; text-align: center;">
+      <h3 style="color: white; margin-top: 0; font-size: 22px;">Get Your Free 12-Week Workout Program</h3>
+      <p style="color: #ccc; margin-bottom: 20px;">Designed specifically for men over 35 who want to build muscle and lose fat safely.</p>
+      <div style="display: flex; gap: 8px; max-width: 480px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
+        <script async data-uid="8946984" src="https://fitover35.ck.page/8946984/index.js"></script>
+      </div>
+      <p style="color: #888; font-size: 12px; margin-top: 12px;">No spam. Unsubscribe anytime.</p>
+    </div>
+
+    <h2>[Third Major Section Heading]</h2>
+    <p>[Content...]</p>
+
+    <h2>[Fourth Major Section Heading — Optional]</h2>
+    <p>[Content...]</p>
+
+    <!-- ============================================
+         PRODUCT COMPARISON TABLE
+         3 products: 1 high-commission primary, 1 high-commission secondary, 1 Amazon budget
+         ============================================ -->
+    <h2>Recommended Gear for [Article Topic]</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 24px 0;">
+
+      <!-- Product 1: High-Commission Primary (featured) -->
+      <div style="border: 2px solid #2563eb; border-radius: 12px; padding: 20px; background: white; position: relative;">
+        <span style="position: absolute; top: -10px; left: 16px; background: #2563eb; color: white; padding: 2px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase;">Editor's Choice</span>
+        <h3 style="font-size: 16px; margin-top: 8px; margin-bottom: 4px;">[Primary Product Name]</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Best for: [specific use case]</p>
+        <ul style="list-style: none; padding: 0; margin-bottom: 12px; font-size: 13px;">
+          <li style="padding: 2px 0;">&#10003; [Feature 1]</li>
+          <li style="padding: 2px 0;">&#10003; [Feature 2]</li>
+          <li style="padding: 2px 0;">&#10003; [Feature 3]</li>
+        </ul>
+        <!-- REPLACE WITH ACTUAL AFFILIATE LINK -->
+        <a href="https://[HIGH-COMMISSION]-AFFILIATE-LINK-PLACEHOLDER" target="_blank" rel="nofollow sponsored"
+           style="display: block; background: #2563eb; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; text-align: center; font-size: 14px; min-height: 44px; line-height: 24px; margin-bottom: 6px;">Check Price</a>
+        <a href="https://www.amazon.com/dp/[ASIN]?tag=fitover35-20" target="_blank" rel="nofollow sponsored"
+           style="display: block; text-align: center; color: #666; font-size: 13px; text-decoration: underline;">Compare on Amazon</a>
+      </div>
+
+      <!-- Product 2: High-Commission Secondary -->
+      <div style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; background: white;">
+        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 4px;">[Secondary Product Name]</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Best for: [specific use case]</p>
+        <ul style="list-style: none; padding: 0; margin-bottom: 12px; font-size: 13px;">
+          <li style="padding: 2px 0;">&#10003; [Feature 1]</li>
+          <li style="padding: 2px 0;">&#10003; [Feature 2]</li>
+          <li style="padding: 2px 0;">&#10003; [Feature 3]</li>
+        </ul>
+        <!-- REPLACE WITH ACTUAL AFFILIATE LINK -->
+        <a href="https://[HIGH-COMMISSION]-AFFILIATE-LINK-PLACEHOLDER" target="_blank" rel="nofollow sponsored"
+           style="display: block; background: #2563eb; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; text-align: center; font-size: 14px; min-height: 44px; line-height: 24px; margin-bottom: 6px;">Check Price</a>
+        <a href="https://www.amazon.com/dp/[ASIN]?tag=fitover35-20" target="_blank" rel="nofollow sponsored"
+           style="display: block; text-align: center; color: #666; font-size: 13px; text-decoration: underline;">Compare on Amazon</a>
+      </div>
+
+      <!-- Product 3: Amazon Budget Option -->
+      <div style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; background: white;">
+        <h3 style="font-size: 16px; margin-top: 0; margin-bottom: 4px;">[Budget Product Name]</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Best for: [budget-conscious buyers]</p>
+        <ul style="list-style: none; padding: 0; margin-bottom: 12px; font-size: 13px;">
+          <li style="padding: 2px 0;">&#10003; [Feature 1]</li>
+          <li style="padding: 2px 0;">&#10003; [Feature 2]</li>
+          <li style="padding: 2px 0;">&#10003; [Feature 3]</li>
+        </ul>
+        <a href="https://www.amazon.com/dp/[ASIN]?tag=fitover35-20" target="_blank" rel="nofollow sponsored"
+           style="display: block; background: #ff9900; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; text-align: center; font-size: 14px; min-height: 44px; line-height: 24px;">Check Price on Amazon</a>
+      </div>
+    </div>
+
+    <!-- Conclusion / Next Steps -->
+    <h2>Your Next Steps</h2>
+    <p>[Wrap up the article with clear action items. What should the reader do this week?]</p>
+    <ol>
+      <li><strong>[Action 1]</strong></li>
+      <li><strong>[Action 2]</strong></li>
+      <li><strong>[Action 3]</strong></li>
+    </ol>
+
+    <!-- Final CTA Box -->
+    <div class="article-cta-box">
+      <h3>Get Your Free 12-Week Workout Program</h3>
+      <p>Download our complete beginner program, exercise video library, and nutrition guide — designed for men over 35.</p>
+      <a href="/#signup" class="btn btn-primary btn-lg">Get Free Access</a>
+    </div>
+
+  </article>
+
+  <!-- Related Articles — UPDATE with actual related articles -->
+  <section class="section" style="background: var(--color-bg-dark, #f5f5f5);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Keep Reading</span>
+        <h2 class="section-title">Related Articles</h2>
+      </div>
+      <div class="articles-grid">
+        <a href="/articles/[related-article-1-slug].html" class="article-card">
+          <img src="https://images.pexels.com/photos/[PHOTO-ID]/pexels-photo-[PHOTO-ID].jpeg?auto=compress&cs=tinysrgb&w=600" alt="[Alt text]" loading="lazy">
+          <div class="article-card-content">
+            <span class="article-category">[Category]</span>
+            <h3>[Related Article 1 Title]</h3>
+            <p>[One-sentence description]</p>
+          </div>
+        </a>
+        <a href="/articles/[related-article-2-slug].html" class="article-card">
+          <img src="https://images.pexels.com/photos/[PHOTO-ID]/pexels-photo-[PHOTO-ID].jpeg?auto=compress&cs=tinysrgb&w=600" alt="[Alt text]" loading="lazy">
+          <div class="article-card-content">
+            <span class="article-category">[Category]</span>
+            <h3>[Related Article 2 Title]</h3>
+            <p>[One-sentence description]</p>
+          </div>
+        </a>
+        <a href="/articles/[related-article-3-slug].html" class="article-card">
+          <img src="https://images.pexels.com/photos/[PHOTO-ID]/pexels-photo-[PHOTO-ID].jpeg?auto=compress&cs=tinysrgb&w=600" alt="[Alt text]" loading="lazy">
+          <div class="article-card-content">
+            <span class="article-category">[Category]</span>
+            <h3>[Related Article 3 Title]</h3>
+            <p>[One-sentence description]</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter CTA — Uses existing ConvertKit form -->
+  <section class="section cta-section" id="signup">
+    <div class="container">
+      <div class="cta-content">
+        <span class="section-badge">Free Resources</span>
+        <h2>Get the Fit Over 35 Newsletter</h2>
+        <p>Weekly training tips, nutrition advice, and motivation — designed for men who refuse to slow down.</p>
+        <script async data-uid="8946984" src="https://fitover35.ck.page/8946984/index.js"></script>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer — matches existing site -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="/" class="logo">
+            <span class="logo-icon">💪</span>
+            <span>FIT OVER 35</span>
+          </a>
+          <p>Helping men build strength, muscle, and confidence after 35.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="/#workouts">Workouts</a></li>
+            <li><a href="/#nutrition">Nutrition</a></li>
+            <li><a href="/gear.html">Gear</a></li>
+            <li><a href="/#articles">Articles</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="/articles/strength-training-men-over-35.html">Strength Training Guide</a></li>
+            <li><a href="/articles/compound-lifts-guide.html">Compound Lifts</a></li>
+            <li><a href="/#signup">Free Newsletter</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Fit Over 35. All rights reserved.</p>
+        <p class="affiliate-disclosure">As an Amazon Associate, we earn from qualifying purchases. <a href="/disclaimer.html">Full disclosure</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+      document.querySelector('.nav').classList.toggle('active');
+      this.classList.toggle('active');
+    });
+    // Sticky header
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 100) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

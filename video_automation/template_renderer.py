@@ -19,13 +19,13 @@ logger = logging.getLogger(__name__)
 
 BRAND_THEMES = {
     'fitness': {
-        'heading_font': 'Fraunces',
+        'heading_font': 'Instrument Serif',
         'body_font': 'DM Sans',
-        'font_import': 'Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700',
+        'font_import': 'Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700',
         'colors': {
-            'bg': '#0A0A0A', 'surface': '#141414', 'border': '#2A2A2A',
-            'accent': '#CCFF00', 'accent_light': '#1A2000', 'text': '#FFFFFF',
-            'muted': '#999999', 'warm': '#1A1A0A',
+            'bg': '#111014', 'surface': '#1a181e', 'border': '#2e2c33',
+            'accent': '#d4a843', 'accent_light': '#2a2520', 'text': '#e8e6ed',
+            'muted': '#8a8894', 'warm': '#1e1c22',
         },
         'expert_name': 'Talhah Bilal',
         'expert_initials': 'TB',

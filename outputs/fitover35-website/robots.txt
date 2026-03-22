@@ -1,3 +1,27 @@
+# Robots.txt for fitover35.com
+
 User-agent: *
 Allow: /
-Sitemap: https://www.fitover35.com/sitemap.xml
+
+# Sitemap location
+Sitemap: https://fitover35.com/sitemap.xml
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block common bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
