@@ -47,6 +47,8 @@ export default function Layout({ children, title, description, canonical, ogType
             <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_ID}');` }} />
           </>
         )}
+        {/* Google AdSense */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossOrigin="anonymous" />
       </Head>
       {/* Structured data from build-time props only - no user input */}
       {structuredData && (
