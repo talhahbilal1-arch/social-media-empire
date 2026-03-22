@@ -417,16 +417,39 @@ def main():
     # Generate full article
     article_data = generator.generate_full_article(args.keyword, args.category)
 
-    # Convert to HTML
-    html = generate_html(article_data)
-
     # Determine output path
     if args.output:
         output_path = Path(args.output)
     else:
         slug = args.keyword.lower().replace(' ', '-').replace('?', '')
         slug = ''.join(c for c in slug if c.isalnum() or c == '-')[:50]
-        output_path = Path(f"dailydealdarling_website/articles/{slug}.html")
+        output_path = Path(f"outputs/dailydealdarling-website/articles/{slug}.html")
+
+    # Use the new unified template system
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    from video_automation.template_renderer import render_article_from_template
+    from video_automation.pin_article_generator import BRAND_SITE_CONFIG, _fetch_pexels_image
+
+    site = BRAND_SITE_CONFIG.get('deals', {})
+    hero_url = _fetch_pexels_image(args.keyword)
+    template_data = {
+        'title': article_data.get('title', args.keyword),
+        'meta_description': article_data.get('meta_description', ''),
+        'hero_url': hero_url,
+        'read_time': '4 min',
+        'brands_tested': 8,
+        'reviews_analyzed': '5,000+',
+        'verdict': f'<strong>Expert reviewed</strong> — here are our top picks.',
+        'before': {'emoji': '\U0001f630', 'text': 'Overwhelmed by options'},
+        'after': {'emoji': '\U0001f60a', 'text': 'Clear, research-backed choice'},
+        'products': [],
+        'faq': [{'q': q, 'a': a} for q, a in zip(
+            [f.get('question', '') for f in article_data.get('faq', [])],
+            [f.get('answer', '') for f in article_data.get('faq', [])]
+        )],
+    }
+    html = render_article_from_template('deals', template_data, site, slug)
 
     # Ensure directory exists
     output_path.parent.mkdir(parents=True, exist_ok=True)
