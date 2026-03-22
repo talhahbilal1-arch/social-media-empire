@@ -220,3 +220,168 @@ All 12 phases completed successfully. Site deployed to Vercel production with ze
 2. Add customer testimonials to About page (builds trust signals further)
 3. Consider adding "Most Compared" tool rankings based on page traffic
 4. Set up automated monthly review updates (currently marked January 2025 - March 2026)
+
+---
+
+## Phase 13: Engagement & Analytics Enhancement (Current)
+**Scope**: Add chatbot for personalized recommendations, set up Ezoic/AdSense monitoring, and expand content
+
+### 13.1: Chatbot for Personalized AI Tool Recommendations
+**Purpose**: Users ask "Which AI tool is best for X?" → Get personalized recommendations based on profession/use case
+
+**Tasks**:
+- [ ] 13.1.1. Create `/pages/api/chat.js` — API endpoint for AI tool recommendations using AI SDK + AI Gateway
+  - Uses Claude via AI Gateway (OIDC auth)
+  - Takes user query + profession/context
+  - Returns 2-3 relevant tools from tools.json with affiliate links
+  - Implements streaming response with `streamText()` + `toUIMessageStreamResponse()`
+
+- [ ] 13.1.2. Create `/components/ChatWidget.js` — Chat UI component
+  - Uses `@ai-sdk/react` `useChat` hook
+  - Renders with AI Elements `<Message>` + `<PromptInput>` components
+  - Floating widget or full-page modal (TBD)
+  - Includes disclaimer about affiliate links
+
+- [ ] 13.1.3. Add chat widget to `/pages/index.js` (homepage)
+  - Toggle between collapsed chat icon and expanded chat window
+  - Position: bottom-right corner, fixed
+  - Fade in on page load
+
+- [ ] 13.1.4. Test chat end-to-end
+  - Test queries: "Best tool for content writers", "I'm a developer learning AI"
+  - Verify affiliate links are correct in recommendations
+  - Check streaming works on slow connections
+
+- [ ] 13.1.5. **Target**: Chatbot live on homepage, increases user engagement + affiliate CTR
+
+### 13.2: Set Up Ezoic/AdSense Monitoring & Analytics (IN PROGRESS)
+**Purpose**: Track monetization performance (impressions, CTR, earnings, revenue trends)
+
+**Tasks**:
+- [x] 13.2.1. Enable Vercel Analytics for PilotTools.ai (if not already enabled)
+  - Verify Web Analytics is capturing page views
+  - Check Speed Insights for Core Web Vitals
+
+- [x] 13.2.2. Configure Netlify Analytics (project is on Netlify, not Vercel)
+  - Check Netlify Analytics configuration
+  - Enable runtime logs if available
+
+- [ ] 13.2.3. Create monitoring checklist (weekly review)
+  - Daily: Page views, bounce rate, new visitors
+  - Weekly: Top 10 pages by traffic, top keywords in GSC
+  - Weekly: Ezoic/AdSense earnings (manual entry for now)
+  - Track: Affiliate link clicks, conversion funnel
+
+- [ ] 13.2.4. Set up Google Search Console monitoring
+  - Verify GSC is properly configured for pilottools.ai
+  - Create weekly review process
+  - Identify quick-win keywords (position 5-20)
+
+- [ ] 13.2.5. Create `/pages/admin/analytics.js` (optional, authenticated dashboard)
+  - Display daily page views, bounce rate, avg session duration
+  - Show top 10 pages by traffic (identify high-intent content)
+  - Display Ezoic earnings estimate (manual entry form)
+  - Show AdSense performance (impressions, CTR, earnings)
+  - Protected with basic auth check
+
+- [ ] 13.2.6. Document monitoring process
+  - Create weekly review template
+  - Document how to access Netlify Analytics, GSC, Ezoic dashboard
+  - Set up alerts/notifications
+
+- [ ] 13.2.7. **Target**: Monitoring infrastructure ready, weekly review checklist established
+
+### 13.3: Expand Content (Blog Posts + Comparisons)
+**Purpose**: Target long-tail keywords, capture more organic search traffic, increase affiliate opportunities
+
+**Tasks**:
+- [ ] 13.3.1. Identify high-intent keywords from GSC (use gsc MCP tool)
+  - Look for queries with 5-20 position (easy wins)
+  - Focus on "best tool for [profession/use case]" keywords
+  - Identify content gaps (comparisons not yet written)
+
+- [ ] 13.3.2. Add 5 new blog posts (high-intent topics)
+  - Target keywords: "Best AI tools for [profession]", "How to use X tool for Y workflow"
+  - Structure: intro + 2-3 tools + comparison table + FAQ + CTA
+  - Place affiliate links strategically (see plans, pricing, alternatives)
+  - Each post: 1,500-2,500 words, optimized for target keyword
+
+- [ ] 13.3.3. Add 3-5 new comparison pages (missing pairs from GSC data)
+  - Example: "Tool A vs Tool B" for queries with high volume
+  - Use same structure as existing comparisons (7-10 points, scores, winner, FAQs)
+
+- [ ] 13.3.4. Add 4-6 new profession pages (if GSC shows demand)
+  - Extend beyond initial 9 professions (Students, Freelancers, etc.)
+  - Examples: Consultants, Copywriters, Video Editors, UX Designers
+  - Reuse existing use_cases data structure
+
+- [ ] 13.3.5. Audit existing tool detail pages
+  - Add 5-10 related links to other tool pages (internal linking)
+  - Add "Alternatives" section with 3-5 tools + brief comparison
+  - Improve internal link anchor text for SEO
+
+- [ ] 13.3.6. Update sitemap + submit to Google Search Console
+  - Run sitemap generation script
+  - Submit updated sitemap to GSC
+
+- [ ] 13.3.7. **Target**: +20 new pages, +15% organic traffic within 4 weeks
+
+---
+
+## Execution Plan (Phase 13)
+
+**Recommended Order**:
+1. **13.1** (Chatbot) — High engagement impact, increases affiliate conversions immediately
+2. **13.2** (Monitoring) — Passive setup, tracks results of all other work
+3. **13.3** (Content) — Long-term SEO play, highest traffic volume over time
+
+**Estimated Timeline**:
+- Chatbot (13.1): 2-3 hours
+- Monitoring (13.2): 1-2 hours
+- Content (13.3): 4-6 hours (research + writing + optimization)
+- **Total**: 7-11 hours
+
+**Risk Level**: Low — chatbot is isolated feature; monitoring doesn't break existing code; content is additive
+
+---
+
+## Phase 14: ElevenLabs Affiliate Link Update
+**Scope**: Update all ElevenLabs affiliate links to new URL with proper rel/target attributes
+
+**Tasks**:
+- [ ] 14.1. Find all ElevenLabs links in codebase
+  - Search content/tools.json for ElevenLabs entry
+  - Search pages for ElevenLabs button/links
+  - Search components for ElevenLabs references
+
+- [ ] 14.2. Update tools.json ElevenLabs entry
+  - Set affiliate_url to: `https://try.elevenlabs.io/a17kfvge5u00`
+  - Verify pricing/alternatives links also use affiliate URL
+
+- [ ] 14.3. Update all button/CTA links across site
+  - Replace with: `<a href="https://try.elevenlabs.io/a17kfvge5u00" rel="nofollow sponsored" target="_blank">`
+  - Update in: tool detail pages, pricing pages, alternatives pages, comparison pages
+  - Update any existing "Try ElevenLabs", "Start Free", "Visit" buttons
+
+- [ ] 14.4. Test all links
+  - Verify affiliate URL is correct
+  - Verify rel and target attributes present
+  - Test on multiple pages
+
+- [ ] 14.5. **Target**: All ElevenLabs links updated with affiliate tracking
+
+---
+
+## EXECUTION STRATEGY: Parallel Agent Teams
+**Launch concurrent agents for independent tasks**:
+1. **Agent A**: Implement Chatbot (13.1) - AI SDK + React UI
+2. **Agent B**: Update ElevenLabs affiliate links (14.1-14.5) - find/replace task
+3. **Agent C**: Research content expansion (13.3.1) - keyword research
+4. **Agent D**: Set up monitoring (13.2) - Vercel Analytics config
+
+**Sequence after parallel completion**:
+5. Write blog posts (13.3.2+) - based on Agent C research
+6. Deploy final version
+7. Verification
+
+**Total time**: 7-12 hours with parallel execution
