@@ -133,5 +133,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-03-22T16:39:56.968Z",
     "success": true
+  },
+  {
+    "slug": "descript",
+    "pin_type": "tool-review",
+    "title": "Descript: Is This AI Video Editor Worth It? (Review)",
+    "link": "https://pilottools.ai/tools/descript/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-03-22T22:14:39.855Z",
+    "success": true
+  },
+  {
+    "slug": "category-video",
+    "pin_type": "category",
+    "title": "Top AI Video Tools of 2026: Create Stunning Videos Effortlessly!",
+    "link": "https://pilottools.ai/category/video/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-03-22T22:14:44.007Z",
+    "success": true
+  },
+  {
+    "slug": "jasper-vs-writesonic",
+    "pin_type": "comparison",
+    "title": "Jasper vs Writesonic: Which AI Writer Wins?",
+    "link": "https://pilottools.ai/compare/jasper-vs-writesonic/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-22T22:14:48.057Z",
+    "success": true
   }
 ]
