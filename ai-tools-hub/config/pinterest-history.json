@@ -106,5 +106,32 @@
     "board": "AI Productivity Tools",
     "posted_at": "2026-03-21T22:13:06.411Z",
     "success": true
+  },
+  {
+    "slug": "category-productivity",
+    "pin_type": "category",
+    "title": "AI Productivity Powerhouse: Top Tools for 2026!",
+    "link": "https://pilottools.ai/category/productivity/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-03-22T16:39:48.906Z",
+    "success": true
+  },
+  {
+    "slug": "runway",
+    "pin_type": "tool-review",
+    "title": "Runway AI Review: Is This Video Tool Worth It?",
+    "link": "https://pilottools.ai/tools/runway/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-03-22T16:39:52.920Z",
+    "success": true
+  },
+  {
+    "slug": "notion-ai-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Notion AI vs ChatGPT: Which AI Tool is Right for YOU?",
+    "link": "https://pilottools.ai/compare/notion-ai-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-22T16:39:56.968Z",
+    "success": true
   }
 ]
