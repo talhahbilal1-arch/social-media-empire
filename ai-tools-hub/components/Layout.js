@@ -47,6 +47,13 @@ export default function Layout({ children, title, description, canonical, ogType
             <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_ID}');` }} />
           </>
         )}
+        {/* Ezoic Privacy Scripts (must load first) */}
+        <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js" />
+        <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js" />
+        {/* Ezoic Header Script */}
+        <script async src="//www.ezojs.com/ezoic/sa.min.js" />
+        <script dangerouslySetInnerHTML={{ __html: 'window.ezstandalone = window.ezstandalone || {}; ezstandalone.cmd = ezstandalone.cmd || [];' }} />
+        <script src="//ezoicanalytics.com/analytics.js" />
         {/* Google AdSense */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossOrigin="anonymous" />
       </Head>
