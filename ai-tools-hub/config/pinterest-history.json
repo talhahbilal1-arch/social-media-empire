@@ -160,5 +160,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-03-22T22:14:48.057Z",
     "success": true
+  },
+  {
+    "slug": "synthesia",
+    "pin_type": "tool-review",
+    "title": "Synthesia AI Video Review: Worth the Hype? (4.6/5)",
+    "link": "https://pilottools.ai/tools/synthesia/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-03-23T17:02:01.689Z",
+    "success": true
+  },
+  {
+    "slug": "category-marketing",
+    "pin_type": "category",
+    "title": "Future-Proof Your Marketing: Top AI Tools of 2026!",
+    "link": "https://pilottools.ai/category/marketing/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-03-23T17:02:05.845Z",
+    "success": true
+  },
+  {
+    "slug": "canva-vs-midjourney",
+    "pin_type": "comparison",
+    "title": "Canva AI vs. Midjourney: Which AI Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/canva-vs-midjourney/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-23T17:02:10.051Z",
+    "success": true
   }
 ]
