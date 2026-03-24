@@ -1,0 +1,13 @@
+.email-capture-bar{position:fixed;bottom:0;left:0;right:0;z-index:9999;transform:translateY(100%);transition:transform .4s ease;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+.email-capture-bar.visible{transform:translateY(0)}
+.email-capture-inner{background:#6B705C;color:#FAF7F0;padding:18px 24px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;box-shadow:0 -4px 20px rgba(0,0,0,.2)}
+.email-capture-bar .ec-text{font-size:15px;font-weight:600;color:#DDBEA9}
+.email-capture-bar .ec-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.email-capture-bar input[type="email"]{padding:10px 14px;border:2px solid #DDBEA9;border-radius:6px;font-size:14px;background:#5a5f4e;color:#FAF7F0;min-width:220px;outline:none}
+.email-capture-bar input[type="email"]::placeholder{color:#b0b0a0}
+.email-capture-bar input[type="email"]:focus{border-color:#EDE0D4}
+.email-capture-bar .ec-btn{background:#DDBEA9;color:#3D3D3D;border:none;padding:10px 20px;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s}
+.email-capture-bar .ec-btn:hover{background:#EDE0D4}
+.email-capture-bar .ec-close{background:none;border:none;color:#b0b0a0;font-size:22px;cursor:pointer;padding:0 4px;line-height:1}
+.email-capture-bar .ec-close:hover{color:#FAF7F0}
+@media(max-width:600px){.email-capture-inner{flex-direction:column;text-align:center;padding:14px 16px}.email-capture-bar input[type="email"]{min-width:0;width:100%}.email-capture-bar .ec-form{width:100%;justify-content:center}}

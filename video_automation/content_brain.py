@@ -27,6 +27,21 @@ _client = None
 
 GEMINI_MODEL = "gemini-2.0-flash"
 
+# Lead magnet URLs — 30% of pins route here instead of the homepage
+LEAD_MAGNET_URLS = {
+    'fitness': 'https://fitover35.com/free-guide',
+    'deals': 'https://dailydealdarling.com/free-guide',
+    'menopause': 'https://menopause-planner-website.vercel.app/free-guide',
+}
+
+
+def maybe_lead_magnet_url(brand_key, default_url):
+    """Return lead magnet URL 30% of the time, otherwise the default destination."""
+    if random.random() < 0.3 and brand_key in LEAD_MAGNET_URLS:
+        logger.info(f"[{brand_key}] Routing pin to lead magnet: {LEAD_MAGNET_URLS[brand_key]}")
+        return LEAD_MAGNET_URLS[brand_key]
+    return default_url
+
 
 def _get_client():
     """Lazy-initialize the Gemini client to prevent import-time failures."""
@@ -910,7 +925,7 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
     pin_data['creatomate_template'] = selected_style['creatomate_template']
     pin_data['board'] = selected_board
     pin_data['description_opener'] = selected_opener
-    pin_data['destination_url'] = config['destination_base_url']
+    pin_data['destination_url'] = maybe_lead_magnet_url(brand_key, config['destination_base_url'])
     pin_data['keywords_used'] = selected_keywords
 
     return pin_data
@@ -1170,7 +1185,7 @@ OUTPUT ONLY THIS JSON:
     pin_data['creatomate_template'] = selected_style['creatomate_template']
     pin_data['board'] = selected_board
     pin_data['description_opener'] = selected_opener
-    pin_data['destination_url'] = config['destination_base_url']
+    pin_data['destination_url'] = maybe_lead_magnet_url(brand_key, config['destination_base_url'])
     pin_data['keywords_used'] = selected_keywords
     pin_data['daily_trend'] = True
 
@@ -1410,7 +1425,7 @@ OUTPUT ONLY THIS JSON:
     pin_data['creatomate_template'] = selected_style['creatomate_template']
     pin_data['board'] = pin_assignment.get('board', config['pinterest_boards'][0])
     pin_data['description_opener'] = selected_opener
-    pin_data['destination_url'] = destination_url
+    pin_data['destination_url'] = maybe_lead_magnet_url(brand_key, destination_url)
     pin_data['keywords_used'] = selected_keywords
     pin_data['calendar_driven'] = True
 
@@ -1550,7 +1565,7 @@ Respond in JSON only:
     pin_data['topic'] = selected_topic['topic']
     pin_data['category'] = selected_topic['category']
     pin_data['board'] = selected_board
-    pin_data['destination_url'] = config.get('destination_base_url', '')
+    pin_data['destination_url'] = maybe_lead_magnet_url(brand_key, config.get('destination_base_url', ''))
     pin_data['content_type'] = 'video_pin'
 
     return pin_data

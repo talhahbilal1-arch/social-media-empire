@@ -26,7 +26,7 @@ from typing import Optional, List, Dict, Any
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from video_automation.content_brain import generate_pin_content
+from video_automation.content_brain import generate_pin_content, maybe_lead_magnet_url
 from video_automation.pinterest_boards import get_board_id, DEFAULT_BOARDS
 from database.supabase_client import get_supabase_client
 
@@ -313,7 +313,7 @@ def process_brand(brand, db_client):
     description = pin_data.get('description', '')
     board_name = pin_data.get('board', '')
     board_id = get_board_id(brand, board_name)
-    destination_url = BRAND_SITE_URLS.get(brand, '')
+    destination_url = maybe_lead_magnet_url(brand, BRAND_SITE_URLS.get(brand, ''))
 
     print('    Hook: {}'.format(hook))
     print('    Title: {}'.format(title_text[:50]))

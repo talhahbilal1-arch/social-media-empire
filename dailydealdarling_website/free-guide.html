@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Weekly Deals Newsletter | Daily Deal Darling</title>
+<meta name="description" content="Never miss a deal again. Get the 10 best deals of the week, curated and delivered free every Monday.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Source Sans 3','Segoe UI',system-ui,sans-serif;background:#FAF8F5;color:#1A1A1A;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero{max-width:560px;width:100%;padding:40px 24px;text-align:center}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:2.2rem;color:#2C3E2D;margin-bottom:12px;line-height:1.2}
+.subhead{font-size:1.1rem;color:#3A3A3A;margin-bottom:36px;line-height:1.5}
+.benefits{list-style:none;margin-bottom:36px;text-align:left;max-width:400px;margin-left:auto;margin-right:auto}
+.benefits li{padding:12px 0;border-bottom:1px solid #F0EBE3;font-size:1rem;display:flex;align-items:center;gap:12px}
+.benefits li::before{content:'✓';color:#C4745B;font-weight:700;font-size:1.2rem;flex-shrink:0}
+.form-wrap{margin-bottom:24px}
+.form-wrap input[type="email"]{width:100%;padding:14px 16px;border:2px solid #B8956A;border-radius:8px;font-size:16px;background:#fff;color:#1A1A1A;margin-bottom:12px}
+.form-wrap input[type="email"]::placeholder{color:#999}
+.form-wrap input[type="email"]:focus{outline:none;border-color:#C4745B}
+.form-wrap button{width:100%;padding:16px;background:#C4745B;color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer;transition:background .2s;font-family:'Source Sans 3',sans-serif}
+.form-wrap button:hover{background:#d4856c}
+.trust{font-size:0.9rem;color:#6B6B6B}
+@media(max-width:480px){h1{font-size:1.6rem}.hero{padding:32px 16px}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>Never Miss a Deal Again</h1>
+  <p class="subhead">The 10 best deals of the week, curated and delivered free every Monday</p>
+  <ul class="benefits">
+    <li>Hand-picked top deals</li>
+    <li>Early access alerts</li>
+    <li>Zero spam guarantee</li>
+  </ul>
+  <form class="form-wrap" action="https://app.kit.com/forms/DDD_FORM_ID/subscriptions" method="post">
+    <input type="email" name="email_address" placeholder="Enter your email" required>
+    <button type="submit">Get My Free Weekly Deals</button>
+  </form>
+  <p class="trust">Join thousands of smart shoppers saving every week</p>
+</div>
+</body>
+</html>
