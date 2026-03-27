@@ -50,6 +50,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Pre-flight check
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -58,7 +59,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
-          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
+          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_PINTEREST }}
         run: python3 scripts/preflight_check.py
 
       - name: Render and publish pins

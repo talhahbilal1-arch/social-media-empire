@@ -50,7 +50,7 @@ def main():
     print("\n[2] Supabase connectivity")
     supabase_url = os.environ.get("SUPABASE_URL", "")
     supabase_key = os.environ.get("SUPABASE_KEY", "")
-    tables_to_check = ["content_history", "errors", "agent_runs", "daily_trending"]
+    tables_to_check = ["content_history", "errors", "agent_runs", "daily_trending", "pinterest_pins"]
 
     if supabase_url and supabase_key:
         headers = {
