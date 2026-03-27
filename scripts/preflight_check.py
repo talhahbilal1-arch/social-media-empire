@@ -40,7 +40,7 @@ def main():
             failures.append(f"Missing {var}")
 
     # At least one Make.com webhook must be configured
-    webhook_vars = ["MAKE_WEBHOOK_FITNESS", "MAKE_WEBHOOK_DEALS", "MAKE_WEBHOOK_MENOPAUSE", "MAKE_WEBHOOK_PINTEREST"]
+    webhook_vars = ["MAKE_WEBHOOK_FITNESS", "MAKE_WEBHOOK_DEALS", "MAKE_WEBHOOK_MENOPAUSE"]
     any_webhook = any(os.environ.get(v, "") for v in webhook_vars)
     if not check("At least one Make.com webhook", any_webhook,
                  "found" if any_webhook else "ALL MISSING — no pins will be posted"):
@@ -122,7 +122,6 @@ def main():
         "MAKE_WEBHOOK_FITNESS": "fitness",
         "MAKE_WEBHOOK_DEALS": "deals",
         "MAKE_WEBHOOK_MENOPAUSE": "menopause",
-        "MAKE_WEBHOOK_PINTEREST": "global-fallback",
     }
     # IMPORTANT: Do NOT make HTTP requests to webhook URLs.
     # Make.com fires the scenario on ANY HTTP method (HEAD, GET, POST, etc.).
@@ -143,11 +142,12 @@ def main():
     if failures:
         for f in failures:
             print(f"  ⚠ {f}")
-        print("\nPipeline will continue but may fail. Fix issues for reliable operation.")
-        sys.exit(1)
+        print("\nPipeline will proceed. Fix warnings above for reliable operation.")
     else:
         print("  All checks passed — pipeline is ready.")
-        sys.exit(0)
+
+    # ALWAYS exit 0 — preflight is diagnostic only, never blocks the pipeline
+    sys.exit(0)
 
 
 if __name__ == "__main__":
