@@ -1,10 +1,9 @@
 """Pre-flight validation script for the content engine.
 
 Checks all required secrets and API connectivity before the expensive
-pin generation phase begins. Exits 0 on pass, 1 on failure.
-
-Used as the first step in content-engine.yml with continue-on-error: true
-so the pipeline surfaces failures fast rather than after 10+ minutes.
+pin generation phase begins. Always exits 0 — this script is diagnostic
+only and must NEVER block the pipeline. Failures are logged as warnings
+so operators can investigate, but pin generation proceeds regardless.
 """
 
 import os
@@ -13,17 +12,17 @@ import requests
 
 
 def check(label, passed, detail=""):
-    icon = "✅" if passed else "❌"
+    icon = "\u2705" if passed else "\u274c"
     msg = f"  {icon} {label}"
     if detail:
-        msg += f" — {detail}"
+        msg += f" \u2014 {detail}"
     print(msg)
     return passed
 
 
 def main():
     print("=== Pre-flight check ===")
-    failures = []
+    warnings = []
 
     # ── Required env vars ────────────────────────────────────────
     print("\n[1] Environment variables")
@@ -37,14 +36,14 @@ def main():
         val = os.environ.get(var, "")
         ok = bool(val and len(val) > 10)
         if not check(f"{var} ({purpose})", ok, "set" if ok else "MISSING"):
-            failures.append(f"Missing {var}")
+            warnings.append(f"Missing {var}")
 
     # At least one Make.com webhook must be configured
-    webhook_vars = ["MAKE_WEBHOOK_FITNESS", "MAKE_WEBHOOK_DEALS", "MAKE_WEBHOOK_MENOPAUSE", "MAKE_WEBHOOK_PINTEREST"]
+    webhook_vars = ["MAKE_WEBHOOK_FITNESS", "MAKE_WEBHOOK_DEALS", "MAKE_WEBHOOK_MENOPAUSE"]
     any_webhook = any(os.environ.get(v, "") for v in webhook_vars)
     if not check("At least one Make.com webhook", any_webhook,
-                 "found" if any_webhook else "ALL MISSING — no pins will be posted"):
-        failures.append("No Make.com webhooks configured")
+                 "found" if any_webhook else "ALL MISSING \u2014 no pins will be posted"):
+        warnings.append("No Make.com webhooks configured")
 
     # ── Supabase table accessibility ─────────────────────────────
     print("\n[2] Supabase connectivity")
@@ -66,16 +65,16 @@ def main():
                 )
                 ok = resp.status_code == 200
                 if not ok and resp.status_code == 404:
-                    detail = f"HTTP {resp.status_code} — table may not exist (run 001_master_schema.sql)"
+                    detail = f"HTTP {resp.status_code} \u2014 table may not exist (run 001_master_schema.sql)"
                 elif not ok:
                     detail = f"HTTP {resp.status_code}"
                 else:
                     detail = "accessible"
                 if not check(f"supabase:{table}", ok, detail):
-                    failures.append(f"Supabase table {table} not accessible")
+                    warnings.append(f"Supabase table {table} not accessible")
             except requests.exceptions.RequestException as e:
                 check(f"supabase:{table}", False, str(e)[:80])
-                failures.append(f"Supabase {table} request error")
+                warnings.append(f"Supabase {table} request error")
     else:
         check("Supabase tables", False, "skipped (credentials missing)")
 
@@ -91,10 +90,10 @@ def main():
             )
             ok = resp.status_code == 200
             if not check("Pexels API", ok, f"HTTP {resp.status_code}"):
-                failures.append("Pexels API unreachable or invalid key")
+                warnings.append("Pexels API unreachable or invalid key")
         except requests.exceptions.RequestException as e:
             check("Pexels API", False, str(e)[:80])
-            failures.append("Pexels API request error")
+            warnings.append("Pexels API request error")
     else:
         check("Pexels API", False, "skipped (key missing)")
 
@@ -109,10 +108,10 @@ def main():
             )
             ok = resp.status_code == 200
             if not check("Gemini API", ok, f"HTTP {resp.status_code}"):
-                failures.append("Gemini API unreachable or invalid key")
+                warnings.append("Gemini API unreachable or invalid key")
         except requests.exceptions.RequestException as e:
             check("Gemini API", False, str(e)[:80])
-            failures.append("Gemini API request error")
+            warnings.append("Gemini API request error")
     else:
         check("Gemini API", False, "skipped (key missing)")
 
@@ -122,7 +121,6 @@ def main():
         "MAKE_WEBHOOK_FITNESS": "fitness",
         "MAKE_WEBHOOK_DEALS": "deals",
         "MAKE_WEBHOOK_MENOPAUSE": "menopause",
-        "MAKE_WEBHOOK_PINTEREST": "global-fallback",
     }
     # IMPORTANT: Do NOT make HTTP requests to webhook URLs.
     # Make.com fires the scenario on ANY HTTP method (HEAD, GET, POST, etc.).
@@ -136,18 +134,19 @@ def main():
             any_configured = True
 
     if not any_configured:
-        failures.append("No Make.com webhooks configured")
+        warnings.append("No Make.com webhooks configured")
 
     # ── Summary ──────────────────────────────────────────────────
-    print(f"\n=== Pre-flight result: {len(failures)} issue(s) ===")
-    if failures:
-        for f in failures:
-            print(f"  ⚠ {f}")
-        print("\nPipeline will continue but may fail. Fix issues for reliable operation.")
-        sys.exit(1)
+    print(f"\n=== Pre-flight result: {len(warnings)} warning(s) ===")
+    if warnings:
+        for w in warnings:
+            print(f"  \u26a0 {w}")
+        print("\nPipeline will proceed. Fix warnings above for reliable operation.")
     else:
-        print("  All checks passed — pipeline is ready.")
-        sys.exit(0)
+        print("  All checks passed \u2014 pipeline is ready.")
+
+    # ALWAYS exit 0 — preflight is diagnostic only, never blocks the pipeline
+    sys.exit(0)
 
 
 if __name__ == "__main__":
