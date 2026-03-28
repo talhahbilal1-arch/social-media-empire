@@ -2,10 +2,12 @@ name: Content Engine
 
 on:
   schedule:
-    # 3 runs per day — renders content_ready pins after Make.com content generator fills them
-    - cron: '0 16 * * *'  # 8 AM PST
-    - cron: '0 22 * * *'  # 2 PM PST
-    - cron: '0 4 * * *'   # 8 PM PST (next day UTC)
+    # 5 runs per day — 1 pin per brand per run = 5 pins/brand/day
+    - cron: '0 14 * * *'  # 6 AM PST
+    - cron: '0 17 * * *'  # 9 AM PST
+    - cron: '0 20 * * *'  # 12 PM PST
+    - cron: '0 23 * * *'  # 3 PM PST
+    - cron: '0 3 * * *'   # 7 PM PST (next day UTC)
   workflow_dispatch:
     inputs:
       brand:
