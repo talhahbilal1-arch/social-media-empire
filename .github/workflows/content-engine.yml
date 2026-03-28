@@ -156,41 +156,45 @@ jobs:
           for brand in brands_to_generate:
               try:
                   # Guardrail: check daily pin count before generating
+                  pins_today = 0
                   try:
                       today_count = db.client.table('content_history') \
                           .select('id', count='exact') \
                           .eq('brand', brand) \
                           .gte('created_at', today_str + 'T00:00:00Z') \
                           .execute()
-                      pin_count = today_count.count if hasattr(today_count, 'count') else len(today_count.data or [])
-                      if pin_count >= MAX_PINS_PER_DAY:
-                          print(f'  [{brand}] SKIP — already {pin_count} pins today (max {MAX_PINS_PER_DAY})')
+                      pins_today = today_count.count if hasattr(today_count, 'count') else len(today_count.data or [])
+                      if pins_today >= MAX_PINS_PER_DAY:
+                          print(f'  [{brand}] SKIP — already {pins_today} pins today (max {MAX_PINS_PER_DAY})')
                           continue
                   except Exception as _e:
                       print(f'  [{brand}] Pin count check failed ({_e}), continuing...')
 
-                  print(f'  Generating content for {brand}...')
-                  pin_data = generate_pin_content(brand, db.client)
-                  board_id = get_board_id(brand, pin_data.get('board', ''))
-                  tips = pin_data.get('tips', [])
-                  insert_row = {
-                      'brand': brand,
-                      'title': pin_data.get('title', ''),
-                      'description': pin_data.get('description', ''),
-                      'overlay_headline': pin_data.get('graphic_title', pin_data.get('title', ''))[:60],
-                      'overlay_subtext': tips[0] if tips else '',
-                      'tips': tips,
-                      'pexels_search_term': pin_data.get('image_search_query', ''),
-                      'board_id': board_id,
-                      'destination_url': pin_data.get('destination_url', ''),
-                      'topic': pin_data.get('topic', ''),
-                      'niche': pin_data.get('category', ''),
-                      'status': 'content_ready',
-                  }
-                  if not dry_run:
-                      db.client.table('pinterest_pins').insert(insert_row).execute()
-                      log_pin_to_history(pin_data, db.client)
-                  print(f'  [{brand}] Content ready: {pin_data.get("title", "")[:50]}')
+                  remaining = MAX_PINS_PER_DAY - pins_today
+                  print(f'  [{brand}] Generating {remaining} pin(s) ({pins_today} already today)...')
+                  for _pin_idx in range(remaining):
+                      print(f'  Generating content for {brand} (pin {_pin_idx + 1}/{remaining})...')
+                      pin_data = generate_pin_content(brand, db.client)
+                      board_id = get_board_id(brand, pin_data.get('board', ''))
+                      tips = pin_data.get('tips', [])
+                      insert_row = {
+                          'brand': brand,
+                          'title': pin_data.get('title', ''),
+                          'description': pin_data.get('description', ''),
+                          'overlay_headline': pin_data.get('graphic_title', pin_data.get('title', ''))[:60],
+                          'overlay_subtext': tips[0] if tips else '',
+                          'tips': tips,
+                          'pexels_search_term': pin_data.get('image_search_query', ''),
+                          'board_id': board_id,
+                          'destination_url': pin_data.get('destination_url', ''),
+                          'topic': pin_data.get('topic', ''),
+                          'niche': pin_data.get('category', ''),
+                          'status': 'content_ready',
+                      }
+                      if not dry_run:
+                          db.client.table('pinterest_pins').insert(insert_row).execute()
+                          log_pin_to_history(pin_data, db.client)
+                      print(f'  [{brand}] Content ready: {pin_data.get("title", "")[:50]}')
               except Exception as e:
                   print(f'  ERROR generating content for {brand}: {e}')
                   import traceback; traceback.print_exc()
