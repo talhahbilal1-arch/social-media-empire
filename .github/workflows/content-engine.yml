@@ -2,12 +2,16 @@ name: Content Engine
 
 on:
   schedule:
-    # 5 runs per day — 1 pin per brand per run = 5 pins/brand/day
+    # 5 runs per day — generates full daily quota (5 pins/brand) each run
     - cron: '0 14 * * *'  # 6 AM PST
     - cron: '0 17 * * *'  # 9 AM PST
     - cron: '0 20 * * *'  # 12 PM PST
     - cron: '0 23 * * *'  # 3 PM PST
     - cron: '0 3 * * *'   # 7 PM PST (next day UTC)
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/content-engine.yml'
   workflow_dispatch:
     inputs:
       brand:
