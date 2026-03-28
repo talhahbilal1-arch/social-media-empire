@@ -8,10 +8,6 @@ on:
     - cron: '0 20 * * *'  # 12 PM PST
     - cron: '0 23 * * *'  # 3 PM PST
     - cron: '0 3 * * *'   # 7 PM PST (next day UTC)
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/content-engine.yml'
   workflow_dispatch:
     inputs:
       brand:
