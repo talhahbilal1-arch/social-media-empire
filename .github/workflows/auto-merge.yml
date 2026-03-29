@@ -38,23 +38,33 @@ jobs:
           CHANGED_WORKFLOWS=$(git diff main...origin/"$BRANCH" --name-only -- '.github/workflows/*.yml' || true)
           if [ -n "$CHANGED_WORKFLOWS" ]; then
             echo "Workflow files changed — validating YAML syntax:"
+            # Do a test merge first so new files are available for validation
+            git merge --no-commit --no-ff origin/"$BRANCH" || {
+              echo "ERROR: Merge conflicts detected — aborting"
+              git merge --abort
+              exit 1
+            }
             for f in $CHANGED_WORKFLOWS; do
-              echo "  Checking $f..."
-              python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null || {
-                echo "  ERROR: Invalid YAML in $f — aborting merge"
-                exit 1
-              }
+              if [ -f "$f" ]; then
+                echo "  Checking $f..."
+                python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null || {
+                  echo "  ERROR: Invalid YAML in $f — aborting merge"
+                  git merge --abort
+                  exit 1
+                }
+              fi
             done
             echo "  All workflow YAML valid"
+            git merge --abort 2>/dev/null || true
+          else
+            # No workflow changes — just check for merge conflicts
+            git merge --no-commit --no-ff origin/"$BRANCH" || {
+              echo "ERROR: Merge conflicts detected — aborting"
+              git merge --abort
+              exit 1
+            }
+            git merge --abort 2>/dev/null || true
           fi
-
-          # Ensure no merge conflicts
-          git merge --no-commit --no-ff origin/"$BRANCH" || {
-            echo "ERROR: Merge conflicts detected — aborting"
-            git merge --abort
-            exit 1
-          }
-          git merge --abort 2>/dev/null || true
 
       - name: Fetch and merge
         run: |
