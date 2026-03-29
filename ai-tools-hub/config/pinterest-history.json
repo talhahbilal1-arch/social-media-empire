@@ -187,5 +187,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-03-23T17:02:10.051Z",
     "success": true
+  },
+  {
+    "slug": "category-audio",
+    "pin_type": "category",
+    "title": "Top AI Audio Tools Shaping Sound in 2026!",
+    "link": "https://pilottools.ai/category/audio/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-03-29T16:44:31.416Z",
+    "success": true
+  },
+  {
+    "slug": "synthesia-vs-runway",
+    "pin_type": "comparison",
+    "title": "Synthesia vs Runway AI: Which Video Tool Wins?",
+    "link": "https://pilottools.ai/compare/synthesia-vs-runway/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-29T16:44:35.493Z",
+    "success": true
+  },
+  {
+    "slug": "cursor",
+    "pin_type": "tool-review",
+    "title": "Cursor: AI Coding Assistant - 4.8/5! Is it Worth It?",
+    "link": "https://pilottools.ai/tools/cursor/",
+    "board": "AI Coding Tools",
+    "posted_at": "2026-03-29T16:44:39.531Z",
+    "success": true
   }
 ]
