@@ -214,5 +214,32 @@
     "board": "AI Coding Tools",
     "posted_at": "2026-03-29T16:44:39.531Z",
     "success": true
+  },
+  {
+    "slug": "category-research",
+    "pin_type": "category",
+    "title": "Top AI Research Tools Powering 2026 Innovations!",
+    "link": "https://pilottools.ai/category/research/",
+    "board": "AI Research Tools",
+    "posted_at": "2026-03-29T22:19:11.350Z",
+    "success": true
+  },
+  {
+    "slug": "elevenlabs-vs-descript",
+    "pin_type": "comparison",
+    "title": "ElevenLabs vs Descript: AI Voice & Video Showdown!",
+    "link": "https://pilottools.ai/compare/elevenlabs-vs-descript/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-29T22:19:15.549Z",
+    "success": true
+  },
+  {
+    "slug": "claude",
+    "pin_type": "tool-review",
+    "title": "Claude AI: Is It Worth the Hype? (Review + Pricing)",
+    "link": "https://pilottools.ai/tools/claude/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-29T22:19:19.570Z",
+    "success": true
   }
 ]
