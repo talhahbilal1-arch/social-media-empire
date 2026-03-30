@@ -181,19 +181,22 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 
 ## Current Status
 <!-- UPDATE THIS AFTER EVERY WORK SESSION — just tell Claude "update CLAUDE.md status" -->
-- **AI API**: Fully migrated from Anthropic to Gemini (gemini-2.0-flash). All 16 Python/JS files + 19 workflows use GEMINI_API_KEY.
-- **Pinterest posting**: Active (content-engine runs 3x daily via Gemini)
-- **All workflows**: Green — 29 workflows operational
-- **Content generated**: 323 articles across 3 brands
-- **Affiliate sites indexed**: In progress — GSC verified for FitOver35, sitemap submitted, waiting on Google crawl
-- **Affiliate tags correct**: Standardized (fitover35-20, dailydealdarling1-20)
-- **DDD deployment**: VELVET NOIR redesigned site pushed to dailydealdarling.com repo
-- **FitOver35 Pinterest**: Connection in progress — linking pins to site articles
-- **Etsy uploads**: In progress
-- **Gumroad products**: Completion in progress
-- **Stale branches/PRs**: Cleaned up (PR #26 closed, 11 branches deleted)
-- **Workflow optimization**: Completed — 11 workflows optimized (scheduling, error handling, efficiency, affiliate tag fix)
-- **Last session**: March 29, 2026 — GitHub Actions audit: content-engine 5x to 3x/day at Pinterest peak times, fixed 4-way 14:00 UTC collision, emergency-alert now sends real emails via Resend, affiliate tag cross-contamination bug fixed, rescue-poster 7x to 3x/day, system-health every 2h to 4h, deploy-brand-sites gets continue-on-error
+- **AI API**: Gemini (gemini-2.0-flash) across all files
+- **Pinterest posting**: Active — 3x daily at peak times (9AM, 2PM, 8PM PST), all 3 brands posting 5 pins/day
+- **All workflows**: Green — optimized scheduling, no collisions, emergency alerts send real email
+- **Content generated**: 323+ articles across 3 brands (145 fitness, 95 deals, 83 menopause)
+- **Affiliate sites indexed**: BOTH in Google Search Console. FitOver35: 7 pages indexed. DDD: property added, auto-verified via GA, sitemap submitted
+- **Affiliate tags**: Fixed cross-contamination bug — fitness articles were getting deals tag. Now per-brand mapped correctly.
+- **DDD deployment**: VELVET NOIR live on Netlify with SEO schema, structured data, email capture
+- **FitOver35**: Live on Vercel with schema markup, sticky CTA, lead magnet page, internal linking
+- **AutoPilot Prompts**: Landing page optimized and redeployed — fixed broken product section, added social proof, cross-sells, email capture
+- **Gumroad products**: All ZIPs uploaded, covers added, Discover enabled, bundle published
+- **Etsy 30-pack**: All content ready, listing copy optimized. BLOCKED on shop onboarding (manual: banking/billing)
+- **Analytics**: New daily-analytics workflow, pin tracker, article tracker, revenue dashboard
+- **Content engine bugs fixed**: Pin style was hardcoded to gradient (now uses all 9 styles), list pins showing 1 tip (now shows 5), trend pins missing graphic_title field
+- **Distribution**: Auto-distribute script for Reddit/Twitter, Pinterest keyword database (206 keywords), social proof counter
+- **Make.com**: 9 active scenarios healthy, 24 dead ones to clean up, burst posting risk identified
+- **Last session**: March 30, 2026 — Full system optimization: 7 parallel agents optimized content engine, SEO, workflows, analytics, products, distribution, and Make.com
 
 ## Active Priorities (March 2026)
 1. Desmond Wong creator services — delivering free short-form + website, tracking results for paid conversion
