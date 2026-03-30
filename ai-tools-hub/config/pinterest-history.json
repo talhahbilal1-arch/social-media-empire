@@ -241,5 +241,32 @@
     "board": "AI Writing Tools",
     "posted_at": "2026-03-29T22:19:19.570Z",
     "success": true
+  },
+  {
+    "slug": "chatgpt-vs-perplexity",
+    "pin_type": "comparison",
+    "title": "ChatGPT vs Perplexity AI: Which AI Tool Wins?",
+    "link": "https://pilottools.ai/compare/chatgpt-vs-perplexity/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-30T17:05:24.503Z",
+    "success": true
+  },
+  {
+    "slug": "midjourney",
+    "pin_type": "tool-review",
+    "title": "Midjourney Review: Stunning AI Art in Seconds! (4.9/5)",
+    "link": "https://pilottools.ai/tools/midjourney/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-03-30T17:05:28.586Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly-vs-jasper",
+    "pin_type": "comparison",
+    "title": "Grammarly vs. Jasper: Which AI Writing Tool is Right for YOU?",
+    "link": "https://pilottools.ai/compare/grammarly-vs-jasper/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-30T17:05:32.823Z",
+    "success": true
   }
 ]
