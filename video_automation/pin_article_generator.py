@@ -289,7 +289,7 @@ def _try_parse_json(content):
 
 
 def _build_product_card(link_text, amazon_url, primary_color='#1565C0'):
-    """Build a styled product card div with Amazon product image."""
+    """Build a styled product card div with Amazon product image and urgency badge."""
     asin_match = re.search(r'/dp/([A-Z0-9]{10})', amazon_url)
     img_html = ''
     if asin_match:
@@ -302,11 +302,18 @@ def _build_product_card(link_text, amazon_url, primary_color='#1565C0'):
             f'onerror="this.parentElement.style.display=\'none\'">'
             f'</a>'
         )
+    # Urgency badge to boost conversion
+    urgency_html = (
+        f'<span style="display:inline-block;background:#dc2626;color:#fff;font-size:0.72em;'
+        f'padding:2px 8px;border-radius:4px;margin-bottom:6px;font-weight:600;">'
+        f'Popular Pick</span>'
+    )
     return (
         f'<div style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin:16px 0;'
         f'display:flex;gap:16px;align-items:center;background:#fafafa;">'
         f'{img_html}'
         f'<div>'
+        f'{urgency_html}'
         f'<strong style="display:block;margin-bottom:8px;font-size:1em;color:#111;">{link_text}</strong>'
         f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" '
         f'style="display:inline-block;background:#FF9900;color:#111;padding:7px 18px;'
@@ -480,6 +487,13 @@ CATEGORY: {category}
 
 AFFILIATE TAG: {affiliate_tag}
 
+REVENUE OPTIMIZATION RULES:
+- The FIRST product recommendation MUST appear within the first 200 words (above the fold)
+- Include a "Quick Pick" callout box at the very top with the #1 product and its price
+- Use urgency language: "currently X% off", "selling fast", "price just dropped"
+- Each product MUST have a specific price range (never say "affordable" without a number)
+- End EVERY product section with a clear "Check price on Amazon" CTA
+
 Output EXACTLY this JSON structure (no markdown, no code fences, ONLY valid JSON):
 {{
   "title": "Best [Product] for [Audience] ({year})",
@@ -569,6 +583,8 @@ REQUIRED STRUCTURE (follow EXACTLY):
      * Also Great: [Product Name] — [one-line why]
      * Budget Pick: [Product Name] — [one-line why]
    - Each pick must include its Amazon link from the APPROVED PRODUCTS list
+   - IMMEDIATELY after Quick Picks, add: [SIGNUP_FORM_PLACEHOLDER]
+     (This captures readers who just want the recommendation and are about to leave)
 
 2. WHY TRUST THIS GUIDE (50-100 words)
    {trust_text}
@@ -603,6 +619,12 @@ REQUIRED STRUCTURE (follow EXACTLY):
 8. FINAL VERDICT + CTA (100 words)
    Restate the top pick with its Amazon link.
    End with specific CTA: "Check today's price on Amazon" — NOT "pick what works for you"
+
+9. RELATED READING (internal links — boosts SEO and time on site)
+   Add 2-3 bullet points linking to related topics on the same site:
+   - "[Related Topic Title](../articles/related-topic-slug.html)"
+   Use realistic topic slugs based on common topics for this brand.
+   These help Google understand site structure and keep readers browsing.
 
 CRITICAL RULES:
 - ALL Amazon links must use DIRECT /dp/ASIN URLs from the approved list below. NEVER invent /dp/ URLs.

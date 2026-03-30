@@ -244,23 +244,37 @@ def fetch_pinterest_trends(brand_key):
     """Discover what's trending on Pinterest for this niche via Claude analysis."""
     config = NICHE_CONFIGS[brand_key]
 
+    # Get current month for seasonal context
+    now = datetime.now(timezone.utc)
+    month_name = now.strftime('%B %Y')
+    next_month = (now.replace(day=28) + timedelta(days=4)).strftime('%B')
+
     pinterest_prompt = f"""You are a Pinterest trends analyst. Based on your knowledge of what's
 currently popular and trending on Pinterest, identify the top 10 trending topics
 in this niche: {brand_key}
 
 Pinterest-specific search terms to consider: {', '.join(config['pinterest_trends_searches'])}
 
+SEASONAL CONTEXT: It is currently {month_name}. Next month is {next_month}.
+Pinterest users plan 2-3 months ahead. Consider what people are SEARCHING for now
+AND what they'll need in the next 4-6 weeks.
+
+COMPETITOR ANALYSIS: Think about what the top 10 Pinterest creators in the {brand_key} niche
+are posting right now. What formats get the most saves? What topics are oversaturated vs underserved?
+
 For each trending topic, provide:
-1. The specific trending topic/search term
+1. The specific trending topic/search term (use Pinterest-style long-tail keywords)
 2. Why it's trending (seasonal, viral, news-related, etc.)
 3. A score from 1-100 for how hot this trend is right now
+4. Pinterest search volume hint: "high", "medium", or "emerging"
 
-IMPORTANT: Focus on what's trending RIGHT NOW ({datetime.now().strftime('%B %Y')}), not evergreen topics.
+IMPORTANT: Focus on what's trending RIGHT NOW ({month_name}), not evergreen topics.
 Think about: seasonal trends, viral content, new products, cultural moments, health news.
+Prioritize topics with LOW competition but HIGH search intent (underserved niches).
 
 Return ONLY a JSON array, no other text:
 [
-    {{"topic": "...", "reason": "...", "score": 85}},
+    {{"topic": "...", "reason": "...", "score": 85, "search_volume": "high"}},
     ...
 ]"""
 
@@ -304,16 +318,22 @@ def fetch_web_trends(brand_key):
     """Use Claude to synthesize trending topics from web knowledge."""
     config = NICHE_CONFIGS[brand_key]
 
+    now = datetime.now(timezone.utc)
+    month_name = now.strftime('%B')
+    next_month = (now.replace(day=28) + timedelta(days=4)).strftime('%B')
+
     web_prompt = f"""You are a content strategist researching what's trending RIGHT NOW
-(the current week of {datetime.now().strftime('%B %Y')}) in the {brand_key} niche.
+(the current week of {now.strftime('%B %Y')}) in the {brand_key} niche.
 
 Think about:
 - What news stories are relevant to this niche right now?
-- What seasonal topics are people searching for in February?
-- What products are getting buzz?
+- What seasonal topics are people searching for in {month_name}? What about early {next_month} planning?
+- What products are getting buzz on TikTok/Instagram that Pinterest users will search for?
 - What health/wellness trends are gaining momentum?
 - What viral content or challenges are happening?
 - What cultural events or awareness months are relevant?
+- What are competitors/top creators in this niche posting about this week?
+- What HIGH-INTENT keywords have low competition? (e.g. "best X for Y under $Z")
 
 Search queries to consider: {', '.join(config['trending_search_queries'])}
 
@@ -483,10 +503,23 @@ Distribute more pins to higher-ranked (more trending) topics."""
 
 
 def get_fallback_trends(brand_key):
-    """If all trend discovery fails, use evergreen topics that always perform."""
+    """If all trend discovery fails, use seasonally-aware evergreen topics that always perform."""
+    now = datetime.now(timezone.utc)
+    month = now.month
+    year = now.year
+
+    # Seasonal deals topics rotate by quarter
+    _SEASONAL_DEALS = {
+        (1, 2, 3): {"topic": "spring cleaning must-have products", "why": "Spring cleaning season"},
+        (4, 5, 6): {"topic": "summer home refresh under $100", "why": "Summer prep season"},
+        (7, 8, 9): {"topic": "back to routine organization finds", "why": "Fall organization season"},
+        (10, 11, 12): {"topic": "holiday gift guide best finds", "why": "Holiday shopping season"},
+    }
+    seasonal_deal = next(v for k, v in _SEASONAL_DEALS.items() if month in k)
+
     fallbacks = {
         "fitness": {
-            "week_of": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "week_of": now.strftime("%Y-%m-%d"),
             "brand": "fitness",
             "trending_topics": [
                 {"rank": 1, "topic": "protein timing for muscle growth over 35", "trend_score": 60, "pins_to_assign": 5,
@@ -500,41 +533,41 @@ def get_fallback_trends(brand_key):
                 {"rank": 3, "topic": "belly fat after 35 real solutions", "trend_score": 55, "pins_to_assign": 4,
                  "why_trending": "Evergreen fitness topic",
                  "pin_ideas": ["Why crunches won't fix belly fat after 35", "The morning habit that targets belly fat"],
-                 "article_concept": "Evidence-based belly fat reduction for men over 35", "affiliate_products": ["body fat calipers", "meal plan service"]},
+                 "article_concept": "Evidence-based belly fat reduction for men over 35", "affiliate_products": ["foam roller", "food scale"]},
                 {"rank": 4, "topic": "creatine for men over 35", "trend_score": 50, "pins_to_assign": 4,
                  "why_trending": "Evergreen fitness topic",
                  "pin_ideas": ["I took creatine for 90 days at 37", "Creatine monohydrate vs HCL honest review"],
-                 "article_concept": "Complete creatine guide for men over 35", "affiliate_products": ["creatine monohydrate", "creatine HCL"]},
+                 "article_concept": "Complete creatine guide for men over 35", "affiliate_products": ["creatine monohydrate"]},
                 {"rank": 5, "topic": "sleep and recovery optimization", "trend_score": 45, "pins_to_assign": 3,
                  "why_trending": "Evergreen fitness topic",
                  "pin_ideas": ["The sleep hack that improved my recovery 40%", "Why 6 hours isn't enough after 35"],
-                 "article_concept": "Sleep optimization for fitness recovery", "affiliate_products": ["magnesium supplement", "sleep mask"]}
+                 "article_concept": "Sleep optimization for fitness recovery", "affiliate_products": ["magnesium glycinate", "massage gun"]}
             ]
         },
         "deals": {
-            "week_of": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "week_of": now.strftime("%Y-%m-%d"),
             "brand": "deals",
             "trending_topics": [
-                {"rank": 1, "topic": "spring organization refresh", "trend_score": 60, "pins_to_assign": 4,
-                 "why_trending": "Seasonal",
-                 "pin_ideas": ["The $30 closet system that changed my mornings", "Pantry organization before and after"],
-                 "article_concept": "Spring organization guide under $100", "affiliate_products": ["storage containers", "label maker"]},
-                {"rank": 2, "topic": "kitchen gadgets worth buying 2026", "trend_score": 55, "pins_to_assign": 4,
+                {"rank": 1, "topic": seasonal_deal["topic"], "trend_score": 65, "pins_to_assign": 4,
+                 "why_trending": seasonal_deal["why"],
+                 "pin_ideas": [f"Best {seasonal_deal['topic'].split()[0]} finds under $30", "The one product everyone's buying right now"],
+                 "article_concept": f"{seasonal_deal['topic'].title()} guide", "affiliate_products": ["organizer bins", "label maker"]},
+                {"rank": 2, "topic": f"kitchen gadgets worth buying {year}", "trend_score": 55, "pins_to_assign": 4,
                  "why_trending": "Evergreen",
                  "pin_ideas": ["The kitchen tool I use more than my stove", "5 gadgets under $25 I actually kept"],
-                 "article_concept": "Best kitchen gadgets under $30", "affiliate_products": ["air fryer accessories", "vegetable chopper"]},
+                 "article_concept": "Best kitchen gadgets under $30", "affiliate_products": ["air fryer", "knife set"]},
                 {"rank": 3, "topic": "self care routine affordable", "trend_score": 50, "pins_to_assign": 3,
                  "why_trending": "Evergreen",
                  "pin_ideas": ["My $15 self care Sunday routine", "Drugstore products that rival luxury brands"],
-                 "article_concept": "Affordable self care routine guide", "affiliate_products": ["face masks", "bath products"]},
-                {"rank": 4, "topic": "valentines day gift ideas", "trend_score": 50, "pins_to_assign": 3,
-                 "why_trending": "Seasonal February",
-                 "pin_ideas": ["Gift ideas she actually wants under $50", "Last minute gift guide"],
-                 "article_concept": "Valentine's Day gift guide", "affiliate_products": ["jewelry", "home spa set"]}
+                 "article_concept": "Affordable self care routine guide", "affiliate_products": ["silk pillowcase", "LED face mask"]},
+                {"rank": 4, "topic": "home organization ideas that actually work", "trend_score": 50, "pins_to_assign": 3,
+                 "why_trending": "Evergreen — always high search volume",
+                 "pin_ideas": ["The $20 closet fix that changed everything", "Before and after pantry organization"],
+                 "article_concept": "Home organization guide", "affiliate_products": ["drawer dividers", "storage bins"]}
             ]
         },
         "menopause": {
-            "week_of": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "week_of": now.strftime("%Y-%m-%d"),
             "brand": "menopause",
             "trending_topics": [
                 {"rank": 1, "topic": "managing hot flashes naturally", "trend_score": 60, "pins_to_assign": 4,
@@ -544,15 +577,15 @@ def get_fallback_trends(brand_key):
                 {"rank": 2, "topic": "menopause and sleep disruption", "trend_score": 55, "pins_to_assign": 4,
                  "why_trending": "Evergreen",
                  "pin_ideas": ["The bedtime routine that fixed my menopause insomnia", "Why melatonin might not be enough"],
-                 "article_concept": "Sleep solutions for menopause", "affiliate_products": ["magnesium glycinate", "cooling sheets"]},
+                 "article_concept": "Sleep solutions for menopause", "affiliate_products": ["magnesium glycinate", "bamboo sheets"]},
                 {"rank": 3, "topic": "perimenopause symptoms checklist", "trend_score": 50, "pins_to_assign": 3,
                  "why_trending": "Evergreen",
                  "pin_ideas": ["12 perimenopause signs your doctor might miss", "Is this perimenopause or just stress?"],
-                 "article_concept": "Complete perimenopause symptoms guide", "affiliate_products": ["menopause planner", "hormone test kit"]},
+                 "article_concept": "Complete perimenopause symptoms guide", "affiliate_products": ["symptom tracker journal", "evening primrose oil"]},
                 {"rank": 4, "topic": "menopause weight gain strategies", "trend_score": 50, "pins_to_assign": 3,
                  "why_trending": "Evergreen",
                  "pin_ideas": ["Why your old diet stopped working", "The metabolism shift nobody warned me about"],
-                 "article_concept": "Managing weight during menopause", "affiliate_products": ["protein powder", "food scale"]}
+                 "article_concept": "Managing weight during menopause", "affiliate_products": ["collagen powder", "vitamin D3"]}
             ]
         }
     }

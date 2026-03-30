@@ -30,7 +30,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"Fit Over 35","url":"https://fitover35.com","description":"Science-backed fitness for men over 35"}
+  {"@context":"https://schema.org","@type":"WebSite","name":"Fit Over 35","url":"https://fitover35.com","description":"Science-backed fitness for men over 35","publisher":{"@type":"Organization","name":"Fit Over 35","url":"https://fitover35.com"},"potentialAction":{"@type":"SearchAction","target":"https://fitover35.com/?s={search_term_string}","query-input":"required name=search_term_string"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://fitover35.com/"}]}
   </script>
   <meta name="pinterest-rich-pin" content="true">
   <!-- Google Analytics — REPLACE GA_MEASUREMENT_ID with actual ID -->
@@ -388,7 +391,7 @@
         </div>
         <div class="footer-links"><h4>Workouts</h4><ul><li><a href="articles/strength-training-men-over-35.html">Strength Training</a></li><li><a href="articles/lose-belly-fat-after-40.html">Fat Loss Guide</a></li><li><a href="articles/best-home-gym-equipment.html">Home Gym Guide</a></li><li><a href="articles/compound-lifts-guide.html">Compound Lifts</a></li></ul></div>
         <div class="footer-links"><h4>Nutrition</h4><ul><li><a href="articles/protein-guide-over-35.html">Protein Guide</a></li><li><a href="articles/testosterone-boost-naturally.html">Testosterone Guide</a></li><li><a href="articles/alcohol-testosterone-what-men-over-35-need-to-know.html">Alcohol & Testosterone</a></li><li><a href="articles/build-muscle-after-35-limited-equipment-maximum-gains.html">Build Muscle Guide</a></li></ul></div>
-        <div class="footer-links"><h4>Resources</h4><ul><li><a href="gear.html">Recommended Gear</a></li><li><a href="12-week-program.html">Free 12-Week Program</a></li><li><a href="disclaimer.html">Affiliate Disclosure</a></li><li><a href="privacy.html">Privacy Policy</a></li></ul></div>
+        <div class="footer-links"><h4>Resources</h4><ul><li><a href="gear.html">Recommended Gear</a></li><li><a href="12-week-program.html">Free 12-Week Program</a></li><li><a href="meal-plan.html">Free 7-Day Meal Plan</a></li><li><a href="resources.html">All Resources</a></li><li><a href="disclaimer.html">Affiliate Disclosure</a></li><li><a href="privacy.html">Privacy Policy</a></li></ul></div>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 Fit Over 35. All rights reserved.</p>
@@ -471,6 +474,33 @@
       };
     });
   });
+  </script>
+
+  <!-- Mobile Sticky CTA Bar -->
+  <div id="mobileStickyBar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:var(--obsidian,#111014);border-top:2px solid var(--brass,#b8964e);padding:10px 16px;text-align:center;">
+    <div style="display:flex;align-items:center;justify-content:space-between;max-width:500px;margin:0 auto;">
+      <span style="color:var(--ivory,#f5f0e8);font-size:0.85rem;font-weight:600;">Free 12-Week Program</span>
+      <a href="#signup" style="background:var(--brass,#b8964e);color:var(--obsidian,#111014);padding:8px 20px;border-radius:6px;font-size:0.85rem;font-weight:700;text-decoration:none;">Get Free Guide</a>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var bar = document.getElementById('mobileStickyBar');
+    if (window.innerWidth <= 768) {
+      window.addEventListener('scroll', function() {
+        bar.style.display = window.scrollY > 400 ? 'block' : 'none';
+      });
+    }
+  })();
+  </script>
+
+  <!-- Exit-Intent Popup Trigger -->
+  <script>
+  (function(){
+    document.addEventListener('mouseout', function(e) {
+      if (e.clientY < 10 && !popupShown) { showPopup(); }
+    });
+  })();
   </script>
 
 </body>

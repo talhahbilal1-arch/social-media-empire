@@ -254,10 +254,14 @@ def _wrap_text(text, font, max_width):
     return lines
 
 
-def _draw_text_with_shadow(draw, xy, text, font, fill, shadow_color=(0, 0, 0), shadow_offset=2):
-    """Draw text with a dark shadow/outline for readability at thumbnail size."""
+def _draw_text_with_shadow(draw, xy, text, font, fill, shadow_color=(0, 0, 0), shadow_offset=3):
+    """Draw text with a dark shadow/outline for readability at thumbnail size.
+
+    Uses a thicker outline (default 3px) so text remains legible even when
+    Pinterest renders pins at 236px wide in the feed.
+    """
     x, y = xy
-    # Draw shadow in 4 directions for outline effect
+    # Draw shadow in 8 directions for thick outline effect
     for dx in (-shadow_offset, 0, shadow_offset):
         for dy in (-shadow_offset, 0, shadow_offset):
             if dx == 0 and dy == 0:
@@ -406,10 +410,10 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     sub_color = hex_to_rgb(colors.get("text_secondary", "#CCCCCC"))
     wm_color = hex_to_rgb(colors.get("accent", "#FFFFFF"))
 
-    # Load fonts — larger sizes for thumbnail readability
-    heading_font = load_font(fonts["heading"], 76, bold=True)
-    sub_font = load_font(fonts["body"], 38)
-    cta_font = load_font(fonts.get("cta", fonts["body"]), 32)
+    # Load fonts — sized for thumbnail readability (Pinterest shows pins small)
+    heading_font = load_font(fonts["heading"], 84, bold=True)
+    sub_font = load_font(fonts["body"], 40)
+    cta_font = load_font(fonts.get("cta", fonts["body"]), 34)
     watermark_font = load_font(fonts["body"], 26)
 
     text_margin = 80
@@ -477,7 +481,7 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     # ── Standard layout (gradient, box_dark, split_layout) ──
     headline_lines = _wrap_text(headline, heading_font, max_text_width)
     y = text_area_top
-    line_height = 90
+    line_height = 98  # Increased for 84pt heading font
 
     for line in headline_lines:
         bbox = heading_font.getbbox(line)
@@ -849,7 +853,7 @@ def render_pin_to_bytes(brand, headline, subheadline, keyword_or_url, style="gra
 
     # Convert to JPEG bytes
     buffer = BytesIO()
-    bg.save(buffer, "JPEG", quality=85, optimize=True)
+    bg.save(buffer, "JPEG", quality=92, optimize=True)
     return buffer.getvalue()
 
 
@@ -894,7 +898,7 @@ def generate_pin(brand, headline, keyword, style="gradient",
     filename = f"{safe_name}_{style}.jpg"
     output_path = output_dir / filename
 
-    bg.save(output_path, "JPEG", quality=85, optimize=True)
+    bg.save(output_path, "JPEG", quality=92, optimize=True)
     logger.info(f"Pin saved: {output_path}")
     return output_path
 
