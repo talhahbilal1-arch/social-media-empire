@@ -43,5 +43,50 @@
     "subject": "PilotTools.ai Review of Cursor - 4.8/5!",
     "sent_at": "2026-03-23T16:04:59.116Z",
     "status": "failed"
+  },
+  {
+    "identifier": "testimonial-writesonic",
+    "type": "testimonial",
+    "tool_slug": "writesonic",
+    "to": "hello@writesonic.com",
+    "subject": "PilotTools.ai Review of Writesonic: 4.4/5 Stars",
+    "sent_at": "2026-03-30T16:09:25.827Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-copy-ai",
+    "type": "testimonial",
+    "tool_slug": "copy-ai",
+    "to": "hello@copy.ai",
+    "subject": "PilotTools.ai Review of Copy.ai: 4.3/5!",
+    "sent_at": "2026-03-30T16:09:30.530Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-synthesia",
+    "type": "testimonial",
+    "tool_slug": "synthesia",
+    "to": "hello@synthesia.io",
+    "subject": "PilotTools.ai Review of Synthesia - 4.6/5 Rating!",
+    "sent_at": "2026-03-30T16:09:35.187Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-grammarly",
+    "type": "testimonial",
+    "tool_slug": "grammarly",
+    "to": "hello@grammarly.com",
+    "subject": "PilotTools.ai Review of Grammarly: 4.7/5",
+    "sent_at": "2026-03-30T16:09:39.841Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-notion-ai",
+    "type": "testimonial",
+    "tool_slug": "notion-ai",
+    "to": "hello@notion.so",
+    "subject": "PilotTools.ai Review of Notion AI: 4.6/5",
+    "sent_at": "2026-03-30T16:09:44.654Z",
+    "status": "failed"
   }
 ]
