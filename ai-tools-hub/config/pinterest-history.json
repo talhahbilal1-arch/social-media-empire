@@ -268,5 +268,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-03-30T17:05:32.823Z",
     "success": true
+  },
+  {
+    "slug": "chatgpt",
+    "pin_type": "tool-review",
+    "title": "ChatGPT Review: Is This AI Writing Tool Worth It?",
+    "link": "https://pilottools.ai/tools/chatgpt/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-30T22:23:23.145Z",
+    "success": true
+  },
+  {
+    "slug": "category-writing",
+    "pin_type": "category",
+    "title": "Top AI Writing Tools 2026: Boost Your Content!",
+    "link": "https://pilottools.ai/category/writing/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-30T22:23:27.229Z",
+    "success": true
+  },
+  {
+    "slug": "scalenut",
+    "pin_type": "tool-review",
+    "title": "Scalenut AI Review: Supercharge Your SEO! (4.4/5)",
+    "link": "https://pilottools.ai/tools/scalenut/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-03-30T22:23:31.425Z",
+    "success": true
   }
 ]
