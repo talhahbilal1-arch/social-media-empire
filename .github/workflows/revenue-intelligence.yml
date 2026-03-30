@@ -2,7 +2,7 @@ name: Revenue Intelligence Engine
 
 on:
   schedule:
-    - cron: '0 14 * * *'  # 6AM PST daily
+    - cron: '0 15 * * *'  # 7AM PST daily (avoids 14:00 UTC collision)
   workflow_dispatch:
 
 permissions:

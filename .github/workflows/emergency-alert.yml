@@ -13,6 +13,7 @@ jobs:
 
     steps:
       - name: Check if content-engine ran in last 24h
+        id: check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -21,7 +22,8 @@ jobs:
 
           if [ -z "$LAST_RUN" ]; then
             echo "WARNING: No successful content-engine runs found"
-            echo "::warning::Content engine has no recent successful runs"
+            echo "alert=true" >> $GITHUB_OUTPUT
+            echo "message=Content engine has NO recent successful runs" >> $GITHUB_OUTPUT
           else
             # Check if last run was within 26 hours
             LAST_EPOCH=$(date -d "$LAST_RUN" +%s 2>/dev/null || date -jf "%Y-%m-%dT%H:%M:%SZ" "$LAST_RUN" +%s 2>/dev/null || echo "0")
@@ -32,20 +34,70 @@ jobs:
             echo "Last successful run: $LAST_RUN ($HOURS hours ago)"
 
             if [ "$HOURS" -gt 26 ]; then
-              echo "::warning::Content engine hasn't run in $HOURS hours"
+              echo "alert=true" >> $GITHUB_OUTPUT
+              echo "message=Content engine hasn't run in $HOURS hours" >> $GITHUB_OUTPUT
             else
-              echo "OK: Content engine ran $HOURS hours ago"
+              echo "alert=false" >> $GITHUB_OUTPUT
+              echo "message=OK — content engine ran $HOURS hours ago" >> $GITHUB_OUTPUT
             fi
           fi
 
-          # No email notifications — issues logged to GitHub only
-          # Weekly summary email covers all failures
+      - name: Send emergency email if content engine is down
+        if: steps.check.outputs.alert == 'true'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          ALERT_MESSAGE: ${{ steps.check.outputs.message }}
+        run: |
+          if [ -z "$RESEND_API_KEY" ] || [ -z "$ALERT_EMAIL" ]; then
+            echo "Email not configured — alert logged to GitHub only"
+            echo "::warning::$ALERT_MESSAGE"
+            exit 0
+          fi
+
+          pip install resend -q
+          python3 << 'PYEOF'
+          import os, resend
+
+          resend.api_key = os.environ['RESEND_API_KEY']
+          alert_email = os.environ['ALERT_EMAIL']
+          message = os.environ.get('ALERT_MESSAGE', 'Content engine down')
+
+          html = f'''
+          <div style="font-family:-apple-system,Arial,sans-serif;max-width:500px;margin:0 auto">
+            <div style="background:#dc2626;color:white;padding:20px;text-align:center;border-radius:8px 8px 0 0">
+              <h2 style="margin:0">DEAD MAN'S SWITCH TRIGGERED</h2>
+            </div>
+            <div style="padding:20px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
+              <p style="font-size:16px;color:#1f2937"><strong>{message}</strong></p>
+              <p style="color:#6b7280;font-size:14px">
+                The content engine has not completed a successful run in over 24 hours.
+                Check GitHub Actions logs immediately.
+              </p>
+              <a href="https://github.com/${{ github.repository }}/actions/workflows/content-engine.yml"
+                 style="display:inline-block;background:#dc2626;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;margin-top:10px">
+                View Content Engine Runs
+              </a>
+            </div>
+          </div>
+          '''
+
+          try:
+              resend.Emails.send({
+                  'from': 'alerts@socialmediaempire.com',
+                  'to': [alert_email],
+                  'subject': f'EMERGENCY: {message}',
+                  'html': html
+              })
+              print(f'Emergency alert sent to {alert_email}')
+          except Exception as e:
+              print(f'Failed to send alert: {e}')
+          PYEOF
 
       - name: Create summary
         if: always()
         run: |
           echo "## Dead Man's Switch Check" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Checked if content-engine ran in last 24 hours." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "_No email notification — check weekly summary for health trends._" >> $GITHUB_STEP_SUMMARY
+          echo "**Result:** ${{ steps.check.outputs.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Alert sent:** ${{ steps.check.outputs.alert }}" >> $GITHUB_STEP_SUMMARY

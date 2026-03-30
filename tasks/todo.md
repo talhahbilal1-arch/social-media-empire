@@ -107,35 +107,59 @@ All 5 components built and verified:
 # GitHub Actions Workflow Optimization Audit
 
 **Created:** 2026-03-29
-**Status:** IN PROGRESS
+**Status:** COMPLETE
 
 ---
 
-## Audit Findings & Planned Changes
+## Audit Findings & Changes Applied
 
 ### 1. SCHEDULING (reduce collisions, align to Pinterest peaks)
 
-- [ ] **1.1** content-engine.yml: 5x/day to 3x/day (9AM, 2PM, 8PM PST) — same output, fewer wasted runs
-- [ ] **1.2** daily-trend-scout.yml: 14:00 UTC collision — move to 13:00 UTC (5AM PST)
-- [ ] **1.3** revenue-intelligence.yml: 14:00 UTC collision — move to 15:00 UTC (7AM PST)
-- [ ] **1.4** video-automation-morning.yml: 14:00 UTC collision — move to 16:00 UTC (8AM PST)
-- [ ] **1.5** enable-and-run.yml: 13:30 UTC double-trigger — move to 13:00 UTC
+- [x] **1.1** content-engine.yml: 5x/day to 3x/day (9AM, 2PM, 8PM PST) — same output, fewer wasted runs
+- [x] **1.2** daily-trend-scout.yml: 14:00 UTC collision — moved to 13:00 UTC (5AM PST)
+- [x] **1.3** revenue-intelligence.yml: 14:00 UTC collision — moved to 15:00 UTC (7AM PST)
+- [x] **1.4** video-automation-morning.yml: 14:00 UTC collision — moved to 16:00 UTC (8AM PST)
+- [x] **1.5** enable-and-run.yml: 13:30 UTC double-trigger — moved to 13:00 UTC
 
 ### 2. ERROR HANDLING
 
-- [ ] **2.1** emergency-alert.yml: wire to Resend API for actual notifications
-- [ ] **2.2** post-product-pins.yml: update actions/checkout@v3 to v4, setup-python@v4 to v5
-- [ ] **2.3** post-product-pins.yml: add timeout-minutes: 15
-- [ ] **2.4** deploy-brand-sites.yml: add timeout + continue-on-error per brand
-- [ ] **2.5** weekly-discovery.yml: reduce timeout 120 to 45 min
+- [x] **2.1** emergency-alert.yml: wired to Resend API — now sends actual email on failure
+- [x] **2.2** post-product-pins.yml: updated actions/checkout@v3 to v4, setup-python@v4 to v5, Python 3.10 to 3.11
+- [x] **2.3** post-product-pins.yml: added timeout-minutes: 15
+- [x] **2.4** deploy-brand-sites.yml: added timeout-minutes: 20 + continue-on-error per brand deploy
+- [x] **2.5** weekly-discovery.yml: reduced timeout 120 to 45 min
 
 ### 3. EFFICIENCY
 
-- [ ] **3.1** rescue-poster.yml: 7x/day to 3x/day
-- [ ] **3.2** system-health.yml: every 2h to every 4h
+- [x] **3.1** rescue-poster.yml: 7x/day to 3x/day (9:30AM, 3:30PM, 9:30PM PST)
+- [x] **3.2** system-health.yml: every 2h to every 4h (12x/day to 6x/day)
 
 ### 4. CONTENT PIPELINE
 
-- [ ] **4.1** content-engine.yml Phase 2b: fix hardcoded affiliate tag to use per-brand mapping
+- [x] **4.1** content-engine.yml Phase 2b: replaced hardcoded `dailydealdarling1-20` with per-brand mapping (fitness=fitover35-20, deals=dailydealdarling1-20, menopause=skip)
+
+---
+
+## Review
+
+### Files Modified (11 workflow files)
+1. `.github/workflows/content-engine.yml` — schedule 5x to 3x, affiliate tag per-brand fix
+2. `.github/workflows/daily-trend-scout.yml` — schedule 14:00 to 13:00 UTC
+3. `.github/workflows/revenue-intelligence.yml` — schedule 14:00 to 15:00 UTC
+4. `.github/workflows/video-automation-morning.yml` — schedule 14:00 to 16:00 UTC
+5. `.github/workflows/enable-and-run.yml` — schedule 13:30 to 13:00 UTC
+6. `.github/workflows/emergency-alert.yml` — added Resend email integration
+7. `.github/workflows/post-product-pins.yml` — updated actions + timeout + Python version
+8. `.github/workflows/deploy-brand-sites.yml` — timeout + continue-on-error
+9. `.github/workflows/weekly-discovery.yml` — timeout 120 to 45 min
+10. `.github/workflows/rescue-poster.yml` — 7x to 3x daily
+11. `.github/workflows/system-health.yml` — every 2h to every 4h
+
+### Impact Summary
+- **CI minutes saved:** ~40% reduction (fewer content-engine, rescue-poster, system-health runs)
+- **Bug fixed:** Affiliate tag cross-contamination (fitness articles were getting wrong tag)
+- **Reliability:** Emergency alerts now actually notify via email; deploy failures isolated per brand
+- **Schedule collisions resolved:** 4 workflows at 14:00 UTC spread to 13:00, 15:00, 16:00 UTC
+- **All YAML validated:** 11/11 files pass yaml.safe_load()
 
 ---
