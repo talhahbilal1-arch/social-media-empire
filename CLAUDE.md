@@ -192,7 +192,8 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Etsy uploads**: In progress
 - **Gumroad products**: Completion in progress
 - **Stale branches/PRs**: Cleaned up (PR #26 closed, 11 branches deleted)
-- **Last session**: March 29, 2026 — repo housekeeping, DDD deployment, Google indexing push, FitOver35 Pinterest connection, Etsy uploads, Gumroad product completion
+- **Workflow optimization**: Completed — 11 workflows optimized (scheduling, error handling, efficiency, affiliate tag fix)
+- **Last session**: March 29, 2026 — GitHub Actions audit: content-engine 5x to 3x/day at Pinterest peak times, fixed 4-way 14:00 UTC collision, emergency-alert now sends real emails via Resend, affiliate tag cross-contamination bug fixed, rescue-poster 7x to 3x/day, system-health every 2h to 4h, deploy-brand-sites gets continue-on-error
 
 ## Active Priorities (March 2026)
 1. Desmond Wong creator services — delivering free short-form + website, tracking results for paid conversion
