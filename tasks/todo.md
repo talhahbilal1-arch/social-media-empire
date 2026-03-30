@@ -1,3 +1,42 @@
+# Pinterest Revenue Optimization Audit — 2026-03-29
+
+## Changes Made
+
+### 1. Content Brain (content_brain.py)
+- [x] Added `SEASONAL_HOOKS` dictionary (12 months) + `_get_seasonal_context()` — pins now auto-inject seasonal urgency language
+- [x] Injected seasonal context into both `generate_pin_content` and `generate_pin_from_daily_trend` prompts
+- [x] Strengthened affiliate product integration prompt with price-anchoring formula
+- [x] Added `graphic_title` field to daily trend and calendar pin JSON output formats (was missing)
+- [x] Added graphic_title generation rules to daily trend prompt
+
+### 2. Pin Image Generator (pin_image_generator.py)
+- [x] Increased heading font 76pt to 84pt, sub font 38pt to 40pt, CTA font 32pt to 34pt
+- [x] Increased text shadow offset 2px to 3px for better contrast
+- [x] Increased heading line height 90px to 98px
+- [x] Increased JPEG quality 85 to 92
+
+### 3. Content Engine Workflow (content-engine.yml)
+- [x] BUG FIX: Replaced hardcoded `style='gradient'` with dynamic `map_visual_style(pin.visual_style)`
+- [x] Added `visual_style` to pinterest_pins insert row
+- [x] Smart subheadline: list styles now get all 5 tips as numbered items
+- [x] Added per-brand summary breakdown in output
+
+### 4. Pin Article Generator (pin_article_generator.py)
+- [x] Added revenue optimization rules to JSON prompt (first product in 200 words, urgency language, price ranges)
+- [x] Added "Popular Pick" urgency badge to product cards
+- [x] Added early email signup CTA (above-the-fold + mid-article)
+- [x] Added "Related Reading" section for internal linking
+
+### 5. Pinterest Boards (pinterest_boards.py) — No changes needed
+
+### 6. Trend Discovery (trend_discovery.py)
+- [x] Enhanced prompts with seasonal planning + competitor analysis
+- [x] Added search_volume field for prioritization
+- [x] Replaced hardcoded seasonal fallbacks with quarter-aware rotation
+- [x] Fixed fallback affiliate products to match actual AMAZON_AFFILIATE_LINKS keys
+
+---
+
 # Revenue Tracking & Analytics Dashboard
 
 ## Plan
