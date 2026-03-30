@@ -1,48 +1,99 @@
 {
-  "fitness": {
-    "programs": [
-      {"name": "PLACEHOLDER - ClickBank fitness program", "url": "PLACEHOLDER", "commission": "30-75%"},
-      {"name": "PLACEHOLDER - ShareASale supplement brand", "url": "PLACEHOLDER", "commission": "15-25%"},
-      {"name": "PLACEHOLDER - Bodybuilding.com", "url": "PLACEHOLDER", "commission": "5-15%"}
-    ],
-    "supplements": [
-      {"name": "Transparent Labs Creatine HMB", "url": "PLACEHOLDER_SHAREASALE", "commission": "25%"},
-      {"name": "Legion Athletics Whey+", "url": "PLACEHOLDER_SHAREASALE", "commission": "20%"}
-    ],
-    "equipment": [
-      {"name": "TRX Suspension Trainer", "url": "PLACEHOLDER_SHAREASALE", "commission": "15%"},
-      {"name": "Bowflex SelectTech 552", "url": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarl-20", "commission": "4%"}
-    ],
-    "signup_urls": {
-      "clickbank": "https://www.clickbank.com/affiliate/",
-      "shareasale": "https://www.shareasale.com/",
-      "bodybuilding": "https://www.bodybuilding.com/affiliate"
+  "working_links": {
+    "amazon_associates": {
+      "status": "ACTIVE",
+      "fitness_tag": "fitover35-20",
+      "deals_tag": "dailydealdarling1-20",
+      "note": "Amazon links are auto-injected in articles via pin_article_generator.py"
     },
-    "note": "Owner must sign up at: clickbank.com, shareasale.com, bodybuilding.com/affiliate"
+    "etsy": {
+      "status": "ACTIVE",
+      "url": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle",
+      "brand": "menopause",
+      "commission": "100% minus Etsy fees"
+    },
+    "gumroad": {
+      "status": "ACTIVE",
+      "products": [
+        {"name": "AI Fitness Coach Vault", "price": "$27", "url": "https://talhahbilal.gumroad.com/l/lupkl", "brand": "fitness"},
+        {"name": "Pinterest Automation Blueprint", "price": "$47", "url": "https://talhahbilal.gumroad.com/l/epjybe", "brand": "deals"},
+        {"name": "Online Coach AI Client Machine", "price": "$17", "url": "https://talhahbilal.gumroad.com/l/weaaa", "brand": "fitness"},
+        {"name": "AI Automation Empire Bundle", "price": "$87", "url": "https://talhahbilal.gumroad.com/l/rwzcy", "brand": "all"},
+        {"name": "Zero-Miss Lead Engine", "url": "https://talhahbilal.gumroad.com/l/bxslh", "brand": "all"},
+        {"name": "Content Repurposing Machine", "url": "https://talhahbilal.gumroad.com/l/rfoee", "brand": "all"},
+        {"name": "Automated Review Generator", "url": "https://talhahbilal.gumroad.com/l/olryh", "brand": "all"}
+      ]
+    },
+    "promptbase": {
+      "status": "ACTIVE",
+      "products": [
+        {"name": "8-Week Training Program for Men Over 35", "price": "$4.99"},
+        {"name": "Pinterest Pin Title Generator", "price": "$4.99"},
+        {"name": "Online Coach DM Reply Script", "price": "$4.99"}
+      ]
+    }
   },
-  "deals": {
-    "programs": [
-      {"name": "PLACEHOLDER - ShareASale home/lifestyle", "url": "PLACEHOLDER", "commission": "10-30%"},
-      {"name": "PLACEHOLDER - Impact brands", "url": "PLACEHOLDER", "commission": "5-20%"},
-      {"name": "PLACEHOLDER - Rakuten retailers", "url": "PLACEHOLDER", "commission": "5-15%"}
+
+  "placeholder_links": {
+    "fitness": [
+      {"name": "ClickBank fitness program", "status": "NEEDS_SIGNUP", "commission": "30-75%"},
+      {"name": "ShareASale supplement brand", "status": "NEEDS_SIGNUP", "commission": "15-25%"},
+      {"name": "Bodybuilding.com affiliate", "status": "NEEDS_SIGNUP", "commission": "5-15%"},
+      {"name": "Transparent Labs Creatine HMB", "status": "NEEDS_SIGNUP", "platform": "ShareASale", "commission": "25%"},
+      {"name": "Legion Athletics Whey+", "status": "NEEDS_SIGNUP", "platform": "ShareASale", "commission": "20%"},
+      {"name": "TRX Suspension Trainer", "status": "NEEDS_SIGNUP", "platform": "ShareASale", "commission": "15%"}
     ],
-    "signup_urls": {
-      "shareasale": "https://www.shareasale.com/",
-      "impact": "https://impact.com/",
-      "rakuten": "https://rakutenadvertising.com/"
-    },
-    "note": "Owner must sign up at: shareasale.com, impact.com, rakutenadvertising.com"
+    "deals": [
+      {"name": "ShareASale home/lifestyle brands", "status": "NEEDS_SIGNUP", "commission": "10-30%"},
+      {"name": "Impact brands", "status": "NEEDS_SIGNUP", "commission": "5-20%"},
+      {"name": "Rakuten retailers", "status": "NEEDS_SIGNUP", "commission": "5-15%"}
+    ],
+    "menopause": [
+      {"name": "Menopause supplement via ShareASale", "status": "NEEDS_SIGNUP", "commission": "15-30%"},
+      {"name": "ClickBank health program", "status": "NEEDS_SIGNUP", "commission": "30-75%"}
+    ]
   },
-  "menopause": {
-    "programs": [
-      {"name": "PLACEHOLDER - menopause supplement via ShareASale", "url": "PLACEHOLDER", "commission": "15-30%"},
-      {"name": "PLACEHOLDER - ClickBank health program", "url": "PLACEHOLDER", "commission": "30-75%"},
-      {"name": "Etsy planner", "url": "https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle", "commission": "100% minus Etsy fees"}
-    ],
-    "signup_urls": {
-      "shareasale": "https://www.shareasale.com/",
-      "clickbank": "https://www.clickbank.com/affiliate/"
+
+  "manual_action_required": [
+    {
+      "platform": "ShareASale",
+      "signup_url": "https://www.shareasale.com/shareasale.cfm?merchantID=signup",
+      "commission": "10-30% depending on merchant",
+      "brands": ["fitness", "deals", "menopause"],
+      "approval_time": "1-3 days",
+      "priority": "HIGH — covers supplements, home goods, wellness"
     },
-    "note": "Owner must sign up at: shareasale.com, clickbank.com"
-  }
+    {
+      "platform": "ClickBank",
+      "signup_url": "https://www.clickbank.com/affiliate/",
+      "commission": "30-75% on digital products",
+      "brands": ["fitness", "menopause"],
+      "approval_time": "Instant",
+      "priority": "HIGH — highest commission rates"
+    },
+    {
+      "platform": "Impact.com",
+      "signup_url": "https://app.impact.com/signup/publisher",
+      "commission": "5-20% depending on brand",
+      "brands": ["deals"],
+      "approval_time": "1-5 days",
+      "priority": "MEDIUM — big retail brands"
+    },
+    {
+      "platform": "Rakuten Advertising",
+      "signup_url": "https://rakutenadvertising.com/publisher/",
+      "commission": "5-15%",
+      "brands": ["deals"],
+      "approval_time": "3-7 days",
+      "priority": "LOW — slower approval, lower commissions"
+    },
+    {
+      "platform": "Bodybuilding.com Affiliate",
+      "signup_url": "https://www.bodybuilding.com/affiliate",
+      "commission": "5-15%",
+      "brands": ["fitness"],
+      "approval_time": "2-5 days",
+      "priority": "MEDIUM — good for supplement recommendations"
+    }
+  ]
 }
