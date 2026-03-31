@@ -429,7 +429,7 @@ jobs:
                       'image_url': pin.get('image_url', ''),
                       'board': pin.get('board_id', ''),
                       'pexels_search_term': pin.get('pexels_search_term', '') or pin.get('title', ''),
-                      'tips': pin.get('tips_list', []) or [],
+                      'tips': pin.get('tips', []) or pin.get('tips_list', []) or [],
                       'category': pin.get('category', ''),
                   }
                   slug, article_md = generate_article_for_pin(brand, pin_data, db.client)

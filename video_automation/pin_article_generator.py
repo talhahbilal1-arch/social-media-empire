@@ -1017,15 +1017,17 @@ def _sanitize_affiliate_links(html_content, brand_key):
     3. Fixes known AI-generated tag typos (truncated, wrong account)
     4. Logs any issues found for monitoring
     """
-    CANONICAL_TAG = 'dailydealdarling1-20'
+    CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
     issues = []
 
     # ── Pass 1: Fix known tag typos ──
     typo_map = {
-        'dailydealdarl-20': CANONICAL_TAG,
-        'menopauseplan-20': CANONICAL_TAG,
-        'fitover35-20': CANONICAL_TAG,
+        'dailydealdarl-20': 'dailydealdarling1-20',
+        'menopauseplan-20': 'dailydealdarling1-20',
     }
+    # Only fix fitover35 typo if we're NOT in the fitness brand
+    if brand_key != 'fitness':
+        typo_map['fitover35-20'] = CANONICAL_TAG
     for wrong, right in typo_map.items():
         if wrong in html_content:
             count = html_content.count(wrong)
