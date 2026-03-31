@@ -295,5 +295,32 @@
     "board": "AI SEO Tools",
     "posted_at": "2026-03-30T22:23:31.425Z",
     "success": true
+  },
+  {
+    "slug": "writesonic",
+    "pin_type": "tool-review",
+    "title": "Writesonic Review: AI Writing That Actually Works? (4.4/5)",
+    "link": "https://pilottools.ai/tools/writesonic/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-31T17:07:56.860Z",
+    "success": true
+  },
+  {
+    "slug": "jasper",
+    "pin_type": "tool-review",
+    "title": "Jasper AI: Is It Worth It? Our Honest Review!",
+    "link": "https://pilottools.ai/tools/jasper/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-03-31T17:08:00.945Z",
+    "success": true
+  },
+  {
+    "slug": "cursor-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Cursor vs ChatGPT: Which AI Coding Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/cursor-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-31T17:08:04.926Z",
+    "success": true
   }
 ]
