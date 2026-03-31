@@ -48,7 +48,7 @@ BRAND_NICHES = {
 
 # Per-brand Amazon Associate tags
 BRAND_AMAZON_TAGS = {
-    'fitness': 'dailydealdarling1-20',
+    'fitness': 'fitover35-20',
     'deals': 'dailydealdarling1-20',
     'menopause': 'dailydealdarling1-20',
 }

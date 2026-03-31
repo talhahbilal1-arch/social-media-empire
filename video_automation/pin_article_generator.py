@@ -34,32 +34,32 @@ def _get_client():
 
 
 # ── Amazon Associates affiliate links ──────────────────────────────────────────
-# All brands use tag=dailydealdarling1-20 (single Amazon Associates account).
+# Fitness uses fitover35-20, all other brands use dailydealdarling1-20.
 # Direct /dp/ASIN links are preferred. For any product NOT in this list, the
 # code falls back to Amazon search URLs (/s?k=...) which always work.
 
 AMAZON_AFFILIATE_LINKS = {
     "fitness": {
-        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20",
-        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarling1-20",
-        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarling1-20",
-        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=dailydealdarling1-20",
-        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=dailydealdarling1-20",
-        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=dailydealdarling1-20",
-        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarling1-20",
-        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=dailydealdarling1-20",
-        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20",
-        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=dailydealdarling1-20",
-        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=dailydealdarling1-20",
-        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=dailydealdarling1-20",
-        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=dailydealdarling1-20",
-        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=dailydealdarling1-20",
-        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=dailydealdarling1-20",
-        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=dailydealdarling1-20",
-        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarling1-20",
-        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=dailydealdarling1-20",
-        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=dailydealdarling1-20",
-        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20",
+        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20",
+        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=fitover35-20",
+        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=fitover35-20",
+        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=fitover35-20",
+        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=fitover35-20",
+        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover35-20",
+        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover35-20",
+        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=fitover35-20",
+        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
+        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=fitover35-20",
+        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=fitover35-20",
+        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=fitover35-20",
+        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=fitover35-20",
+        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=fitover35-20",
+        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=fitover35-20",
+        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=fitover35-20",
+        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=fitover35-20",
+        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=fitover35-20",
+        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=fitover35-20",
+        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
     },
     "deals": {
         "air fryer": "https://www.amazon.com/dp/B07FDJMC9Q?tag=dailydealdarling1-20",
@@ -91,7 +91,7 @@ AMAZON_AFFILIATE_LINKS = {
 }
 
 BRAND_AFFILIATE_TAGS = {
-    "fitness": "dailydealdarling1-20",
+    "fitness": "fitover35-20",
     "deals": "dailydealdarling1-20",
     "menopause": "dailydealdarling1-20",
 }
@@ -1012,7 +1012,7 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
 def _sanitize_affiliate_links(html_content, brand_key):
     """Post-generation sanitization — triple-checks every Amazon link.
 
-    1. Enforces dailydealdarling1-20 tag on ALL Amazon links (single account)
+    1. Enforces per-brand affiliate tags (fitover35-20 for fitness, dailydealdarling1-20 for deals/menopause)
     2. Converts fake/placeholder ASINs to working search URLs
     3. Fixes known AI-generated tag typos (truncated, wrong account)
     4. Logs any issues found for monitoring
