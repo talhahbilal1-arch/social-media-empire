@@ -322,5 +322,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-03-31T17:08:04.926Z",
     "success": true
+  },
+  {
+    "slug": "canva",
+    "pin_type": "tool-review",
+    "title": "Canva Review: Is it Worth the Hype? (4.7/5 Rating)",
+    "link": "https://pilottools.ai/tools/canva/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-03-31T22:23:52.638Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-image-generators-2026-midjourney-vs-dalle-vs-stable-diffusion",
+    "pin_type": "article",
+    "title": "AI Image Generator Showdown 2026: Midjourney, DALL-E, Stable Diffusion!",
+    "link": "https://pilottools.ai/blog/best-ai-image-generators-2026-midjourney-vs-dalle-vs-stable-diffusion/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-03-31T22:23:56.783Z",
+    "success": true
+  },
+  {
+    "slug": "stable-diffusion",
+    "pin_type": "tool-review",
+    "title": "Stable Diffusion Review: Stunning AI Images! (4.3/5)",
+    "link": "https://pilottools.ai/tools/stable-diffusion/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-03-31T22:24:00.701Z",
+    "success": true
   }
 ]
