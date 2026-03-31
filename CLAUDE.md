@@ -53,7 +53,7 @@ Phase 4: Render PIL image → upload Supabase Storage → post via Make.com webh
 
 | Secret | Purpose |
 |--------|---------|
-| `GEMINI_API_KEY` | Google Gemini API (primary AI — gemini-2.0-flash) |
+| `GEMINI_API_KEY` | Google Gemini API (primary AI — gemini-2.5-flash) |
 | `PEXELS_API_KEY` | Background images |
 | `SUPABASE_URL` | Database |
 | `SUPABASE_KEY` | Database |
@@ -181,22 +181,19 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 
 ## Current Status
 <!-- UPDATE THIS AFTER EVERY WORK SESSION — just tell Claude "update CLAUDE.md status" -->
-- **AI API**: Gemini (gemini-2.0-flash) across all files
-- **Pinterest posting**: Active — 3x daily at peak times (9AM, 2PM, 8PM PST), all 3 brands posting 5 pins/day
-- **All workflows**: Green — optimized scheduling, no collisions, emergency alerts send real email
-- **Content generated**: 323+ articles across 3 brands (145 fitness, 95 deals, 83 menopause)
-- **Affiliate sites indexed**: BOTH in Google Search Console. FitOver35: 7 pages indexed. DDD: property added, auto-verified via GA, sitemap submitted
-- **Affiliate tags**: Fixed cross-contamination bug — fitness articles were getting deals tag. Now per-brand mapped correctly.
-- **DDD deployment**: VELVET NOIR live on Netlify with SEO schema, structured data, email capture
-- **FitOver35**: Live on Vercel with schema markup, sticky CTA, lead magnet page, internal linking
-- **AutoPilot Prompts**: Landing page optimized and redeployed — fixed broken product section, added social proof, cross-sells, email capture
-- **Gumroad products**: All ZIPs uploaded, covers added, Discover enabled, bundle published
-- **Etsy 30-pack**: All content ready, listing copy optimized. BLOCKED on shop onboarding (manual: banking/billing)
-- **Analytics**: New daily-analytics workflow, pin tracker, article tracker, revenue dashboard
-- **Content engine bugs fixed**: Pin style was hardcoded to gradient (now uses all 9 styles), list pins showing 1 tip (now shows 5), trend pins missing graphic_title field
-- **Distribution**: Auto-distribute script for Reddit/Twitter, Pinterest keyword database (206 keywords), social proof counter
-- **Make.com**: 9 active scenarios healthy, 24 dead ones to clean up, burst posting risk identified
-- **Last session**: March 30, 2026 — Full system optimization: 7 parallel agents optimized content engine, SEO, workflows, analytics, products, distribution, and Make.com
+- **AI API**: Gemini (gemini-2.5-flash) — migrated from 2.0-flash before June 1 deprecation. Paid tier enabled.
+- **Pinterest posting**: Active — 5x daily (6AM, 9AM, 12PM, 3PM, 7PM PST), 5 pins/brand/day (15 total)
+- **All workflows**: Green — content engine, rescue poster, social distribution all active
+- **Content generated**: 400+ articles across 3 brands
+- **Affiliate tags**: FIXED — fitness=fitover35-20, deals/menopause=dailydealdarling1-20. All 144 fitness articles corrected.
+- **Google Analytics**: All articles now have brand-specific GA tracking (G-1FC6FH34L9, G-HVCLZPEYNS, G-02ZPS3H3GC)
+- **Email capture**: Kit forms working on all 3 brand sites with correct form IDs (8946984, 9144859, 9144926)
+- **FitOver35**: Live on Vercel with schema markup, sticky CTA, lead magnet page, correct affiliate tags
+- **DDD**: Live on Netlify with email capture, correct GA tracking
+- **Gumroad products**: All listed — AI Fitness Vault ($27), Pinterest Blueprint ($47), Bundle ($87)
+- **Social distribution**: Weekly workflow generates Reddit/Twitter content from latest articles
+- **Make.com**: 9 active scenarios healthy
+- **Last session**: March 31, 2026 — Revenue bug fix sprint: affiliate tags, GA tracking, Gemini migration, social distribution
 
 ## Active Priorities (March 2026)
 1. Desmond Wong creator services — delivering free short-form + website, tracking results for paid conversion
@@ -206,9 +203,10 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 
 ## Known Issues
 - Schema-code mismatches have occurred (missing columns, malformed PostgREST filters)
-- Affiliate tags were cross-contaminated (FitOver35 pages using dailydealdarling1-20 tag)
-- Neither affiliate site has Google indexing
-- Pinterest content had message-to-product mismatch (bedroom imagery → menopause planners)
+- Affiliate tags cross-contamination: FIXED March 31, 2026 (code + 144 articles corrected)
+- Late API keys expired — video pin posting via Late returns 401. Refresh at getlate.dev
+- Etsy shop onboarding still needs banking/billing setup (manual)
+- Make.com: ~15 dead scenarios to clean up manually
 
 ## Development Rules
 - NEVER commit API keys or secrets

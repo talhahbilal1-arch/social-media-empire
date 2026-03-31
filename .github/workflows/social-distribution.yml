@@ -1,0 +1,156 @@
+name: Weekly Social Distribution
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Monday 02:00 UTC / Sunday 6 PM PST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-distribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate weekly distribution content
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAKE_WEBHOOK_ACTIVATOR: ${{ secrets.MAKE_WEBHOOK_ACTIVATOR }}
+        run: |
+          python3 << 'PYEOF'
+          import os, sys, json, glob, re
+          from datetime import datetime, timezone, timedelta
+          from pathlib import Path
+
+          sys.path.insert(0, '.')
+          from google import genai
+
+          client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+          MODEL = 'gemini-2.5-flash'
+
+          BRANDS = {
+              'fitness': {
+                  'site': 'fitover35.com',
+                  'dir': 'outputs/fitover35-website/articles',
+                  'subreddit': 'r/fitness30plus',
+                  'gumroad': 'https://talhahbilal.gumroad.com/l/lupkl',
+                  'product': 'AI Fitness Coach Vault ($27)',
+              },
+              'deals': {
+                  'site': 'dailydealdarling.com',
+                  'dir': 'outputs/dailydealdarling-website/articles',
+                  'subreddit': 'r/Frugal',
+                  'gumroad': 'https://talhahbilal.gumroad.com/l/epjybe',
+                  'product': 'Pinterest Automation Blueprint ($47)',
+              },
+              'menopause': {
+                  'site': 'menopause-planner-website.vercel.app',
+                  'dir': 'outputs/menopause-planner-website/articles',
+                  'subreddit': 'r/Menopause',
+                  'gumroad': 'https://talhahbilal.gumroad.com/l/rwzcy',
+                  'product': 'AI Automation Empire Bundle ($87)',
+              },
+          }
+
+          date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+          output = [f"# Weekly Distribution Content — {date_str}\n"]
+          payload_items = []
+
+          for brand, config in BRANDS.items():
+              # Get 3 most recent articles
+              articles_dir = config['dir']
+              html_files = sorted(glob.glob(f'{articles_dir}/*.html'), key=os.path.getmtime, reverse=True)[:3]
+
+              if not html_files:
+                  output.append(f"\n## {brand.title()} — No recent articles\n")
+                  continue
+
+              titles = []
+              for f in html_files:
+                  with open(f, 'r', encoding='utf-8', errors='replace') as fh:
+                      html = fh.read()
+                  m = re.search(r'<title>([^<]+)</title>', html)
+                  title = m.group(1).split('|')[0].strip() if m else Path(f).stem.replace('-', ' ').title()
+                  slug = Path(f).stem
+                  titles.append({'title': title, 'slug': slug, 'url': f"https://{config['site']}/articles/{slug}.html"})
+
+              titles_text = '\n'.join(f"- {t['title']} ({t['url']})" for t in titles)
+
+              prompt = (
+                  f"Write a Reddit post for {config['subreddit']} that shares genuine value "
+                  f"related to these articles:\n{titles_text}\n\n"
+                  f"Brand: {brand}\nRules:\n"
+                  "- Be conversational and human. No AI slop. No emojis.\n"
+                  f"- Share a real insight from the article content\n"
+                  f"- Subtly mention more content at {config['site']} or product at {config['gumroad']}\n"
+                  "- NO hard selling. 80% value, 20% soft mention.\n"
+                  "- Under 200 words. Include a suggested title.\n\n"
+                  "Also write a 3-tweet Twitter mini-thread:\n"
+                  "- Tweet 1: Hook with specific insight (under 280 chars)\n"
+                  "- Tweet 2: Expand with detail (under 280 chars)\n"
+                  "- Tweet 3: CTA to article or product (under 280 chars)\n\n"
+                  "Format:\nREDDIT TITLE: ...\nREDDIT POST:\n...\n"
+                  "TWEET 1: ...\nTWEET 2: ...\nTWEET 3: ..."
+              )
+
+              try:
+                  response = client.models.generate_content(model=MODEL, contents=prompt, config={'max_output_tokens': 800})
+                  content = response.text.strip()
+                  output.append(f"\n---\n## {brand.title()} ({config['subreddit']})\n\n{content}\n")
+                  payload_items.append({'brand': brand, 'content': content, 'articles': titles})
+              except Exception as e:
+                  output.append(f"\n## {brand.title()} — Generation failed: {e}\n")
+
+          # Save to file
+          os.makedirs('distribution/weekly-posts', exist_ok=True)
+          output_path = f'distribution/weekly-posts/{date_str}.md'
+          with open(output_path, 'w') as f:
+              f.write('\n'.join(output))
+          print(f'Saved distribution content to {output_path}')
+
+          # Save JSON payload for Make.com
+          payload_path = f'distribution/weekly-posts/{date_str}.json'
+          with open(payload_path, 'w') as f:
+              json.dump({'date': date_str, 'brands': payload_items}, f, indent=2)
+          print(f'Saved JSON payload to {payload_path}')
+
+          # Send webhook notification if activator URL is set
+          activator = os.environ.get('MAKE_WEBHOOK_ACTIVATOR', '')
+          if activator:
+              import urllib.request
+              try:
+                  data = json.dumps({'action': 'social_distribution', 'date': date_str}).encode()
+                  req = urllib.request.Request(activator, data=data, headers={'Content-Type': 'application/json'})
+                  with urllib.request.urlopen(req, timeout=10) as r:
+                      print(f'Webhook notification sent: HTTP {r.status}')
+              except Exception as e:
+                  print(f'Webhook notification skipped: {e}')
+          PYEOF
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add distribution/
+          git diff --staged --quiet || {
+            git commit -m "distribution: weekly social content $(date +%Y-%m-%d)"
+            git push
+          }
