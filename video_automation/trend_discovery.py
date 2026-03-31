@@ -281,7 +281,7 @@ Return ONLY a JSON array, no other text:
     for attempt in range(3):
         try:
             response = _get_gemini_client().models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-flash",
                 contents=pinterest_prompt,
                 config={"max_output_tokens": 1500, "temperature": 0.7},
             )
@@ -354,7 +354,7 @@ Return ONLY the JSON array, no other text."""
     for attempt in range(3):
         try:
             response = _get_gemini_client().models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-flash",
                 contents=web_prompt,
                 config={"max_output_tokens": 1500, "temperature": 0.7},
             )
@@ -475,7 +475,7 @@ Distribute more pins to higher-ranked (more trending) topics."""
     for attempt in range(3):
         try:
             response = _get_gemini_client().models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-flash",
                 contents=ranking_prompt,
                 config={"max_output_tokens": 2000, "temperature": 0.7},
             )
@@ -661,7 +661,7 @@ Return ONLY this JSON:
     for attempt in range(3):
         try:
             response = _get_gemini_client().models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-flash",
                 contents=calendar_prompt,
                 config={"max_output_tokens": 6000, "temperature": 0.7},
             )

@@ -15,12 +15,12 @@ class GeminiClient:
     Handles:
     - 429 rate limit errors with exponential backoff (8 retries, 5 min max)
     - Structured logging with duration and status
-    - Model selection (default: gemini-2.0-flash)
+    - Model selection (default: gemini-2.5-flash)
 
     Note: Free tier is 5 RPM as of Dec 2025. Retry logic is essential.
     """
 
-    DEFAULT_MODEL = "gemini-2.0-flash"
+    DEFAULT_MODEL = "gemini-2.5-flash"
 
     def __init__(
         self,
@@ -31,7 +31,7 @@ class GeminiClient:
 
         Args:
             api_key: Gemini API key (defaults to settings.GEMINI_API_KEY)
-            model: Model ID (defaults to gemini-2.0-flash)
+            model: Model ID (defaults to gemini-2.5-flash)
         """
         self.api_key = api_key or settings.GEMINI_API_KEY
         if not self.api_key:

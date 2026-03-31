@@ -41,7 +41,7 @@ PEXELS_SEARCH_MAP = {
 }
 
 ELEVENLABS_VOICE_ID = "EXAVITQu4vr4xnSDxMaL"  # Sarah - friendly female
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 _gemini_client = None
 

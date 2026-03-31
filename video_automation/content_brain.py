@@ -52,7 +52,7 @@ def _get_seasonal_context():
 
 _client = None
 
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 
 def _get_client():

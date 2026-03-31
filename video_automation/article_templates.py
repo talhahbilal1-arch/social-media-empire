@@ -99,6 +99,13 @@ LEAD_MAGNET_OVERRIDES = {
     'menopause': 'Free: Night Sweat Symptom Tracker (Printable PDF)',
 }
 
+# Brand Google Analytics IDs
+_BRAND_GA_IDS = {
+    'fitness': 'G-1FC6FH34L9',
+    'deals': 'G-HVCLZPEYNS',
+    'menopause': 'G-02ZPS3H3GC',
+}
+
 # Brand affiliate tags
 _BRAND_TAGS = {
     'fitness': 'fitover35-20',
@@ -550,9 +557,10 @@ def _head(tpl, title, meta_desc, article_url, site_config, article_schema,
         '&display=swap" rel="stylesheet">\n'
         '  <script src="https://cdn.tailwindcss.com"></script>\n'
         f'  <script>tailwind.config = {tw_config}</script>\n'
-        '  <!-- Google Analytics: Replace G-XXXXXXX with your tracking ID -->\n'
-        '  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX">'
-        '</script> -->\n'
+        f'  <script async src="https://www.googletagmanager.com/gtag/js?id={_BRAND_GA_IDS.get(brand_key, "")}">'
+        '</script>\n'
+        '  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}'
+        f'gtag("js",new Date());gtag("config","{_BRAND_GA_IDS.get(brand_key, "")}");</script>\n'
         '  <!-- Facebook Pixel: Replace XXXXXXX with your Pixel ID -->\n'
         '  <!-- <noscript><img height="1" width="1" style="display:none" '
         'src="https://www.facebook.com/tr?id=XXXXXXX&ev=PageView&noscript=1"/>'

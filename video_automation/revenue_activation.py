@@ -38,7 +38,7 @@ BRAND_NICHES = {
 }
 
 
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 _gemini_client = None
 
 def _get_gemini_client():

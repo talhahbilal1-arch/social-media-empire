@@ -41,7 +41,7 @@ def test_gemini():
     try:
         import google.generativeai as genai
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         response = model.generate_content("Say 'API test successful' in 3 words or less")
         return True, f"Working - got response: {response.text[:50]}..."
     except Exception as e:

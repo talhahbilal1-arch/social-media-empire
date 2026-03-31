@@ -146,7 +146,7 @@ Return JSON only:
             for attempt in range(3):
                 try:
                     response = client.models.generate_content(
-                        model='gemini-2.0-flash',
+                        model='gemini-2.5-flash',
                         contents=prompt,
                         config={'max_output_tokens': 1000, 'temperature': 0.7},
                     )
@@ -227,7 +227,7 @@ Write the full article now:"""
                 for attempt in range(3):
                     try:
                         response = client.models.generate_content(
-                            model='gemini-2.0-flash',
+                            model='gemini-2.5-flash',
                             contents=prompt,
                             config={'max_output_tokens': 2000, 'temperature': 0.7},
                         )
