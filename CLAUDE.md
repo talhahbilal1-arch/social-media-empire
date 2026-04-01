@@ -193,21 +193,30 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Gumroad products**: All listed — AI Fitness Vault ($27), Pinterest Blueprint ($47), Bundle ($87)
 - **Social distribution**: Weekly workflow generates Reddit/Twitter content from latest articles
 - **Make.com**: 9 active scenarios healthy
-- **Content quality improvements**: NEW (March 31, 2026) — Enhanced Gemini prompts (stronger CTAs, quick verdict box, related articles), internal linking automation, comprehensive sitemap updates (333 articles indexed), og:image tags added
-- **Last session**: March 31, 2026 — Content quality sprint: prompt enhancements, internal linking script, sitemap regeneration, OG image tags
+- **Content quality improvements**: Enhanced Gemini prompts (stronger CTAs, quick verdict box, related articles), internal linking automation, comprehensive sitemap updates (333 articles indexed), og:image tags added
+- **PilotTools**: Expanded to 35 tools, 29 comparisons, 25 articles. Affiliate tracker created.
+- **Product funnels**: Bundle landing page + 3 product pages deployed. Product CTAs injected into article templates.
+- **Anti-Gravity**: 5 home office articles created (11,724 words). Site pending Vercel deploy.
+- **Distribution**: SEO ping system + GitHub Action, 20 Pinterest product pins, Reddit/Twitter content generated
+- **Make.com**: 29 dead scenarios DELETED. 9 active scenarios remain, all healthy (0 errors).
+- **Revenue dashboard**: Created at outputs/fitover35-website/dashboard/index.html
+- **Last session**: March 31, 2026 — Overnight revenue activation (7-agent execution)
 
-## Active Priorities (March 2026)
-1. Desmond Wong creator services — delivering free short-form + website, tracking results for paid conversion
-2. Prompt packs — listed on Gumroad/Etsy, needs distribution and promotion
-3. Pinterest system — fix any broken workflows, correct affiliate tags, submit to Google Search Console
-4. QuantConnect trading algo — on hold until $1K/month online revenue achieved
+## Active Priorities (April 2026)
+1. Sign up for top affiliate programs — Semrush ($200/sale), Grammarly, Ahrefs, Hostinger (see PHONE-ACTION-CHECKLIST.md)
+2. Deploy Anti-Gravity home office site to Vercel
+3. Post distribution content from distribution/weekly-posts/
+4. Monitor GA4 for Pinterest traffic across all brands
+5. Desmond Wong creator services — delivering free short-form + website
+6. QuantConnect trading algo — on hold until $1K/month online revenue achieved
 
 ## Known Issues
 - Schema-code mismatches have occurred (missing columns, malformed PostgREST filters)
 - Affiliate tags cross-contamination: FIXED March 31, 2026 (code + 144 articles corrected)
 - Late API keys expired — video pin posting via Late returns 401. Refresh at getlate.dev
 - Etsy shop onboarding still needs banking/billing setup (manual)
-- Make.com: ~15 dead scenarios to clean up manually
+- Make.com: CLEANED UP — 29 dead scenarios deleted March 31, 2026
+- Phase 13 work stashed — run `git stash pop` to restore
 
 ## Development Rules
 - NEVER commit API keys or secrets
