@@ -184,7 +184,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **AI API**: Gemini (gemini-2.5-flash) — migrated from 2.0-flash before June 1 deprecation. Paid tier enabled.
 - **Pinterest posting**: Active — 5x daily (6AM, 9AM, 12PM, 3PM, 7PM PST), 5 pins/brand/day (15 total)
 - **All workflows**: Green — content engine, rescue poster, social distribution all active
-- **Content generated**: 400+ articles across 3 brands
+- **Content generated**: 400+ articles across 3 brands (333 articles indexed in sitemaps)
 - **Affiliate tags**: FIXED — fitness=fitover35-20, deals/menopause=dailydealdarling1-20. All 144 fitness articles corrected.
 - **Google Analytics**: All articles now have brand-specific GA tracking (G-1FC6FH34L9, G-HVCLZPEYNS, G-02ZPS3H3GC)
 - **Email capture**: Kit forms working on all 3 brand sites with correct form IDs (8946984, 9144859, 9144926)
@@ -193,7 +193,8 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Gumroad products**: All listed — AI Fitness Vault ($27), Pinterest Blueprint ($47), Bundle ($87)
 - **Social distribution**: Weekly workflow generates Reddit/Twitter content from latest articles
 - **Make.com**: 9 active scenarios healthy
-- **Last session**: March 31, 2026 — Revenue bug fix sprint: affiliate tags, GA tracking, Gemini migration, social distribution
+- **Content quality improvements**: NEW (March 31, 2026) — Enhanced Gemini prompts (stronger CTAs, quick verdict box, related articles), internal linking automation, comprehensive sitemap updates (333 articles indexed), og:image tags added
+- **Last session**: March 31, 2026 — Content quality sprint: prompt enhancements, internal linking script, sitemap regeneration, OG image tags
 
 ## Active Priorities (March 2026)
 1. Desmond Wong creator services — delivering free short-form + website, tracking results for paid conversion
