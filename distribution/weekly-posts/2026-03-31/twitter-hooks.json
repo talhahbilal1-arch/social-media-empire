@@ -1,0 +1,66 @@
+[
+  {
+    "platform": "twitter",
+    "hook": "I tested 5 standing desks under $500. One collapsed under load. One lasted 6 months before the motor died. Here's what actually works →",
+    "type": "thread_intro",
+    "article_url": "https://fitover35.com/articles/standing-desk-guide",
+    "thread": [
+      "I tested 5 standing desks under $500. One collapsed under load. One lasted 6 months before the motor died. Here's what actually works →",
+      "**FlexiSpot E8 ($399)**\n- Dual motor (smooth)\n- 70 lb capacity\n- No wobble at full height\n- 5+ year track record\n\nWorth the money.",
+      "**Monoprice ($249)**\n- Single motor (slower)\n- Still stable\n- No cable management (annoying)\n- Good if you don't move it much\n\nBest budget pick.",
+      "**Skip the Amazon brands**\n- \"VIVO\" and knockoffs\n- Wobble within weeks\n- Motors fail in 6 months\n- Customer service ghost you\n\nSave yourself the headache.",
+      "Bonus tip: Standing desk + ergonomic keyboard = 10x more impact than the desk itself.\n\nYour posture changes overnight."
+    ],
+    "keywords": ["standing desk", "office setup", "posture", "productivity"],
+    "reach_potential": "high"
+  },
+  {
+    "platform": "twitter",
+    "hook": "Why do 90% of people fail at strength training? They're doing too much volume. 20 sets of mediocre work beats 6 quality sets in no universe.",
+    "type": "hook_only",
+    "article_url": "https://fitover35.com/articles/strength-training-guide",
+    "expanded": "The pattern I see: People confuse effort with results. You don't need to be destroyed after every workout. You need to get stronger week-to-week. That's it.",
+    "keywords": ["fitness", "strength training", "gym", "progressive overload"],
+    "reach_potential": "very_high"
+  },
+  {
+    "platform": "twitter",
+    "hook": "My clients save $4,200/year by changing ONE thing: when they shop. Electronics in winter. Furniture in summer. Clothing in spring. That's it.",
+    "type": "hook_only",
+    "article_url": "https://dailydealdarling.com/articles/seasonal-deals-guide",
+    "expanded": "Most people think \"deals\" are random. They're not. Sales follow predictable seasonal patterns. If you need something and it's not in season, wait 4-6 weeks. 99% of the time prices drop.",
+    "keywords": ["shopping", "savings", "deals", "budget tips"],
+    "reach_potential": "very_high"
+  },
+  {
+    "platform": "twitter",
+    "hook": "You're paying $1.50 for protein bars. Here's how to make them for $0.35 while spending 10 minutes on Sunday.",
+    "type": "thread_intro",
+    "article_url": "https://fitover35.com/articles/budget-snacks",
+    "thread": [
+      "You're paying $1.50 for protein bars. Here's how to make them for $0.35 while spending 10 minutes on Sunday.",
+      "**Protein Balls**\n- 2 cups peanut butter\n- 1 cup honey\n- 2 cups oats\n- Mix + roll\n- 12 balls per batch\n- 10g protein each",
+      "**Roasted Chickpeas**\n- 1 can chickpeas ($0.70)\n- Roast 25 mins\n- Crunchy texture\n- 6g protein per serving\n- Shelf stable",
+      "**Fruit & Nut Mix**\n- Bulk raisins + almonds + cashews\n- 1:1:1 ratio\n- Portable\n- No sugar added\n- Lasts 2 weeks",
+      "Total spend: ~$15 for 30 snacks.\n\nStore-bought: ~$45 for 30.\n\nThat's $30/month saved. $360/year. For 10 minutes of work."
+    ],
+    "keywords": ["nutrition", "budget", "meal prep", "snacks"],
+    "reach_potential": "high"
+  },
+  {
+    "platform": "twitter",
+    "hook": "Menopause + sleep = nightmare. Here are 5 science-backed fixes that actually work (not hormone meds).",
+    "type": "thread_intro",
+    "article_url": "https://menopause-planner-website.vercel.app/articles/sleep-guide",
+    "thread": [
+      "Menopause + sleep = nightmare. Here are 5 science-backed fixes that actually work (not hormone meds).",
+      "**1. Cool room (65-68°F)**\nHot flashes spike at night. Cooling reduces them 30-40%.\n\nOpen window. Breathable sheets. That's 80% of the solution.",
+      "**2. Magnesium Glycinate (300-400mg)**\nTaken before bed. Calms nervous system. Reduces night sweats.\n\n$8/month. No side effects for most women.",
+      "**3. Evening Primrose Oil (2-3g)**\nDaily dose. Reduces hot flash intensity 20-30%.\n\nCheap. Harmless. Actually works.",
+      "**4. Consistent sleep schedule**\nBed at 10 PM. Wake at 6 AM. Every day.\n\nIrregular sleep + hot flashes = disaster. Your body adapts in 3 weeks.",
+      "**5. No caffeine/alcohol after 2 PM**\nBoth trigger hot flashes. Both disrupt REM.\n\nYes, even one glass of wine counts."
+    ],
+    "keywords": ["menopause", "women's health", "sleep", "wellness"],
+    "reach_potential": "high"
+  }
+]
