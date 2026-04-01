@@ -409,6 +409,31 @@ def _prompt_pack_cta(tpl):
     )
 
 
+def _product_cta(tpl):
+    """Return product CTA HTML based on brand, or empty string if none."""
+    brand = tpl.get('brand_key', '')
+    c = tpl['colors']
+
+    if brand == 'fitness':
+        return (
+            f'<div style="background:#141414;border:1px solid #222;border-radius:8px;'
+            f'padding:1.5rem;margin:2rem 0;text-align:center">'
+            f'<p style="color:#888;font-size:.9rem;margin-bottom:.5rem">Want to automate your fitness programming?</p>'
+            f'<a href="https://talhahbilal.gumroad.com/l/lupkl" style="color:#22c55e;'
+            f'font-weight:700;text-decoration:none">Get the AI Fitness Coach Vault → $27</a></div>'
+        )
+    elif brand == 'deals':
+        return (
+            f'<div style="background:#141414;border:1px solid #222;border-radius:8px;'
+            f'padding:1.5rem;margin:2rem 0;text-align:center">'
+            f'<p style="color:#888;font-size:.9rem;margin-bottom:.5rem">Want to build your own automated income system?</p>'
+            f'<a href="https://talhahbilal.gumroad.com/l/rwzcy" style="color:#D4AF37;'
+            f'font-weight:700;text-decoration:none">Get the AI Automation Empire Bundle → $87</a></div>'
+        )
+    # menopause: skip product CTA
+    return ''
+
+
 # ── Signup form ───────────────────────────────────────────────────────────
 
 def _signup_form(site_config, tpl, brand_key='deals'):
@@ -728,6 +753,7 @@ def _render_iron_standard(tpl, title, meta_desc, body_html, hero_url, site_confi
         + f'<div class="article-body">\n{body_html}\n</div>\n'
         + _expert_card(tpl) + '\n'
         + _disclosure(tpl) + '\n'
+        + _product_cta(tpl) + '\n'
         + _prompt_pack_cta(tpl) + '\n'
         + f'<div style="background:{c["accent"]};border-radius:12px;padding:24px;'
         f'margin-top:32px;text-align:center">'
@@ -806,6 +832,7 @@ def _render_wellness_whisper(tpl, title, meta_desc, body_html, hero_url, site_co
         + f'<div class="article-body">\n{body_html}\n</div>\n'
         + _expert_card(tpl) + '\n'
         + _disclosure(tpl) + '\n'
+        + _product_cta(tpl) + '\n'
         + f'<div style="background:{c["accent"]};border-radius:12px;padding:24px;'
         f'margin-top:32px;text-align:center">'
         f'<p style="margin:0 0 8px;color:#fff;font-weight:700;font-size:1.1em">'
@@ -886,6 +913,7 @@ def _render_aesthetic_edit(tpl, title, meta_desc, body_html, hero_url, site_conf
         + f'<div class="article-body">\n{body_html}\n</div>\n'
         + _expert_card(tpl) + '\n'
         + _disclosure(tpl) + '\n'
+        + _product_cta(tpl) + '\n'
         + f'<div style="background:{c["accent"]};border-radius:12px;padding:24px;'
         f'margin-top:32px;text-align:center">'
         f'<p style="margin:0 0 8px;color:#000;font-weight:700;font-size:1.1em">'
