@@ -2,8 +2,8 @@ name: Daily Trend Scout
 
 on:
   schedule:
-    # 6 AM PST (14:00 UTC) — 1 hour before first content-engine run
-    - cron: '0 14 * * *'
+    # 5 AM PST (13:00 UTC) — 4 hours before first content-engine run (9AM PST)
+    - cron: '0 13 * * *'
   workflow_dispatch:
 
 permissions:

@@ -2,8 +2,8 @@ name: Video Automation - Morning (6 AM PST)
 
 on:
   schedule:
-    # 6 AM PST = 2 PM UTC (during PST) or 1 PM UTC (during PDT)
-    - cron: '0 14 * * *'
+    # 8 AM PST = 4 PM UTC (avoids 14:00 UTC collision with trend-scout)
+    - cron: '0 16 * * *'
   workflow_dispatch:
     inputs:
       brand:

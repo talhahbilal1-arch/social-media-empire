@@ -1,0 +1,70 @@
+name: Enable All Workflows + Run Pins
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/enable-and-run.yml'
+  schedule:
+    - cron: '0 13 * * *'  # Daily 5 AM PST — re-enable workflows well before first content-engine run (9AM PST)
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  enable-and-trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-enable all disabled workflows
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: { workflows } } = await github.rest.actions.listRepoWorkflows({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            let enabled = 0;
+            for (const wf of workflows) {
+              if (wf.state !== 'active') {
+                console.log(`Enabling: ${wf.name} (was ${wf.state})`);
+                await github.rest.actions.enableWorkflow({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: wf.id,
+                });
+                enabled++;
+              } else {
+                console.log(`Already active: ${wf.name}`);
+              }
+            }
+            console.log(`\nEnabled ${enabled} workflow(s)`);
+
+      - name: Trigger content engine
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'content-engine.yml',
+              ref: 'main',
+            });
+            console.log('Content engine dispatched');
+
+      - name: Trigger rescue poster
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'rescue-poster.yml',
+                ref: 'main',
+              });
+              console.log('Rescue poster dispatched');
+            } catch (e) {
+              console.log('Rescue poster dispatch skipped:', e.message);
+            }

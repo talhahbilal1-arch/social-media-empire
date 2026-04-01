@@ -15,7 +15,7 @@ class GeminiClient:
     """Client for Google Gemini AI content generation."""
 
     api_key: str
-    model_name: str = "gemini-2.0-flash"
+    model_name: str = "gemini-2.5-flash"
 
     def __post_init__(self):
         genai.configure(api_key=self.api_key)

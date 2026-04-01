@@ -15,7 +15,7 @@ env:
 jobs:
   discover-and-plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository

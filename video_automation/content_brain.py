@@ -23,9 +23,36 @@ from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
 
+
+# ═══════════════════════════════════════════════════════════════
+# SEASONAL CONTENT HOOKS — auto-rotate based on current month
+# Adds urgency and timeliness that boost CTR on Pinterest
+# ═══════════════════════════════════════════════════════════════
+
+SEASONAL_HOOKS = {
+    1: {"theme": "New Year reset", "urgency": "Start the year strong", "keywords": ["new year", "resolution", "fresh start", "reset"]},
+    2: {"theme": "Valentine's + self-love", "urgency": "This month only", "keywords": ["valentine", "self-love", "winter wellness"]},
+    3: {"theme": "Spring refresh", "urgency": "Spring is here — time to act", "keywords": ["spring", "refresh", "new season", "declutter"]},
+    4: {"theme": "Spring cleaning + outdoor", "urgency": "Before summer hits", "keywords": ["spring cleaning", "outdoor", "prep", "garden"]},
+    5: {"theme": "Mother's Day + summer prep", "urgency": "Summer body countdown", "keywords": ["mother's day", "summer prep", "gift", "warm weather"]},
+    6: {"theme": "Summer kickoff", "urgency": "Summer is officially here", "keywords": ["summer", "beach", "outdoor", "heat"]},
+    7: {"theme": "Mid-year check-in", "urgency": "Half the year is gone", "keywords": ["mid-year", "progress check", "summer sale", "prime day"]},
+    8: {"theme": "Back-to-routine", "urgency": "Get back on track before fall", "keywords": ["back to school", "routine", "organize", "fall prep"]},
+    9: {"theme": "Fall transition", "urgency": "Fall is coming — prepare now", "keywords": ["fall", "autumn", "cozy", "transition"]},
+    10: {"theme": "Halloween + cozy season", "urgency": "Holiday prep starts now", "keywords": ["halloween", "fall decor", "cozy", "pumpkin"]},
+    11: {"theme": "Holiday deals + gratitude", "urgency": "Black Friday / holiday gifting", "keywords": ["black friday", "holiday", "gift guide", "deals", "thanksgiving"]},
+    12: {"theme": "Year-end + holiday", "urgency": "Last chance this year", "keywords": ["holiday", "christmas", "year end", "gift", "new year prep"]},
+}
+
+
+def _get_seasonal_context():
+    """Return seasonal hooks for the current month."""
+    month = datetime.now(timezone.utc).month
+    return SEASONAL_HOOKS.get(month, SEASONAL_HOOKS[1])
+
 _client = None
 
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 
 def _get_client():
@@ -760,11 +787,18 @@ def generate_pin_content(brand_key, supabase_client):
     overlay_hooks = config.get('text_overlay_hooks', [])
     overlay_hooks_text = '\n'.join(f'  - "{h}"' for h in overlay_hooks)
 
+    seasonal = _get_seasonal_context()
+
     prompt = f"""You are creating a Pinterest pin for the brand "{config['name']}".
 Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 
 ═══ YOUR VOICE/PERSONA ═══
 {config['voice']}
+
+═══ SEASONAL CONTEXT (use if relevant to topic) ═══
+Theme: {seasonal['theme']} | Urgency: {seasonal['urgency']}
+Seasonal keywords to weave in naturally: {', '.join(seasonal['keywords'])}
+If the topic connects to this season, use the urgency angle — seasonal pins get 3x more saves.
 
 ═══ PROBLEM-SOLUTION MATRIX ═══
 Your audience's core problems:
@@ -829,12 +863,17 @@ DESCRIPTION REQUIREMENTS:
 7. After the CTA, on a NEW LINE, append 5-8 hashtags: {' '.join(selected_hashtags)}
 8. If a product naturally fits, mention its BENEFIT (not just the name): "the cooling pillow that actually stopped my night sweats" not "cooling pillow"
 
-═══ AFFILIATE PRODUCT INTEGRATION ═══
-If the topic naturally relates to any of these products, weave ONE into the description with a benefit-driven mention.
-Do NOT force it — only include if genuinely relevant to the topic.
+═══ AFFILIATE PRODUCT INTEGRATION (REVENUE DRIVER) ═══
+Weave ONE product into the description using this formula: [price anchor] + [specific benefit] + [personal proof].
+This is HOW we make money — every pin should mention a product if even remotely relevant.
 Available products for this brand: {', '.join(category_products) if category_products else 'none for this category'}
-GOOD example: "This $15 foam roller fixed my hip pain better than 3 PT sessions"
-BAD example: "Check out this foam roller"
+FORMULA: "$[price] [product] that [specific measurable result]"
+GREAT: "This $15 foam roller fixed my hip pain better than 3 PT sessions"
+GREAT: "The $28 cooling pillow that finally stopped my 3AM wake-ups"
+GREAT: "Under $25 and it replaced 3 kitchen tools — still using it daily"
+BAD: "Check out this foam roller"
+BAD: "Great product for you"
+RULE: ALWAYS include a dollar amount or price range. Prices drive clicks because they set expectations.
 
 ═══ VISUAL STYLE ═══
 {selected_style['name']} — {selected_style['description']}
@@ -1069,11 +1108,17 @@ def generate_pin_from_daily_trend(brand_key, run_index, supabase_client):
     overlay_hooks = config.get('text_overlay_hooks', [])
     overlay_hooks_text = '\n'.join(f'  - "{h}"' for h in overlay_hooks)
 
+    seasonal = _get_seasonal_context()
+
     prompt = f"""You are creating a Pinterest pin for "{config['name']}".
 Your SOLE OBJECTIVE: maximize clicks, saves, and affiliate revenue on Pinterest.
 
 ═══ YOUR VOICE ═══
 {config['voice']}
+
+═══ SEASONAL CONTEXT (use if relevant) ═══
+Theme: {seasonal['theme']} | Urgency: {seasonal['urgency']}
+Seasonal keywords: {', '.join(seasonal['keywords'])}
 
 ═══ PROBLEM-SOLUTION MATRIX ═══
 Your audience's core problems:
@@ -1090,6 +1135,14 @@ Topic: {selected_trend['topic']}
 Why it's trending: {selected_trend.get('why_trending', 'Currently popular in this niche')}
 Content angle: {selected_trend.get('content_angle', 'Create engaging visual content about this trend')}
 Target board: {selected_board}
+
+═══ GRAPHIC TITLE RULES (text printed ON the pin image — the scroll-stopper) ═══
+- 30-50 characters MAX (must be legible as oversized bold text)
+- Written for the PERSON SCROLLING, not for Pinterest's algorithm
+- MUST contain the PRIMARY SEO KEYWORD — Pinterest's vision reads image text
+- Use "you", direct numbers, specific audience call-outs, or surprising statements
+- GOOD: "Why Fat Loss Stops After 35", "Hot Flash Fix (Not What You Think)", "Amazon Finds Under $20"
+- BAD: "5 Proven Methods for Building Strength After 35 in 2024" (too long)
 
 ═══ TITLE RULES (CRITICAL — determines if anyone clicks) ═══
 Your title MUST be a LISTICLE with the number 5:
@@ -1142,6 +1195,7 @@ Each tip MUST be:
 OUTPUT ONLY THIS JSON:
 {{
     "title": "...",
+    "graphic_title": "...",
     "description": "...",
     "image_search_query": "...",
     "tips": ["tip 1", "tip 2", "tip 3", "tip 4", "tip 5"],
@@ -1382,6 +1436,7 @@ Each tip MUST be:
 OUTPUT ONLY THIS JSON:
 {{
     "title": "...",
+    "graphic_title": "...",
     "description": "...",
     "image_search_query": "...",
     "tips": ["tip 1 text", "tip 2 text", "tip 3 text", "tip 4 text", "tip 5 text"],

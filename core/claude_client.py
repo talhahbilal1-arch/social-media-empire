@@ -22,7 +22,7 @@ class ClaudeClient:
             raise ValueError("GEMINI_API_KEY environment variable required")
 
         self.client = genai.Client(api_key=api_key)
-        self.model = "gemini-2.0-flash"
+        self.model = "gemini-2.5-flash"
 
     def generate(self,
                  system_prompt: str,

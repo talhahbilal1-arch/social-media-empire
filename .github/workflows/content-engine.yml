@@ -2,10 +2,11 @@ name: Content Engine
 
 on:
   schedule:
-    # 3 runs per day — renders content_ready pins after Make.com content generator fills them
-    - cron: '0 16 * * *'  # 8 AM PST
-    - cron: '0 22 * * *'  # 2 PM PST
-    - cron: '0 4 * * *'   # 8 PM PST (next day UTC)
+    # 3 runs per day — aligned to Pinterest peak engagement windows
+    # Guardrail caps at 5 pins/brand/day; fewer runs = fewer idle CI cycles
+    - cron: '0 17 * * *'  # 9 AM PST  — morning engagement window
+    - cron: '0 22 * * *'  # 2 PM PST  — afternoon peak (2-4 PM)
+    - cron: '0 4 * * *'   # 8 PM PST  — evening peak (8-11 PM)
   workflow_dispatch:
     inputs:
       brand:
@@ -58,7 +59,6 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
-          MAKE_WEBHOOK_PINTEREST: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
         run: python3 scripts/preflight_check.py
 
       - name: Render and publish pins
@@ -82,6 +82,7 @@ jobs:
           import os
           import sys
           import json
+          import re
           import time
           import subprocess
           import urllib.request
@@ -91,7 +92,7 @@ jobs:
 
           sys.path.insert(0, '.')
           from video_automation.image_selector import get_unique_pexels_image
-          from video_automation.pin_image_generator import render_pin_to_bytes, compute_image_hash
+          from video_automation.pin_image_generator import render_pin_to_bytes, compute_image_hash, map_visual_style
           from video_automation.supabase_storage import upload_pin_image
           from video_automation.pin_article_generator import (
               generate_article_for_pin, article_to_html, save_and_register_article,
@@ -154,41 +155,46 @@ jobs:
           for brand in brands_to_generate:
               try:
                   # Guardrail: check daily pin count before generating
+                  pins_today = 0
                   try:
                       today_count = db.client.table('content_history') \
                           .select('id', count='exact') \
                           .eq('brand', brand) \
                           .gte('created_at', today_str + 'T00:00:00Z') \
                           .execute()
-                      pin_count = today_count.count if hasattr(today_count, 'count') else len(today_count.data or [])
-                      if pin_count >= MAX_PINS_PER_DAY:
-                          print(f'  [{brand}] SKIP — already {pin_count} pins today (max {MAX_PINS_PER_DAY})')
+                      pins_today = today_count.count if hasattr(today_count, 'count') else len(today_count.data or [])
+                      if pins_today >= MAX_PINS_PER_DAY:
+                          print(f'  [{brand}] SKIP — already {pins_today} pins today (max {MAX_PINS_PER_DAY})')
                           continue
                   except Exception as _e:
                       print(f'  [{brand}] Pin count check failed ({_e}), continuing...')
 
-                  print(f'  Generating content for {brand}...')
-                  pin_data = generate_pin_content(brand, db.client)
-                  board_id = get_board_id(brand, pin_data.get('board', ''))
-                  tips = pin_data.get('tips', [])
-                  insert_row = {
-                      'brand': brand,
-                      'title': pin_data.get('title', ''),
-                      'description': pin_data.get('description', ''),
-                      'overlay_headline': pin_data.get('graphic_title', pin_data.get('title', ''))[:60],
-                      'overlay_subtext': tips[0] if tips else '',
-                      'tips': tips,
-                      'pexels_search_term': pin_data.get('image_search_query', ''),
-                      'board_id': board_id,
-                      'destination_url': pin_data.get('destination_url', ''),
-                      'topic': pin_data.get('topic', ''),
-                      'niche': pin_data.get('category', ''),
-                      'status': 'content_ready',
-                  }
-                  if not dry_run:
-                      db.client.table('pinterest_pins').insert(insert_row).execute()
-                      log_pin_to_history(pin_data, db.client)
-                  print(f'  [{brand}] Content ready: {pin_data.get("title", "")[:50]}')
+                  remaining = MAX_PINS_PER_DAY - pins_today
+                  print(f'  [{brand}] Generating {remaining} pin(s) ({pins_today} already today)...')
+                  for _pin_idx in range(remaining):
+                      print(f'  Generating content for {brand} (pin {_pin_idx + 1}/{remaining})...')
+                      pin_data = generate_pin_content(brand, db.client)
+                      board_id = get_board_id(brand, pin_data.get('board', ''))
+                      tips = pin_data.get('tips', [])
+                      insert_row = {
+                          'brand': brand,
+                          'title': pin_data.get('title', ''),
+                          'description': pin_data.get('description', ''),
+                          'overlay_headline': pin_data.get('graphic_title', pin_data.get('title', ''))[:60],
+                          'overlay_subtext': tips[0] if tips else '',
+                          'tips': tips,
+                          'pexels_search_term': pin_data.get('image_search_query', ''),
+                          'board_id': board_id,
+                          'destination_url': pin_data.get('destination_url', ''),
+                          'topic': pin_data.get('topic', ''),
+                          'niche': pin_data.get('category', ''),
+                          'visual_style': pin_data.get('visual_style', ''),
+                          'status': 'content_ready',
+                      }
+                      if not dry_run:
+                          db.client.table('pinterest_pins').insert(insert_row).execute()
+                          log_pin_to_history(pin_data, db.client)
+                      print(f'  [{brand}] Content ready: {pin_data.get("title", "")[:50]}')
               except Exception as e:
                   print(f'  ERROR generating content for {brand}: {e}')
                   import traceback; traceback.print_exc()
@@ -250,7 +256,16 @@ jobs:
               try:
                   search_term = pin.get('pexels_search_term') or pin.get('title', 'lifestyle photo')
                   headline = pin.get('overlay_headline') or pin.get('title', '')
-                  subheadline = pin.get('overlay_subtext') or ''
+
+                  # Use the visual style from content_brain instead of always 'gradient'
+                  pin_style = map_visual_style(pin.get('visual_style', '')) if pin.get('visual_style') else 'gradient'
+
+                  # For list-based styles, format all tips as numbered items for the renderer
+                  tips_list = pin.get('tips', []) or []
+                  if pin_style in ('numbered_list', 'checklist', 'comparison') and tips_list:
+                      subheadline = ' '.join(f'{i+1}. {t}' for i, t in enumerate(tips_list[:5]))
+                  else:
+                      subheadline = pin.get('overlay_subtext') or ''
 
                   # Render with deduplication: retry up to 3 times with different backgrounds
                   image_bytes = None
@@ -262,7 +277,7 @@ jobs:
                           headline=headline,
                           subheadline=subheadline,
                           keyword_or_url=image['url'],
-                          style='gradient',
+                          style=pin_style,
                       )
                       img_hash = compute_image_hash(image_bytes)
                       if not check_image_hash_exists(img_hash, db.client):
@@ -414,7 +429,7 @@ jobs:
                       'image_url': pin.get('image_url', ''),
                       'board': pin.get('board_id', ''),
                       'pexels_search_term': pin.get('pexels_search_term', '') or pin.get('title', ''),
-                      'tips': pin.get('tips_list', []) or [],
+                      'tips': pin.get('tips', []) or pin.get('tips_list', []) or [],
                       'category': pin.get('category', ''),
                   }
                   slug, article_md = generate_article_for_pin(brand, pin_data, db.client)
@@ -464,13 +479,20 @@ jobs:
           # Scans every Amazon link in every article generated this run.
           # Fixes wrong tags, fake ASINs, and missing tags on the fly.
           # ══════════════════════════════════════════════════════════════
-          CANONICAL_TAG = 'dailydealdarling1-20'
+          BRAND_AFFILIATE_TAG = {
+              'fitness': 'fitover35-20',
+              'deals': 'dailydealdarling1-20',
+              'menopause': '',  # No Amazon affiliate tag for menopause
+          }
           if articles_generated:
               print('\n=== PHASE 2b: Affiliate link audit ===')
               link_issues = 0
               link_ok = 0
               for pin in rendered_pins:
                   brand = pin['brand']
+                  canonical_tag = BRAND_AFFILIATE_TAG.get(brand, '')
+                  if not canonical_tag:
+                      continue  # Skip brands without affiliate tags
                   site = BRAND_SITE_CONFIG.get(brand, {})
                   output_dir = site.get('output_dir', '')
                   if not output_dir:
@@ -486,8 +508,8 @@ jobs:
                       amazon_links = re.findall(r'https://www\.amazon\.com/[^"]+', content)
                       needs_fix = False
                       for link in amazon_links:
-                          # Check 1: correct tag
-                          if 'tag=' in link and f'tag={CANONICAL_TAG}' not in link:
+                          # Check 1: correct tag for THIS brand
+                          if 'tag=' in link and f'tag={canonical_tag}' not in link:
                               needs_fix = True
                           # Check 2: has a tag at all
                           elif 'tag=' not in link:
@@ -684,11 +706,17 @@ jobs:
               except Exception as e:
                   print(f'  Verification query failed: {e}')
 
-          # Summary
+          # Summary with per-brand breakdown
           print(f'\n=== Content Engine Summary ===')
           print(f'  Rendered: {len(rendered_pins)} pins')
           print(f'  Articles: {len(articles_generated)}')
           print(f'  Posted: {posted_count} pins')
+          # Per-brand breakdown for tracking
+          for _brand in ALL_BRANDS:
+              _brand_rendered = sum(1 for p in rendered_pins if p.get('brand') == _brand)
+              _brand_articles = sum(1 for a in articles_generated if a.startswith(f'{_brand}:'))
+              _brand_styles = [p.get('visual_style', 'gradient') for p in rendered_pins if p.get('brand') == _brand]
+              print(f'  [{_brand}] rendered={_brand_rendered} articles={_brand_articles} styles={",".join(_brand_styles) or "none"}')
           if not content_ready_pins:
               print('  No content_ready pins — pipeline idle')
           try:

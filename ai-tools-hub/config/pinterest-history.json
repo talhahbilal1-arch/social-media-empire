@@ -133,5 +133,221 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-03-22T16:39:56.968Z",
     "success": true
+  },
+  {
+    "slug": "descript",
+    "pin_type": "tool-review",
+    "title": "Descript: Is This AI Video Editor Worth It? (Review)",
+    "link": "https://pilottools.ai/tools/descript/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-03-22T22:14:39.855Z",
+    "success": true
+  },
+  {
+    "slug": "category-video",
+    "pin_type": "category",
+    "title": "Top AI Video Tools of 2026: Create Stunning Videos Effortlessly!",
+    "link": "https://pilottools.ai/category/video/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-03-22T22:14:44.007Z",
+    "success": true
+  },
+  {
+    "slug": "jasper-vs-writesonic",
+    "pin_type": "comparison",
+    "title": "Jasper vs Writesonic: Which AI Writer Wins?",
+    "link": "https://pilottools.ai/compare/jasper-vs-writesonic/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-22T22:14:48.057Z",
+    "success": true
+  },
+  {
+    "slug": "synthesia",
+    "pin_type": "tool-review",
+    "title": "Synthesia AI Video Review: Worth the Hype? (4.6/5)",
+    "link": "https://pilottools.ai/tools/synthesia/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-03-23T17:02:01.689Z",
+    "success": true
+  },
+  {
+    "slug": "category-marketing",
+    "pin_type": "category",
+    "title": "Future-Proof Your Marketing: Top AI Tools of 2026!",
+    "link": "https://pilottools.ai/category/marketing/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-03-23T17:02:05.845Z",
+    "success": true
+  },
+  {
+    "slug": "canva-vs-midjourney",
+    "pin_type": "comparison",
+    "title": "Canva AI vs. Midjourney: Which AI Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/canva-vs-midjourney/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-23T17:02:10.051Z",
+    "success": true
+  },
+  {
+    "slug": "category-audio",
+    "pin_type": "category",
+    "title": "Top AI Audio Tools Shaping Sound in 2026!",
+    "link": "https://pilottools.ai/category/audio/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-03-29T16:44:31.416Z",
+    "success": true
+  },
+  {
+    "slug": "synthesia-vs-runway",
+    "pin_type": "comparison",
+    "title": "Synthesia vs Runway AI: Which Video Tool Wins?",
+    "link": "https://pilottools.ai/compare/synthesia-vs-runway/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-29T16:44:35.493Z",
+    "success": true
+  },
+  {
+    "slug": "cursor",
+    "pin_type": "tool-review",
+    "title": "Cursor: AI Coding Assistant - 4.8/5! Is it Worth It?",
+    "link": "https://pilottools.ai/tools/cursor/",
+    "board": "AI Coding Tools",
+    "posted_at": "2026-03-29T16:44:39.531Z",
+    "success": true
+  },
+  {
+    "slug": "category-research",
+    "pin_type": "category",
+    "title": "Top AI Research Tools Powering 2026 Innovations!",
+    "link": "https://pilottools.ai/category/research/",
+    "board": "AI Research Tools",
+    "posted_at": "2026-03-29T22:19:11.350Z",
+    "success": true
+  },
+  {
+    "slug": "elevenlabs-vs-descript",
+    "pin_type": "comparison",
+    "title": "ElevenLabs vs Descript: AI Voice & Video Showdown!",
+    "link": "https://pilottools.ai/compare/elevenlabs-vs-descript/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-29T22:19:15.549Z",
+    "success": true
+  },
+  {
+    "slug": "claude",
+    "pin_type": "tool-review",
+    "title": "Claude AI: Is It Worth the Hype? (Review + Pricing)",
+    "link": "https://pilottools.ai/tools/claude/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-29T22:19:19.570Z",
+    "success": true
+  },
+  {
+    "slug": "chatgpt-vs-perplexity",
+    "pin_type": "comparison",
+    "title": "ChatGPT vs Perplexity AI: Which AI Tool Wins?",
+    "link": "https://pilottools.ai/compare/chatgpt-vs-perplexity/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-30T17:05:24.503Z",
+    "success": true
+  },
+  {
+    "slug": "midjourney",
+    "pin_type": "tool-review",
+    "title": "Midjourney Review: Stunning AI Art in Seconds! (4.9/5)",
+    "link": "https://pilottools.ai/tools/midjourney/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-03-30T17:05:28.586Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly-vs-jasper",
+    "pin_type": "comparison",
+    "title": "Grammarly vs. Jasper: Which AI Writing Tool is Right for YOU?",
+    "link": "https://pilottools.ai/compare/grammarly-vs-jasper/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-30T17:05:32.823Z",
+    "success": true
+  },
+  {
+    "slug": "chatgpt",
+    "pin_type": "tool-review",
+    "title": "ChatGPT Review: Is This AI Writing Tool Worth It?",
+    "link": "https://pilottools.ai/tools/chatgpt/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-30T22:23:23.145Z",
+    "success": true
+  },
+  {
+    "slug": "category-writing",
+    "pin_type": "category",
+    "title": "Top AI Writing Tools 2026: Boost Your Content!",
+    "link": "https://pilottools.ai/category/writing/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-30T22:23:27.229Z",
+    "success": true
+  },
+  {
+    "slug": "scalenut",
+    "pin_type": "tool-review",
+    "title": "Scalenut AI Review: Supercharge Your SEO! (4.4/5)",
+    "link": "https://pilottools.ai/tools/scalenut/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-03-30T22:23:31.425Z",
+    "success": true
+  },
+  {
+    "slug": "writesonic",
+    "pin_type": "tool-review",
+    "title": "Writesonic Review: AI Writing That Actually Works? (4.4/5)",
+    "link": "https://pilottools.ai/tools/writesonic/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-03-31T17:07:56.860Z",
+    "success": true
+  },
+  {
+    "slug": "jasper",
+    "pin_type": "tool-review",
+    "title": "Jasper AI: Is It Worth It? Our Honest Review!",
+    "link": "https://pilottools.ai/tools/jasper/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-03-31T17:08:00.945Z",
+    "success": true
+  },
+  {
+    "slug": "cursor-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Cursor vs ChatGPT: Which AI Coding Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/cursor-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-03-31T17:08:04.926Z",
+    "success": true
+  },
+  {
+    "slug": "canva",
+    "pin_type": "tool-review",
+    "title": "Canva Review: Is it Worth the Hype? (4.7/5 Rating)",
+    "link": "https://pilottools.ai/tools/canva/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-03-31T22:23:52.638Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-image-generators-2026-midjourney-vs-dalle-vs-stable-diffusion",
+    "pin_type": "article",
+    "title": "AI Image Generator Showdown 2026: Midjourney, DALL-E, Stable Diffusion!",
+    "link": "https://pilottools.ai/blog/best-ai-image-generators-2026-midjourney-vs-dalle-vs-stable-diffusion/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-03-31T22:23:56.783Z",
+    "success": true
+  },
+  {
+    "slug": "stable-diffusion",
+    "pin_type": "tool-review",
+    "title": "Stable Diffusion Review: Stunning AI Images! (4.3/5)",
+    "link": "https://pilottools.ai/tools/stable-diffusion/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-03-31T22:24:00.701Z",
+    "success": true
   }
 ]

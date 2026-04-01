@@ -8,8 +8,10 @@ name: Pinterest Rescue Poster
 
 on:
   schedule:
-    # Every 2 hours during business hours (PST: 8AM-8PM = UTC: 16-04)
-    - cron: '30 16,18,20,22,0,2,4 * * *'
+    # 3x daily rescue sweeps — morning, afternoon, evening PST
+    - cron: '30 17 * * *'  # 9:30 AM PST — catch overnight failures
+    - cron: '30 23 * * *'  # 3:30 PM PST — catch afternoon failures
+    - cron: '30 5 * * *'   # 9:30 PM PST — catch evening failures
   workflow_dispatch:
     inputs:
       hours_back:

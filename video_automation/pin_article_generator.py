@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 _client = None
 
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 
 def _get_client():
@@ -34,32 +34,32 @@ def _get_client():
 
 
 # ── Amazon Associates affiliate links ──────────────────────────────────────────
-# All brands use tag=dailydealdarling1-20 (single Amazon Associates account).
+# Fitness uses fitover35-20, all other brands use dailydealdarling1-20.
 # Direct /dp/ASIN links are preferred. For any product NOT in this list, the
 # code falls back to Amazon search URLs (/s?k=...) which always work.
 
 AMAZON_AFFILIATE_LINKS = {
     "fitness": {
-        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20",
-        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarling1-20",
-        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarling1-20",
-        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=dailydealdarling1-20",
-        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=dailydealdarling1-20",
-        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=dailydealdarling1-20",
-        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarling1-20",
-        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=dailydealdarling1-20",
-        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20",
-        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=dailydealdarling1-20",
-        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=dailydealdarling1-20",
-        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=dailydealdarling1-20",
-        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=dailydealdarling1-20",
-        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=dailydealdarling1-20",
-        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=dailydealdarling1-20",
-        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=dailydealdarling1-20",
-        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarling1-20",
-        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=dailydealdarling1-20",
-        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=dailydealdarling1-20",
-        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20",
+        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20",
+        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=fitover35-20",
+        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=fitover35-20",
+        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=fitover35-20",
+        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=fitover35-20",
+        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover35-20",
+        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover35-20",
+        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=fitover35-20",
+        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
+        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=fitover35-20",
+        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=fitover35-20",
+        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=fitover35-20",
+        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=fitover35-20",
+        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=fitover35-20",
+        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=fitover35-20",
+        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=fitover35-20",
+        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=fitover35-20",
+        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=fitover35-20",
+        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=fitover35-20",
+        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
     },
     "deals": {
         "air fryer": "https://www.amazon.com/dp/B07FDJMC9Q?tag=dailydealdarling1-20",
@@ -91,7 +91,7 @@ AMAZON_AFFILIATE_LINKS = {
 }
 
 BRAND_AFFILIATE_TAGS = {
-    "fitness": "dailydealdarling1-20",
+    "fitness": "fitover35-20",
     "deals": "dailydealdarling1-20",
     "menopause": "dailydealdarling1-20",
 }
@@ -289,7 +289,7 @@ def _try_parse_json(content):
 
 
 def _build_product_card(link_text, amazon_url, primary_color='#1565C0'):
-    """Build a styled product card div with Amazon product image."""
+    """Build a styled product card div with Amazon product image and urgency badge."""
     asin_match = re.search(r'/dp/([A-Z0-9]{10})', amazon_url)
     img_html = ''
     if asin_match:
@@ -302,11 +302,18 @@ def _build_product_card(link_text, amazon_url, primary_color='#1565C0'):
             f'onerror="this.parentElement.style.display=\'none\'">'
             f'</a>'
         )
+    # Urgency badge to boost conversion
+    urgency_html = (
+        f'<span style="display:inline-block;background:#dc2626;color:#fff;font-size:0.72em;'
+        f'padding:2px 8px;border-radius:4px;margin-bottom:6px;font-weight:600;">'
+        f'Popular Pick</span>'
+    )
     return (
         f'<div style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin:16px 0;'
         f'display:flex;gap:16px;align-items:center;background:#fafafa;">'
         f'{img_html}'
         f'<div>'
+        f'{urgency_html}'
         f'<strong style="display:block;margin-bottom:8px;font-size:1em;color:#111;">{link_text}</strong>'
         f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" '
         f'style="display:inline-block;background:#FF9900;color:#111;padding:7px 18px;'
@@ -480,6 +487,13 @@ CATEGORY: {category}
 
 AFFILIATE TAG: {affiliate_tag}
 
+REVENUE OPTIMIZATION RULES:
+- The FIRST product recommendation MUST appear within the first 200 words (above the fold)
+- Include a "Quick Pick" callout box at the very top with the #1 product and its price
+- Use urgency language: "currently X% off", "selling fast", "price just dropped"
+- Each product MUST have a specific price range (never say "affordable" without a number)
+- End EVERY product section with a clear "Check price on Amazon" CTA
+
 Output EXACTLY this JSON structure (no markdown, no code fences, ONLY valid JSON):
 {{
   "title": "Best [Product] for [Audience] ({year})",
@@ -569,6 +583,8 @@ REQUIRED STRUCTURE (follow EXACTLY):
      * Also Great: [Product Name] — [one-line why]
      * Budget Pick: [Product Name] — [one-line why]
    - Each pick must include its Amazon link from the APPROVED PRODUCTS list
+   - IMMEDIATELY after Quick Picks, add: [SIGNUP_FORM_PLACEHOLDER]
+     (This captures readers who just want the recommendation and are about to leave)
 
 2. WHY TRUST THIS GUIDE (50-100 words)
    {trust_text}
@@ -603,6 +619,12 @@ REQUIRED STRUCTURE (follow EXACTLY):
 8. FINAL VERDICT + CTA (100 words)
    Restate the top pick with its Amazon link.
    End with specific CTA: "Check today's price on Amazon" — NOT "pick what works for you"
+
+9. RELATED READING (internal links — boosts SEO and time on site)
+   Add 2-3 bullet points linking to related topics on the same site:
+   - "[Related Topic Title](../articles/related-topic-slug.html)"
+   Use realistic topic slugs based on common topics for this brand.
+   These help Google understand site structure and keep readers browsing.
 
 CRITICAL RULES:
 - ALL Amazon links must use DIRECT /dp/ASIN URLs from the approved list below. NEVER invent /dp/ URLs.
@@ -990,20 +1012,22 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
 def _sanitize_affiliate_links(html_content, brand_key):
     """Post-generation sanitization — triple-checks every Amazon link.
 
-    1. Enforces dailydealdarling1-20 tag on ALL Amazon links (single account)
+    1. Enforces per-brand affiliate tags (fitover35-20 for fitness, dailydealdarling1-20 for deals/menopause)
     2. Converts fake/placeholder ASINs to working search URLs
     3. Fixes known AI-generated tag typos (truncated, wrong account)
     4. Logs any issues found for monitoring
     """
-    CANONICAL_TAG = 'dailydealdarling1-20'
+    CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
     issues = []
 
     # ── Pass 1: Fix known tag typos ──
     typo_map = {
-        'dailydealdarl-20': CANONICAL_TAG,
-        'menopauseplan-20': CANONICAL_TAG,
-        'fitover35-20': CANONICAL_TAG,
+        'dailydealdarl-20': 'dailydealdarling1-20',
+        'menopauseplan-20': 'dailydealdarling1-20',
     }
+    # Only fix fitover35 typo if we're NOT in the fitness brand
+    if brand_key != 'fitness':
+        typo_map['fitover35-20'] = CANONICAL_TAG
     for wrong, right in typo_map.items():
         if wrong in html_content:
             count = html_content.count(wrong)
