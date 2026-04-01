@@ -349,5 +349,23 @@
     "board": "AI Image Generators",
     "posted_at": "2026-03-31T22:24:00.701Z",
     "success": true
+  },
+  {
+    "slug": "category-sales",
+    "pin_type": "category",
+    "title": "🚀 Top AI Sales Tools 2026: Skyrocket Your Revenue!",
+    "link": "https://pilottools.ai/category/sales/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-01T17:05:20.509Z",
+    "success": true
+  },
+  {
+    "slug": "rytr",
+    "pin_type": "tool-review",
+    "title": "Rytr AI Review: Write Faster, Better (4.4/5)",
+    "link": "https://pilottools.ai/tools/rytr/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-04-01T17:05:24.621Z",
+    "success": true
   }
 ]
