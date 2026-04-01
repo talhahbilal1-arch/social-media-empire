@@ -64,15 +64,16 @@ def _load_affiliate_config():
 
 
 # ── Affiliate Link Mapping ──────────────────────────────────────────────────
-# CRITICAL: Always use direct product links (/dp/ASIN?tag=dailydealdarling1-20), never /s? search URLs
+# CRITICAL: Always use direct product links (/dp/ASIN?tag=TAG), never /s? search URLs
+# Fitness uses fitover35-20, all other brands use dailydealdarling1-20.
 
 AFFILIATE_LINKS = {
     'fitness': {
-        'supplements': 'https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20',
-        'equipment': 'https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20',
-        'protein': 'https://www.amazon.com/dp/B000QSNYGI?tag=dailydealdarling1-20',
-        'creatine': 'https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20',
-        'default': 'https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20',
+        'supplements': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20',
+        'equipment': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20',
+        'protein': 'https://www.amazon.com/dp/B000QSNYGI?tag=fitover35-20',
+        'creatine': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20',
+        'default': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20',
     },
     'deals': {
         'kitchen': 'https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarling1-20',
