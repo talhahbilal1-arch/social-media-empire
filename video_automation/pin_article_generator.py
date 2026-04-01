@@ -618,13 +618,22 @@ REQUIRED STRUCTURE (follow EXACTLY):
 
 8. FINAL VERDICT + CTA (100 words)
    Restate the top pick with its Amazon link.
-   End with specific CTA: "Check today's price on Amazon" — NOT "pick what works for you"
+   Use action-oriented CTAs like: "See today's price on Amazon", "Check if it's in stock", "View current deals"
+   — NOT generic phrases like "pick what works for you"
 
-9. RELATED READING (internal links — boosts SEO and time on site)
-   Add 2-3 bullet points linking to related topics on the same site:
+9. QUICK VERDICT BOX (early in article, after intro)
+   Include a 2-3 sentence verdict box with the top pick recommendation.
+   Format as a blockquote or highlighted section with:
+   - The winning product name
+   - One key reason it's the best
+   - Link to detailed review section below
+   Position this above the "Why Trust This Guide" section for maximum visibility.
+
+10. RELATED ARTICLES (internal links — boosts SEO and time on site)
+   Add "You Might Also Like" section at bottom with 2-3 related article links:
    - "[Related Topic Title](../articles/related-topic-slug.html)"
    Use realistic topic slugs based on common topics for this brand.
-   These help Google understand site structure and keep readers browsing.
+   These help Google understand site structure and keep readers browsing longer.
 
 CRITICAL RULES:
 - ALL Amazon links must use DIRECT /dp/ASIN URLs from the approved list below. NEVER invent /dp/ URLs.
@@ -636,6 +645,7 @@ CRITICAL RULES:
 - Review counts: realistic range 1,000-50,000
 - Price ranges: approximate but realistic
 - badge values: "Our Pick", "Also Great", "Budget Pick", or "Best Value"
+- CALL-TO-ACTION RULE: Use strong, action-oriented CTAs. Examples: "See today's price on Amazon", "Check if it's in stock", "View current deals", "Check current price". Never use vague phrases like "check price" or "buy now" without context.
 
 APPROVED PRODUCTS WITH AMAZON LINKS (use these EXACT URLs):
 {products_text}

@@ -563,6 +563,11 @@ def _head(tpl, title, meta_desc, article_url, site_config, article_schema,
             "brand": c['accent'], "surface": c['surface'], "dark": c['bg'],
         }}}
     })
+    # Build og:image tag (use hero_url if available)
+    og_image_tag = ''
+    if hero_url:
+        og_image_tag = f'  <meta property="og:image" content="{_esc(hero_url)}">\n'
+
     return (
         '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
         '  <meta charset="UTF-8">\n'
@@ -574,6 +579,7 @@ def _head(tpl, title, meta_desc, article_url, site_config, article_schema,
         f'  <meta property="og:url" content="{article_url}">\n'
         f'  <meta property="og:title" content="{_esc(title)}">\n'
         f'  <meta property="og:description" content="{_esc(meta_desc[:160])}">\n'
+        f'{og_image_tag}'
         f'  <title>{_esc(title)} | {site_config["site_name"]} '
         '&mdash; Best of 2026, Expert Verified</title>\n'
         '  <link rel="preconnect" href="https://fonts.googleapis.com">\n'

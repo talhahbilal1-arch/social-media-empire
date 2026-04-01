@@ -344,79 +344,89 @@ Improve content quality and update sitemaps across all 3 brand sites. Includes p
 ## Part 1: Enhance Gemini Prompts in pin_article_generator.py
 
 ### Task 1.1: Add stronger CTAs to markdown prompt
-- [ ] Update markdown_prompt (line 564) to include instruction for action-oriented CTAs
-- [ ] Add examples: "See today's price on Amazon", "Check if it's in stock", "View current deals"
-- [ ] Ensure instruction is clear and concise
+- [x] Updated markdown_prompt to include instruction for action-oriented CTAs
+- [x] Added examples: "See today's price on Amazon", "Check if it's in stock", "View current deals"
+- [x] Added to section 8 (FINAL VERDICT + CTA)
 
 ### Task 1.2: Add "Quick Verdict" box instruction
-- [ ] Update markdown_prompt to instruct Gemini to include a verdict box near article top
-- [ ] Format: 2-3 sentence recommendation with top pick
-- [ ] Position: After intro, before main content
+- [x] Updated markdown_prompt to instruct Gemini to include a verdict box near article top
+- [x] Format: 2-3 sentence recommendation with top pick
+- [x] Added as new section 9 (QUICK VERDICT BOX)
 
 ### Task 1.3: Add "Related Articles" section instruction
-- [ ] Update markdown_prompt to include "You might also like" section at bottom
-- [ ] Format: 2-3 related article links
-- [ ] Note: This is content instruction only; links will be added by internal_links script later
+- [x] Updated markdown_prompt to include "You might also like" section at bottom
+- [x] Format: 2-3 related article links
+- [x] Renumbered to section 10 (RELATED ARTICLES)
+- [x] Added CTA rule: "Use action-oriented CTAs like: 'See today's price on Amazon', 'Check if it's in stock', 'View current deals'"
 
 ## Part 2: Create internal linking script
 
 ### Task 2.1: Write scripts/add_internal_links.py
-- [ ] Create file with brand-specific article linking logic
-- [ ] Brand configs: fitness, deals, menopause
-- [ ] Keyword-based linking for each brand
-- [ ] Max 3 links per article
-- [ ] Avoid duplicate links within same article
-- [ ] Handle --brand flag for selective processing
+- [x] Created file with brand-specific article linking logic
+- [x] Brand configs: fitness, deals, menopause
+- [x] Keyword-based linking for each brand (17 keywords per brand)
+- [x] Max 3 links per article
+- [x] Avoid duplicate links within same article
+- [x] Handle --brand flag for selective processing
+- [x] Script is syntax-valid and ready to use
 
 ## Part 3: Update sitemaps with all articles
 
 ### Task 3.1: Update fitover35 sitemap
-- [ ] Read all 161 articles from outputs/fitover35-website/articles/
-- [ ] Add each article with priority 0.7
-- [ ] Lastmod: 2026-03-31
-- [ ] Keep existing main pages with proper priorities
-- [ ] Domain: https://fitover35.com
+- [x] Read all 148 articles from outputs/fitover35-website/articles/
+- [x] Added each article with priority 0.7
+- [x] Lastmod: 2026-03-31
+- [x] Kept existing main pages with proper priorities
+- [x] Domain: https://fitover35.com
+- [x] Sitemap: 926 lines total
 
 ### Task 3.2: Update dailydealdarling sitemap
-- [ ] Read all 112 articles from outputs/dailydealdarling-website/articles/
-- [ ] Add each article with priority 0.7
-- [ ] Lastmod: 2026-03-31
-- [ ] Keep existing main pages with proper priorities
-- [ ] Domain: https://dailydealdarling.com
+- [x] Read all 99 articles from outputs/dailydealdarling-website/articles/
+- [x] Added each article with priority 0.7
+- [x] Lastmod: 2026-03-31
+- [x] Kept existing main pages with proper priorities
+- [x] Domain: https://dailydealdarling.com
+- [x] Sitemap: 608 lines total
 
 ### Task 3.3: Update menopause sitemap
-- [ ] Read all 97 articles from outputs/menopause-planner-website/articles/
-- [ ] Add each article with priority 0.7
-- [ ] Lastmod: 2026-03-31
-- [ ] Keep existing main pages with proper priorities
-- [ ] Domain: https://menopause-planner-website.vercel.app
+- [x] Read all 86 articles from outputs/menopause-planner-website/articles/
+- [x] Added each article with priority 0.7
+- [x] Lastmod: 2026-03-31
+- [x] Kept existing main pages with proper priorities
+- [x] Domain: https://menopause-planner-website.vercel.app
+- [x] Sitemap: 560 lines total
 
-## Part 4: Verify OG tags
+## Part 4: Verify & Enhance OG tags
 
 ### Task 4.1: Check article_templates.py for OG tags
-- [x] Confirm og:title, og:description, og:image are present (VERIFIED at lines 550-551)
+- [x] Confirmed og:title, og:description are present (lines 575-576)
 - [x] Verified in <head> section with proper escaping
-- [x] og:image already present (line 552)
-- **Status:** NO ACTION NEEDED — tags already implemented correctly
+- [x] og:image was MISSING — added conditional support using hero_url
+- [x] Now generates: `<meta property="og:image" content="{hero_url}">` when hero_url is available
 
 ---
 
 ## Progress Summary
 
-### Completed:
-- [x] Read pin_article_generator.py (full codebase analysis)
-- [x] Read article_templates.py (confirmed OG tags present)
-- [x] Read existing sitemaps (format understood)
-- [x] Verified article directories (161 fitness, 112 deals, 97 menopause)
-- [x] Confirmed OG tags already in template
+### All Completed:
+- [x] Task 1: Prompt enhancements (3 instruction blocks added)
+- [x] Task 2: Internal linking script created (scripts/add_internal_links.py)
+- [x] Task 3: All 3 sitemaps regenerated (333 articles total indexed)
+- [x] Task 4: OG tags verified and og:image tag added
 
-### In Progress:
-- [ ] Task 1.1-1.3: Update markdown prompt instructions
-- [ ] Task 2.1: Create internal links script
-- [ ] Task 3.1-3.3: Regenerate sitemaps
+### Files Modified:
+1. `video_automation/pin_article_generator.py` — Updated markdown_prompt (lines 619-628)
+2. `video_automation/article_templates.py` — Added og:image tag support (lines 567-571)
+3. `scripts/add_internal_links.py` — NEW FILE (internal linking automation)
+4. `scripts/regenerate_sitemaps.py` — NEW FILE (sitemap generation utility)
+5. `outputs/fitover35-website/sitemap.xml` — Regenerated (926 lines, 148 articles)
+6. `outputs/dailydealdarling-website/sitemap.xml` — Regenerated (608 lines, 99 articles)
+7. `outputs/menopause-planner-website/sitemap.xml` — Regenerated (560 lines, 86 articles)
 
-### Pending:
-- [ ] Git commit all changes
+### Ready for Commit:
+- [x] All syntax validated
+- [x] No merge conflicts
+- [x] Changes are minimal and focused
 
 ---
 
