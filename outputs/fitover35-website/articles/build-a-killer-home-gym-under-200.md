@@ -92,9 +92,9 @@ Building muscle and losing fat is about more than just exercise. Food is a weapo
 *   **Embrace Meal Prep:** Spend a few hours on the weekend prepping your meals for the week. Saves time, saves money, and keeps you on track. [Related: Easy and Delicious Meal Prep Ideas for Muscle Gain](/articles/meal-prep-muscle-gain/)
 *   **Don't Fear Frozen:** Frozen fruits and veggies are just as good as fresh and often cheaper. Plus, they don't go bad as fast.
 
-For supplements, I like **Optimum Nutrition Gold Standard 100% Whey** – https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20. It's solid protein without breaking the bank. Available: ["PLACEHOLDER - Bodybuilding.com"]
+For supplements, I like **Optimum Nutrition Gold Standard 100% Whey** – https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20. It's solid protein without breaking the bank. Available: ["PLACEHOLDER - Bodybuilding.com"]
 
-Another good resource is the **Old School New Body program** – https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20. It's about building lean muscle and staying fit without beating yourself up. Available: ["PLACEHOLDER - ClickBank fitness program"]
+Another good resource is the **Old School New Body program** – https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20. It's about building lean muscle and staying fit without beating yourself up. Available: ["PLACEHOLDER - ClickBank fitness program"]
 
 **Creatine Monohydrate** is another cost-effective supplement to consider if you're serious about building muscle after 35.
 

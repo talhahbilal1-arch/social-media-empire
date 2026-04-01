@@ -65,7 +65,7 @@ Okay, now let's talk about how to build muscle effectively with your limited equ
 *   **High Reps with Resistance Bands:** For smaller muscle groups like biceps and triceps, high-rep sets with resistance bands can be very effective. Aim for 15-20 reps per set.
 *   **Don’t Neglect the Posterior Chain:** So many guys focus on the mirror muscles (chest, biceps, abs) and forget about their back and hamstrings. Incorporate exercises like dumbbell Romanian deadlifts and resistance band pull-throughs to build a strong, balanced physique. A strong back is crucial for preventing injuries as you get older.
 
-**[Garage Gains Program]** — This at-home program focuses on building muscle using minimal equipment and bodyweight exercises. The progressive structure makes it a great tool for maximizing muscle growth in a small space. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Garage Gains Program]** — This at-home program focuses on building muscle using minimal equipment and bodyweight exercises. The progressive structure makes it a great tool for maximizing muscle growth in a small space. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 
 Available: ["PLACEHOLDER - ClickBank fitness program", "PLACEHOLDER - ShareASale supplement brand", "PLACEHOLDER - Bodybuilding.com"]
 
@@ -101,7 +101,7 @@ You can't out-train a bad diet. You’ve heard that before, right? Muscle buildi
 *   **Meal Prep is Your Friend:** Cook your meals in advance to avoid unhealthy takeout options. Make a big batch of chicken and rice on Sunday and you're set for the week. It sounds boring, but it works.
 *   **Stay Hydrated:** Drink plenty of water throughout the day. I carry a water bottle with me everywhere.
 
-**[Affordable Mass Gainer]** – This is a great budget-friendly option for packing on the pounds *if* you're really struggling to get enough calories. Mix with water or milk for a quick and easy post-workout shake. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Affordable Mass Gainer]** – This is a great budget-friendly option for packing on the pounds *if* you're really struggling to get enough calories. Mix with water or milk for a quick and easy post-workout shake. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - ClickBank fitness program", "PLACEHOLDER - ShareASale supplement brand", "PLACEHOLDER - Bodybuilding.com"]
 
 ## Staying Motivated: Making Your Home Gym Work Long-Term

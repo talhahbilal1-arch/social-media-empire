@@ -51,7 +51,7 @@ Alright, let’s get back to the good stuff. Creatine isn't just about building 
 
 I found that taking 5g of creatine monohydrate daily significantly improved my performance in the gym. I was able to push harder, recover faster, and ultimately build more muscle. It's become a staple in my routine. And that routine helps me maintain strength even at 38 with a busy schedule. I usually focus on 3-4 days a week, mixing compound exercises like squats, deadlifts, and bench press with accessory work. Even home workout no equipment routines benefit from the added energy and recovery that creatine provides.
 
-**[Transparent Labs Creatine HMB]** – It tastes great, it's tested for purity, and the added HMB *may* help with muscle recovery. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Transparent Labs Creatine HMB]** – It tastes great, it's tested for purity, and the added HMB *may* help with muscle recovery. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - ShareASale supplement brand"]
 
 ### The TRUTH: Does Creatine Cause Hair Loss?
@@ -84,7 +84,7 @@ I've been taking creatine on and off for years, and I can honestly say that it h
 
 Could creatine be speeding things up a tiny bit? Maybe. But the evidence is so weak that I'm not going to lose any sleep over it. The benefits I get from creatine – increased strength, improved workout performance, and *potential* cognitive benefits – far outweigh any theoretical risk to my hair.
 
-**[Optimum Nutrition Creatine Monohydrate Powder]** – This is a simple, affordable, and effective creatine monohydrate powder. It's unflavored, so you can easily mix it into your protein shakes or pre-workout drink. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Optimum Nutrition Creatine Monohydrate Powder]** – This is a simple, affordable, and effective creatine monohydrate powder. It's unflavored, so you can easily mix it into your protein shakes or pre-workout drink. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - Bodybuilding.com"]
 
 The important thing to remember here is: Don't let fear of hair loss keep you from taking a safe and effective supplement that can improve your fitness and overall health.

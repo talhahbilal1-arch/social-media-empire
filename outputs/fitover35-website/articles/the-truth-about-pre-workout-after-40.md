@@ -69,8 +69,8 @@ Okay, let's get into the nitty-gritty. Here are the ingredients I prioritize in 
 
 After trying countless pre-workouts over the years, here are a couple that have actually made a difference for me:
 
-*   **[Product Name: Transparent Labs BULK Black]** — This is my go-to for days when I need an extra kick. It has a solid dose of citrulline, beta-alanine, betaine, and a moderate amount of caffeine. It's also third-party tested, which is a huge plus. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20 Available: [PLACEHOLDER - Bodybuilding.com]
-*   **[Product Name: Klean Athlete Klean Pre-Workout]** — This is a good option if you're looking for something with a lower stimulant content or are new to pre-workouts. It contains Beta-Alanine, Citrulline and Betaine but has only 75mg of caffeine. I like the fact that Klean Athlete products are NSF Certified for Sport. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20 Available: [PLACEHOLDER - Bodybuilding.com]
+*   **[Product Name: Transparent Labs BULK Black]** — This is my go-to for days when I need an extra kick. It has a solid dose of citrulline, beta-alanine, betaine, and a moderate amount of caffeine. It's also third-party tested, which is a huge plus. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 Available: [PLACEHOLDER - Bodybuilding.com]
+*   **[Product Name: Klean Athlete Klean Pre-Workout]** — This is a good option if you're looking for something with a lower stimulant content or are new to pre-workouts. It contains Beta-Alanine, Citrulline and Betaine but has only 75mg of caffeine. I like the fact that Klean Athlete products are NSF Certified for Sport. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 Available: [PLACEHOLDER - Bodybuilding.com]
 
 Remember, what works for me might not work for you. Experiment and find what works best for your body. We're all wired a little differently.
 
