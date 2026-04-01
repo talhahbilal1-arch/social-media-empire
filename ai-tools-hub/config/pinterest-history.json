@@ -367,5 +367,32 @@
     "board": "AI Writing Tools",
     "posted_at": "2026-04-01T17:05:24.621Z",
     "success": true
+  },
+  {
+    "slug": "tome",
+    "pin_type": "tool-review",
+    "title": "Tome AI Review: Is It Worth the Hype? (Productivity Tool)",
+    "link": "https://pilottools.ai/tools/tome/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-01T22:26:12.762Z",
+    "success": true
+  },
+  {
+    "slug": "semrush-vs-surfer-seo",
+    "pin_type": "comparison",
+    "title": "Semrush vs Surfer SEO: Which SEO Tool Wins? [Comparison]",
+    "link": "https://pilottools.ai/compare/semrush-vs-surfer-seo/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-01T22:26:16.845Z",
+    "success": true
+  },
+  {
+    "slug": "pictory-vs-synthesia",
+    "pin_type": "comparison",
+    "title": "Pictory vs Synthesia: AI Video Showdown! Which Tool Wins?",
+    "link": "https://pilottools.ai/compare/pictory-vs-synthesia/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-01T22:26:20.880Z",
+    "success": true
   }
 ]
