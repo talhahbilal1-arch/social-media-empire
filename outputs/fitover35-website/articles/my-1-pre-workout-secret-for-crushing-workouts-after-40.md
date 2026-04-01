@@ -53,11 +53,11 @@ Alright, let's dive into the good stuff – the ingredients that can actually ma
 
 I’ve tried a lot of pre-workouts over the years, and these are the ones that have consistently delivered results without the side effects:
 
-1.  **[Product Name: Transparent Labs BULK]** – This pre-workout has a solid blend of creatine, beta-alanine, citrulline, and a moderate dose of caffeine. I noticed a significant boost in my strength and endurance during my workouts. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20 Available: [PLACEHOLDER - Transparent Labs website]
+1.  **[Product Name: Transparent Labs BULK]** – This pre-workout has a solid blend of creatine, beta-alanine, citrulline, and a moderate dose of caffeine. I noticed a significant boost in my strength and endurance during my workouts. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 Available: [PLACEHOLDER - Transparent Labs website]
 
-2.  **[Product Name: Legion Pulse]** – Legion Pulse uses natural ingredients and provides a good energy boost without the jitters. It's a bit pricier, but I appreciate the focus on quality. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20 Available: [PLACEHOLDER - Legion Athletics website]
+2.  **[Product Name: Legion Pulse]** – Legion Pulse uses natural ingredients and provides a good energy boost without the jitters. It's a bit pricier, but I appreciate the focus on quality. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 Available: [PLACEHOLDER - Legion Athletics website]
 
-3. **[Product Name: Optimum Nutrition Gold Standard Pre-Workout]** - This is a more budget-friendly option that still delivers decent results. It contains creatine, beta-alanine, and caffeine, but the dosages might be a bit lower than the other two. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20 Available: [PLACEHOLDER - Bodybuilding.com]
+3. **[Product Name: Optimum Nutrition Gold Standard Pre-Workout]** - This is a more budget-friendly option that still delivers decent results. It contains creatine, beta-alanine, and caffeine, but the dosages might be a bit lower than the other two. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 Available: [PLACEHOLDER - Bodybuilding.com]
 
 ## How to Properly Dose Your Pre-Workout for Maximum Benefit
 

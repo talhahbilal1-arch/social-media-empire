@@ -102,7 +102,12 @@ class RainforestClient:
     """Client for Rainforest API to fetch Amazon product data."""
 
     BASE_URL = "https://api.rainforestapi.com/request"
-    AFFILIATE_TAG = "dailydealdarling1-20"
+    BRAND_AFFILIATE_TAGS = {
+        "fitness": "fitover35-20",
+        "deals": "dailydealdarling1-20",
+        "menopause": "dailydealdarling1-20",
+    }
+    AFFILIATE_TAG = "dailydealdarling1-20"  # default fallback
 
     def __init__(self, api_key: Optional[str] = None):
         """

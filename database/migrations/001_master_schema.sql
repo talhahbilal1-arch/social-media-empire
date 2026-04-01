@@ -209,6 +209,20 @@ CREATE TABLE IF NOT EXISTS pinterest_pins (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Columns required by content-engine.yml pipeline phases
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS overlay_headline TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS overlay_subtext TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS tips JSONB DEFAULT '[]';
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS pexels_search_term TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS niche VARCHAR(100);
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS topic TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS visual_style VARCHAR(100);
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS generated_image_url TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS article_generated BOOLEAN DEFAULT FALSE;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS posted_at TIMESTAMPTZ;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS error_message TEXT;
+ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS image_hash TEXT;
+
 -- ── RLS: enable on all tables (service_role bypasses RLS via BYPASSRLS=true) ──
 -- anon + authenticated are blocked. Python scripts use service_role key — unaffected.
 ALTER TABLE videos ENABLE ROW LEVEL SECURITY;

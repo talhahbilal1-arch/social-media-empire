@@ -57,7 +57,7 @@ Okay, okay, I'm not saying *all* supplements are bunk. There are a few that have
 
 Remember, talk to your doctor before starting any new supplement, especially if you have any underlying health conditions. Also, don't expect miracles. These supplements are just *supplements* – they're meant to *supplement* a healthy lifestyle, not replace it.
 
-**[Nutrabolt C4 Original Pre Workout Powder]** — This pre-workout powder mixes creatine with other ingredients that will help you get the most out of your workout. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Nutrabolt C4 Original Pre Workout Powder]** — This pre-workout powder mixes creatine with other ingredients that will help you get the most out of your workout. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - ShareASale supplement brand"]
 
 ## Lifestyle Changes That Naturally Boost Testosterone (The Real Secret)
@@ -102,7 +102,7 @@ Okay, so here's what *actually* worked for me. This isn't medical advice, but ju
 
 This is what works for *me*. Your mileage may vary. But I can tell you that these changes had a HUGE impact on my energy levels, muscle mass, and overall well-being. Plus, I lost the stubborn belly fat that had been plaguing me for years. My wife even started calling me "handsome" again.
 
-**[Transparent Labs StrengthSeries Creatine HMB]** — This creatine supplement includes HMB for better results from each workout. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Transparent Labs StrengthSeries Creatine HMB]** — This creatine supplement includes HMB for better results from each workout. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - Bodybuilding.com"]
 
 [Related: Build Muscle in Your 30s](/articles/build-muscle-after-30/)

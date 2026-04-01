@@ -53,7 +53,7 @@ Here's what I do to optimize my sleep. This took some trial and error, but it wo
 
 *   **Consistent Bedtime:** I aim to be in bed by 10:30 PM every night, even on weekends. Waking up at 6:00 am every morning, that gives me 7.5 hours.
 *   **Wind-Down Routine:** About an hour before bed, I start winding down. I dim the lights, turn off the TV, and put away my phone.
-*   **Magnesium Supplement:** I take a magnesium supplement before bed. Magnesium helps relax your muscles and calm your nervous system, promoting better sleep. I use **[Magnesium Glycinate Supplement]** — I've tried a bunch, but this one doesn't mess with my stomach and I actually feel calmer. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20 Available: [PLACEHOLDER - ShareASale supplement brand]
+*   **Magnesium Supplement:** I take a magnesium supplement before bed. Magnesium helps relax your muscles and calm your nervous system, promoting better sleep. I use **[Magnesium Glycinate Supplement]** — I've tried a bunch, but this one doesn't mess with my stomach and I actually feel calmer. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 Available: [PLACEHOLDER - ShareASale supplement brand]
 *   **Dark and Cool Room:** I make sure my bedroom is dark, quiet, and cool. Blackout curtains are a must, and I keep the temperature around 65-68 degrees Fahrenheit.
 *   **Deep Breathing:** Before I drift off, I do a few minutes of deep breathing exercises to calm my mind and relax my body. I just close my eyes and take slow, deep breaths, focusing on my breath.
 
@@ -72,7 +72,7 @@ Now, here's what to *avoid*:
 
 *   **Sleep Aids with Diphenhydramine:** These over-the-counter sleep aids (like Benadryl) can make you drowsy, but they can also cause side effects like dry mouth, constipation, and daytime fatigue. Plus, they're not a long-term solution.
 *   **Anything With Stimulants:** This should be obvious, but avoid any supplements that contain stimulants like caffeine or guarana before bed.
-*   **[PLACEHOLDER - ClickBank fitness program]** promises overnight muscle gains, but the only thing you'll be overnight is awake, because it's loaded with sugar and stimulants. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+*   **[PLACEHOLDER - ClickBank fitness program]** promises overnight muscle gains, but the only thing you'll be overnight is awake, because it's loaded with sugar and stimulants. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 
 ## Creating the Ultimate Sleep Sanctuary
 

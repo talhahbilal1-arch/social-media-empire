@@ -70,7 +70,7 @@ I usually take this about 20-30 minutes before my workout:
 *   6g L-Citrulline Malate
 *   B-Complex Vitamin
 
-**[Transparent Labs PreSeries BULK]** – This pre-workout has a great combination of ingredients, including clinically effective doses of citrulline, beta-alanine, and betaine. It's a bit pricey, but the quality is worth it. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Transparent Labs PreSeries BULK]** – This pre-workout has a great combination of ingredients, including clinically effective doses of citrulline, beta-alanine, and betaine. It's a bit pricey, but the quality is worth it. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - Bodybuilding.com"]
 
 I also sometimes add a scoop of a greens powder for extra nutrients and antioxidants. Remember, consistency is key. Don't expect miracles overnight. It took me years to figure out what works, so be patient with yourself.
@@ -86,7 +86,7 @@ So, what can you realistically expect from using the right pre-workout? It's not
 *   **Better Muscle Endurance:** You'll be able to do more reps and sets before fatigue sets in. You'll be surprised how much further you can push yourself.
 *   **Faster Recovery:** The increased blood flow and nutrients will help your muscles recover more quickly. That means less soreness the next day.
 
-**[Athletic Greens]** – This isn't a pre-workout, but it's a fantastic supplement to add to your daily routine. It's packed with vitamins, minerals, and probiotics to support overall health and well-being. Improved overall health is what every man over 35 needs! https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Athletic Greens]** – This isn't a pre-workout, but it's a fantastic supplement to add to your daily routine. It's packed with vitamins, minerals, and probiotics to support overall health and well-being. Improved overall health is what every man over 35 needs! https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - ClickBank fitness program"]
 
 Remember, supplements are just that – supplements. They *supplement* a healthy diet and consistent workout routine. They aren't a replacement for them. You can't out-supplement a bad diet.
@@ -105,7 +105,7 @@ Don’t fall into the trap of thinking a supplement is a magic bullet. It's only
 
 By combining the right pre-workout supplement with a healthy lifestyle, you can reclaim your energy, focus, and performance, even after 40. It's not easy, but it's worth it.
 
-**[Old School Labs Vintage Blast]** – This is a two-stage pre-workout designed for sustained energy without the crash. I like that it focuses on ingredients that support blood flow and muscle endurance. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Old School Labs Vintage Blast]** – This is a two-stage pre-workout designed for sustained energy without the crash. I like that it focuses on ingredients that support blood flow and muscle endurance. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - ShareASale supplement brand"]
 
 **Next Steps:**

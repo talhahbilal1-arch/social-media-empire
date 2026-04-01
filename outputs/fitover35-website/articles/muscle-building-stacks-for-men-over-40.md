@@ -58,12 +58,12 @@ Want more? Get our FREE 7-Day Fat Burn Kickstart Plan — delivered straight to 
 Alright, let's talk supplements. This is *my* go-to stack for guys over 40 looking to build muscle and stay strong. Remember, this works *for me*, and you should talk to your doctor before starting any new supplement regimen.
 
 1.  **Creatine Monohydrate:** The OG of muscle-building supplements, and for good reason. According to research in the Journal of the International Society of Sports Nutrition (2017), creatine supplementation combined with resistance training can significantly increase muscle strength and lean body mass in older adults. I take 5 grams daily, every day, mixed with my protein shake after my workout. It helps with energy production and muscle recovery.
-    *   **[Product Name]** — I've been using [Brand Name] Creatine for years, and I've always been happy with the results. It's a simple, effective, and affordable option. https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20
+    *   **[Product Name]** — I've been using [Brand Name] Creatine for years, and I've always been happy with the results. It's a simple, effective, and affordable option. https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20
     Available: ["PLACEHOLDER - ClickBank fitness program", "PLACEHOLDER - ShareASale supplement brand", "PLACEHOLDER - Bodybuilding.com"]
 2.  **Whey Protein Powder:** As we talked about earlier, protein is critical, especially as we age. Whey protein powder is a convenient way to hit your daily protein goals. I use it post-workout to kickstart muscle recovery. I prefer a good quality Whey Isolate to keep carbs and fat low.
 3.  **Vitamin D3:** Many of us are deficient in Vitamin D, especially during winter. Low Vitamin D levels can negatively impact testosterone production and overall health. I take 5000 IU daily, year-round.
 4.  **Magnesium:** Another common deficiency that can affect sleep, muscle function, and recovery. I take a magnesium supplement before bed to help me relax and sleep better.
-    *   **[Product Name]** - I like [Brand Name]'s Magnesium Glycinate. It's highly absorbable and doesn't upset my stomach. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+    *   **[Product Name]** - I like [Brand Name]'s Magnesium Glycinate. It's highly absorbable and doesn't upset my stomach. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
     Available: ["PLACEHOLDER - ClickBank fitness program", "PLACEHOLDER - ShareASale supplement brand", "PLACEHOLDER - Bodybuilding.com"]
 
 ## Supplement Cycling: Should You Do It?

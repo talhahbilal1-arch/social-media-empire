@@ -54,7 +54,7 @@ How does it work? Creatine helps to regenerate ATP, your body's primary energy s
 
 **How to Use It:** The most common method is to take 3-5 grams of creatine monohydrate daily. You don't need to "load" it with high doses like they used to recommend. Just take it consistently, and you'll see results within a few weeks. I personally take 5g every morning with my coffee. It's tasteless, so you won't even notice it.
 
-**[Product Name: Creatine Monohydrate Powder]** – I've been using this brand for years. It's unflavored, mixes easily, and most importantly, it works! https://www.amazon.com/dp/B002DYIZEO?tag=dailydealdarling1-20
+**[Product Name: Creatine Monohydrate Powder]** – I've been using this brand for years. It's unflavored, mixes easily, and most importantly, it works! https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20
 Available: ["PLACEHOLDER - Bodybuilding.com"]
 
 ## Protein Powders: Whey vs. Casein vs. Plant-Based
@@ -96,7 +96,7 @@ Honestly, not as much as you think. Consistency is *way* more important than pre
 
 Read this article about [Optimizing Your Workout Schedule](/articles/best-workout-schedule-men/) for more tips.
 
-**[Product Name: Whey Protein Isolate]** - This is my go-to protein powder. It mixes well, tastes great (especially the chocolate flavor), and doesn't upset my stomach. https://www.amazon.com/dp/B001ARYU58?tag=dailydealdarling1-20
+**[Product Name: Whey Protein Isolate]** - This is my go-to protein powder. It mixes well, tastes great (especially the chocolate flavor), and doesn't upset my stomach. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
 Available: ["PLACEHOLDER - ShareASale supplement brand"]
 
 ## Real Results: What to Expect (and What *Not* To)

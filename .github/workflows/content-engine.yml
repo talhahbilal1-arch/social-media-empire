@@ -192,7 +192,22 @@ jobs:
                           'status': 'content_ready',
                       }
                       if not dry_run:
-                          db.client.table('pinterest_pins').insert(insert_row).execute()
+                          try:
+                              db.client.table('pinterest_pins').insert(insert_row).execute()
+                          except Exception as _insert_err:
+                              # Schema may be missing extended columns — fall back to core columns only
+                              # Run database/migrations/002_fix_pinterest_pins_schema.sql to fix permanently
+                              print(f'  [{brand}] Full insert failed ({_insert_err}), trying core columns...')
+                              core_row = {
+                                  'brand': brand,
+                                  'title': pin_data.get('title', ''),
+                                  'description': pin_data.get('description', ''),
+                                  'board_id': board_id,
+                                  'destination_url': pin_data.get('destination_url', ''),
+                                  'status': 'content_ready',
+                              }
+                              db.client.table('pinterest_pins').insert(core_row).execute()
+                              print(f'  [{brand}] ⚠ DEGRADED MODE — run 002_fix_pinterest_pins_schema.sql in Supabase SQL Editor!')
                           log_pin_to_history(pin_data, db.client)
                       print(f'  [{brand}] Content ready: {pin_data.get("title", "")[:50]}')
               except Exception as e:
@@ -289,11 +304,18 @@ jobs:
                   image_url = upload_pin_image(image_bytes, filename)
                   pin['image_hash'] = img_hash  # Pass to log_pin_to_history later
 
-                  db.client.table('pinterest_pins').update({
-                      'image_url': image_url,
-                      'generated_image_url': image_url,
-                      'status': 'ready'
-                  }).eq('id', pin_id).execute()
+                  try:
+                      db.client.table('pinterest_pins').update({
+                          'image_url': image_url,
+                          'generated_image_url': image_url,
+                          'status': 'ready'
+                      }).eq('id', pin_id).execute()
+                  except Exception:
+                      # Fallback if generated_image_url column doesn't exist yet
+                      db.client.table('pinterest_pins').update({
+                          'image_url': image_url,
+                          'status': 'ready'
+                      }).eq('id', pin_id).execute()
 
                   pin['image_url'] = image_url
                   rendered_pins.append(pin)
@@ -619,7 +641,10 @@ jobs:
                           'error_message': f'image_url missing: "{image_url}"',
                       }).eq('id', pin_id).execute()
                   except Exception:
-                      pass
+                      try:
+                          db.client.table('pinterest_pins').update({'status': 'failed'}).eq('id', pin_id).execute()
+                      except Exception:
+                          pass
                   log_pipeline_error('1b', brand, f'image_url missing for pin {pin_id}', severity='high')
                   continue
 
@@ -652,10 +677,16 @@ jobs:
                       with urllib.request.urlopen(req, timeout=30) as resp:
                           resp_body = resp.read().decode('utf-8', errors='replace')
                           print(f'  [{brand}] Webhook → HTTP {resp.status} "{resp_body[:60]}"')
-                      db.client.table('pinterest_pins').update({
-                          'status': 'posted',
-                          'posted_at': datetime.now(timezone.utc).isoformat()
-                      }).eq('id', pin_id).execute()
+                      # Update status — try with posted_at, fallback without
+                      try:
+                          db.client.table('pinterest_pins').update({
+                              'status': 'posted',
+                              'posted_at': datetime.now(timezone.utc).isoformat()
+                          }).eq('id', pin_id).execute()
+                      except Exception:
+                          db.client.table('pinterest_pins').update({
+                              'status': 'posted'
+                          }).eq('id', pin_id).execute()
                       posted_count += 1
                       success = True
                       break
@@ -671,7 +702,10 @@ jobs:
                                   'error_message': f'Webhook HTTP {e.code}: {err_body}',
                               }).eq('id', pin_id).execute()
                           except Exception:
-                              pass
+                              try:
+                                  db.client.table('pinterest_pins').update({'status': 'failed'}).eq('id', pin_id).execute()
+                              except Exception:
+                                  pass
                           log_pipeline_error('1b', brand, f'Webhook HTTP {e.code}: {err_body}', severity='high')
                   except Exception as e:
                       print(f'  [{brand}] Attempt {attempt+1}/3 FAILED — {e}')
@@ -684,7 +718,10 @@ jobs:
                                   'error_message': str(e)[:200],
                               }).eq('id', pin_id).execute()
                           except Exception:
-                              pass
+                              try:
+                                  db.client.table('pinterest_pins').update({'status': 'failed'}).eq('id', pin_id).execute()
+                              except Exception:
+                                  pass
                           log_pipeline_error('1b', brand, e, severity='high')
 
           print(f'  Posted {posted_count}/{len(rendered_pins)} pins to Pinterest')

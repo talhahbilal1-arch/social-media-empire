@@ -575,6 +575,7 @@ def _head(tpl, title, meta_desc, article_url, site_config, article_schema,
         f'  <meta name="description" content="{_esc(meta_desc)}">\n'
         f'  <meta name="author" content="{_esc(site_config["site_name"])}">\n'
         '  <meta name="robots" content="index, follow">\n'
+        f'  <link rel="canonical" href="{article_url}">\n'
         '  <meta property="og:type" content="article">\n'
         f'  <meta property="og:url" content="{article_url}">\n'
         f'  <meta property="og:title" content="{_esc(title)}">\n'
