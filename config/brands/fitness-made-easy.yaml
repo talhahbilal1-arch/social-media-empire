@@ -7,5 +7,6 @@ colors:
 tts_voice: en-US-SaraNeural  # Energetic, motivational female voice
 cta_text: Start your fitness journey
 cta_url: https://example.com/fitness  # TBD - placeholder
+affiliate_tag: fitover3509-20
 description: Simple fitness tips for busy women
 target_audience: Busy women seeking practical fitness advice

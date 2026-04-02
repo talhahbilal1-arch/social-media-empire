@@ -1013,13 +1013,21 @@ def _sanitize_affiliate_links(html_content, brand_key):
     issues = []
 
     # ── Pass 1: Fix known tag typos ──
-    typo_map = {
-        'dailydealdarling1-20': CANONICAL_TAG,
-        'menopauseplan-20': CANONICAL_TAG,
-    }
-    # Only fix fitover35 typo if we're NOT in the fitness brand
-    if brand_key != 'fitness':
-        typo_map['fitover35-20'] = CANONICAL_TAG
+    # Any tag that is NOT the canonical tag for this brand gets replaced.
+    # This catches AI-hallucinated tags, old broken tags, and typos.
+    KNOWN_BAD_TAGS = [
+        'dailydealdarling1-20',  # old broken DDD tag
+        'dailydealdarling-20',   # common AI-generated typo
+        'menopauseplan-20',      # old menopause tag (never existed)
+        'fitover35-20',          # old broken fitness tag (NOT fitover3509-20)
+        'fitnessquick-20',       # old TikTok default
+        'nurseplanner-20',       # non-existent tag
+        'adhdplanner-20',        # non-existent tag
+    ]
+    typo_map = {}
+    for bad_tag in KNOWN_BAD_TAGS:
+        if bad_tag != CANONICAL_TAG:
+            typo_map[bad_tag] = CANONICAL_TAG
     for wrong, right in typo_map.items():
         if wrong in html_content:
             count = html_content.count(wrong)
