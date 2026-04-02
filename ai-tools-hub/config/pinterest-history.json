@@ -421,5 +421,23 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-02T17:03:55.897Z",
     "success": true
+  },
+  {
+    "slug": "notion-ai",
+    "pin_type": "tool-review",
+    "title": "Notion AI Review: Supercharge Your Productivity! (4.6/5)",
+    "link": "https://pilottools.ai/tools/notion-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-02T22:22:20.053Z",
+    "success": true
+  },
+  {
+    "slug": "murf-ai",
+    "pin_type": "tool-review",
+    "title": "Murf AI Review: Effortless Voiceovers & Audio (4.4/5)",
+    "link": "https://pilottools.ai/tools/murf-ai/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-04-02T22:22:24.103Z",
+    "success": true
   }
 ]
