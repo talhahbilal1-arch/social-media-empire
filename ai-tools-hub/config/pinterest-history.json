@@ -394,5 +394,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-01T22:26:20.880Z",
     "success": true
+  },
+  {
+    "slug": "hostinger-ai",
+    "pin_type": "tool-review",
+    "title": "Hostinger AI: Boost Your Productivity (Review + Discount!)",
+    "link": "https://pilottools.ai/tools/hostinger-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-02T17:03:47.574Z",
+    "success": true
+  },
+  {
+    "slug": "frase",
+    "pin_type": "tool-review",
+    "title": "Frase AI Review: Unlock SEO Success (4.5/5 Stars!)",
+    "link": "https://pilottools.ai/tools/frase/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-02T17:03:51.730Z",
+    "success": true
+  },
+  {
+    "slug": "chatgpt-vs-claude",
+    "pin_type": "comparison",
+    "title": "ChatGPT vs. Claude: AI Chatbot Battle! Which is Best?",
+    "link": "https://pilottools.ai/compare/chatgpt-vs-claude/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-02T17:03:55.897Z",
+    "success": true
   }
 ]
