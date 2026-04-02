@@ -755,7 +755,7 @@ jobs:
               _brand_styles = [p.get('visual_style', 'gradient') for p in rendered_pins if p.get('brand') == _brand]
               print(f'  [{_brand}] rendered={_brand_rendered} articles={_brand_articles} styles={",".join(_brand_styles) or "none"}')
           if not content_ready_pins:
-              print('  No content_ready pins — pipeline idle')
+              print('  ⚠ No content_ready pins — pipeline idle')
           try:
               db.client.table('agent_runs').upsert({
                   'agent_name': 'content_pipeline',
@@ -765,6 +765,36 @@ jobs:
               }, on_conflict='agent_name').execute()
           except Exception:
               pass
+
+          # ═══════════════��══════════════════════════════════════════════
+          # FAIL-SAFE: Exit with error if zero pins were generated
+          # This prevents silent "success" when the entire pipeline is broken.
+          # The daily cap check (pins_today >= MAX_PINS_PER_DAY) is the only
+          # legitimate reason for 0 pins — if ALL brands are capped, that's OK.
+          # ══════════════════════════════════════════════════════════════
+          if not dry_run and not rendered_pins and not content_ready_pins:
+              # Check if we were legitimately capped
+              all_capped = True
+              for _brand in brands_to_generate:
+                  try:
+                      _tc = db.client.table('content_history') \
+                          .select('id', count='exact') \
+                          .eq('brand', _brand) \
+                          .gte('created_at', today_str + 'T00:00:00Z') \
+                          .execute()
+                      _count = _tc.count if hasattr(_tc, 'count') and _tc.count is not None else len(_tc.data or [])
+                      if _count < MAX_PINS_PER_DAY:
+                          all_capped = False
+                          print(f'  ⚠ [{_brand}] only {_count}/{MAX_PINS_PER_DAY} pins today but nothing was generated!')
+                  except Exception:
+                      all_capped = False
+              if not all_capped:
+                  print('\n❌ CRITICAL: Zero pins generated but daily cap NOT reached!')
+                  print('   This usually means the Gemini API or database insert is failing.')
+                  print('   Check the logs above for ERROR lines.')
+                  sys.exit(1)
+              else:
+                  print('  All brands at daily cap — legitimate idle run ✓')
           PYEOF
 
       - name: Deploy brand sites to Vercel
