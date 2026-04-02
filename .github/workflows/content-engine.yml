@@ -2,11 +2,13 @@ name: Content Engine
 
 on:
   schedule:
-    # 3 runs per day — aligned to Pinterest peak engagement windows
-    # Guardrail caps at 5 pins/brand/day; fewer runs = fewer idle CI cycles
-    - cron: '0 17 * * *'  # 9 AM PST  — morning engagement window
-    - cron: '0 22 * * *'  # 2 PM PST  — afternoon peak (2-4 PM)
-    - cron: '0 4 * * *'   # 8 PM PST  — evening peak (8-11 PM)
+    # 5 runs per day — 1 pin per brand per run, spread across Pinterest peak times
+    # 5 runs x 1 pin x 3 brands = 15 pins/day total
+    - cron: '0 14 * * *'  #  6 AM PST — early morning
+    - cron: '0 17 * * *'  #  9 AM PST — morning engagement
+    - cron: '0 20 * * *'  # 12 PM PST — midday
+    - cron: '0 23 * * *'  #  3 PM PST — afternoon peak
+    - cron: '0 3 * * *'   #  7 PM PST — evening peak
   workflow_dispatch:
     inputs:
       brand:
@@ -162,7 +164,8 @@ jobs:
           brand_filter = os.environ.get('BRAND_INPUT', '').strip()
           brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ALL_BRANDS
 
-          MAX_PINS_PER_DAY = 5  # Pinterest best practice: 1-5 pins/day/account
+          MAX_PINS_PER_DAY = 5  # 5 pins/brand/day across 5 scheduled runs
+          MAX_PINS_PER_RUN = 1  # 1 pin/brand/run — spread pins across day for better engagement
           today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
           for brand in brands_to_generate:
@@ -182,8 +185,8 @@ jobs:
                   except Exception as _e:
                       print(f'  [{brand}] Pin count check failed ({_e}), continuing...')
 
-                  remaining = MAX_PINS_PER_DAY - pins_today
-                  print(f'  [{brand}] Generating {remaining} pin(s) ({pins_today} already today)...')
+                  remaining = min(MAX_PINS_PER_RUN, MAX_PINS_PER_DAY - pins_today)
+                  print(f'  [{brand}] Generating {remaining} pin(s) ({pins_today} already today, {MAX_PINS_PER_DAY - pins_today} remaining)...')
                   for _pin_idx in range(remaining):
                       print(f'  Generating content for {brand} (pin {_pin_idx + 1}/{remaining})...')
                       pin_data = generate_pin_content(brand, db.client)
