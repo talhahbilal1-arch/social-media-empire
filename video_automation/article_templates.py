@@ -108,9 +108,9 @@ _BRAND_GA_IDS = {
 
 # Brand affiliate tags
 _BRAND_TAGS = {
-    'fitness': 'fitover35-20',
-    'deals': 'dailydealdarling1-20',
-    'menopause': 'dailydealdarling1-20',
+    'fitness': 'fitover3509-20',
+    'deals': 'dailydealdarl-20',
+    'menopause': 'dailydealdarl-20',
 }
 
 
@@ -118,7 +118,7 @@ _BRAND_TAGS = {
 
 def _get_brand_tag(brand_key):
     """Get Amazon affiliate tag for a brand."""
-    return _BRAND_TAGS.get(brand_key, 'dailydealdarling1-20')
+    return _BRAND_TAGS.get(brand_key, 'dailydealdarl-20')
 
 
 def _find_first_amazon_url(body_html):

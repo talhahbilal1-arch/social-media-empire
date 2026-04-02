@@ -33,7 +33,7 @@ I also experimented with different skincare products to combat the dryness and d
 
 What *didn't* work? Trying to force myself into clothes that didn't fit or feel comfortable. Trying to keep up with every single beauty trend. Comparing myself to younger women. It was exhausting and ultimately made me feel worse. I had to ditch perfectionism and just focus on feeling good in my own skin. Now I stick to clothes that feel good on my body and make me feel confident.
 
-One thing that has helped me feel better about my style is finding a great planner. **The Menopause Planner** helps me keep track of my medications, doctor's appointments, and mood. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20 I find it incredibly helpful for keeping track of my symptoms. It helps me see patterns and gives me something concrete to discuss with my doctor.
+One thing that has helped me feel better about my style is finding a great planner. **The Menopause Planner** helps me keep track of my medications, doctor's appointments, and mood. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20 I find it incredibly helpful for keeping track of my symptoms. It helps me see patterns and gives me something concrete to discuss with my doctor.
 
 ### Fitness Fuel: Exercises to Reclaim Your Energy (and Sanity!)
 
@@ -60,7 +60,7 @@ Here's what I've learned:
 *   **Consider serums:** Serums with antioxidants like vitamin C can help protect your skin from free radical damage. I apply mine in the morning before my moisturizer.
 *   **Gentle is best:** Avoid harsh scrubs and cleansers that can strip your skin of its natural oils. I switched to a gentle cleanser and my skin has never been happier.
 
-I also love **[Product Name]**. It's a super hydrating cream that doesn't feel greasy, and it really helps with the dryness that comes with menopause. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20 Talk to your doctor before starting any new supplements.
+I also love **[Product Name]**. It's a super hydrating cream that doesn't feel greasy, and it really helps with the dryness that comes with menopause. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20 Talk to your doctor before starting any new supplements.
 
 [Related: Night Sweats Solutions That Actually Work](/articles/night-sweats-solutions/)
 
@@ -90,7 +90,7 @@ Here are a few things that helped me:
 *   **Prioritize sleep:** Sleep disturbances are common during menopause, but getting enough sleep is crucial for your overall health. I try to stick to a regular sleep schedule and create a relaxing bedtime routine.
 *   **Find hobbies and activities you enjoy:** Make time for things that make you happy, whether it's reading, gardening, or spending time with loved ones. I rediscovered my love of painting!
 
-**The [Product Name]** is a online program that I really like, and think you might like too! It's a series of meditations and self-care exercises specifically for women dealing with menopause. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20 Always consult with your doctor before starting any new health program.
+**The [Product Name]** is a online program that I really like, and think you might like too! It's a series of meditations and self-care exercises specifically for women dealing with menopause. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20 Always consult with your doctor before starting any new health program.
 
 ### Expert Advice: What Doctors Say About Menopause Management
 

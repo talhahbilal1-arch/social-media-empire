@@ -19,7 +19,7 @@ The National Retail Federation says Easter spending is projected to reach $22.4 
 
 Okay, let's be real. Adults deserve Easter baskets too! Forget those generic pre-made ones – we're making something special and (more importantly) affordable. Think about what the recipient *actually* loves. Personalizing the basket is key to making it feel luxe, even on a budget.
 
-*   **The Self-Care Superstar:** This is my go-to! I love putting together a mini pampering package. I snagged a ridiculously cute [Product Name] bath bomb set on sale last week. **[Product Name]** — Seriously, these smell SO good, and they make bath time feel like a mini spa day. I found them on sale for like, 40% off, which is a total steal. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20 Available: ["PLACEHOLDER - ShareASale home/lifestyle"] A face mask (check out the dollar store – they have surprisingly good ones!), a small bottle of essential oil, and a pair of cozy socks are perfect too.
+*   **The Self-Care Superstar:** This is my go-to! I love putting together a mini pampering package. I snagged a ridiculously cute [Product Name] bath bomb set on sale last week. **[Product Name]** — Seriously, these smell SO good, and they make bath time feel like a mini spa day. I found them on sale for like, 40% off, which is a total steal. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20 Available: ["PLACEHOLDER - ShareASale home/lifestyle"] A face mask (check out the dollar store – they have surprisingly good ones!), a small bottle of essential oil, and a pair of cozy socks are perfect too.
 *   **The Coffee/Tea Lover:** A cute mug (Target dollar spot, anyone?!), a bag of fancy coffee beans or tea, some biscotti, and maybe a mini milk frother (I saw one on Amazon for under $15!) is perfect.
 *   **The Gardener:** Seed packets, gardening gloves (dollar store for the win!), a small trowel, and maybe a little succulent in a cute pot.
 *   **The Bookworm:** A paperback novel (used bookstores are the BEST!), a bookmark, a cozy blanket, and maybe a small candle.
@@ -67,7 +67,7 @@ Feeling crafty? DIY Easter basket fillers are perfect for personalizing gifts an
 
 ![DIY Easter basket filler ideas](PEXELS_IMAGE_PLACEHOLDER:diy easter basket)
 
-Don't underestimate a handmade gift! It shows you put in the time and effort, which is always appreciated. For example, I use my [Product Name] food scale ALL the time when baking for gifts. **[Product Name]** — It's so accurate, and it makes baking so much easier. I snagged mine on Amazon for $15, and it's been a game changer. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20 Available: ["PLACEHOLDER - Rakuten retailers"]
+Don't underestimate a handmade gift! It shows you put in the time and effort, which is always appreciated. For example, I use my [Product Name] food scale ALL the time when baking for gifts. **[Product Name]** — It's so accurate, and it makes baking so much easier. I snagged mine on Amazon for $15, and it's been a game changer. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20 Available: ["PLACEHOLDER - Rakuten retailers"]
 
 ## The Great Candy Debate: How to Keep it Healthy-ish
 

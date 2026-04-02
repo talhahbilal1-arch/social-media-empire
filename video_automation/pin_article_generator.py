@@ -25,66 +25,66 @@ def _get_client():
 
 
 # ── Amazon Associates affiliate links ──────────────────────────────────────────
-# Fitness uses fitover35-20, all other brands use dailydealdarling1-20.
+# Fitness uses fitover3509-20, all other brands use dailydealdarl-20.
 # Direct /dp/ASIN links are preferred. For any product NOT in this list, the
 # code falls back to Amazon search URLs (/s?k=...) which always work.
 
 AMAZON_AFFILIATE_LINKS = {
     "fitness": {
-        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20",
-        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=fitover35-20",
-        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=fitover35-20",
-        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=fitover35-20",
-        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=fitover35-20",
-        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover35-20",
-        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover35-20",
-        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=fitover35-20",
-        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
-        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=fitover35-20",
-        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=fitover35-20",
-        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=fitover35-20",
-        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=fitover35-20",
-        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=fitover35-20",
-        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=fitover35-20",
-        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=fitover35-20",
-        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=fitover35-20",
-        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=fitover35-20",
-        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=fitover35-20",
-        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20",
+        "creatine monohydrate": "https://www.amazon.com/dp/B002DYIZEO?tag=fitover3509-20",
+        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=fitover3509-20",
+        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=fitover3509-20",
+        "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=fitover3509-20",
+        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=fitover3509-20",
+        "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover3509-20",
+        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover3509-20",
+        "resistance bands set": "https://www.amazon.com/dp/B01AVDVHTI?tag=fitover3509-20",
+        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20",
+        "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=fitover3509-20",
+        "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=fitover3509-20",
+        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=fitover3509-20",
+        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=fitover3509-20",
+        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=fitover3509-20",
+        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=fitover3509-20",
+        "food scale": "https://www.amazon.com/dp/B004164SRA?tag=fitover3509-20",
+        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=fitover3509-20",
+        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=fitover3509-20",
+        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=fitover3509-20",
+        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20",
     },
     "deals": {
-        "air fryer": "https://www.amazon.com/dp/B07FDJMC9Q?tag=dailydealdarling1-20",
-        "knife set": "https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarling1-20",
-        "meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarling1-20",
-        "organizer bins": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20",
-        "silk pillowcase": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarling1-20",
-        "LED face mask": "https://www.amazon.com/dp/B07D3KVL4Z?tag=dailydealdarling1-20",
-        "label maker": "https://www.amazon.com/dp/B0719RFLTQ?tag=dailydealdarling1-20",
-        "drawer dividers": "https://www.amazon.com/dp/B073VB74FJ?tag=dailydealdarling1-20",
-        "throw pillows": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20",
-        "LED candles": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarling1-20",
-        "_default": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20",
+        "air fryer": "https://www.amazon.com/dp/B07FDJMC9Q?tag=dailydealdarl-20",
+        "knife set": "https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarl-20",
+        "meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarl-20",
+        "organizer bins": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
+        "silk pillowcase": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
+        "LED face mask": "https://www.amazon.com/dp/B07D3KVL4Z?tag=dailydealdarl-20",
+        "label maker": "https://www.amazon.com/dp/B0719RFLTQ?tag=dailydealdarl-20",
+        "drawer dividers": "https://www.amazon.com/dp/B073VB74FJ?tag=dailydealdarl-20",
+        "throw pillows": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
+        "LED candles": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
     },
     "menopause": {
-        "black cohosh": "https://www.amazon.com/dp/B0019LTI86?tag=dailydealdarling1-20",
-        "evening primrose oil": "https://www.amazon.com/dp/B00DWCZWHK?tag=dailydealdarling1-20",
-        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarling1-20",
-        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarling1-20",
-        "cooling pillow": "https://www.amazon.com/dp/B07C7FQBDT?tag=dailydealdarling1-20",
-        "bamboo sheets": "https://www.amazon.com/dp/B07QDFLQ7J?tag=dailydealdarling1-20",
-        "cooling pajamas": "https://www.amazon.com/dp/B07YC684QN?tag=dailydealdarling1-20",
-        "weighted blanket": "https://www.amazon.com/dp/B07H2DKQGJ?tag=dailydealdarling1-20",
-        "symptom tracker journal": "https://www.amazon.com/dp/B0BW9GDRP7?tag=dailydealdarling1-20",
-        "essential oils diffuser": "https://www.amazon.com/dp/B07L4R62GQ?tag=dailydealdarling1-20",
-        "collagen powder": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarling1-20",
-        "_default": "https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20",
+        "black cohosh": "https://www.amazon.com/dp/B0019LTI86?tag=dailydealdarl-20",
+        "evening primrose oil": "https://www.amazon.com/dp/B00DWCZWHK?tag=dailydealdarl-20",
+        "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20",
+        "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarl-20",
+        "cooling pillow": "https://www.amazon.com/dp/B07C7FQBDT?tag=dailydealdarl-20",
+        "bamboo sheets": "https://www.amazon.com/dp/B07QDFLQ7J?tag=dailydealdarl-20",
+        "cooling pajamas": "https://www.amazon.com/dp/B07YC684QN?tag=dailydealdarl-20",
+        "weighted blanket": "https://www.amazon.com/dp/B07H2DKQGJ?tag=dailydealdarl-20",
+        "symptom tracker journal": "https://www.amazon.com/dp/B0BW9GDRP7?tag=dailydealdarl-20",
+        "essential oils diffuser": "https://www.amazon.com/dp/B07L4R62GQ?tag=dailydealdarl-20",
+        "collagen powder": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20",
     },
 }
 
 BRAND_AFFILIATE_TAGS = {
-    "fitness": "fitover35-20",
-    "deals": "dailydealdarling1-20",
-    "menopause": "dailydealdarling1-20",
+    "fitness": "fitover3509-20",
+    "deals": "dailydealdarl-20",
+    "menopause": "dailydealdarl-20",
 }
 
 
@@ -419,7 +419,7 @@ PIN TIPS (expand on each of these in the article):
 
     seo_keywords = ', '.join(config.get('seo_keywords', [])[:6])
     year = datetime.now(timezone.utc).year
-    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
+    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
 
     # Brand-specific trust section
     trust_text = {
@@ -816,7 +816,7 @@ def _inline_format(text, brand_key='deals'):
     """Apply inline markdown formatting (bold, italic, links)."""
     global _APPROVED_ASINS
 
-    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
+    affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
 
     # Links [text](url) — Amazon affiliate links get nofollow + new tab
     def _link_replace(match):
@@ -1004,18 +1004,18 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
 def _sanitize_affiliate_links(html_content, brand_key):
     """Post-generation sanitization — triple-checks every Amazon link.
 
-    1. Enforces per-brand affiliate tags (fitover35-20 for fitness, dailydealdarling1-20 for deals/menopause)
+    1. Enforces per-brand affiliate tags (fitover3509-20 for fitness, dailydealdarl-20 for deals/menopause)
     2. Converts fake/placeholder ASINs to working search URLs
     3. Fixes known AI-generated tag typos (truncated, wrong account)
     4. Logs any issues found for monitoring
     """
-    CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarling1-20')
+    CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
     issues = []
 
     # ── Pass 1: Fix known tag typos ──
     typo_map = {
-        'dailydealdarl-20': 'dailydealdarling1-20',
-        'menopauseplan-20': 'dailydealdarling1-20',
+        'dailydealdarling1-20': CANONICAL_TAG,
+        'menopauseplan-20': CANONICAL_TAG,
     }
     # Only fix fitover35 typo if we're NOT in the fitness brand
     if brand_key != 'fitness':

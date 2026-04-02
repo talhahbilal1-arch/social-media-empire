@@ -59,7 +59,7 @@ These work for specific campaigns or niches:
 ### HIGH PRIORITY PROGRAMS
 
 #### 1. Amazon Associates (Optimization Focus)
-**Status:** Already Active (fitover35-20, dailydealdarling1-20)
+**Status:** Already Active (fitover3509-20, dailydealdarl-20)
 
 **Signup URL:** https://affiliate-program.amazon.com/
 

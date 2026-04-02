@@ -41,7 +41,7 @@ Here are some ideas for adult Easter baskets that are both budget-friendly and g
 *   **The "Foodie" Basket:** This basket can be tailored to your recipient's taste. Think gourmet olive oil, a fancy balsamic vinegar, artisanal crackers, some interesting spices, or a small jar of local honey. YUM.
 *   **The "Movie Night" Basket:** Popcorn, a cozy blanket, a fun DVD or Blu-ray (or a subscription to a streaming service!), and some classic candies. This is an easy and affordable way to create a fun and relaxing experience.
 
-**[Reusable Silicone Popcorn Popper]** — I absolutely swear by my silicone popcorn popper. You can make healthy, delicious popcorn in the microwave without any oil. Plus, it's reusable, so it's way more eco-friendly than those pre-packaged microwave bags. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Reusable Silicone Popcorn Popper]** — I absolutely swear by my silicone popcorn popper. You can make healthy, delicious popcorn in the microwave without any oil. Plus, it's reusable, so it's way more eco-friendly than those pre-packaged microwave bags. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - Amazon home/lifestyle"]
 
 ![Adult Easter Basket with self-care items](PEXELS_IMAGE_PLACEHOLDER:adult easter basket self care)
@@ -87,7 +87,7 @@ Okay, let's talk about where to actually *find* these budget-friendly goodies. H
 *   **Sales and Clearance Sections:** Keep an eye out for sales and clearance sections at your favorite stores. You can often find great deals on Easter-themed items *after* the holiday, too, if you're planning ahead for next year.
 *   **Bulk Stores:** If you're making multiple Easter baskets, buying in bulk can save you money.
 
-**[Eco Lips Mongo Kiss Lip Balm]** — I love this lip balm because it's natural, moisturizing, and comes in a bunch of yummy flavors. Plus, it's ethically sourced and fairly traded! Total win, and great for tossing in a basket. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Eco Lips Mongo Kiss Lip Balm]** — I love this lip balm because it's natural, moisturizing, and comes in a bunch of yummy flavors. Plus, it's ethically sourced and fairly traded! Total win, and great for tossing in a basket. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle"]
 
 Don't forget to sign up for email lists and follow your favorite stores on social media to stay up-to-date on the latest deals.

@@ -53,7 +53,7 @@ BRAND_CONFIGS = {
         'site_name': 'FitOver35',
         'base_url': 'https://fitover35.com',
         'output_dir': os.path.join(BASE, 'outputs', 'fitover35-website', 'articles'),
-        'affiliate_tag': 'dailydealdarling1-20',
+        'affiliate_tag': 'fitover3509-20',
         'audience': 'men over 35 who lift and want to stay fit',
         'voice': 'confident, data-backed, coach-style authority',
     },
@@ -61,7 +61,7 @@ BRAND_CONFIGS = {
         'site_name': 'Daily Deal Darling',
         'base_url': 'https://dailydealdarling.com',
         'output_dir': os.path.join(BASE, 'outputs', 'dailydealdarling-website', 'articles'),
-        'affiliate_tag': 'dailydealdarling1-20',
+        'affiliate_tag': 'dailydealdarl-20',
         'audience': 'women looking for great Amazon finds and home/lifestyle deals',
         'voice': 'curated, editorial, boutique magazine recommending the best',
     },
@@ -69,7 +69,7 @@ BRAND_CONFIGS = {
         'site_name': 'The Menopause Planner',
         'base_url': 'https://menopauseplanner.com',
         'output_dir': os.path.join(BASE, 'outputs', 'menopause-planner-website', 'articles'),
-        'affiliate_tag': 'dailydealdarling1-20',
+        'affiliate_tag': 'dailydealdarl-20',
         'audience': 'women experiencing perimenopause and menopause symptoms',
         'voice': 'warm, empathetic, evidence-based wellness guide',
     },
@@ -387,7 +387,7 @@ def sanitize_affiliate_links(html_content, brand_key):
     tag = BRAND_CONFIGS[brand_key]['affiliate_tag']
 
     # Fix wrong tags
-    wrong_tags = ['fitover35-20', 'menopauseplan-20', 'dailydealdarl-20']
+    wrong_tags = ['dailydealdarling1-20', 'menopauseplan-20']
     for wrong in wrong_tags:
         if wrong != tag:
             html_content = html_content.replace(wrong, tag)

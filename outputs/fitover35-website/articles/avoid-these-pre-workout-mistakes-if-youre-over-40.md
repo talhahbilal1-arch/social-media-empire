@@ -76,13 +76,13 @@ Remember, consistency is key. Taking a pre-workout supplement once in a while wo
 
 Okay, so you know the theory. Now let's get to the products that I've personally used and recommend. I’m not going to shill you some garbage I don't believe in. These are the pre-workouts I’ve used consistently and seen real results with.
 
-1.  **[Product Name: Transparent Labs Bulk Pre-Workout]** – This is my go-to for overall performance. It's got a solid dose of creatine, beta-alanine, citrulline malate, and a moderate amount of caffeine. The best part? It's free of artificial sweeteners and dyes. I've been using this one for over a year. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
+1.  **[Product Name: Transparent Labs Bulk Pre-Workout]** – This is my go-to for overall performance. It's got a solid dose of creatine, beta-alanine, citrulline malate, and a moderate amount of caffeine. The best part? It's free of artificial sweeteners and dyes. I've been using this one for over a year. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
     Available: [PLACEHOLDER - ShareASale supplement brand]
 
-2.  **[Product Name: CrazyBulk Intensive Pre-Train]** – For those days when I need a little extra kick, this one delivers. It includes a potent blend of ingredients designed to *potentially* boost energy, focus, and performance. The addition of EnXtra *may* help with sustained energy without the crash. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
+2.  **[Product Name: CrazyBulk Intensive Pre-Train]** – For those days when I need a little extra kick, this one delivers. It includes a potent blend of ingredients designed to *potentially* boost energy, focus, and performance. The addition of EnXtra *may* help with sustained energy without the crash. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
     Available: [PLACEHOLDER - Bodybuilding.com]
 
-3.  **[Product Name: Old School Labs Vintage Blast]** – A great option if you prefer a two-stage release. It *may* provide a sustained energy boost without the jitters and includes ingredients to *potentially* support nitric oxide production for better blood flow. A more "classic" formula, if you will. It's not my everyday choice, but it's solid. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
+3.  **[Product Name: Old School Labs Vintage Blast]** – A great option if you prefer a two-stage release. It *may* provide a sustained energy boost without the jitters and includes ingredients to *potentially* support nitric oxide production for better blood flow. A more "classic" formula, if you will. It's not my everyday choice, but it's solid. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
     Available: [PLACEHOLDER - ClickBank fitness program]
 
 Remember, these are just my personal recommendations. What works for me might not work for you. Experiment and find what suits your needs and preferences. We're all different. Men over 35 fitness is about finding the right tools *for you*!

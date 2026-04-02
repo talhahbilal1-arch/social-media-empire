@@ -19,9 +19,9 @@ renders images with PIL, uploads to Supabase Storage, and posts to Pinterest via
 
 | Brand key | Site | Niche | Pins/day | Amazon Tag |
 |-----------|------|-------|----------|------------|
-| `fitness` | fitover35.com | Men's fitness over 35 | 5 | fitover35-20 |
-| `deals` | dailydealdarling.com | Budget home & lifestyle | 5 | dailydealdarling1-20 |
-| `menopause` | menopause-planner-website.vercel.app | Menopause wellness | 5 | — |
+| `fitness` | fitover35.com | Men's fitness over 35 | 5 | fitover3509-20 |
+| `deals` | dailydealdarling.com | Budget home & lifestyle | 5 | dailydealdarl-20 |
+| `menopause` | menopause-planner-website.vercel.app | Menopause wellness | 5 | dailydealdarl-20 |
 
 ## Pipeline Architecture (content-engine.yml — 5x daily)
 
@@ -185,7 +185,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Pinterest posting**: Active — 5x daily (6AM, 9AM, 12PM, 3PM, 7PM PST), 5 pins/brand/day (15 total)
 - **All workflows**: Green — content engine, rescue poster, social distribution all active
 - **Content generated**: 400+ articles across 3 brands (333 articles indexed in sitemaps)
-- **Affiliate tags**: FIXED — fitness=fitover35-20, deals/menopause=dailydealdarling1-20. All 144 fitness articles corrected.
+- **Affiliate tags**: FIXED April 2, 2026 — fitness=fitover3509-20, deals/menopause=dailydealdarl-20. All 375+ articles corrected repo-wide.
 - **Google Analytics**: All articles now have brand-specific GA tracking (G-1FC6FH34L9, G-HVCLZPEYNS, G-02ZPS3H3GC)
 - **Email capture**: Kit forms working on all 3 brand sites with correct form IDs (8946984, 9144859, 9144926)
 - **FitOver35**: Live on Vercel with schema markup, sticky CTA, lead magnet page, correct affiliate tags

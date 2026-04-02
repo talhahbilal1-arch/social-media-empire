@@ -48,9 +48,9 @@ BRAND_NICHES = {
 
 # Per-brand Amazon Associate tags
 BRAND_AMAZON_TAGS = {
-    'fitness': 'fitover35-20',
-    'deals': 'dailydealdarling1-20',
-    'menopause': 'dailydealdarling1-20',
+    'fitness': 'fitover3509-20',
+    'deals': 'dailydealdarl-20',
+    'menopause': 'dailydealdarl-20',
 }
 
 
@@ -191,7 +191,7 @@ def article_writer_agent(keyword_gaps, db, client):
         if not gaps:
             return []
 
-        amazon_tag = BRAND_AMAZON_TAGS.get(brand, 'dailydealdarling1-20')
+        amazon_tag = BRAND_AMAZON_TAGS.get(brand, 'dailydealdarl-20')
         articles_dir = Path(BRAND_SITE_DIRS[brand]) / 'articles'
         articles_dir.mkdir(parents=True, exist_ok=True)
         brand_written = []

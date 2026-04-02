@@ -54,13 +54,13 @@ This setup works if you're single-monitor, have limited desk space, or are tempo
 
 | Item | Product | Cost |
 |------|---------|------|
-| Desk | [Flexispot E7 (standing desk)](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarling1-20) | $300-350 |
-| Chair | [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarling1-20) | $600-750 |
+| Desk | [Flexispot E7 (standing desk)](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarl-20) | $300-350 |
+| Chair | [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarl-20) | $600-750 |
 | Monitors | Two 24" IPS monitors | $200-250 |
-| Monitor arms | [VIVO Dual Arm](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarling1-20) | $100-150 |
+| Monitor arms | [VIVO Dual Arm](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarl-20) | $100-150 |
 | Desk accessories | Pad, power, clips | $40-50 |
-| Lighting | [TaoTronics LED lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarling1-20) | $25-35 |
-| USB hub | [Anker 7-in-1](https://www.amazon.com/s?k=Anker+PowerExpand+7&tag=dailydealdarling1-20) | $30-40 |
+| Lighting | [TaoTronics LED lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarl-20) | $25-35 |
+| USB hub | [Anker 7-in-1](https://www.amazon.com/s?k=Anker+PowerExpand+7&tag=dailydealdarl-20) | $30-40 |
 | Keyboard/mouse | Mechanical keyboard + mouse | $80-120 |
 
 **Total:** ~$1,050
@@ -71,12 +71,12 @@ This is the "sweet spot" setup. You get dual monitors, a motorized standing desk
 
 | Item | Product | Cost |
 |------|---------|------|
-| Desk | [UPLIFT V2 with desktop](https://www.amazon.com/s?k=UPLIFT+V2+standing+desk&tag=dailydealdarling1-20) | $600-800 |
-| Chair | [Steelcase Leap](https://www.amazon.com/s?k=Steelcase+Leap&tag=dailydealdarling1-20) | $1,000-1,200 |
+| Desk | [UPLIFT V2 with desktop](https://www.amazon.com/s?k=UPLIFT+V2+standing+desk&tag=dailydealdarl-20) | $600-800 |
+| Chair | [Steelcase Leap](https://www.amazon.com/s?k=Steelcase+Leap&tag=dailydealdarl-20) | $1,000-1,200 |
 | Monitors | Two 27" 4K monitors | $300-400 |
-| Monitor arms | [Ergotron LX (x2)](https://www.amazon.com/dp/B00358RIRC?tag=dailydealdarling1-20) | $800-900 |
+| Monitor arms | [Ergotron LX (x2)](https://www.amazon.com/dp/B00358RIRC?tag=dailydealdarl-20) | $800-900 |
 | Desk accessories | Premium mat, organizer, etc. | $60-80 |
-| Lighting | [BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarling1-20) | $100-130 |
+| Lighting | [BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarl-20) | $100-130 |
 | Keyboard/mouse | Premium mechanical keyboard | $150-200 |
 | Additional | Footrest, wrist rest, backup power | $50-80 |
 
@@ -99,8 +99,8 @@ This is the "no compromises" setup. Premium desk (10-year warranty), premium cha
 
 **Recommended options by budget:**
 - Under $300: Fezibo Electric (single motor, lighter)
-- $300-500: [Flexispot E7](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarling1-20) (dual motor, stable)
-- $500-800: [UPLIFT V2](https://www.amazon.com/s?k=UPLIFT+V2&tag=dailydealdarling1-20) (premium, 10-year warranty)
+- $300-500: [Flexispot E7](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarl-20) (dual motor, stable)
+- $500-800: [UPLIFT V2](https://www.amazon.com/s?k=UPLIFT+V2&tag=dailydealdarl-20) (premium, 10-year warranty)
 
 **Desktop surface separately:**
 - IKEA Bekant ($70) is cheap and adequate
@@ -121,9 +121,9 @@ Your chair is the single most important investment for your health.
 
 **Recommended options by budget:**
 - $100-200: IKEA Markus (basic, not ergonomic, cheap)
-- $600-750: [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarling1-20) (good ergonomics, affordable)
-- $400-550: [Secretlab Titan](https://www.amazon.com/s?k=Secretlab+Titan&tag=dailydealdarling1-20) (excellent value, 12-year warranty)
-- $1,000-1,200: [Steelcase Leap](https://www.amazon.com/s?k=Steelcase+Leap&tag=dailydealdarling1-20) or [Herman Miller Aeron](https://www.amazon.com/s?k=Herman+Miller+Aeron&tag=dailydealdarling1-20) (premium, last 15+ years)
+- $600-750: [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarl-20) (good ergonomics, affordable)
+- $400-550: [Secretlab Titan](https://www.amazon.com/s?k=Secretlab+Titan&tag=dailydealdarl-20) (excellent value, 12-year warranty)
+- $1,000-1,200: [Steelcase Leap](https://www.amazon.com/s?k=Steelcase+Leap&tag=dailydealdarl-20) or [Herman Miller Aeron](https://www.amazon.com/s?k=Herman+Miller+Aeron&tag=dailydealdarl-20) (premium, last 15+ years)
 
 **Chair setup tips:**
 - Seat height: Thighs parallel to floor, feet flat
@@ -164,10 +164,10 @@ A monitor arm frees desk space and allows perfect height/angle positioning.
 - **Smooth movement:** Gas springs should adjust smoothly without creep
 
 **Recommended by budget:**
-- $40-60: [AmazonBasics](https://www.amazon.com/dp/B00MIBN16O?tag=dailydealdarling1-20) (budget single arm)
-- $100-150: [VIVO Dual](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarling1-20) (best dual value)
-- $120-180: [North Bayou F80](https://www.amazon.com/s?k=North+Bayou+F80&tag=dailydealdarling1-20) (premium performance)
-- $400-450: [Ergotron LX](https://www.amazon.com/dp/B00358RIRC?tag=dailydealdarling1-20) (professional-grade, 10-year warranty)
+- $40-60: [AmazonBasics](https://www.amazon.com/dp/B00MIBN16O?tag=dailydealdarl-20) (budget single arm)
+- $100-150: [VIVO Dual](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarl-20) (best dual value)
+- $120-180: [North Bayou F80](https://www.amazon.com/s?k=North+Bayou+F80&tag=dailydealdarl-20) (premium performance)
+- $400-450: [Ergotron LX](https://www.amazon.com/dp/B00358RIRC?tag=dailydealdarl-20) (professional-grade, 10-year warranty)
 
 ---
 
@@ -183,9 +183,9 @@ Poor lighting causes eye strain, fatigue, and headaches. This is underestimated.
 
 **Recommended by budget:**
 - $20-30: Basic desk lamp (functional)
-- $25-35: [TaoTronics LED lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarling1-20) (adjustable)
-- $100-130: [BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarling1-20) (game-changer for eye strain)
-- $70-90: [Philips Hue](https://www.amazon.com/s?k=Philips+Hue+Go&tag=dailydealdarling1-20) (smart, customizable)
+- $25-35: [TaoTronics LED lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarl-20) (adjustable)
+- $100-130: [BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarl-20) (game-changer for eye strain)
+- $70-90: [Philips Hue](https://www.amazon.com/s?k=Philips+Hue+Go&tag=dailydealdarl-20) (smart, customizable)
 
 **Lighting setup:**
 - General room light: 300-500 lux
@@ -366,11 +366,11 @@ This is my recommended "best value" complete setup (~$1,000). Here's how to impl
 
 ### Month 1: Foundation ($400-500)
 
-1. **Desk:** [Flexispot E7](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarling1-20) ($300-350)
+1. **Desk:** [Flexispot E7](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarl-20) ($300-350)
    - Motorized, dual motor, stable, good weight capacity
    - Assemble on first weekend
 
-2. **Chair:** [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarling1-20) ($600-750)
+2. **Chair:** [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarl-20) ($600-750)
    - Wait, this is over budget month 1
 
 **Revised Month 1:**
@@ -380,24 +380,24 @@ This is my recommended "best value" complete setup (~$1,000). Here's how to impl
 
 ### Month 2: Optimization ($300-400)
 
-1. **Chair upgrade:** [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarling1-20) ($600-750)
+1. **Chair upgrade:** [HON Ignition 2.0](https://www.amazon.com/s?k=HON+Ignition+2.0&tag=dailydealdarl-20) ($600-750)
    - Wait, this is still over budget
 
 **Revised Month 2:**
 1. Second monitor ($100-150)
-2. Monitor arm [VIVO Dual](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarling1-20) ($100-150)
+2. Monitor arm [VIVO Dual](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarl-20) ($100-150)
 3. Desk accessories (mat, power, clips): ($30-50)
 
 ### Month 3: Finishing ($200-300)
 
-1. **Chair:** [Secretlab Titan](https://www.amazon.com/s?k=Secretlab+Titan&tag=dailydealdarling1-20) ($400-550)
+1. **Chair:** [Secretlab Titan](https://www.amazon.com/s?k=Secretlab+Titan&tag=dailydealdarl-20) ($400-550)
    - Upgrade from temporary chair
 
-2. **Lighting:** [TaoTronics LED lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarling1-20) ($25-35)
+2. **Lighting:** [TaoTronics LED lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarl-20) ($25-35)
 
 3. **Peripherals:** Keyboard + mouse ($80-120)
 
-4. **USB hub:** [Anker 7-in-1](https://www.amazon.com/s?k=Anker+PowerExpand+7&tag=dailydealdarling1-20) ($30-40)
+4. **USB hub:** [Anker 7-in-1](https://www.amazon.com/s?k=Anker+PowerExpand+7&tag=dailydealdarl-20) ($30-40)
 
 ### Total over 3 months: ~$1,050
 
@@ -459,18 +459,18 @@ Before you start buying, use this checklist:
 **Budget $500 Setup:** IKEA desk + used chair + basic monitor. Works temporarily, not optimal.
 
 **Budget $1,000 Setup (RECOMMENDED):**
-- [Flexispot E7 standing desk](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarling1-20) ($300-350)
-- [Secretlab Titan chair](https://www.amazon.com/s?k=Secretlab+Titan&tag=dailydealdarling1-20) ($400-550)
+- [Flexispot E7 standing desk](https://www.amazon.com/s?k=Flexispot+E7&tag=dailydealdarl-20) ($300-350)
+- [Secretlab Titan chair](https://www.amazon.com/s?k=Secretlab+Titan&tag=dailydealdarl-20) ($400-550)
 - Two 24" monitors ($200-250)
-- [VIVO Dual Monitor Arm](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarling1-20) ($100-150)
+- [VIVO Dual Monitor Arm](https://www.amazon.com/s?k=VIVO+dual+monitor+arm&tag=dailydealdarl-20) ($100-150)
 - Accessories, lighting, peripherals ($100-150)
 
 **Budget $2,000 Setup (PREMIUM):**
-- [UPLIFT V2 standing desk](https://www.amazon.com/s?k=UPLIFT+V2&tag=dailydealdarling1-20) ($600-800)
-- [Steelcase Leap chair](https://www.amazon.com/s?k=Steelcase+Leap&tag=dailydealdarling1-20) ($1,000-1,200)
+- [UPLIFT V2 standing desk](https://www.amazon.com/s?k=UPLIFT+V2&tag=dailydealdarl-20) ($600-800)
+- [Steelcase Leap chair](https://www.amazon.com/s?k=Steelcase+Leap&tag=dailydealdarl-20) ($1,000-1,200)
 - Two 27" monitors ($300-400)
-- [Ergotron LX arms (x2)](https://www.amazon.com/dp/B00358RIRC?tag=dailydealdarling1-20) ($800-900)
-- [BenQ ScreenBar lighting](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarling1-20) ($100-130)
+- [Ergotron LX arms (x2)](https://www.amazon.com/dp/B00358RIRC?tag=dailydealdarl-20) ($800-900)
+- [BenQ ScreenBar lighting](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarl-20) ($100-130)
 - Premium peripherals & accessories ($100-150)
 
 Your home office is an investment in your health, productivity, and work satisfaction. Buy right the first time. You'll use it for years.

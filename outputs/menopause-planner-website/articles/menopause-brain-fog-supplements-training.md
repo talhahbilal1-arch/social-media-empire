@@ -43,7 +43,7 @@ Okay, so what about those brain training apps that promise to make you smarter a
 
 The research is somewhat encouraging. A meta-analysis of studies found that cognitive training interventions can lead to small but significant improvements in cognitive performance in healthy older adults. That being said, it's important to have realistic expectations. Brain training apps probably won't turn you into a genius, but they might help sharpen your focus and improve your memory skills. Think of it like a workout for your brain!
 
-I've tried a few brain training apps myself. I found that playing them regularly (even just for 10-15 minutes a day) helped me feel more mentally alert. My favorite app is **Lumosity** -- https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20 -- I like the variety of games and that it tracks my progress. It's fun, engaging, and gives my brain a little workout. Remember to approach them as games, not chores, so you'll stick with them. Find one you enjoy and make it a part of your routine.
+I've tried a few brain training apps myself. I found that playing them regularly (even just for 10-15 minutes a day) helped me feel more mentally alert. My favorite app is **Lumosity** -- https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20 -- I like the variety of games and that it tracks my progress. It's fun, engaging, and gives my brain a little workout. Remember to approach them as games, not chores, so you'll stick with them. Find one you enjoy and make it a part of your routine.
 
 ### Lifestyle Tweaks for a Clearer Mind: Sleep, Diet, and Exercise
 
@@ -79,7 +79,7 @@ Okay, so what's in *my* menopause self care brain-boosting toolkit? Here's what'
 
 What *didn't* work so well for me? I tried a few different brain-training apps, but I only stuck with Lumosity because it was the most fun. I also experimented with different herbal supplements, but I didn't notice a significant difference with most of them. Everyone is different, though!
 
-I also use a **Menopause Planner** from Etsy -- https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20 -- to keep track of appointments, supplements, and lifestyle changes. It helps me stay organized and on track with my brain-boosting goals. It also helps to manage menopause weight gain, with areas to plan meals and exercise. I highly recommend getting one!
+I also use a **Menopause Planner** from Etsy -- https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20 -- to keep track of appointments, supplements, and lifestyle changes. It helps me stay organized and on track with my brain-boosting goals. It also helps to manage menopause weight gain, with areas to plan meals and exercise. I highly recommend getting one!
 
 ### Creating Your Own Menopause Cognitive Wellness Plan
 

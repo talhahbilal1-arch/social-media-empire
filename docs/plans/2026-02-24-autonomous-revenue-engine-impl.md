@@ -1079,7 +1079,7 @@ BRAND_NICHES = {
 }
 
 BRAND_AMAZON_TAGS = {
-    'fitness': 'fitover35-20',
+    'fitness': 'fitover3509-20',
     'deals': 'dailydealdarl-20',
     'menopause': 'menopauseplan-20'
 }

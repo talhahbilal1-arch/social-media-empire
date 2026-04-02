@@ -49,10 +49,10 @@ Okay, now for the fun part (yes, I actually think it's fun!). Having the right c
 
 Okay, a couple of my current favorites:
 
-**[Mrs. Meyer's Clean Day Multi-Surface Everyday Cleaner]** — I'm seriously obsessed with these! They smell AMAZING (especially the lavender scent!), and they're plant-derived, so I don't feel *as* guilty using them around my pets. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Mrs. Meyer's Clean Day Multi-Surface Everyday Cleaner]** — I'm seriously obsessed with these! They smell AMAZING (especially the lavender scent!), and they're plant-derived, so I don't feel *as* guilty using them around my pets. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle"]
 
-**[Bissell Little Green Multi-Purpose Portable Carpet and Upholstery Cleaner]** — This thing is a TOTAL lifesaver! I have two kids and a dog, so spills are a daily thing. This little gadget easily tackles stains on carpets, rugs, and upholstery. Seriously worth the investment! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Bissell Little Green Multi-Purpose Portable Carpet and Upholstery Cleaner]** — This thing is a TOTAL lifesaver! I have two kids and a dog, so spills are a daily thing. This little gadget easily tackles stains on carpets, rugs, and upholstery. Seriously worth the investment! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - Impact brands"]
 
 I always check [PLACEHOLDER - Rakuten retailers] for cashback deals before I buy anything. Every little bit helps, right?!

@@ -41,13 +41,13 @@ Want even *more* great deals? Get our FREE Weekly Deals Digest delivered straigh
 
 Okay, NOW we're talking! I'm all about finding the best cleaning stuff without spending a fortune. Here are some things I'm loving right now:
 
-*   **[Product Name: Microfiber Cleaning Cloths]** – Seriously, these are game-changers! They soak up everything, you can reuse them a million times, and they're awesome for cleaning everything from counters to windows. Plus, they're way better for the planet than paper towels. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+*   **[Product Name: Microfiber Cleaning Cloths]** – Seriously, these are game-changers! They soak up everything, you can reuse them a million times, and they're awesome for cleaning everything from counters to windows. Plus, they're way better for the planet than paper towels. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
     Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
-*   **[Product Name: All-Purpose Cleaner Concentrate]** – I'm all about concentrates because they save money *and* cut down on plastic waste. I try to find one that's plant-based and non-toxic, since my fur babies are always running around! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+*   **[Product Name: All-Purpose Cleaner Concentrate]** – I'm all about concentrates because they save money *and* cut down on plastic waste. I try to find one that's plant-based and non-toxic, since my fur babies are always running around! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
     Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
-*   **[Product Name: Grout Brush]** – Don’t underestimate this little tool! Seriously! It's a lifesaver for getting rid of those gross stains in your bathroom and kitchen grout. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+*   **[Product Name: Grout Brush]** – Don’t underestimate this little tool! Seriously! It's a lifesaver for getting rid of those gross stains in your bathroom and kitchen grout. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
    Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
 **Heads up:** Don’t buy into the hype around super expensive gadgets that promise to do everything. Sometimes, the simplest tools (like a good old scrub brush) are the best!

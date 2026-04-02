@@ -39,9 +39,9 @@ ARTICLE_DIRS = {
 
 # Amazon affiliate tags per brand
 AFFILIATE_TAGS = {
-    "fitness": "fitover35-20",
-    "deals": "dailydealdarling1-20",
-    "menopause": None,  # No Amazon tag for menopause brand
+    "fitness": "fitover3509-20",
+    "deals": "dailydealdarl-20",
+    "menopause": "dailydealdarl-20",
 }
 
 MIN_WORD_COUNT = 400  # Below this = thin content

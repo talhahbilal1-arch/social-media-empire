@@ -66,7 +66,7 @@ def format_for_manual_posting(items: list) -> list:
         if products and len(products) > 0:
             product = products[0]
             asin = product.get("asin", "")
-            amazon_tag = item.get("amazon_tag", "fitnessquick-20")
+            amazon_tag = item.get("amazon_tag", "fitover3509-20")
             if asin:
                 affiliate_link = f"https://www.amazon.com/dp/{asin}?tag={amazon_tag}"
 

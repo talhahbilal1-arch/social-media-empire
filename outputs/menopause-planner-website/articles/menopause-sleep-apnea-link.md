@@ -90,11 +90,11 @@ Here are some other things that have helped me:
 *   **Managing Hot Flashes:** Hot flashes can disrupt sleep, so I try to manage them with natural remedies like black cohosh and evening primrose oil. Of course, talk to your doctor before trying any new supplements.
 *   **Stress Reduction:** Stress can make sleep apnea worse, so I practice relaxation techniques like yoga and meditation.
 
-I also find that having a really cozy sleep environment helps! I recently bought a **weighted blanket** – [1-2 sentence honest review: The gentle pressure is incredibly soothing and helps me fall asleep faster and stay asleep longer.] https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+I also find that having a really cozy sleep environment helps! I recently bought a **weighted blanket** – [1-2 sentence honest review: The gentle pressure is incredibly soothing and helps me fall asleep faster and stay asleep longer.] https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
-I also take a **natural sleep aid with melatonin and magnesium** from time to time. [1-2 sentence honest review: It helps me wind down before bed without feeling groggy in the morning.] https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+I also take a **natural sleep aid with melatonin and magnesium** from time to time. [1-2 sentence honest review: It helps me wind down before bed without feeling groggy in the morning.] https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
-Another thing that helps is having a **dedicated menopause planner** where I can track my symptoms, including sleep quality. [1-2 sentence honest review: It helps me identify patterns and make adjustments to my routine.] https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+Another thing that helps is having a **dedicated menopause planner** where I can track my symptoms, including sleep quality. [1-2 sentence honest review: It helps me identify patterns and make adjustments to my routine.] https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
 ![Woman meditating before bed](PEXELS_IMAGE_PLACEHOLDER:woman meditating before bed)
 

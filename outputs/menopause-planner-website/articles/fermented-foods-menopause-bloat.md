@@ -51,7 +51,7 @@ Taking a daily probiotic was one of the first things I incorporated into my rout
 
 According to Dr. Felice Gersh, OB/GYN and author of 'Menopause: 50 Things You Need to Know,' a diverse gut microbiome is crucial for hormone regulation. She recommends including both prebiotic and probiotic foods in your diet. Talk to your doctor to see if probiotics are right for you!
 
-**[Product Name: Seed Probiotic]** – I've been taking Seed for about 6 months and have definitely noticed a reduction in bloating. It's a bit pricier, but the quality seems to make a difference for me. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Seed Probiotic]** – I've been taking Seed for about 6 months and have definitely noticed a reduction in bloating. It's a bit pricier, but the quality seems to make a difference for me. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ![Selection of colorful fermented foods](PEXELS_IMAGE_PLACEHOLDER:fermented food)
@@ -68,7 +68,7 @@ Here are a few things I've found helpful:
 *   **Manage Stress:** Stress can negatively impact your gut health. Find healthy ways to manage stress, like yoga, meditation, or spending time in nature. Even just 15 minutes of quiet time each day can make a difference. (Check out our article on [Menopause Self Care: Making Time for Yourself](/articles/menopause-self-care/)).
 *   **Stay Hydrated:** Water is essential for keeping things moving in your digestive system. I aim for at least eight glasses of water a day. Sometimes I add lemon or cucumber to make it more interesting.
 
-**[Product Name: Kombucha Variety Pack]** – I love having a variety of flavors on hand for that afternoon pick-me-up. Plus, it's a much healthier alternative to sugary sodas. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Kombucha Variety Pack]** – I love having a variety of flavors on hand for that afternoon pick-me-up. Plus, it's a much healthier alternative to sugary sodas. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ## Choosing the Right Probiotic: What to Look For
@@ -84,7 +84,7 @@ I've also found it helpful to read reviews from other women going through menopa
 
 Dr. Mark Hyman, a functional medicine physician, advocates for personalized gut health approaches, including testing for imbalances and targeted probiotic supplementation. Talk to your doctor about gut health testing! It's not something I've done personally, but I'm definitely curious about it.
 
-**[Product Name: Menopause Probiotic]** – I've seen this one recommended in several online groups. While I haven't personally tried it, the reviews are promising, and it's specifically formulated for menopause symptoms. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Menopause Probiotic]** – I've seen this one recommended in several online groups. While I haven't personally tried it, the reviews are promising, and it's specifically formulated for menopause symptoms. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ## Listen to Your Gut: When to Talk to Your Doctor

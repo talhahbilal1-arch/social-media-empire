@@ -291,7 +291,7 @@ The local clone at `C:\Users\talha\Desktop\social-media-empire` has only **3 com
 |-------|-----------|---------|-----------|------|--------|
 | Daily Deal Darling | @dailydealdarling (587+ pins) | dailydealdarling.com | dailydealdarl-20 | No | ACTIVE |
 | The Menopause Planner | @TheMenopausePlanner (226+ pins, 4 boards) | themenopauseplanner.com | N/A | YES - LIVE | ACTIVE |
-| FitOver35 / Fitness Made Easy | @1uy77rvyo4c0mmr (469 followers) | fitover35.com | fitover35-20 | No | ACTIVE (articles publishing) |
+| FitOver35 / Fitness Made Easy | @1uy77rvyo4c0mmr (469 followers) | fitover35.com | fitover3509-20 | No | ACTIVE (articles publishing) |
 | PilotTools Hub | N/A | ai-tools-hub (Netlify) | N/A | No | BUILT |
 
 ---

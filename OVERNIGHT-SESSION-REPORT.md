@@ -49,7 +49,7 @@ Executed 7-agent revenue activation plan across PilotTools, brand sites, product
   - best-monitor-arms-2026.md (2,551 words)
   - best-desk-accessories-2026.md (2,457 words)
   - home-office-setup-guide.md (2,626 words)
-- All with Amazon affiliate links (tag=dailydealdarling1-20)
+- All with Amazon affiliate links (tag=dailydealdarl-20)
 - Commit: `082b7a2`
 
 ### Phase 5: Distribution & SEO (DONE)

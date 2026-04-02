@@ -28,7 +28,7 @@ A quality desk mat isn't just aesthetic—it protects your desk, defines your wo
 
 ### Top Picks
 
-**1. [SteelSeries QcK Prime Mousepad](https://www.amazon.com/s?k=SteelSeries+QcK+Prime+mousepad&tag=dailydealdarling1-20)**
+**1. [SteelSeries QcK Prime Mousepad](https://www.amazon.com/s?k=SteelSeries+QcK+Prime+mousepad&tag=dailydealdarl-20)**
 
 **Price:** $15-20
 **Size:** 27.2" x 13.1" (large, extends under keyboard)
@@ -51,7 +51,7 @@ The SteelSeries QcK is the industry standard for mouse control and comfort. It's
 
 ---
 
-**2. [AIROPS Large Desk Mat](https://www.amazon.com/s?k=AIROPS+large+desk+mat&tag=dailydealdarling1-20)**
+**2. [AIROPS Large Desk Mat](https://www.amazon.com/s?k=AIROPS+large+desk+mat&tag=dailydealdarl-20)**
 
 **Price:** $30-40
 **Size:** 35.4" x 15.75" (XL, covers most desk)
@@ -75,7 +75,7 @@ If you want actual desk protection plus a defined workspace, the AIROPS mat is p
 
 ---
 
-**3. [Logitech Studio Series Desk Mat](https://www.amazon.com/s?k=Logitech+Studio+desk+mat&tag=dailydealdarling1-20)**
+**3. [Logitech Studio Series Desk Mat](https://www.amazon.com/s?k=Logitech+Studio+desk+mat&tag=dailydealdarl-20)**
 
 **Price:** $40-50
 **Size:** 31.5" x 15.75" (large)
@@ -104,7 +104,7 @@ Cable sprawl under your desk creates visual chaos and makes it hard to identify 
 
 ### Top Picks
 
-**1. [Anker 5-Outlet Power Strip with USB](https://www.amazon.com/s?k=Anker+5+outlet+power+strip+USB&tag=dailydealdarling1-20)**
+**1. [Anker 5-Outlet Power Strip with USB](https://www.amazon.com/s?k=Anker+5+outlet+power+strip+USB&tag=dailydealdarl-20)**
 
 **Price:** $20-25
 **Outlets:** 5 standard + 2 USB-C + 2 USB-A
@@ -127,7 +127,7 @@ The foundation of good cable management is consolidating power. Instead of multi
 
 ---
 
-**2. [Cable Management Clips & Velcro Straps](https://www.amazon.com/s?k=cable+management+clips+velcro+straps&tag=dailydealdarling1-20)**
+**2. [Cable Management Clips & Velcro Straps](https://www.amazon.com/s?k=cable+management+clips+velcro+straps&tag=dailydealdarl-20)**
 
 **Price:** $10-20 for assortment
 **Options:** Adhesive clips, velcro straps, cable ties
@@ -150,7 +150,7 @@ Basic cable organization tools. Essential, cheap, and immediately effective.
 
 ---
 
-**3. [Desk Cable Tray](https://www.amazon.com/s?k=under+desk+cable+tray+metal&tag=dailydealdarling1-20)**
+**3. [Desk Cable Tray](https://www.amazon.com/s?k=under+desk+cable+tray+metal&tag=dailydealdarl-20)**
 
 **Price:** $25-40
 **Material:** Metal or plastic
@@ -178,7 +178,7 @@ Modern desks need more USB ports than most computers provide. A quality hub adds
 
 ### Top Picks
 
-**1. [Anker PowerExpand 7-in-1 USB Hub](https://www.amazon.com/s?k=Anker+PowerExpand+7+in+1+USB+hub&tag=dailydealdarling1-20)**
+**1. [Anker PowerExpand 7-in-1 USB Hub](https://www.amazon.com/s?k=Anker+PowerExpand+7+in+1+USB+hub&tag=dailydealdarl-20)**
 
 **Price:** $30-40
 **Ports:** 7 USB-A + 1 SD card reader
@@ -201,7 +201,7 @@ The Anker hub consolidates multiple ports into one, freeing up USB ports on your
 
 ---
 
-**2. [Belkin USB-C Multi-Port Hub](https://www.amazon.com/s?k=Belkin+USB+C+multi+port+hub&tag=dailydealdarling1-20)**
+**2. [Belkin USB-C Multi-Port Hub](https://www.amazon.com/s?k=Belkin+USB+C+multi+port+hub&tag=dailydealdarl-20)**
 
 **Price:** $35-50
 **Ports:** 4 USB-A + SD card + HDMI
@@ -224,7 +224,7 @@ If your computer is USB-C based (modern Macs, Windows laptops), this is essentia
 
 ---
 
-**3. [VIOFO USB Hub with Standalone Power](https://www.amazon.com/s?k=VIOFO+USB+hub&tag=dailydealdarling1-20)**
+**3. [VIOFO USB Hub with Standalone Power](https://www.amazon.com/s?k=VIOFO+USB+hub&tag=dailydealdarl-20)**
 
 **Price:** $25-35
 **Ports:** 10 USB-A (basic model)
@@ -251,7 +251,7 @@ Screen light without proper ambient lighting causes eye strain and headaches. A 
 
 ### Top Picks
 
-**1. [BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarling1-20)**
+**1. [BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarl-20)**
 
 **Price:** $100-130
 **Light Type:** LED, bias lighting
@@ -276,7 +276,7 @@ The ScreenBar is the gold standard for monitor lights. It sits on top of your mo
 
 ---
 
-**2. [TaoTronics LED Desk Lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarling1-20)**
+**2. [TaoTronics LED Desk Lamp](https://www.amazon.com/s?k=TaoTronics+LED+desk+lamp&tag=dailydealdarl-20)**
 
 **Price:** $25-35
 **Light Type:** LED flexible desk lamp
@@ -299,7 +299,7 @@ If you want traditional desk lighting at a budget, the TaoTronics is reliable an
 
 ---
 
-**3. [Philips Hue Go Light](https://www.amazon.com/s?k=Philips+Hue+Go&tag=dailydealdarling1-20)**
+**3. [Philips Hue Go Light](https://www.amazon.com/s?k=Philips+Hue+Go&tag=dailydealdarl-20)**
 
 **Price:** $70-90
 **Light Type:** Smart LED light
@@ -325,7 +325,7 @@ If you want flexibility and smart home integration, Philips Hue lights offer cus
 
 ## Category 5: Keyboard & Typing Accessories
 
-**1. [Desk Keyboard Tray](https://www.amazon.com/s?k=under+desk+keyboard+tray&tag=dailydealdarling1-20)**
+**1. [Desk Keyboard Tray](https://www.amazon.com/s?k=under+desk+keyboard+tray&tag=dailydealdarl-20)**
 
 **Price:** $30-60
 **Material:** Metal or wood
@@ -347,7 +347,7 @@ A keyboard tray allows your keyboard to sit below desk level (keeping elbows at 
 
 ---
 
-**2. [Mouse Pad with Wrist Support](https://www.amazon.com/s?k=mousepad+wrist+rest&tag=dailydealdarling1-20)**
+**2. [Mouse Pad with Wrist Support](https://www.amazon.com/s?k=mousepad+wrist+rest&tag=dailydealdarl-20)**
 
 **Price:** $12-20
 **Material:** Gel or foam
@@ -370,7 +370,7 @@ A mousepad with wrist support prevents repetitive strain during all-day mousing.
 
 ## Category 6: Desk Organizers
 
-**1. [Desk Drawer Organizer](https://www.amazon.com/s?k=desk+drawer+organizer+set&tag=dailydealdarling1-20)**
+**1. [Desk Drawer Organizer](https://www.amazon.com/s?k=desk+drawer+organizer+set&tag=dailydealdarl-20)**
 
 **Price:** $15-25
 **Material:** Bamboo or plastic
@@ -390,7 +390,7 @@ Keep pens, notepads, cables, and small items organized and accessible.
 
 ---
 
-**2. [Monitor Stand with Storage](https://www.amazon.com/s?k=monitor+stand+with+storage&tag=dailydealdarling1-20)**
+**2. [Monitor Stand with Storage](https://www.amazon.com/s?k=monitor+stand+with+storage&tag=dailydealdarl-20)**
 
 **Price:** $40-80
 **Material:** Wood or metal
@@ -496,9 +496,9 @@ A: Bundle by function (power cables together, data cables together), label cable
 
 If you're just starting to optimize your desk, buy these three items:
 
-1. **[Anker Power Strip](https://www.amazon.com/s?k=Anker+5+outlet+power+strip+USB&tag=dailydealdarling1-20)** — $20 - Consolidates power and charging
-2. **[Cable Management Clips](https://www.amazon.com/s?k=cable+management+clips+velcro+straps&tag=dailydealdarling1-20)** — $10 - Organizes the mess
-3. **[BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarling1-20)** — $120 - Eliminates eye strain
+1. **[Anker Power Strip](https://www.amazon.com/s?k=Anker+5+outlet+power+strip+USB&tag=dailydealdarl-20)** — $20 - Consolidates power and charging
+2. **[Cable Management Clips](https://www.amazon.com/s?k=cable+management+clips+velcro+straps&tag=dailydealdarl-20)** — $10 - Organizes the mess
+3. **[BenQ ScreenBar](https://www.amazon.com/s?k=BenQ+ScreenBar&tag=dailydealdarl-20)** — $120 - Eliminates eye strain
 
 **Total:** ~$150
 

@@ -52,7 +52,7 @@ Here are a few natural estrogen boosters that I’ve explored:
 *   **Sesame Seeds:** Another great option to add to your salads or snacks. I love toasting them lightly for a nutty flavor.
 *   **Chickpeas:** Hummus anyone? I love snacking on hummus with veggies, so this is a win-win for me. It's such an easy and delicious way to get some extra phytoestrogens into my diet.
 
-**[Product Name: Organic Ground Flaxseed]** — I've found this brand of flaxseed to be really high quality. It's finely ground, so it mixes easily into my smoothies and doesn't have that gritty texture some flaxseed can have. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Organic Ground Flaxseed]** — I've found this brand of flaxseed to be really high quality. It's finely ground, so it mixes easily into my smoothies and doesn't have that gritty texture some flaxseed can have. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ![Close-up of flax seeds in a bowl](PEXELS_IMAGE_PLACEHOLDER:flax seeds in bowl)
@@ -79,7 +79,7 @@ Beyond diet, certain lifestyle changes can make a big difference in managing all
 *   **Clean Regularly:** Dust, vacuum, and wash your bedding frequently to minimize allergens in your home. I try to wash my bedding at least once a week.
 *   **Limit Exposure:** On high pollen days, try to stay indoors with the windows closed. If you must go outside, wear a mask and sunglasses. I know it's not the most fashionable look, but it can really help!
 
-**[Product Name: Philips Air Purifier]** — I've been using this air purifier in my bedroom for the past few months and it has made a noticeable difference in my allergy symptoms, especially at night. It really helps filter out the pollen and dust! https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Philips Air Purifier]** — I've been using this air purifier in my bedroom for the past few months and it has made a noticeable difference in my allergy symptoms, especially at night. It really helps filter out the pollen and dust! https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ## When to Talk to Your Doctor About Hormone Therapy
@@ -101,7 +101,7 @@ Okay, so here’s what has *actually* helped *me*. This isn't medical advice, ju
 *   **Peppermint Essential Oil:** I put a few drops of peppermint essential oil in a diffuser to help clear my sinuses. It smells amazing and really helps to open things up.
 *   **Vitamin D:** My doctor recommended this, as many people are deficient. I had my levels checked and, sure enough, I was low. Now I take a supplement every day, especially during the winter months.
 
-**[Product Name: High Potency Quercetin with Bromelain]** — This is the brand of Quercetin I use, as it also has Bromelain to aid absorption. I feel like it really helps to lessen the severity of my allergy symptoms. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: High Potency Quercetin with Bromelain]** — This is the brand of Quercetin I use, as it also has Bromelain to aid absorption. I feel like it really helps to lessen the severity of my allergy symptoms. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ![Nasal Spray](PEXELS_IMAGE_PLACEHOLDER:nasal spray)

@@ -21,7 +21,7 @@ Ready to dive in? Let's ditch the idea that cheap Amazon finds = cheap quality. 
 
 Finding stylish clothes on Amazon that *don't* look like they came out of a vending machine can be a challenge, I totally get it. But trust me, it's possible! The secret is to focus on classic styles, fabrics that seem decent (read those reviews!), and stay away from anything too trendy or with a ton of embellishments.
 
-I've been on the hunt for the perfect everyday dress FOREVER, and I think I finally found it! This **[Flowy Midi Dress]** is seriously amazing. It's SO comfy, comes in a ton of colors (I have the black and the olive green!), and can be dressed up or down. I've worn it to work with a blazer, and then out to dinner with sandals. Seriously versatile. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+I've been on the hunt for the perfect everyday dress FOREVER, and I think I finally found it! This **[Flowy Midi Dress]** is seriously amazing. It's SO comfy, comes in a ton of colors (I have the black and the olive green!), and can be dressed up or down. I've worn it to work with a blazer, and then out to dinner with sandals. Seriously versatile. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - Amazon Associates"]
 
 **What to look for:**
@@ -39,7 +39,7 @@ Want more amazing deals? Get our FREE Weekly Deals Digest — best finds deliver
 
 Okay, beauty products can be a total money pit, right? I've def been there, spending way too much on things that end up sitting in my bathroom cabinet untouched. But there are some seriously great beauty bargains to be found on Amazon if you know where to look.
 
-One of my holy grail finds is this **[Makeup Brush Set]**. I know, I know, brush sets can seem intimidating, but this one is actually amazing! The bristles are super soft, they blend makeup like a dream, and the set comes with everything you need for a full face of makeup. Plus, it's like, a FRACTION of the price of those fancy department store brushes. https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarling1-20
+One of my holy grail finds is this **[Makeup Brush Set]**. I know, I know, brush sets can seem intimidating, but this one is actually amazing! The bristles are super soft, they blend makeup like a dream, and the set comes with everything you need for a full face of makeup. Plus, it's like, a FRACTION of the price of those fancy department store brushes. https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale beauty/personal care"]
 
 **A few other things I swear by:**
@@ -54,7 +54,7 @@ Don't fall for the hype around *every* product though! I tried a super popular e
 
 Okay, this is where things get dangerous, folks. I could literally spend hours browsing Amazon for home decor and organization goodies. But let's focus on the things that are actually useful and will make your life easier (and prettier!).
 
-I'm obsessed with these **[Airtight Food Storage Containers]**. My pantry used to be a total disaster zone (think overflowing bags of chips and stale cereal), but these have completely transformed it! They're airtight, stackable, and they make it so easy to see what I have on hand. Plus, they're way cheaper than those fancy containers you see at The Container Store. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+I'm obsessed with these **[Airtight Food Storage Containers]**. My pantry used to be a total disaster zone (think overflowing bags of chips and stale cereal), but these have completely transformed it! They're airtight, stackable, and they make it so easy to see what I have on hand. Plus, they're way cheaper than those fancy containers you see at The Container Store. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - Impact home goods"]
 
 **Other must-haves for a budget home makeover:**
@@ -75,7 +75,7 @@ Who doesn't love a little sparkle? You can totally find gorgeous jewelry on Amaz
 *   **Simple, classic designs.** These tend to look more elegant and timeless, and they'll go with everything in your closet.
 *   **Jewelry with good reviews.** Again, read what other people have to say about the quality and durability. No one wants a necklace that turns their neck green!
 
-I found the cutest **[dainty gold necklace]** last month and it's become my everyday piece. It goes with everything, it's super comfortable, and I get compliments on it all the time! Plus, it was under $20! Such a steal. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+I found the cutest **[dainty gold necklace]** last month and it's become my everyday piece. It goes with everything, it's super comfortable, and I get compliments on it all the time! Plus, it was under $20! Such a steal. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - Rakuten jewelry retailers"]
 
 ## Tech Accessories That Are Actually Worth the Hype (and the Price)

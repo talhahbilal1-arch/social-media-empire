@@ -81,7 +81,7 @@ Add it to a warm bath and soak for 20-30 minutes. Pure bliss!
 
 ![Person getting pampered at home](PEXELS_IMAGE_PLACEHOLDER:woman relaxing in bubble bath)
 
-**Product Recommendation:** I'm currently obsessed with this **Shea Moisture Coconut & Hibiscus Body Scrub**. https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarling1-20 Seriously, it smells divine and makes my skin SO soft. Totally worth it!
+**Product Recommendation:** I'm currently obsessed with this **Shea Moisture Coconut & Hibiscus Body Scrub**. https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20 Seriously, it smells divine and makes my skin SO soft. Totally worth it!
 Available: ["PLACEHOLDER - ShareASale home/lifestyle"]
 
 ### Setting the Mood: Creating a Spa-Like Atmosphere
@@ -96,7 +96,7 @@ Okay, so you've got your DIY treatments ready. Now, let's turn your bathroom int
 
 Also, taking a few deep breaths and focusing on the present moment can really amplify your spa experience. I read a study in the *Journal of Consulting and Clinical Psychology* (2014) saying that these types of mindfulness practices *may* improve mental health. So breathe in, breathe out, and let your worries go.
 
-**Product Recommendation:** If you want to instantly make your bathroom feel more spa-like, I'm all about these **LED Fairy String Lights**. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20 They're battery-operated so you can hang them anywhere, and they add the perfect touch of sparkle!
+**Product Recommendation:** If you want to instantly make your bathroom feel more spa-like, I'm all about these **LED Fairy String Lights**. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20 They're battery-operated so you can hang them anywhere, and they add the perfect touch of sparkle!
 Available: ["PLACEHOLDER - ShareASale home/lifestyle"]
 
 [Related: Simple Ways to Declutter Your Home Today](/articles/simple-declutter-tips/)

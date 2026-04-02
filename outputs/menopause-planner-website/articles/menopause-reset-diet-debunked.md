@@ -53,7 +53,7 @@ Instead of chasing a "reset," let's put our energy into fueling our bodies with 
 
 *   **Limit Processed Foods, Sugar, and Alcohol:** These can make menopause symptoms worse and contribute to weight gain. I know, easier said than done! But even small changes can really make a difference.
 
-**[Product Name]** – I really struggled to get enough calcium and Vitamin D, so I added this supplement to my daily routine. It's easy to swallow, and I like that it also includes magnesium. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name]** – I really struggled to get enough calcium and Vitamin D, so I added this supplement to my daily routine. It's easy to swallow, and I like that it also includes magnesium. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
 ![Woman stretching at home](PEXELS_IMAGE_PLACEHOLDER:woman stretching at home menopause)
 
@@ -77,7 +77,7 @@ What we eat is just one piece of the puzzle. Here are some other lifestyle chang
 *   **Stress Management:** Find healthy ways to manage stress. Yoga, meditation, deep breathing, or just spending time outside can really help.
 *   **Stay Hydrated:** Drink plenty of water throughout the day.
 
-**[Product Name]** – I use this planner to keep track of my symptoms and mood. It helps me to see patterns and make changes to my routine when I need to. It's a lifesaver! https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name]** – I use this planner to keep track of my symptoms and mood. It helps me to see patterns and make changes to my routine when I need to. It's a lifesaver! https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
 ## When to Talk to Your Doctor About Menopause Symptoms
 
@@ -85,7 +85,7 @@ Lifestyle changes can really make a difference, but it's still important to talk
 
 Don't just suffer in silence! Your doctor can also check for any other underlying issues that might be contributing to your symptoms and give you personalized advice based on what's going on with you.
 
-**[Product Name]** – If you’re looking at other options for menopause relief, this program might be just what you need. I found that this was a gentle way to address hot flashes. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name]** – If you’re looking at other options for menopause relief, this program might be just what you need. I found that this was a gentle way to address hot flashes. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
 ## The Bottom Line: Ditch the "Reset," Embrace the Journey
 

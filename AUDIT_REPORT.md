@@ -266,7 +266,7 @@ All 3 brand sites have `vercel.json` with `cleanUrls: true, trailingSlash: false
 Audited 41 GitHub Actions workflows, fixed affiliate tag contamination across 13 FitOver35 articles, injected email capture forms into all 333 articles across 3 brands, created 3 missing Gumroad product ZIP files, added canonical URLs to all articles for SEO, and verified the content engine pipeline and Make.com webhook integration.
 
 **Key findings:**
-- 13 FitOver35 articles had wrong affiliate tags (dailydealdarling1-20 instead of fitover35-20) — **FIXED**
+- 13 FitOver35 articles had wrong affiliate tags (dailydealdarling1-20 instead of fitover3509-20) — **FIXED**
 - Zero articles had email capture forms deployed — **FIXED** (333 articles now have ConvertKit forms)
 - 333 articles were missing canonical URLs — **FIXED**
 - 3 Gumroad products were missing deliverable ZIP files — **FIXED**
@@ -349,7 +349,7 @@ Audited 41 GitHub Actions workflows, fixed affiliate tag contamination across 13
 
 ### Root Cause
 The code-level fix was already in place (commit `44882a6` on March 31, 2026):
-- `BRAND_AFFILIATE_TAGS` in `pin_article_generator.py` correctly maps `fitness → fitover35-20`
+- `BRAND_AFFILIATE_TAGS` in `pin_article_generator.py` correctly maps `fitness → fitover3509-20`
 - `_sanitize_affiliate_links()` enforces per-brand tags on all new articles
 - `_BRAND_TAGS` in `article_templates.py` also correctly configured
 
@@ -357,7 +357,7 @@ The code-level fix was already in place (commit `44882a6` on March 31, 2026):
 13 article files in `outputs/fitover35-website/articles/` still had `dailydealdarling1-20` — these were generated before the code fix was applied.
 
 ### Fix Applied
-Batch replaced `dailydealdarling1-20` → `fitover35-20` in all 13 files:
+Batch replaced `dailydealdarling1-20` → `fitover3509-20` in all 13 files:
 - `build-a-killer-home-gym-under-200.md`
 - `muscle-building-stacks-for-men-over-40.md`
 - `hack-your-sleep-for-muscle-growth.md`

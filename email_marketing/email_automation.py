@@ -378,7 +378,7 @@ class EmailAutomationManager:
 
         # 2. Check if this is an affiliate link click
         is_affiliate = (
-            "tag=dailydealdarling1-20" in link_url
+            "tag=dailydealdarl-20" in link_url
             or link_type == "affiliate"
             or "amazon.com" in link_url
         )
