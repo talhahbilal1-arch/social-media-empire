@@ -1,9 +1,9 @@
 name: TikTok Video Poster
 
 on:
-  schedule:
-    # Daily at 6 PM UTC (10 AM PST)
-    - cron: '0 18 * * *'
+  # DISABLED Phase 2 (April 2, 2026): TikTok not active, TIKTOK_ACCESS_TOKEN missing.
+  # schedule:
+  #   - cron: '0 18 * * *'
   workflow_dispatch:
     inputs:
       max_videos:

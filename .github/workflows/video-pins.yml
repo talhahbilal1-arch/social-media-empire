@@ -1,8 +1,9 @@
 name: Video Pin Generator
 
 on:
-  schedule:
-    - cron: '0 18 * * *'  # 10 AM PST daily
+  # DISABLED Phase 2 (April 2, 2026): ELEVENLABS_API_KEY missing, video/voiceover generation non-functional.
+  # schedule:
+  #   - cron: '0 18 * * *'
   workflow_dispatch:
     inputs:
       brands:

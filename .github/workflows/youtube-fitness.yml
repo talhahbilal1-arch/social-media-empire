@@ -1,8 +1,9 @@
 name: YouTube Fitness Shorts
 
 on:
-  schedule:
-    - cron: '0 20 * * *'
+  # DISABLED Phase 2 (April 2, 2026): LATE_API_KEY_3 missing, YouTube channel not active.
+  # schedule:
+  #   - cron: '0 20 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

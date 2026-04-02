@@ -1,9 +1,10 @@
 name: System Health
 
 on:
-  schedule:
-    # Every 4 hours — sufficient for catching issues; self-healing retry threshold is 10
-    - cron: '0 */4 * * *'
+  # DISABLED Phase 2 (April 2, 2026): Multiple missing secrets (CREATOMATE, ELEVENLABS, LATE_API_KEY).
+  # Health checks fail 6x/day generating CI noise. Core pipeline has its own watchdog (pin-watchdog.yml).
+  # schedule:
+  #   - cron: '0 */4 * * *'
   workflow_dispatch:
     inputs:
       action:

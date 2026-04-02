@@ -25,10 +25,17 @@ BRAND_IMAGE_RULES = {
             "man", "male", "men", "guy", "masculine", "male athlete"
         ],
         "blocked_terms": [
+            # Home / lifestyle (off-brand for fitness)
             "bedroom", "furniture", "decor", "fashion", "beauty", "makeup",
             "skincare", "menopause", "hot flash", "deal", "sale", "discount",
             "coupon", "baby", "wedding", "party", "christmas", "holiday",
-            "woman", "women", "female", "girl", "feminine", "she", "her"
+            # Female-oriented (fitness brand is men-only)
+            "woman", "women", "female", "girl", "feminine", "she", "her",
+            "pink", "purse", "handbag", "nail polish", "lipstick",
+            # Off-brand environments
+            "nightclub", "casino", "bar", "cocktail", "wine",
+            "cooking", "baking", "knitting", "sewing", "gardening",
+            "office desk", "cubicle", "corporate"
         ],
         "fallback_query": "man fitness workout gym"
     },
@@ -44,14 +51,27 @@ BRAND_IMAGE_RULES = {
             "minimalist home"
         ],
         "blocked_terms": [
-            "gym", "weightlifting", "bodybuilding", "menopause", "hormone",
-            "hot flash", "supplement", "protein powder", "dumbbell",
-            "barbell", "crossfit", "medical", "prescription",
-            "christmas", "tree", "holiday", "construction", "industrial",
-            "chef", "cooking", "baking", "factory", "warehouse",
-            "snow", "winter", "food prep", "restaurant", "building site",
-            "hard hat", "concrete", "machinery", "dark moody",
-            "black and white", "abandoned"
+            # Fitness / workout imagery
+            "gym", "weightlifting", "bodybuilding", "crossfit", "dumbbell",
+            "barbell", "treadmill", "pushup", "squat", "deadlift", "bench press",
+            "muscle", "bicep", "abs", "sixpack", "protein powder", "supplement",
+            "pre workout", "creatine", "whey", "fitness", "workout", "exercise",
+            "athlete", "marathon", "running shoes", "sports bra", "sweat",
+            # Medical / health imagery
+            "menopause", "hormone", "hot flash", "medical", "prescription",
+            "hospital", "surgery", "doctor", "nurse", "stethoscope", "pill",
+            "medication", "injection", "syringe", "x-ray", "blood test",
+            # Industrial / construction
+            "construction", "industrial", "factory", "warehouse", "building site",
+            "hard hat", "concrete", "machinery", "welding", "scaffold",
+            # Food service (not home kitchen)
+            "chef", "cooking", "baking", "food prep", "restaurant",
+            "commercial kitchen", "food truck",
+            # Off-brand environments
+            "christmas", "tree", "holiday", "snow", "winter",
+            "dark moody", "black and white", "abandoned", "grunge",
+            "nightclub", "bar", "casino", "tattoo", "motorcycle",
+            "hunting", "fishing", "camping", "military", "weapon"
         ],
         "fallback_query": "clean organized home shelf products flat lay bright"
     },
@@ -64,9 +84,20 @@ BRAND_IMAGE_RULES = {
             "yoga mature women", "peaceful lifestyle", "wellness journal"
         ],
         "blocked_terms": [
-            "gym", "bodybuilding", "heavy weights", "fashion", "party",
-            "nightclub", "young woman", "teen", "baby", "pregnancy",
-            "deal", "sale", "discount", "coupon", "unboxing"
+            # Fitness / intense exercise
+            "gym", "bodybuilding", "heavy weights", "crossfit", "dumbbell",
+            "barbell", "bench press", "deadlift", "muscle", "sixpack",
+            "protein powder", "pre workout",
+            # Youth / lifestyle (off-brand for midlife wellness)
+            "fashion", "party", "nightclub", "young woman", "teen",
+            "baby", "pregnancy", "college", "sorority", "prom",
+            "bikini", "crop top", "miniskirt",
+            # Commercial / deals
+            "deal", "sale", "discount", "coupon", "unboxing",
+            "shopping haul", "amazon",
+            # Off-brand environments
+            "casino", "bar", "cocktail", "tattoo", "motorcycle",
+            "construction", "factory", "warehouse", "military"
         ],
         "fallback_query": "wellness self care calm lifestyle"
     }

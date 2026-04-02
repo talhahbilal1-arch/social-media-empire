@@ -5,10 +5,9 @@
 name: Pinterest Analytics
 
 on:
-  schedule:
-    # Every Monday at 8:00 AM UTC
-    # (Sunday 11 PM PST)
-    - cron: '0 8 * * 1'
+  # DISABLED Phase 2 (April 2, 2026): LATE_API_KEY missing (expired). Re-enable after refreshing at getlate.dev.
+  # schedule:
+  #   - cron: '0 8 * * 1'
   workflow_dispatch:
 
 env:

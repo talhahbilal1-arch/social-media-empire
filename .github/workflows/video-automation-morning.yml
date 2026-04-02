@@ -1,9 +1,9 @@
 name: Video Automation - Morning (6 AM PST)
 
 on:
-  schedule:
-    # 8 AM PST = 4 PM UTC (avoids 14:00 UTC collision with trend-scout)
-    - cron: '0 16 * * *'
+  # DISABLED Phase 2 (April 2, 2026): CREATOMATE_API_KEY + LATE_API_KEY missing, video rendering non-functional.
+  # schedule:
+  #   - cron: '0 16 * * *'
   workflow_dispatch:
     inputs:
       brand:

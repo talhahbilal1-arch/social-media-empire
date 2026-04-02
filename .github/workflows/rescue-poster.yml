@@ -7,11 +7,11 @@
 name: Pinterest Rescue Poster
 
 on:
-  schedule:
-    # 3x daily rescue sweeps — morning, afternoon, evening PST
-    - cron: '30 17 * * *'  # 9:30 AM PST — catch overnight failures
-    - cron: '30 23 * * *'  # 3:30 PM PST — catch afternoon failures
-    - cron: '30 5 * * *'   # 9:30 PM PST — catch evening failures
+  # DISABLED Phase 2 (April 2, 2026): All LATE_API_KEY variants missing (expired at getlate.dev).
+  # schedule:
+  #   - cron: '30 17 * * *'
+  #   - cron: '30 23 * * *'
+  #   - cron: '30 5 * * *'
   workflow_dispatch:
     inputs:
       hours_back:
