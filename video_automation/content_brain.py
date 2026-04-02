@@ -20,6 +20,7 @@ import re
 import logging
 import time
 from datetime import datetime, timedelta, timezone
+from video_automation.gemini_client import generate_json, generate_text, get_client, health_check
 
 logger = logging.getLogger(__name__)
 
@@ -50,71 +51,14 @@ def _get_seasonal_context():
     month = datetime.now(timezone.utc).month
     return SEASONAL_HOOKS.get(month, SEASONAL_HOOKS[1])
 
-_client = None
-
-# Model fallback chain: try preferred model first, then fallbacks
-GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"]
-GEMINI_MODEL = GEMINI_MODELS[0]
-
-
 def _get_client():
-    """Lazy-initialize the Gemini client to prevent import-time failures."""
-    global _client
-    if _client is None:
-        api_key = os.environ.get('GEMINI_API_KEY', '')
-        if not api_key:
-            raise ValueError("GEMINI_API_KEY environment variable is not set")
-        _client = genai.Client(api_key=api_key)
-    return _client
+    """Get the shared Gemini client (delegates to gemini_client module)."""
+    return get_client()
 
 
 def _generate_text(prompt, max_tokens=1000):
-    """Call Gemini API and return the text response.
-
-    Uses model fallback chain: tries each model in GEMINI_MODELS.
-    Retries on 429 rate limit. Disables thinking for JSON-only calls.
-    """
-    last_error = None
-    for model_name in GEMINI_MODELS:
-        for attempt in range(3):
-            try:
-                # Disable thinking for JSON responses — gemini-2.5-flash is a
-                # thinking model and may return reasoning tokens that break JSON
-                config = {
-                    "response_mime_type": "application/json",
-                    "max_output_tokens": max_tokens,
-                }
-                # Disable thinking budget if the model supports it
-                try:
-                    from google.genai import types
-                    config["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
-                except (ImportError, AttributeError):
-                    pass  # Older SDK version — thinking not configurable
-
-                response = _get_client().models.generate_content(
-                    model=model_name,
-                    contents=prompt,
-                    config=config,
-                )
-                text = response.text.strip() if response.text else ""
-                if not text:
-                    raise ValueError(f"Empty response from {model_name}")
-                logger.info(f"Gemini success with model={model_name}")
-                return text
-            except Exception as e:
-                last_error = e
-                err_str = str(e)
-                if "429" in err_str and attempt < 2:
-                    wait = 15 * (attempt + 1)
-                    logger.warning(f"Gemini 429 rate limit ({model_name}) — waiting {wait}s (attempt {attempt + 1}/3)")
-                    time.sleep(wait)
-                elif "429" in err_str:
-                    logger.error(f"Gemini 429 exhausted retries for {model_name}, trying next model")
-                    break  # Try next model
-                else:
-                    logger.error(f"Gemini error with {model_name}: {err_str[:200]}")
-                    break  # Try next model
-    raise last_error or RuntimeError("All Gemini models failed")
+    """Generate JSON text via Gemini (delegates to gemini_client module)."""
+    return generate_json(prompt, max_tokens=max_tokens)
 
 # ═══════════════════════════════════════════════════════════════
 # BRAND CONFIGURATIONS

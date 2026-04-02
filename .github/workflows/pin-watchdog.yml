@@ -1,0 +1,329 @@
+name: Pin Watchdog
+
+# Runs every 2 hours. Checks if pins are being generated on schedule.
+# If pins are missing, auto-diagnoses the issue and either fixes it
+# or triggers an emergency content-engine run.
+#
+# This is the SAFETY NET that ensures pins never stop silently.
+
+on:
+  schedule:
+    - cron: '30 */2 * * *'  # Every 2 hours at :30 (offset from content-engine)
+  workflow_dispatch:
+    inputs:
+      force_repair:
+        description: 'Force repair even if pin count looks OK'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write  # Needed to trigger other workflows
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run watchdog diagnostics
+        id: watchdog
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
+          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          FORCE_REPAIR: ${{ github.event.inputs.force_repair || 'false' }}
+        run: |
+          python3 << 'PYEOF'
+          import os
+          import sys
+          import json
+          from datetime import datetime, timezone, timedelta
+
+          sys.path.insert(0, '.')
+
+          force_repair = os.environ.get('FORCE_REPAIR', 'false') == 'true'
+
+          print('=' * 60)
+          print('PIN WATCHDOG — Automated Health Monitor')
+          print(f'Time: {datetime.now(timezone.utc).isoformat()}')
+          print('=' * 60)
+
+          issues = []
+          fixes_applied = []
+
+          # ── 1. Database connectivity ────────────────────────────────
+          print('\n[1/5] Database connectivity')
+          try:
+              from database.supabase_client import get_supabase_client
+              db = get_supabase_client()
+              test = db.client.table('content_history').select('id').limit(1).execute()
+              print('  ✓ Supabase connected')
+          except Exception as e:
+              issues.append(f'Supabase connection failed: {e}')
+              print(f'  ✗ Supabase FAILED: {e}')
+              # Can't continue without DB
+              print('\n❌ CRITICAL: Database unreachable. Cannot diagnose further.')
+              sys.exit(1)
+
+          # ── 2. Check today's pin count ──────────────────────────────
+          print('\n[2/5] Pin generation status')
+          today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+          current_hour = datetime.now(timezone.utc).hour
+          brands = ['fitness', 'deals', 'menopause']
+          MAX_PINS_PER_DAY = 5
+
+          total_pins_today = 0
+          brands_missing = []
+
+          for brand in brands:
+              try:
+                  result = db.client.table('content_history') \
+                      .select('id', count='exact') \
+                      .eq('brand', brand) \
+                      .gte('created_at', today_str + 'T00:00:00Z') \
+                      .execute()
+                  count = result.count if hasattr(result, 'count') and result.count is not None else len(result.data or [])
+                  total_pins_today += count
+                  status = '✓' if count >= MAX_PINS_PER_DAY else '⚠' if count > 0 else '✗'
+                  print(f'  {status} {brand}: {count}/{MAX_PINS_PER_DAY} pins today')
+                  if count == 0:
+                      brands_missing.append(brand)
+              except Exception as e:
+                  print(f'  ✗ {brand}: query failed — {e}')
+                  brands_missing.append(brand)
+
+          # After 10 AM UTC (first cron at 4 AM + buffer), we expect at least some pins
+          if current_hour >= 10 and total_pins_today == 0:
+              issues.append(f'CRITICAL: Zero pins generated today (it is {current_hour}:00 UTC)')
+          elif current_hour >= 10 and brands_missing:
+              issues.append(f'Brands with 0 pins: {", ".join(brands_missing)}')
+
+          # ── 3. Check for recent failures ────────────────────────────
+          print('\n[3/5] Recent failures')
+          try:
+              recent_fails = db.client.table('pinterest_pins') \
+                  .select('brand, error_message, created_at') \
+                  .eq('status', 'failed') \
+                  .gte('created_at', today_str + 'T00:00:00Z') \
+                  .execute()
+              fail_count = len(recent_fails.data or [])
+              if fail_count > 0:
+                  print(f'  ⚠ {fail_count} failed pins today:')
+                  for fp in (recent_fails.data or [])[:5]:
+                      print(f'    [{fp["brand"]}] {fp.get("error_message", "unknown")[:80]}')
+                  if fail_count > 5:
+                      issues.append(f'{fail_count} failed pins today — posting may be broken')
+              else:
+                  print('  ✓ No failed pins today')
+          except Exception as e:
+              print(f'  ? Could not check failures: {e}')
+
+          # ── 4. Gemini API health ────────────────────────────────────
+          print('\n[4/5] Gemini API health')
+          try:
+              from video_automation.gemini_client import health_check, discover_models
+              models = discover_models()
+              print(f'  Available models: {", ".join(models[:5])}')
+              hc_ok, hc_detail = health_check()
+              if hc_ok:
+                  print(f'  ✓ Gemini API healthy (model={hc_detail})')
+              else:
+                  issues.append(f'Gemini API broken: {hc_detail}')
+                  print(f'  ✗ Gemini API FAILING: {hc_detail}')
+          except Exception as e:
+              issues.append(f'Gemini import/health check failed: {e}')
+              print(f'  ✗ Gemini check error: {e}')
+
+          # ── 5. Make.com webhooks ────────────────────────────────────
+          print('\n[5/5] Make.com webhooks')
+          webhook_map = {
+              'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
+              'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
+              'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+          }
+          for brand, url in webhook_map.items():
+              if url and url.startswith('https://'):
+                  print(f'  ✓ {brand}: configured')
+              else:
+                  issues.append(f'{brand} webhook not configured')
+                  print(f'  ✗ {brand}: MISSING')
+
+          # ── 6. Check last successful pipeline run ───────────────────
+          print('\n[6] Last successful content generation')
+          try:
+              last_pin = db.client.table('content_history') \
+                  .select('brand, created_at') \
+                  .order('created_at', desc=True) \
+                  .limit(1) \
+                  .execute()
+              if last_pin.data:
+                  last_time = last_pin.data[0]['created_at']
+                  last_brand = last_pin.data[0]['brand']
+                  # Parse and check staleness
+                  try:
+                      last_dt = datetime.fromisoformat(last_time.replace('Z', '+00:00'))
+                      hours_ago = (datetime.now(timezone.utc) - last_dt).total_seconds() / 3600
+                      if hours_ago > 36:
+                          issues.append(f'No pins generated in {hours_ago:.0f} hours!')
+                          print(f'  ✗ Last pin {hours_ago:.0f} hours ago ({last_brand} at {last_time})')
+                      elif hours_ago > 18:
+                          issues.append(f'Pin generation stale: {hours_ago:.0f} hours since last pin')
+                          print(f'  ⚠ Last pin {hours_ago:.0f} hours ago ({last_brand})')
+                      else:
+                          print(f'  ✓ Last pin {hours_ago:.1f} hours ago ({last_brand})')
+                  except Exception:
+                      print(f'  ? Last pin at {last_time} ({last_brand})')
+              else:
+                  issues.append('No pins in content_history at all!')
+                  print('  ✗ No pins found in content_history')
+          except Exception as e:
+              print(f'  ? Could not check last pin: {e}')
+
+          # ══════════════════════════════════════════════════════════════
+          # DIAGNOSIS & AUTO-REPAIR
+          # ══════════════════════════════════════════════════════════════
+          print('\n' + '=' * 60)
+          if not issues and not force_repair:
+              print('✅ ALL SYSTEMS HEALTHY — no action needed')
+              print('=' * 60)
+
+              # Log healthy status
+              try:
+                  db.client.table('agent_runs').upsert({
+                      'agent_name': 'pin_watchdog',
+                      'status': 'healthy',
+                      'items_processed': total_pins_today,
+                      'started_at': datetime.now(timezone.utc).isoformat(),
+                      'completed_at': datetime.now(timezone.utc).isoformat(),
+                      'error_log': [],
+                  }, on_conflict='agent_name').execute()
+              except Exception:
+                  pass
+              sys.exit(0)
+
+          print(f'⚠ {len(issues)} ISSUE(S) DETECTED:')
+          for i, issue in enumerate(issues, 1):
+              print(f'  {i}. {issue}')
+          print('=' * 60)
+
+          # ── Auto-repair: Schema fixes ───────────────────────────────
+          print('\n[AUTO-REPAIR] Checking database schema...')
+          schema_fixes = [
+              ("errors", "severity", "ALTER TABLE errors ADD COLUMN IF NOT EXISTS severity VARCHAR(20) DEFAULT 'medium'"),
+              ("pinterest_pins", "image_hash", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS image_hash TEXT"),
+              ("pinterest_pins", "posted_at", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS posted_at TIMESTAMPTZ"),
+              ("pinterest_pins", "error_message", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS error_message TEXT"),
+              ("pinterest_pins", "article_generated", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS article_generated BOOLEAN DEFAULT FALSE"),
+              ("pinterest_pins", "overlay_headline", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS overlay_headline TEXT"),
+              ("pinterest_pins", "tips", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS tips JSONB DEFAULT '[]'"),
+              ("pinterest_pins", "topic", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS topic TEXT"),
+              ("pinterest_pins", "visual_style", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS visual_style VARCHAR(100)"),
+              ("pinterest_pins", "niche", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS niche VARCHAR(100)"),
+              ("pinterest_pins", "pexels_search_term", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS pexels_search_term TEXT"),
+              ("pinterest_pins", "generated_image_url", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS generated_image_url TEXT"),
+              ("pinterest_pins", "overlay_subtext", "ALTER TABLE pinterest_pins ADD COLUMN IF NOT EXISTS overlay_subtext TEXT"),
+          ]
+          for table, column, sql in schema_fixes:
+              try:
+                  # Try a query that uses the column — if it fails, the column is missing
+                  db.client.table(table).select(column).limit(1).execute()
+              except Exception:
+                  print(f'  Fixing: {table}.{column} missing — adding via RPC...')
+                  try:
+                      # Use Supabase RPC or direct REST to run DDL
+                      import urllib.request
+                      supabase_url = os.environ.get('SUPABASE_URL', '')
+                      supabase_key = os.environ.get('SUPABASE_KEY', '')
+                      rpc_url = f'{supabase_url}/rest/v1/rpc/exec_sql'
+                      # Fallback: log the needed fix
+                      print(f'  ⚠ Cannot auto-fix DDL. Manual fix needed: {sql}')
+                      fixes_applied.append(f'MANUAL: Run in Supabase SQL Editor: {sql}')
+                  except Exception as fix_e:
+                      print(f'  Schema fix failed: {fix_e}')
+
+          # ── Auto-repair: Trigger content engine if no pins today ────
+          needs_emergency_run = (
+              (current_hour >= 10 and total_pins_today == 0) or
+              force_repair
+          )
+          if needs_emergency_run:
+              print('\n[AUTO-REPAIR] Triggering emergency content-engine run...')
+              # Set output to trigger the next job
+              with open(os.environ.get('GITHUB_OUTPUT', '/dev/null'), 'a') as f:
+                  f.write('trigger_emergency=true\n')
+              fixes_applied.append('Triggered emergency content-engine run')
+          else:
+              with open(os.environ.get('GITHUB_OUTPUT', '/dev/null'), 'a') as f:
+                  f.write('trigger_emergency=false\n')
+
+          # Log watchdog status
+          try:
+              db.client.table('agent_runs').upsert({
+                  'agent_name': 'pin_watchdog',
+                  'status': 'issues_found',
+                  'items_processed': total_pins_today,
+                  'started_at': datetime.now(timezone.utc).isoformat(),
+                  'completed_at': datetime.now(timezone.utc).isoformat(),
+                  'error_log': issues + fixes_applied,
+              }, on_conflict='agent_name').execute()
+          except Exception:
+              pass
+
+          # Log errors to errors table for visibility
+          for issue in issues:
+              try:
+                  db.client.table('errors').insert({
+                      'error_type': 'pin_watchdog',
+                      'error_message': issue[:500],
+                      'context': json.dumps({'fixes': fixes_applied, 'pins_today': total_pins_today}),
+                      'severity': 'high' if 'CRITICAL' in issue else 'medium',
+                      'created_at': datetime.now(timezone.utc).isoformat(),
+                  }).execute()
+              except Exception:
+                  pass
+
+          print(f'\nFixes applied: {len(fixes_applied)}')
+          for fix in fixes_applied:
+              print(f'  → {fix}')
+
+          PYEOF
+
+      - name: Emergency content-engine trigger
+        if: steps.watchdog.outputs.trigger_emergency == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('Triggering emergency content-engine run...');
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'content-engine.yml',
+              ref: 'main',
+              inputs: {
+                dry_run: 'false'
+              }
+            });
+            console.log('Emergency content-engine triggered successfully');

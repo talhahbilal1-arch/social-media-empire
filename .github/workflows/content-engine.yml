@@ -99,6 +99,7 @@ jobs:
               BRAND_SITE_CONFIG, _make_slug
           )
           from video_automation.content_brain import generate_pin_content, log_pin_to_history, check_image_hash_exists, validate_destination_link
+          from video_automation.gemini_client import health_check as gemini_health_check
           from video_automation.pinterest_boards import get_board_id
           from video_automation.product_pin_injector import should_inject_product_pin, get_product_pin
 
@@ -119,7 +120,19 @@ jobs:
                       'created_at': datetime.now(timezone.utc).isoformat()
                   }).execute()
               except Exception:
-                  pass  # Never let error logging crash the pipeline
+                  print(f'  [error-log] Failed to log error to DB: {error}')
+
+          # ══════════════════════════════════════════════════════════════
+          # HEALTH CHECK: Verify Gemini API works BEFORE spending time
+          # ══════════════════════════════════════════════════════════════
+          print('=== Gemini API Health Check ===')
+          _hc_ok, _hc_detail = gemini_health_check()
+          if _hc_ok:
+              print(f'  Gemini API: HEALTHY (model={_hc_detail})')
+          else:
+              print(f'  Gemini API: FAILING — {_hc_detail}')
+              print(f'  Will attempt content generation anyway (model fallback active)')
+              log_pipeline_error('health_check', 'all', f'Gemini health check failed: {_hc_detail}', severity='high')
 
           # ══════════════════════════════════════════════════════════════
           # PRE-FLIGHT: Reactivate Make.com poster scenarios via Scenario

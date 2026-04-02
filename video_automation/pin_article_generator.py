@@ -15,23 +15,14 @@ from datetime import datetime, timezone
 
 import requests
 from google import genai
+from video_automation.gemini_client import generate_json, generate_text, get_client
 
 logger = logging.getLogger(__name__)
 
-_client = None
-
-GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"]
-GEMINI_MODEL = GEMINI_MODELS[0]
-
 
 def _get_client():
-    global _client
-    if _client is None:
-        api_key = os.environ.get('GEMINI_API_KEY', '')
-        if not api_key:
-            raise ValueError("GEMINI_API_KEY environment variable is not set")
-        _client = genai.Client(api_key=api_key)
-    return _client
+    """Get the shared Gemini client (delegates to gemini_client module)."""
+    return get_client()
 
 
 # ── Amazon Associates affiliate links ──────────────────────────────────────────
@@ -545,31 +536,16 @@ RULES:
 - BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "unlock your potential"
 - Output ONLY JSON, no markdown, no backticks, no code fences"""
 
-    for _model in GEMINI_MODELS:
-        try:
-            _config = {"response_mime_type": "application/json", "max_output_tokens": 4000}
-            try:
-                from google.genai import types as _types
-                _config["thinking_config"] = _types.ThinkingConfig(thinking_budget=0)
-            except (ImportError, AttributeError):
-                pass
-            response = _get_client().models.generate_content(
-                model=_model,
-                contents=json_prompt,
-                config=_config,
-            )
-            article_json = response.text.strip()
-            parsed = _try_parse_json(article_json)
-            if parsed and isinstance(parsed, dict):
-                logger.info(f"JSON article generated successfully for '{topic}' using {_model}")
-                return slug, article_json
-            else:
-                logger.warning(f"JSON parsing failed with {_model}, trying next model")
-                continue
-        except Exception as e:
-            logger.warning(f"JSON generation failed with {_model}: {e}")
-            continue
-    logger.warning(f"All models failed for JSON, falling back to markdown for '{topic}'")
+    try:
+        article_json = generate_json(json_prompt, max_tokens=4000)
+        parsed = _try_parse_json(article_json)
+        if parsed and isinstance(parsed, dict):
+            logger.info(f"JSON article generated successfully for '{topic}'")
+            return slug, article_json
+        else:
+            logger.warning(f"JSON parsing failed, falling back to markdown for '{topic}'")
+    except Exception as e:
+        logger.warning(f"JSON generation failed: {e}, falling back to markdown")
 
     # ── Fallback to markdown generation ──────────────────────────────────
     markdown_prompt = f"""Write a high-converting affiliate buying guide for the {config['name']} website.
@@ -678,26 +654,12 @@ keywords: ["keyword1", "keyword2", "keyword3"]
 
 [Article content in Markdown]"""
 
-    for _model in GEMINI_MODELS:
-        try:
-            _config = {"max_output_tokens": 4000}
-            try:
-                from google.genai import types as _types
-                _config["thinking_config"] = _types.ThinkingConfig(thinking_budget=0)
-            except (ImportError, AttributeError):
-                pass
-            response = _get_client().models.generate_content(
-                model=_model,
-                contents=markdown_prompt,
-                config=_config,
-            )
-            article_md = response.text.strip()
-            if article_md:
-                return slug, article_md
-        except Exception as e:
-            logger.warning(f"Markdown generation failed with {_model}: {e}")
-            continue
-    logger.error(f"Article generation failed for '{topic}' with all models")
+    try:
+        article_md = generate_text(markdown_prompt, max_tokens=4000)
+        if article_md:
+            return slug, article_md
+    except Exception as e:
+        logger.error(f"Article generation failed for '{topic}': {e}")
     return slug, None
 
 
