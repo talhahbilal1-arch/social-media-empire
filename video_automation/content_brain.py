@@ -12,7 +12,6 @@ Optimized for maximum Pinterest clicks, engagement, and affiliate revenue:
 - Board selection weighted toward highest-follower boards
 """
 
-from google import genai
 import json
 import random
 import os

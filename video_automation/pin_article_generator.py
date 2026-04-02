@@ -14,7 +14,6 @@ import urllib.parse
 from datetime import datetime, timezone
 
 import requests
-from google import genai
 from video_automation.gemini_client import generate_json, generate_text, get_client
 
 logger = logging.getLogger(__name__)
