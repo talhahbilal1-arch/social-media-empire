@@ -332,15 +332,14 @@ class DailyDealDarlingArticleGenerator:
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY not set")
 
-        genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-2.5-flash')
+        self._client = genai.Client(api_key=self.api_key)
         self.pexels_key = pexels_key or os.getenv("PEXELS_API_KEY")
 
     def _call_gemini(self, prompt: str) -> str:
         """Make a Gemini API call with retry."""
         for attempt in range(3):
             try:
-                response = self.model.generate_content(prompt)
+                response = self._client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
                 return response.text
             except Exception as e:
                 logger.error(f"Gemini API error (attempt {attempt + 1}): {e}")
