@@ -39,10 +39,9 @@ def test_gemini():
         return False, "GEMINI_API_KEY not set"
 
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-2.5-flash')
-        response = model.generate_content("Say 'API test successful' in 3 words or less")
+        from google import genai
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(model='gemini-2.5-flash', contents="Say 'API test successful' in 3 words or less")
         return True, f"Working - got response: {response.text[:50]}..."
     except Exception as e:
         return False, f"Error: {str(e)[:100]}"
