@@ -141,15 +141,15 @@ class HealthChecker:
             )
 
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=config.gemini_api_key)
+            from google import genai
+            client = genai.Client(api_key=config.gemini_api_key)
 
             start = datetime.now()
             # Simple test generation
-            model = genai.GenerativeModel("gemini-2.5-flash")
-            response = model.generate_content(
-                "Say 'ok'",
-                generation_config=genai.GenerationConfig(max_output_tokens=10)
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents="Say 'ok'",
+                config={"max_output_tokens": 10}
             )
             response_time = (datetime.now() - start).total_seconds() * 1000
 
