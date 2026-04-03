@@ -124,7 +124,7 @@ Return ONLY valid JSON:
 }
 
 async function generateComparisonPin(comp) {
-  const toolNames = comp.tool_names || comp.tools.map(s => s.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()))
+  const toolNames = comp.tool_names || (comp.tools || []).filter(Boolean).map(s => s.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()))
   const prompt = `Generate a Pinterest pin for an AI tool comparison: "${toolNames[0]} vs ${toolNames[1]}".
 Verdict: ${comp.verdict || 'See the full comparison'}
 
