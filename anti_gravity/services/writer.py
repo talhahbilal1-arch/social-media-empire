@@ -306,7 +306,7 @@ Rules:
 
 Return ONLY the meta description text."""
 
-        meta = _call_gemini(self.model, prompt).strip().strip('"')
+        meta = _call_gemini(self._client, self._model_name, prompt).strip().strip('"')
         return meta[:155]
 
     # ------------------------------------------------------------------
