@@ -88,24 +88,37 @@ def generate_script(category: Optional[str] = None) -> dict:
         "Return ONLY valid JSON with these exact keys and no markdown formatting or code blocks."
     )
 
+    text = None
     for attempt in range(3):
         try:
             response = _get_gemini_client().models.generate_content(
                 model=GEMINI_MODEL,
                 contents=prompt,
-                config={"max_output_tokens": 1500},
+                config={
+                    "max_output_tokens": 1500,
+                    "response_mime_type": "application/json",
+                },
             )
             text = response.text.strip()
+            # Strip markdown fences if model ignores mime type
+            if text.startswith("```"):
+                text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+            # Validate JSON before accepting
+            json.loads(text)
             break
+        except json.JSONDecodeError as e:
+            logger.warning(f"Attempt {attempt + 1}: JSON parse error — {e}. Retrying.")
+            text = None
+            if attempt == 2:
+                raise
+            import time
+            time.sleep(5 * (attempt + 1))
         except Exception as e:
             if "429" in str(e) and attempt < 2:
                 import time
                 time.sleep(15 * (attempt + 1))
                 continue
             raise
-
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
 
     data = json.loads(text)
     data["category"] = category
