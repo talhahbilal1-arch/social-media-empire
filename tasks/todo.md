@@ -2,12 +2,21 @@
 
 ## Tasks
 
-- [ ] **Task 1: Create zero-miss-lead-engine.html** — Landing page matching existing product page style
-- [ ] **Task 2: Create content-repurposing-machine.html** — Landing page matching existing product page style
-- [ ] **Task 3: Create automated-review-generator.html** — Landing page matching existing product page style
-- [ ] **Task 4: Create products/index.html** — Products index page listing all 7 products + bundle
-- [ ] **Task 5: Update bundle/index.html** — Add links to all individual product pages
+- [x] **Task 1: Create zero-miss-lead-engine.html** — Landing page with hero, 3 benefits, "What's Inside" (8 items), guarantee, FAQ, 3 CTAs, GA tracking, schema markup
+- [x] **Task 2: Create content-repurposing-machine.html** — Landing page with hero, 3 benefits, "What's Inside" (7 sections), guarantee, FAQ, 3 CTAs, GA tracking, schema markup
+- [x] **Task 3: Create automated-review-generator.html** — Landing page with hero, 3 benefits, "What's Inside" (7 sections), guarantee, FAQ, 3 CTAs, GA tracking, schema markup
+- [x] **Task 4: Create products/index.html** — Products index listing all 7 products with prices, descriptions, Buy Now + Details links, plus bundle banner at top
+- [x] **Task 5: Update bundle/index.html** — Updated to show all 7 products (was 3), added product page links, GA tracking, corrected savings ($91 not $83)
 - [ ] **Task 6: Commit and push** — Single commit with all changes
+
+## Review
+
+All 4 new landing pages + 1 index page created, bundle page updated. Changes:
+- 3 product landing pages match existing design (DM Sans + Space Mono, dark theme, green accent #22c55e)
+- All new pages include: Google Analytics (G-1FC6FH34L9), JSON-LD product schema, 30-day money-back guarantee, mobile responsive
+- No fake testimonials — replaced testimonial section with "What's Inside" detail section
+- Products index page lists all 7 products + bundle with direct Gumroad buy links and details page links
+- Bundle page updated from 3 products to 7, savings corrected from $83 to $91, GA tracking added
 
 ---
 
