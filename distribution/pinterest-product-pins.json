@@ -178,5 +178,32 @@
     "board": "Coaching & Business",
     "type": "product",
     "price": "$67"
+  },
+  {
+    "brand": "menopause",
+    "title": "Menopause Wellness Planner - Track Symptoms, Manage Your Journey",
+    "description": "Complete menopause wellness planner with symptom tracker, hormone health journal, hot flash log, and self-care pages. Available in digital + printable formats. Evidence-based, beautifully designed. #MenopausePlanner #WellnessJournal #MenopauseSupport #SymptomTracker",
+    "link": "https://themenopauseplanner.etsy.com/listing/menopause-wellness-planner",
+    "board": "Menopause Wellness",
+    "type": "product",
+    "price": "$12.97"
+  },
+  {
+    "brand": "wellness",
+    "title": "ADHD Planner Bundle - Digital + Printable | Daily Weekly Monthly",
+    "description": "The ADHD planner designed by someone who gets it. Daily, weekly, monthly views plus brain dump pages, habit trackers, and routine builders. Digital + printable versions included. #ADHDPlanner #Neurodivergent #ProductivityPlanner #ADHDOrganization",
+    "link": "https://themenopauseplanner.etsy.com/listing/adhd-planner",
+    "board": "ADHD Organization Tips",
+    "type": "product",
+    "price": "$9.99"
+  },
+  {
+    "brand": "wellness",
+    "title": "Night Shift Nurse Planner - Schedule, Self-Care & Wellness Tracker",
+    "description": "Built for the night shift grind. Nursing schedule planner with self-care tracking, meal planning, sleep optimization, and shift scheduling. Digital + printable. #NursePlanner #NightShiftNurse #NurseLife #HealthcarePlanner",
+    "link": "https://themenopauseplanner.etsy.com/listing/nurse-planner",
+    "board": "Nurse Life & Self-Care",
+    "type": "product",
+    "price": "$11.97"
   }
 ]
