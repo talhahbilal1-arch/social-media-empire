@@ -226,7 +226,7 @@ OUTLINE TO EXPAND:
 
 Return ONLY the HTML content. Start with the H1 title heading. No markdown. No explanations outside the HTML."""
 
-        raw_html = _call_gemini(self.model, prompt)
+        raw_html = _call_gemini(self._client, self._model_name, prompt)
 
         # Extract title from first H1
         title = self._extract_h1(raw_html, keyword)
