@@ -18,17 +18,17 @@ class GeminiClient:
     model_name: str = "gemini-2.5-flash"
 
     def __post_init__(self):
-        genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel(self.model_name)
+        self._client = genai.Client(api_key=self.api_key)
 
     def generate_content(self, prompt: str, max_tokens: int = 1024) -> str:
         """Generate content using Gemini."""
-        response = self.model.generate_content(
-            prompt,
-            generation_config=genai.GenerationConfig(
-                max_output_tokens=max_tokens,
-                temperature=0.7,
-            )
+        response = self._client.models.generate_content(
+            model=self.model_name,
+            contents=prompt,
+            config={
+                "max_output_tokens": max_tokens,
+                "temperature": 0.7,
+            }
         )
         return response.text
 
