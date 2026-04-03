@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-import google.generativeai as genai
+from google import genai
 
 logging.basicConfig(
     level=logging.INFO,
