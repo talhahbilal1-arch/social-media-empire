@@ -105,13 +105,12 @@ class ArticleGenerator:
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY not set")
 
-        genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self._client = genai.Client(api_key=self.api_key)
 
     def _call_gemini(self, prompt: str) -> str:
         """Make a Gemini API call."""
         try:
-            response = self.model.generate_content(prompt)
+            response = self._client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
             return response.text
         except Exception as e:
             logger.error(f"Gemini API error: {e}")
