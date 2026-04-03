@@ -270,7 +270,7 @@ Requirements:
 
 Return ONLY the image generation prompt, nothing else. Keep it under 100 words."""
 
-        return _call_gemini(self.model, prompt).strip()
+        return _call_gemini(self._client, self._model_name, prompt).strip()
 
     # ------------------------------------------------------------------
     # Helpers
