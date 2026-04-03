@@ -17,20 +17,20 @@ import sys
 from pathlib import Path
 
 try:
-    import google.generativeai as genai
+    from google import genai
 except ImportError:
-    print("ERROR: google-generativeai package not installed.")
-    print("Install with: pip install google-generativeai")
+    print("ERROR: google-genai package not installed.")
+    print("Install with: pip install google-genai")
     sys.exit(1)
 
-# Configure Gemini API
+# Initialize Gemini API
 API_KEY = os.environ.get('GEMINI_API_KEY')
 if not API_KEY:
     print("ERROR: GEMINI_API_KEY environment variable not set.")
     print("Get your API key from: https://aistudio.google.com/app/apikey")
     sys.exit(1)
 
-genai.configure(api_key=API_KEY)
+client = genai.Client(api_key=API_KEY)
 
 # Output directory for generated images
 IMAGES_DIR = Path(__file__).parent.parent / "public" / "assets" / "images"
