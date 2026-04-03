@@ -5,7 +5,7 @@ import requests
 from typing import Optional, Any
 from dataclasses import dataclass
 try:
-    import google.generativeai as genai
+    from google import genai
 except ImportError:
     genai = None
 
