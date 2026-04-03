@@ -141,8 +141,7 @@ class FitOver35ArticleGenerator:
         self.repo_name = "fitover35"
 
         if self.gemini_api_key:
-            genai.configure(api_key=self.gemini_api_key)
-            self.model = genai.GenerativeModel('gemini-2.5-flash')
+            self._client = genai.Client(api_key=self.gemini_api_key)
 
     def get_pexels_image(self, category: str) -> str:
         """Get a relevant image from Pexels."""
