@@ -40,7 +40,7 @@ Here's what to look for:
 
 I personally found that bamboo pajamas were a godsend for night sweats. They felt cool against my skin and kept me from waking up feeling like I needed to change the sheets *and* myself. I also switched to linen bedding during the summer months, which made a noticeable difference. I even started hanging my sheets outside to dry – old school, I know, but they smelled amazing and felt even cooler!
 
-**[Product Name: Cozy Earth Bamboo Pajamas]** — These pajamas are incredibly soft and breathable, made from sustainably sourced bamboo. They've significantly reduced my night sweats and are now my go-to sleepwear. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Cozy Earth Bamboo Pajamas]** — These pajamas are incredibly soft and breathable, made from sustainably sourced bamboo. They've significantly reduced my night sweats and are now my go-to sleepwear. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ![Woman wearing cooling pajamas](PEXELS_IMAGE_PLACEHOLDER:woman in pajamas smiling)
@@ -59,7 +59,7 @@ Here are a few things to consider when choosing a wearable tech device for hot f
 
 While the research on the long-term effectiveness of these devices is still emerging, many women report significant relief from hot flashes using them. I tried one that delivered a cool sensation to my wrist, and it really helped to take the edge off those sudden waves of heat. It wasn't a cure-all, but it definitely made them more manageable, especially when I was out and about.
 
-**[Product Name: Embr Wave 2]** — This device uses thermoelectric cooling to deliver a cool or warm sensation to your wrist. It's discreet, easy to use, and has helped me to manage my hot flashes on the go. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Embr Wave 2]** — This device uses thermoelectric cooling to deliver a cool or warm sensation to your wrist. It's discreet, easy to use, and has helped me to manage my hot flashes on the go. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ## Other Non-Hormonal Strategies That Worked for Me
@@ -87,7 +87,7 @@ Dr. JoAnn Pinkerton, Executive Director of NAMS, emphasizes the importance of th
 
 While many women can manage their hot flashes with non-hormonal strategies, it's important to talk to your doctor if your symptoms are severe, frequent, or significantly impacting your quality of life. They can help you determine the best course of treatment for you, which may include hormone therapy or other medications. There’s no shame in exploring all available options. It's all about finding what works best for *you*. Remember, according to Dr. Santoro, what works for one woman may not work for another! Also, talk to your doctor to see if some supplements can help with hormone balance naturally. It's worth exploring!
 
-**[Product Name: Menopause Multi by Perelel]** — I've found that this supplement has helped me to balance my hormones and reduce the severity of my menopause symptoms. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name: Menopause Multi by Perelel]** — I've found that this supplement has helped me to balance my hormones and reduce the severity of my menopause symptoms. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 Ultimately, dealing with hot flashes is a journey. Be patient with yourself, experiment with different strategies, and don't be afraid to seek help from your doctor or other healthcare professionals. And remember, you're not alone! We're all in this together. [Related: Embracing Menopause Self Care](/articles/embracing-menopause-self-care/)

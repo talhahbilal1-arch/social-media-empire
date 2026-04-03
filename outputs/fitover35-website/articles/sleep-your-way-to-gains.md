@@ -40,7 +40,7 @@ Want more? Get our FREE 7-Day Fat Burn Kickstart Plan — delivered straight to 
 Okay, so you're convinced that sleep is important. But actually *getting* good sleep can be tough. Here are some common culprits and how to deal with them:
 
 *   **Caffeine Overload:** Coffee is great...until it's not. I love my morning cup (okay, maybe two), but cut yourself off by early afternoon. Caffeine has a half-life of several hours, so that afternoon pick-me-up can still be buzzing around in your system when you're trying to wind down. Try switching to decaf or herbal tea after lunch. I've found that even one cup after 2 PM messes with my sleep.
-*   **Screen Time Before Bed:** The blue light emitted from your phone, tablet, and computer messes with your body's natural sleep-wake cycle. I know it's tempting to scroll through Instagram before bed, but resist! Aim to put away screens at least an hour before bedtime. If you absolutely must use them, invest in blue light-blocking glasses (I use https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 these ones from Amazon) or turn on the blue light filter on your devices.
+*   **Screen Time Before Bed:** The blue light emitted from your phone, tablet, and computer messes with your body's natural sleep-wake cycle. I know it's tempting to scroll through Instagram before bed, but resist! Aim to put away screens at least an hour before bedtime. If you absolutely must use them, invest in blue light-blocking glasses (I use https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20 these ones from Amazon) or turn on the blue light filter on your devices.
 *   **Inconsistent Sleep Schedule:** Your body loves routine. Going to bed and waking up at the same time each day, even on weekends, helps regulate your circadian rhythm and makes it easier to fall asleep and wake up feeling refreshed. I know it's tempting to "catch up" on sleep on weekends, but honestly, a 2012 study by Broussard et al. suggests that even partial sleep deprivation (like getting 5-6 hours consistently) can mess with your glucose metabolism, impacting energy levels. Weekend sleep-ins can't fully fix the damage. I try to stick to within an hour of my weekday wake time, even on Saturdays and Sundays.
 *   **Stress and Anxiety:** This is a big one. If you're lying awake at night worrying about work, finances, or relationships, it's going to be tough to fall asleep. Try practicing relaxation techniques like deep breathing, meditation, or journaling before bed. I personally find that writing down my worries helps me get them out of my head. Apps like Headspace can also be really helpful.
 *   **Late-Night Eating:** A heavy meal right before bed can disrupt your sleep. Your body is busy digesting food instead of relaxing and preparing for sleep. Aim to finish eating at least 2-3 hours before bedtime. I try to have my last meal by 8 PM if I'm going to bed around 11 PM.
@@ -67,7 +67,7 @@ Let's talk about what to put *in* your body to support better sleep. I'm not a h
 *   **Chamomile Tea:** This herbal tea has calming properties and can help you relax before bed. It's my go-to when I want something warm and comforting.
 *   **Foods Rich in Tryptophan:** Tryptophan is an amino acid that the body uses to produce melatonin and serotonin. Foods rich in tryptophan include turkey, chicken, nuts, and seeds. Try having a small snack with one of these ingredients a couple of hours before bed. Make it part of your [meal prep for muscle](/articles/meal-prep-for-muscle/) strategy. A handful of almonds and a small banana works for me.
 
-**[Product Name: Magnesium Glycinate Supplement]** — I've tried a bunch of different magnesium supplements, and this one seems to work the best for me. It helps me relax and fall asleep faster. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
+**[Product Name: Magnesium Glycinate Supplement]** — I've tried a bunch of different magnesium supplements, and this one seems to work the best for me. It helps me relax and fall asleep faster. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
 Available: ["PLACEHOLDER - ShareASale supplement brand"]
 
 ![Person Drinking Chamomile Tea](PEXELS_IMAGE_PLACEHOLDER:drinking chamomile tea before bed)
@@ -76,12 +76,12 @@ Available: ["PLACEHOLDER - ShareASale supplement brand"]
 
 Your bedroom should be your sanctuary. A place of peace and relaxation, not a brightly lit, noisy zone.
 
-*   **Darkness is Key:** As mentioned before, blackout curtains are a game-changer. Even a little bit of light can disrupt your sleep. I bought mine at https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20 Amazon and they were cheap and work great.
+*   **Darkness is Key:** As mentioned before, blackout curtains are a game-changer. Even a little bit of light can disrupt your sleep. I bought mine at https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20 Amazon and they were cheap and work great.
 *   **Keep it Cool:** Aim for a temperature between 65-68 degrees Fahrenheit. A cooler temperature helps your body relax and fall asleep. I crack a window even in the winter sometimes.
 *   **Minimize Noise:** A white noise machine or fan can help mask distracting sounds. Earplugs are also an option. I use a simple fan.
 *   **Comfortable Bedding:** Invest in a comfortable mattress, pillows, and sheets. This is an investment in your health and well-being. Don't skimp! I upgraded my mattress a few years ago and it was worth every penny.
 
-**[Product Name: Blackout Curtains]** — Seriously, these things are amazing. I can sleep in on weekends without being woken up by the sun. https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20
+**[Product Name: Blackout Curtains]** — Seriously, these things are amazing. I can sleep in on weekends without being woken up by the sun. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
 Available: ["PLACEHOLDER - ClickBank fitness program"]
 
 ## When to See a Doctor About Your Sleep Issues

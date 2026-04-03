@@ -37,7 +37,7 @@ Instead, let’s think of “detox” as a gentle way to support your body's nat
 
 And, it's also about cutting out the junk. Sugary drinks, processed foods, and too much alcohol can all contribute to inflammation and weight gain. I know it's tempting to reach for that glass of wine after a long day, but trust me, your body will thank you for choosing herbal tea instead. I personally found that limiting my alcohol consumption really helped with my night sweats and gave me more energy.
 
-**[Product Name]** — I started taking a liver support supplement that really helped me get rid of that sluggish feeling. I noticed a big difference in my energy levels and digestion. Talk to your doctor to see if a liver support supplement is right for you. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name]** — I started taking a liver support supplement that really helped me get rid of that sluggish feeling. I noticed a big difference in my energy levels and digestion. Talk to your doctor to see if a liver support supplement is right for you. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 ## The 'Menopause Metabolism' Myth (And What To Do Instead)
@@ -123,7 +123,7 @@ Dr. JoAnn Manson, Professor of Medicine at Harvard Medical School, recommends a 
 
 And don't underestimate the power of managing stress. Too much stress can lead to hormonal imbalances, higher cortisol levels, and weight gain. Find healthy ways to manage stress, like meditation, yoga, spending time in nature, or talking to a therapist. I started practicing mindfulness meditation every morning, and it's made a huge difference in my stress levels and how I feel overall.
 
-**[Product Name]** - I rely on my guided meditation app during stressful moments. The personalized sessions always put me in a calm place. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name]** - I rely on my guided meditation app during stressful moments. The personalized sessions always put me in a calm place. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - menopause supplement via ShareASale", "PLACEHOLDER - ClickBank health program", "Etsy planner"]
 
 And taking care of yourself is *never* selfish. It’s essential! Make time for activities that bring you joy and help you relax. Read a book, take a bath, get a massage… whatever makes you feel good. For more self care ideas, see [Related: Self-Care Activities for Menopause Relief](/articles/menopause-self-care-activities/).

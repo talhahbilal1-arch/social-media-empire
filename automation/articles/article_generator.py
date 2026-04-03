@@ -93,11 +93,11 @@ class ArticleGenerator:
     """Generate SEO articles using Gemini AI."""
 
     BRAND_AFFILIATE_TAGS = {
-        "fitness": "fitover35-20",
-        "deals": "dailydealdarling1-20",
-        "menopause": "dailydealdarling1-20",
+        "fitness": "fitover3509-20",
+        "deals": "dailydealdarl-20",
+        "menopause": "dailydealdarl-20",
     }
-    AFFILIATE_TAG = "dailydealdarling1-20"  # default fallback
+    AFFILIATE_TAG = "dailydealdarl-20"  # default fallback
 
     def __init__(self, api_key: Optional[str] = None):
         """Initialize with Gemini API key."""

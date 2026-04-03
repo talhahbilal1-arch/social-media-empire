@@ -65,28 +65,28 @@ def _load_affiliate_config():
 
 # ── Affiliate Link Mapping ──────────────────────────────────────────────────
 # CRITICAL: Always use direct product links (/dp/ASIN?tag=TAG), never /s? search URLs
-# Fitness uses fitover35-20, all other brands use dailydealdarling1-20.
+# Fitness uses fitover3509-20, all other brands use dailydealdarl-20.
 
 AFFILIATE_LINKS = {
     'fitness': {
-        'supplements': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20',
-        'equipment': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20',
-        'protein': 'https://www.amazon.com/dp/B000QSNYGI?tag=fitover35-20',
-        'creatine': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover35-20',
-        'default': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover35-20',
+        'supplements': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover3509-20',
+        'equipment': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20',
+        'protein': 'https://www.amazon.com/dp/B000QSNYGI?tag=fitover3509-20',
+        'creatine': 'https://www.amazon.com/dp/B002DYIZEO?tag=fitover3509-20',
+        'default': 'https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20',
     },
     'deals': {
-        'kitchen': 'https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarling1-20',
-        'home': 'https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20',
-        'beauty': 'https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarling1-20',
-        'selfcare': 'https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarling1-20',
-        'default': 'https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20',
+        'kitchen': 'https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarl-20',
+        'home': 'https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20',
+        'beauty': 'https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20',
+        'selfcare': 'https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20',
     },
     'menopause': {
-        'supplements': 'https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20',
-        'wellness': 'https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarling1-20',
-        'sleep': 'https://www.amazon.com/dp/B005DEK990?tag=dailydealdarling1-20',
-        'default': 'https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20',
+        'supplements': 'https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20',
+        'wellness': 'https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20',
+        'sleep': 'https://www.amazon.com/dp/B005DEK990?tag=dailydealdarl-20',
+        'default': 'https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20',
     }
 }
 

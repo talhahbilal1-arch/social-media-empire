@@ -59,7 +59,7 @@ Spill the tea, right? Where do I *actually* find these deals? Here are my fave p
 *   **Specialty Online Retailers:** There are more and more online retailers that specialize in sustainable furniture. They *might* be pricier than big box stores, but you can often find unique, high-quality pieces that are built to last.
 *   **Amazon:** Search specifically for "recycled patio furniture" and filter by price. You can find some surprisingly good deals! Just double-check the reviews and product descriptions.
 
-**[Outdoor Rug]** – I recently snagged an outdoor rug made from recycled plastic bottles. It’s SO soft and looks way more expensive than it was! Plus, I feel good knowing I’m helping to keep plastic out of landfills. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Outdoor Rug]** – I recently snagged an outdoor rug made from recycled plastic bottles. It’s SO soft and looks way more expensive than it was! Plus, I feel good knowing I’m helping to keep plastic out of landfills. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
 While we're talking home finds, check out my article on home organization ideas [Home Organization Hacks That Actually Work](/articles/home-organization-hacks/)
@@ -88,7 +88,7 @@ Investing in sustainable patio furniture is smart, but take care of it to make i
 
 While we're talking great deals, have you seen these kitchen gadgets? [Kitchen Gadgets You Didn't Know You Needed](/articles/kitchen-gadgets-worth-buying/)
 
-**[Citronella Candles]** – I swear by these to keep the bugs away during summer evenings! These are made with natural soy wax and essential oils, so I can enjoy the fresh air without inhaling harsh chemicals. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Citronella Candles]** – I swear by these to keep the bugs away during summer evenings! These are made with natural soy wax and essential oils, so I can enjoy the fresh air without inhaling harsh chemicals. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
 ## Common Mistakes to Avoid When Buying Affordable Patio Furniture

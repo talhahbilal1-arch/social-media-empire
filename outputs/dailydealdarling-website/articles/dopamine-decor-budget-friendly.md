@@ -41,7 +41,7 @@ Seriously, don't underestimate the power of a good thrift store haul! You can fi
 *   **Mirrors:** Mirrors are great for bouncing light around the room and making it feel bigger. Look for unique shapes or frames. A full length mirror can make a small space look bigger!
 *   **Small Accent Furniture:** Keep an eye out for side tables, stools, or even small dressers that you can paint or refinish in a bright color. I found a gorgeous teal side table for $10 last week!
 
-**[Product Name]** — Okay, this set of brightly colored spray paints is my absolute go-to for upcycling thrift store finds. They’re super easy to use and come in the most vibrant colors. Trust me, you need these. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Product Name]** — Okay, this set of brightly colored spray paints is my absolute go-to for upcycling thrift store finds. They’re super easy to use and come in the most vibrant colors. Trust me, you need these. https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
 ## DIY Dopamine Decor Projects (Even If You're Not Crafty!)
@@ -75,7 +75,7 @@ Sometimes, all it takes is a few simple swaps to completely transform a space. P
 *   **Bright Rugs:** A rug can instantly anchor a room and add a pop of color to the floor. Even a small rug can make a big difference. Consider swapping out a neutral rug for something bolder. [Related: Best Rug Deals Online](/articles/best-rug-deals/)
 *   **Curtains:** Switch out your neutral curtains for something with a bold print or vibrant color. Sheer, colorful curtains can let light in while adding a pop of color!
 
-**[Product Name]** — Okay, I'm obsessed with these velvet throw pillow covers from [Retailer]. They come in a ton of different colors, and they're SO soft. Plus, they're super affordable, so you can buy a few different colors and mix and match! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+**[Product Name]** — Okay, I'm obsessed with these velvet throw pillow covers from [Retailer]. They come in a ton of different colors, and they're SO soft. Plus, they're super affordable, so you can buy a few different colors and mix and match! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
 ## When "Dopamine Decor" Becomes Overload

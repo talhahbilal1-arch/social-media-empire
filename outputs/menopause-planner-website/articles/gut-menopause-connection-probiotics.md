@@ -41,7 +41,7 @@ Now, I’m not saying probiotics are a magic bullet. I still get the occasional 
 
 And research backs this up. A systematic review, cited by the NCBI (2021), found that probiotics *may* improve several menopause symptoms, including hot flashes and sleep disturbances. Plus, Dr. Mary Jane Minkin, a Clinical Professor at Yale University School of Medicine, suggests that probiotics can help with vaginal dryness and mood swings, two other common menopause complaints. Always talk with your own doctor for personalized advice.
 
-**[Product Name] - The Menopause Reset** - I've personally tried this 6 week online course about gut health. I appreciate how it goes beyond "take a probiotic" and offers real dietary and lifestyle adjustments to reduce inflammation. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name] - The Menopause Reset** - I've personally tried this 6 week online course about gut health. I appreciate how it goes beyond "take a probiotic" and offers real dietary and lifestyle adjustments to reduce inflammation. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 ### Choosing the Right Probiotic Strain for Menopause Symptoms
 
 Here's where it gets a little tricky: not all probiotics are created equal. Different strains of bacteria have different effects. So, how do you choose the right one for menopause symptoms relief? It's like picking the right tool for the job – you want to make sure you're using the best one for *your* needs.
@@ -55,7 +55,7 @@ Talk to your doctor or a registered dietitian to find a probiotic supplement tha
 
 ![Selection of colorful probiotic capsules](PEXELS_IMAGE_PLACEHOLDER:probiotic capsules)
 
-**[Product Name] - Seed Synbiotic** - These capsules have a unique two-in-one design to survive digestion and make it to your large intestine where they can go to work. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name] - Seed Synbiotic** - These capsules have a unique two-in-one design to survive digestion and make it to your large intestine where they can go to work. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
 ### Foods to Feed Your Gut: Prebiotics and Fermented Foods for Hormone Health
 
@@ -84,7 +84,7 @@ While focusing on your gut health can be a helpful strategy for managing menopau
 
 It's also important to remember that while probiotics can be beneficial for some women, they may not be right for everyone. Some people may experience side effects, such as gas, bloating, or diarrhea. If you experience any adverse effects, stop taking the probiotic and talk to your doctor.
 
-**[Product Name] - The Menopause Planner** - Staying organized can do wonders for overall well-being during this stage of life. Planning balanced meals that support gut health is easier with a purpose-built planner. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarling1-20
+**[Product Name] - The Menopause Planner** - Staying organized can do wonders for overall well-being during this stage of life. Planning balanced meals that support gut health is easier with a purpose-built planner. https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20
 
 ![Woman practicing yoga outdoors](PEXELS_IMAGE_PLACEHOLDER:woman yoga nature)
 

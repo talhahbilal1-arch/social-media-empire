@@ -48,7 +48,7 @@ Here are some of my can't-live-without organization heroes that won't empty your
 *   **Drawer Dividers:** GAME CHANGER! Wave goodbye to messy, overflowing drawers. These are perfect for organizing underwear, socks, makeup, or even office supplies.
 *   **Woven Baskets:** These are both functional AND add a bit of style to any room. Use them for blankets, magazines, or even toys.
 
-I swear by these foldable storage cubes: **[Foldable Storage Cubes]** - They make any shelf look instantly more put-together! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+I swear by these foldable storage cubes: **[Foldable Storage Cubes]** - They make any shelf look instantly more put-together! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
 ![Alt text](PEXELS_IMAGE_PLACEHOLDER:organization and decluttering)
@@ -73,7 +73,7 @@ Okay, let’s get to the FUN part: decorating! You really don't have to spend a 
 
 And don't forget the little things like candles, diffusers, and cute figurines. They can really tie a room together and make it feel cozy and inviting. Plus, you'll find tons of affordable self-care goodies at these places too!
 
-This essential oil diffuser is AMAZING: **[Essential Oil Diffuser]** - I use it every single day. It makes my whole apartment smell incredible! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarling1-20
+This essential oil diffuser is AMAZING: **[Essential Oil Diffuser]** - I use it every single day. It makes my whole apartment smell incredible! https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20
 Available: ["PLACEHOLDER - ShareASale home/lifestyle", "PLACEHOLDER - Impact brands", "PLACEHOLDER - Rakuten retailers"]
 
 ![Alt text](PEXELS_IMAGE_PLACEHOLDER:home decor)

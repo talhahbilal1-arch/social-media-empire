@@ -5,8 +5,9 @@ Single source of truth — all automation scripts import from here.
 
 # Amazon Associates affiliate tags
 AFFILIATE_TAGS = {
-    "fitover35": "fitover35-20",
+    "fitover35": "fitover3509-20",
     "dailydealdarling": "dailydealdarl-20",
+    "menopause": "dailydealdarl-20",
 }
 
 # Website root directories (local paths)

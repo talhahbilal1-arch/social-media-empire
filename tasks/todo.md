@@ -1,3 +1,27 @@
+# Phase 5: Email Sequence JSON Conversion + Kit Uploader — April 2, 2026
+
+## Tasks
+
+- [x] **Task 1: Parse fitness welcome sequence** — Extracted 7 emails from fitover35_welcome_sequence.md to fitness_welcome.json. Fixed all affiliate tags from dailydealdarl-20 to fitover3509-20 (8 links corrected).
+- [x] **Task 2: Parse deals welcome sequence** — Extracted 7 emails from daily_deal_darling_welcome_sequence.md to deals_welcome.json. 14 affiliate links all correct (dailydealdarl-20).
+- [x] **Task 3: Parse menopause welcome sequence** — Extracted 7 emails from menopause_planner_welcome_sequence.md to menopause_welcome.json. 1 affiliate link correct (dailydealdarl-20).
+- [x] **Task 4: Parse reengagement sequence** — Extracted 3 multi-brand emails from reengagement_sequence.md to reengagement_welcome.json. Structured with per-brand variants (fitness/deals/menopause).
+- [x] **Task 5: Create Kit API uploader** — Built email_marketing/kit_sequence_uploader.py with dry-run default, --live flag, --list, --validate-only modes. Uses Kit API v4, maps to correct form IDs.
+- [x] **Task 6: Validate all outputs** — All 4 JSON files parse cleanly. Affiliate tag validation passes. Dry-run upload simulates all 3 brand sequences successfully.
+- [x] **Task 7: Commit and push**
+
+## Review
+
+Converted 4 markdown email sequences to Kit-uploadable JSON format:
+- fitness_welcome.json: 7 emails, 8 affiliate links (all corrected to fitover3509-20)
+- deals_welcome.json: 7 emails, 14 affiliate links (dailydealdarl-20)
+- menopause_welcome.json: 7 emails, 1 affiliate link (dailydealdarl-20)
+- reengagement_welcome.json: 3 emails, multi-brand variants (fitness/deals/menopause)
+
+Kit uploader features: dry-run by default, --live to push, --list to preview, --validate-only for tag checks, rate limiting, form-to-sequence linking. Maps to form IDs: fitness=8946984, deals=9144859, menopause=9144926.
+
+---
+
 # Phase 4: Gumroad Product Landing Pages — April 2, 2026
 
 ## Tasks

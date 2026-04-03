@@ -220,7 +220,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Pinterest posting**: Active — 5x daily (6AM, 9AM, 12PM, 3PM, 7PM PST), 5 pins/brand/day (15 total)
 - **All workflows**: Green — content engine, rescue poster, social distribution all active
 - **Content generated**: 400+ articles across 3 brands (333 articles indexed in sitemaps)
-- **Affiliate tags**: FIXED — fitness=fitover3509-20, deals/menopause=dailydealdarl-20. All 144 fitness articles corrected.
+- **Affiliate tags**: FIXED April 2, 2026 — fitness=fitover3509-20, deals/menopause=dailydealdarl-20. ALL 335 articles + entire codebase corrected. Booby-trap sanitization function killed.
 - **Google Analytics**: All articles now have brand-specific GA tracking (G-1FC6FH34L9, G-HVCLZPEYNS, G-02ZPS3H3GC)
 - **Email capture**: Kit forms working on all 3 brand sites with correct form IDs (8946984, 9144859, 9144926)
 - **FitOver35**: Live on Vercel with schema markup, sticky CTA, lead magnet page, correct affiliate tags
@@ -235,7 +235,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Distribution**: SEO ping system + GitHub Action, 20 Pinterest product pins, Reddit/Twitter content generated
 - **Make.com**: 29 dead scenarios DELETED. 9 active scenarios remain, all healthy (0 errors).
 - **Revenue dashboard**: Created at outputs/fitover35-website/dashboard/index.html
-- **Last session**: March 31, 2026 — Overnight revenue activation (7-agent execution)
+- **Last session**: April 2, 2026 — EMERGENCY: Fixed ALL affiliate tags across entire codebase (fitover3509-20, dailydealdarl-20). Killed booby-trap sanitization function.
 
 ## Active Priorities (April 2026)
 1. Sign up for top affiliate programs — Semrush ($200/sale), Grammarly, Ahrefs, Hostinger (see PHONE-ACTION-CHECKLIST.md)
@@ -247,7 +247,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 
 ## Known Issues
 - Schema-code mismatches have occurred (missing columns, malformed PostgREST filters)
-- Affiliate tags cross-contamination: FIXED March 31, 2026 (code + 144 articles corrected)
+- Affiliate tags cross-contamination: FIXED April 2, 2026 (ALL code + ALL 335 articles corrected. Booby-trap sanitize function removed. Correct tags: fitover3509-20, dailydealdarl-20)
 - Late API keys expired — video pin posting via Late returns 401. Refresh at getlate.dev
 - Etsy shop onboarding still needs banking/billing setup (manual)
 - Make.com: CLEANED UP — 29 dead scenarios deleted March 31, 2026

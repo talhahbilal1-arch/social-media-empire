@@ -518,9 +518,9 @@ jobs:
           # Fixes wrong tags, fake ASINs, and missing tags on the fly.
           # ══════════════════════════════════════════════════════════════
           BRAND_AFFILIATE_TAG = {
-              'fitness': 'fitover35-20',
-              'deals': 'dailydealdarling1-20',
-              'menopause': '',  # No Amazon affiliate tag for menopause
+              'fitness': 'fitover3509-20',
+              'deals': 'dailydealdarl-20',
+              'menopause': 'dailydealdarl-20',
           }
           if articles_generated:
               print('\n=== PHASE 2b: Affiliate link audit ===')
