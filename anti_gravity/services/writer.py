@@ -49,8 +49,8 @@ class Writer:
         key = api_key or settings.GEMINI_API_KEY
         if not key:
             raise ValueError("GEMINI_API_KEY is required")
-        genai.configure(api_key=key)
-        self.model = genai.GenerativeModel(model_name=model_name or settings.GEMINI_MODEL)
+        self._client = genai.Client(api_key=key)
+        self._model_name = model_name or settings.GEMINI_MODEL
 
     # ------------------------------------------------------------------
     # Step 1: Keyword brainstorming
