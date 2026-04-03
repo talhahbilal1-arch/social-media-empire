@@ -439,5 +439,32 @@
     "board": "AI Audio Tools",
     "posted_at": "2026-04-02T22:22:24.103Z",
     "success": true
+  },
+  {
+    "slug": "fliki",
+    "pin_type": "tool-review",
+    "title": "Fliki AI Review: Effortless Video Creation (4.4/5)",
+    "link": "https://pilottools.ai/tools/fliki/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-03T16:51:58.426Z",
+    "success": true
+  },
+  {
+    "slug": "neuronwriter",
+    "pin_type": "tool-review",
+    "title": "NeuronWriter Review: Ace SEO with AI (4.3/5)",
+    "link": "https://pilottools.ai/tools/neuronwriter/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-03T16:52:02.403Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Grammarly vs ChatGPT: Which AI Writing Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/grammarly-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-03T16:52:06.459Z",
+    "success": true
   }
 ]
