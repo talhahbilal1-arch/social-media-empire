@@ -1257,12 +1257,14 @@ def main():
     article_data = generator.generate_full_article(args.keyword, args.category)
 
     # Convert to HTML
+    # Derive slug unconditionally (needed for template rendering and Pexels fallback)
+    slug = article_data['keyword'].lower().replace(' ', '-').replace('?', '').replace("'", '')
+    slug = ''.join(c for c in slug if c.isalnum() or c == '-')[:60]
+
     # Determine output path
     if args.output:
         output_path = Path(args.output)
     else:
-        slug = article_data['keyword'].lower().replace(' ', '-').replace('?', '').replace("'", '')
-        slug = ''.join(c for c in slug if c.isalnum() or c == '-')[:60]
         output_path = Path(args.output_dir) / f"{slug}.html"
 
     # Use the new unified template system
