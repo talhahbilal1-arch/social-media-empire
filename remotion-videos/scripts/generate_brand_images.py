@@ -92,14 +92,6 @@ def generate_images_for_brand(brand_id: str) -> bool:
     print(f"Output directory: {output_dir}")
     print(f"{'='*50}")
 
-    # Initialize Imagen model
-    try:
-        model = genai.ImageGenerationModel("imagen-3.0-generate-001")
-    except Exception as e:
-        print(f"ERROR: Could not initialize Imagen model: {e}")
-        print("Note: Imagen 3 requires access to be enabled for your API key.")
-        return False
-
     success_count = 0
 
     for i, prompt in enumerate(config['prompts'], 1):
@@ -115,11 +107,14 @@ def generate_images_for_brand(brand_id: str) -> bool:
         print(f"       Prompt: {prompt[:60]}...")
 
         try:
-            result = model.generate_images(
+            result = client.models.generate_images(
+                model="imagen-3.0-generate-001",
                 prompt=prompt,
-                number_of_images=1,
-                aspect_ratio="9:16",  # Vertical for Pinterest/TikTok/Reels
-                safety_filter_level="block_only_high",
+                config={
+                    "number_of_images": 1,
+                    "aspect_ratio": "9:16",
+                    "safety_filter_level": "block_only_high",
+                }
             )
 
             # Save the generated image
