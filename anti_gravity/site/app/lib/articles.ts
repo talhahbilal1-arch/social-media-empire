@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import matter from 'gray-matter'
+import { marked } from 'marked'
 
 export interface Article {
   title: string
@@ -14,14 +16,31 @@ export interface Article {
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'articles')
 
+function parseMarkdownArticle(filePath: string): Article {
+  const raw = fs.readFileSync(filePath, 'utf-8')
+  const { data, content } = matter(raw)
+
+  const html = marked.parse(content, { async: false }) as string
+  const wordCount = content.split(/\s+/).filter(Boolean).length
+
+  return {
+    title: data.title || '',
+    slug: data.slug || path.basename(filePath, '.md'),
+    html,
+    meta_description: data.description || '',
+    word_count: wordCount,
+    keyword: data.category || '',
+    created_at: data.date || new Date().toISOString(),
+  }
+}
+
 export function getAllArticles(): Article[] {
   if (!fs.existsSync(CONTENT_DIR)) return []
 
-  const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.json'))
+  const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'))
 
   const articles = files.map(file => {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, file), 'utf-8')
-    return JSON.parse(raw) as Article
+    return parseMarkdownArticle(path.join(CONTENT_DIR, file))
   })
 
   // Sort by created_at descending (newest first)
@@ -31,16 +50,15 @@ export function getAllArticles(): Article[] {
 }
 
 export function getArticleBySlug(slug: string): Article | null {
-  const filePath = path.join(CONTENT_DIR, `${slug}.json`)
+  const filePath = path.join(CONTENT_DIR, `${slug}.md`)
   if (!fs.existsSync(filePath)) return null
-  const raw = fs.readFileSync(filePath, 'utf-8')
-  return JSON.parse(raw) as Article
+  return parseMarkdownArticle(filePath)
 }
 
 export function getAllSlugs(): string[] {
   if (!fs.existsSync(CONTENT_DIR)) return []
   return fs
     .readdirSync(CONTENT_DIR)
-    .filter(f => f.endsWith('.json'))
-    .map(f => f.replace('.json', ''))
+    .filter(f => f.endsWith('.md'))
+    .map(f => f.replace('.md', ''))
 }
