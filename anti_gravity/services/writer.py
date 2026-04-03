@@ -14,7 +14,7 @@ import re
 import time
 from typing import Optional
 
-import google.generativeai as genai
+from google import genai
 
 from anti_gravity.core.config import settings
 
