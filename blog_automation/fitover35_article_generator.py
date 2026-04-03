@@ -211,7 +211,7 @@ IMPORTANT:
 """
 
         try:
-            response = self.model.generate_content(prompt)
+            response = self._client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
             text = response.text
 
             # Clean up the response
