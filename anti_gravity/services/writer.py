@@ -25,11 +25,11 @@ MAX_RETRIES = 5
 BASE_BACKOFF_SECONDS = 2
 
 
-def _call_gemini(model, prompt: str, retries: int = MAX_RETRIES) -> str:
+def _call_gemini(client, model_name, prompt: str, retries: int = MAX_RETRIES) -> str:
     """Call Gemini with exponential backoff on 429 errors."""
     for attempt in range(retries):
         try:
-            response = model.generate_content(prompt)
+            response = client.models.generate_content(model=model_name, contents=prompt)
             return response.text
         except Exception as e:
             err = str(e).lower()
