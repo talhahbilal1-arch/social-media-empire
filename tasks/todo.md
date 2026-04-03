@@ -1,3 +1,40 @@
+# Phase 4: Gumroad Product Landing Pages — April 2, 2026
+
+## Tasks
+
+- [ ] **Task 1: Create zero-miss-lead-engine.html** — Landing page matching existing product page style
+- [ ] **Task 2: Create content-repurposing-machine.html** — Landing page matching existing product page style
+- [ ] **Task 3: Create automated-review-generator.html** — Landing page matching existing product page style
+- [ ] **Task 4: Create products/index.html** — Products index page listing all 7 products + bundle
+- [ ] **Task 5: Update bundle/index.html** — Add links to all individual product pages
+- [ ] **Task 6: Commit and push** — Single commit with all changes
+
+---
+
+# Phase 3: Workflow Cleanup & Health Monitor — April 2, 2026
+
+## Tasks
+
+- [x] **Task 1: Archive 8 dead workflows** — Moved 8 disabled workflows to .github/workflows/archive/. Archive now has 24 files. 34 active workflow files remain.
+- [x] **Task 2: Audit remaining active workflows** — All 34 active workflows audited. All use checkout@v4, Python 3.11, Node 20. Fixed subdomain-deploy.yml (Node 18 -> 20). All cron schedules valid.
+- [x] **Task 3: Create scripts/workflow_health.py** — Created. Parses all workflow YAML files, extracts cron schedules, generates markdown report with active/archived counts and daily timeline. Tested successfully (34 active, 24 archived).
+- [x] **Task 4: Create weekly-health-report.yml** — Runs Monday 8AM PST (cron: '0 16 * * 1'), executes workflow_health.py, commits report to monitoring/workflow-health.md. Has contents: write permission.
+- [x] **Task 5: Update CLAUDE.md active workflows section** — Updated from 9 to 35 workflows. Organized into Core Pipeline (daily), Weekly, PilotTools, and Event-Driven sections with cron schedules.
+- [x] **Task 6: Log active vs archived counts in health report** — Final count: 35 active workflows, 24 archived. Health report regenerated with all workflows included.
+
+## Review
+
+Phase 3 completed. Key changes:
+- 8 dead/disabled workflows moved from .github/workflows/ to .github/workflows/archive/
+- subdomain-deploy.yml Node version updated from 18 to 20
+- New script: scripts/workflow_health.py — generates comprehensive markdown health report
+- New workflow: weekly-health-report.yml — auto-runs Monday 8AM PST, commits report
+- CLAUDE.md "Active GitHub Workflows" section updated from 9 to 35 entries, organized by category
+- Health report at monitoring/workflow-health.md includes daily UTC timeline of all scheduled workflows
+- Final count: 35 active, 24 archived (59 total)
+
+---
+
 # Phase 2: Optimization & Expansion — April 2, 2026
 
 ## Tasks

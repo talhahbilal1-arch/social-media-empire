@@ -1,0 +1,38 @@
+name: Weekly Health Report
+
+on:
+  schedule:
+    # Monday 8AM PST (16:00 UTC)
+    - cron: '0 16 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Generate workflow health report
+        run: python3 scripts/workflow_health.py
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add monitoring/workflow-health.md
+          git diff --cached --quiet || git commit -m "docs: update weekly workflow health report"
+          git push

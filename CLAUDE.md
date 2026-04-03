@@ -19,9 +19,9 @@ renders images with PIL, uploads to Supabase Storage, and posts to Pinterest via
 
 | Brand key | Site | Niche | Pins/day | Amazon Tag |
 |-----------|------|-------|----------|------------|
-| `fitness` | fitover35.com | Men's fitness over 35 | 5 | fitover35-20 |
-| `deals` | dailydealdarling.com | Budget home & lifestyle | 5 | dailydealdarling1-20 |
-| `menopause` | menopause-planner-website.vercel.app | Menopause wellness | 5 | — |
+| `fitness` | fitover35.com | Men's fitness over 35 | 5 | fitover3509-20 |
+| `deals` | dailydealdarling.com | Budget home & lifestyle | 5 | dailydealdarl-20 |
+| `menopause` | menopause-planner-website.vercel.app | Menopause wellness | 5 | dailydealdarl-20 |
 
 ## Pipeline Architecture (content-engine.yml — 5x daily)
 
@@ -107,17 +107,52 @@ Make.com payload uses hyphenated names: `fitness-made-easy`, `daily-deal-darling
 - dailydealdarling.com → `outputs/dailydealdarling-website/`
 - menopause-planner-website.vercel.app → `outputs/menopause-planner-website/`
 
-## Active GitHub Workflows (9)
+## Active GitHub Workflows (35 active, 24 archived)
 
-1. `content-engine.yml` — 5x daily pin + article + deploy pipeline
-2. `weekly-discovery.yml` — Sunday 10PM PST trend discovery
-3. `fitness-articles.yml` — FitOver35 article generation
-4. `system-health.yml` — 6-hourly self-healing + DB maintenance
-5. `email-automation.yml` — ConvertKit email sequences
-6. `weekly-maintenance.yml` — Sunday cleanup + DB vacuum
-7. `emergency-alert.yml` — Critical failure alerts
-8. `auto-merge.yml` — Auto-merge passing PRs
-9. `toolpilot-deploy.yml` — ToolPilot AI directory deploy
+### Core Pipeline (daily)
+1. `content-engine.yml` — 5x daily pin + article + deploy pipeline (6/9/12/3/7 PM UTC)
+2. `fitness-articles.yml` — Mon-Fri article generation (7AM UTC)
+3. `daily-trend-scout.yml` — Daily trend scouting (1PM UTC)
+4. `daily-analytics.yml` — Daily analytics collection (2PM UTC)
+5. `analytics-collector.yml` — Analytics data (11PM UTC)
+6. `pin-watchdog.yml` — Every 2h safety net for pin generation
+7. `enable-and-run.yml` — Daily workflow re-enabler (1PM UTC)
+8. `emergency-alert.yml` — Dead man's switch (8AM UTC)
+9. `revenue-intelligence.yml` — Daily revenue analysis (3PM UTC)
+
+### Weekly
+10. `weekly-discovery.yml` — Sunday 10PM PST trend discovery
+11. `weekly-summary.yml` — Sunday weekly report
+12. `social-distribution.yml` — Monday social content distribution
+13. `seo-ping.yml` — Monday SEO ping
+14. `check-affiliate-links.yml` — Monday affiliate link check
+15. `post-product-pins.yml` — Mon/Thu product pins
+16. `seo-content-machine.yml` — Mon/Wed/Fri SEO articles
+17. `menopause-newsletter.yml` — Wednesday newsletter
+18. `revenue-activation.yml` — Monday revenue team
+19. `self-improve.yml` — Sunday self-optimization
+20. `weekly-health-report.yml` — Monday workflow health report (4PM UTC)
+
+### PilotTools
+21. `toolpilot-content.yml` — Mon-Fri daily content (6AM UTC)
+22. `toolpilot-pinterest.yml` — 2x daily pins (4PM/10PM UTC)
+23. `toolpilot-twitter.yml` — 3x daily tweets
+24. `toolpilot-linkedin.yml` — Mon/Wed/Fri LinkedIn posts
+25. `toolpilot-repurpose.yml` — Daily content repurposing
+26. `toolpilot-weekly.yml` — Monday trend discovery
+27. `toolpilot-newsletter.yml` — Monday newsletter
+28. `toolpilot-outreach.yml` — Monday backlink outreach
+29. `toolpilot-report.yml` — Sunday weekly report
+
+### Event-Driven (no schedule)
+30. `toolpilot-deploy.yml` — PilotTools deploy (push to main)
+31. `deploy-brand-sites.yml` — Brand site deploy (manual/callable)
+32. `subdomain-deploy.yml` — Subdomain deploy (push to main)
+33. `auto-merge.yml` — Auto-merge PRs (push)
+34. `article-guard.yml` — Article format validation (push)
+35. `regenerate-articles.yml` — Manual article regeneration
+
+Full report: `monitoring/workflow-health.md` (auto-updated weekly)
 
 ## Common Issues & Fixes
 
@@ -185,7 +220,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Pinterest posting**: Active — 5x daily (6AM, 9AM, 12PM, 3PM, 7PM PST), 5 pins/brand/day (15 total)
 - **All workflows**: Green — content engine, rescue poster, social distribution all active
 - **Content generated**: 400+ articles across 3 brands (333 articles indexed in sitemaps)
-- **Affiliate tags**: FIXED — fitness=fitover35-20, deals/menopause=dailydealdarling1-20. All 144 fitness articles corrected.
+- **Affiliate tags**: FIXED — fitness=fitover3509-20, deals/menopause=dailydealdarl-20. All 144 fitness articles corrected.
 - **Google Analytics**: All articles now have brand-specific GA tracking (G-1FC6FH34L9, G-HVCLZPEYNS, G-02ZPS3H3GC)
 - **Email capture**: Kit forms working on all 3 brand sites with correct form IDs (8946984, 9144859, 9144926)
 - **FitOver35**: Live on Vercel with schema markup, sticky CTA, lead magnet page, correct affiliate tags
