@@ -80,7 +80,7 @@ Return ONLY a JSON array. No markdown fences. Example format:
   {{"keyword": "top wireless earbuds for running 2026", "intent": "best-of-purchase", "difficulty": "low"}}
 ]"""
 
-        raw = _call_gemini(self.model, prompt)
+        raw = _call_gemini(self._client, self._model_name, prompt)
 
         # Strip markdown fences if present
         raw = re.sub(r"```json\s*", "", raw)
@@ -343,7 +343,7 @@ Return ONLY a JSON array. No markdown fences:
   {{"pin_title": "...", "pin_description": "..."}}
 ]"""
 
-        raw = _call_gemini(self.model, prompt)
+        raw = _call_gemini(self._client, self._model_name, prompt)
         raw = re.sub(r"```json\s*", "", raw)
         raw = re.sub(r"```\s*$", "", raw)
 
