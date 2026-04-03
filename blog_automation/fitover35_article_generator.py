@@ -10,7 +10,7 @@ import re
 from datetime import datetime
 from dataclasses import dataclass
 from typing import Optional
-import google.generativeai as genai
+from google import genai
 import requests
 
 
