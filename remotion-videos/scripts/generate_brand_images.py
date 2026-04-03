@@ -118,7 +118,7 @@ def generate_images_for_brand(brand_id: str) -> bool:
             )
 
             # Save the generated image
-            if result.images:
+            if result and hasattr(result, 'images') and result.images:
                 result.images[0].save(str(image_path))
                 print(f"       Saved: {image_path.name}")
                 success_count += 1
