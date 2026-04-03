@@ -43,6 +43,7 @@ function generateToolPins() {
 
   // Comparison pins
   for (const comp of comparisons) {
+    if (!comp.tools || !comp.tools[0] || !comp.tools[1]) continue
     const tool1Name = comp.tools[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
     const tool2Name = comp.tools[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
 

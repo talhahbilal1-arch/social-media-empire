@@ -150,7 +150,7 @@ def update_blog_html(
     # Check for duplicates
     if check_duplicate(content, title, article_path):
         logger.warning(f"Article already exists in blog listing: {title}")
-        return False
+        return True  # Not an error — article already listed
 
     # Generate the new blog item HTML
     if brand == "fitover35":
