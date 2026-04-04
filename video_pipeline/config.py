@@ -33,6 +33,23 @@ class BrandConfig:
     amazon_tag: Optional[str]
     pexels_orientation: str = "portrait"
 
+    @property
+    def pinterest_webhook_url(self) -> Optional[str]:
+        """Resolved Make.com webhook URL from the brand's env var (None if not configured)."""
+        if not self.webhook_env:
+            return None
+        return os.getenv(self.webhook_env)
+
+    @property
+    def pinterest_webhook_env(self) -> Optional[str]:
+        """Name of the env var that holds this brand's Pinterest webhook URL."""
+        return self.webhook_env
+
+    @property
+    def affiliate_tag(self) -> Optional[str]:
+        """Amazon affiliate tag for this brand (alias for amazon_tag)."""
+        return self.amazon_tag
+
 # ── Load .env files ────────────────────────────────────────────────────────────
 # Load project .env first, then toolkit .env for ElevenLabs key fallback
 
