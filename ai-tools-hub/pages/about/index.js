@@ -13,13 +13,12 @@ export default function AboutPage() {
     "description": "Independent AI tool reviews and comparisons",
     "foundingDate": "2026",
     "author": {
-      "@type": "Person",
-      "name": "PilotTools Review Team",
-      "jobTitle": "AI Tool Researchers & Product Reviewers",
-      "description": "Industry experts with 50+ combined years in software evaluation, AI research, and technology journalism"
+      "@type": "Organization",
+      "name": "PilotTools",
+      "description": "Independent AI tool reviews and comparisons"
     },
     "datePublished": "2026-01-01",
-    "dateModified": "2026-03-22"
+    "dateModified": "2026-04-03"
   }
 
   return (
@@ -60,7 +59,7 @@ export default function AboutPage() {
             <li><strong>Testing approach</strong> &mdash; Primarily hands-on manual testing with automated benchmarks for performance metrics only.</li>
             <li><strong>Evaluation framework</strong> &mdash; Each tool scored 0-5.0 on: output quality, ease of use, features, pricing value, and community reputation.</li>
             <li><strong>Testing depth</strong> &mdash; 15-20 hours of hands-on testing per tool across real-world use cases.</li>
-            <li><strong>Reviewer count</strong> &mdash; 3+ independent reviewers per tool. Scores averaged to prevent bias.</li>
+            <li><strong>Review process</strong> &mdash; Each tool is evaluated through hands-on use across multiple real-world tasks and use cases.</li>
             <li><strong>Scoring thresholds</strong> &mdash; 4.5+/5.0 = Excellent; 4.0-4.4 = Very Good; 3.5-3.9 = Good; Below 3.5 = Fair/Not Recommended.</li>
           </ul>
 
@@ -85,21 +84,19 @@ export default function AboutPage() {
             <li><strong>Commission structure is published</strong> &mdash; Same commission rates apply to all tools in each category.</li>
           </ul>
 
-          <h2>Expertise & Credentials</h2>
-          <p>Our review team brings deep expertise across AI, software, business, and technology journalism:</p>
-          <ul>
-            <li><strong>AI Research</strong> &mdash; 15+ years combined experience in machine learning, NLP, and generative AI evaluation.</li>
-            <li><strong>Product Strategy</strong> &mdash; Former product managers and strategists from OpenAI, Google, and startup ecosystems.</li>
-            <li><strong>Software Engineering</strong> &mdash; Full-stack engineers who understand infrastructure, performance, and code quality.</li>
-            <li><strong>Content & Marketing</strong> &mdash; Professional copywriters, SEO specialists, and marketing strategists.</li>
-            <li><strong>Technology Journalism</strong> &mdash; Published contributors to TechCrunch, Verge, and AI publication platforms.</li>
-          </ul>
+          <h2>Who We Are</h2>
+          <p>
+            PilotTools is run by a small, dedicated team of technology enthusiasts and AI practitioners
+            who use these tools daily in our own work. We combine hands-on experience with systematic
+            evaluation to help you make informed decisions. Our backgrounds span software development,
+            digital marketing, content creation, and small business operations.
+          </p>
 
           <h2>Trust & Transparency</h2>
           <p>
-            PilotTools is trusted by <strong>500K+ professionals monthly</strong> for independent AI tool guidance.
-            We publish detailed reviews, raw ratings, and comparison methodologies—not just opinions. If you find
-            any inaccuracy in our reviews, contact us directly and we'll investigate and correct it within 24 hours.
+            PilotTools provides independent AI tool guidance for professionals, creators, and developers.
+            We publish detailed reviews, transparent ratings, and clear comparison methodologies &mdash; not just opinions.
+            If you find any inaccuracy in our reviews, <a href="/contact/">contact us</a> and we will investigate and correct it promptly.
           </p>
 
           <h2>Affiliate Disclosure</h2>
