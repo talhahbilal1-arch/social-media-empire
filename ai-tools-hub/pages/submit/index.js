@@ -9,7 +9,7 @@ export default function SubmitTool() {
           We review tools for a free listing in our directory. Please send us your tool's details.
         </p>
         <div className="card p-8 bg-dark-surface">
-          <a href="mailto:talhahbilal1@gmail.com?subject=Tool Submission - [Tool Name]" className="btn-primary inline-flex">
+          <a href="mailto:hello@pilottools.ai?subject=Tool Submission - [Tool Name]" className="btn-primary inline-flex">
             Email Us Your Submission
           </a>
         </div>
