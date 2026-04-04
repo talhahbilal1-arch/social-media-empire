@@ -17,8 +17,8 @@ from .config import BrandConfig, BrandColors, get_api_key
 
 logger = logging.getLogger(__name__)
 
-VIDEO_W = 1080
-VIDEO_H = 1920
+VIDEO_W = 720
+VIDEO_H = 1280
 IMAGE_DURATION = 7  # seconds per image before transition
 FADE_DURATION = 0.5
 
@@ -126,7 +126,8 @@ def _build_filter_complex(
             f"d={int(seg_duration * 25)}:s={VIDEO_W}x{VIDEO_H}:fps=25,"
             f"setpts=PTS-STARTPTS,"
             f"fade=t=in:st=0:d={FADE_DURATION},"
-            f"fade=t=out:st={seg_duration - FADE_DURATION}:d={FADE_DURATION}"
+            f"fade=t=out:st={seg_duration - FADE_DURATION}:d={FADE_DURATION},"
+            f"setsar=1"
             f"[v{i}]"
         )
         scaled_labels.append(f"[v{i}]")
@@ -259,7 +260,7 @@ def render_video(
             cmd,
             capture_output=True,
             text=True,
-            timeout=300,
+            timeout=900,
         )
         if result.returncode != 0:
             logger.error(f"FFmpeg stderr:\n{result.stderr[-3000:]}")
