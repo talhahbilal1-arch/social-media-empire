@@ -1,9 +1,37 @@
 """Brand configs and environment variable loading for the video pipeline."""
 
 import os
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 from dotenv import load_dotenv
+
+
+@dataclass
+class BrandColors:
+    primary: str
+    accent: str
+    text: str
+
+
+@dataclass
+class BrandConfig:
+    key: str
+    name: str
+    slug: str
+    niche: str
+    audience: str
+    tone: str
+    colors: BrandColors
+    voice_style: str
+    topics: list
+    hook_styles: list
+    hashtags: list
+    cta: str
+    webhook_env: Optional[str]
+    site_url: str
+    amazon_tag: Optional[str]
+    pexels_orientation: str = "portrait"
 
 # ── Load .env files ────────────────────────────────────────────────────────────
 # Load project .env first, then toolkit .env for ElevenLabs key fallback
@@ -149,11 +177,29 @@ BRANDS: dict[str, dict] = {
 }
 
 
-def get_brand(brand_key: str) -> dict:
-    """Return brand config, raising ValueError if unknown."""
+def get_brand(brand_key: str) -> BrandConfig:
+    """Return brand config as a BrandConfig object, raising ValueError if unknown."""
     if brand_key not in BRANDS:
         raise ValueError(f"Unknown brand '{brand_key}'. Valid brands: {list(BRANDS)}")
-    return BRANDS[brand_key]
+    data = BRANDS[brand_key]
+    return BrandConfig(
+        key=brand_key,
+        name=data["name"],
+        slug=brand_key.replace("_", "-"),
+        niche=data["niche"],
+        audience=data["audience"],
+        tone=data["tone"],
+        colors=BrandColors(**data["colors"]),
+        voice_style=data["voice_style"],
+        topics=data["topics"],
+        hook_styles=data.get("hook_styles", []),
+        hashtags=data.get("hashtags", []),
+        cta=data["cta"],
+        webhook_env=data.get("webhook_env"),
+        site_url=data["site_url"],
+        amazon_tag=data.get("amazon_tag"),
+        pexels_orientation=data.get("pexels_orientation", "portrait"),
+    )
 
 
 def get_env(key: str, required: bool = False) -> Optional[str]:
@@ -162,6 +208,21 @@ def get_env(key: str, required: bool = False) -> Optional[str]:
     if required and not value:
         raise EnvironmentError(f"Required env var '{key}' is not set.")
     return value
+
+
+def get_api_key(key: str) -> str:
+    """Return a required API key env var, raising EnvironmentError if missing."""
+    value = os.getenv(key)
+    if not value:
+        raise EnvironmentError(f"Required API key '{key}' is not set.")
+    return value
+
+
+def load_env() -> None:
+    """Reload .env files. Called explicitly from CLI entrypoints."""
+    load_dotenv(_PROJECT_ENV, override=True)
+    if not os.getenv("ELEVENLABS_API_KEY"):
+        load_dotenv(_TOOLKIT_ENV)
 
 
 def get_voice_id(brand_key: str) -> str:
