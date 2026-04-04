@@ -193,13 +193,17 @@ export default function ComparisonPage({ comparison, tool1, tool2 }) {
 }
 
 export async function getStaticPaths() {
-  return { paths: getAllComparisons().map(c => ({ params: { slug: c.slug } })), fallback: false }
+  const paths = getAllComparisons()
+    .filter(c => c.tools && c.tools.length >= 2 && getToolBySlug(c.tools[0]) && getToolBySlug(c.tools[1]))
+    .map(c => ({ params: { slug: c.slug } }))
+  return { paths, fallback: false }
 }
 
 export async function getStaticProps({ params }) {
   const comparison = getComparisonBySlug(params.slug)
   const tool1 = getToolBySlug(comparison.tools[0])
   const tool2 = getToolBySlug(comparison.tools[1])
+  if (!tool1 || !tool2) return { notFound: true }
   return {
     props: {
       comparison,

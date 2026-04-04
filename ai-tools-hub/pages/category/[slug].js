@@ -61,9 +61,9 @@ export default function CategoryPage({ category, tools, relatedComparisons }) {
             {relatedComparisons.map(comp => (
               <Link key={comp.slug} href={`/compare/${comp.slug}/`} className="card hover:border-accent/30">
                 <div className="flex items-center justify-center space-x-3">
-                  <span className="font-bold text-dt">{comp.tools[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                  <span className="font-bold text-dt">{(comp.tools[0] || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
                   <span className="text-accent font-bold">VS</span>
-                  <span className="font-bold text-dt">{comp.tools[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                  <span className="font-bold text-dt">{(comp.tools[1] || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
                 </div>
               </Link>
             ))}

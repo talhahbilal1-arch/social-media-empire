@@ -34,9 +34,9 @@ export default function ComparePage({ comparisons }) {
           {comparisons.map(comp => (
             <Link key={comp.slug} href={`/compare/${comp.slug}/`} className="card hover:border-accent/30 group">
               <div className="flex items-center justify-center space-x-4 mb-4">
-                <span className="text-xl font-bold text-dt">{comp.tools[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                <span className="text-xl font-bold text-dt">{(comp.tools[0] || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
                 <span className="text-accent font-bold text-lg">VS</span>
-                <span className="text-xl font-bold text-dt">{comp.tools[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                <span className="text-xl font-bold text-dt">{(comp.tools[1] || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
               </div>
               <h2 className="text-lg font-semibold text-dt group-hover:text-accent transition-colors text-center mb-3">{comp.title}</h2>
               <p className="text-sm text-dt-muted text-center">{comp.verdict}</p>

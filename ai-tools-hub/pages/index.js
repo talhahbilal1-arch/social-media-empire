@@ -156,9 +156,9 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
               className="card gradient-border hover:border-accent/30"
             >
               <div className="flex items-center justify-center space-x-4 mb-4">
-                <span className="font-bold text-lg text-dt">{comp.tools[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                <span className="font-bold text-lg text-dt">{(comp.tools[0] || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
                 <span className="text-accent font-bold">VS</span>
-                <span className="font-bold text-lg text-dt">{comp.tools[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                <span className="font-bold text-lg text-dt">{(comp.tools[1] || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
               </div>
               <p className="text-sm text-dt-muted text-center line-clamp-2">{comp.verdict}</p>
             </Link>

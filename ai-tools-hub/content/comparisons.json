@@ -2116,7 +2116,8 @@
     "title": "Grammarly vs ProWritingAid: Best Grammar Checker in 2026?",
     "meta_description": "Grammarly vs ProWritingAid compared on accuracy, features, and pricing in 2026. Find the best AI grammar checker for your writing needs.",
     "tools": [
-      "grammarly"
+      "grammarly",
+      "prowritingaid"
     ],
     "category": "writing",
     "keywords": [
@@ -2175,7 +2176,8 @@
     "title": "Notion AI vs Coda AI: Which Workspace is Smarter in 2026?",
     "meta_description": "Notion AI vs Coda AI compared for team productivity in 2026. Features, AI capabilities, pricing, and which workspace fits your team.",
     "tools": [
-      "notion-ai"
+      "notion-ai",
+      "coda-ai"
     ],
     "category": "productivity",
     "keywords": [
@@ -2294,7 +2296,8 @@
     "title": "Canva vs Adobe Express: Which AI Design Tool Wins in 2026?",
     "meta_description": "Canva vs Adobe Express compared for AI design in 2026. Templates, AI features, pricing, and which tool is better for non-designers.",
     "tools": [
-      "canva"
+      "canva",
+      "adobe-express-ai"
     ],
     "category": "design",
     "keywords": [
@@ -2353,7 +2356,8 @@
     "title": "Otter.ai vs Fireflies: Best AI Meeting Notes in 2026",
     "meta_description": "Otter.ai vs Fireflies compared for AI meeting transcription in 2026. Accuracy, CRM integrations, and pricing for remote teams.",
     "tools": [
-      "otter-ai"
+      "otter-ai",
+      "fireflies-meeting-notes"
     ],
     "category": "productivity",
     "keywords": [
@@ -2412,7 +2416,8 @@
     "title": "Descript vs CapCut: Which Video Editor is Better in 2026?",
     "meta_description": "Descript vs CapCut compared for video editing in 2026. Text-based editing vs TikTok-native tools for content creators.",
     "tools": [
-      "descript"
+      "descript",
+      "capcut-video-editing"
     ],
     "category": "video",
     "keywords": [
