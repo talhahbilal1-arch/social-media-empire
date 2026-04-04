@@ -117,6 +117,12 @@ def post_to_pinterest(
         )
         return {"platform": "pinterest", "status": "skipped", "reason": "webhook_url_not_configured"}
 
+    # Upload video to catbox.moe to get a publicly reachable URL for Pinterest
+    public_video_url = _upload_to_catbox(video_path)
+    if not public_video_url:
+        logger.warning("catbox.moe upload failed; falling back to supabase_video_url")
+        public_video_url = supabase_video_url or ""
+
     # Build hashtag string
     hashtags = " ".join(script_data.get("hashtags", []))
 
@@ -125,7 +131,9 @@ def post_to_pinterest(
         "brand_name": brand.name,
         "title": script_data["title"],
         "description": f"{script_data['hook']}\n\n{hashtags}",
-        "video_url": supabase_video_url or "",
+        "video_url": public_video_url,
+        "image_url": public_video_url,  # Make.com uses image_url for the pin thumbnail
+        "link": brand.site_url,
         "affiliate_tag": brand.affiliate_tag,
         "pin_type": "video",
         "timestamp": datetime.now(timezone.utc).isoformat(),
