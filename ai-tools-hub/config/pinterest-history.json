@@ -520,5 +520,32 @@
     "board": "AI SEO Tools",
     "posted_at": "2026-04-04T16:46:00.084Z",
     "success": true
+  },
+  {
+    "slug": "midjourney-vs-dall-e-3-business",
+    "pin_type": "comparison",
+    "title": "Midjourney vs ChatGPT: AI Art Battle! Which Tool Wins?",
+    "link": "https://pilottools.ai/compare/midjourney-vs-dall-e-3-business/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-04T22:18:02.063Z",
+    "success": true
+  },
+  {
+    "slug": "luma-ai",
+    "pin_type": "tool-review",
+    "title": "Luma AI Review: Stunning 3D Videos Made Easy! (4.3/5)",
+    "link": "https://pilottools.ai/tools/luma-ai/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-04T22:18:06.203Z",
+    "success": true
+  },
+  {
+    "slug": "category-coding",
+    "pin_type": "category",
+    "title": "AI Coding Superstars: Top Tools of 2026!",
+    "link": "https://pilottools.ai/category/coding/",
+    "board": "AI Coding Tools",
+    "posted_at": "2026-04-04T22:18:10.157Z",
+    "success": true
   }
 ]
