@@ -221,36 +221,12 @@ def _post_single(
         # ── 1. Upload the video ───────────────────────────────────────────────
         logger.info(f"Uploading video: {video_path.name}")
 
-        # Pinterest uses a hidden file input; we must trigger the file chooser
-        with page.expect_file_chooser(timeout=ACTION_TIMEOUT_MS) as fc_info:
-            # Click the upload area — try several selectors in priority order
-            upload_area_selectors = [
-                '[data-test-id="storyboard-upload-input"]',
-                'input[type="file"][accept*="video"]',
-                'input[type="file"]',
-                '[data-test-id="upload-zone"]',
-                'div[role="button"]:has-text("Choose a file")',
-                'div[role="button"]:has-text("Upload")',
-            ]
-            clicked = False
-            for sel in upload_area_selectors:
-                try:
-                    el = page.locator(sel).first
-                    if el.is_visible(timeout=3000):
-                        el.click(timeout=ACTION_TIMEOUT_MS)
-                        clicked = True
-                        logger.debug(f"Clicked upload via selector: {sel}")
-                        break
-                except Exception:
-                    continue
-
-            if not clicked:
-                # Fallback: dispatch click on the page body to trigger file chooser
-                page.locator("body").click()
-
-        file_chooser = fc_info.value
-        file_chooser.set_files(str(video_path))
-        logger.info("File set — waiting for video to process...")
+        # Pinterest has a hidden file input — set files directly, no dialog needed
+        file_input = page.locator('input[type="file"]#storyboard-upload-input').first
+        if not file_input.count():
+            file_input = page.locator('input[type="file"]').first
+        file_input.set_input_files(str(video_path))
+        logger.info(f"File set on input: {video_path.name}")
 
         # ── 2. Wait for upload / processing ──────────────────────────────────
         # Pinterest shows a processing indicator; wait for it to disappear
