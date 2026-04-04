@@ -70,12 +70,21 @@ def _fetch_pexels_images(
 
 
 def _escape_ffmpeg_text(text: str) -> str:
-    """Escape special characters for FFmpeg drawtext filter."""
+    """Escape special characters for FFmpeg drawtext filter.
+
+    FFmpeg filter option values are wrapped in single quotes by the caller
+    (text='...'). Within a single-quoted FFmpeg option, a literal single
+    quote must be written as '\\'' (close-quote, backslash-quote, open-quote).
+    Using \\' alone closes the quoted string early, turning the rest of the
+    text into unquoted filter tokens — which is the root cause of the
+    "No such filter" errors.
+    """
     return (
         text
         .replace("\\", "\\\\")
-        .replace("'", "\\'")
+        .replace("'", "'\\''")   # close-quote + \\' + open-quote
         .replace(":", "\\:")
+        .replace("%", "\\%")     # prevent drawtext variable expansion (e.g. %{pts})
         .replace("[", "\\[")
         .replace("]", "\\]")
     )
