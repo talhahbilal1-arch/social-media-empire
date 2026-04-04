@@ -45,10 +45,12 @@ def post_to_pinterest(
     """
     webhook_url = brand.pinterest_webhook_url
     if not webhook_url:
-        raise RuntimeError(
-            f"Pinterest webhook URL not set for brand '{brand.key}'. "
-            f"Set env var: {brand.pinterest_webhook_env}"
+        env_var = brand.pinterest_webhook_env or "MAKE_WEBHOOK_<BRAND>"
+        logger.warning(
+            f"Pinterest webhook URL not configured for brand '{brand.key}'. "
+            f"Set env var '{env_var}' to enable posting. Skipping."
         )
+        return {"platform": "pinterest", "status": "skipped", "reason": "webhook_url_not_configured"}
 
     # Build hashtag string
     hashtags = " ".join(script_data.get("hashtags", []))
