@@ -166,12 +166,14 @@ def _build_filter_complex(
     )
 
     # Overlay 3: Body points (up to 3, stacked)
+    # Always use [vpoint{j}] labels so the output name is predictable
+    # regardless of how many body_points exist, then pipe to [vfinal] via null.
     current_label = "[vtitle]"
     for j, point in enumerate(body_points[:3]):
         safe_point = _escape_ffmpeg_text(
             textwrap.shorten(f"• {point}", width=48, placeholder="...")
         )
-        next_label = f"[vpoint{j}]" if j < 2 else "[vfinal]"
+        next_label = f"[vpoint{j}]"
         y_pos = VIDEO_H - 350 + (j * 80)
         filters.append(
             f"{current_label}drawtext="
@@ -183,8 +185,8 @@ def _build_filter_complex(
         )
         current_label = next_label
 
-    if current_label != "[vfinal]":
-        filters.append(f"{current_label}copy[vfinal]")
+    # Always produce [vfinal] via null passthrough — no conditional branch
+    filters.append(f"{current_label}null[vfinal]")
 
     filter_str = ";".join(filters)
     return filter_str, []
