@@ -493,5 +493,32 @@
     "board": "AI Video Tools",
     "posted_at": "2026-04-03T22:21:50.490Z",
     "success": true
+  },
+  {
+    "slug": "category-design",
+    "pin_type": "category",
+    "title": "Future-Proof Your Designs: AI Tools Dominating 2026!",
+    "link": "https://pilottools.ai/category/design/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-04-04T16:45:52.018Z",
+    "success": true
+  },
+  {
+    "slug": "pictory",
+    "pin_type": "tool-review",
+    "title": "Pictory AI Review: Effortless Video Creation? (4.3/5)",
+    "link": "https://pilottools.ai/tools/pictory/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-04T16:45:56.006Z",
+    "success": true
+  },
+  {
+    "slug": "surfer-seo",
+    "pin_type": "tool-review",
+    "title": "Surfer SEO Review: AI-Powered SEO Domination! (4.5/5)",
+    "link": "https://pilottools.ai/tools/surfer-seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-04T16:46:00.084Z",
+    "success": true
   }
 ]
