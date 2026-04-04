@@ -23,7 +23,7 @@ export default function Layout({ children, title, description, canonical, ogType
         <title>{fullTitle}</title>
         <meta name="description" content={metaDesc} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="canonical" href={canonicalUrl} />
         {hasGSC && <meta name="google-site-verification" content={GSC_TAG} />}
         <meta property="og:title" content={fullTitle} />
