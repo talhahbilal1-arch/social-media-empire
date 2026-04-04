@@ -5,10 +5,12 @@ Saves metadata JSON alongside video for tracking.
 
 import json
 import logging
+import mimetypes
 import os
 import time
 import urllib.request
 import urllib.error
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
