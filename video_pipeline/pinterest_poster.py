@@ -48,7 +48,7 @@ BRAND_BOARD_NAMES: dict[str, str] = {
 
 MAX_RETRIES = 3
 UPLOAD_TIMEOUT_MS = 120_000   # 2 min — Pinterest video processing can be slow
-ACTION_TIMEOUT_MS  = 15_000   # 15 s for normal UI interactions
+ACTION_TIMEOUT_MS  = 30_000   # 30 s for normal UI interactions (video upload needs time)
 NAV_TIMEOUT_MS     = 30_000   # 30 s for page navigations
 
 
