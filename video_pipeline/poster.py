@@ -21,6 +21,69 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
+# catbox.moe — anonymous public file host
+# ---------------------------------------------------------------------------
+
+def _upload_to_catbox(video_path: Path) -> Optional[str]:
+    """
+    Upload a local video file to catbox.moe and return its public URL.
+
+    Uses multipart/form-data with fields: reqtype=fileupload, fileToUpload=<binary>.
+    Returns None on failure so callers can fall back gracefully.
+    """
+    url = "https://catbox.moe/user/api.php"
+    boundary = uuid.uuid4().hex
+
+    mime_type = mimetypes.guess_type(str(video_path))[0] or "video/mp4"
+
+    try:
+        file_data = video_path.read_bytes()
+    except OSError as e:
+        logger.error(f"Cannot read video for catbox upload: {e}")
+        return None
+
+    # Build multipart body manually (no external deps)
+    body_parts = [
+        f"--{boundary}\r\nContent-Disposition: form-data; name=\"reqtype\"\r\n\r\nfileupload",
+        (
+            f"--{boundary}\r\n"
+            f'Content-Disposition: form-data; name="fileToUpload"; filename="{video_path.name}"\r\n'
+            f"Content-Type: {mime_type}\r\n\r\n"
+        ),
+    ]
+
+    body = (
+        body_parts[0].encode() + b"\r\n" +
+        body_parts[1].encode() + file_data +
+        f"\r\n--{boundary}--\r\n".encode()
+    )
+
+    req = urllib.request.Request(
+        url,
+        data=body,
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
+        method="POST",
+    )
+
+    logger.info(f"Uploading {video_path.name} ({len(file_data) // 1024}KB) to catbox.moe ...")
+
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            public_url = resp.read().decode("utf-8").strip()
+
+        if public_url.startswith("https://"):
+            logger.info(f"catbox.moe upload OK: {public_url}")
+            return public_url
+
+        logger.error(f"Unexpected catbox.moe response: {public_url}")
+        return None
+
+    except Exception as e:
+        logger.error(f"catbox.moe upload failed: {e}")
+        return None
+
+
+# ---------------------------------------------------------------------------
 # Pinterest via Make.com webhook
 # ---------------------------------------------------------------------------
 
