@@ -218,6 +218,30 @@ def _post_single(
         page.goto(PINTEREST_CREATE_URL, timeout=NAV_TIMEOUT_MS, wait_until="networkidle")
         _dismiss_popups(page)
 
+        # If Pinterest redirected us away (not logged in), wait for the user to
+        # log in and manually navigate to the creation tool (headed mode only).
+        if "pin-creation-tool" not in page.url:
+            if headed:
+                logger.info(
+                    "Not on pin creation tool — Pinterest may have redirected to login. "
+                    "Please log in and navigate to pinterest.com/pin-creation-tool/ "
+                    "Waiting up to 3 minutes..."
+                )
+                try:
+                    page.wait_for_url("**/pin-creation-tool/**", timeout=180_000)
+                    _dismiss_popups(page)
+                    logger.info("Now on pin creation tool — continuing.")
+                except PWTimeout:
+                    raise RuntimeError(
+                        "Timed out waiting for Pinterest pin creation tool. "
+                        "Please log in and navigate to the creation tool manually."
+                    )
+            else:
+                raise RuntimeError(
+                    f"Pinterest redirected to {page.url!r} instead of pin creation tool. "
+                    "Session may be expired — run with --headed to re-authenticate."
+                )
+
         # ── 1. Upload the video ───────────────────────────────────────────────
         logger.info(f"Uploading video: {video_path.name}")
 
