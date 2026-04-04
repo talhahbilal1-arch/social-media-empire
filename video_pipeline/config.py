@@ -254,8 +254,4 @@ def get_voice_id(brand_key: str) -> str:
 
 def get_pinterest_webhook(brand_key: str) -> Optional[str]:
     """Return Make.com webhook URL for the brand's Pinterest poster."""
-    brand = get_brand(brand_key)
-    env_key = brand.get("webhook_env")
-    if not env_key:
-        return None
-    return os.getenv(env_key)
+    return get_brand(brand_key).pinterest_webhook_url
