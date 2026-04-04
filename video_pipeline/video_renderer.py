@@ -42,7 +42,7 @@ def _fetch_pexels_images(
                 f"?query={urllib.request.quote(query)}"
                 f"&orientation={orientation}&per_page=1&page=1"
             )
-            req = urllib.request.Request(url, headers={"Authorization": api_key})
+            req = urllib.request.Request(url, headers={"Authorization": api_key, "User-Agent": "VideoBot/1.0"})
             with urllib.request.urlopen(req, timeout=15) as resp:
                 data = json.loads(resp.read())
 
@@ -55,7 +55,10 @@ def _fetch_pexels_images(
             img_url = photo["src"].get("large2x") or photo["src"]["original"]
             img_path = output_dir / f"img_{i:02d}.jpg"
 
-            urllib.request.urlretrieve(img_url, img_path)
+            img_req = urllib.request.Request(img_url, headers={"User-Agent": "VideoBot/1.0"})
+            with urllib.request.urlopen(img_req, timeout=30) as img_resp:
+                with open(img_path, "wb") as f:
+                    f.write(img_resp.read())
             downloaded.append(img_path)
             logger.debug(f"Downloaded: {img_path.name} ({query})")
 
