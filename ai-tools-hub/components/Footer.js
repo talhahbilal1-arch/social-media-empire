@@ -42,6 +42,7 @@ export default function Footer() {
               <li><Link href="/about/" className="text-dt-muted hover:text-accent text-sm transition-colors">About Us</Link></li>
               <li><Link href="/contact/" className="text-dt-muted hover:text-accent text-sm transition-colors">Contact</Link></li>
               <li><Link href="/privacy/" className="text-dt-muted hover:text-accent text-sm transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms/" className="text-dt-muted hover:text-accent text-sm transition-colors">Terms of Service</Link></li>
               <li><Link href="/affiliate-disclosure/" className="text-dt-muted hover:text-accent text-sm transition-colors">Affiliate Disclosure</Link></li>
             </ul>
           </div>

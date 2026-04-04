@@ -66,6 +66,12 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>${SITE_URL}/terms/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>${SITE_URL}/contact/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>yearly</changefreq>
@@ -124,7 +130,7 @@ ${articles.map(a => `  <url>
 const outDir = path.join(__dirname, '..', 'public')
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap)
 
-const totalUrls = 8 + comparisons.length + (tools.length * 3) + categories.length + useCases.length + 1 + articles.length
+const totalUrls = 9 + comparisons.length + (tools.length * 3) + categories.length + useCases.length + 1 + articles.length
 console.log(`Sitemap generated with ${totalUrls} URLs`)
 
 const robots = `User-agent: *
