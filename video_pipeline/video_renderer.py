@@ -1,6 +1,7 @@
 """
 Render a 1080x1920 vertical MP4 video using FFmpeg.
-Pipeline: Pexels images → Ken Burns effect → text overlays → voiceover mix → fade transitions.
+Pipeline: Pexels images → Pillow text overlays → Ken Burns effect → voiceover mix → fade transitions.
+Text is burned onto images via Pillow before FFmpeg (avoids drawtext/freetype dependency).
 """
 
 import json
@@ -12,6 +13,8 @@ import textwrap
 import urllib.request
 from pathlib import Path
 from typing import Optional
+
+from PIL import Image, ImageDraw, ImageFont
 
 from .config import BrandConfig, BrandColors, get_api_key
 
@@ -66,53 +69,165 @@ def _fetch_pexels_images(
     return downloaded
 
 
-def _escape_ffmpeg_text(text: str) -> str:
-    """Escape special characters for FFmpeg drawtext filter."""
-    return (
-        text
-        .replace("\\", "\\\\")
-        .replace("'", "\\'")
-        .replace(":", "\\:")
-        .replace("[", "\\[")
-        .replace("]", "\\]")
-    )
+def _find_font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
+    """Return best available TrueType font at the given size.
+
+    Tries common system paths (macOS + Ubuntu/Debian for GitHub Actions),
+    then falls back to PIL's built-in bitmap font.
+    """
+    if bold:
+        candidates = [
+            # macOS
+            "/System/Library/Fonts/Helvetica.ttc",
+            "/Library/Fonts/Arial Bold.ttf",
+            # Ubuntu / Debian
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+            # Fallback to regular dejavu
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        ]
+    else:
+        candidates = [
+            "/System/Library/Fonts/Helvetica.ttc",
+            "/Library/Fonts/Arial.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+        ]
+
+    for path in candidates:
+        try:
+            return ImageFont.truetype(path, size)
+        except (OSError, IOError):
+            continue
+
+    logger.warning("No TrueType font found — using PIL built-in default (text will be small)")
+    return ImageFont.load_default()
 
 
-def _hex_to_ffmpeg_color(hex_color: str, alpha: float = 1.0) -> str:
-    """Convert #RRGGBB to FFmpeg 0xRRGGBBAA format."""
-    hex_color = hex_color.lstrip("#")
-    r, g, b = int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16)
-    a = int(alpha * 255)
-    return f"0x{r:02X}{g:02X}{b:02X}{a:02X}"
+def _color_luminance(hex_color: str) -> float:
+    """Return relative luminance of a hex color (0 = black, 1 = white)."""
+    h = hex_color.lstrip("#")
+    r, g, b = int(h[0:2], 16) / 255, int(h[2:4], 16) / 255, int(h[4:6], 16) / 255
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def _hex_to_rgba(hex_color: str, alpha: int = 255) -> tuple[int, int, int, int]:
+    h = hex_color.lstrip("#")
+    return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16), alpha)
+
+
+def _burn_text_onto_images(
+    images: list[Path],
+    title: str,
+    body_points: list[str],
+    colors: BrandColors,
+    output_dir: Path,
+) -> list[Path]:
+    """Burn text overlays onto images using Pillow.
+
+    Each image gets a dark semi-transparent bar at the bottom, then text:
+      - Image 0        : large centered title
+      - Images 1..n-2  : one body point per image (left-aligned)
+      - Image n-1      : CTA "Follow for more! ↓"
+
+    Returns a list of new JPEG paths (text_XX.jpg) in output_dir.
+    """
+    n = len(images)
+    if n == 0:
+        return images
+
+    # Body-point text color: use brand primary if bright enough, else white
+    point_color: tuple[int, int, int, int] = (255, 255, 255, 255)
+    if _color_luminance(colors.primary) > 0.25:
+        point_color = _hex_to_rgba(colors.primary)
+
+    # Assign text role to each frame
+    assignments: list[tuple[str, str]] = []
+    for i in range(n):
+        if n == 1:
+            assignments.append(("title", title))
+        elif i == 0:
+            assignments.append(("title", title))
+        elif i == n - 1:
+            assignments.append(("cta", "Follow for more! \u2193"))
+        else:
+            point_idx = i - 1
+            if point_idx < len(body_points) and body_points[point_idx]:
+                assignments.append(("point", f"\u2022 {body_points[point_idx]}"))
+            else:
+                assignments.append(("skip", ""))
+
+    result_paths: list[Path] = []
+
+    for i, (img_path, (kind, text)) in enumerate(zip(images, assignments)):
+        if kind == "skip" or not text:
+            result_paths.append(img_path)
+            continue
+
+        # Open + resize to exact frame dimensions
+        img = Image.open(img_path).convert("RGB")
+        img = img.resize((VIDEO_W, VIDEO_H), Image.LANCZOS)
+
+        # --- Dark gradient bar at bottom (semi-transparent black box) ---
+        overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        ImageDraw.Draw(overlay).rectangle(
+            [(0, VIDEO_H - 520), (VIDEO_W, VIDEO_H)],
+            fill=(0, 0, 0, 165),
+        )
+        img_rgba = Image.alpha_composite(img.convert("RGBA"), overlay)
+        draw = ImageDraw.Draw(img_rgba)
+
+        # --- Text on top of the dark bar ---
+        if kind == "title":
+            font = _find_font(58, bold=True)
+            wrapped = textwrap.fill(title, width=26)
+            bbox = draw.textbbox((0, 0), wrapped, font=font)
+            text_w = bbox[2] - bbox[0]
+            x = max(40, (VIDEO_W - text_w) // 2)
+            y = VIDEO_H - 490
+            draw.text((x, y), wrapped, font=font, fill=(255, 255, 255, 255))
+
+        elif kind == "point":
+            font = _find_font(40)
+            wrapped = textwrap.fill(text, width=34)
+            draw.text((60, VIDEO_H - 440), wrapped, font=font, fill=point_color)
+
+        elif kind == "cta":
+            font = _find_font(50, bold=True)
+            wrapped = textwrap.fill(text, width=28)
+            bbox = draw.textbbox((0, 0), wrapped, font=font)
+            text_w = bbox[2] - bbox[0]
+            x = max(40, (VIDEO_W - text_w) // 2)
+            y = VIDEO_H - 460
+            draw.text((x, y), wrapped, font=font, fill=(255, 255, 255, 255))
+
+        out_path = output_dir / f"text_{i:02d}.jpg"
+        img_rgba.convert("RGB").save(out_path, "JPEG", quality=92)
+        result_paths.append(out_path)
+        logger.debug(f"Text burned onto frame {i} ({kind})")
+
+    return result_paths
 
 
 def _build_filter_complex(
     images: list[Path],
     voiceover_path: Optional[Path],
-    title: str,
-    body_points: list[str],
-    colors: BrandColors,
     total_duration: float,
 ) -> tuple[str, list[str]]:
-    """
-    Build the FFmpeg -filter_complex string and input list.
+    """Build FFmpeg filter_complex for Ken Burns zoom/pan + fades + concat.
 
-    Returns:
-        (filter_complex_string, extra_ffmpeg_args)
+    Text overlays are handled by Pillow before this step, so no drawtext here.
     """
     n = len(images)
     seg_duration = total_duration / n
 
-    primary = _hex_to_ffmpeg_color(colors.primary, 0.85)
-    text_color = _hex_to_ffmpeg_color(colors.text)
-    accent = _hex_to_ffmpeg_color(colors.accent)
-
     filters = []
     scaled_labels = []
 
-    # --- Per-image: scale, Ken Burns zoom/pan, fade in/out ---
-    for i, img_path in enumerate(images):
-        # Scale to slightly larger than frame so zoompan has room to move
+    # Per-image: upscale → Ken Burns zoompan → fade in/out
+    for i in range(n):
         filters.append(
             f"[{i}:v]scale={VIDEO_W * 2}:{VIDEO_H * 2}:force_original_aspect_ratio=increase,"
             f"crop={VIDEO_W * 2}:{VIDEO_H * 2},"
@@ -128,53 +243,11 @@ def _build_filter_complex(
         )
         scaled_labels.append(f"[v{i}]")
 
-    # --- Concatenate all video segments ---
+    # Concatenate all segments
     concat_in = "".join(scaled_labels)
-    filters.append(f"{concat_in}concat=n={n}:v=1:a=0[vconcat]")
+    filters.append(f"{concat_in}concat=n={n}:v=1:a=0[vfinal]")
 
-    # --- Text overlays on the concatenated stream ---
-    # Overlay 1: dark gradient bar at bottom for text legibility
-    filters.append(
-        f"[vconcat]drawbox="
-        f"x=0:y={VIDEO_H - 500}:w={VIDEO_W}:h=500:"
-        f"color={_hex_to_ffmpeg_color('#000000', 0.55)}:t=fill"
-        f"[vbox]"
-    )
-
-    # Overlay 2: Title text
-    safe_title = _escape_ffmpeg_text(textwrap.shorten(title, width=38, placeholder="..."))
-    filters.append(
-        f"[vbox]drawtext="
-        f"text='{safe_title}':"
-        f"fontsize=52:fontcolor={text_color}:"
-        f"x=(w-text_w)/2:y={VIDEO_H - 460}:"
-        f"fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-        f"[vtitle]"
-    )
-
-    # Overlay 3: Body points (up to 3, stacked)
-    current_label = "[vtitle]"
-    for j, point in enumerate(body_points[:3]):
-        safe_point = _escape_ffmpeg_text(
-            textwrap.shorten(f"• {point}", width=48, placeholder="...")
-        )
-        next_label = f"[vpoint{j}]" if j < 2 else "[vfinal]"
-        y_pos = VIDEO_H - 350 + (j * 80)
-        filters.append(
-            f"{current_label}drawtext="
-            f"text='{safe_point}':"
-            f"fontsize=34:fontcolor={accent}:"
-            f"x=60:y={y_pos}:"
-            f"fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-            f"{next_label}"
-        )
-        current_label = next_label
-
-    if current_label != "[vfinal]":
-        filters.append(f"{current_label}copy[vfinal]")
-
-    filter_str = ";".join(filters)
-    return filter_str, []
+    return ";".join(filters), []
 
 
 def render_video(
@@ -204,12 +277,19 @@ def render_video(
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    filter_complex, _ = _build_filter_complex(
+    # Burn text overlays onto images with Pillow before handing off to FFmpeg
+    img_dir = images[0].parent if images else output_path.parent
+    text_images = _burn_text_onto_images(
         images=images,
-        voiceover_path=voiceover_path,
         title=title,
         body_points=body_points,
         colors=colors,
+        output_dir=img_dir,
+    )
+
+    filter_complex, _ = _build_filter_complex(
+        images=text_images,
+        voiceover_path=voiceover_path,
         total_duration=total_duration,
     )
 
@@ -217,8 +297,8 @@ def render_video(
     cmd = ["ffmpeg", "-y"]
 
     # Input: one entry per image, looped for its segment duration
-    seg_duration = total_duration / len(images)
-    for img_path in images:
+    seg_duration = total_duration / len(text_images)
+    for img_path in text_images:
         cmd += ["-loop", "1", "-t", str(seg_duration), "-i", str(img_path)]
 
     # Input: audio (if provided)
@@ -231,9 +311,9 @@ def render_video(
     # Map video output
     cmd += ["-map", "[vfinal]"]
 
-    # Map audio (mix voiceover to final track)
+    # Map audio
     if has_audio:
-        audio_idx = len(images)
+        audio_idx = len(text_images)
         cmd += ["-map", f"{audio_idx}:a"]
 
     cmd += [
