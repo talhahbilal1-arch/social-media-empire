@@ -56,6 +56,76 @@ Rules:
 """
 
 
+def _build_pinterest_prompt(brand: BrandConfig, topic: Optional[str] = None) -> str:
+    """Pinterest-optimized prompt: 10-12 sec spoken, open-loop curiosity hook, 1 body point."""
+    chosen_topic = topic or random.choice(brand.topics)
+
+    hook_examples = {
+        "deals": [
+            "This $12 Amazon gadget replaced 3 appliances in my kitchen...",
+            "I almost returned this, then I saw what it actually does...",
+            "The product every home needs but nobody's talking about...",
+        ],
+        "fitover35": [
+            "Every trainer over 35 is doing this wrong — and it's killing your gains...",
+            "This one habit added 10 pounds of muscle after 40...",
+            "The muscle-building mistake men over 35 make every single day...",
+        ],
+        "menopause": [
+            "This 30-second trick stopped my hot flashes for good...",
+            "Doctors won't tell you this about menopause weight gain...",
+            "The hormone hack that changed everything for women over 45...",
+        ],
+        "pilottools": [
+            "This free AI tool just replaced $300/month of software...",
+            "The AI tool that nobody's talking about in 2025...",
+            "I tested every AI writing tool — this one shocked me...",
+        ],
+    }
+    examples = hook_examples.get(brand.key, hook_examples["fitover35"])
+    hook_example = random.choice(examples)
+
+    return f"""You are a Pinterest video script writer for the brand "{brand.name}".
+
+Brand voice: {brand.voice_style}
+Topic: {chosen_topic}
+Audience: {brand.audience}
+
+Write a SHORT Pinterest video script — 10-12 seconds of spoken content (50-60 words MAX).
+
+The hook MUST create an open loop — the viewer cannot mentally close it without clicking.
+Hook example for inspiration (don't copy exactly): "{hook_example}"
+
+Return ONLY valid JSON in this exact structure:
+{{
+  "title": "Compelling video title (under 55 chars)",
+  "topic": "{chosen_topic}",
+  "hook": "One sentence open-loop hook — creates curiosity the viewer MUST resolve by clicking",
+  "body_points": [
+    "One concrete teaser — reveals just enough to be intriguing, not enough to satisfy"
+  ],
+  "cta": "Link in bio",
+  "full_script": "Complete narration: hook sentence + one body teaser + CTA. MAX 60 words. Read naturally at normal pace.",
+  "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5"],
+  "pexels_search_queries": [
+    "specific portrait image query 1",
+    "specific portrait image query 2",
+    "specific portrait image query 3",
+    "specific portrait image query 4"
+  ],
+  "estimated_duration_seconds": 12
+}}
+
+Rules:
+- full_script must be 50-60 words MAXIMUM (counts as spoken — roughly 12 seconds)
+- Hook must create an UNRESOLVED question or tease a secret/reveal
+- body_points has exactly ONE item — a teaser, not a full answer
+- cta is always "Link in bio" or "Tap to shop" — drives affiliate clicks
+- Pexels queries must be portrait-oriented and visually relevant (e.g. "woman holding kitchen gadget smiling" not just "kitchen")
+- No filler phrases like "in this video" or "today we're going to"
+"""
+
+
 def generate_script(
     brand: BrandConfig,
     topic: Optional[str] = None,
