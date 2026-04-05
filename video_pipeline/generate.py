@@ -138,6 +138,22 @@ def run_pipeline(
                 logger.info(f"{run_label} → [SKIP POST] Skipping platform posting")
                 result["post_results"] = []
                 result["status"] = "rendered"
+            elif format == "pinterest":
+                # Pinterest format: upload to catbox.moe and write pending JSON
+                logger.info(f"{run_label} → Step 4: Queuing for Pinterest (catbox.moe upload)...")
+                post_result = auto_post_pinterest(
+                    video_path=rendered_path,
+                    brand_key=brand_key,
+                    script_data=script_data,
+                )
+                result["post_results"] = [post_result]
+                result["status"] = "posted" if post_result.get("status") != "failed" else "failed"
+                if post_result.get("status") == "pending":
+                    logger.info(
+                        f"{run_label} → Pinterest: queued {post_result.get('pending_json_path', '')}"
+                    )
+                else:
+                    logger.warning(f"{run_label} → Pinterest: {post_result.get('status')} — {post_result.get('error', '')}")
             else:
                 logger.info(f"{run_label} → Step 4: Posting to {platforms}...")
                 post_results = post_video(
