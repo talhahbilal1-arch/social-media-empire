@@ -262,7 +262,7 @@ Examples:
 
     logger.info(
         f"Starting video pipeline: brand={args.brand}, count={args.count}, "
-        f"platforms={platforms}, dry_run={args.dry_run}"
+        f"format={args.format}, platforms={platforms}, dry_run={args.dry_run}"
     )
 
     results = run_pipeline(
@@ -272,6 +272,7 @@ Examples:
         skip_post=args.skip_post,
         platforms=platforms,
         topic=args.topic,
+        video_format=args.format,
     )
 
     # Summary
