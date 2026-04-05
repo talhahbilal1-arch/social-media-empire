@@ -574,5 +574,32 @@
     "board": "AI Audio Tools",
     "posted_at": "2026-04-05T16:46:37.492Z",
     "success": true
+  },
+  {
+    "slug": "category-video",
+    "pin_type": "category",
+    "title": "AI Video Magic: Top Tools Shaping 2026!",
+    "link": "https://pilottools.ai/category/video/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-05T22:19:08.359Z",
+    "success": true
+  },
+  {
+    "slug": "runway",
+    "pin_type": "tool-review",
+    "title": "Runway AI Review: Effortless Video Editing! 4.6/5",
+    "link": "https://pilottools.ai/tools/runway/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-05T22:19:12.295Z",
+    "success": true
+  },
+  {
+    "slug": "heygen",
+    "pin_type": "tool-review",
+    "title": "HeyGen AI Video Review: Is it Worth the Hype? (4.5/5)",
+    "link": "https://pilottools.ai/tools/heygen/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-05T22:19:16.303Z",
+    "success": true
   }
 ]
