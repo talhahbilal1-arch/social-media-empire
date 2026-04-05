@@ -114,13 +114,21 @@ def run_pipeline(
                 script_data["estimated_duration_seconds"] = duration
 
             # --- Step 3: Render video ---
-            logger.info(f"{run_label} → Step 3: Rendering video...")
-            rendered_path = create_video(
-                brand=brand,
-                script_data=script_data,
-                voiceover_path=voiceover_path,
-                output_path=output_path,
-            )
+            logger.info(f"{run_label} → Step 3: Rendering video (renderer={format})...")
+            if format == "pinterest":
+                rendered_path = create_video_remotion(
+                    brand=brand,
+                    script_data=script_data,
+                    voiceover_path=voiceover_path,
+                    output_path=output_path,
+                )
+            else:
+                rendered_path = create_video(
+                    brand=brand,
+                    script_data=script_data,
+                    voiceover_path=voiceover_path,
+                    output_path=output_path,
+                )
             result["video_path"] = str(rendered_path)
             logger.info(f"{run_label} → Video: {rendered_path.name}")
 
