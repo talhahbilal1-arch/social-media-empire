@@ -244,6 +244,134 @@ def _build_filter_complex(
     return filter_str, []
 
 
+def render_video_from_clip(
+    video_clip: Path,
+    voiceover_path: Optional[Path],
+    output_path: Path,
+    title: str,
+    body_points: list[str],
+    colors: BrandColors,
+    total_duration: float,
+) -> Path:
+    """
+    Render a vertical MP4 using a real video clip as background with text overlays.
+
+    The clip is looped if shorter than total_duration, scaled/cropped to 720x1280.
+
+    Args:
+        video_clip: Path to downloaded .mp4 background clip
+        voiceover_path: Path to MP3 audio (or None for silent)
+        output_path: Where to write the final MP4
+        title: Video title for overlay
+        body_points: Bullet points for overlay (1 for pinterest, 3 for standard)
+        colors: Brand color palette
+        total_duration: Target video length in seconds
+
+    Returns:
+        Path to the rendered MP4 file
+    """
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    text_color = _hex_to_ffmpeg_color(colors.text)
+    accent = _hex_to_ffmpeg_color(colors.accent)
+
+    filters = []
+
+    # Scale clip to fill 720x1280, crop any excess
+    filters.append(
+        f"[0:v]scale={VIDEO_W}:{VIDEO_H}:force_original_aspect_ratio=increase,"
+        f"crop={VIDEO_W}:{VIDEO_H},"
+        f"setsar=1"
+        f"[vscaled]"
+    )
+
+    # Dark gradient bar at bottom for text legibility
+    filters.append(
+        f"[vscaled]drawbox="
+        f"x=0:y={VIDEO_H - 500}:w={VIDEO_W}:h=500:"
+        f"color={_hex_to_ffmpeg_color('#000000', 0.55)}:t=fill"
+        f"[vbox]"
+    )
+
+    # Title text overlay
+    safe_title = _escape_ffmpeg_text(textwrap.shorten(title, width=38, placeholder="..."))
+    filters.append(
+        f"[vbox]drawtext="
+        f"text='{safe_title}':"
+        f"fontsize=52:fontcolor={text_color}:"
+        f"x=(w-text_w)/2:y={VIDEO_H - 460}:"
+        f"fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+        f"[vtitle]"
+    )
+
+    # Body point overlays (1 for pinterest, up to 3 for standard)
+    current_label = "[vtitle]"
+    for j, point in enumerate(body_points[:3]):
+        safe_point = _escape_ffmpeg_text(
+            textwrap.shorten(f"• {point}", width=48, placeholder="...")
+        )
+        next_label = f"[vpoint{j}]" if j < 2 else "[vfinal]"
+        y_pos = VIDEO_H - 350 + (j * 80)
+        filters.append(
+            f"{current_label}drawtext="
+            f"text='{safe_point}':"
+            f"fontsize=34:fontcolor={accent}:"
+            f"x=60:y={y_pos}:"
+            f"fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+            f"{next_label}"
+        )
+        current_label = next_label
+
+    if current_label != "[vfinal]":
+        filters.append(f"{current_label}copy[vfinal]")
+
+    filter_str = ";".join(filters)
+
+    cmd = ["ffmpeg", "-y"]
+    # Loop clip so it covers total_duration even if clip is shorter
+    cmd += ["-stream_loop", "-1", "-t", str(total_duration), "-i", str(video_clip)]
+
+    has_audio = voiceover_path and voiceover_path.exists()
+    if has_audio:
+        cmd += ["-i", str(voiceover_path)]
+
+    cmd += ["-filter_complex", filter_str]
+    cmd += ["-map", "[vfinal]"]
+
+    if has_audio:
+        cmd += ["-map", "1:a"]
+
+    cmd += [
+        "-c:v", "libx264",
+        "-preset", "fast",
+        "-crf", "23",
+        "-pix_fmt", "yuv420p",
+        "-c:a", "aac",
+        "-b:a", "128k",
+        "-t", str(total_duration),
+        "-movflags", "+faststart",
+        str(output_path),
+    ]
+
+    logger.info(f"Running FFmpeg render (video clip) → {output_path.name}")
+    logger.debug(f"FFmpeg command: {' '.join(cmd)}")
+
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        if result.returncode != 0:
+            logger.error(f"FFmpeg stderr:\n{result.stderr[-3000:]}")
+            raise RuntimeError(f"FFmpeg failed with return code {result.returncode}")
+
+        logger.info(
+            f"Video rendered: {output_path} ({output_path.stat().st_size / 1_000_000:.1f} MB)"
+        )
+        return output_path
+
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("FFmpeg render timed out after 300 seconds")
+
+
 def render_video(
     images: list[Path],
     voiceover_path: Optional[Path],
