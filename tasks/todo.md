@@ -1,3 +1,19 @@
+# Phase 6: Pinterest Video Pipeline (Remotion) — April 4, 2026
+
+## Tasks
+
+- [ ] **Task 1: Update script_generator.py** — Add `_build_pinterest_prompt()` for 10-12 sec scripts with open-loop curiosity hooks and 1 body point
+- [ ] **Task 2: Create pexels_fetcher.py** — Standalone portrait image downloader returning 4 paths
+- [ ] **Task 3: Add `create_video_remotion()` to video_renderer.py** — Copies assets to public/, writes props JSON, calls `npx remotion render`
+- [ ] **Task 4: Update generate.py** — Add `--format pinterest` flag routing to Remotion renderer
+- [ ] **Task 5: Test end-to-end** — `python3 -m video_pipeline.generate --brand deals --format pinterest --skip-post --count 1`
+
+## Review
+
+(to be filled)
+
+---
+
 # Phase 5: Email Sequence JSON Conversion + Kit Uploader — April 2, 2026
 
 ## Tasks
