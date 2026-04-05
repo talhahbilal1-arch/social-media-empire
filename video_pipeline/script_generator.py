@@ -130,6 +130,7 @@ def generate_script(
     brand: BrandConfig,
     topic: Optional[str] = None,
     model: str = "gemini-2.5-flash",
+    format: str = "standard",
 ) -> dict:
     """
     Generate a video script for the given brand.
@@ -138,6 +139,7 @@ def generate_script(
         brand: BrandConfig instance
         topic: Optional specific topic; picks randomly from brand.topics if None
         model: Gemini model to use
+        format: "standard" (30-60s) or "pinterest" (10-12s open-loop)
 
     Returns:
         dict with keys: title, topic, hook, body_points, cta, full_script,
@@ -154,7 +156,10 @@ def generate_script(
 
     try:
         client = genai.Client(api_key=api_key)
-        prompt = _build_prompt(brand, topic)
+        if format == "pinterest":
+            prompt = _build_pinterest_prompt(brand, topic)
+        else:
+            prompt = _build_prompt(brand, topic)
 
         logger.info(f"Generating script for brand={brand.key}, model={model}")
 
