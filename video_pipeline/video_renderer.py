@@ -1,11 +1,14 @@
 """
-Render a 1080x1920 vertical MP4 video using FFmpeg.
-Pipeline: Pexels video clip (or Ken Burns image fallback) → text overlays → voiceover mix.
+Render a 1080x1920 vertical MP4 video via Remotion (SlideshowVideo compositions).
+
+Pipeline: script props → Remotion render (animated text, Ken Burns, spring effects) → MP4.
+Falls back to FFmpeg Ken Burns slideshow if Remotion is unavailable.
 """
 
 import json
 import logging
 import os
+import shutil
 import subprocess
 import tempfile
 import textwrap
