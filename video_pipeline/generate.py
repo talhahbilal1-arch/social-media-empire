@@ -17,7 +17,7 @@ from pathlib import Path
 from .config import load_env, get_brand, BRANDS
 from .script_generator import generate_script
 from .voiceover import generate_voiceover
-from .video_renderer import create_video
+from .video_renderer import create_video, create_video_remotion
 from .poster import post_video
 
 logging.basicConfig(
@@ -45,6 +45,7 @@ def run_pipeline(
     skip_post: bool = False,
     platforms: list[str] = None,
     topic: str = None,
+    format: str = "pinterest",
 ) -> list[dict]:
     """
     Execute the full video pipeline for a brand.
@@ -77,8 +78,8 @@ def run_pipeline(
 
         try:
             # --- Step 1: Generate script ---
-            logger.info(f"{run_label} → Step 1: Generating script...")
-            script_data = generate_script(brand=brand, topic=topic)
+            logger.info(f"{run_label} → Step 1: Generating script (format={format})...")
+            script_data = generate_script(brand=brand, topic=topic, format=format)
             result["title"] = script_data["title"]
             result["topic"] = script_data.get("topic")
             logger.info(f"{run_label} → Script: '{script_data['title']}'")
@@ -113,13 +114,21 @@ def run_pipeline(
                 script_data["estimated_duration_seconds"] = duration
 
             # --- Step 3: Render video ---
-            logger.info(f"{run_label} → Step 3: Rendering video...")
-            rendered_path = create_video(
-                brand=brand,
-                script_data=script_data,
-                voiceover_path=voiceover_path,
-                output_path=output_path,
-            )
+            logger.info(f"{run_label} → Step 3: Rendering video (renderer={format})...")
+            if format == "pinterest":
+                rendered_path = create_video_remotion(
+                    brand=brand,
+                    script_data=script_data,
+                    voiceover_path=voiceover_path,
+                    output_path=output_path,
+                )
+            else:
+                rendered_path = create_video(
+                    brand=brand,
+                    script_data=script_data,
+                    voiceover_path=voiceover_path,
+                    output_path=output_path,
+                )
             result["video_path"] = str(rendered_path)
             logger.info(f"{run_label} → Video: {rendered_path.name}")
 
@@ -228,6 +237,12 @@ Examples:
         help="Comma-separated list of platforms to post to (default: pinterest)",
     )
     parser.add_argument(
+        "--format",
+        default="pinterest",
+        choices=["pinterest", "standard"],
+        help="Video format: 'pinterest' (10-12s Remotion, default) or 'standard' (30-60s FFmpeg)",
+    )
+    parser.add_argument(
         "--topic",
         default=None,
         help="Specific topic override (random from brand topics if not set)",
@@ -261,6 +276,7 @@ Examples:
         skip_post=args.skip_post,
         platforms=platforms,
         topic=args.topic,
+        format=args.format,
     )
 
     # Summary

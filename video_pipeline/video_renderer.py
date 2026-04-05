@@ -1,15 +1,19 @@
 """
-Render a 1080x1920 vertical MP4 video using FFmpeg.
-Pipeline: Pexels images → Ken Burns effect → text overlays → voiceover mix → fade transitions.
+Render a 1080x1920 vertical MP4 video.
+Two backends:
+  - FFmpeg: Ken Burns + text overlays (create_video)
+  - Remotion: SlideshowVideo React component (create_video_remotion)
 """
 
 import json
 import logging
 import os
+import shutil
 import subprocess
 import tempfile
 import textwrap
 import urllib.request
+import uuid
 from pathlib import Path
 from typing import Optional
 
@@ -271,6 +275,150 @@ def render_video(
 
     except subprocess.TimeoutExpired:
         raise RuntimeError("FFmpeg render timed out after 300 seconds")
+
+
+# Mapping from Python brand key → (Remotion composition ID, brands.ts config key)
+_BRAND_TO_REMOTION: dict[str, tuple[str, str]] = {
+    "deals":      ("Slideshow-DailyDealDarling", "daily_deal_darling"),
+    "fitover35":  ("Slideshow-FitOver35",         "fitnessmadeasy"),
+    "menopause":  ("Slideshow-MenopausePlanner",  "menopause_planner"),
+    "pilottools": ("Slideshow-FitOver35",         "fitnessmadeasy"),
+}
+
+# Remotion project directory
+_REMOTION_DIR = Path(__file__).parent.parent / "remotion-videos"
+
+
+def create_video_remotion(
+    brand: BrandConfig,
+    script_data: dict,
+    voiceover_path: Optional[Path],
+    output_path: Path,
+) -> Path:
+    """
+    Render a 1080x1920 vertical MP4 using Remotion's SlideshowVideo component.
+
+    Steps:
+      1. Download Pexels portrait images
+      2. Copy images + voiceover into remotion-videos/public/temp_{session}/
+      3. Write props JSON to /tmp/remotion_props_{session}.json
+      4. Run `npx remotion render {composition} {output} --props=...`
+      5. Clean up temp assets
+
+    Args:
+        brand: BrandConfig for this video
+        script_data: Output from script_generator.generate_script()
+        voiceover_path: Path to ElevenLabs MP3 (or None for silent)
+        output_path: Destination for the final MP4
+
+    Returns:
+        Path to rendered MP4
+    """
+    from .pexels_fetcher import fetch_portrait_images
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    composition_id, brand_ts_key = _BRAND_TO_REMOTION.get(
+        brand.key, ("Slideshow-FitOver35", "fitnessmadeasy")
+    )
+
+    session_id = uuid.uuid4().hex[:10]
+    public_temp_dir = _REMOTION_DIR / "public" / f"temp_{session_id}"
+    props_path = Path(f"/tmp/remotion_props_{session_id}.json")
+
+    try:
+        public_temp_dir.mkdir(parents=True, exist_ok=True)
+
+        # 1. Download Pexels images
+        logger.info("Downloading Pexels portrait images...")
+        with tempfile.TemporaryDirectory(prefix="pexels_") as tmpdir:
+            images = fetch_portrait_images(
+                queries=script_data.get("pexels_search_queries", [brand.name]),
+                count=4,
+                output_dir=Path(tmpdir),
+            )
+            # 2a. Copy images to remotion public/
+            public_image_refs = []
+            for i, img_path in enumerate(images):
+                dest = public_temp_dir / f"img_{i:02d}.jpg"
+                shutil.copy2(img_path, dest)
+                public_image_refs.append(f"temp_{session_id}/img_{i:02d}.jpg")
+
+        # 2b. Copy voiceover to remotion public/
+        public_voiceover_ref = ""
+        if voiceover_path and Path(voiceover_path).exists():
+            dest_audio = public_temp_dir / "voiceover.mp3"
+            shutil.copy2(voiceover_path, dest_audio)
+            public_voiceover_ref = f"temp_{session_id}/voiceover.mp3"
+
+        # 3. Build props JSON
+        props = {
+            "brand": brand_ts_key,
+            "hook": script_data.get("hook", ""),
+            "title": script_data.get("title", ""),
+            "points": script_data.get("body_points", [])[:1],  # Pinterest: max 1 point
+            "cta": script_data.get("cta", "Link in bio"),
+            "images": public_image_refs,
+            "voiceover": public_voiceover_ref,
+        }
+        props_path.write_text(json.dumps(props, indent=2))
+        logger.debug(f"Remotion props: {json.dumps(props, indent=2)}")
+
+        # 4. Run Remotion render
+        env = os.environ.copy()
+        env["PATH"] = f"/opt/homebrew/bin:/usr/local/bin:{env.get('PATH', '')}"
+
+        cmd = [
+            "npx", "remotion", "render",
+            composition_id,
+            str(output_path.resolve()),
+            f"--props={props_path}",
+            "--browser-executable=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        ]
+
+        logger.info(f"Remotion render: {composition_id} → {output_path.name}")
+        logger.debug(f"Command: {' '.join(cmd)}")
+
+        # Write output to files instead of capturing via pipe.
+        # capture_output=True pipes stdout which inhibits Remotion's HTTP server startup.
+        stdout_log = Path(f"/tmp/remotion_out_{session_id}.log")
+        stderr_log = Path(f"/tmp/remotion_err_{session_id}.log")
+
+        with open(stdout_log, "w") as out_f, open(stderr_log, "w") as err_f:
+            result = subprocess.run(
+                cmd,
+                cwd=str(_REMOTION_DIR),
+                stdout=out_f,
+                stderr=err_f,
+                timeout=600,
+                env=env,
+            )
+
+        stdout_content = stdout_log.read_text() if stdout_log.exists() else ""
+        stderr_content = stderr_log.read_text() if stderr_log.exists() else ""
+
+        for log_file in (stdout_log, stderr_log):
+            if log_file.exists():
+                log_file.unlink(missing_ok=True)
+
+        if result.returncode != 0:
+            logger.error(f"Remotion stdout:\n{stdout_content[-2000:]}")
+            logger.error(f"Remotion stderr:\n{stderr_content[-2000:]}")
+            raise RuntimeError(
+                f"Remotion render failed (exit {result.returncode}):\n{stderr_content[-500:]}"
+            )
+
+        size_mb = output_path.stat().st_size / 1_000_000
+        logger.info(f"Video rendered: {output_path} ({size_mb:.1f} MB)")
+        return output_path
+
+    finally:
+        # Clean up temp assets regardless of success/failure
+        if public_temp_dir.exists():
+            shutil.rmtree(public_temp_dir, ignore_errors=True)
+        if props_path.exists():
+            props_path.unlink(missing_ok=True)
 
 
 def create_video(
