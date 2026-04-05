@@ -51,9 +51,22 @@ class BrandConfig:
         return self.amazon_tag
 
 # ── Load .env files ────────────────────────────────────────────────────────────
-# Load project .env first, then toolkit .env for ElevenLabs key fallback
+# Load project .env first, then toolkit .env for ElevenLabs key fallback.
+# Supports git worktrees: walks up parent dirs to find the main project .env.
 
-_PROJECT_ENV = Path(__file__).parent.parent / ".env"
+def _find_env_file() -> Path:
+    """Find .env by checking the project root, then walking up (handles git worktrees)."""
+    candidate = Path(__file__).parent.parent / ".env"
+    if candidate.exists():
+        return candidate
+    # Walk up to find .env (worktree may be nested deep inside main project)
+    for parent in Path(__file__).parents:
+        probe = parent / ".env"
+        if probe.exists():
+            return probe
+    return candidate  # return default even if missing; load_dotenv handles it gracefully
+
+_PROJECT_ENV = _find_env_file()
 _TOOLKIT_ENV = Path.home() / "claude-video-toolkit" / ".env"
 
 load_dotenv(_PROJECT_ENV)  # project env — higher priority
