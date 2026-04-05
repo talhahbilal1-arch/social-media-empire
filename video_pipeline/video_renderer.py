@@ -380,20 +380,33 @@ def create_video_remotion(
         logger.info(f"Remotion render: {composition_id} → {output_path.name}")
         logger.debug(f"Command: {' '.join(cmd)}")
 
-        result = subprocess.run(
-            cmd,
-            cwd=str(_REMOTION_DIR),
-            capture_output=True,
-            text=True,
-            timeout=600,
-            env=env,
-        )
+        # Write output to files instead of capturing via pipe.
+        # capture_output=True pipes stdout which inhibits Remotion's HTTP server startup.
+        stdout_log = Path(f"/tmp/remotion_out_{session_id}.log")
+        stderr_log = Path(f"/tmp/remotion_err_{session_id}.log")
+
+        with open(stdout_log, "w") as out_f, open(stderr_log, "w") as err_f:
+            result = subprocess.run(
+                cmd,
+                cwd=str(_REMOTION_DIR),
+                stdout=out_f,
+                stderr=err_f,
+                timeout=600,
+                env=env,
+            )
+
+        stdout_content = stdout_log.read_text() if stdout_log.exists() else ""
+        stderr_content = stderr_log.read_text() if stderr_log.exists() else ""
+
+        for log_file in (stdout_log, stderr_log):
+            if log_file.exists():
+                log_file.unlink(missing_ok=True)
 
         if result.returncode != 0:
-            logger.error(f"Remotion stdout:\n{result.stdout[-2000:]}")
-            logger.error(f"Remotion stderr:\n{result.stderr[-2000:]}")
+            logger.error(f"Remotion stdout:\n{stdout_content[-2000:]}")
+            logger.error(f"Remotion stderr:\n{stderr_content[-2000:]}")
             raise RuntimeError(
-                f"Remotion render failed (exit {result.returncode}):\n{result.stderr[-500:]}"
+                f"Remotion render failed (exit {result.returncode}):\n{stderr_content[-500:]}"
             )
 
         size_mb = output_path.stat().st_size / 1_000_000
