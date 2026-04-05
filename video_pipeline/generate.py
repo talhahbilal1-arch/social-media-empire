@@ -45,6 +45,7 @@ def run_pipeline(
     skip_post: bool = False,
     platforms: list[str] = None,
     topic: str = None,
+    format: str = "pinterest",
 ) -> list[dict]:
     """
     Execute the full video pipeline for a brand.
