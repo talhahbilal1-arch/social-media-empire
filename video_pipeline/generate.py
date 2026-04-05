@@ -19,6 +19,7 @@ from .script_generator import generate_script
 from .voiceover import generate_voiceover
 from .video_renderer import create_video, create_video_remotion
 from .poster import post_video
+from .auto_post_pinterest import auto_post_pinterest
 
 logging.basicConfig(
     level=logging.INFO,
