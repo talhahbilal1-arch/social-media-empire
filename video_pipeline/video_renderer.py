@@ -1,15 +1,19 @@
 """
-Render a 1080x1920 vertical MP4 video using FFmpeg.
-Pipeline: Pexels images → Ken Burns effect → text overlays → voiceover mix → fade transitions.
+Render a 1080x1920 vertical MP4 video.
+Two backends:
+  - FFmpeg: Ken Burns + text overlays (create_video)
+  - Remotion: SlideshowVideo React component (create_video_remotion)
 """
 
 import json
 import logging
 import os
+import shutil
 import subprocess
 import tempfile
 import textwrap
 import urllib.request
+import uuid
 from pathlib import Path
 from typing import Optional
 
