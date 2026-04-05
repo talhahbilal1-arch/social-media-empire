@@ -547,5 +547,32 @@
     "board": "AI Coding Tools",
     "posted_at": "2026-04-04T22:18:10.157Z",
     "success": true
+  },
+  {
+    "slug": "chatgpt-alternatives-2026",
+    "pin_type": "article",
+    "title": "Beyond ChatGPT: Best AI Tools in 2026!",
+    "link": "https://pilottools.ai/blog/chatgpt-alternatives-2026/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-05T16:46:29.765Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-voice-generators-2026",
+    "pin_type": "article",
+    "title": "Top AI Voice Generators of 2026: Realistic TTS!",
+    "link": "https://pilottools.ai/blog/best-ai-voice-generators-2026/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-05T16:46:33.590Z",
+    "success": true
+  },
+  {
+    "slug": "podcastle",
+    "pin_type": "tool-review",
+    "title": "Podcastle Review: AI Audio Editing Made Easy!",
+    "link": "https://pilottools.ai/tools/podcastle/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-04-05T16:46:37.492Z",
+    "success": true
   }
 ]
