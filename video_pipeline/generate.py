@@ -276,6 +276,7 @@ Examples:
         skip_post=args.skip_post,
         platforms=platforms,
         topic=args.topic,
+        format=args.format,
     )
 
     # Summary
