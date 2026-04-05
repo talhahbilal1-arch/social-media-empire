@@ -471,7 +471,10 @@ def create_video(
     output_path: Path,
 ) -> Path:
     """
-    Full pipeline: download Pexels images → render video.
+    Full pipeline: download Pexels video clip (or image fallback) → render video.
+
+    Tries a real video clip first for authentic motion. Falls back to Ken Burns
+    image slideshow if the Pexels video API fails.
 
     Args:
         brand: BrandConfig for this video
@@ -482,23 +485,45 @@ def create_video(
     Returns:
         Path to rendered MP4
     """
+    queries = script_data.get("pexels_search_queries", [brand.name])
+    total_duration = float(script_data.get("estimated_duration_seconds", 45))
+
     with tempfile.TemporaryDirectory(prefix="vidpipeline_") as tmpdir:
         tmp_path = Path(tmpdir)
 
-        # Download images
-        logger.info("Downloading Pexels images...")
+        # --- Try Pexels video clip first (real motion) ---
+        logger.info("Attempting Pexels video background...")
+        video_clip = _fetch_pexels_video(
+            queries=queries,
+            orientation=brand.pexels_orientation,
+            output_dir=tmp_path,
+        )
+
+        if video_clip:
+            logger.info("Using real video clip as background")
+            return render_video_from_clip(
+                video_clip=video_clip,
+                voiceover_path=voiceover_path,
+                output_path=output_path,
+                title=script_data["title"],
+                body_points=script_data.get("body_points", []),
+                colors=brand.colors,
+                total_duration=total_duration,
+            )
+
+        # --- Fallback: Ken Burns image slideshow ---
+        logger.warning("Pexels video unavailable — falling back to Ken Burns image slideshow")
         images = _fetch_pexels_images(
-            queries=script_data.get("pexels_search_queries", [brand.name]),
+            queries=queries,
             count=5,
             orientation=brand.pexels_orientation,
             output_dir=tmp_path,
         )
 
         if not images:
-            raise RuntimeError("No images downloaded from Pexels — check PEXELS_API_KEY and queries")
+            raise RuntimeError("No Pexels images or video available — check PEXELS_API_KEY")
 
-        total_duration = float(script_data.get("estimated_duration_seconds", 45))
-        # Pad a couple seconds so video doesn't cut before audio ends
+        # Ensure enough duration to cover all image segments
         total_duration = max(total_duration, len(images) * IMAGE_DURATION * 0.6)
 
         return render_video(
