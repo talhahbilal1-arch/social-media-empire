@@ -20,6 +20,64 @@ from .config import BrandConfig, BrandColors, get_api_key
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Remotion configuration
+# ---------------------------------------------------------------------------
+
+# Maps Python brand key → (Remotion composition ID, Remotion brand ID in brands.ts)
+_REMOTION_COMPOSITION: dict[str, tuple[str, str]] = {
+    "fitover35":  ("Slideshow-FitOver35",          "fitnessmadeasy"),
+    "deals":      ("Slideshow-DailyDealDarling",   "daily_deal_darling"),
+    "menopause":  ("Slideshow-MenopausePlanner",   "menopause_planner"),
+    "pilottools": ("Slideshow-DailyDealDarling",   "daily_deal_darling"),  # fallback
+}
+
+
+def _find_remotion_dir() -> Path:
+    """
+    Locate the remotion-videos/ directory with node_modules installed.
+
+    Searches upward from this file (handles both main repo and git worktrees).
+    Respects REMOTION_DIR env override.
+    """
+    env_override = os.environ.get("REMOTION_DIR")
+    if env_override:
+        return Path(env_override)
+
+    candidate = Path(__file__).parent.parent
+    for _ in range(5):
+        remotion_path = candidate / "remotion-videos"
+        if (remotion_path / "node_modules" / ".bin" / "remotion").exists():
+            return remotion_path
+        candidate = candidate.parent
+
+    # Default path (may not have node_modules — render will surface the error)
+    return Path(__file__).parent.parent / "remotion-videos"
+
+
+def _find_chrome() -> str:
+    """Return path to a Chrome/Chromium executable, or empty string if not found."""
+    candidates = [
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",  # macOS
+        "/usr/bin/google-chrome-stable",   # GitHub Actions Ubuntu runner
+        "/usr/bin/google-chrome",          # Linux generic
+        "/usr/bin/chromium-browser",       # Debian/Ubuntu Chromium
+        "/usr/bin/chromium",               # Alpine/Arch Chromium
+    ]
+    for path in candidates:
+        if Path(path).exists():
+            return path
+    for name in ("google-chrome-stable", "google-chrome", "chromium-browser", "chromium"):
+        found = shutil.which(name, path=f"/opt/homebrew/bin:{os.environ.get('PATH','')}")
+        if found:
+            return found
+    return ""
+
+
+# ---------------------------------------------------------------------------
+# FFmpeg constants (used by Ken Burns fallback renderer)
+# ---------------------------------------------------------------------------
+
 VIDEO_W = 720
 VIDEO_H = 1280
 IMAGE_DURATION = 7  # seconds per image before transition (fallback mode)
