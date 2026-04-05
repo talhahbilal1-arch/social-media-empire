@@ -79,8 +79,8 @@ def run_pipeline(
 
         try:
             # --- Step 1: Generate script ---
-            logger.info(f"{run_label} → Step 1: Generating script...")
-            script_data = generate_script(brand=brand, topic=topic)
+            logger.info(f"{run_label} → Step 1: Generating script (format={video_format})...")
+            script_data = generate_script(brand=brand, topic=topic, format=video_format)
             result["title"] = script_data["title"]
             result["topic"] = script_data.get("topic")
             logger.info(f"{run_label} → Script: '{script_data['title']}'")
