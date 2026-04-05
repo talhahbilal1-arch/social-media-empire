@@ -1,3 +1,22 @@
+# Phase 7: Video Auto-Post to Pinterest — April 5, 2026
+
+## Tasks
+
+- [x] **Task 1: Create video_pipeline/auto_post_pinterest.py** — Uploads video + thumbnail to catbox.moe, writes pending JSON to `output/_pending_posts/{brand}_{ts}.json`. Uses ffmpeg for thumbnail extraction, curl for catbox.moe multipart upload.
+- [x] **Task 2: Update generate.py** — When `format=pinterest` and `skip_post=False`, calls `auto_post_pinterest()` instead of `post_video()` (Make.com webhook). Standard format still uses `post_video()`.
+- [x] **Task 3: Create .github/workflows/daily-video-generation.yml** — Scheduled daily at 10AM PST (6PM UTC). Uses `--format pinterest` flag. Installs Remotion + FFmpeg + Python. Runs per-brand with brand-filter support. Commits pending posts and uploads videos as artifacts. All `workflow_dispatch` inputs use env vars (not direct `${{ inputs.* }}` interpolation) for security.
+- [x] **Task 4: Verify PATH** — `/opt/homebrew/bin` already prepended in `video_renderer.py:370` for Remotion/npx.
+
+## Review
+
+Pinterest video auto-post pipeline fully wired:
+- **auto_post_pinterest.py**: catbox.moe upload for video + thumbnail → writes `output/_pending_posts/{brand}_{ts}.json` with all Pinterest pin metadata (video_url, cover_url, title, description, brand, affiliate_tag). Thumbnail cleaned up after upload.
+- **generate.py**: Pinterest format now routes to `auto_post_pinterest()` post-render. Standard format still uses Make.com webhook (`post_video()`). Clean separation.
+- **daily-video-generation.yml**: New active workflow replacing the archived `video-pins.yml`. Runs Remotion pipeline, 3 brands, daily 10AM PST. Security-compliant (inputs go through env vars, not shell interpolation).
+- **Test command**: `python3 -m video_pipeline.generate --brand deals --format pinterest --count 1`
+
+---
+
 # Phase 6: Pinterest Video Pipeline (Remotion) — April 4, 2026
 
 ## Tasks
