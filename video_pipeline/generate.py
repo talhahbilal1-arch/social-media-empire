@@ -57,6 +57,7 @@ def run_pipeline(
         skip_post: Render video but don't post to platforms
         platforms: List of platforms to post to (default: ["pinterest"])
         topic: Optional specific topic (picks randomly if None)
+        format: "pinterest" (15s Remotion) or "youtube" (45s FFmpeg)
 
     Returns:
         List of result dicts per video
