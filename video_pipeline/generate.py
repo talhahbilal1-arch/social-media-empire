@@ -231,6 +231,12 @@ Examples:
         help="Comma-separated list of platforms to post to (default: pinterest)",
     )
     parser.add_argument(
+        "--format",
+        default="pinterest",
+        choices=["pinterest", "youtube"],
+        help="Output format: 'pinterest' (15s Remotion) or 'youtube' (45s FFmpeg) (default: pinterest)",
+    )
+    parser.add_argument(
         "--topic",
         default=None,
         help="Specific topic override (random from brand topics if not set)",
