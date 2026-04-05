@@ -45,6 +45,7 @@ def run_pipeline(
     skip_post: bool = False,
     platforms: list[str] = None,
     topic: str = None,
+    video_format: str = "standard",
 ) -> list[dict]:
     """
     Execute the full video pipeline for a brand.
@@ -56,6 +57,7 @@ def run_pipeline(
         skip_post: Render video but don't post to platforms
         platforms: List of platforms to post to (default: ["pinterest"])
         topic: Optional specific topic (picks randomly if None)
+        video_format: "pinterest" (10-12s), "youtube" or "standard" (30-60s)
 
     Returns:
         List of result dicts per video
