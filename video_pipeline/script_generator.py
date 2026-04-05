@@ -132,7 +132,7 @@ def generate_script(
         client = genai.Client(api_key=api_key)
         prompt = _build_prompt(brand, topic, format=format)
 
-        logger.info(f"Generating script for brand={brand.key}, model={model}")
+        logger.info(f"Generating script for brand={brand.key}, model={model}, format={format}")
 
         response = client.models.generate_content(
             model=model,
