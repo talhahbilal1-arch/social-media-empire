@@ -17,7 +17,7 @@ from pathlib import Path
 from .config import load_env, get_brand, BRANDS
 from .script_generator import generate_script
 from .voiceover import generate_voiceover
-from .video_renderer import create_video
+from .video_renderer import create_video, create_video_ffmpeg
 from .poster import post_video
 
 logging.basicConfig(
