@@ -13,15 +13,58 @@ from .config import BrandConfig, get_api_key
 logger = logging.getLogger(__name__)
 
 
-def _build_prompt(brand: BrandConfig, topic: Optional[str] = None) -> str:
+def _build_prompt(
+    brand: BrandConfig,
+    topic: Optional[str] = None,
+    format: str = "standard",
+) -> str:
     chosen_topic = topic or random.choice(brand.topics)
 
+    if format == "pinterest":
+        return f"""You are a viral Pinterest video script writer for the brand "{brand.name}".
+
+Brand voice: {brand.voice_style}
+Topic: {chosen_topic}
+
+Write a 10-12 second Pinterest video script (roughly 25-35 words spoken aloud).
+Structure: Hook (1 sentence, 2-3s) → ONE key insight (1-2 sentences, 5-8s) → CTA (1 sentence, 2-3s).
+
+Return ONLY valid JSON in this exact structure:
+{{
+  "title": "Compelling video title (under 60 chars)",
+  "topic": "{chosen_topic}",
+  "hook": "One punchy sentence that stops the scroll (2-3 seconds)",
+  "body_points": [
+    "ONE specific, actionable insight — 1-2 sentences max"
+  ],
+  "cta": "One clear action (save this, follow for more, link in bio)",
+  "full_script": "Complete narration: hook + one insight + cta — 25-35 words total, ready for TTS",
+  "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5"],
+  "pexels_search_queries": [
+    "specific video/image search query 1",
+    "specific video/image search query 2",
+    "specific video/image search query 3"
+  ],
+  "estimated_duration_seconds": 11
+}}
+
+Rules:
+- full_script must be 25-35 words MAXIMUM — no exceptions
+- body_points must have EXACTLY 1 item
+- Hook creates instant curiosity or promises one specific result
+- The one body point is a concrete fact or quick tip (not generic)
+- Pexels queries must be specific (e.g. "woman doing home workout" not just "workout")
+- Hashtags mix broad and niche tags for the brand
+"""
+
+    # Standard (30-60s) and youtube (same template) formats
+    duration_hint = "30-60 second" if format != "youtube" else "30-60 second"
     return f"""You are a viral short-form video script writer for the brand "{brand.name}".
 
 Brand voice: {brand.voice_style}
 Topic: {chosen_topic}
 
-Write a 30-60 second video script (roughly 75-150 words when spoken aloud at a normal pace).
+Write a {duration_hint} video script (roughly 75-150 words when spoken aloud at a normal pace).
 
 Return ONLY valid JSON in this exact structure:
 {{
