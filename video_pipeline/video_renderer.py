@@ -532,10 +532,16 @@ def create_video(
     output_path: Path,
 ) -> Path:
     """
-    Full pipeline: download Pexels video clip (or image fallback) → render video.
+    Render a vertical MP4 via Remotion SlideshowVideo composition.
 
-    Tries a real video clip first for authentic motion. Falls back to Ken Burns
-    image slideshow if the Pexels video API fails.
+    Produces 1080x1920, 15s, 30fps with:
+      - Spring-animated text (hook → title → points → CTA)
+      - Karaoke-style word highlighting
+      - Ken Burns effect on brand images
+      - Voiceover audio (if provided)
+      - Brand-themed colors, watermark, and progress bar
+
+    Falls back to FFmpeg Ken Burns slideshow if Remotion is unavailable.
 
     Args:
         brand: BrandConfig for this video
@@ -546,47 +552,113 @@ def create_video(
     Returns:
         Path to rendered MP4
     """
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    remotion_dir = _find_remotion_dir()
+    if not (remotion_dir / "node_modules" / ".bin" / "remotion").exists():
+        logger.warning(
+            f"Remotion not found at {remotion_dir} — falling back to FFmpeg renderer. "
+            f"Run `npm install` in remotion-videos/ to enable Remotion."
+        )
+        return _create_video_ffmpeg_fallback(brand, script_data, voiceover_path, output_path)
+
+    composition_id, remotion_brand_id = _REMOTION_COMPOSITION.get(
+        brand.key, ("Slideshow-DailyDealDarling", "daily_deal_darling")
+    )
+
+    # Stage voiceover into Remotion's public/ so staticFile() can resolve it
+    voiceover_rel = ""
+    voiceover_staging: Optional[Path] = None
+    if voiceover_path and voiceover_path.exists():
+        audio_dir = remotion_dir / "public" / "assets" / "audio"
+        audio_dir.mkdir(parents=True, exist_ok=True)
+        vo_name = f"vo_{brand.key}_{os.getpid()}.mp3"
+        voiceover_staging = audio_dir / vo_name
+        shutil.copy2(voiceover_path, voiceover_staging)
+        voiceover_rel = f"assets/audio/{vo_name}"
+
+    props = {
+        "brand": remotion_brand_id,
+        "hook":   script_data.get("hook", ""),
+        "title":  script_data.get("title", ""),
+        "points": script_data.get("body_points", []),
+        "cta":    script_data.get("cta", ""),
+        "images": [],        # use brand's default slideshow images from brands.ts
+        "voiceover": voiceover_rel,
+    }
+
+    # Write props to a temp file — avoids shell escaping issues with special chars
+    props_file = Path(tempfile.mktemp(suffix=".json", prefix="remotion_props_"))
+    props_file.write_text(json.dumps(props))
+
+    cmd = [
+        "npx", "remotion", "render",
+        composition_id,
+        str(output_path.resolve()),
+        f"--props={props_file}",
+        "--concurrency=1",   # >1 causes Chrome tab race on localhost:3000
+    ]
+    chrome = _find_chrome()
+    if chrome:
+        cmd.append(f"--browser-executable={chrome}")
+
+    # Ensure /opt/homebrew/bin is in PATH for npx on macOS
+    env = {**os.environ, "PATH": f"/opt/homebrew/bin:{os.environ.get('PATH', '')}"}
+
+    logger.info(f"Remotion render: {composition_id} → {output_path.name}")
+    logger.debug(f"Props: {json.dumps(props)}")
+
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=600,
+            cwd=str(remotion_dir),
+            env=env,
+        )
+        if result.returncode != 0:
+            logger.error(f"Remotion stderr:\n{result.stderr[-3000:]}")
+            raise RuntimeError(f"Remotion render failed (exit {result.returncode})")
+
+        logger.info(
+            f"Remotion render complete: {output_path} "
+            f"({output_path.stat().st_size / 1_000_000:.1f} MB)"
+        )
+        return output_path
+
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("Remotion render timed out after 600 seconds")
+
+    finally:
+        props_file.unlink(missing_ok=True)
+        if voiceover_staging and voiceover_staging.exists():
+            voiceover_staging.unlink()
+
+
+def _create_video_ffmpeg_fallback(
+    brand: BrandConfig,
+    script_data: dict,
+    voiceover_path: Optional[Path],
+    output_path: Path,
+) -> Path:
+    """Ken Burns image slideshow via FFmpeg — used when Remotion is unavailable."""
     queries = script_data.get("pexels_search_queries", [brand.name])
     total_duration = float(script_data.get("estimated_duration_seconds", 45))
 
     with tempfile.TemporaryDirectory(prefix="vidpipeline_") as tmpdir:
         tmp_path = Path(tmpdir)
-
-        # --- Try Pexels video clip first (real motion) ---
-        logger.info("Attempting Pexels video background...")
-        video_clip = _fetch_pexels_video(
-            queries=queries,
-            orientation=brand.pexels_orientation,
-            output_dir=tmp_path,
-        )
-
-        if video_clip:
-            logger.info("Using real video clip as background")
-            return render_video_from_clip(
-                video_clip=video_clip,
-                voiceover_path=voiceover_path,
-                output_path=output_path,
-                title=script_data["title"],
-                body_points=script_data.get("body_points", []),
-                colors=brand.colors,
-                total_duration=total_duration,
-            )
-
-        # --- Fallback: Ken Burns image slideshow ---
-        logger.warning("Pexels video unavailable — falling back to Ken Burns image slideshow")
         images = _fetch_pexels_images(
             queries=queries,
             count=5,
             orientation=brand.pexels_orientation,
             output_dir=tmp_path,
         )
-
         if not images:
-            raise RuntimeError("No Pexels images or video available — check PEXELS_API_KEY")
+            raise RuntimeError("No Pexels images available — check PEXELS_API_KEY")
 
-        # Ensure enough duration to cover all image segments
         total_duration = max(total_duration, len(images) * IMAGE_DURATION * 0.6)
-
         return render_video(
             images=images,
             voiceover_path=voiceover_path,
