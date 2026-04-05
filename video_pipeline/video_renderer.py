@@ -1,6 +1,6 @@
 """
 Render a 1080x1920 vertical MP4 video using FFmpeg.
-Pipeline: Pexels images → Ken Burns effect → text overlays → voiceover mix → fade transitions.
+Pipeline: Pexels video clip (or Ken Burns image fallback) → text overlays → voiceover mix.
 """
 
 import json
@@ -19,8 +19,71 @@ logger = logging.getLogger(__name__)
 
 VIDEO_W = 720
 VIDEO_H = 1280
-IMAGE_DURATION = 7  # seconds per image before transition
+IMAGE_DURATION = 7  # seconds per image before transition (fallback mode)
 FADE_DURATION = 0.5
+
+
+def _fetch_pexels_video(
+    queries: list[str],
+    orientation: str,
+    output_dir: Path,
+) -> Optional[Path]:
+    """
+    Try to download a short Pexels video clip as the background.
+
+    Tries up to the first 3 queries. Returns local .mp4 path on success, None on failure.
+    Any orientation video is accepted — FFmpeg will scale/crop to portrait.
+    """
+    api_key = get_api_key("PEXELS_API_KEY")
+
+    for query in queries[:3]:
+        try:
+            url = (
+                f"https://api.pexels.com/videos/search"
+                f"?query={urllib.request.quote(query)}"
+                f"&orientation={orientation}&per_page=5&page=1"
+            )
+            req = urllib.request.Request(
+                url, headers={"Authorization": api_key, "User-Agent": "VideoBot/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                data = json.loads(resp.read())
+
+            videos = data.get("videos", [])
+            if not videos:
+                logger.warning(f"No Pexels videos for query: '{query}'")
+                continue
+
+            # Prefer shorter clips (faster download, less waste for 10-12s target)
+            short_videos = [v for v in videos if v.get("duration", 999) <= 45]
+            video = (short_videos or videos)[0]
+
+            # Pick best available file (prefer hd quality)
+            video_files = video.get("video_files", [])
+            if not video_files:
+                continue
+            hd_files = [f for f in video_files if f.get("quality") == "hd"]
+            best_file = (hd_files or video_files)[0]
+            video_url = best_file["link"]
+
+            vid_path = output_dir / "bg_video.mp4"
+            logger.info(f"Downloading Pexels video clip ({query})...")
+            vid_req = urllib.request.Request(
+                video_url, headers={"User-Agent": "VideoBot/1.0"}
+            )
+            with urllib.request.urlopen(vid_req, timeout=60) as vid_resp:
+                with open(vid_path, "wb") as f:
+                    f.write(vid_resp.read())
+
+            size_mb = vid_path.stat().st_size / 1_000_000
+            logger.info(f"Downloaded Pexels video: {vid_path.name} ({size_mb:.1f} MB)")
+            return vid_path
+
+        except Exception as e:
+            logger.warning(f"Pexels video fetch failed for '{query}': {e}")
+            continue
+
+    return None
 
 
 def _fetch_pexels_images(
