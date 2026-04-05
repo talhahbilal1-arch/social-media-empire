@@ -1,0 +1,45 @@
+name: Etsy Product Pins
+
+on:
+  schedule:
+    # Post 1 pin/day at 6PM UTC (11AM PST)
+    # Staggered from content-engine.yml so boards stay active all day
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+    inputs:
+      post_all:
+        description: "Post all 10 pins at once (use for initial launch)"
+        required: false
+        default: "false"
+
+jobs:
+  post-etsy-pins:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install requests pillow
+
+      - name: Post Etsy product pins
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          POST_ALL: ${{ github.event.inputs.post_all }}
+        run: |
+          if [ "$POST_ALL" = "true" ]; then
+            python3 scripts/post_etsy_pins.py --all
+          else
+            python3 scripts/post_etsy_pins.py --limit 1
+          fi
