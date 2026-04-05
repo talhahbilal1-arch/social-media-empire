@@ -273,6 +273,18 @@ def render_video(
         raise RuntimeError("FFmpeg render timed out after 300 seconds")
 
 
+_REMOTION_DIR = Path(__file__).parent.parent / "remotion-videos"
+
+_BRAND_TO_COMPOSITION = {
+    "deals":      "Slideshow-DailyDealDarling",
+    "fitover35":  "Slideshow-FitOver35",
+    "menopause":  "Slideshow-MenopausePlanner",
+    "pilottools":  "Slideshow-FitOver35",  # fitness template as fallback
+}
+
+CHROME_EXECUTABLE = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+
 def create_video(
     brand: BrandConfig,
     script_data: dict,
@@ -280,7 +292,80 @@ def create_video(
     output_path: Path,
 ) -> Path:
     """
-    Full pipeline: download Pexels images → render video.
+    Render a 15-second Pinterest video using Remotion (Slideshow composition).
+
+    Downloads Pexels images, builds JSON props, then shells out to
+    `npx remotion render` in the remotion-videos/ directory.
+    """
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    composition_id = _BRAND_TO_COMPOSITION.get(brand.key, "Slideshow-FitOver35")
+
+    with tempfile.TemporaryDirectory(prefix="vidpipeline_") as tmpdir:
+        tmp_path = Path(tmpdir)
+
+        logger.info("Downloading Pexels images for Remotion render...")
+        images = _fetch_pexels_images(
+            queries=script_data.get("pexels_search_queries", [brand.name]),
+            count=5,
+            orientation=brand.pexels_orientation,
+            output_dir=tmp_path,
+        )
+
+        if not images:
+            raise RuntimeError("No images downloaded from Pexels — check PEXELS_API_KEY and queries")
+
+        props = {
+            "brand": brand.key,
+            "hook": script_data.get("hook", ""),
+            "title": script_data.get("title", ""),
+            "points": script_data.get("body_points", []),
+            "cta": script_data.get("cta", brand.cta),
+            "images": [str(p) for p in images],
+            "voiceover": str(voiceover_path) if voiceover_path and voiceover_path.exists() else "",
+        }
+
+        props_json = json.dumps(props)
+
+        env = os.environ.copy()
+        env["PATH"] = "/opt/homebrew/bin:" + env.get("PATH", "")
+
+        cmd = [
+            "npx", "remotion", "render",
+            composition_id,
+            str(output_path.resolve()),
+            f"--props={props_json}",
+            f"--browser-executable={CHROME_EXECUTABLE}",
+        ]
+
+        logger.info(f"Running Remotion render → {output_path.name} (composition: {composition_id})")
+        logger.debug(f"Remotion command: {' '.join(cmd[:4])} ...")
+
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,
+            cwd=str(_REMOTION_DIR),
+            env=env,
+        )
+        if result.returncode != 0:
+            logger.error(f"Remotion stderr:\n{result.stderr[-3000:]}")
+            raise RuntimeError(f"Remotion render failed with return code {result.returncode}")
+
+        logger.info(f"Video rendered: {output_path} ({output_path.stat().st_size / 1_000_000:.1f} MB)")
+        return output_path
+
+
+def create_video_ffmpeg(
+    brand: BrandConfig,
+    script_data: dict,
+    voiceover_path: Optional[Path],
+    output_path: Path,
+) -> Path:
+    """
+    Full pipeline: download Pexels images → render video via FFmpeg (YouTube/long-form).
 
     Args:
         brand: BrandConfig for this video
