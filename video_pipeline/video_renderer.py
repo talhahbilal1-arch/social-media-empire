@@ -385,7 +385,7 @@ def create_video_remotion(
             cwd=str(_REMOTION_DIR),
             capture_output=True,
             text=True,
-            timeout=300,
+            timeout=600,
             env=env,
         )
 
