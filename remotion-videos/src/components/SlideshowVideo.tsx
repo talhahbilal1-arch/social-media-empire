@@ -128,7 +128,8 @@ export const SlideshowVideo: React.FC<SlideshowVideoProps> = ({
     cta: cta || config.content.cta,
   };
   const imageList = images?.length ? images : config.images;
-  const voiceoverSrc = voiceover || config.voiceover;
+  // undefined → use brand config default; "" → no audio
+  const voiceoverSrc = voiceover !== undefined ? voiceover : config.voiceover;
 
   // ─── Timing ───────────────────────────────────────────────────────────────
   const HOOK_DUR = Math.round(3 * fps);       // 90 at 30fps
