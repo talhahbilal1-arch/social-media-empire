@@ -32,6 +32,7 @@ class BrandConfig:
     site_url: str
     amazon_tag: Optional[str]
     pexels_orientation: str = "portrait"
+    tiktok_webhook_env: Optional[str] = None
 
     @property
     def pinterest_webhook_url(self) -> Optional[str]:
