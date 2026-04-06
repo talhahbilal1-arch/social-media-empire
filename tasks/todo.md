@@ -1,3 +1,27 @@
+# Phase 7: Multi-Platform Video Distribution — April 6, 2026
+
+## Tasks
+
+- [x] **Task 1: Add post_to_tiktok() to poster.py** — Make.com webhook approach mirroring Pinterest. Reads `MAKE_WEBHOOK_TIKTOK_<BRAND>` env var per brand. Skips gracefully if not configured.
+- [x] **Task 2: Wire tiktok into post_video() dispatcher** — Added `elif platform == "tiktok"` branch in `post_video()`.
+- [x] **Task 3: Add tiktok_webhook_env to BrandConfig** — New optional field in `BrandConfig` dataclass, populated for all 3 active brands (fitness/deals/menopause). pilottools left as None.
+- [x] **Task 4: Update .env.example** — Added `MAKE_WEBHOOK_TIKTOK_FITNESS/DEALS/MENOPAUSE` with instructions referencing Make.com scenario 3963775.
+- [x] **Task 5: Test dry-run + platform routing** — Verified syntax OK, dry-run passes, TikTok skips gracefully when webhook not set, YouTube OAuth creds loaded from parent .env.
+
+## Review
+
+Multi-platform video distribution wired up:
+- **YouTube Shorts**: Already fully built in `poster.py` using `google-api-python-client`. OAuth creds (`YOUTUBE_CLIENT_ID/SECRET/REFRESH_TOKEN`) are in main `.env` and load automatically via `config.py`'s parent-dir walk. Zero code changes needed — just needs those creds in GitHub Secrets to go live.
+- **TikTok**: New `post_to_tiktok()` in `poster.py`. Same webhook pattern as Pinterest. Needs Make.com scenario 3963775 ("TikTok Video Automation") configured with 3 brand routes + webhook URLs set in GitHub Secrets (`MAKE_WEBHOOK_TIKTOK_FITNESS/DEALS/MENOPAUSE`).
+- **`--platforms` flag**: Already worked in `generate.py`. Now supports `pinterest,youtube,tiktok` as valid values.
+- **No changes to generate.py** — the flag was already implemented.
+
+**To go live:**
+1. YouTube: Add `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN` to GitHub Secrets
+2. TikTok: Set up Make.com scenario 3963775, get webhook URLs, add as GitHub Secrets
+
+---
+
 # Phase 6: Pinterest Video Pipeline (Remotion) — April 4, 2026
 
 ## Tasks
