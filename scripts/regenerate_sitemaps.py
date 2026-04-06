@@ -14,6 +14,7 @@ BRAND_SITEMAPS = {
         'sitemap_path': 'outputs/fitover35-website/sitemap.xml',
         'main_pages': [
             ('', 1.0, 'weekly'),
+            ('blog.html', 0.9, 'weekly'),
             ('gear.html', 0.9, 'weekly'),
             ('12-week-program.html', 0.8, 'monthly'),
             ('privacy.html', 0.3, 'yearly'),
@@ -27,6 +28,7 @@ BRAND_SITEMAPS = {
         'sitemap_path': 'outputs/dailydealdarling-website/sitemap.xml',
         'main_pages': [
             ('', 1.0, 'weekly'),
+            ('blog.html', 0.9, 'weekly'),
             ('about', 0.6, 'monthly'),
         ],
     },
@@ -46,7 +48,7 @@ BRAND_SITEMAPS = {
     },
 }
 
-LASTMOD_DATE = '2026-03-31'
+LASTMOD_DATE = '2026-04-06'
 
 
 def get_article_filenames(articles_dir):

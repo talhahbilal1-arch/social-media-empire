@@ -2,12 +2,21 @@
 
 ## Tasks
 
-- [ ] Create scripts/rebuild_blog_indexes.py
-- [ ] Run it to regenerate all 3 blog.html files
-- [ ] Update sitemaps (lastmod + add blog.html to fitness/deals main_pages)
-- [ ] Run regenerate_sitemaps.py
-- [ ] Verify counts
+- [x] Create scripts/rebuild_blog_indexes.py
+- [x] Run it to regenerate all 3 blog.html files
+- [x] Update sitemaps (lastmod + add blog.html to fitness/deals main_pages)
+- [x] Run regenerate_sitemaps.py
+- [x] Verify counts
 - [ ] Commit and push
+
+## Review
+
+All 3 blog index pages rebuilt from article metadata:
+- FitOver35: 148 articles (was ~143, gained 5)
+- DailyDealDarling: 99 articles (was 12, gained 87)
+- Menopause Planner: 86 articles (was 0, gained 86)
+- Total: 333 articles now visible (was ~155, 178 were hidden)
+- Sitemaps updated with lastmod=2026-04-06, blog.html added to fitness+deals
 
 ---
 
