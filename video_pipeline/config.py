@@ -233,6 +233,7 @@ def get_brand(brand_key: str) -> BrandConfig:
         site_url=data["site_url"],
         amazon_tag=data.get("amazon_tag"),
         pexels_orientation=data.get("pexels_orientation", "portrait"),
+        tiktok_webhook_env=data.get("tiktok_webhook_env"),
     )
 
 
