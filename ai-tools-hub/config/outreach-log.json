@@ -88,5 +88,50 @@
     "subject": "PilotTools.ai Review of Notion AI: 4.6/5",
     "sent_at": "2026-03-30T16:09:44.654Z",
     "status": "failed"
+  },
+  {
+    "identifier": "testimonial-elevenlabs",
+    "type": "testimonial",
+    "tool_slug": "elevenlabs",
+    "to": "hello@elevenlabs.io",
+    "subject": "PilotTools.ai Review of ElevenLabs - 4.8/5!",
+    "sent_at": "2026-04-06T15:55:52.760Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-canva",
+    "type": "testimonial",
+    "tool_slug": "canva",
+    "to": "hello@canva.com",
+    "subject": "PilotTools.ai Review of Canva: 4.7/5",
+    "sent_at": "2026-04-06T15:55:57.306Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-descript",
+    "type": "testimonial",
+    "tool_slug": "descript",
+    "to": "hello@descript.com",
+    "subject": "PilotTools.ai Review of Descript: 4.5/5 Stars",
+    "sent_at": "2026-04-06T15:56:01.934Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-runway",
+    "type": "testimonial",
+    "tool_slug": "runway",
+    "to": "hello@runwayml.com",
+    "subject": "PilotTools.ai Review of Runway: 4.6/5 Stars",
+    "sent_at": "2026-04-06T15:56:07.328Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-perplexity",
+    "type": "testimonial",
+    "tool_slug": "perplexity",
+    "to": "hello@perplexity.ai",
+    "subject": "PilotTools.ai Review of Perplexity AI: 4.7/5",
+    "sent_at": "2026-04-06T15:56:12.049Z",
+    "status": "failed"
   }
 ]
