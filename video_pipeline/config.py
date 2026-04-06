@@ -176,6 +176,7 @@ BRANDS: dict[str, dict] = {
         "hashtags": ["#menopause", "#perimenopause", "#hormonehealth", "#menopausewellness", "#womenover45", "#menopauserelief"],
         "cta": "Follow for daily menopause tips. Free symptom guide in bio.",
         "webhook_env": "MAKE_WEBHOOK_MENOPAUSE",
+        "tiktok_webhook_env": "MAKE_WEBHOOK_TIKTOK_MENOPAUSE",
         "site_url": "https://menopause-planner-website.vercel.app",
         "amazon_tag": "dailydealdarl-20",
     },
