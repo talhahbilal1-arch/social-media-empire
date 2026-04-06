@@ -235,6 +235,94 @@ def post_to_youtube(
 
 
 # ---------------------------------------------------------------------------
+# TikTok via Make.com webhook
+# ---------------------------------------------------------------------------
+
+def post_to_tiktok(
+    brand: BrandConfig,
+    video_path: Path,
+    script_data: dict,
+    supabase_video_url: Optional[str] = None,
+) -> dict:
+    """
+    POST video metadata to Make.com webhook for TikTok upload.
+
+    Make.com scenario 3963775 receives the webhook and posts to TikTok.
+    Sends the Supabase public URL of the video (not the raw file).
+
+    Args:
+        brand: BrandConfig for this post
+        video_path: Local path to the MP4 (used for metadata)
+        script_data: Script dict from script_generator
+        supabase_video_url: Public URL of the uploaded video (required)
+
+    Returns:
+        dict with status and webhook response
+    """
+    webhook_url = os.getenv(brand.tiktok_webhook_env) if brand.tiktok_webhook_env else None
+    if not webhook_url:
+        env_var = brand.tiktok_webhook_env or "MAKE_WEBHOOK_TIKTOK_<BRAND>"
+        logger.warning(
+            f"TikTok webhook URL not configured for brand '{brand.key}'. "
+            f"Set env var '{env_var}' to enable posting. Skipping."
+        )
+        return {"platform": "tiktok", "status": "skipped", "reason": "webhook_url_not_configured"}
+
+    hashtags = " ".join(script_data.get("hashtags", []))
+    caption = f"{script_data['title']}\n\n{script_data['hook']}\n\n{hashtags}"
+
+    payload = {
+        "brand": brand.key,
+        "brand_name": brand.name,
+        "caption": caption[:2200],  # TikTok caption limit
+        "video_url": supabase_video_url or "",
+        "hashtags": script_data.get("hashtags", []),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+    payload_bytes = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        webhook_url,
+        data=payload_bytes,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+
+    logger.info(f"Posting to TikTok webhook: {brand.key}")
+
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            response_text = resp.read().decode("utf-8")
+            status_code = resp.status
+
+        logger.info(f"TikTok webhook response: {status_code} — {response_text[:200]}")
+        return {
+            "platform": "tiktok",
+            "status": "posted" if status_code == 200 else "warning",
+            "status_code": status_code,
+            "response": response_text,
+            "payload": payload,
+        }
+
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        logger.error(f"TikTok webhook HTTP error {e.code}: {body}")
+        return {
+            "platform": "tiktok",
+            "status": "failed",
+            "status_code": e.code,
+            "error": body,
+        }
+    except Exception as e:
+        logger.error(f"TikTok webhook request failed: {e}")
+        return {
+            "platform": "tiktok",
+            "status": "failed",
+            "error": str(e),
+        }
+
+
+# ---------------------------------------------------------------------------
 # Metadata persistence
 # ---------------------------------------------------------------------------
 
