@@ -117,6 +117,7 @@ BRANDS: dict[str, dict] = {
         "hashtags": ["#fitover35", "#menshealth", "#musclebuilding", "#fitover40", "#strengthtraining", "#over35fitness"],
         "cta": "Follow for daily fitness tips. Free 30-day plan in bio.",
         "webhook_env": "MAKE_WEBHOOK_FITNESS",
+        "tiktok_webhook_env": "MAKE_WEBHOOK_TIKTOK_FITNESS",
         "site_url": "https://fitover35.com",
         "amazon_tag": "fitover3509-20",
     },
