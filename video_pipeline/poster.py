@@ -320,6 +320,13 @@ def post_video(
                 video_path=video_path,
                 script_data=script_data,
             )
+        elif platform == "tiktok":
+            result = post_to_tiktok(
+                brand=brand,
+                video_path=video_path,
+                script_data=script_data,
+                supabase_video_url=supabase_video_url,
+            )
         else:
             logger.warning(f"Unknown platform: {platform}")
             result = {"platform": platform, "status": "skipped", "reason": "unknown platform"}
