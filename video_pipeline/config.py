@@ -146,6 +146,7 @@ BRANDS: dict[str, dict] = {
         "hashtags": ["#amazonfind", "#dealsoftheday", "#amazonmusthaves", "#homefinds", "#budgetbeauty", "#tiktokmademebuyit"],
         "cta": "Follow for daily deals. Free finds guide in bio link.",
         "webhook_env": "MAKE_WEBHOOK_DEALS",
+        "tiktok_webhook_env": "MAKE_WEBHOOK_TIKTOK_DEALS",
         "site_url": "https://dailydealdarling.com",
         "amazon_tag": "dailydealdarl-20",
     },
