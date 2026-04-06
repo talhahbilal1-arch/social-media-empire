@@ -1,0 +1,68 @@
+{
+  "date": "2026-04-06",
+  "brands": [
+    {
+      "brand": "fitness",
+      "content": "REDDIT TITLE: Beyond the Scale: How I'm Tracking Progress (and Staying Sane) After 35\nREDDIT",
+      "articles": [
+        {
+          "title": "5 Zinc Mistakes Tanking Your Testosterone After 35 \u2014 FitOver35",
+          "slug": "zinc-and-its-role-in-testosterone-production",
+          "url": "https://fitover35.com/articles/zinc-and-its-role-in-testosterone-production.html"
+        },
+        {
+          "title": "How to Track Fitness Progress After 35 Without Losing Your Mind Over the Scale \u2014 FitOver35",
+          "slug": "tracking-progress-without-obsessing-over-the-scale",
+          "url": "https://fitover35.com/articles/tracking-progress-without-obsessing-over-the-scale.html"
+        },
+        {
+          "title": "How to Train Around Injuries Without Losing Progress \u2014 FitOver35",
+          "slug": "training-around-injuries",
+          "url": "https://fitover35.com/articles/training-around-injuries.html"
+        }
+      ]
+    },
+    {
+      "brand": "deals",
+      "content": "REDDIT TITLE: Investing in Quality Now Saves You Big Later (Kitchen & Workout Gear Lessons)\n\nREDDIT POST:\nHey r/Frug",
+      "articles": [
+        {
+          "title": "5 Wooden Kitchen Utensils That&#x27;ll Make You Ditch Plastic Forever \u2014 Daily Deal Darling",
+          "slug": "wooden-kitchen-utensils-to-replace-plastic-microplastic-free",
+          "url": "https://dailydealdarling.com/articles/wooden-kitchen-utensils-to-replace-plastic-microplastic-free.html"
+        },
+        {
+          "title": "Workout Gear I Actually Wear vs What Sits in My Drawer: Honest Reviews for 2026 \u2014 Daily Deal Darling",
+          "slug": "workout-gear-and-athleisure-finds-worth-buying",
+          "url": "https://dailydealdarling.com/articles/workout-gear-and-athleisure-finds-worth-buying.html"
+        },
+        {
+          "title": "Williams Sonoma Outlet Deals: 5 Premium Kitchen Finds Actually Worth Your Money \u2014 Daily Deal Darling",
+          "slug": "williams-sonoma-outlet-deals-premium-kitchen-finds-up-to-44-",
+          "url": "https://dailydealdarling.com/articles/williams-sonoma-outlet-deals-premium-kitchen-finds-up-to-44-.html"
+        }
+      ]
+    },
+    {
+      "brand": "menopause",
+      "content": "REDDIT TITLE: Feeling frustrated with body changes or managing symptoms? Some insights that really clicked for me.\nREDDIT POST:\nHey everyone,",
+      "articles": [
+        {
+          "title": "Weight Distribution Changes in Menopause: Why Your Body Looks Different (And What Actually Helps) \u2014 The Menopause Planner",
+          "slug": "weight-distribution-changes-during-menopause",
+          "url": "https://menopause-planner-website.vercel.app/articles/weight-distribution-changes-during-menopause.html"
+        },
+        {
+          "title": "Yoga Poses for Menopause Relief: Does It Actually Work for Symptom Relief? \u2014 The Menopause Planner",
+          "slug": "yoga-poses-specifically-for-menopause-symptom-relief",
+          "url": "https://menopause-planner-website.vercel.app/articles/yoga-poses-specifically-for-menopause-symptom-relief.html"
+        },
+        {
+          "title": "Menopause Symptoms: Track to Find Your Relief (2024) \u2014 The Menopause Planner",
+          "slug": "tracking-symptoms-to-identify-patterns-and-triggers",
+          "url": "https://menopause-planner-website.vercel.app/articles/tracking-symptoms-to-identify-patterns-and-triggers.html"
+        }
+      ]
+    }
+  ]
+}
