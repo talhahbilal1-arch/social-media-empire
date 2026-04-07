@@ -19,6 +19,13 @@ def remove_proof_section(content: str) -> tuple[str, int]:
     if count > 0:
         content = re.sub(pattern, '', content, flags=re.DOTALL)
 
+    # Also remove orphaned face divs and proof-text that may be left behind
+    orphan_pattern = r'<div class="face">.*?</div>\s*'
+    content = re.sub(orphan_pattern, '', content, flags=re.DOTALL)
+
+    proof_text_pattern = r'<div class="proof-text">.*?</div>\s*</div>\s*'
+    content = re.sub(proof_text_pattern, '', content, flags=re.DOTALL)
+
     return content, count
 
 def remove_testimonials(content: str) -> tuple[str, int]:

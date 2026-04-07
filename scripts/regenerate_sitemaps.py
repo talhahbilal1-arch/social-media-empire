@@ -129,10 +129,10 @@ def write_sitemap(brand_name, brand_config):
 
     try:
         Path(sitemap_path).write_text(sitemap_xml, encoding='utf-8')
-        print(f"  ✓ Wrote sitemap with {article_count} articles ({len(brand_config['main_pages'])} main pages)")
+        print(f"  OK Wrote sitemap with {article_count} articles ({len(brand_config['main_pages'])} main pages)")
         return True
     except Exception as e:
-        print(f"  ✗ Error writing sitemap: {e}")
+        print(f"  ERROR writing sitemap: {e}")
         return False
 
 
