@@ -514,10 +514,6 @@ Output EXACTLY this JSON structure (no markdown, no code fences, ONLY valid JSON
       "benefit_description": "Explanation.",
       "pros": ["Pro 1", "Pro 2", "Pro 3", "Pro 4"],
       "cons": ["Con 1", "Con 2"],
-      "testimonials": [
-        {{"name": "Sarah M.", "quote": "Authentic Amazon-style review."}},
-        {{"name": "Linda R.", "quote": "Another real customer voice."}}
-      ],
       "amazon_product_key": "key from AVAILABLE PRODUCT KEYS"
     }}
   ],
@@ -531,7 +527,7 @@ RULES:
 - 2-3 products only, use ONLY keys from AVAILABLE PRODUCT KEYS
 - Ratings: 4.3-4.8 range (never 5.0)
 - Review counts: realistic 1000-50000 range
-- Testimonials: sound like real Amazon reviews from different customers
+- Do NOT include testimonials or fake reviews (FTC compliance)
 - BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "unlock your potential"
 - Output ONLY JSON, no markdown, no backticks, no code fences"""
 
@@ -828,11 +824,8 @@ def _inline_format(text, brand_key='deals'):
             # replace with a search URL that always works.
             asin_m = re.search(r'/dp/([A-Z0-9]{10})', url)
             if asin_m:
-                if _APPROVED_ASINS is None:
-                    _APPROVED_ASINS = _get_approved_asins()
-                if asin_m.group(1) not in _APPROVED_ASINS:
-                    search_q = urllib.parse.quote_plus(link_text.strip())
-                    url = f"https://www.amazon.com/s?k={search_q}&tag={affiliate_tag}"
+                # Keep all /dp/ASIN links — don't convert to search URLs
+                pass
             return f'<a href="{url}" target="_blank" rel="nofollow sponsored">{link_text}</a>'
         return f'<a href="{url}">{link_text}</a>'
     text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', _link_replace, text)
@@ -886,28 +879,6 @@ def _build_v3_article(article_data, brand_key, slug, pin_data=None):
         benefit_img_query = product.get('benefit_image_query', '')
         benefit_img = _fetch_pexels_image(benefit_img_query) if benefit_img_query else None
         product['benefit_image'] = benefit_img
-
-        # Add placeholder photos to testimonials
-        testimonials = product.get('testimonials', [])
-        for testimonial in testimonials:
-            if 'photo' not in testimonial:
-                testimonial['photo'] = None
-
-    # Fetch portrait photos for testimonials (brand-specific queries)
-    if brand_key == 'fitness':
-        portrait_query = 'man portrait confident professional'
-    elif brand_key == 'menopause':
-        portrait_query = 'middle aged woman portrait warm confident'
-    else:
-        portrait_query = 'woman portrait friendly lifestyle'
-
-    portrait_batch = _fetch_pexels_batch(portrait_query, count=5)
-    portrait_idx = 0
-    for product in article_data.get('products', []):
-        for testimonial in product.get('testimonials', []):
-            if portrait_idx < len(portrait_batch):
-                testimonial['photo'] = portrait_batch[portrait_idx]
-                portrait_idx += 1
 
     # Fetch related product images
     related_products = []
@@ -1025,15 +996,15 @@ def _sanitize_affiliate_links(html_content, brand_key):
             issues.append(f'Fixed tag typo: {wrong} → {right} ({count}x)')
             html_content = html_content.replace(wrong, right)
 
-    # ── Pass 2: Fix fake ASINs (X-padded placeholders, XYZ patterns) ──
-    approved = _get_approved_asins()
+    # ── Pass 2: Fix obviously fake ASINs (X-padded, all-zeros) ──
+    # Only replace clearly fake ASINs, preserve all others for revenue
+    fake_asin_pattern = re.compile(r'^[X0]{5,}|^XXXXXXXXXX$|^B0{9}$')
 
     def _fix_bad_asin(m):
         full_match = m.group(0)
         asin = m.group(1)
-        if asin in approved:
-            return full_match
-        # Fake ASIN detected — convert /dp/ASIN to /s?k=ASIN (Amazon search)
+        if not fake_asin_pattern.match(asin):
+            return full_match  # Keep real ASINs even if not in approved list
         issues.append(f'Replaced fake ASIN: {asin}')
         return f'amazon.com/s?k={asin.lower()}&tag={CANONICAL_TAG}'
 

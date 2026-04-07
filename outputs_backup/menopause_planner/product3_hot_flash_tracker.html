@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hot Flash Tracker</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#A5A58D;--rose:#DDBEA9;--cream:#FAF7F0;--taupe:#A39384;--deep:#6B705C}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#333;background:var(--cream);line-height:1.5}
+.pg{width:8.5in;min-height:11in;margin:0 auto;padding:.75in;background:#fff;position:relative}
+.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,var(--deep),var(--taupe))}
+.cover h1{font-size:2.4em;color:#fff;margin-bottom:.3em}
+.cover h2{font-size:1.1em;color:var(--rose);font-weight:400;margin-bottom:2em}
+.cover .sub{color:var(--cream);font-size:.95em;border-top:2px solid var(--rose);padding-top:1em;width:60%}
+.hdr{background:var(--deep);color:#fff;text-align:center;padding:.4em;font-size:1.1em;margin-bottom:.5em;border-radius:4px}
+.shdr{background:var(--sage);color:#fff;padding:.3em .6em;font-size:.92em;margin:.5em 0 .3em;border-radius:3px}
+h3{color:var(--deep);margin:.6em 0 .3em;font-size:1em}
+p{font-size:.85em;margin-bottom:.4em}
+.note{background:var(--cream);border-left:3px solid var(--sage);padding:.4em .6em;font-size:.8em;margin:.5em 0}
+table{width:100%;border-collapse:collapse;margin-bottom:.5em;font-size:.8em}
+th{background:var(--sage);color:#fff;padding:6px 4px;text-align:left;font-weight:600;font-size:.78em}
+td{border:1px solid #ddd;padding:6px 4px;height:28px}
+tr:nth-child(even) td{background:var(--cream)}
+.box{border:1px solid var(--sage);border-radius:4px;padding:.5em;min-height:1in;margin-bottom:.4em}
+.box-sm{border:1px solid var(--rose);border-radius:4px;padding:.4em;min-height:.6in;margin-bottom:.3em}
+.box-label{font-size:.78em;color:var(--taupe);font-weight:600;margin-bottom:.2em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.4em}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3em}
+.cl{list-style:none;font-size:.82em}
+.cl li{margin-bottom:.2em}
+.cl li::before{content:"\2610 ";color:var(--sage)}
+.cols2{columns:2;column-gap:1em}
+ol{padding-left:1.2em;font-size:.85em}
+ol li{margin-bottom:.3em}
+.ft{text-align:center;color:var(--taupe);font-size:.7em;position:absolute;bottom:.4in;left:0;right:0}
+.intensity{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.wb{border:1px solid var(--sage);border-radius:4px;padding:.5em;margin-bottom:.5em}
+.wb-title{background:var(--rose);color:var(--deep);padding:.2em .5em;border-radius:3px;font-weight:600;font-size:.85em;margin-bottom:.4em}
+@media print{
+  body{background:#fff}
+  .pg{page-break-after:always;margin:0;box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pg:last-child{page-break-after:avoid}
+}
+@media screen{.pg{margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:4px}}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: Cover -->
+<div class="pg cover">
+<div style="font-size:3em;margin-bottom:.3em">&#9832;</div>
+<h1>Hot Flash Tracker</h1>
+<h2>Identify Patterns. Find What Works.</h2>
+<div class="sub">An 8-Week Tracking System<br>for Managing Hot Flashes &amp; Night Sweats</div>
+<p style="color:var(--cream);margin-top:3em;font-size:.85em">Name: ___________________________<br><br>Start Date: _______________</p>
+</div>
+
+<!-- PAGE 2: Instructions -->
+<div class="pg">
+<div class="hdr">How to Use This Tracker</div>
+
+<h3>About Hot Flashes</h3>
+<p>Hot flashes affect up to 80% of women during menopause. They can last from 30 seconds to 10 minutes and vary from mild warmth to intense, drenching episodes. Tracking your hot flashes helps you identify triggers, measure the effectiveness of treatments, and communicate clearly with your healthcare provider.</p>
+
+<h3>How to Record Each Episode</h3>
+<ol>
+<li><strong>Time:</strong> Note when the hot flash started (e.g., 2:30 PM, 3 AM).</li>
+<li><strong>Duration:</strong> Estimate how long it lasted (30 sec, 2 min, 5 min, etc.).</li>
+<li><strong>Intensity (1-10):</strong> Rate the severity.
+<br><span style="font-size:.82em">1-3 = Mild warmth &nbsp;|&nbsp; 4-6 = Moderate flushing &amp; sweating &nbsp;|&nbsp; 7-10 = Severe drenching</span></li>
+<li><strong>Location:</strong> Where were you? (bed, work, car, store, etc.)</li>
+<li><strong>Trigger:</strong> What might have caused it? (See common triggers below.)</li>
+<li><strong>What Helped:</strong> What did you do to manage it? (fan, cold water, breathing, etc.)</li>
+</ol>
+
+<h3>Common Hot Flash Triggers</h3>
+<div class="cols2">
+<ul class="cl">
+<li>Spicy food</li>
+<li>Alcohol (especially wine)</li>
+<li>Caffeine</li>
+<li>Hot beverages</li>
+<li>Warm rooms</li>
+<li>Stress or anxiety</li>
+<li>Tight clothing</li>
+</ul>
+<ul class="cl">
+<li>Exercise</li>
+<li>Sugar</li>
+<li>Smoking</li>
+<li>Hot weather</li>
+<li>Bending over</li>
+<li>Spicy scents</li>
+<li>Emotional upset</li>
+</ul>
+</div>
+
+<h3>Quick Relief Strategies</h3>
+<div class="grid2">
+<div class="box-sm"><div class="box-label">Immediate</div><span style="font-size:.8em">Cold water on wrists, portable fan, deep breathing, cold compress on neck, step outside</span></div>
+<div class="box-sm"><div class="box-label">Preventive</div><span style="font-size:.8em">Dress in layers, keep room cool, avoid triggers, stay hydrated, practice relaxation techniques</span></div>
+</div>
+
+<div class="note"><strong>Pro Tip:</strong> Keep this tracker in your bag or on your nightstand. The more consistently you record, the faster you'll spot patterns.</div>
+<div class="ft">Hot Flash Tracker &mdash; Page 2</div>
+</div>
+
+<!-- PAGES 3-10: 8 Weekly Tracker Tables -->
+<div class="pg">
+<div class="hdr">Week 1 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 2 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 3 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 4 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 4</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 5 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 5</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 6 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 6</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 7 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 7</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 8 &mdash; Hot Flash Tracker</div>
+<p style="font-size:.82em;margin-bottom:.3em">Week of: _______________</p>
+<table>
+<tr><th style="width:12%">Time</th><th style="width:10%">Duration</th><th style="width:10%">Intensity (1-10)</th><th style="width:14%">Location</th><th style="width:22%">Trigger</th><th style="width:32%">What Helped</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Summary</h3>
+<div class="grid3">
+<div class="box-sm"><div class="box-label">Total Episodes:</div></div>
+<div class="box-sm"><div class="box-label">Avg Intensity:</div></div>
+<div class="box-sm"><div class="box-label">Daytime vs Night:</div></div>
+</div>
+<div class="box"><div class="box-label">Top Triggers Identified This Week:</div></div>
+<div class="box"><div class="box-label">Most Effective Relief Strategy:</div></div>
+<div class="ft">Hot Flash Tracker &mdash; Week 8</div>
+</div>
+
+<!-- PAGE 11: Trigger Identification Worksheet -->
+<div class="pg">
+<div class="hdr">Trigger Identification Worksheet</div>
+<p style="font-size:.85em;margin-bottom:.5em">After several weeks of tracking, use this worksheet to analyze your personal triggers. Review your weekly logs and look for patterns.</p>
+
+<h3>Food &amp; Drink Triggers</h3>
+<table>
+<tr><th>Item</th><th>Times It Triggered a Flash</th><th>Severity (Avg)</th><th>Avoid / Reduce / OK</th></tr>
+<tr><td>Spicy food</td><td></td><td></td><td></td></tr>
+<tr><td>Alcohol</td><td></td><td></td><td></td></tr>
+<tr><td>Caffeine</td><td></td><td></td><td></td></tr>
+<tr><td>Hot drinks</td><td></td><td></td><td></td></tr>
+<tr><td>Sugar</td><td></td><td></td><td></td></tr>
+<tr><td>Other: ________</td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Environmental Triggers</h3>
+<table>
+<tr><th>Situation</th><th>Times It Triggered a Flash</th><th>Severity (Avg)</th><th>Can I Control This?</th></tr>
+<tr><td>Warm rooms</td><td></td><td></td><td></td></tr>
+<tr><td>Hot weather</td><td></td><td></td><td></td></tr>
+<tr><td>Crowded spaces</td><td></td><td></td><td></td></tr>
+<tr><td>Car / driving</td><td></td><td></td><td></td></tr>
+<tr><td>Bed / sleeping</td><td></td><td></td><td></td></tr>
+<tr><td>Other: ________</td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Emotional &amp; Lifestyle Triggers</h3>
+<table>
+<tr><th>Factor</th><th>Times It Triggered a Flash</th><th>Severity (Avg)</th><th>Management Strategy</th></tr>
+<tr><td>Stress / anxiety</td><td></td><td></td><td></td></tr>
+<tr><td>Anger / frustration</td><td></td><td></td><td></td></tr>
+<tr><td>Exercise</td><td></td><td></td><td></td></tr>
+<tr><td>Poor sleep</td><td></td><td></td><td></td></tr>
+<tr><td>Rushing / hurrying</td><td></td><td></td><td></td></tr>
+<tr><td>Other: ________</td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>My Top 3 Personal Triggers</h3>
+<div class="box" style="min-height:1in"><div class="box-label">Based on my tracking data:</div><p style="font-size:.82em;margin-top:.3em">1.<br>2.<br>3.</p></div>
+<div class="ft">Hot Flash Tracker &mdash; Trigger Worksheet</div>
+</div>
+
+<!-- PAGE 12: Pattern Analysis & Monthly Summary -->
+<div class="pg">
+<div class="hdr">Pattern Analysis &amp; Monthly Summary</div>
+
+<h3>8-Week Overview</h3>
+<table>
+<tr><th>Week</th><th>Total Episodes</th><th>Avg Intensity</th><th>Most Common Time</th><th>Top Trigger</th><th>Trend vs Last Week</th></tr>
+<tr><td>Week 1</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 2</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 3</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 4</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 5</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 6</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 7</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Week 8</td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Key Patterns Discovered</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Time of Day Pattern: When do flashes happen most?</div></div>
+<div class="box"><div class="box-label">Frequency Trend: Getting better, worse, or stable?</div></div>
+<div class="box"><div class="box-label">Intensity Pattern: Are episodes getting milder or stronger?</div></div>
+<div class="box"><div class="box-label">Trigger Pattern: What consistently sets them off?</div></div>
+</div>
+
+<h3>What Worked Best</h3>
+<div class="box"><div class="box-label">My most effective strategies for prevention and relief:</div></div>
+
+<h3>Action Plan</h3>
+<div class="wb">
+<div class="wb-title">Changes I Will Make Based on My Data</div>
+<ul class="cl" style="margin:.3em 0">
+<li>Trigger to avoid or reduce: ________________________________</li>
+<li>Strategy to continue: ________________________________</li>
+<li>New approach to try: ________________________________</li>
+<li>Question for my doctor: ________________________________</li>
+</ul>
+</div>
+
+<div class="note"><strong>Share this summary with your healthcare provider.</strong> Eight weeks of objective data is far more useful than trying to remember your symptoms from memory. This information can help guide treatment decisions including HRT, lifestyle changes, or other interventions.</div>
+<div class="ft">Hot Flash Tracker &mdash; Pattern Analysis</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beauty Guide — Daily Deal Darling</title>
+<meta name="description" content="Beauty and skincare product reviews and deals. Find the best serums, moisturizers, makeup, and hair care products.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://dailydealdarling.com/beauty.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dailydealdarling.com/beauty.html">
+<meta property="og:title" content="Beauty Guide | Daily Deal Darling">
+<meta property="og:description" content="Beauty and skincare product reviews and deals. Find the best serums, moisturizers, makeup, and hair care products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Beauty Guide — Daily Deal Darling",
+  "description": "Beauty and skincare product reviews and deals. Find the best serums, moisturizers, makeup, and hair care products.",
+  "url": "https://dailydealdarling.com/beauty.html"
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HVCLZPEYNS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HVCLZPEYNS');
+</script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #ffffff;
+  color: #2d2d2d;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+nav {
+  background: #fef7f5;
+  border-bottom: 1px solid #f0d4d0;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #E91E63;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: #2d2d2d;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #E91E63;
+}
+
+.hero {
+  padding: 100px 0 80px;
+  text-align: center;
+  background: #fef7f5;
+}
+
+.hero h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 56px;
+  line-height: 1.1;
+  color: #E91E63;
+  margin-bottom: 24px;
+}
+
+.hero p {
+  font-size: 20px;
+  color: #666666;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.articles-section {
+  padding: 80px 0 120px;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 32px;
+}
+
+.article-card {
+  background: #fef7f5;
+  border: 1px solid #f0d4d0;
+  border-radius: 12px;
+  padding: 32px;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: block;
+}
+
+.article-card:hover {
+  transform: translateY(-4px);
+  border-color: #E91E63;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.article-card h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #2d2d2d;
+  margin-bottom: 12px;
+}
+
+.article-card p {
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.email-signup {
+  background: #fef7f5;
+  border: 1px solid #f0d4d0;
+  border-radius: 16px;
+  padding: 80px 40px;
+  margin: 80px 0;
+  text-align: center;
+}
+
+.email-signup h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 40px;
+  color: #E91E63;
+  margin-bottom: 16px;
+}
+
+.email-signup p {
+  font-size: 18px;
+  color: #666666;
+  margin-bottom: 32px;
+}
+
+footer {
+  background: #fef7f5;
+  border-top: 1px solid #f0d4d0;
+  padding: 60px 0 40px;
+  text-align: center;
+}
+
+footer p {
+  color: #666666;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
+
+  .email-signup {
+    padding: 60px 24px;
+  }
+
+  .email-signup h2 {
+    font-size: 32px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-content">
+      <a href="/" class="logo">Daily Deal Darling</a>
+      <div class="nav-links">
+        <a href="/kitchen.html">Kitchen</a>
+        <a href="/home.html">Home</a>
+        <a href="/beauty.html" class="active">Beauty</a>
+        <a href="/mom.html">Mom</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <h1>Beauty</h1>
+    <p>Skincare, haircare, and beauty essentials that actually work. Product reviews, routines, and deals on your favorite brands.</p>
+  </div>
+</div>
+
+<section class="articles-section">
+  <div class="container">
+    <div class="articles-grid" id="articles-grid"></div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="email-signup">
+    <h2>Get Daily Deals</h2>
+    <p>Join 5,000+ savvy shoppers getting the best deals delivered daily.</p>
+    <div data-kickstarter-form="9144859"></div>
+    <script src="https://scripts.getkickstarter.com/form.js" defer></script>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Daily Deal Darling. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+const articles = [
+  {
+    "filename": "affordable-makeup-organizers-for-small-bathroom-counters.html",
+    "title": "Affordable Makeup Organizers for Small Bathroom Counters — Daily Deal Darling",
+    "description": "Maximize small bathroom counter space! Discover the best affordable makeup organizers: rotating displays, stackable drawers, and vanity trays."
+  },
+  {
+    "filename": "affordable-skincare-product-sales.html",
+    "title": "Affordable Skincare Product Sales: Glowing Skin Without Breaking the Bank — Daily Deal Darling",
+    "description": "Unlock radiant skin on a budget! Discover the best affordable skincare sales, curated for women who love Amazon finds and home/lifestyle deals."
+  },
+  {
+    "filename": "best-budget-friendly-makeup-brush-sets.html",
+    "title": "Best Budget-Friendly Makeup Brush Sets — Daily Deal Darling",
+    "description": "affordable makeup brush sets — tips and recommendations"
+  },
+  {
+    "filename": "best-robot-vacuum-pet-hair-budget.html",
+    "title": "Best Budget Robot Vacuums for Pet Hair in 2026 (Under $300) — Daily Deal Darling",
+    "description": "Tired of pet hair everywhere? We tested 10 budget robot vacuums and found 3 that actually handle pet hair on carpet, hardwood, and furniture. Real results inside."
+  },
+  {
+    "filename": "best-setting-spray-for-oily-skin.html",
+    "title": "Best Setting Sprays for Oily Skin: Your Shine-Free Savior! — Daily Deal Darling",
+    "description": "Say goodbye to shine! Discover the best setting sprays for oily skin that keep your makeup locked in all day. Find your perfect shine-free savior!"
+  },
+  {
+    "filename": "best-skincare-products-2026.html",
+    "title": "Best Skincare Products 2026: Expert-Tested Picks for Every Skin Type — Daily Deal Darling",
+    "description": "Unlock radiant skin in 2026! Discover our expert-tested skincare product recommendations tailored for every skin type. Find your perfect match!"
+  },
+  {
+    "filename": "hair-tools-honest-review-and-comparison.html",
+    "title": "5 Hair Tools That Actually Earn Their Counter Space (Honest Reviews) — Daily Deal Darling",
+    "description": "Tired of hair tools that underperform? We tested the best-selling hair tools to find the ones that truly deliver salon-worthy results at home."
+  },
+  {
+    "filename": "skincare-routine-affordable-products-that-work.html",
+    "title": "5 Affordable Skincare Products That Actually Work (No Luxury Tax Required) — Daily Deal Darling",
+    "description": "Unlock radiant skin without breaking the bank! Discover 3 affordable skincare heroes that deliver real results. No luxury prices, just glowing skin!"
+  },
+  {
+    "filename": "top-rated-budget-makeup-brushes.html",
+    "title": "Top Rated Budget Makeup Brushes — Daily Deal Darling",
+    "description": "affordable makeup brush sets — tips and recommendations"
+  }
+];
+
+const grid = document.getElementById('articles-grid');
+articles.forEach(article => {
+  const card = document.createElement('a');
+  card.href = '/articles/' + article.filename;
+  card.className = 'article-card';
+
+  const title = document.createElement('h3');
+  title.textContent = article.title;
+
+  const desc = document.createElement('p');
+  desc.textContent = article.description;
+
+  card.appendChild(title);
+  card.appendChild(desc);
+  grid.appendChild(card);
+});
+</script>
+
+</body>
+</html>

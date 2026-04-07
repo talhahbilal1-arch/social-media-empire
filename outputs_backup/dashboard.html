@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Empire - Analytics Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #1e293b;
+            margin-bottom: 30px;
+        }
+        header h1 { font-size: 28px; color: #f8fafc; margin-bottom: 5px; }
+        header .subtitle { color: #94a3b8; font-size: 14px; }
+        .summary {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .summary-item {
+            background: #1e293b;
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .summary-item .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        .summary-item .label {
+            font-size: 13px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .card h3 { font-size: 18px; margin-bottom: 4px; color: #f8fafc; }
+        .site-link { color: #94a3b8; font-size: 12px; text-decoration: none; }
+        .site-link:hover { color: #e2e8f0; }
+        .metrics { display: flex; gap: 20px; margin-top: 16px; }
+        .metric { text-align: center; flex: 1; }
+        .metric-value { display: block; font-size: 28px; font-weight: 700; color: #f8fafc; }
+        .metric-label { display: block; font-size: 12px; color: #94a3b8; text-transform: uppercase; }
+        .section { margin-bottom: 30px; }
+        .section h2 {
+            font-size: 18px;
+            color: #f8fafc;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1e293b;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 10px 12px; color: #94a3b8; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #1e293b; }
+        td { padding: 10px 12px; border-bottom: 1px solid #1e293b; font-size: 14px; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .severity-high { background: #7f1d1d; color: #fca5a5; }
+        .severity-medium { background: #78350f; color: #fcd34d; }
+        .severity-low { background: #14532d; color: #86efac; }
+        .status-success { background: #14532d; color: #86efac; }
+        .status-idle { background: #1e293b; color: #94a3b8; }
+        .status-error { background: #7f1d1d; color: #fca5a5; }
+        .no-data { text-align: center; color: #64748b; padding: 20px; }
+        .pin-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #1e293b;
+        }
+        .pin-brand { font-size: 12px; font-weight: 600; min-width: 120px; }
+        .pin-title { color: #e2e8f0; text-decoration: none; flex: 1; font-size: 14px; }
+        .pin-title:hover { color: #93c5fd; }
+        .pin-date { color: #64748b; font-size: 12px; }
+        footer { text-align: center; padding: 20px 0; color: #475569; font-size: 12px; }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .summary { flex-direction: column; align-items: center; }
+            .metrics { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Social Media Empire</h1>
+            <div class="subtitle">Analytics Dashboard | Last updated: 2026-04-07 15:05 UTC</div>
+        </header>
+
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">566</div>
+                <div class="label">Total Pins</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">474</div>
+                <div class="label">Total Articles</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">102</div>
+                <div class="label">Pins (7 Days)</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">5</div>
+                <div class="label">Open Errors</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            
+        <div class="card" style="border-top: 4px solid #2563eb;">
+            <h3>FitOver35</h3>
+            <a href="https://fitover35.com" target="_blank" class="site-link">https://fitover35.com</a>
+            <div class="metrics">
+                <div class="metric">
+                    <span class="metric-value">171</span>
+                    <span class="metric-label">Total Pins</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">192</span>
+                    <span class="metric-label">Total Articles</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">34</span>
+                    <span class="metric-label">Pins (7d)</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="border-top: 4px solid #8b5cf6;">
+            <h3>Daily Deal Darling</h3>
+            <a href="https://dailydealdarling.com" target="_blank" class="site-link">https://dailydealdarling.com</a>
+            <div class="metrics">
+                <div class="metric">
+                    <span class="metric-value">203</span>
+                    <span class="metric-label">Total Pins</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">150</span>
+                    <span class="metric-label">Total Articles</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">34</span>
+                    <span class="metric-label">Pins (7d)</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="border-top: 4px solid #ec4899;">
+            <h3>Menopause Planner</h3>
+            <a href="https://menopause-planner-website.vercel.app" target="_blank" class="site-link">https://menopause-planner-website.vercel.app</a>
+            <div class="metrics">
+                <div class="metric">
+                    <span class="metric-value">192</span>
+                    <span class="metric-label">Total Pins</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">132</span>
+                    <span class="metric-label">Total Articles</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">34</span>
+                    <span class="metric-label">Pins (7d)</span>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="section">
+            <h2>Recent Pins</h2>
+            
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #ec4899;">Menopause Planner</span>
+                <a href="https://menopause-planner-website.vercel.app/articles/creating-a-menopause-management-plan.html" target="_blank" class="pin-title">Your Menopause Management Plan: A Simple Guide for Clarity</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #8b5cf6;">Daily Deal Darling</span>
+                <a href="https://dailydealdarling.com/articles/at-home-spa-night-essentials-and-setup.html" target="_blank" class="pin-title">Home Spa Night Essentials Under $50 (Finally Relax)</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #2563eb;">FitOver35</span>
+                <a href="https://fitover35.com/articles/post-workout-nutrition-what-actually-matters.html" target="_blank" class="pin-title">Post-Workout Nutrition: The Honest Truth After 35</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #2563eb;">FitOver35</span>
+                <a href="https://fitover35.com/articles/productpromotion.html" target="_blank" class="pin-title">How to Land 3 New Coaching Clients This Week Using AI</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #ec4899;">Menopause Planner</span>
+                <a href="https://menopause-planner-website.vercel.app/articles/joint-pain-during-menopause-often-overlooked-symptom.html" target="_blank" class="pin-title">Honest Joint Pain During Menopause: What I Actually Did</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #8b5cf6;">Daily Deal Darling</span>
+                <a href="https://dailydealdarling.com/articles/small-kitchen-maximizing-counter-space-solutions.html" target="_blank" class="pin-title">Small Kitchen Maximizing Counter Space: My Honest Finds</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #2563eb;">FitOver35</span>
+                <a href="https://fitover35.com/articles/creatine-monohydrate-the-most-studied-supplement-in-history.html" target="_blank" class="pin-title">Creatine Monohydrate: The Supplement You Actually Need (Most</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #ec4899;">Menopause Planner</span>
+                <a href="https://menopause-planner-website.vercel.app/articles/loneliness-during-menopause-building-connection.html" target="_blank" class="pin-title">Loneliness During Menopause? Simple Ways to Connect.</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #8b5cf6;">Daily Deal Darling</span>
+                <a href="https://dailydealdarling.com/articles/seasonal-item-storage-smart-solutions.html" target="_blank" class="pin-title">Seasonal Item Storage: Finally Tidy Your Home for Spring</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+            <div class="pin-item">
+                <span class="pin-brand" style="color: #2563eb;">FitOver35</span>
+                <a href="https://fitover35.com/articles/testosterone-boosters-which-ones-have-evidence-vs-hype.html" target="_blank" class="pin-title">Testosterone Boosters: My Doctor Said THIS About Them</a>
+                <span class="pin-date">2026-04-07</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Unresolved Errors</h2>
+            <table>
+                <thead><tr><th>Severity</th><th>Type</th><th>Message</th><th>Date</th></tr></thead>
+                <tbody>
+            <tr>
+                <td><span class="badge severity-high">high</span></td>
+                <td>content_engine</td>
+                <td>No Pinterest account connected to Late API</td>
+                <td>2026-04-07 14:48:13</td>
+            </tr>
+            <tr>
+                <td><span class="badge severity-high">high</span></td>
+                <td>content_engine</td>
+                <td>No Pinterest account connected to Late API</td>
+                <td>2026-04-07 14:47:45</td>
+            </tr>
+            <tr>
+                <td><span class="badge severity-high">high</span></td>
+                <td>content_engine</td>
+                <td>No Pinterest account connected to Late API</td>
+                <td>2026-04-07 14:47:16</td>
+            </tr>
+            <tr>
+                <td><span class="badge severity-medium">medium</span></td>
+                <td>content_engine</td>
+                <td>Pexels API error: 403 - &lt;!DOCTYPE html&gt;
+&lt;!--[if lt IE 7]&gt; &lt;html class=&quot;no-js ie6</td>
+                <td>2026-04-07 14:46:46</td>
+            </tr>
+            <tr>
+                <td><span class="badge severity-medium">medium</span></td>
+                <td>article_url_404</td>
+                <td>Article URL 404 at post time: https://fitover35.com/articles/productpromotion.ht</td>
+                <td>2026-04-07 05:11:54</td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Agent Status</h2>
+            <table>
+                <thead><tr><th>Agent</th><th>Status</th><th>Last Run</th></tr></thead>
+                <tbody><tr><td colspan="3" class="no-data">No agent data</td></tr></tbody>
+            </table>
+        </div>
+
+        <footer>
+            Social Media Empire Analytics | Auto-generated by daily-analytics workflow
+        </footer>
+    </div>
+</body>
+</html>

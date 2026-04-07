@@ -13,7 +13,10 @@ BRAND_SITEMAPS = {
         'articles_dir': 'outputs/fitover35-website/articles',
         'sitemap_path': 'outputs/fitover35-website/sitemap.xml',
         'main_pages': [
-            ('', 1.0, 'weekly'),
+            ('', 1.0, 'daily'),
+            ('supplements.html', 0.9, 'weekly'),
+            ('workouts.html', 0.9, 'weekly'),
+            ('nutrition.html', 0.9, 'weekly'),
             ('gear.html', 0.9, 'weekly'),
             ('12-week-program.html', 0.8, 'monthly'),
             ('privacy.html', 0.3, 'yearly'),
@@ -26,7 +29,11 @@ BRAND_SITEMAPS = {
         'articles_dir': 'outputs/dailydealdarling-website/articles',
         'sitemap_path': 'outputs/dailydealdarling-website/sitemap.xml',
         'main_pages': [
-            ('', 1.0, 'weekly'),
+            ('', 1.0, 'daily'),
+            ('kitchen.html', 0.9, 'weekly'),
+            ('home.html', 0.9, 'weekly'),
+            ('beauty.html', 0.9, 'weekly'),
+            ('mom.html', 0.9, 'weekly'),
             ('about', 0.6, 'monthly'),
         ],
     },
@@ -35,7 +42,10 @@ BRAND_SITEMAPS = {
         'articles_dir': 'outputs/menopause-planner-website/articles',
         'sitemap_path': 'outputs/menopause-planner-website/sitemap.xml',
         'main_pages': [
-            ('', 1.0, 'weekly'),
+            ('', 1.0, 'daily'),
+            ('supplements.html', 0.9, 'weekly'),
+            ('sleep.html', 0.9, 'weekly'),
+            ('wellness.html', 0.9, 'weekly'),
             ('about.html', 0.8, 'monthly'),
             ('blog.html', 0.8, 'weekly'),
             ('thank-you.html', 0.5, 'weekly'),
@@ -46,7 +56,7 @@ BRAND_SITEMAPS = {
     },
 }
 
-LASTMOD_DATE = '2026-03-31'
+LASTMOD_DATE = '2026-04-07'
 
 
 def get_article_filenames(articles_dir):
@@ -94,8 +104,8 @@ def build_sitemap_xml(brand_config):
         xml_lines.append('  <url>')
         xml_lines.append(f'    <loc>{url}</loc>')
         xml_lines.append(f'    <lastmod>{LASTMOD_DATE}</lastmod>')
-        xml_lines.append('    <changefreq>monthly</changefreq>')
-        xml_lines.append('    <priority>0.7</priority>')
+        xml_lines.append('    <changefreq>weekly</changefreq>')
+        xml_lines.append('    <priority>0.8</priority>')
         xml_lines.append('  </url>')
 
     xml_lines.append('</urlset>')

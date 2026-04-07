@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Command Center</title>
+    <style>
+        /* ========== RESET & BASE ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #111113;
+            --surface: #1a1a1e;
+            --surface-hover: #222226;
+            --border: #2a2a2e;
+            --text: #e4e4e7;
+            --text-muted: #71717a;
+            --text-dim: #52525b;
+            --green: #22c55e;
+            --green-dim: rgba(34, 197, 94, 0.15);
+            --red: #ef4444;
+            --red-dim: rgba(239, 68, 68, 0.15);
+            --fitover35: #1565C0;
+            --ddd: #E91E63;
+            --menopause: #7B1FA2;
+            --pilottools: #00897B;
+            --antigravity: #FF6F00;
+            --gold: #D4AF37;
+            --radius: 10px;
+            --radius-sm: 6px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.5;
+            padding: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ========== HEADER ========== */
+        .header {
+            text-align: center;
+            padding: 24px 0 20px;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        .last-updated {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
+
+        /* ========== REVENUE HERO ========== */
+        .revenue-hero {
+            background: linear-gradient(135deg, #0f2027 0%, #111113 100%);
+            border: 1px solid var(--green);
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .revenue-hero-label {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .revenue-hero-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+            font-variant-numeric: tabular-nums;
+            margin: 4px 0;
+        }
+
+        .revenue-hero-month {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .revenue-hero-alltime {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        /* ========== SECTION ========== */
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 4px 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ========== REVENUE CARDS ========== */
+        .revenue-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .revenue-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .revenue-card-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .revenue-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .revenue-card-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .revenue-card-tag {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        .revenue-card-inputs {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .revenue-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .revenue-input-prefix {
+            position: absolute;
+            left: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            font-weight: 600;
+        }
+
+        .revenue-input {
+            width: 90px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--green);
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 6px 8px 6px 20px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .revenue-input:focus {
+            border-color: var(--green);
+        }
+
+        .revenue-card-last {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            text-align: right;
+        }
+
+        /* ========== CONTENT SCORECARD ========== */
+        .scorecard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .scorecard-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px;
+            text-align: center;
+        }
+
+        .scorecard-brand {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .scorecard-count {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .scorecard-label {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+        }
+
+        .scorecard-total {
+            grid-column: 1 / -1;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scorecard-total-left {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .scorecard-total-num {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .scorecard-total-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .scorecard-week-input {
+            width: 56px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 5px 6px;
+            text-align: center;
+            outline: none;
+        }
+
+        .scorecard-week-input:focus {
+            border-color: var(--green);
+        }
+
+        .scorecard-week-label {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        /* ========== PINTEREST STATUS ========== */
+        .pinterest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .pinterest-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--green);
+            background: var(--green-dim);
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .scenario-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .scenario-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .scenario-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .scenario-id {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #333;
+            border-radius: 22px;
+            transition: 0.25s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: #888;
+            border-radius: 50%;
+            transition: 0.25s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: var(--green-dim);
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(18px);
+            background: var(--green);
+        }
+
+        /* ========== AFFILIATE CHECKLIST ========== */
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .checklist-row {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .checklist-row:hover {
+            background: var(--surface-hover);
+        }
+
+        .checklist-row.checked {
+            opacity: 0.5;
+        }
+
+        .checklist-row.checked .checklist-name {
+            text-decoration: line-through;
+        }
+
+        .checklist-cb {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .checklist-row.checked .checklist-cb {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .checklist-cb-check {
+            display: none;
+            width: 10px;
+            height: 10px;
+        }
+
+        .checklist-row.checked .checklist-cb-check {
+            display: block;
+        }
+
+        .checklist-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .checklist-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .checklist-potential {
+            font-size: 0.7rem;
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .checklist-progress {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            padding: 8px 4px 4px;
+        }
+
+        /* ========== QUICK LINKS ========== */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .quick-link {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.15s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quick-link:hover {
+            background: var(--surface-hover);
+            border-color: #444;
+        }
+
+        .quick-link-icon {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        .quick-link-label {
+            line-height: 1.2;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (min-width: 600px) {
+            body { padding: 24px; }
+            .header h1 { font-size: 1.8rem; }
+            .revenue-hero-amount { font-size: 3.5rem; }
+            .scorecard-grid { grid-template-columns: repeat(3, 1fr); }
+            .scorecard-total { grid-column: 1 / -1; }
+            .links-grid { grid-template-columns: repeat(3, 1fr); }
+            .revenue-input { width: 100px; }
+        }
+
+        @media (min-width: 900px) {
+            .scorecard-grid { grid-template-columns: repeat(5, 1fr); }
+            .scorecard-total { grid-column: 1 / -1; }
+            .links-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        /* ========== UTILITY ========== */
+        .brand-dot-fitover35 { background: var(--fitover35); }
+        .brand-dot-ddd { background: var(--ddd); }
+        .brand-dot-menopause { background: var(--menopause); }
+        .brand-dot-pilottools { background: var(--pilottools); }
+        .brand-dot-gumroad { background: var(--gold); }
+        .brand-dot-etsy { background: var(--antigravity); }
+
+        .border-top-fitover35 { border-top: 3px solid var(--fitover35); }
+        .border-top-ddd { border-top: 3px solid var(--ddd); }
+        .border-top-menopause { border-top: 3px solid var(--menopause); }
+        .border-top-pilottools { border-top: 3px solid var(--pilottools); }
+        .border-top-antigravity { border-top: 3px solid var(--antigravity); }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Revenue Command Center</h1>
+            <div class="last-updated" id="lastUpdated">Last updated: never</div>
+        </div>
+
+        <!-- REVENUE HERO -->
+        <div class="revenue-hero">
+            <div class="revenue-hero-label">Current Month Revenue</div>
+            <div class="revenue-hero-amount" id="totalRevenue">$0.00</div>
+            <div class="revenue-hero-month" id="currentMonth"></div>
+            <div class="revenue-hero-alltime">All-time total: <strong id="allTimeTotal">$0.00</strong></div>
+        </div>
+
+        <!-- SECTION 1: REVENUE TRACKER -->
+        <div class="section">
+            <div class="section-title">Revenue Tracker</div>
+            <div class="revenue-cards" id="revenueCards"></div>
+        </div>
+
+        <!-- SECTION 2: CONTENT SCORECARD -->
+        <div class="section">
+            <div class="section-title">Content Scorecard</div>
+            <div class="scorecard-grid" id="scorecardGrid">
+                <div class="scorecard-item border-top-fitover35">
+                    <div class="scorecard-brand">FitOver35</div>
+                    <div class="scorecard-count">162+</div>
+                    <div class="scorecard-label">articles</div>
+                </div>
+                <div class="scorecard-item border-top-ddd">
+                    <div class="scorecard-brand">DDD</div>
+                    <div class="scorecard-count">112+</div>
+                    <div class="scorecard-label">articles</div>
+                </div>
+                <div class="scorecard-item border-top-menopause">
+                    <div class="scorecard-brand">Menopause</div>
+                    <div class="scorecard-count">98+</div>
+                    <div class="scorecard-label">articles</div>
+                </div>
+                <div class="scorecard-item border-top-pilottools">
+                    <div class="scorecard-brand">PilotTools</div>
+                    <div class="scorecard-count">25+</div>
+                    <div class="scorecard-label">articles</div>
+                </div>
+                <div class="scorecard-item border-top-antigravity">
+                    <div class="scorecard-brand">Anti-Gravity</div>
+                    <div class="scorecard-count">5</div>
+                    <div class="scorecard-label">articles</div>
+                </div>
+                <div class="scorecard-total">
+                    <div class="scorecard-total-left">
+                        <span class="scorecard-total-num">400+</span>
+                        <span class="scorecard-total-label">total articles</span>
+                    </div>
+                    <div>
+                        <input type="number" class="scorecard-week-input" id="weeklyArticles" min="0" placeholder="0" />
+                        <div class="scorecard-week-label">this week</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: PINTEREST STATUS -->
+        <div class="section">
+            <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+                Pinterest Status
+                <span class="pinterest-badge">15 pins/day</span>
+            </div>
+            <div class="scenario-list" id="scenarioList"></div>
+        </div>
+
+        <!-- SECTION 4: AFFILIATE SIGNUP CHECKLIST -->
+        <div class="section">
+            <div class="section-title">Affiliate Signup Checklist</div>
+            <div class="checklist-progress" id="checklistProgress"></div>
+            <div class="checklist-items" id="checklistItems"></div>
+        </div>
+
+        <!-- SECTION 5: QUICK LINKS -->
+        <div class="section">
+            <div class="section-title">Quick Links</div>
+            <div class="links-grid" id="linksGrid"></div>
+        </div>
+
+        <div style="height: 40px;"></div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // ==================== DATA ====================
+
+        var REVENUE_SOURCES = [
+            { id: 'amazon-fitness', name: 'Amazon Associates', tag: 'fitover3509-20', brand: 'FitOver35', dot: 'fitover35' },
+            { id: 'amazon-ddd', name: 'Amazon Associates', tag: 'dailydealdarl-20', brand: 'DDD + Menopause', dot: 'ddd' },
+            { id: 'gumroad', name: 'Gumroad', tag: '7 products + bundle', brand: '', dot: 'gumroad' },
+            { id: 'etsy', name: 'Etsy', tag: 'when live', brand: '', dot: 'etsy' },
+            { id: 'pilottools', name: 'PilotTools Affiliates', tag: 'Semrush, Grammarly, etc.', brand: '', dot: 'pilottools' }
+        ];
+
+        var SCENARIOS = [
+            { id: '4261143', name: 'Fitness v3' },
+            { id: '4261294', name: 'Deals v4' },
+            { id: '4261296', name: 'Menopause v4' },
+            { id: '4263862', name: 'Video Fitness' },
+            { id: '4263863', name: 'Video Deals' },
+            { id: '4263864', name: 'Video Menopause' },
+            { id: '4261421', name: 'Scenario Activator' }
+        ];
+
+        var AFFILIATE_ITEMS = [
+            { id: 'semrush', name: 'Semrush', potential: '$200/sale' },
+            { id: 'grammarly', name: 'Grammarly', potential: '$20/free signup, $25/premium' },
+            { id: 'ahrefs', name: 'Ahrefs', potential: '20% recurring' },
+            { id: 'hostinger', name: 'Hostinger', potential: '40-60% per sale' },
+            { id: 'frase', name: 'Frase', potential: '30% recurring' },
+            { id: 'rytr', name: 'Rytr', potential: '30% recurring' },
+            { id: 'heygen', name: 'HeyGen', potential: '20% recurring' },
+            { id: 'pictory', name: 'Pictory', potential: '20% recurring' },
+            { id: 'fliki', name: 'Fliki', potential: '30% recurring' },
+            { id: 'tidio', name: 'Tidio', potential: '20% recurring' },
+            { id: 'simplified', name: 'Simplified', potential: '20% recurring' },
+            { id: 'murf', name: 'Murf AI', potential: '20% recurring' },
+            { id: 'neuronwriter', name: 'NeuronWriter', potential: '20% recurring' },
+            { id: 'clickbank', name: 'ClickBank', potential: '30-75% per sale' },
+            { id: 'shareasale', name: 'ShareASale', potential: 'Access 100+ programs' },
+            { id: 'impact', name: 'Impact.com', potential: '5-20% per sale' },
+            { id: 'etsy-banking', name: 'Etsy Banking Setup', potential: 'Unlock 30 listings' }
+        ];
+
+        var QUICK_LINKS = [
+            { label: 'GA4 Dashboard', url: 'https://analytics.google.com/', icon: 'GA' },
+            { label: 'Amazon Associates', url: 'https://affiliate-program.amazon.com/', icon: 'AZ' },
+            { label: 'Gumroad', url: 'https://talhahbilal.gumroad.com/dashboard', icon: 'GR' },
+            { label: 'Kit Dashboard', url: 'https://app.kit.com/', icon: 'KT' },
+            { label: 'Make.com', url: 'https://us2.make.com/', icon: 'MK' },
+            { label: 'Vercel', url: 'https://vercel.com/dashboard', icon: 'VC' },
+            { label: 'GitHub Actions', url: 'https://github.com/talhahbilal1-arch/social-media-empire/actions', icon: 'GH' },
+            { label: 'Supabase', url: 'https://supabase.com/dashboard', icon: 'SB' }
+        ];
+
+        // ==================== STORAGE HELPERS ====================
+
+        var STORE_KEY = 'rcc_data_v2';
+
+        function loadStore() {
+            try {
+                var raw = localStorage.getItem(STORE_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveStore(data) {
+            try {
+                localStorage.setItem(STORE_KEY, JSON.stringify(data));
+            } catch (e) { /* silently fail */ }
+        }
+
+        function getVal(key, fallback) {
+            var store = loadStore();
+            return store[key] !== undefined ? store[key] : fallback;
+        }
+
+        function setVal(key, value) {
+            var store = loadStore();
+            store[key] = value;
+            store['_lastUpdated'] = new Date().toISOString();
+            saveStore(store);
+            updateTimestamp();
+        }
+
+        // ==================== MONTH KEY ====================
+
+        function getMonthKey() {
+            var d = new Date();
+            var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            return months[d.getMonth()] + ' ' + d.getFullYear();
+        }
+
+        function getStorageMonthPrefix() {
+            var d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        }
+
+        // ==================== REVENUE SECTION ====================
+
+        function renderRevenueCards() {
+            var container = document.getElementById('revenueCards');
+            var html = '';
+            var monthPrefix = getStorageMonthPrefix();
+
+            REVENUE_SOURCES.forEach(function(src) {
+                var currentKey = 'rev_' + src.id + '_' + monthPrefix;
+                var lastMonthDate = new Date();
+                lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+                var lastPrefix = lastMonthDate.getFullYear() + '-' + String(lastMonthDate.getMonth() + 1).padStart(2, '0');
+                var lastKey = 'rev_' + src.id + '_' + lastPrefix;
+                var currentVal = getVal(currentKey, '');
+                var lastVal = getVal(lastKey, 0);
+
+                var tagLine = src.tag;
+                if (src.brand) tagLine = src.brand + ' \u2014 ' + src.tag;
+
+                html += '<div class="revenue-card">' +
+                    '<div class="revenue-card-dot brand-dot-' + src.dot + '"></div>' +
+                    '<div class="revenue-card-info">' +
+                        '<div class="revenue-card-name">' + src.name + '</div>' +
+                        '<div class="revenue-card-tag">' + tagLine + '</div>' +
+                    '</div>' +
+                    '<div class="revenue-card-inputs">' +
+                        '<div class="revenue-input-wrapper">' +
+                            '<span class="revenue-input-prefix">$</span>' +
+                            '<input type="number" class="revenue-input" ' +
+                                'data-key="' + currentKey + '" ' +
+                                'data-source="' + src.id + '" ' +
+                                'value="' + currentVal + '" ' +
+                                'placeholder="0.00" ' +
+                                'step="0.01" min="0" />' +
+                        '</div>' +
+                        '<div class="revenue-card-last">Last mo: $' + Number(lastVal).toFixed(2) + '</div>' +
+                    '</div>' +
+                '</div>';
+            });
+
+            container.innerHTML = html;
+
+            // Bind events
+            var inputs = container.querySelectorAll('.revenue-input');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener('input', function() {
+                    var key = this.getAttribute('data-key');
+                    setVal(key, this.value ? parseFloat(this.value) : 0);
+                    recalcTotals();
+                });
+            }
+        }
+
+        function recalcTotals() {
+            var monthPrefix = getStorageMonthPrefix();
+            var monthTotal = 0;
+            var allTimeTotal = 0;
+            var store = loadStore();
+
+            REVENUE_SOURCES.forEach(function(src) {
+                var currentKey = 'rev_' + src.id + '_' + monthPrefix;
+                monthTotal += Number(store[currentKey] || 0);
+            });
+
+            // Sum all rev_ keys for all-time
+            Object.keys(store).forEach(function(key) {
+                if (key.indexOf('rev_') === 0 && key !== '_lastUpdated') {
+                    allTimeTotal += Number(store[key] || 0);
+                }
+            });
+
+            document.getElementById('totalRevenue').textContent = '$' + monthTotal.toFixed(2);
+            document.getElementById('allTimeTotal').textContent = '$' + allTimeTotal.toFixed(2);
+            document.getElementById('currentMonth').textContent = getMonthKey();
+        }
+
+        // ==================== PINTEREST SCENARIOS ====================
+
+        function renderScenarios() {
+            var container = document.getElementById('scenarioList');
+            var html = '';
+
+            SCENARIOS.forEach(function(sc) {
+                var key = 'scenario_' + sc.id;
+                var isOn = getVal(key, true);
+
+                html += '<div class="scenario-item">' +
+                    '<div class="scenario-info">' +
+                        '<div class="scenario-name">' + sc.name + '</div>' +
+                        '<div class="scenario-id">ID: ' + sc.id + '</div>' +
+                    '</div>' +
+                    '<label class="toggle">' +
+                        '<input type="checkbox" data-key="' + key + '" ' + (isOn ? 'checked' : '') + ' />' +
+                        '<span class="toggle-slider"></span>' +
+                    '</label>' +
+                '</div>';
+            });
+
+            container.innerHTML = html;
+
+            var toggles = container.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < toggles.length; i++) {
+                toggles[i].addEventListener('change', function() {
+                    setVal(this.getAttribute('data-key'), this.checked);
+                });
+            }
+        }
+
+        // ==================== AFFILIATE CHECKLIST ====================
+
+        function renderChecklist() {
+            var container = document.getElementById('checklistItems');
+            var html = '';
+            var checkedCount = 0;
+
+            AFFILIATE_ITEMS.forEach(function(item) {
+                var key = 'aff_' + item.id;
+                var isChecked = getVal(key, false);
+                if (isChecked) checkedCount++;
+
+                html += '<div class="checklist-row' + (isChecked ? ' checked' : '') + '" data-key="' + key + '">' +
+                    '<div class="checklist-cb">' +
+                        '<svg class="checklist-cb-check" viewBox="0 0 10 10" fill="none">' +
+                            '<path d="M2 5L4.5 7.5L8 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+                        '</svg>' +
+                    '</div>' +
+                    '<div class="checklist-info">' +
+                        '<div class="checklist-name">' + item.name + '</div>' +
+                    '</div>' +
+                    '<div class="checklist-potential">' + item.potential + '</div>' +
+                '</div>';
+            });
+
+            container.innerHTML = html;
+            document.getElementById('checklistProgress').textContent = checkedCount + ' / ' + AFFILIATE_ITEMS.length + ' completed';
+
+            var rows = container.querySelectorAll('.checklist-row');
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].addEventListener('click', function() {
+                    var key = this.getAttribute('data-key');
+                    var current = getVal(key, false);
+                    setVal(key, !current);
+                    renderChecklist(); // re-render to update state
+                });
+            }
+        }
+
+        // ==================== QUICK LINKS ====================
+
+        function renderQuickLinks() {
+            var container = document.getElementById('linksGrid');
+            var html = '';
+
+            QUICK_LINKS.forEach(function(link) {
+                html += '<a href="' + link.url + '" target="_blank" rel="noopener" class="quick-link">' +
+                    '<span class="quick-link-icon">' + link.icon + '</span>' +
+                    '<span class="quick-link-label">' + link.label + '</span>' +
+                '</a>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ==================== WEEKLY ARTICLES ====================
+
+        function initWeeklyArticles() {
+            var input = document.getElementById('weeklyArticles');
+            var weekKey = 'weekly_articles_' + getISOWeek();
+            input.value = getVal(weekKey, '');
+
+            input.addEventListener('input', function() {
+                setVal(weekKey, this.value ? parseInt(this.value) : 0);
+            });
+        }
+
+        function getISOWeek() {
+            var d = new Date();
+            var dayNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return d.getUTCFullYear() + '-W' + String(weekNo).padStart(2, '0');
+        }
+
+        // ==================== TIMESTAMP ====================
+
+        function updateTimestamp() {
+            var ts = getVal('_lastUpdated', null);
+            var el = document.getElementById('lastUpdated');
+            if (ts) {
+                var d = new Date(ts);
+                el.textContent = 'Last updated: ' + d.toLocaleDateString('en-US', {
+                    month: 'short', day: 'numeric', year: 'numeric',
+                    hour: 'numeric', minute: '2-digit'
+                });
+            }
+        }
+
+        // ==================== INIT ====================
+
+        function init() {
+            renderRevenueCards();
+            recalcTotals();
+            renderScenarios();
+            renderChecklist();
+            renderQuickLinks();
+            initWeeklyArticles();
+            updateTimestamp();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+    })();
+    </script>
+</body>
+</html>

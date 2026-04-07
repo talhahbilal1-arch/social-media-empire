@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellness Guide — Menopause Planner</title>
+<meta name="description" content="Wellness guides for menopause. Self-care, exercise, stress management, and holistic approaches to symptom relief.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://menopause-planner-website.vercel.app/wellness.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://menopause-planner-website.vercel.app/wellness.html">
+<meta property="og:title" content="Wellness Guide | Menopause Planner">
+<meta property="og:description" content="Wellness guides for menopause. Self-care, exercise, stress management, and holistic approaches to symptom relief.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Wellness Guide — Menopause Planner",
+  "description": "Wellness guides for menopause. Self-care, exercise, stress management, and holistic approaches to symptom relief.",
+  "url": "https://menopause-planner-website.vercel.app/wellness.html"
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02ZPS3H3GC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-02ZPS3H3GC');
+</script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #faf8fc;
+  color: #2d2d2d;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+nav {
+  background: #ffffff;
+  border-bottom: 1px solid #e8d9f0;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #7B1FA2;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: #2d2d2d;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #7B1FA2;
+}
+
+.hero {
+  padding: 100px 0 80px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.hero h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 56px;
+  line-height: 1.1;
+  color: #7B1FA2;
+  margin-bottom: 24px;
+}
+
+.hero p {
+  font-size: 20px;
+  color: #666666;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.articles-section {
+  padding: 80px 0 120px;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 32px;
+}
+
+.article-card {
+  background: #ffffff;
+  border: 1px solid #e8d9f0;
+  border-radius: 12px;
+  padding: 32px;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: block;
+}
+
+.article-card:hover {
+  transform: translateY(-4px);
+  border-color: #7B1FA2;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.article-card h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #2d2d2d;
+  margin-bottom: 12px;
+}
+
+.article-card p {
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.email-signup {
+  background: #ffffff;
+  border: 1px solid #e8d9f0;
+  border-radius: 16px;
+  padding: 80px 40px;
+  margin: 80px 0;
+  text-align: center;
+}
+
+.email-signup h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 40px;
+  color: #7B1FA2;
+  margin-bottom: 16px;
+}
+
+.email-signup p {
+  font-size: 18px;
+  color: #666666;
+  margin-bottom: 32px;
+}
+
+footer {
+  background: #ffffff;
+  border-top: 1px solid #e8d9f0;
+  padding: 60px 0 40px;
+  text-align: center;
+}
+
+footer p {
+  color: #666666;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
+
+  .email-signup {
+    padding: 60px 24px;
+  }
+
+  .email-signup h2 {
+    font-size: 32px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-content">
+      <a href="/" class="logo">Menopause Planner</a>
+      <div class="nav-links">
+        <a href="/supplements.html">Supplements</a>
+        <a href="/sleep.html">Sleep</a>
+        <a href="/wellness.html" class="active">Wellness</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <h1>Wellness</h1>
+    <p>Holistic wellness guides for managing menopause. Self-care, exercise, stress relief, and symptom management strategies.</p>
+  </div>
+</div>
+
+<section class="articles-section">
+  <div class="container">
+    <div class="articles-grid" id="articles-grid"></div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="email-signup">
+    <h2>Get Weekly Wellness Tips</h2>
+    <p>Join women navigating menopause with science-backed advice and support.</p>
+    <div data-kickstarter-form="9144926"></div>
+    <script src="https://scripts.getkickstarter.com/form.js" defer></script>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Menopause Planner. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+const articles = [
+  {
+    "filename": "anti-inflammatory-eating-for-menopause-symptom-relief.html",
+    "title": "Anti-Inflammatory Eating for Menopause: Does It Actually Ease Hot Flashes? — The Menopause Planner",
+    "description": "Can an anti-inflammatory diet reduce hot flashes during menopause? Explore the evidence and practical tips for relief. Plus, symptom trackers!"
+  },
+  {
+    "filename": "anxiety-during-menopause-vs-general-anxiety-differences.html",
+    "title": "5 Signs Your Anxiety Is Actually Menopause (Not Just Stress) — The Menopause Planner",
+    "description": "Is it stress or menopause? Discover 5 key signs that your anxiety might be linked to hormonal changes, not just everyday worries."
+  },
+  {
+    "filename": "best-magnesium-supplement-for-menopause-sleep-and-anxiety.html",
+    "title": "Best Magnesium Supplement for Menopause Sleep and Anxiety — The Menopause Planner",
+    "description": "Discover the best magnesium supplements to ease menopause symptoms like sleep issues and anxiety. Find the right form for your needs!"
+  },
+  {
+    "filename": "best-magnesium-supplements-for-menopause-sleep-and-anxiety.html",
+    "title": "Best Magnesium Supplements for Menopause Sleep and Anxiety — The Menopause Planner",
+    "description": "Struggling with sleep and anxiety during menopause? Discover the best magnesium supplements to help you find relief and reclaim your calm."
+  },
+  {
+    "filename": "best-menopause-supplements-for-weight-loss-over-50.html",
+    "title": "Best Menopause Supplements for Weight Loss Over 50 — The Menopause Planner",
+    "description": "Navigating menopause weight gain? Discover the best supplements to support healthy weight management and overall well-being after 50."
+  },
+  {
+    "filename": "best-weighted-blanket-menopause-sleep.html",
+    "title": "Best Weighted Blanket for Menopause Sleep — The Menopause Planner",
+    "description": "Find the best weighted blankets for menopause sleep. Cooling weighted blankets that reduce anxiety, improve sleep quality, and won"
+  },
+  {
+    "filename": "breathing-techniques-for-hot-flash-management.html",
+    "title": "Breathing Techniques That Stop Hot Flashes Fast (And Actually Work) — The Menopause Planner",
+    "description": "Discover powerful breathing techniques to quickly relieve hot flashes during menopause. Find the best methods to regain control and comfort."
+  },
+  {
+    "filename": "creativity-and-hobbies-for-menopause-mental-health.html",
+    "title": "5 Creative Hobbies That Eased My Menopause Anxiety (And Might Help Yours Too) — The Menopause Planner",
+    "description": "Discover 5 relaxing creative hobbies that helped me manage menopause anxiety. Find your calm and reclaim your well-being today!"
+  },
+  {
+    "filename": "essential-oils-menopause-symptoms.html",
+    "title": "Essential Oils for Menopause Symptoms — The Menopause Planner",
+    "description": "Best essential oils for menopause symptoms including hot flashes, anxiety, and insomnia. Evidence-based guide to clary sage, peppermint, and lavender oil for natural relief."
+  },
+  {
+    "filename": "essential-perimenopause-symptom-relief-strategies.html",
+    "title": "5 Perimenopause Symptom Relief Strategies That Actually Work (Evidence-Based) — The Menopause Planner",
+    "description": "Tired of perimenopause symptoms? Discover 5 evidence-based strategies to ease hot flashes, mood swings, and sleep problems. Reclaim your well-being!"
+  },
+  {
+    "filename": "foods-that-help-balance-hormones-naturally-during-menopause.html",
+    "title": "5 Foods That Calmed My Hot Flashes (#3 Surprised Me) — The Menopause Planner",
+    "description": "Tired of hot flashes? Discover 5 surprising foods that helped me find relief during menopause. #3 was a game-changer!"
+  },
+  {
+    "filename": "frozen-shoulder-the-surprising-menopause-symptom.html",
+    "title": "Frozen Shoulder: The Surprising Menopause Symptom No One Warned You About — The Menopause Planner",
+    "description": "Is frozen shoulder a menopause symptom? It&#x27;s more common than you think! Learn about the link and how to find relief during perimenopause."
+  },
+  {
+    "filename": "glp-1-medications-for-menopause-weight-loss.html",
+    "title": "GLP-1 Medications for Menopause Weight Loss: 5 Truths Your Doctor Won&#x27;t Tell You — The Menopause Planner",
+    "description": "Uncover hidden truths about GLP-1 medications for menopause weight loss. Expert insights to navigate perimenopause with confidence and make informed choices."
+  },
+  {
+    "filename": "hormone-balance-support-through-strategic-supplementation.html",
+    "title": "5 Supplement Combinations That Actually Ease Menopause Hot Flashes (And How to Use Them) — The Menopause Planner",
+    "description": "Finally, real relief! Discover 5 supplement combinations clinically shown to reduce hot flashes &amp; night sweats during menopause. Plus, how to use them!"
+  },
+  {
+    "filename": "hot-flash-triggers-identification-and-avoidance-strategies.html",
+    "title": "Hot Flash Triggers I Finally Stopped (And Started Sleeping Again) — The Menopause Planner",
+    "description": "Discover the surprising hot flash triggers I eliminated to finally get a full night&#x27;s sleep. Evidence-based strategies for perimenopause &amp; menopause."
+  },
+  {
+    "filename": "hydration-and-its-role-in-managing-hot-flashes.html",
+    "title": "Hydration for Hot Flashes: The Simple Timing Trick That Actually Works — The Menopause Planner",
+    "description": "Combat hot flashes with strategic hydration! Discover a simple timing trick to stay cool and comfortable during perimenopause and menopause."
+  },
+  {
+    "filename": "joint-pain-during-menopause-often-overlooked-symptom.html",
+    "title": "Joint Pain in Menopause: The Overlooked Symptom No One Warns You About — The Menopause Planner",
+    "description": "Joint pain during menopause? You&#x27;re not alone! Discover why it happens and how to find relief. Expert guide for women in perimenopause &amp; menopause."
+  },
+  {
+    "filename": "journaling-prompts-for-processing-menopause-emotions.html",
+    "title": "Best Symptom Tracker Journal for Menopause Relief (2026) — The Menopause Planner",
+    "description": "Feeling lost in menopause? Discover the best symptom tracker journals to understand your body &amp; find relief. Expert reviews &amp; personal experiences."
+  },
+  {
+    "filename": "meditation-and-mindfulness-for-menopause-anxiety.html",
+    "title": "5 Simple Meditation Tricks That Calmed My Menopause Anxiety — The Menopause Planner",
+    "description": "Struggling with menopause anxiety? Discover 5 easy meditation tricks that helped me find calm and reclaim my inner peace. Plus, helpful resources!"
+  },
+  {
+    "filename": "natural-supplements-hot-flashes.html",
+    "title": "Natural Supplements for Hot Flashes — The Menopause Planner",
+    "description": "Discover the best natural supplements for hot flashes during menopause. Evidence-based picks including black cohosh, evening primrose oil, and red clover that actually work."
+  },
+  {
+    "filename": "omega-3-benefits-specifically-for-menopause.html",
+    "title": "5 Omega-3 Secrets That Actually Helped My Hot Flashes (And the Science Behind Why) — The Menopause Planner",
+    "description": "Struggling with hot flashes? Discover 5 omega-3 secrets that eased my menopause symptoms, backed by science! Plus, product recommendations."
+  },
+  {
+    "filename": "pelvic-floor-exercises-importance-during-menopause.html",
+    "title": "Pelvic Floor Exercises That Actually Prevent Leaks During Menopause — The Menopause Planner",
+    "description": "Stop leaks during menopause with effective pelvic floor exercises. Regain control and confidence with our expert guide."
+  },
+  {
+    "filename": "perimenopause-age-when-symptoms-really-start.html",
+    "title": "Perimenopause Age: When Symptoms Really Start (Not When You Think) — The Menopause Planner",
+    "description": "Perimenopause can start much earlier than you think! Learn the real age range and how to manage those unexpected early symptoms effectively."
+  },
+  {
+    "filename": "perimenopause-in-your-30s-early-symptoms-what-to-know.html",
+    "title": "Perimenopause in Your 30s: 5 Early Symptoms Doctors Often Miss — The Menopause Planner",
+    "description": "Are you in your 30s and feeling off? Discover 5 early perimenopause symptoms doctors often overlook and what you can do about it."
+  },
+  {
+    "filename": "perimenopause-symptoms-visual-checklist-are-you-in-perimenop.html",
+    "title": "5 Perimenopause Symptoms Doctors Miss (And Why You&#x27;re Not Crazy) — The Menopause Planner",
+    "description": "Feeling dismissed? Discover 5 often-overlooked perimenopause symptoms and why your experience is valid. Plus, find relief and reclaim your well-being."
+  },
+  {
+    "filename": "phytoestrogen-foods-and-their-actual-impact.html",
+    "title": "5 Phytoestrogen Foods That Actually Ease Hot Flashes (Not Hype) — The Menopause Planner",
+    "description": "Discover 5 phytoestrogen-rich foods that can naturally ease hot flashes. Evidence-based guide for perimenopause and menopause relief."
+  },
+  {
+    "filename": "self-care-massage-techniques-for-menopause-symptom-relief.html",
+    "title": "5 Self-Massage Secrets for Hot Flashes and Menopause Relief — The Menopause Planner",
+    "description": "Discover 5 simple self-massage techniques to ease hot flashes and find lasting menopause relief. Reclaim your calm and comfort today!"
+  },
+  {
+    "filename": "social-connection-importance-during-menopause-transition.html",
+    "title": "5 Social Connection Secrets That Ease Menopause Symptoms (And Why #2 Saved Me) — The Menopause Planner",
+    "description": "Combat menopause symptoms with the power of social connection! Discover 5 secrets to ease your journey, including the one that transformed my experience."
+  },
+  {
+    "filename": "strength-training-over-cardio-for-menopause-metabolism.html",
+    "title": "5 Cardio Mistakes That Spike Cortisol and Stall Menopause Weight Loss — The Menopause Planner",
+    "description": "Are you making these cardio mistakes? Learn how to avoid spiking cortisol and finally lose weight during perimenopause and menopause."
+  },
+  {
+    "filename": "sugar-and-caffeine-impact-on-menopause-symptoms.html",
+    "title": "How Sugar Actually Worsens Hot Flashes (And What Helped Me Instead) — The Menopause Planner",
+    "description": "Feeling the heat? I discovered cutting sugar eased my hot flashes. Plus, the symptom tracker that helped me reclaim my sleep. Read on!"
+  },
+  {
+    "filename": "tracking-symptoms-to-identify-patterns-and-triggers.html",
+    "title": "Menopause Symptoms: Track to Find Your Relief (2024) — The Menopause Planner",
+    "description": "Take control of menopause! Track your symptoms, identify triggers, and find relief with our guide. Includes tracking tips and product recommendations."
+  },
+  {
+    "filename": "walking-benefits-for-menopause-mood-and-weight.html",
+    "title": "5 Walking Secrets That Fixed My Menopause Mood (#4 Works Fast) — The Menopause Planner",
+    "description": "Discover how walking transformed my menopause mood swings! These 5 secrets, including a fast-acting trick, brought me back to myself. Learn more!"
+  },
+  {
+    "filename": "weight-distribution-changes-during-menopause.html",
+    "title": "Weight Distribution Changes in Menopause: Why Your Body Looks Different (And What Actually Helps) — The Menopause Planner",
+    "description": "Understand menopause weight shifts &amp; how to manage them. Expert guide for women experiencing perimenopause &amp; menopause. Regain control &amp; feel your best!"
+  },
+  {
+    "filename": "yoga-poses-specifically-for-menopause-symptom-relief.html",
+    "title": "Yoga Poses for Menopause Relief: Does It Actually Work for Symptom Relief? — The Menopause Planner",
+    "description": "Discover if yoga can ease menopause symptoms like hot flashes and mood swings. Explore effective poses and expert tips for natural relief."
+  }
+];
+
+const grid = document.getElementById('articles-grid');
+articles.forEach(article => {
+  const card = document.createElement('a');
+  card.href = '/articles/' + article.filename;
+  card.className = 'article-card';
+
+  const title = document.createElement('h3');
+  title.textContent = article.title;
+
+  const desc = document.createElement('p');
+  desc.textContent = article.description;
+
+  card.appendChild(title);
+  card.appendChild(desc);
+  grid.appendChild(card);
+});
+</script>
+
+</body>
+</html>

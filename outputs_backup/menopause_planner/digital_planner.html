@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menopause Wellness Planner - Digital Edition</title>
+<style>
+@page{size:landscape;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#A5A58D;--rose:#DDBEA9;--cream:#FAF7F0;--taupe:#A39384;--deep:#6B705C}
+body{font-family:system-ui,-apple-system,sans-serif;background:#fff;color:#333;font-size:11px;line-height:1.4}
+.page{width:100vw;height:100vh;display:flex;page-break-before:always;position:relative;background:var(--cream)}
+.page:first-child{page-break-before:auto}
+nav.sb{width:44px;min-width:44px;background:var(--deep);display:flex;flex-direction:column;align-items:center;padding:6px 0;gap:2px;overflow-y:auto}
+nav.sb a{color:var(--cream);text-decoration:none;font-size:7px;text-align:center;padding:3px 2px;border-radius:3px;width:38px;line-height:1.2;display:block}
+nav.sb a:hover{background:var(--sage)}
+.content{flex:1;padding:16px 20px;overflow-y:auto}
+h1{font-size:22px;color:var(--deep);margin-bottom:8px}
+h2{font-size:16px;color:var(--deep);margin-bottom:6px;border-bottom:2px solid var(--sage);padding-bottom:3px}
+h3{font-size:13px;color:var(--taupe);margin:6px 0 4px}
+table{width:100%;border-collapse:collapse;font-size:10px}
+th{background:var(--sage);color:#fff;padding:4px 3px;text-align:left;font-weight:600;white-space:nowrap}
+td{border:1px solid #d5d0c8;padding:3px;vertical-align:top}
+tr:nth-child(even){background:rgba(165,165,141,.07)}
+input[type=checkbox]{accent-color:var(--sage);margin:1px}
+input[type=text],input[type=date],input[type=time],input[type=number],select,textarea{border:1px solid #ccc;border-radius:3px;padding:2px 4px;font-size:10px;font-family:inherit;background:#fff}
+textarea{resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.card{background:#fff;border-radius:6px;padding:10px;border:1px solid #e0dbd3}
+.badge{display:inline-block;background:var(--rose);color:var(--deep);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:600}
+.cover-center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1;background:linear-gradient(135deg,var(--cream),#fff,var(--rose))}
+.cover-center h1{font-size:32px;margin-bottom:4px}
+.cover-center p{color:var(--taupe);font-size:14px}
+.cover-deco{width:80px;height:4px;background:var(--sage);border-radius:2px;margin:12px 0}
+.sym-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0}
+.sym-grid .hdr{background:var(--sage);color:#fff;text-align:center;padding:3px;font-weight:600;font-size:9px}
+.sym-grid .cell{border:1px solid #e0dbd3;padding:2px;text-align:center;min-height:22px}
+.sym-label{background:var(--rose);padding:3px 5px;font-weight:600;font-size:9px;border:1px solid #e0dbd3;white-space:nowrap}
+.nav-hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.nav-card{background:#fff;border:2px solid var(--sage);border-radius:8px;padding:12px;text-align:center;text-decoration:none;color:var(--deep);transition:.2s}
+.nav-card:hover{background:var(--sage);color:#fff}
+.nav-card h3{font-size:13px;margin-bottom:3px}
+.nav-card p{font-size:9px;color:var(--taupe)}
+.checklist label{display:block;padding:2px 0;font-size:10px}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.lines div{border-bottom:1px solid #d5d0c8;height:22px}
+.week-grid{display:grid;grid-template-columns:80px repeat(7,1fr);gap:0}
+.week-grid .wh{background:var(--sage);color:#fff;padding:4px;font-weight:600;font-size:9px;text-align:center}
+.week-grid .wc{border:1px solid #e0dbd3;padding:4px;min-height:50px;font-size:9px}
+.week-grid .wl{background:var(--rose);padding:4px;font-weight:600;font-size:10px;border:1px solid #e0dbd3;display:flex;align-items:center}
+@media print{.page{height:100vh;page-break-inside:avoid}nav.sb{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<section class="page" id="cover">
+<div class="cover-center">
+<div style="font-size:40px;color:var(--sage);margin-bottom:8px">&#127807;</div>
+<h1>Menopause Wellness Planner</h1>
+<div class="cover-deco"></div>
+<p>Digital Edition &mdash; Your Guide Through Every Stage</p>
+<p style="margin-top:20px;font-size:11px;color:var(--taupe)">Track symptoms &bull; Monitor patterns &bull; Reclaim your wellbeing</p>
+<div style="margin-top:30px;font-size:10px;color:var(--taupe)">Name: ________________ &nbsp;&nbsp; Start Date: ________________</div>
+</div>
+</section>
+
+<section class="page" id="nav-hub">
+<nav class="sb">
+<a href="#cover">Cover</a><a href="#nav-hub" style="background:var(--sage)">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a>
+</nav>
+<div class="content">
+<h1>Navigation Hub</h1>
+<p style="color:var(--taupe);margin-bottom:6px">Tap any section to jump directly to it</p>
+<div class="nav-hub-grid">
+<a class="nav-card" href="#journey"><h3>Journey Overview</h3><p>Stage, goals &amp; checklist</p></a>
+<a class="nav-card" href="#symptoms"><h3>Symptom Tracker</h3><p>Weekly symptom checklist</p></a>
+<a class="nav-card" href="#m1"><h3>Monthly Logs 1-6</h3><p>Daily tracking for 6 months</p></a>
+<a class="nav-card" href="#hf1"><h3>Hot Flash Tracker</h3><p>Time, triggers &amp; relief</p></a>
+<a class="nav-card" href="#sl1"><h3>Sleep Log</h3><p>Quality &amp; pattern tracking</p></a>
+<a class="nav-card" href="#mood"><h3>Mood Tracker</h3><p>AM/PM mood &amp; energy</p></a>
+<a class="nav-card" href="#meds"><h3>Medications</h3><p>Rx, supplements &amp; HRT</p></a>
+<a class="nav-card" href="#doctor"><h3>Doctor Notes</h3><p>Pre-visit prep &amp; notes</p></a>
+<a class="nav-card" href="#selfcare"><h3>Self-Care Planner</h3><p>Weekly wellness grid</p></a>
+</div>
+</div>
+</section>
+
+<section class="page" id="journey">
+<nav class="sb">
+<a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey" style="background:var(--sage)">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a>
+</nav>
+<div class="content">
+<h2>My Menopause Journey Overview</h2>
+<div class="grid2">
+<div class="card">
+<h3>My Stage</h3>
+<div style="margin:6px 0">
+<label><input type="checkbox"> Perimenopause (irregular periods beginning)</label><br>
+<label><input type="checkbox"> Menopause (12+ months without period)</label><br>
+<label><input type="checkbox"> Post-Menopause</label><br>
+<label><input type="checkbox"> Surgical Menopause</label><br>
+<label><input type="checkbox"> Unsure / In Transition</label>
+</div>
+<p style="margin-top:6px"><strong>Start Date:</strong> <input type="text" style="width:120px"> &nbsp; <strong>Age:</strong> <input type="text" style="width:50px"></p>
+<p style="margin-top:4px"><strong>Last Period:</strong> <input type="text" style="width:120px"></p>
+<p style="margin-top:4px"><strong>Healthcare Provider:</strong> <input type="text" style="width:180px"></p>
+</div>
+<div class="card">
+<h3>My Top Symptoms</h3>
+<div class="checklist">
+<label><input type="checkbox"> Hot flashes / night sweats</label>
+<label><input type="checkbox"> Sleep disruption</label>
+<label><input type="checkbox"> Mood changes / anxiety</label>
+<label><input type="checkbox"> Brain fog / memory</label>
+<label><input type="checkbox"> Weight changes</label>
+<label><input type="checkbox"> Joint pain</label>
+<label><input type="checkbox"> Fatigue / low energy</label>
+<label><input type="checkbox"> Vaginal dryness</label>
+<label><input type="checkbox"> Heart palpitations</label>
+<label><input type="checkbox"> Headaches</label>
+<label><input type="checkbox"> Hair / skin changes</label>
+<label><input type="checkbox"> Other: ______________</label>
+</div>
+</div>
+</div>
+<div class="card" style="margin-top:10px">
+<h3>My Wellness Goals</h3>
+<div class="grid3">
+<div><strong>Physical</strong><div class="lines"><div></div><div></div><div></div></div></div>
+<div><strong>Emotional</strong><div class="lines"><div></div><div></div><div></div></div></div>
+<div><strong>Lifestyle</strong><div class="lines"><div></div><div></div><div></div></div></div>
+</div>
+</div>
+<div class="card" style="margin-top:10px">
+<h3>Current Treatments &amp; Support</h3>
+<div class="grid2">
+<div><strong>HRT / Medications:</strong> <input type="text" style="width:90%"></div>
+<div><strong>Supplements:</strong> <input type="text" style="width:90%"></div>
+<div><strong>Exercise Routine:</strong> <input type="text" style="width:90%"></div>
+<div><strong>Support Network:</strong> <input type="text" style="width:90%"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="page" id="symptoms">
+<nav class="sb">
+<a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms" style="background:var(--sage)">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a>
+</nav>
+<div class="content">
+<h2>Weekly Symptom Tracker</h2>
+<p style="color:var(--taupe);margin-bottom:6px">Check each symptom experienced daily. Week of: ______________</p>
+<div style="display:grid;grid-template-columns:130px repeat(7,1fr);gap:0;font-size:9px">
+<div class="sym-label" style="background:var(--deep);color:#fff">Symptom</div>
+<div class="sym-grid hdr" style="background:var(--deep)">Mon</div><div class="sym-grid hdr" style="background:var(--deep)">Tue</div><div class="sym-grid hdr" style="background:var(--deep)">Wed</div><div class="sym-grid hdr" style="background:var(--deep)">Thu</div><div class="sym-grid hdr" style="background:var(--deep)">Fri</div><div class="sym-grid hdr" style="background:var(--deep)">Sat</div><div class="sym-grid hdr" style="background:var(--deep)">Sun</div>
+</div>
+<div style="display:grid;grid-template-columns:130px repeat(7,1fr);gap:0;font-size:9px">
+<div class="sym-label">Hot Flashes</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Night Sweats</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Insomnia</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Anxiety</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Mood Swings</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Brain Fog</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Fatigue</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Joint Pain</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Headaches</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Heart Palpitations</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Weight Gain</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Bloating</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Vaginal Dryness</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Low Libido</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Hair Thinning</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Dry Skin</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Irritability</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+<div class="sym-label">Urinary Issues</div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div><div class="cell"><input type="checkbox"></div>
+</div>
+<div class="card" style="margin-top:8px"><h3>Notes &amp; Patterns Observed</h3><div class="lines"><div></div><div></div><div></div></div></div>
+</div>
+</section>
+
+<section class="page" id="m1">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1" style="background:var(--sage)">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Monthly Log</h2><span class="badge">Month 1</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Month: ____________ Year: ________</p>
+<table><tr><th style="width:30px">Day</th><th>Hot Flashes</th><th>Night Sweats</th><th style="width:55px">Sleep 1-5</th><th style="width:55px">Mood 1-5</th><th style="width:55px">Energy 1-5</th><th>Exercise</th><th>Notes</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>16</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>17</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>18</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>19</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>21</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>22</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>23</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>24</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>26</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>27</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>28</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>29</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+</section>
+
+<section class="page" id="m2">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2" style="background:var(--sage)">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Monthly Log</h2><span class="badge">Month 2</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Month: ____________ Year: ________</p>
+<table><tr><th style="width:30px">Day</th><th>Hot Flashes</th><th>Night Sweats</th><th style="width:55px">Sleep 1-5</th><th style="width:55px">Mood 1-5</th><th style="width:55px">Energy 1-5</th><th>Exercise</th><th>Notes</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>16</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>17</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>18</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>19</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>21</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>22</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>23</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>24</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>26</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>27</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>28</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>29</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+</section>
+
+<section class="page" id="m3">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3" style="background:var(--sage)">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Monthly Log</h2><span class="badge">Month 3</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Month: ____________ Year: ________</p>
+<table><tr><th style="width:30px">Day</th><th>Hot Flashes</th><th>Night Sweats</th><th style="width:55px">Sleep 1-5</th><th style="width:55px">Mood 1-5</th><th style="width:55px">Energy 1-5</th><th>Exercise</th><th>Notes</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>16</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>17</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>18</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>19</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>21</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>22</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>23</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>24</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>26</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>27</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>28</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>29</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+</section>
+
+<section class="page" id="m4">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4" style="background:var(--sage)">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Monthly Log</h2><span class="badge">Month 4</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Month: ____________ Year: ________</p>
+<table><tr><th style="width:30px">Day</th><th>Hot Flashes</th><th>Night Sweats</th><th style="width:55px">Sleep 1-5</th><th style="width:55px">Mood 1-5</th><th style="width:55px">Energy 1-5</th><th>Exercise</th><th>Notes</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>16</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>17</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>18</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>19</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>21</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>22</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>23</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>24</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>26</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>27</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>28</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>29</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+</section>
+
+<section class="page" id="m5">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5" style="background:var(--sage)">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Monthly Log</h2><span class="badge">Month 5</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Month: ____________ Year: ________</p>
+<table><tr><th style="width:30px">Day</th><th>Hot Flashes</th><th>Night Sweats</th><th style="width:55px">Sleep 1-5</th><th style="width:55px">Mood 1-5</th><th style="width:55px">Energy 1-5</th><th>Exercise</th><th>Notes</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>16</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>17</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>18</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>19</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>21</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>22</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>23</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>24</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>26</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>27</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>28</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>29</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+</section>
+
+<section class="page" id="m6">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6" style="background:var(--sage)">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Monthly Log</h2><span class="badge">Month 6</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Month: ____________ Year: ________</p>
+<table><tr><th style="width:30px">Day</th><th>Hot Flashes</th><th>Night Sweats</th><th style="width:55px">Sleep 1-5</th><th style="width:55px">Mood 1-5</th><th style="width:55px">Energy 1-5</th><th>Exercise</th><th>Notes</th></tr>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>16</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>17</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>18</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>19</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>21</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>22</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>23</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>24</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>26</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>27</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>28</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>29</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>31</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+</section>
+
+<section class="page" id="hf1">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1" style="background:var(--sage)">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Hot Flash Tracker</h2><span class="badge">Page 1 of 3</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Date Range: ____________ to ____________</p>
+<table>
+<tr><th style="width:50px">Date</th><th style="width:60px">Time</th><th style="width:70px">Duration</th><th style="width:80px">Intensity 1-10</th><th>Trigger</th><th>What Helped</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="card" style="margin-top:8px">
+<h3>Common Triggers Checklist</h3>
+<div style="columns:4;font-size:9px">
+<label><input type="checkbox"> Stress</label><br><label><input type="checkbox"> Spicy food</label><br><label><input type="checkbox"> Caffeine</label><br><label><input type="checkbox"> Alcohol</label><br><label><input type="checkbox"> Hot environment</label><br><label><input type="checkbox"> Exercise</label><br><label><input type="checkbox"> Tight clothing</label><br><label><input type="checkbox"> Sugar</label>
+</div>
+</div>
+</div>
+</section>
+
+<section class="page" id="hf2">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2" style="background:var(--sage)">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Hot Flash Tracker</h2><span class="badge">Page 2 of 3</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Date Range: ____________ to ____________</p>
+<table>
+<tr><th style="width:50px">Date</th><th style="width:60px">Time</th><th style="width:70px">Duration</th><th style="width:80px">Intensity 1-10</th><th>Trigger</th><th>What Helped</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="card" style="margin-top:8px">
+<h3>Patterns Noticed</h3><div class="lines"><div></div><div></div><div></div></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="hf3">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3" style="background:var(--sage)">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Hot Flash Tracker</h2><span class="badge">Page 3 of 3</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Date Range: ____________ to ____________</p>
+<table>
+<tr><th style="width:50px">Date</th><th style="width:60px">Time</th><th style="width:70px">Duration</th><th style="width:80px">Intensity 1-10</th><th>Trigger</th><th>What Helped</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="card" style="margin-top:8px">
+<h3>Patterns Noticed</h3><div class="lines"><div></div><div></div><div></div></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="sl1">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1" style="background:var(--sage)">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Sleep Log</h2><span class="badge">Page 1 of 2</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Dates: ____________ to ____________</p>
+<table>
+<tr><th style="width:65px">Date</th><th style="width:65px">Bedtime</th><th style="width:65px">Wake Time</th><th style="width:50px">Hours</th><th style="width:75px">Night Sweats</th><th style="width:65px">Quality 1-5</th><th>Notes (wakeups, dreams, aids used)</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="card" style="margin-top:8px">
+<h3>Sleep Hygiene Checklist</h3>
+<div style="columns:3;font-size:9px">
+<label><input type="checkbox"> Cool bedroom (65-68F)</label><br><label><input type="checkbox"> No screens 1hr before</label><br><label><input type="checkbox"> No caffeine after 2pm</label><br><label><input type="checkbox"> Consistent bedtime</label><br><label><input type="checkbox"> Relaxation routine</label><br><label><input type="checkbox"> Moisture-wicking PJs</label>
+</div>
+</div>
+</div>
+</section>
+
+<section class="page" id="sl2">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2" style="background:var(--sage)">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Sleep Log</h2><span class="badge">Page 2 of 2</span></div>
+<p style="color:var(--taupe);margin-bottom:4px">Dates: ____________ to ____________</p>
+<table>
+<tr><th style="width:65px">Date</th><th style="width:65px">Bedtime</th><th style="width:65px">Wake Time</th><th style="width:50px">Hours</th><th style="width:75px">Night Sweats</th><th style="width:65px">Quality 1-5</th><th>Notes (wakeups, dreams, aids used)</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="card" style="margin-top:8px">
+<h3>Sleep Patterns &amp; Insights</h3><div class="lines"><div></div><div></div><div></div></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="mood">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood" style="background:var(--sage)">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<h2>Mood &amp; Energy Tracker</h2>
+<p style="color:var(--taupe);margin-bottom:6px">Week of: ______________</p>
+<table>
+<tr><th style="width:45px">Day</th><th colspan="2">AM</th><th colspan="2">PM</th><th>Triggers</th><th>Coping Strategy Used</th></tr>
+<tr><th></th><th style="width:70px">Mood 1-5</th><th style="width:70px">Energy 1-5</th><th style="width:70px">Mood 1-5</th><th style="width:70px">Energy 1-5</th><th></th><th></th></tr>
+<tr><td>Mon</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Tue</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Wed</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Thu</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Fri</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Sat</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Sun</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="grid2" style="margin-top:10px">
+<div class="card">
+<h3>Mood Scale Reference</h3>
+<div style="font-size:9px">
+<p><strong>1</strong> = Very low / depressed / overwhelmed</p>
+<p><strong>2</strong> = Low / anxious / irritable</p>
+<p><strong>3</strong> = Neutral / okay / manageable</p>
+<p><strong>4</strong> = Good / calm / positive</p>
+<p><strong>5</strong> = Great / joyful / balanced</p>
+</div>
+</div>
+<div class="card">
+<h3>My Coping Toolkit</h3>
+<div class="checklist" style="font-size:9px">
+<label><input type="checkbox"> Deep breathing</label>
+<label><input type="checkbox"> Walk / movement</label>
+<label><input type="checkbox"> Journaling</label>
+<label><input type="checkbox"> Talk to friend</label>
+<label><input type="checkbox"> Meditation</label>
+<label><input type="checkbox"> Creative activity</label>
+<label><input type="checkbox"> Limit caffeine</label>
+<label><input type="checkbox"> Nature time</label>
+</div>
+</div>
+</div>
+<div class="card" style="margin-top:8px">
+<h3>Weekly Reflection</h3>
+<div class="grid3" style="font-size:9px">
+<div><strong>Best day &amp; why:</strong><div class="lines"><div></div><div></div></div></div>
+<div><strong>Most challenging:</strong><div class="lines"><div></div><div></div></div></div>
+<div><strong>What helped most:</strong><div class="lines"><div></div><div></div></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="page" id="meds">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds" style="background:var(--sage)">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<h2>Medications, Supplements &amp; HRT</h2>
+<table>
+<tr><th>Name</th><th style="width:65px">Dose</th><th style="width:75px">Frequency</th><th style="width:60px">Time</th><th>Purpose</th><th>Side Effects</th><th style="width:70px">Start Date</th></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td style="height:28px"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="grid2" style="margin-top:10px">
+<div class="card">
+<h3>HRT Details</h3>
+<p style="font-size:9px"><strong>Type:</strong> <input type="text" style="width:85%"></p>
+<p style="font-size:9px"><strong>Started:</strong> <input type="text" style="width:80%"></p>
+<p style="font-size:9px"><strong>Provider:</strong> <input type="text" style="width:80%"></p>
+<p style="font-size:9px"><strong>Next review:</strong> <input type="text" style="width:75%"></p>
+<p style="font-size:9px;margin-top:4px"><strong>Notes:</strong></p>
+<div class="lines"><div></div><div></div></div>
+</div>
+<div class="card">
+<h3>Supplements Tried</h3>
+<div class="checklist" style="font-size:9px">
+<label><input type="checkbox"> Black Cohosh</label>
+<label><input type="checkbox"> Evening Primrose Oil</label>
+<label><input type="checkbox"> Magnesium</label>
+<label><input type="checkbox"> Vitamin D</label>
+<label><input type="checkbox"> Ashwagandha</label>
+<label><input type="checkbox"> Omega-3</label>
+<label><input type="checkbox"> Maca Root</label>
+<label><input type="checkbox"> Probiotics</label>
+<label><input type="checkbox"> Red Clover</label>
+<label><input type="checkbox"> Calcium</label>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="page" id="doctor">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor" style="background:var(--sage)">Doctor</a><a href="#selfcare">Care</a></nav>
+<div class="content">
+<h2>Doctor Visit Notes</h2>
+<div class="grid2">
+<div>
+<div class="card">
+<h3>Appointment Details</h3>
+<p><strong>Date:</strong> <input type="text" style="width:100px"> &nbsp; <strong>Doctor:</strong> <input type="text" style="width:150px"></p>
+<p style="margin-top:3px"><strong>Type:</strong>
+<label><input type="checkbox"> Annual</label>
+<label><input type="checkbox"> Follow-up</label>
+<label><input type="checkbox"> Specialist</label>
+<label><input type="checkbox"> Urgent</label>
+</p>
+</div>
+<div class="card" style="margin-top:8px">
+<h3>Pre-Visit Checklist</h3>
+<div class="checklist" style="font-size:9px">
+<label><input type="checkbox"> Updated symptom tracker</label>
+<label><input type="checkbox"> List of current medications</label>
+<label><input type="checkbox"> Written questions ready</label>
+<label><input type="checkbox"> Insurance card</label>
+<label><input type="checkbox"> Previous lab results</label>
+<label><input type="checkbox"> Symptom diary/photos</label>
+<label><input type="checkbox"> Family history notes</label>
+</div>
+</div>
+<div class="card" style="margin-top:8px">
+<h3>Questions to Ask</h3>
+<div style="font-size:9px">
+<p>1. <input type="text" style="width:92%"></p>
+<p>2. <input type="text" style="width:92%"></p>
+<p>3. <input type="text" style="width:92%"></p>
+<p>4. <input type="text" style="width:92%"></p>
+<p>5. <input type="text" style="width:92%"></p>
+<p>6. <input type="text" style="width:92%"></p>
+<p>7. <input type="text" style="width:92%"></p>
+<p>8. <input type="text" style="width:92%"></p>
+</div>
+</div>
+</div>
+<div>
+<div class="card">
+<h3>Doctor's Notes &amp; Recommendations</h3>
+<div class="lines"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+<div class="card" style="margin-top:8px">
+<h3>Tests Ordered</h3>
+<div class="checklist" style="font-size:9px">
+<label><input type="checkbox"> Blood work (hormones)</label>
+<label><input type="checkbox"> Thyroid panel</label>
+<label><input type="checkbox"> Bone density (DEXA)</label>
+<label><input type="checkbox"> Mammogram</label>
+<label><input type="checkbox"> Pap smear</label>
+<label><input type="checkbox"> Cholesterol panel</label>
+<label><input type="checkbox"> Vitamin D levels</label>
+<label><input type="checkbox"> Other: ____________</label>
+</div>
+</div>
+<div class="card" style="margin-top:8px">
+<h3>Follow-Up</h3>
+<p style="font-size:9px"><strong>Next appt:</strong> <input type="text" style="width:80%"></p>
+<p style="font-size:9px"><strong>Action items:</strong></p>
+<div class="lines"><div></div><div></div><div></div></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="page" id="selfcare">
+<nav class="sb"><a href="#cover">Cover</a><a href="#nav-hub">Nav</a><a href="#journey">Journey</a><a href="#symptoms">Symptoms</a><a href="#m1">Mon 1</a><a href="#m2">Mon 2</a><a href="#m3">Mon 3</a><a href="#m4">Mon 4</a><a href="#m5">Mon 5</a><a href="#m6">Mon 6</a><a href="#hf1">HF 1</a><a href="#hf2">HF 2</a><a href="#hf3">HF 3</a><a href="#sl1">Sleep1</a><a href="#sl2">Sleep2</a><a href="#mood">Mood</a><a href="#meds">Meds</a><a href="#doctor">Doctor</a><a href="#selfcare" style="background:var(--sage)">Care</a></nav>
+<div class="content">
+<h2>Self-Care Weekly Planner</h2>
+<p style="color:var(--taupe);margin-bottom:6px">Week of: ______________</p>
+<div class="week-grid">
+<div class="wh"></div><div class="wh">Mon</div><div class="wh">Tue</div><div class="wh">Wed</div><div class="wh">Thu</div><div class="wh">Fri</div><div class="wh">Sat</div><div class="wh">Sun</div>
+<div class="wl">Body</div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div>
+<div class="wl">Mind</div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div>
+<div class="wl">Spirit</div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div>
+<div class="wl">Social</div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div><div class="wc"></div>
+</div>
+<div class="grid4" style="margin-top:10px">
+<div class="card">
+<h3>Body Ideas</h3>
+<div style="font-size:8px">
+<p>- Walk / yoga</p>
+<p>- Strength training</p>
+<p>- Epsom salt bath</p>
+<p>- Stretching</p>
+<p>- Healthy meal prep</p>
+<p>- Hydration goal</p>
+</div>
+</div>
+<div class="card">
+<h3>Mind Ideas</h3>
+<div style="font-size:8px">
+<p>- Meditation</p>
+<p>- Journaling</p>
+<p>- Read a book</p>
+<p>- Brain puzzle</p>
+<p>- Learn something</p>
+<p>- Digital detox</p>
+</div>
+</div>
+<div class="card">
+<h3>Spirit Ideas</h3>
+<div style="font-size:8px">
+<p>- Gratitude list</p>
+<p>- Nature walk</p>
+<p>- Prayer / reflection</p>
+<p>- Creative art</p>
+<p>- Music therapy</p>
+<p>- Affirmations</p>
+</div>
+</div>
+<div class="card">
+<h3>Social Ideas</h3>
+<div style="font-size:8px">
+<p>- Call a friend</p>
+<p>- Support group</p>
+<p>- Date night</p>
+<p>- Volunteer</p>
+<p>- Coffee meetup</p>
+<p>- Set boundaries</p>
+</div>
+</div>
+</div>
+<div class="card" style="margin-top:10px">
+<h3>Weekly Self-Care Wins &amp; Reflections</h3>
+<div class="grid3">
+<div><strong style="font-size:9px">What nourished me:</strong><div class="lines"><div></div><div></div></div></div>
+<div><strong style="font-size:9px">What I need more of:</strong><div class="lines"><div></div><div></div></div></div>
+<div><strong style="font-size:9px">Next week's intention:</strong><div class="lines"><div></div><div></div></div></div>
+</div>
+</div>
+</div>
+</section>
+
+</body>
+</html>

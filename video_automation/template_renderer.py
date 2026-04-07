@@ -188,23 +188,14 @@ def _build_product_block_html(product, index, brand_key, theme):
 
     bottom_line = _esc(product.get('bottom_line', ''))
 
-    # Testimonials
-    testimonials_html = ''
-    for t in product.get('testimonials', [])[:2]:
-        t_name = _esc(t.get('name', 'Verified Buyer'))
-        t_quote = _esc(t.get('quote', ''))
-        t_photo = _ensure_image(
-            t.get('photo', ''),
-            FALLBACK_FACES.get(brand_key, FALLBACK_FACES['deals'])[0]
-        )
-        testimonials_html += (
-            f'<div class="testimonial">'
-            f'<div class="testimonial-avatar"><img src="{t_photo}" alt="" loading="lazy"></div>'
-            f'<div class="testimonial-body">'
-            f'<div class="testimonial-name">{t_name} \u2014 Verified Buyer</div>'
-            f'<div class="testimonial-text">"{t_quote}"</div>'
-            f'</div></div>'
-        )
+    # Amazon rating badge (replaces fake testimonials for FTC compliance)
+    rating_badge_html = (
+        f'<div class="amazon-rating-badge" style="display:flex;align-items:center;gap:8px;'
+        f'padding:10px 14px;background:var(--warm);border-radius:8px;margin:12px 0">'
+        f'<span style="color:#FF9900;font-weight:700">\u2605 {rating}</span>'
+        f'<span style="font-size:.82rem;color:var(--muted)">Based on Amazon reviews</span>'
+        f'</div>'
+    )
 
     # Star display
     full_stars = int(rating)
@@ -238,7 +229,7 @@ def _build_product_block_html(product, index, brand_key, theme):
         f'<div class="pc-col cons"><h4>Watch Out For</h4><ul>{cons_html}</ul></div>'
         f'</div>'
         f'<div class="bottom-line"><strong>Bottom line:</strong> {bottom_line}</div>'
-        f'{"<div class=testimonials>" + testimonials_html + "</div>" if testimonials_html else ""}'
+        f'{rating_badge_html}'
         f'<a class="cta" href="{amazon_url}" target="_blank" rel="nofollow sponsored">'
         f'Check Today\'s Price on Amazon \u2192'
         f'<small>Free returns \u00b7 30-day guarantee \u00b7 Subscribe & Save available</small></a>'

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sleep & Night Sweat Log</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#A5A58D;--rose:#DDBEA9;--cream:#FAF7F0;--taupe:#A39384;--deep:#6B705C}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#333;background:var(--cream);line-height:1.5}
+.pg{width:8.5in;min-height:11in;margin:0 auto;padding:.75in;background:#fff;position:relative}
+.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,var(--deep),var(--sage))}
+.cover h1{font-size:2.4em;color:#fff;margin-bottom:.3em;letter-spacing:1px}
+.cover h2{font-size:1.2em;color:var(--cream);font-weight:400;margin-bottom:2em}
+.cover .sub{color:var(--rose);font-size:1em;border-top:2px solid var(--rose);padding-top:1em;width:60%}
+.hdr{background:var(--deep);color:#fff;text-align:center;padding:.4em;font-size:1.1em;margin-bottom:.5em;border-radius:4px}
+.shdr{background:var(--sage);color:#fff;padding:.3em .6em;font-size:.95em;margin:.5em 0 .3em;border-radius:3px}
+h3{color:var(--deep);margin:.6em 0 .3em;font-size:1em}
+p,.note{font-size:.85em;margin-bottom:.4em}
+.note{background:var(--cream);border-left:3px solid var(--sage);padding:.4em .6em;font-size:.8em;margin:.5em 0}
+table{width:100%;border-collapse:collapse;margin-bottom:.5em;font-size:.8em}
+th{background:var(--sage);color:#fff;padding:6px 4px;text-align:left;font-weight:600;font-size:.78em}
+td{border:1px solid #ddd;padding:6px 4px;height:28px}
+tr:nth-child(even) td{background:var(--cream)}
+.row-label{background:var(--rose);color:var(--deep);font-weight:600;width:14%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.5em}
+.box{border:1px solid var(--sage);border-radius:4px;padding:.5em;min-height:1.2in}
+.box-label{font-size:.78em;color:var(--taupe);font-weight:600;margin-bottom:.2em}
+.scale{display:flex;gap:4px;margin:.3em 0}
+.scale span{width:22px;height:22px;border:1px solid var(--sage);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7em;color:var(--taupe)}
+.summary-row td{height:36px}
+.ft{text-align:center;color:var(--taupe);font-size:.7em;position:absolute;bottom:.4in;left:0;right:0}
+.checklist{list-style:none;font-size:.82em}
+.checklist li::before{content:"\2610 ";color:var(--sage)}
+.tips{columns:2;font-size:.8em;column-gap:1em}
+.tips li{margin-bottom:.3em}
+ol{padding-left:1.2em;font-size:.85em}
+ol li{margin-bottom:.4em}
+@media print{
+  body{background:#fff}
+  .pg{page-break-after:always;margin:0;box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pg:last-child{page-break-after:avoid}
+}
+@media screen{
+  .pg{margin:20px auto;box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:4px}
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: Cover -->
+<div class="pg cover">
+<div style="font-size:3em;margin-bottom:.3em">&#9790;</div>
+<h1>Sleep & Night Sweat Log</h1>
+<h2>Track Your Rest. Understand Your Patterns.</h2>
+<div class="sub">A 12-Week Sleep Tracking Journal<br>for Women Navigating Menopause</div>
+<p style="color:var(--cream);margin-top:3em;font-size:.85em">Name: ___________________________<br><br>Start Date: _______________</p>
+</div>
+
+<!-- PAGE 2: Instructions -->
+<div class="pg">
+<div class="hdr">How to Use This Log</div>
+<h3>Why Track Your Sleep?</h3>
+<p>Sleep disruptions and night sweats are among the most common menopause symptoms. By tracking patterns over 12 weeks, you can identify triggers, measure improvement, and share meaningful data with your healthcare provider.</p>
+
+<h3>How to Fill Out Each Week</h3>
+<ol>
+<li><strong>Date:</strong> Write the date for each day of the week.</li>
+<li><strong>Bedtime & Wake Time:</strong> Record when you got into bed and when you woke up for the day.</li>
+<li><strong>Night Sweats Count:</strong> How many times you woke due to night sweats (0 if none).</li>
+<li><strong>Room Temp:</strong> Note bedroom temperature or setting (e.g., 68F, "fan on").</li>
+<li><strong>Supplements:</strong> Any sleep aids, supplements, or medications taken before bed.</li>
+<li><strong>Sleep Quality (1-10):</strong> Rate your overall sleep. 1 = terrible, 10 = best sleep ever.</li>
+<li><strong>Notes:</strong> Anything notable: stress, caffeine, exercise, late meals, hot flashes.</li>
+</ol>
+
+<h3>Tips for Better Sleep During Menopause</h3>
+<ul class="tips">
+<li>Keep your bedroom cool (60-67F)</li>
+<li>Use moisture-wicking sheets and sleepwear</li>
+<li>Avoid caffeine after 2 PM</li>
+<li>Limit alcohol (it triggers night sweats)</li>
+<li>Try a consistent bedtime routine</li>
+<li>Consider a fan or cooling pillow</li>
+<li>Exercise regularly but not within 3 hours of bed</li>
+<li>Talk to your doctor about persistent insomnia</li>
+</ul>
+
+<div class="note"><strong>Bring this log to appointments.</strong> 12 weeks of data gives your doctor a clear picture of your sleep health and helps guide treatment decisions.</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Page 2</div>
+</div>
+
+<!-- PAGES 3-14: 12 Weekly Tracking Tables -->
+<div class="pg">
+<div class="hdr">Week 1 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 1</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 2 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 2</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 3 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 3</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 4 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 4</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 5 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 5</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 6 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 6</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 7 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 7</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 8 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 8</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 9 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 9</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 10 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 10</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 11 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 11</div>
+</div>
+
+<div class="pg">
+<div class="hdr">Week 12 &mdash; Sleep & Night Sweat Tracker</div>
+<p style="font-size:.82em;margin-bottom:.4em">Week of: _______________</p>
+<table>
+<tr><th>Date</th><th>Bedtime</th><th>Wake Time</th><th>Night Sweats</th><th>Room Temp</th><th>Supplements</th><th>Quality (1-10)</th><th>Notes</th></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<h3>Weekly Reflections</h3>
+<div class="grid2">
+<div class="box"><div class="box-label">Average Sleep Quality This Week:</div></div>
+<div class="box"><div class="box-label">Total Night Sweats This Week:</div></div>
+<div class="box"><div class="box-label">Best Night &mdash; What Made It Good?</div></div>
+<div class="box"><div class="box-label">Worst Night &mdash; Possible Triggers?</div></div>
+</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; Week 12</div>
+</div>
+
+<!-- PAGE 15: Monthly Summary -->
+<div class="pg">
+<div class="hdr">12-Week Summary &amp; Analysis</div>
+
+<h3>Monthly Averages</h3>
+<table>
+<tr><th>Period</th><th>Avg Sleep Quality</th><th>Avg Night Sweats/Week</th><th>Avg Bedtime</th><th>Avg Wake Time</th><th>Trend</th></tr>
+<tr class="summary-row"><td>Weeks 1-4</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="summary-row"><td>Weeks 5-8</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="summary-row"><td>Weeks 9-12</td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h3>Key Patterns Identified</h3>
+<div class="box" style="min-height:1.5in"><div class="box-label">What triggers my worst nights?</div></div>
+
+<div class="box" style="min-height:1.5in;margin-top:.5em"><div class="box-label">What helps me sleep best?</div></div>
+
+<h3>Supplements & Strategies That Worked</h3>
+<div class="box" style="min-height:1.2in"><div class="box-label">List what made a noticeable difference:</div></div>
+
+<h3>Questions for My Healthcare Provider</h3>
+<div class="box" style="min-height:1.2in"><div class="box-label">Based on 12 weeks of data, I want to discuss:</div></div>
+
+<div class="note"><strong>Congratulations!</strong> You now have 12 weeks of valuable data. Whether your sleep improved or you need more support, this log gives you and your doctor real evidence to work with.</div>
+<div class="ft">Sleep & Night Sweat Log &mdash; 12-Week Summary</div>
+</div>
+
+</body>
+</html>
