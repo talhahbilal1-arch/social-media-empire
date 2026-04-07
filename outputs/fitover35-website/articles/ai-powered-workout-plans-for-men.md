@@ -13,7 +13,7 @@ keywords: ["men over 35 fitness", "workout plan over 35", "muscle building after
 
 Look, I get it. You're not 22 anymore. You can't just crush it in the gym, eat whatever, and expect results. I hit that wall *hard* in my early 30s. The old routines stopped working, and honestly, I started getting a little soft around the edges. Then I realized I needed to get smarter about my training. That's where AI comes in. I'm not talking about robots yelling at you. I'm talking about using technology to *actually* personalize your workouts and make them more effective. It's like having a coach who *really* knows their stuff, without the hefty price tag.
 
-![Man lifting weights, looking determined](PEXELS_IMAGE_PLACEHOLDER:man lifting weights focused)
+![Man lifting weights, looking determined](https://images.pexels.com/photos/4720788/pexels-photo-4720788.jpeg?auto=compress&cs=tinysrgb&w=800)
 
 ## What Exactly *Are* AI-Powered Workout Plans?
 
@@ -39,7 +39,7 @@ Okay, so how does this magic actually happen? Here are a few key ways AI persona
 *   **Rest Periods:** Often overlooked, rest is crucial for recovery and muscle growth. The AI can optimize rest periods based on your heart rate variability (HRV) or perceived exertion. I used to rush through my rest periods; big mistake. Now I let the AI tell me when I'm ready to go again.
 *   **Progression:** One of the biggest mistakes I made early on was doing the same workouts over and over again. AI automatically programs progressive overload. It ensures that the workouts get progressively more challenging over time, which is essential for continuous gains. Research suggests that personalized workout plans, like those potentially designed by AI, can increase strength gains compared to generic plans. A 2022 study in *Medicine & Science in Sports & Exercise* indicated gains could be up to 30% higher.
 
-![Man tracking fitness data on his phone](PEXELS_IMAGE_PLACEHOLDER:man using fitness tracker)
+![Man tracking fitness data on his phone](https://images.pexels.com/photos/3825517/pexels-photo-3825517.jpeg?auto=compress&cs=tinysrgb&w=800)
 
 ## The Good, The Bad, and The AI: What to Watch Out For
 

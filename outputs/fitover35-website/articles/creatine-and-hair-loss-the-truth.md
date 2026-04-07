@@ -13,7 +13,7 @@ Okay, let's get real. 50% of guys over 50 experience male pattern baldness. A lo
 
 I remember being 35, finally getting my diet dialed in, hitting the gym consistently, and then reading about creatine causing hair loss. As someone who was already noticing a bit of thinning up top, I almost quit right there. The panic was real! I'm here to tell you – don’t bail just yet. Turns out, the science is way more nuanced than those clickbait headlines.
 
-![man flexing bicep while looking at receding hairline](PEXELS_IMAGE_PLACEHOLDER:man flexing bicep receding hairline)
+![man flexing bicep while looking at receding hairline](https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=800)
 
 ### What IS Creatine, Anyway?
 
@@ -52,7 +52,6 @@ Alright, let’s get back to the good stuff. Creatine isn't just about building 
 I found that taking 5g of creatine monohydrate daily significantly improved my performance in the gym. I was able to push harder, recover faster, and ultimately build more muscle. It's become a staple in my routine. And that routine helps me maintain strength even at 38 with a busy schedule. I usually focus on 3-4 days a week, mixing compound exercises like squats, deadlifts, and bench press with accessory work. Even home workout no equipment routines benefit from the added energy and recovery that creatine provides.
 
 **[Transparent Labs Creatine HMB]** – It tastes great, it's tested for purity, and the added HMB *may* help with muscle recovery. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
-Available: ["PLACEHOLDER - ShareASale supplement brand"]
 
 ### The TRUTH: Does Creatine Cause Hair Loss?
 
@@ -66,7 +65,7 @@ That's a pretty definitive statement, right?
 
 Forget the hype: Creatine isn't going to make you go bald. Let's break down the real science – and the scare tactics – behind the creatine and hair loss myth.
 
-![man with full head of hair confidently lifting weights](PEXELS_IMAGE_PLACEHOLDER:man lifting weights full head hair)
+![man with full head of hair confidently lifting weights](https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=800)
 
 ### What *Actually* Causes Male Pattern Baldness?
 
@@ -85,7 +84,6 @@ I've been taking creatine on and off for years, and I can honestly say that it h
 Could creatine be speeding things up a tiny bit? Maybe. But the evidence is so weak that I'm not going to lose any sleep over it. The benefits I get from creatine – increased strength, improved workout performance, and *potential* cognitive benefits – far outweigh any theoretical risk to my hair.
 
 **[Optimum Nutrition Creatine Monohydrate Powder]** – This is a simple, affordable, and effective creatine monohydrate powder. It's unflavored, so you can easily mix it into your protein shakes or pre-workout drink. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
-Available: ["PLACEHOLDER - Bodybuilding.com"]
 
 The important thing to remember here is: Don't let fear of hair loss keep you from taking a safe and effective supplement that can improve your fitness and overall health.
 
@@ -100,7 +98,7 @@ Look, I get it. Losing your hair sucks. But stressing about creatine acceleratin
 
 Bottom line: Get in the gym, lift heavy things, and don't let the fear of going bald hold you back from achieving your fitness goals. You got this.
 
-![man confidently looking at himself in the mirror at the gym](PEXELS_IMAGE_PLACEHOLDER:man confident looking in mirror gym)
+![man confidently looking at himself in the mirror at the gym](https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=800)
 ```
 
 <p style="font-size:12px;color:#888;margin-top:40px;padding-top:16px;border-top:1px solid #eee"><em>This article contains affiliate links. If you purchase through these links, we may earn a small commission at no extra cost to you. This helps us continue creating free content.</em></p>

@@ -31,10 +31,10 @@ The biggest misconception is that you need tons of space or expensive gear. You 
 Okay, let's get down to the nitty-gritty. Here's what I recommend for a killer home gym on a budget. These are the exact pieces of equipment I use, or equivalent options.
 
 1.  **Adjustable Dumbbells:** (Around $150-$250) These are a game-changer. They replace an entire rack of dumbbells and save a ton of space. Look for sets that go up to at least 50 lbs per dumbbell. Trust me, you'll grow into them. I currently use a set of Bowflex SelectTech 552s.
-    ![Adjustable Dumbbells](PEXELS_IMAGE_PLACEHOLDER:adjustable dumbbells)
+    ![Adjustable Dumbbells](https://images.pexels.com/photos/2261477/pexels-photo-2261477.jpeg?auto=compress&cs=tinysrgb&w=800)
 2.  **Resistance Bands:** (Around $20-$40) Don't underestimate these bad boys. They're perfect for warm-ups, accessory exercises, and adding resistance to bodyweight movements. Get a set with varying resistance levels. They're especially great for those little tweaks, like rotator cuff exercises.
 3.  **Pull-Up Bar:** (Around $20-$40) This is a must-have for back development. If you can't do a full pull-up, use resistance bands for assistance. Get a sturdy one that fits securely in your doorway. If you struggle with pullups, negative reps are your friend! Jump up to the top position, then slowly lower yourself down. Repeat.
-    ![Pull Up Bar](PEXELS_IMAGE_PLACEHOLDER:pull up bar)
+    ![Pull Up Bar](https://images.pexels.com/photos/2261477/pexels-photo-2261477.jpeg?auto=compress&cs=tinysrgb&w=800)
 4.  **Workout Mat:** (Around $20-$30) Protect your floors and provide a comfortable surface for floor exercises like planks and push-ups. Your knees will thank you.
 5.  **Jump Rope:** (Around $10-$20) Excellent for cardio and warm-ups. Plus, it's a great way to improve your coordination. It's way better than just hopping on the treadmill.
 
@@ -66,8 +66,6 @@ Okay, now let's talk about how to build muscle effectively with your limited equ
 *   **Don’t Neglect the Posterior Chain:** So many guys focus on the mirror muscles (chest, biceps, abs) and forget about their back and hamstrings. Incorporate exercises like dumbbell Romanian deadlifts and resistance band pull-throughs to build a strong, balanced physique. A strong back is crucial for preventing injuries as you get older.
 
 **[Garage Gains Program]** — This at-home program focuses on building muscle using minimal equipment and bodyweight exercises. The progressive structure makes it a great tool for maximizing muscle growth in a small space. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
-
-Available: ["PLACEHOLDER - ClickBank fitness program", "PLACEHOLDER - ShareASale supplement brand", "PLACEHOLDER - Bodybuilding.com"]
 
 ## Sample Workout Routines: Get Started Today
 
@@ -102,7 +100,6 @@ You can't out-train a bad diet. You’ve heard that before, right? Muscle buildi
 *   **Stay Hydrated:** Drink plenty of water throughout the day. I carry a water bottle with me everywhere.
 
 **[Affordable Mass Gainer]** – This is a great budget-friendly option for packing on the pounds *if* you're really struggling to get enough calories. Mix with water or milk for a quick and easy post-workout shake. https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20
-Available: ["PLACEHOLDER - ClickBank fitness program", "PLACEHOLDER - ShareASale supplement brand", "PLACEHOLDER - Bodybuilding.com"]
 
 ## Staying Motivated: Making Your Home Gym Work Long-Term
 
