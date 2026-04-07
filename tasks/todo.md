@@ -1,3 +1,21 @@
+# Phase 7: Pinterest Auto-Posting via catbox.moe + Make.com — April 7, 2026
+
+## Tasks
+
+- [x] **Task 1: Create `video_pipeline/pinterest_api_poster.py`** — 3-step poster: (1) upload MP4 to catbox.moe, (2) extract thumbnail via FFmpeg + upload to catbox.moe, (3) POST `{video_url, cover_image_url, title, description, board_id}` to brand's Make.com webhook. Standalone CLI: `python -m video_pipeline.pinterest_api_poster --brand deals --video out.mp4`.
+- [x] **Task 2: Update `generate.py`** — Replaced legacy `post_video()` for Pinterest platform with `post_video_pin()`. YouTube and other platforms still route through legacy poster. No changes to `--skip-post`, `--dry-run` logic.
+- [x] **Task 3: Update `.env`** — Added `MAKE_WEBHOOK_DEALS`, `MAKE_WEBHOOK_FITNESS`, `MAKE_WEBHOOK_MENOPAUSE` pointing to the 3 new 5-module Make.com scenarios.
+
+## Review
+
+Wired auto-posting into the video pipeline:
+- **`pinterest_api_poster.py`**: Self-contained module. Uploads video + thumbnail to catbox.moe (free, no auth), then fires Make.com webhook with public URLs + board ID. Make.com handles the Pinterest API (media registration → S3 upload → pin creation).
+- **`generate.py`**: Pinterest platform now calls `post_video_pin()` directly. YouTube still uses legacy poster. Zero changes to CLI args or pipeline structure.
+- **`.env`**: 3 webhook URLs added for deals/fitness/menopause brands.
+- **Board IDs hardcoded**: deals=874683627569021288, fitness=418834902785125486, menopause=1076993767079887530.
+
+---
+
 # Phase 6: Pinterest Video Pipeline (Remotion) — April 4, 2026
 
 ## Tasks
