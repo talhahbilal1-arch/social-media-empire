@@ -84,9 +84,19 @@ function computeOpacityTimelines(
     if (!frames.length) {
       return { frames: [0, totalFrames], values: [0, 0] };
     }
-    frames.push(totalFrames);
-    values.push(active ? 1 : 0);
-    return { frames, values };
+    // Ensure monotonically increasing by deduplicating
+    const deduped: { f: number; v: number }[] = [];
+    for (let i = 0; i < frames.length; i++) {
+      if (deduped.length === 0 || frames[i] > deduped[deduped.length - 1].f) {
+        deduped.push({ f: frames[i], v: values[i] });
+      }
+    }
+    // Add final frame
+    const lastFrame = deduped[deduped.length - 1].f;
+    if (lastFrame < totalFrames) {
+      deduped.push({ f: totalFrames, v: active ? 1 : 0 });
+    }
+    return { frames: deduped.map(d => d.f), values: deduped.map(d => d.v) };
   });
 }
 

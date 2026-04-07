@@ -375,6 +375,7 @@ def create_video_remotion(
             str(output_path.resolve()),
             f"--props={props_path}",
             "--browser-executable=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            "--chrome-mode=headless-shell",
         ]
 
         logger.info(f"Remotion render: {composition_id} → {output_path.name}")
