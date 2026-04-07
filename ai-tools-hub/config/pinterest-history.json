@@ -682,5 +682,32 @@
     "board": "AI Productivity Tools",
     "posted_at": "2026-04-07T17:10:36.880Z",
     "success": true
+  },
+  {
+    "slug": "semrush",
+    "pin_type": "tool-review",
+    "title": "Semrush AI SEO Review: Worth the Price?",
+    "link": "https://pilottools.ai/tools/semrush/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-07T22:27:40.197Z",
+    "success": true
+  },
+  {
+    "slug": "elevenlabs",
+    "pin_type": "tool-review",
+    "title": "ElevenLabs AI Voice Magic: Is it Worth the Hype? (4.8/5)",
+    "link": "https://pilottools.ai/tools/elevenlabs/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-04-07T22:27:44.403Z",
+    "success": true
+  },
+  {
+    "slug": "jasper-vs-writesonic",
+    "pin_type": "comparison",
+    "title": "Jasper vs Writesonic: AI Content Showdown! Which Tool Wins?",
+    "link": "https://pilottools.ai/compare/jasper-vs-writesonic/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-07T22:27:48.552Z",
+    "success": true
   }
 ]
