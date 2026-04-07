@@ -19,6 +19,7 @@ from .script_generator import generate_script
 from .voiceover import generate_voiceover
 from .video_renderer import create_video, create_video_remotion
 from .poster import post_video
+from .pinterest_api_poster import post_video_pin
 
 logging.basicConfig(
     level=logging.INFO,
@@ -139,13 +140,26 @@ def run_pipeline(
                 result["status"] = "rendered"
             else:
                 logger.info(f"{run_label} → Step 4: Posting to {platforms}...")
-                post_results = post_video(
-                    brand=brand,
-                    video_path=rendered_path,
-                    script_data=script_data,
-                    platforms=platforms,
-                    dry_run=dry_run,
-                )
+                post_results = []
+                for platform in platforms:
+                    if platform == "pinterest":
+                        # Use catbox.moe + Make.com webhook flow
+                        pr = post_video_pin(
+                            brand_key=brand_key,
+                            video_path=rendered_path,
+                            script_data=script_data,
+                        )
+                        pr["platform"] = "pinterest"
+                        post_results.append(pr)
+                    else:
+                        # YouTube and other platforms via legacy poster
+                        legacy = post_video(
+                            brand=brand,
+                            video_path=rendered_path,
+                            script_data=script_data,
+                            platforms=[platform],
+                        )
+                        post_results.extend(legacy)
                 result["post_results"] = post_results
                 result["status"] = "posted"
                 _log_post_summary(run_label, post_results)
