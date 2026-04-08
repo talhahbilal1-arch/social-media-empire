@@ -36,9 +36,9 @@ CATBOX_URL = "https://catbox.moe/user/api.php"
 
 # Make.com webhook URLs — these NEW scenarios handle the full video upload flow
 WEBHOOKS: dict[str, str] = {
-    "deals":     os.getenv("MAKE_WEBHOOK_DEALS",     "https://hook.us2.make.com/1x2njc77d9wqfktepo2hdv6zoxhkplhv"),
-    "fitover35": os.getenv("MAKE_WEBHOOK_FITNESS",   "https://hook.us2.make.com/4g32a4tiqy8btjjdwqtuqy533jx2c85c"),
-    "menopause": os.getenv("MAKE_WEBHOOK_MENOPAUSE", "https://hook.us2.make.com/3yz1j8ac06fopdon7tu4hkcwimax8774"),
+    "deals":     os.getenv("MAKE_WEBHOOK_DEALS",     "https://hook.us2.make.com/cstwukwmwmnnfq1x82o4dlu2d5wzk43l"),
+    "fitover35": os.getenv("MAKE_WEBHOOK_FITNESS",   "https://hook.us2.make.com/3j53k464d7hpaxy9o2fs5akprb8aj2nk"),
+    "menopause": os.getenv("MAKE_WEBHOOK_MENOPAUSE", "https://hook.us2.make.com/7lrqz32lfrtdc0nkhv9z4whraxvuyo3x"),
 }
 
 # Pinterest board IDs per brand (these boards must exist on the Pinterest account)
@@ -157,6 +157,20 @@ def _post_to_webhook(
     hashtags = " ".join(script_data.get("hashtags", brand.hashtags))
     description = f"{script_data.get('hook', '')}\n\n{hashtags}"[:500]
 
+    # Build the pin creation body with MEDIA_ID_PLACEHOLDER
+    # Make.com will replace this with the actual media_id from the /v5/media registration
+    pin_body = json.dumps({
+        "board_id": board_id,
+        "title": script_data.get("title", brand.name)[:100],
+        "description": description,
+        "link": brand.site_url,
+        "media_source": {
+            "source_type": "video_id",
+            "cover_image_url": cover_image_url,
+            "media_id": "MEDIA_ID_PLACEHOLDER",
+        },
+    })
+
     payload = {
         "brand":           brand.key,
         "title":           script_data.get("title", brand.name)[:100],
@@ -165,6 +179,7 @@ def _post_to_webhook(
         "cover_image_url": cover_image_url,
         "board_id":        board_id,
         "link":            brand.site_url,
+        "pin_body":        pin_body,
     }
 
     payload_bytes = json.dumps(payload).encode("utf-8")
