@@ -736,5 +736,32 @@
     "board": "Best AI Tools 2026",
     "posted_at": "2026-04-08T17:15:11.776Z",
     "success": true
+  },
+  {
+    "slug": "rytr-vs-jasper",
+    "pin_type": "comparison",
+    "title": "Rytr vs Jasper AI: Which AI Writer Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/rytr-vs-jasper/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-08T22:29:03.044Z",
+    "success": true
+  },
+  {
+    "slug": "copy-ai",
+    "pin_type": "tool-review",
+    "title": "Copy.ai Review: Level Up Your Marketing with AI! 🤖",
+    "link": "https://pilottools.ai/tools/copy-ai/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-04-08T22:29:07.144Z",
+    "success": true
+  },
+  {
+    "slug": "category-image",
+    "pin_type": "category",
+    "title": "AI Image Magic: Top Tools Transforming Visuals in 2026!",
+    "link": "https://pilottools.ai/category/image/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-04-08T22:29:11.550Z",
+    "success": true
   }
 ]
