@@ -709,5 +709,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-07T22:27:48.552Z",
     "success": true
+  },
+  {
+    "slug": "category-seo",
+    "pin_type": "category",
+    "title": "Top AI SEO Tools DOMINATING 2026: Boost Your Rankings!",
+    "link": "https://pilottools.ai/category/seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-08T17:15:03.379Z",
+    "success": true
+  },
+  {
+    "slug": "copy-ai-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Copy.ai vs ChatGPT: Which AI Copywriting Tool is Best?",
+    "link": "https://pilottools.ai/compare/copy-ai-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-08T17:15:07.655Z",
+    "success": true
+  },
+  {
+    "slug": "ai-tools-teachers-2026",
+    "pin_type": "article",
+    "title": "AI for Teachers: Save Time & Boost Student Success!",
+    "link": "https://pilottools.ai/blog/ai-tools-teachers-2026/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-08T17:15:11.776Z",
+    "success": true
   }
 ]
