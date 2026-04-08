@@ -1,3 +1,31 @@
+# Phase 8: PilotTools URL Fixes & SEO Meta Descriptions — April 8, 2026
+
+## Plan
+Fix PilotTools placeholder URLs and improve SEO meta descriptions across 10 random articles.
+
+## Tasks
+
+### Part A - Fix Placeholder URLs
+- [ ] Fix placeholder email in `ai-tools-hub/scripts/outreach-automator.js` line 241 (replace `contact@example.com` with `hello@pilottools.ai`)
+- [ ] Verify all affiliate_url entries in `ai-tools-hub/content/tools.json` have proper ?ref=pilottools or affiliate parameters ✅ (Already correct)
+
+### Part B - Improve SEO Meta Descriptions
+- [ ] Sample 10 random articles from `ai-tools-hub/content/articles.json`
+- [ ] Check each article's meta_description for:
+  - Length: 150-160 characters (ideal for search results)
+  - Includes primary keyword
+  - Has compelling CTA if applicable
+- [ ] Update any that are too short, too generic, or missing keywords
+- [ ] git commit with message: "fix: replace placeholder email + improve meta descriptions for SEO"
+
+## Notes
+- Total articles: 37
+- Current meta description range: 117-161 characters (all acceptable)
+- Placeholder URLs found: 1 (contact@example.com in outreach automator)
+- Affiliate URLs: All already have proper ?ref=pilottools parameters ✅
+
+---
+
 # Phase 7: Etsy Product Pin Automation — April 5, 2026
 
 ## Plan
