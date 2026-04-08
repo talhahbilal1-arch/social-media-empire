@@ -145,6 +145,7 @@ def generate_script(
         dict with keys: title, topic, hook, body_points, cta, full_script,
                         hashtags, pexels_search_queries, estimated_duration_seconds
     """
+    import time as _time
     try:
         import google.genai as genai
     except ImportError:
@@ -154,6 +155,9 @@ def generate_script(
 
     api_key = get_api_key("GEMINI_API_KEY")
 
+    # Model fallback chain — if primary hits rate limit, try alternatives
+    models_to_try = [model, "gemini-2.0-flash", "gemini-1.5-flash"]
+
     try:
         client = genai.Client(api_key=api_key)
         if format == "pinterest":
@@ -161,16 +165,36 @@ def generate_script(
         else:
             prompt = _build_prompt(brand, topic)
 
-        logger.info(f"Generating script for brand={brand.key}, model={model}")
+        response = None
+        last_error = None
+        for attempt_model in models_to_try:
+            for attempt in range(3):
+                try:
+                    logger.info(f"Generating script: brand={brand.key}, model={attempt_model}, attempt={attempt+1}")
+                    response = client.models.generate_content(
+                        model=attempt_model,
+                        contents=prompt,
+                        config=genai.types.GenerateContentConfig(
+                            temperature=0.8,
+                            response_mime_type="application/json",
+                        ),
+                    )
+                    break  # Success
+                except Exception as e:
+                    last_error = e
+                    err_str = str(e)
+                    if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                        wait = min(60, 10 * (attempt + 1))
+                        logger.warning(f"Rate limited on {attempt_model}, waiting {wait}s (attempt {attempt+1}/3)")
+                        _time.sleep(wait)
+                    else:
+                        raise  # Non-rate-limit error, don't retry
+            if response is not None:
+                break
+            logger.warning(f"All retries exhausted for {attempt_model}, trying next model...")
 
-        response = client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=genai.types.GenerateContentConfig(
-                temperature=0.8,
-                response_mime_type="application/json",
-            ),
-        )
+        if response is None:
+            raise RuntimeError(f"All models exhausted. Last error: {last_error}")
 
         raw = response.text.strip()
 
