@@ -51,12 +51,23 @@ BOARD_IDS: dict[str, str] = {
 
 # ── catbox.moe upload ──────────────────────────────────────────────────────────
 
-def _upload_to_catbox(file_path: Path) -> str:
+def _verify_url(url: str, timeout: int = 15) -> bool:
+    """HEAD request to confirm a URL is publicly accessible. Returns True if reachable."""
+    try:
+        req = urllib.request.Request(url, method="HEAD")
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status < 400
+    except Exception as e:
+        logger.warning(f"URL verification failed for {url}: {e}")
+        return False
+
+
+def _upload_to_catbox(file_path: Path, max_attempts: int = 3, retry_delay: float = 5.0) -> str:
     """
     Upload a file to catbox.moe and return the public direct URL.
 
-    Uses multipart/form-data with reqtype=fileupload (no auth required).
-    Raises RuntimeError if the upload fails or returns a non-URL response.
+    Retries up to max_attempts times with retry_delay seconds between attempts.
+    Raises RuntimeError if all attempts fail or the response is not a URL.
     """
     logger.info(f"Uploading to catbox.moe: {file_path.name} ({file_path.stat().st_size // 1024} KB)")
 
@@ -64,7 +75,6 @@ def _upload_to_catbox(file_path: Path) -> str:
     file_bytes = file_path.read_bytes()
     mime_type = "video/mp4" if file_path.suffix.lower() == ".mp4" else "image/jpeg"
 
-    # Build multipart body manually (no external deps)
     body = (
         f"--{boundary}\r\n"
         f'Content-Disposition: form-data; name="reqtype"\r\n\r\n'
@@ -74,29 +84,43 @@ def _upload_to_catbox(file_path: Path) -> str:
         f"Content-Type: {mime_type}\r\n\r\n"
     ).encode("utf-8") + file_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
 
-    req = urllib.request.Request(
-        CATBOX_URL,
-        data=body,
-        headers={
-            "Content-Type": f"multipart/form-data; boundary={boundary}",
-            "User-Agent": "social-media-empire/1.0",
-        },
-        method="POST",
-    )
+    last_error: str = ""
+    for attempt in range(1, max_attempts + 1):
+        if attempt > 1:
+            logger.info(f"catbox.moe retry {attempt}/{max_attempts} in {retry_delay}s…")
+            time.sleep(retry_delay)
 
-    try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            result = resp.read().decode("utf-8").strip()
-    except urllib.error.HTTPError as e:
-        raise RuntimeError(f"catbox.moe HTTP error {e.code}: {e.read().decode('utf-8', errors='replace')}")
-    except Exception as e:
-        raise RuntimeError(f"catbox.moe upload failed: {e}")
+        req = urllib.request.Request(
+            CATBOX_URL,
+            data=body,
+            headers={
+                "Content-Type": f"multipart/form-data; boundary={boundary}",
+                "User-Agent": "social-media-empire/1.0",
+            },
+            method="POST",
+        )
 
-    if not result.startswith("https://"):
-        raise RuntimeError(f"catbox.moe returned unexpected response: {result!r}")
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                result = resp.read().decode("utf-8").strip()
+        except urllib.error.HTTPError as e:
+            last_error = f"catbox.moe HTTP error {e.code}: {e.read().decode('utf-8', errors='replace')}"
+            logger.warning(f"Attempt {attempt} failed: {last_error}")
+            continue
+        except Exception as e:
+            last_error = f"catbox.moe upload failed: {e}"
+            logger.warning(f"Attempt {attempt} failed: {last_error}")
+            continue
 
-    logger.info(f"catbox.moe upload complete: {result}")
-    return result
+        if not result.startswith("https://"):
+            last_error = f"catbox.moe returned unexpected response: {result!r}"
+            logger.warning(f"Attempt {attempt} failed: {last_error}")
+            continue
+
+        logger.info(f"catbox.moe upload complete (attempt {attempt}): {result}")
+        return result
+
+    raise RuntimeError(f"catbox.moe upload failed after {max_attempts} attempts. Last error: {last_error}")
 
 
 # ── Thumbnail extraction ───────────────────────────────────────────────────────
