@@ -171,18 +171,31 @@ def _post_to_webhook(
     video_url: str,
     cover_image_url: str,
     script_data: dict,
+    max_attempts: int = 3,
+    retry_delay: float = 10.0,
 ) -> dict:
     """
     POST the pin payload to the Make.com webhook URL.
 
+    Verifies both catbox URLs are accessible before sending.
+    Retries up to max_attempts times with retry_delay seconds between attempts.
     Returns a result dict with keys: status, status_code, response, error.
     """
     board_id = BOARD_IDS.get(brand.key, "")
     hashtags = " ".join(script_data.get("hashtags", brand.hashtags))
     description = f"{script_data.get('hook', '')}\n\n{hashtags}"[:500]
 
+    # Verify catbox URLs are accessible before handing off to Make.com
+    logger.info("Verifying catbox URLs are publicly accessible…")
+    for label, url in [("video", video_url), ("thumbnail", cover_image_url)]:
+        if not _verify_url(url):
+            return {
+                "status": "failed",
+                "error": f"catbox URL not accessible before webhook: {label}={url}",
+            }
+    logger.info("Both catbox URLs verified ✓")
+
     # Build the pin creation body with MEDIA_ID_PLACEHOLDER
-    # Make.com will replace this with the actual media_id from the /v5/media registration
     pin_body = json.dumps({
         "board_id": board_id,
         "title": script_data.get("title", brand.name)[:100],
@@ -207,35 +220,46 @@ def _post_to_webhook(
     }
 
     payload_bytes = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
-        webhook_url,
-        data=payload_bytes,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-
     logger.info(f"POSTing to Make.com webhook: brand={brand.key}, board={board_id}")
     logger.debug(f"Payload: {json.dumps(payload, indent=2)}")
 
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            response_text = resp.read().decode("utf-8").strip()
-            status_code = resp.status
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", errors="replace")
-        logger.error(f"Webhook HTTP error {e.code}: {body}")
-        return {"status": "failed", "status_code": e.code, "error": body}
-    except Exception as e:
-        logger.error(f"Webhook request failed: {e}")
-        return {"status": "failed", "error": str(e)}
+    last_error: str = ""
+    for attempt in range(1, max_attempts + 1):
+        if attempt > 1:
+            logger.info(f"Webhook retry {attempt}/{max_attempts} in {retry_delay}s…")
+            time.sleep(retry_delay)
 
-    logger.info(f"Webhook response: {status_code} — {response_text[:200]}")
-    return {
-        "status":      "posted" if status_code == 200 else "warning",
-        "status_code": status_code,
-        "response":    response_text,
-        "payload":     payload,
-    }
+        req = urllib.request.Request(
+            webhook_url,
+            data=payload_bytes,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                response_text = resp.read().decode("utf-8").strip()
+                status_code = resp.status
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace")
+            last_error = f"HTTP {e.code}: {body}"
+            logger.warning(f"Webhook attempt {attempt} failed: {last_error}")
+            continue
+        except Exception as e:
+            last_error = str(e)
+            logger.warning(f"Webhook attempt {attempt} failed: {last_error}")
+            continue
+
+        logger.info(f"Webhook response (attempt {attempt}): {status_code} — {response_text[:200]}")
+        return {
+            "status":      "posted" if status_code == 200 else "warning",
+            "status_code": status_code,
+            "response":    response_text,
+            "payload":     payload,
+        }
+
+    logger.error(f"Webhook failed after {max_attempts} attempts. Last error: {last_error}")
+    return {"status": "failed", "error": f"All {max_attempts} webhook attempts failed. Last: {last_error}"}
 
 
 # ── Public API ─────────────────────────────────────────────────────────────────
