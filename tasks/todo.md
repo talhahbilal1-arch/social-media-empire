@@ -1,3 +1,34 @@
+# Phase 8: Catbox → Supabase Storage Migration — April 8, 2026
+
+## Plan
+Replace catbox.moe with Supabase Storage for permanent, reliable video + thumbnail hosting.
+
+Current issue: catbox.moe is temporary storage (files deleted after 48h). Need permanent URLs for Pinterest pins.
+
+Solution: Use existing Supabase Storage buckets (`videos` + `pin-images`, both public=True) via REST API.
+
+## Tasks
+
+- [ ] **Task 1: Add _upload_to_supabase() function** — Uses urllib + REST API (matches existing code style). Uploads to `videos` bucket for MP4s, `pin-images` for thumbnails. Unique filenames with timestamp: `{brand}_{YYYYMMDD_HHMMSS}_{random_suffix}.{ext}`. Retries 3x with 5s backoff. Returns public URL: `{SUPABASE_URL}/storage/v1/object/public/{bucket}/{filename}`
+
+- [ ] **Task 2: Update post_video_pin() logic** — Try Supabase first (primary), fallback to catbox.moe (secondary). If Supabase succeeds for video but fails for thumbnail, still attempt webhook post (video is the critical asset).
+
+- [ ] **Task 3: Keep _upload_to_catbox() as fallback** — Existing function unchanged. Used only if Supabase fails all retries.
+
+- [ ] **Task 4: Test end-to-end** — Create small test video, verify uploads to both buckets, verify public URLs are accessible, verify webhook still posts correctly.
+
+- [ ] **Task 5: Commit with clear message** — "feat: replace catbox.moe with Supabase Storage for permanent video URLs"
+
+## Review
+
+Will verify:
+- Supabase upload succeeds with correct public URLs
+- Fallback to catbox.moe works if Supabase is down
+- Make.com webhook still receives valid video_url + cover_image_url
+- Verifies URLs are publicly accessible before posting
+
+---
+
 # Phase 7: Etsy Product Pin Automation — April 5, 2026
 
 ## Plan
