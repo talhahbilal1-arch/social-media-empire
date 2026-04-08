@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 BRANDS = {
     "fitover35": {
         "blog_path": "outputs/fitover35-website/blog.html",
-        "insert_marker": '<div class="blog-list">',
+        "insert_marker": '<div class="blog-grid"',
         "template": "fitover35",
     },
     "dailydealdarling": {
@@ -52,24 +52,9 @@ def generate_fitover35_blog_item(
     read_time: int,
     image_url: str,
 ) -> str:
-    """Generate a blog-item card matching FitOver35 blog.html structure."""
-    alt_text = title.lower()
+    """Generate a blog-item link matching FitOver35 blog.html structure."""
     return f"""
-        <!-- Article: {title} -->
-        <article class="blog-item">
-          <div class="blog-item__image">
-            <img src="{image_url}" alt="{alt_text}" loading="lazy">
-          </div>
-          <div class="blog-item__content">
-            <span class="blog-item__category">{category}</span>
-            <h2 class="blog-item__title">
-              <a href="{article_path}">{title}</a>
-            </h2>
-            <p class="blog-item__excerpt">{excerpt}</p>
-            <span class="blog-item__meta">{read_time} min read</span>
-          </div>
-        </article>
-"""
+    <a href="{article_path}" class="blog-item">{title}</a>"""
 
 
 def generate_dailydealdarling_blog_item(
@@ -165,16 +150,20 @@ def update_blog_html(
         logger.error(f"Unknown brand: {brand}")
         return False
 
-    # Find the insertion point: right after <div class="blog-list">
-    insert_marker = '<div class="blog-list">'
+    # Find the insertion point: right after the blog container opening tag
+    insert_marker = brand_config["insert_marker"]
     marker_pos = content.find(insert_marker)
 
     if marker_pos == -1:
         logger.error(f"Could not find blog list marker '{insert_marker}' in {blog_path}")
         return False
 
-    # Insert after the marker tag
-    insert_pos = marker_pos + len(insert_marker)
+    # Find the end of the opening tag (after the >)
+    tag_end = content.find('>', marker_pos)
+    if tag_end == -1:
+        logger.error(f"Could not find closing > for marker in {blog_path}")
+        return False
+    insert_pos = tag_end + 1
     updated_content = content[:insert_pos] + new_item + content[insert_pos:]
 
     # Write updated content

@@ -1,3 +1,25 @@
+# Phase 7: Etsy Product Pin Automation — April 5, 2026
+
+## Plan
+Build Pinterest pin automation for ADHD Planner and Night Shift Nurse Planner Etsy products,
+posting to DailyDealDarling Pinterest account (connection 6738173).
+
+## Tasks
+
+- [x] **Task 1: Create video_automation/etsy_product_pins.py** — 10 pin templates (5 per product). ADHD Planner pins target "Self Care Products Worth It" and "Gift Ideas" boards. Night Shift Nurse Planner pins same boards. Includes `ETSY_URLS` dict with placeholders to update once listings are live.
+- [x] **Task 2: Create scripts/post_etsy_pins.py** — Main posting script. Follows same Pexels → PIL render → Supabase upload → Make.com webhook pattern as `post-product-pins.py`. Fixes the brand name bug (passes `"daily-deal-darling"` not `"fitness-made-easy"`). Hour-based rotation so each run picks different pins. Supports `--limit N` and `--all` flags.
+- [x] **Task 3: Create .github/workflows/etsy-product-pins.yml** — Scheduled workflow: 1 pin/day at 6PM UTC (11AM PST). Manual trigger with `post_all=true` to post all 10 at once for initial launch. Uses `POST_ALL` env var (not direct interpolation) to be injection-safe.
+
+## Review
+
+Etsy product pin automation built end-to-end:
+- **10 pin templates**: 5 for ADHD Planner + 5 for Night Shift Nurse Planner. Boards: "Self Care Products Worth It" + "Gift Ideas"
+- **Posting pipeline**: identical to existing product pin flow — Pexels image → PIL gradient overlay → Supabase Storage → Make.com deals webhook → Pinterest
+- **Scheduling**: 1 pin/day at 6PM UTC. Manual `workflow_dispatch` with `post_all=true` to post all 10 on launch
+- **Next step**: Update `ETSY_URLS` in `video_automation/etsy_product_pins.py` with real Etsy listing URLs once listings are live
+
+---
+
 # Phase 6: Pinterest Video Pipeline (Remotion) — April 4, 2026
 
 ## Tasks

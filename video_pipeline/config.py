@@ -32,6 +32,7 @@ class BrandConfig:
     site_url: str
     amazon_tag: Optional[str]
     pexels_orientation: str = "portrait"
+    tiktok_webhook_env: Optional[str] = None
 
     @property
     def pinterest_webhook_url(self) -> Optional[str]:
@@ -116,6 +117,7 @@ BRANDS: dict[str, dict] = {
         "hashtags": ["#fitover35", "#menshealth", "#musclebuilding", "#fitover40", "#strengthtraining", "#over35fitness"],
         "cta": "Follow for daily fitness tips. Free 30-day plan in bio.",
         "webhook_env": "MAKE_WEBHOOK_FITNESS",
+        "tiktok_webhook_env": "MAKE_WEBHOOK_TIKTOK_FITNESS",
         "site_url": "https://fitover35.com",
         "amazon_tag": "fitover3509-20",
     },
@@ -144,6 +146,7 @@ BRANDS: dict[str, dict] = {
         "hashtags": ["#amazonfind", "#dealsoftheday", "#amazonmusthaves", "#homefinds", "#budgetbeauty", "#tiktokmademebuyit"],
         "cta": "Follow for daily deals. Free finds guide in bio link.",
         "webhook_env": "MAKE_WEBHOOK_DEALS",
+        "tiktok_webhook_env": "MAKE_WEBHOOK_TIKTOK_DEALS",
         "site_url": "https://dailydealdarling.com",
         "amazon_tag": "dailydealdarl-20",
     },
@@ -173,6 +176,7 @@ BRANDS: dict[str, dict] = {
         "hashtags": ["#menopause", "#perimenopause", "#hormonehealth", "#menopausewellness", "#womenover45", "#menopauserelief"],
         "cta": "Follow for daily menopause tips. Free symptom guide in bio.",
         "webhook_env": "MAKE_WEBHOOK_MENOPAUSE",
+        "tiktok_webhook_env": "MAKE_WEBHOOK_TIKTOK_MENOPAUSE",
         "site_url": "https://menopause-planner-website.vercel.app",
         "amazon_tag": "dailydealdarl-20",
     },
@@ -229,6 +233,7 @@ def get_brand(brand_key: str) -> BrandConfig:
         site_url=data["site_url"],
         amazon_tag=data.get("amazon_tag"),
         pexels_orientation=data.get("pexels_orientation", "portrait"),
+        tiktok_webhook_env=data.get("tiktok_webhook_env"),
     )
 
 
