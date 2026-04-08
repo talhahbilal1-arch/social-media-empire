@@ -183,12 +183,12 @@ def generate_script(
                 except Exception as e:
                     last_error = e
                     err_str = str(e)
-                    if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                    if any(code in err_str for code in ["429", "RESOURCE_EXHAUSTED", "503", "UNAVAILABLE", "overloaded", "high demand"]):
                         wait = min(60, 10 * (attempt + 1))
-                        logger.warning(f"Rate limited on {attempt_model}, waiting {wait}s (attempt {attempt+1}/3)")
+                        logger.warning(f"Retryable error on {attempt_model}, waiting {wait}s (attempt {attempt+1}/3): {err_str[:100]}")
                         _time.sleep(wait)
                     else:
-                        raise  # Non-rate-limit error, don't retry
+                        raise  # Non-retryable error
             if response is not None:
                 break
             logger.warning(f"All retries exhausted for {attempt_model}, trying next model...")
