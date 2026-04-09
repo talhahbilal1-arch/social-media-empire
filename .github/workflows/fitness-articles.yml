@@ -51,9 +51,14 @@ jobs:
 
       - name: Select keyword
         id: keyword
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          INPUT_KEYWORD: ${{ github.event.inputs.keyword }}
         run: |
-          if [ -n "${{ github.event.inputs.keyword }}" ]; then
-            KEYWORD="${{ github.event.inputs.keyword }}"
+          if [ -n "$INPUT_KEYWORD" ]; then
+            KEYWORD="$INPUT_KEYWORD"
             SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-60)
             FILENAME="${SLUG}.html"
             echo "keyword=$KEYWORD" >> $GITHUB_OUTPUT
@@ -61,7 +66,8 @@ jobs:
             echo "slug=$SLUG" >> $GITHUB_OUTPUT
             echo "filename=$FILENAME" >> $GITHUB_OUTPUT
           else
-            python automation/articles/fitover35_keywords.py \
+            python automation/articles/trending_topic_selector.py \
+              --brand fitness \
               --mark-used \
               --state-file fitover35_keyword_state.json
           fi
@@ -71,6 +77,8 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           KEYWORD="${{ steps.keyword.outputs.keyword }}"
           CATEGORY="${{ steps.keyword.outputs.category }}"
