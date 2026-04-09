@@ -81,6 +81,7 @@ jobs:
           git push
 
       - name: Ping search engines
+        working-directory: ai-tools-hub
         run: node scripts/ping-google.js
 
       - name: Repurpose content
