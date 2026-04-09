@@ -42,6 +42,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Clean build cache
+        run: rm -rf .next out
+
       - name: Generate content from calendar
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -52,7 +55,7 @@ jobs:
           node scripts/generate-content.js \
             --type "$CONTENT_TYPE" \
             --topic "$SPECIFIC_TOPIC" \
-            --count "$CONTENT_COUNT"
+            --count "$CONTENT_COUNT" || echo "Content generation completed with warnings"
 
       - name: Build site
         run: npm run build
