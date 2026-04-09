@@ -81,9 +81,10 @@ RESEARCH_AND_OUTLINE_PROMPT = """You are an expert fitness content researcher an
 The site owner has a Bachelor's in Kinesiology, Master's in Education, 15+ years fitness experience, and is a natural bodybuilder/coach.
 
 Your task has TWO parts for the keyword: "{keyword}"
-
+{trending_context_block}
 ═══ PART 1: RESEARCH ═══
 Compile research on this topic as it specifically applies to men over 35:
+IMPORTANT: Use the provided trending context and real-time research data above (if any). Reference current events, recent studies, and up-to-date statistics. Do NOT rely solely on training data — incorporate the real-time research provided.
 - 3-5 statistics with sources (journals, health organizations, or well-known studies — cite author/org and year)
 - 2-3 expert perspectives or quotes (real researchers, coaches, or doctors who have published on this topic)
 - 1-2 common misconceptions the audience likely holds about this topic
