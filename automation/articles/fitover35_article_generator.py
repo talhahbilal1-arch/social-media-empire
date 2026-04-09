@@ -499,10 +499,26 @@ class FitOver35ArticleGenerator:
 
         raise ValueError(f"No valid JSON found in response: {text[:200]}...")
 
-    def research_and_outline(self, keyword: str) -> dict:
+    def research_and_outline(self, keyword: str, trending_context: str = '',
+                             search_results_summary: str = '') -> dict:
         """Generate research + article outline with retry on parse failure."""
         logger.info(f"Researching and outlining: {keyword}")
-        prompt = RESEARCH_AND_OUTLINE_PROMPT.format(keyword=keyword)
+
+        # Build optional trending context block inserted into prompt
+        if trending_context or search_results_summary:
+            parts = []
+            if trending_context:
+                parts.append(f"WHY THIS TOPIC IS TRENDING NOW:\n{trending_context}")
+            if search_results_summary:
+                parts.append(f"LATEST WEB RESEARCH (use this real-time data):\n{search_results_summary}")
+            trending_context_block = "\n\n" + "\n\n".join(parts) + "\n\n"
+        else:
+            trending_context_block = ""
+
+        prompt = RESEARCH_AND_OUTLINE_PROMPT.format(
+            keyword=keyword,
+            trending_context_block=trending_context_block,
+        )
         last_error = None
         for attempt in range(3):
             response = self._call_llm(prompt, json_mode=True)
