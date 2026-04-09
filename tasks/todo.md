@@ -1,3 +1,43 @@
+# Phase 8: Content Quality Spot-Check + Revenue Status Dashboard — April 8, 2026
+
+## Plan
+
+Part A - Quality Spot-Check:
+1. Pick 5 random articles from each brand (15 total)
+2. Check each for: working affiliate links (Amazon + correct tag), email capture form (ConvertKit), images loading, internal links working
+3. Log findings in QUALITY_CHECK.md
+
+Part B - Revenue Status Dashboard:
+1. Count articles per brand
+2. Count affiliate links (Amazon ASIN vs search URLs)
+3. Count email capture forms per brand
+4. List Gumroad products + status
+5. List affiliate programs not yet signed up
+6. Next manual actions needed
+7. Create REVENUE_STATUS.md at repo root
+
+## Tasks
+
+- [ ] **Task 1: Sample 5 articles per brand** — Select random articles from fitness (170), deals (107), menopause (96) folders
+- [ ] **Task 2: Check affiliate links** — Verify each article has Amazon links with correct tag (fitness=fitover3509-20, deals/menopause=dailydealdarl-20). No search URLs.
+- [ ] **Task 3: Check email forms** — Verify ConvertKit forms embedded (form IDs: fitness=8946984, deals=9144859, menopause=9144926)
+- [ ] **Task 4: Check images** — Verify all Pexels images load correctly, no broken image URLs
+- [ ] **Task 5: Check internal links** — Spot-check 3 internal links per article (should be relative paths to other articles)
+- [ ] **Task 6: Log findings to QUALITY_CHECK.md** — Document any issues found and count passes/failures
+- [ ] **Task 7: Count articles per brand** — Generate counts: fitness, deals, menopause
+- [ ] **Task 8: Count affiliate links** — Count Amazon ASIN vs search URL links in each brand (sample 10 articles per brand)
+- [ ] **Task 9: Count email forms** — Sample 10 articles per brand, check for ConvertKit form presence
+- [ ] **Task 10: List Gumroad products** — Document 4 live products + status (sales, traffic)
+- [ ] **Task 11: List missing affiliate programs** — Semrush, Grammarly, Ahrefs, Hostinger, etc. (from PHONE-ACTION-CHECKLIST.md)
+- [ ] **Task 12: Create REVENUE_STATUS.md** — Summarize all findings + next manual actions (sign up for programs, etc.)
+- [ ] **Task 13: Commit and push** — git add + git commit
+
+## Review
+
+(To be filled after execution)
+
+---
+
 # Phase 7: Etsy Product Pin Automation — April 5, 2026
 
 ## Plan
