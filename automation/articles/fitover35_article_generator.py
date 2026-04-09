@@ -558,7 +558,8 @@ class FitOver35ArticleGenerator:
 
     def generate_article_content(self, keyword: str, title: str, outline: dict,
                                   winning_hook: str = '', hook_transition: str = '',
-                                  research: Optional[dict] = None) -> str:
+                                  research: Optional[dict] = None,
+                                  search_results_summary: str = '') -> str:
         """Generate the full article HTML content."""
         logger.info(f"Generating article content for: {keyword}")
 
@@ -571,6 +572,16 @@ class FitOver35ArticleGenerator:
 
         research_json = json.dumps(research, indent=2) if research else "No research data available — use your knowledge."
 
+        # Optional block of live web search results
+        if search_results_summary:
+            search_results_block = (
+                "\nLATEST WEB RESEARCH (real-time data — incorporate this into the article):\n"
+                + search_results_summary
+                + "\n"
+            )
+        else:
+            search_results_block = ""
+
         prompt = ARTICLE_CONTENT_PROMPT.format(
             keyword=keyword,
             title=title,
@@ -578,7 +589,8 @@ class FitOver35ArticleGenerator:
             hook_transition=hook_transition or "Transition naturally into the first section.",
             outline_json=json.dumps(outline, indent=2),
             research_json=research_json,
-            internal_links=internal_links
+            search_results_block=search_results_block,
+            internal_links=internal_links,
         )
         return self._call_llm(prompt)
 
