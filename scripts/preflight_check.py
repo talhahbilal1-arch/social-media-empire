@@ -138,16 +138,25 @@ def main():
         failures.append("No Make.com webhooks configured")
 
     # ── Summary ──────────────────────────────────────────────────
-    print(f"\n=== Pre-flight result: {len(failures)} issue(s) ===")
+    # Critical failures: missing credentials or unreachable core services
+    critical_prefixes = ("Missing GEMINI", "Missing SUPABASE", "Supabase table", "Gemini API")
+    critical_failures = [f for f in failures if any(f.startswith(p) for p in critical_prefixes)]
+
+    print(f"\n=== Pre-flight result: {len(failures)} issue(s), {len(critical_failures)} critical ===")
     if failures:
         for f in failures:
-            print(f"  ⚠ {f}")
-        print("\nPipeline will proceed. Fix warnings above for reliable operation.")
+            severity = "CRITICAL" if any(f.startswith(p) for p in critical_prefixes) else "WARNING"
+            print(f"  {'🚨' if severity == 'CRITICAL' else '⚠'} [{severity}] {f}")
+
+    if critical_failures:
+        print("\nPipeline BLOCKED — fix critical issues above before running.")
+        sys.exit(1)
+    elif failures:
+        print("\nPipeline will proceed with warnings. Fix above for reliable operation.")
+        sys.exit(0)
     else:
         print("  All checks passed — pipeline is ready.")
-
-    # ALWAYS exit 0 — preflight is diagnostic only, never blocks the pipeline
-    sys.exit(0)
+        sys.exit(0)
 
 
 if __name__ == "__main__":

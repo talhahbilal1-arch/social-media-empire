@@ -90,7 +90,7 @@ jobs:
           import urllib.request
           import urllib.error
           from datetime import datetime, timezone, timedelta
-          from concurrent.futures import ThreadPoolExecutor
+          # ThreadPoolExecutor removed — sequential article generation to avoid Gemini rate limits
 
           sys.path.insert(0, '.')
           from video_automation.image_selector import get_unique_pexels_image
@@ -507,8 +507,9 @@ jobs:
                   log_pipeline_error('2', brand, e, severity='medium')
 
           if rendered_pins:
-              with ThreadPoolExecutor(max_workers=3) as executor:
-                  list(executor.map(_generate_article_for_pin, rendered_pins))
+              # Sequential to avoid Gemini API rate limits (429 errors)
+              for pin in rendered_pins:
+                  _generate_article_for_pin(pin)
           else:
               print('  No rendered pins — skipping article generation')
 
@@ -587,7 +588,18 @@ jobs:
                           ['git', 'commit', '-m', f'content: publish pin articles {timestamp}'],
                           check=True
                       )
-                      subprocess.run(['git', 'push'], check=True)
+                      # Retry git push up to 3 times with backoff
+                      for push_attempt in range(3):
+                          try:
+                              subprocess.run(['git', 'push'], check=True)
+                              break
+                          except subprocess.CalledProcessError:
+                              if push_attempt < 2:
+                                  wait = (push_attempt + 1) * 5
+                                  print(f'  Git push attempt {push_attempt+1} failed, retrying in {wait}s...')
+                                  time.sleep(wait)
+                              else:
+                                  raise
                       print(f'  Pushed {len(articles_generated)} articles — Vercel deploying...')
                       time.sleep(90)  # Allow Vercel deploy to propagate before posting pins
                   else:
@@ -818,7 +830,7 @@ jobs:
         if: '!cancelled()'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
-          VERCEL_ORG: team_h4nMjQJcOXwrnK5fpKHrbJGq
+          VERCEL_ORG: ${{ secrets.VERCEL_ORG_ID }}
           FITOVER35_PROJECT_ID: ${{ secrets.VERCEL_FITOVER35_PROJECT_ID }}
           DEALS_PROJECT_ID: ${{ secrets.VERCEL_DEALS_PROJECT_ID }}
           MENOPAUSE_PROJECT_ID: ${{ secrets.VERCEL_MENOPAUSE_PROJECT_ID }}
