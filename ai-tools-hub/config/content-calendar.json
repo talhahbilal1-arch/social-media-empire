@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-20",
+  "last_updated": "2026-04-09",
   "items": [
     {
       "id": 1,
@@ -395,28 +395,31 @@
       "id": 55,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-small-business",
       "keyword": "best ai tools for small business",
-      "title": "10 Best AI Tools for Small Business in 2026"
+      "title": "10 Best AI Tools for Small Business in 2026",
+      "published_date": "2026-04-09"
     },
     {
       "id": 56,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-content-creators",
       "keyword": "best ai tools for content creators",
-      "title": "9 Best AI Tools for Content Creators in 2026"
+      "title": "9 Best AI Tools for Content Creators in 2026",
+      "published_date": "2026-04-09"
     },
     {
       "id": 57,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-marketers",
       "keyword": "best ai tools for marketers 2026",
-      "title": "10 Best AI Tools for Marketers in 2026"
+      "title": "10 Best AI Tools for Marketers in 2026",
+      "published_date": "2026-04-09"
     },
     {
       "id": 58,
