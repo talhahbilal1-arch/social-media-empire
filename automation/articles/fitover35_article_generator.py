@@ -650,36 +650,64 @@ class FitOver35ArticleGenerator:
                 for item in faq_items
             ]
 
-    def generate_full_article(self, keyword: str, category: str) -> dict:
+    def generate_full_article(self, keyword: str, category: str,
+                              trending_context: str = '',
+                              search_results_summary: str = '') -> dict:
         """
         Generate a complete article with all components.
 
         Uses the content-research-writer methodology:
-        1. Research + Outline (combined)
+        1. Research + Outline (combined, with trending context if available)
         2. Hook Evaluation (pick best opening)
-        3. Article Content (with research + winning hook)
+        3. Article Content (with research + winning hook + live web data)
         4. Editorial Review (polish voice, citations, flow)
         5. Product Recommendations (unchanged)
         6. FAQ (unchanged)
 
         Set ENHANCED_ARTICLES=false env var to skip steps 2 + 4 (research/review).
 
+        Trending context is loaded automatically from trending_context.json if it
+        exists in the working directory (written by trending_topic_selector.py).
+
         Args:
             keyword: Target keyword
             category: Article category
+            trending_context: Why this topic is trending right now (optional)
+            search_results_summary: Latest web research results (optional)
 
         Returns:
             Dict with all article components needed for HTML generation
         """
         enhanced = os.getenv('ENHANCED_ARTICLES', 'true').lower() != 'false'
 
+        # Auto-load trending context from sidecar file if not passed explicitly
+        if not trending_context and not search_results_summary:
+            ctx_file = Path('trending_context.json')
+            if ctx_file.exists():
+                try:
+                    ctx = json.loads(ctx_file.read_text())
+                    # Only apply context if it's for this keyword (or any keyword when
+                    # the caller didn't pass one — e.g. when the workflow auto-selects)
+                    if ctx.get('keyword', '').lower() in (keyword.lower(), ''):
+                        trending_context = ctx.get('trending_context', '')
+                        search_results_summary = ctx.get('search_results_summary', '')
+                        logger.info("Loaded trending context from trending_context.json")
+                except Exception as e:
+                    logger.warning(f"Could not load trending_context.json: {e}")
+
         logger.info(f"{'='*60}")
         logger.info(f"Generating full article for: {keyword}")
         logger.info(f"Category: {category} | Enhanced: {enhanced}")
+        logger.info(f"Trending context: {'yes' if trending_context else 'no'}")
+        logger.info(f"Web search data: {'yes' if search_results_summary else 'no'}")
         logger.info(f"{'='*60}")
 
         # Step 1: Research + Outline
-        outline = self.research_and_outline(keyword)
+        outline = self.research_and_outline(
+            keyword,
+            trending_context=trending_context,
+            search_results_summary=search_results_summary,
+        )
         title = outline.get('title', keyword.title())
         meta_description = outline.get('meta_description', '')
         research = outline.get('research', {})
