@@ -728,12 +728,13 @@ class FitOver35ArticleGenerator:
             winning_hook = hooks.get('bold_statement', '')
             hook_selected = 'bold_statement (default)'
 
-        # Step 3: Generate article content (with research + hook)
+        # Step 3: Generate article content (with research + hook + live web data)
         content_html = self.generate_article_content(
             keyword, title, outline,
             winning_hook=winning_hook,
             hook_transition=hook_transition,
-            research=research if enhanced else None
+            research=research if enhanced else None,
+            search_results_summary=search_results_summary,
         )
 
         # Step 4: Editorial Review (skip if not enhanced)
