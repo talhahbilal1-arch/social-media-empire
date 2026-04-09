@@ -763,5 +763,32 @@
     "board": "AI Image Generators",
     "posted_at": "2026-04-08T22:29:11.550Z",
     "success": true
+  },
+  {
+    "slug": "grammarly",
+    "pin_type": "tool-review",
+    "title": "Grammarly Review: Is This AI Writing Tool Worth It?",
+    "link": "https://pilottools.ai/tools/grammarly/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-04-09T17:16:34.850Z",
+    "success": true
+  },
+  {
+    "slug": "tidio",
+    "pin_type": "tool-review",
+    "title": "Tidio AI Chatbot: Boost Sales or Just Hype?",
+    "link": "https://pilottools.ai/tools/tidio/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-09T17:16:38.907Z",
+    "success": true
+  },
+  {
+    "slug": "category-marketing",
+    "pin_type": "category",
+    "title": "🚀Top AI Marketing Tools of 2026: Dominate Your Niche!",
+    "link": "https://pilottools.ai/category/marketing/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-04-09T17:16:43.207Z",
+    "success": true
   }
 ]
