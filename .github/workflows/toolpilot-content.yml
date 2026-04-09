@@ -85,12 +85,14 @@ jobs:
         run: node scripts/ping-google.js
 
       - name: Repurpose content
+        working-directory: ai-tools-hub
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/content-repurposer.js --count 1
         continue-on-error: true
 
       - name: Generate lead magnet (Mondays only)
+        working-directory: ai-tools-hub
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
