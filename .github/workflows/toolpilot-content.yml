@@ -113,6 +113,7 @@ jobs:
         continue-on-error: true
 
       - name: Summary
+        working-directory: ai-tools-hub
         run: |
           TOOLS=$(jq 'length' content/tools.json)
           COMPS=$(jq 'length' content/comparisons.json)
