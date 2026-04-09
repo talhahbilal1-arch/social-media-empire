@@ -139,7 +139,7 @@ def main():
 
     # ── Summary ──────────────────────────────────────────────────
     # Critical failures: missing credentials or unreachable core services
-    critical_prefixes = ("Missing GEMINI", "Missing SUPABASE", "Supabase table", "Gemini API")
+    critical_prefixes = ("Missing GEMINI", "Missing SUPABASE", "Supabase table", "Supabase ", "Gemini API")
     critical_failures = [f for f in failures if any(f.startswith(p) for p in critical_prefixes)]
 
     print(f"\n=== Pre-flight result: {len(failures)} issue(s), {len(critical_failures)} critical ===")
