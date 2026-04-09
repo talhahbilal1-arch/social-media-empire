@@ -151,6 +151,11 @@ def update_blog_html(
         return False
 
     # Find the insertion point: right after the blog container opening tag
+    brand_config = BRANDS.get(brand)
+    if not brand_config:
+        logger.error(f"Unknown brand: {brand}")
+        return False
+
     insert_marker = brand_config["insert_marker"]
     marker_pos = content.find(insert_marker)
 
