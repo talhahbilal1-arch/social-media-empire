@@ -1,0 +1,383 @@
+{
+  "name": "Agent 2B - Scheduled Inline Image Pinner",
+  "description": "Runs every 6 hours. Queries Supabase for inline blog images that are due to be pinned, generates a unique pin title for each via Claude, creates the pin on Pinterest, and updates the record as pinned. Ensures a steady drip of pins back to listicle blog posts over time.",
+  "version": 2,
+  "scheduling": {
+    "type": "interval",
+    "intervalMinutes": 360,
+    "timezone": "America/Los_Angeles"
+  },
+  "flow": [
+    {
+      "id": 1,
+      "module": "builtin:BasicScheduler",
+      "version": 1,
+      "label": "Schedule Trigger (Every 6 Hours)",
+      "parameters": {
+        "scheduling": {
+          "type": "interval",
+          "interval": 360,
+          "timezone": "America/Los_Angeles"
+        }
+      },
+      "mapper": {},
+      "metadata": {
+        "notes": "Runs every 6 hours (4x daily): approximately 12am, 6am, 12pm, 6pm PST. This staggers pin creation so Pinterest sees organic-looking posting patterns rather than bulk uploads."
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase RPC: Get Today's Scheduled Pins",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/rpc/get_due_scheduled_pins",
+        "method": "POST",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"},
+          {"name": "Prefer", "value": "return=representation"}
+        ],
+        "body": {
+          "p_current_time": "{{formatDate(now; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}",
+          "p_limit": 10
+        },
+        "parseResponse": true,
+        "timeout": 15000
+      },
+      "mapper": {
+        "pins_due": "{{2.data}}",
+        "pin_count": "{{length(2.data)}}"
+      },
+      "metadata": {
+        "notes": "Calls a Supabase RPC function that returns scheduled_pins where: pinned = false AND scheduled_for <= NOW(). Limited to 10 per run to stay within rate limits. The RPC function returns: id, post_id, image_url, heading, destination_url, board_id, brand_name, original_post_title, image_description, scheduled_for.",
+        "rpcDefinition": "CREATE OR REPLACE FUNCTION get_due_scheduled_pins(p_current_time TIMESTAMPTZ, p_limit INT DEFAULT 10) RETURNS SETOF scheduled_pins AS $$ SELECT sp.* FROM scheduled_pins sp WHERE sp.pinned = false AND sp.scheduled_for <= p_current_time ORDER BY sp.scheduled_for ASC LIMIT p_limit; $$ LANGUAGE sql STABLE;",
+        "errorHandler": {
+          "type": "retry",
+          "maxRetries": 2,
+          "interval": 5000,
+          "fallback": "stop"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicFilter",
+      "version": 1,
+      "label": "Filter: Only Continue If Pins Are Due",
+      "parameters": {
+        "condition": "{{length(2.data)}} > 0"
+      },
+      "metadata": {
+        "notes": "Stops execution if no pins are due. This prevents unnecessary API calls and operations when there is nothing to process. Most 6-hour windows will have 0-3 pins due."
+      }
+    },
+    {
+      "id": 4,
+      "module": "builtin:BasicIterator",
+      "version": 1,
+      "label": "Iterator: Loop Through Each Due Pin",
+      "parameters": {
+        "array": "{{2.data}}"
+      },
+      "mapper": {
+        "pin_record_id": "{{4.id}}",
+        "post_id": "{{4.post_id}}",
+        "image_url": "{{4.image_url}}",
+        "heading": "{{4.heading}}",
+        "destination_url": "{{4.destination_url}}",
+        "board_id": "{{4.board_id}}",
+        "brand_name": "{{4.brand_name}}",
+        "original_post_title": "{{4.original_post_title}}",
+        "image_description": "{{4.image_description}}"
+      },
+      "metadata": {
+        "notes": "Iterates through each pin that is due. For each pin, Claude generates a unique title, then the pin is created on Pinterest, and the record is updated in Supabase."
+      }
+    },
+    {
+      "id": 5,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Claude API: Generate Unique Pin Title",
+      "parameters": {
+        "url": "https://api.anthropic.com/v1/messages",
+        "method": "POST",
+        "headers": [
+          {"name": "x-api-key", "value": "{{connections.anthropic.apikey}}"},
+          {"name": "anthropic-version", "value": "2023-06-01"},
+          {"name": "content-type", "value": "application/json"}
+        ],
+        "body": {
+          "model": "claude-sonnet-4-5-20250929",
+          "max_tokens": 150,
+          "messages": [
+            {
+              "role": "user",
+              "content": "You are generating a unique Pinterest pin title for an inline blog image being pinned on a delayed schedule.\n\n**Original Blog Post Title:** {{4.original_post_title}}\n**List Item Heading This Image Belongs To:** {{4.heading}}\n**Image Description / Alt Text:** {{4.image_description}}\n\n## Rules\n1. Use COMPLETELY different wording from the original title. Not a synonym swap -- a genuinely different angle.\n2. Must also differ from the list item heading.\n3. If the original is a listicle format ('7 Best...'), do NOT use listicle format.\n4. Maximum 100 characters.\n5. Include at least one power word: secret, proven, essential, surprising, overlooked, underrated, real, honest, worth, actual, smart, simple, tested, affordable, effective, fast, easy, better.\n6. Create a curiosity gap or promise a specific benefit.\n7. Do not give away the complete answer.\n8. Front-load attention-grabbing words.\n9. No hashtags, emojis, or quotes wrapping the title.\n10. Title Case capitalization.\n\nReturn ONLY the pin title string. No JSON. No quotes. No explanation."
+            }
+          ]
+        },
+        "parseResponse": true,
+        "timeout": 30000
+      },
+      "mapper": {
+        "generated_title": "{{trim(5.data.content[0].text)}}"
+      },
+      "metadata": {
+        "notes": "Uses Claude claude-sonnet-4-5-20250929 with low max_tokens (150) since we only need a single title string. The pin_title_generator.md prompt is embedded inline. Response is trimmed to remove any whitespace.",
+        "errorHandler": {
+          "type": "fallback",
+          "fallbackValue": {
+            "generated_title": "{{substring(4.heading; 0; 100)}}"
+          },
+          "note": "If Claude fails, fall back to using the original list item heading as the pin title. This is suboptimal but keeps the pipeline running."
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Pinterest API: Create Pin from Inline Image",
+      "parameters": {
+        "url": "https://api.pinterest.com/v5/pins",
+        "method": "POST",
+        "headers": [
+          {"name": "Authorization", "value": "Bearer {{connections.pinterest.access_token}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "board_id": "{{4.board_id}}",
+          "title": "{{substring(trim(5.data.content[0].text); 0; 100)}}",
+          "description": "{{4.heading}}\n\nFrom our full guide: {{4.original_post_title}}\n\nRead the complete list at the link.",
+          "link": "{{4.destination_url}}{{if(contains(4.destination_url; '?'); '&'; '?')}}utm_source=pinterest&utm_medium=inline_pin&utm_campaign={{lower(replace(4.brand_name; ' '; '_'))}}_listicle&utm_content={{formatDate(now; 'YYYYMMDD')}}",
+          "media_source": {
+            "source_type": "image_url",
+            "url": "{{4.image_url}}"
+          },
+          "alt_text": "{{ifempty(4.image_description; 4.heading)}}"
+        },
+        "parseResponse": true,
+        "timeout": 30000
+      },
+      "mapper": {
+        "pinterest_pin_id": "{{6.data.id}}",
+        "pinterest_pin_url": "{{6.data.link}}"
+      },
+      "metadata": {
+        "notes": "Creates the pin on Pinterest using the Claude-generated unique title. The description references the original post to drive curiosity. UTM parameters distinguish inline_pin from cover_pin for analytics.",
+        "errorHandler": {
+          "type": "retry",
+          "maxRetries": 3,
+          "interval": 15000,
+          "fallback": "log_and_skip"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase: Mark Pin as Completed",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/scheduled_pins?id=eq.{{4.id}}",
+        "method": "PATCH",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"},
+          {"name": "Prefer", "value": "return=representation"}
+        ],
+        "body": {
+          "pinned": true,
+          "pin_id": "{{6.data.id}}",
+          "pin_url": "{{6.data.link}}",
+          "generated_title": "{{trim(5.data.content[0].text)}}",
+          "pinned_at": "{{formatDate(now; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}"
+        },
+        "parseResponse": true,
+        "timeout": 10000
+      },
+      "mapper": {},
+      "metadata": {
+        "notes": "Updates the scheduled_pins record to mark it as pinned. Stores the Pinterest pin ID, the generated title, and the pinned timestamp. This prevents the pin from being processed again in future runs."
+      }
+    },
+    {
+      "id": 8,
+      "module": "builtin:Sleep",
+      "version": 1,
+      "label": "Rate Limit Delay Between Pins",
+      "parameters": {
+        "seconds": 3
+      },
+      "metadata": {
+        "notes": "3-second delay between pin creations to respect Pinterest API rate limits and avoid triggering spam detection. With a max of 10 pins per run, this adds at most 30 seconds to execution time."
+      }
+    },
+    {
+      "id": 9,
+      "module": "builtin:BasicAggregator",
+      "version": 1,
+      "label": "Aggregator: Collect Results from All Pins",
+      "parameters": {
+        "sourceModule": 4,
+        "targetStructure": {
+          "pin_record_id": "{{4.id}}",
+          "generated_title": "{{trim(5.data.content[0].text)}}",
+          "pinterest_pin_id": "{{6.data.id}}",
+          "brand_name": "{{4.brand_name}}",
+          "success": "{{if(6.data.id; true; false)}}"
+        }
+      },
+      "mapper": {
+        "total_processed": "{{length(9.array)}}",
+        "total_successful": "{{length(filter(9.array; 'item'; item.success = true))}}",
+        "total_failed": "{{length(filter(9.array; 'item'; item.success = false))}}"
+      },
+      "metadata": {
+        "notes": "Aggregates results from all processed pins in this run. Used for the completion log to provide a summary of the batch."
+      }
+    },
+    {
+      "id": 10,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase: Log Batch Completion",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/automation_logs",
+        "method": "POST",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "scenario": "agent_2b_scheduled_pinner",
+          "status": "{{if(9.total_failed = 0; 'success'; 'partial_success')}}",
+          "total_due": "{{2.pin_count}}",
+          "total_processed": "{{9.total_processed}}",
+          "total_successful": "{{9.total_successful}}",
+          "total_failed": "{{9.total_failed}}",
+          "pins_detail": "{{toJSON(9.array)}}",
+          "execution_time_ms": "{{executionDuration}}",
+          "created_at": "{{formatDate(now; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}"
+        },
+        "parseResponse": true,
+        "timeout": 10000
+      },
+      "mapper": {},
+      "metadata": {
+        "notes": "Logs the batch completion with summary statistics. This provides an audit trail and enables monitoring for success rates over time."
+      }
+    },
+    {
+      "id": 11,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "label": "Error Handler Router",
+      "parameters": {},
+      "routes": [
+        {
+          "label": "Failures Detected",
+          "filter": {
+            "condition": "{{9.total_failed}} > 0"
+          },
+          "modules": [
+            {
+              "id": 12,
+              "module": "email:Send",
+              "version": 1,
+              "label": "Send Failure Alert Email",
+              "parameters": {
+                "to": "{{connections.alert_email}}",
+                "subject": "[Agent 2B Warning] {{9.total_failed}} pins failed to post",
+                "body": "Agent 2B Scheduled Pinner completed with failures.\n\nTotal due: {{2.pin_count}}\nSuccessful: {{9.total_successful}}\nFailed: {{9.total_failed}}\nTime: {{formatDate(now; 'YYYY-MM-DD HH:mm:ss')}} PST\n\nFailed pins will be retried in the next 6-hour window (they remain in scheduled_pins with pinned=false).\n\nCheck automation_logs in Supabase for details.",
+                "contentType": "text/plain"
+              }
+            }
+          ]
+        },
+        {
+          "label": "All Successful",
+          "filter": {
+            "condition": "{{9.total_failed}} = 0 AND {{9.total_processed}} > 0"
+          },
+          "modules": []
+        }
+      ],
+      "metadata": {
+        "notes": "Only sends alert emails when failures occur. Successful runs are logged silently. Failed pins remain in the scheduled_pins table with pinned=false and will be picked up by the next run, providing automatic retry behavior."
+      }
+    }
+  ],
+  "connections": {
+    "supabase": {
+      "type": "http_api_key",
+      "label": "Supabase REST API",
+      "fields": {
+        "url": "Your Supabase project URL",
+        "apikey": "Your Supabase anon/service_role key"
+      }
+    },
+    "anthropic": {
+      "type": "http_api_key",
+      "label": "Anthropic Claude API",
+      "fields": {
+        "apikey": "Your Anthropic API key (sk-ant-...)"
+      },
+      "headerName": "x-api-key"
+    },
+    "pinterest": {
+      "type": "oauth2",
+      "label": "Pinterest Business Account",
+      "fields": {
+        "access_token": "Pinterest OAuth2 access token"
+      },
+      "scopes": ["boards:read", "boards:write", "pins:read", "pins:write"]
+    },
+    "alert_email": {
+      "type": "string",
+      "label": "Error Alert Email",
+      "value": "Your alert email address"
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2026-02-07",
+    "author": "Social Media Empire",
+    "operationsPerRun": {
+      "estimated": "3 + (4 * pins_due)",
+      "breakdown": {
+        "scheduler": 1,
+        "supabase_rpc_read": 1,
+        "filter": 1,
+        "per_pin": {
+          "iterator": 0,
+          "claude_api": 1,
+          "pinterest_api": 1,
+          "supabase_update": 1,
+          "sleep": 1
+        },
+        "aggregator": 1,
+        "supabase_log": 1,
+        "router_and_email": "0-1"
+      },
+      "example": "With 3 pins due: 3 + (4 * 3) + 2 = 17 operations"
+    },
+    "monthlyOperations": {
+      "estimated": "Avg 2 pins/run * 4 runs/day * 30 days = ~240 pins/month. At 4 ops/pin + 5 overhead/run = ~1,560 ops/month",
+      "makePlanRequired": "Free tier (10,000 ops) is sufficient"
+    },
+    "requiredSupabaseTables": [
+      "scheduled_pins",
+      "automation_logs"
+    ],
+    "requiredSupabaseRPC": [
+      "get_due_scheduled_pins"
+    ],
+    "retryBehavior": "Failed pins remain in scheduled_pins with pinned=false and are automatically retried on the next 6-hour cycle. No manual intervention needed unless failures persist."
+  }
+}

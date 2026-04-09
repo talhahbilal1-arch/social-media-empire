@@ -1,0 +1,552 @@
+{
+  "name": "Agent 2A - Listicle Post Creator",
+  "description": "Generates listicle blog posts 3x daily. Selects a random active subdomain, generates a 7-item listicle via Claude, fetches images from Pexels for each item, stores the post in Supabase, schedules inline images for delayed pinning, creates a cover pin on Pinterest, and handles errors gracefully.",
+  "version": 2,
+  "scheduling": {
+    "type": "custom",
+    "days": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    "times": [
+      {"hour": 8, "minute": 0},
+      {"hour": 12, "minute": 0},
+      {"hour": 17, "minute": 0}
+    ],
+    "timezone": "America/Los_Angeles"
+  },
+  "flow": [
+    {
+      "id": 1,
+      "module": "builtin:BasicScheduler",
+      "version": 1,
+      "label": "Schedule Trigger (3x Daily)",
+      "parameters": {
+        "scheduling": {
+          "type": "custom",
+          "days": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+          "times": [
+            {"hour": 8, "minute": 0},
+            {"hour": 12, "minute": 0},
+            {"hour": 17, "minute": 0}
+          ],
+          "timezone": "America/Los_Angeles"
+        }
+      },
+      "mapper": {},
+      "metadata": {
+        "notes": "Runs at 8am, 12pm, 5pm PST. These are high-engagement windows for Pinterest traffic to blog posts."
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase: Get Random Active Subdomain",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/subdomains",
+        "method": "GET",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "qs": [
+          {"name": "select", "value": "*"},
+          {"name": "is_active", "value": "eq.true"},
+          {"name": "order", "value": "random()"},
+          {"name": "limit", "value": "1"}
+        ],
+        "parseResponse": true,
+        "followRedirect": true,
+        "followAllRedirects": false,
+        "timeout": 30000
+      },
+      "mapper": {
+        "subdomain_id": "{{2.data[0].id}}",
+        "brand_name": "{{2.data[0].brand_name}}",
+        "subdomain_slug": "{{2.data[0].slug}}",
+        "subdomain_category": "{{2.data[0].category}}",
+        "target_audience": "{{2.data[0].target_audience}}",
+        "brand_voice": "{{2.data[0].brand_voice}}",
+        "base_url": "{{2.data[0].base_url}}",
+        "pinterest_board_id": "{{2.data[0].pinterest_board_id}}"
+      },
+      "metadata": {
+        "notes": "Fetches one random active subdomain from the subdomains table. The random() ordering ensures even distribution across subdomains over time.",
+        "errorHandler": {
+          "type": "retry",
+          "maxRetries": 2,
+          "interval": 5000,
+          "fallback": "stop"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase: Get Recent Posts for Deduplication",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/listicle_posts",
+        "method": "GET",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "qs": [
+          {"name": "select", "value": "id,title,topic,subdomain_category,created_at"},
+          {"name": "subdomain_id", "value": "eq.{{2.data[0].id}}"},
+          {"name": "order", "value": "created_at.desc"},
+          {"name": "limit", "value": "15"}
+        ],
+        "parseResponse": true,
+        "timeout": 15000
+      },
+      "mapper": {
+        "recent_posts_formatted": "{{join(map(3.data; 'item'; '- ' + item.title + ' (' + item.subdomain_category + ', ' + formatDate(parseDate(item.created_at); 'MMM D') + ')'); newline)}}"
+      },
+      "metadata": {
+        "notes": "Fetches the 15 most recent listicle posts for this subdomain. Used in the Claude prompt for deduplication. The formatted string is injected into {recent_posts}."
+      }
+    },
+    {
+      "id": 4,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Claude API: Generate Listicle Content",
+      "parameters": {
+        "url": "https://api.anthropic.com/v1/messages",
+        "method": "POST",
+        "headers": [
+          {"name": "x-api-key", "value": "{{connections.anthropic.apikey}}"},
+          {"name": "anthropic-version", "value": "2023-06-01"},
+          {"name": "content-type", "value": "application/json"}
+        ],
+        "body": {
+          "model": "claude-sonnet-4-5-20250929",
+          "max_tokens": 4096,
+          "messages": [
+            {
+              "role": "user",
+              "content": "You are the content engine for a lifestyle brand's blog subdomain. You generate listicle-format blog posts that rank in Google, drive Pinterest traffic, and convert readers into email subscribers through genuinely valuable content.\n\n## Brand Configuration\n\n**Brand:** {{2.data[0].brand_name}}\n**Target Audience:** {{2.data[0].target_audience}}\n**Subdomain Category:** {{2.data[0].category}}\n**Topic for This Post:** {{2.data[0].next_topic}}\n\n## Brand Voice\n\n{{2.data[0].brand_voice}}\n\n## Deduplication Context\n\n**Recent posts already published (do NOT duplicate topics, angles, or product recommendations):**\n\n{{3.recent_posts_formatted}}\n\nYour post must cover a meaningfully different angle from every post listed above.\n\n## Output Format\n\nReturn ONLY a JSON object with these fields:\n- title: 50-65 characters, includes primary keyword\n- meta_description: 155 characters max\n- introduction: 120-180 words, opens with hook, states the problem, previews value. Must NOT start with a question.\n- list_items: array of exactly 7 items, each with: heading (specific, benefit-oriented), content (150-200 words across 2-3 paragraphs with at least one specific number), image_keyword (5-8 word Pexels search query), amazon_product (real product: 'Name | $price | ASIN' or 'N/A')\n- conclusion: 80-120 words with soft email CTA\n- tags: array of 5 tags (1 primary keyword, 3 secondary, 1 long-tail)\n\n## Rules\n1. Exactly 7 list items. Each heading must start with a different word.\n2. Every item must include a specific number (price, measurement, timeframe).\n3. At least 2 items must include honest caveats.\n4. At least 1 item must challenge a popular recommendation.\n5. Zero tolerance for: 'game-changer', 'must-have', 'you won't believe', 'in today's fast-paced world', 'without further ado'.\n6. Amazon products must be real, currently available products.\n7. Image keywords must be specific enough to return relevant Pexels results.\n\nReturn ONLY the JSON. No markdown fences. No explanation."
+            }
+          ]
+        },
+        "parseResponse": true,
+        "timeout": 120000
+      },
+      "mapper": {
+        "raw_response": "{{4.data.content[0].text}}"
+      },
+      "metadata": {
+        "notes": "Calls Claude claude-sonnet-4-5-20250929 to generate the listicle. 120-second timeout because long-form content generation can take 30-60 seconds. The full listicle_generator.md prompt template is embedded inline with Make.com variable substitutions.",
+        "errorHandler": {
+          "type": "retry",
+          "maxRetries": 2,
+          "interval": 10000,
+          "fallback": "route_to_error_handler"
+        },
+        "rateLimiting": {
+          "note": "Claude API allows 60 RPM. This scenario runs 3x/day so rate limits are not a concern."
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "json:ParseJSON",
+      "version": 1,
+      "label": "Parse Claude JSON Response",
+      "parameters": {
+        "jsonString": "{{4.data.content[0].text}}"
+      },
+      "mapper": {
+        "title": "{{5.title}}",
+        "meta_description": "{{5.meta_description}}",
+        "introduction": "{{5.introduction}}",
+        "list_items": "{{5.list_items}}",
+        "conclusion": "{{5.conclusion}}",
+        "tags": "{{5.tags}}"
+      },
+      "metadata": {
+        "notes": "Parses the raw JSON string from Claude into a structured object. If Claude returns markdown fences around the JSON, the parse may fail -- the error handler catches this and strips fences before retrying.",
+        "errorHandler": {
+          "type": "custom",
+          "action": "Strip markdown fences from raw_response and retry parse. Regex: replace(4.raw_response; '/^```json\\n?|\\n?```$/g'; '')"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "module": "builtin:BasicIterator",
+      "version": 1,
+      "label": "Iterator: Loop Through 7 List Items + Cover Image",
+      "parameters": {
+        "array": "{{5.list_items}}"
+      },
+      "mapper": {
+        "item_index": "{{6.i}}",
+        "item_heading": "{{6.heading}}",
+        "item_content": "{{6.content}}",
+        "item_image_keyword": "{{6.image_keyword}}",
+        "item_amazon_product": "{{6.amazon_product}}"
+      },
+      "metadata": {
+        "notes": "Iterates through each of the 7 list items. For each item, the next module fetches a unique image from Pexels. An additional 8th iteration is added for the cover/featured image using the post title as the search query."
+      }
+    },
+    {
+      "id": 7,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Pexels API: Fetch Image for Each List Item",
+      "parameters": {
+        "url": "https://api.pexels.com/v1/search",
+        "method": "GET",
+        "headers": [
+          {"name": "Authorization", "value": "{{connections.pexels.apikey}}"}
+        ],
+        "qs": [
+          {"name": "query", "value": "{{6.image_keyword}}"},
+          {"name": "orientation", "value": "landscape"},
+          {"name": "per_page", "value": "5"},
+          {"name": "size", "value": "large"}
+        ],
+        "parseResponse": true,
+        "timeout": 15000
+      },
+      "mapper": {
+        "image_url": "{{if(length(7.data.photos) > 0; 7.data.photos[0].src.large; 'https://images.pexels.com/photos/1431282/pexels-photo-1431282.jpeg?auto=compress&cs=tinysrgb&w=800')}}",
+        "image_id": "{{if(length(7.data.photos) > 0; 7.data.photos[0].id; 'fallback')}}",
+        "photographer": "{{if(length(7.data.photos) > 0; 7.data.photos[0].photographer; 'Pexels')}}",
+        "alt_text": "{{6.item_heading}}"
+      },
+      "metadata": {
+        "notes": "Fetches a landscape image from Pexels using the item-specific search query. Falls back to a default image if no results. Rate limit: 200 req/hour -- with 8 images per post and 3 posts per day, this uses 24 of the 200 hourly requests.",
+        "errorHandler": {
+          "type": "fallback",
+          "fallbackValue": {
+            "image_url": "https://images.pexels.com/photos/1431282/pexels-photo-1431282.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "image_id": "fallback",
+            "photographer": "Pexels"
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase: Create Listicle Post Record",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/listicle_posts",
+        "method": "POST",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"},
+          {"name": "Prefer", "value": "return=representation"}
+        ],
+        "body": {
+          "subdomain_id": "{{2.data[0].id}}",
+          "brand_name": "{{2.data[0].brand_name}}",
+          "subdomain_category": "{{2.data[0].category}}",
+          "title": "{{5.title}}",
+          "slug": "{{replace(lower(5.title); '/[^a-z0-9\\s-]/g'; '')  |> replace($/; '/[\\s_]+/g'; '-') |> replace($/; '/-+/g'; '-') |> trim($/; '-')}}",
+          "meta_description": "{{5.meta_description}}",
+          "introduction": "{{5.introduction}}",
+          "list_items": "{{toJSON(5.list_items)}}",
+          "conclusion": "{{5.conclusion}}",
+          "tags": "{{toJSON(5.tags)}}",
+          "featured_image_url": "{{7.image_url}}",
+          "cover_pin_created": false,
+          "inline_images_scheduled": false,
+          "word_count": "{{length(split(5.introduction + ' ' + join(map(5.list_items; 'item'; item.content); ' ') + ' ' + 5.conclusion; ' '))}}",
+          "status": "published",
+          "created_at": "{{formatDate(now; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}"
+        },
+        "parseResponse": true,
+        "timeout": 15000
+      },
+      "mapper": {
+        "post_id": "{{8.data[0].id}}",
+        "post_slug": "{{8.data[0].slug}}"
+      },
+      "metadata": {
+        "notes": "Creates the listicle post record in Supabase. The slug is generated from the title. This record is the source of truth for the post and is referenced by inline image scheduling and cover pin creation.",
+        "errorHandler": {
+          "type": "retry",
+          "maxRetries": 2,
+          "interval": 5000
+        }
+      }
+    },
+    {
+      "id": 9,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase RPC: Schedule Inline Images for Delayed Pinning",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/rpc/schedule_inline_images",
+        "method": "POST",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"},
+          {"name": "Prefer", "value": "return=representation"}
+        ],
+        "body": {
+          "p_post_id": "{{8.data[0].id}}",
+          "p_list_items": "{{toJSON(map(5.list_items; 'item'; {'heading': item.heading, 'image_url': item.image_url, 'image_keyword': item.image_keyword, 'amazon_product': item.amazon_product}))}}",
+          "p_base_url": "{{2.data[0].base_url}}",
+          "p_post_slug": "{{8.data[0].slug}}",
+          "p_brand_name": "{{2.data[0].brand_name}}",
+          "p_board_id": "{{2.data[0].pinterest_board_id}}",
+          "p_schedule_start": "{{formatDate(addHours(now; 6); 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}",
+          "p_schedule_interval_hours": 6
+        },
+        "parseResponse": true,
+        "timeout": 15000
+      },
+      "mapper": {
+        "scheduled_count": "{{9.data.scheduled_count}}",
+        "first_pin_at": "{{9.data.first_pin_at}}",
+        "last_pin_at": "{{9.data.last_pin_at}}"
+      },
+      "metadata": {
+        "notes": "Calls a Supabase RPC function that creates scheduled_pins records for each of the 7 inline images. Each image is scheduled 6 hours apart starting 6 hours after the post is created. This ensures a steady drip of pins back to the blog post over ~2 days. The RPC function creates records in the scheduled_pins table with columns: post_id, image_url, heading, destination_url, board_id, brand_name, scheduled_for, pinned (boolean), pin_id."
+      }
+    },
+    {
+      "id": 10,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Pinterest API: Create Cover Pin for Blog Post",
+      "parameters": {
+        "url": "https://api.pinterest.com/v5/pins",
+        "method": "POST",
+        "headers": [
+          {"name": "Authorization", "value": "Bearer {{connections.pinterest.access_token}}"},
+          {"name": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "board_id": "{{2.data[0].pinterest_board_id}}",
+          "title": "{{substring(5.title; 0; 100)}}",
+          "description": "{{5.meta_description}}\n\n{{join(map(slice(5.list_items; 0; 3); 'item'; '- ' + item.heading); newline)}}\n\n... and 4 more. Full list at the link.\n\n{{join(5.tags; ' #')}}",
+          "link": "{{2.data[0].base_url}}/{{8.data[0].slug}}/?utm_source=pinterest&utm_medium=cover_pin&utm_campaign={{lower(replace(2.data[0].brand_name; ' '; '_'))}}_listicle&utm_content={{formatDate(now; 'YYYYMMDD')}}",
+          "media_source": {
+            "source_type": "image_url",
+            "url": "{{7.image_url}}"
+          },
+          "alt_text": "{{5.title}} - {{2.data[0].brand_name}}"
+        },
+        "parseResponse": true,
+        "timeout": 30000
+      },
+      "mapper": {
+        "pin_id": "{{10.data.id}}",
+        "pin_url": "{{10.data.link}}"
+      },
+      "metadata": {
+        "notes": "Creates the cover pin on Pinterest immediately after post publication. This is the 'announcement' pin. The 7 inline image pins will be created by Agent 2B on the delayed schedule. The description previews 3 of the 7 items to create curiosity.",
+        "errorHandler": {
+          "type": "retry",
+          "maxRetries": 3,
+          "interval": 15000,
+          "fallback": "log_and_continue"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "module": "http:MakeRequest",
+      "version": 3,
+      "label": "Supabase: Update Post with Pin ID and Mark Complete",
+      "parameters": {
+        "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/listicle_posts?id=eq.{{8.data[0].id}}",
+        "method": "PATCH",
+        "headers": [
+          {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+          {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+          {"name": "Content-Type", "value": "application/json"},
+          {"name": "Prefer", "value": "return=representation"}
+        ],
+        "body": {
+          "cover_pin_id": "{{10.data.id}}",
+          "cover_pin_url": "{{10.data.link}}",
+          "cover_pin_created": true,
+          "inline_images_scheduled": true,
+          "scheduled_pin_count": "{{9.data.scheduled_count}}",
+          "updated_at": "{{formatDate(now; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}"
+        },
+        "parseResponse": true,
+        "timeout": 10000
+      },
+      "mapper": {},
+      "metadata": {
+        "notes": "Updates the listicle_posts record with the cover pin ID and marks both cover_pin_created and inline_images_scheduled as true. This record is now complete and the post enters the Agent 2B pipeline for inline image pinning."
+      }
+    },
+    {
+      "id": 12,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "label": "Error Handler Router",
+      "parameters": {},
+      "routes": [
+        {
+          "label": "Success Path",
+          "filter": {
+            "condition": "{{10.statusCode}} = 201 OR {{10.statusCode}} = 200"
+          },
+          "modules": [
+            {
+              "id": 13,
+              "module": "http:MakeRequest",
+              "version": 3,
+              "label": "Supabase: Log Successful Execution",
+              "parameters": {
+                "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/automation_logs",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+                  {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "body": {
+                  "scenario": "agent_2a_listicle_creator",
+                  "status": "success",
+                  "brand": "{{2.data[0].brand_name}}",
+                  "subdomain_category": "{{2.data[0].category}}",
+                  "post_title": "{{5.title}}",
+                  "post_id": "{{8.data[0].id}}",
+                  "cover_pin_id": "{{10.data.id}}",
+                  "scheduled_inline_pins": "{{9.data.scheduled_count}}",
+                  "images_fetched": "{{length(5.list_items)}}",
+                  "execution_time_ms": "{{executionDuration}}",
+                  "created_at": "{{formatDate(now; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "label": "Error Path",
+          "filter": {
+            "condition": "{{isError}} = true"
+          },
+          "modules": [
+            {
+              "id": 14,
+              "module": "http:MakeRequest",
+              "version": 3,
+              "label": "Supabase: Log Error",
+              "parameters": {
+                "url": "{{ifempty(connections.supabase.url; 'https://epfoxpgrpsnhlsglxvsa.supabase.co')}}/rest/v1/automation_logs",
+                "method": "POST",
+                "headers": [
+                  {"name": "apikey", "value": "{{connections.supabase.apikey}}"},
+                  {"name": "Authorization", "value": "Bearer {{connections.supabase.apikey}}"},
+                  {"name": "Content-Type", "value": "application/json"}
+                ],
+                "body": {
+                  "scenario": "agent_2a_listicle_creator",
+                  "status": "error",
+                  "brand": "{{2.data[0].brand_name}}",
+                  "subdomain_category": "{{2.data[0].category}}",
+                  "error_module": "{{error.moduleName}}",
+                  "error_message": "{{error.message}}",
+                  "error_type": "{{error.type}}",
+                  "created_at": "{{formatDate(now; 'YYYY-MM-DDTHH:mm:ss.SSSZ')}}"
+                }
+              }
+            },
+            {
+              "id": 15,
+              "module": "email:Send",
+              "version": 1,
+              "label": "Send Error Alert Email",
+              "parameters": {
+                "to": "{{connections.alert_email}}",
+                "subject": "[Agent 2A Error] Listicle Creator Failed - {{2.data[0].brand_name}}",
+                "body": "Agent 2A Listicle Creator encountered an error.\n\nBrand: {{2.data[0].brand_name}}\nCategory: {{2.data[0].category}}\nModule: {{error.moduleName}}\nError: {{error.message}}\nTime: {{formatDate(now; 'YYYY-MM-DD HH:mm:ss')}} PST\n\nCheck the Make.com execution log for details.",
+                "contentType": "text/plain"
+              }
+            }
+          ]
+        }
+      ],
+      "metadata": {
+        "notes": "Routes to success logging or error handling. Error path logs to Supabase and sends an email alert. Success path logs the completion with all relevant IDs for auditing."
+      }
+    }
+  ],
+  "connections": {
+    "supabase": {
+      "type": "http_api_key",
+      "label": "Supabase REST API",
+      "fields": {
+        "url": "Your Supabase project URL (e.g., https://epfoxpgrpsnhlsglxvsa.supabase.co)",
+        "apikey": "Your Supabase anon/service_role key"
+      }
+    },
+    "anthropic": {
+      "type": "http_api_key",
+      "label": "Anthropic Claude API",
+      "fields": {
+        "apikey": "Your Anthropic API key (sk-ant-...)"
+      },
+      "headerName": "x-api-key"
+    },
+    "pexels": {
+      "type": "http_api_key",
+      "label": "Pexels Image API",
+      "fields": {
+        "apikey": "Your Pexels API key"
+      },
+      "headerName": "Authorization"
+    },
+    "pinterest": {
+      "type": "oauth2",
+      "label": "Pinterest Business Account",
+      "fields": {
+        "access_token": "Pinterest OAuth2 access token"
+      },
+      "scopes": ["boards:read", "boards:write", "pins:read", "pins:write"]
+    },
+    "alert_email": {
+      "type": "string",
+      "label": "Error Alert Email",
+      "value": "Your alert email address"
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2026-02-07",
+    "author": "Social Media Empire",
+    "operationsPerRun": {
+      "estimated": 15,
+      "breakdown": {
+        "scheduler": 1,
+        "supabase_reads": 2,
+        "claude_api": 1,
+        "json_parse": 1,
+        "pexels_api_calls": "7-8 (one per list item + optional cover)",
+        "supabase_writes": 3,
+        "pinterest_api": 1,
+        "logging": 1
+      }
+    },
+    "monthlyOperations": {
+      "estimated": "15 ops x 3 runs/day x 30 days = 1,350 ops/month",
+      "makePlanRequired": "Free tier (10,000 ops) is sufficient"
+    },
+    "requiredSupabaseTables": [
+      "subdomains",
+      "listicle_posts",
+      "scheduled_pins",
+      "automation_logs"
+    ],
+    "requiredSupabaseRPC": [
+      "schedule_inline_images"
+    ]
+  }
+}

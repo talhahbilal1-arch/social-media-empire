@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sleep Guide — Menopause Planner</title>
+<meta name="description" content="Sleep solutions for menopause. Products and strategies to manage night sweats, insomnia, and improve rest quality.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://menopause-planner-website.vercel.app/sleep.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://menopause-planner-website.vercel.app/sleep.html">
+<meta property="og:title" content="Sleep Guide | Menopause Planner">
+<meta property="og:description" content="Sleep solutions for menopause. Products and strategies to manage night sweats, insomnia, and improve rest quality.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Sleep Guide — Menopause Planner",
+  "description": "Sleep solutions for menopause. Products and strategies to manage night sweats, insomnia, and improve rest quality.",
+  "url": "https://menopause-planner-website.vercel.app/sleep.html"
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02ZPS3H3GC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-02ZPS3H3GC');
+</script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #faf8fc;
+  color: #2d2d2d;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+nav {
+  background: #ffffff;
+  border-bottom: 1px solid #e8d9f0;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #7B1FA2;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: #2d2d2d;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #7B1FA2;
+}
+
+.hero {
+  padding: 100px 0 80px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.hero h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 56px;
+  line-height: 1.1;
+  color: #7B1FA2;
+  margin-bottom: 24px;
+}
+
+.hero p {
+  font-size: 20px;
+  color: #666666;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.articles-section {
+  padding: 80px 0 120px;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 32px;
+}
+
+.article-card {
+  background: #ffffff;
+  border: 1px solid #e8d9f0;
+  border-radius: 12px;
+  padding: 32px;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: block;
+}
+
+.article-card:hover {
+  transform: translateY(-4px);
+  border-color: #7B1FA2;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.article-card h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #2d2d2d;
+  margin-bottom: 12px;
+}
+
+.article-card p {
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.email-signup {
+  background: #ffffff;
+  border: 1px solid #e8d9f0;
+  border-radius: 16px;
+  padding: 80px 40px;
+  margin: 80px 0;
+  text-align: center;
+}
+
+.email-signup h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 40px;
+  color: #7B1FA2;
+  margin-bottom: 16px;
+}
+
+.email-signup p {
+  font-size: 18px;
+  color: #666666;
+  margin-bottom: 32px;
+}
+
+footer {
+  background: #ffffff;
+  border-top: 1px solid #e8d9f0;
+  padding: 60px 0 40px;
+  text-align: center;
+}
+
+footer p {
+  color: #666666;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
+
+  .email-signup {
+    padding: 60px 24px;
+  }
+
+  .email-signup h2 {
+    font-size: 32px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-content">
+      <a href="/" class="logo">Menopause Planner</a>
+      <div class="nav-links">
+        <a href="/supplements.html">Supplements</a>
+        <a href="/sleep.html" class="active">Sleep</a>
+        <a href="/wellness.html">Wellness</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <h1>Sleep</h1>
+    <p>Solutions for menopause-related sleep issues. From night sweats to insomnia, find products and strategies that work.</p>
+  </div>
+</div>
+
+<section class="articles-section">
+  <div class="container">
+    <div class="articles-grid" id="articles-grid"></div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="email-signup">
+    <h2>Get Weekly Wellness Tips</h2>
+    <p>Join women navigating menopause with science-backed advice and support.</p>
+    <div data-kickstarter-form="9144926"></div>
+    <script src="https://scripts.getkickstarter.com/form.js" defer></script>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Menopause Planner. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+const articles = [
+  {
+    "filename": "best-cooling-mattress-topper-menopause.html",
+    "title": "Best Cooling Mattress Topper for Menopause — The Menopause Planner",
+    "description": "Beat night sweats with the best cooling mattress toppers! Find relief and sleep soundly through menopause with our top picks."
+  },
+  {
+    "filename": "best-cooling-pajamas-for-menopause-night-sweats.html",
+    "title": "Best Cooling Pajamas for Menopause Night Sweats — The Menopause Planner",
+    "description": "Say goodbye to night sweats with our guide to the best cooling pajamas designed for menopause. Find relief and comfort tonight!"
+  },
+  {
+    "filename": "best-cooling-pajamas-for-night-sweats-during-menopause.html",
+    "title": "Best Cooling Pajamas for Night Sweats During Menopause — The Menopause Planner",
+    "description": "Beat night sweats with the best cooling pajamas! Find relief during menopause with our top picks for breathable, moisture-wicking sleepwear."
+  },
+  {
+    "filename": "best-cooling-pillows-for-menopause-night-sweats.html",
+    "title": "Best Cooling Pillows for Menopause Night Sweats — The Menopause Planner",
+    "description": "Cooling pillows can be a lifesaver during menopause. Find the best pillows for night sweats to sleep comfortably through the night."
+  },
+  {
+    "filename": "best-cooling-pillows-night-sweats.html",
+    "title": "Best Cooling Pillows for Night Sweats — The Menopause Planner",
+    "description": "Find the best cooling pillows to beat night sweats during menopause. Our top picks for gel, shredded memory foam, and bamboo pillows that actually keep you cool all night."
+  },
+  {
+    "filename": "best-cooling-sheets-for-menopause-night-sweats-2024.html",
+    "title": "Best Cooling Sheets for Menopause Night Sweats 2024 — The Menopause Planner",
+    "description": "Finally, a good night&#x27;s sleep! Discover the best cooling sheets to combat menopause night sweats and stay comfortable all night long."
+  },
+  {
+    "filename": "best-cooling-sheets-for-menopause-night-sweats.html",
+    "title": "Best Cooling Sheets for Menopause Night Sweats — The Menopause Planner",
+    "description": "Say goodbye to night sweats! Discover the best cooling sheets for menopause to stay comfortable and sleep soundly through the night."
+  },
+  {
+    "filename": "best-magnesium-supplement-for-menopause-sleep-and-anxiety.html",
+    "title": "Best Magnesium Supplement for Menopause Sleep and Anxiety — The Menopause Planner",
+    "description": "Discover the best magnesium supplements to ease menopause symptoms like sleep issues and anxiety. Find the right form for your needs!"
+  },
+  {
+    "filename": "best-magnesium-supplement-for-menopause-sleep.html",
+    "title": "Best Magnesium Supplement for Menopause Sleep — The Menopause Planner",
+    "description": "Struggling to sleep during menopause? Discover the best magnesium supplements to ease insomnia, reduce anxiety, and promote restful nights."
+  },
+  {
+    "filename": "best-magnesium-supplements-for-menopause-sleep-and-anxiety.html",
+    "title": "Best Magnesium Supplements for Menopause Sleep and Anxiety — The Menopause Planner",
+    "description": "Struggling with sleep and anxiety during menopause? Discover the best magnesium supplements to help you find relief and reclaim your calm."
+  },
+  {
+    "filename": "best-sleep-aids-menopause-insomnia.html",
+    "title": "Best Sleep Aids for Menopause Insomnia — The Menopause Planner",
+    "description": "The best sleep aids for menopause insomnia. Compare magnesium, melatonin, valerian, and sleep-promoting gadgets that actually help menopausal women sleep through the night."
+  },
+  {
+    "filename": "best-weighted-blanket-menopause-sleep.html",
+    "title": "Best Weighted Blanket for Menopause Sleep — The Menopause Planner",
+    "description": "Find the best weighted blankets for menopause sleep. Cooling weighted blankets that reduce anxiety, improve sleep quality, and won"
+  },
+  {
+    "filename": "hot-flash-triggers-identification-and-avoidance-strategies.html",
+    "title": "Hot Flash Triggers I Finally Stopped (And Started Sleeping Again) — The Menopause Planner",
+    "description": "Discover the surprising hot flash triggers I eliminated to finally get a full night&#x27;s sleep. Evidence-based strategies for perimenopause &amp; menopause."
+  },
+  {
+    "filename": "magnesium-glycinate-sleep-protocol-for-menopause.html",
+    "title": "The Magnesium Glycinate Sleep Protocol That Finally Ended My 3AM Wake-Ups — The Menopause Planner",
+    "description": "Discover how magnesium glycinate helped me overcome perimenopause-related insomnia and reclaim restful nights. My simple sleep protocol revealed!"
+  },
+  {
+    "filename": "night-sweats-and-sleep-disruption-practical-solutions.html",
+    "title": "Night Sweats and Sleep Disruption: Simple Fixes That Actually Work — The Menopause Planner",
+    "description": "Tired of night sweats ruining your sleep during menopause? Discover simple, effective solutions for a cooler, more restful night."
+  },
+  {
+    "filename": "sleep-disruption-beyond-night-sweats-menopause-insomnia.html",
+    "title": "Menopause Insomnia: The Real Causes Beyond Night Sweats — The Menopause Planner",
+    "description": "Struggling with sleep during menopause? Discover hidden causes of insomnia beyond hot flashes &amp; practical tips to reclaim restful nights."
+  },
+  {
+    "filename": "sleep-hygiene-routine-for-night-sweats-and-insomnia.html",
+    "title": "Night Sweats Sleep Routine That Actually Worked for Me — The Menopause Planner",
+    "description": "Finally conquered night sweats! My routine includes cooling bedding, mindfulness, and the Menopause Symptom Tracker for sweet dreams."
+  }
+];
+
+const grid = document.getElementById('articles-grid');
+articles.forEach(article => {
+  const card = document.createElement('a');
+  card.href = '/articles/' + article.filename;
+  card.className = 'article-card';
+
+  const title = document.createElement('h3');
+  title.textContent = article.title;
+
+  const desc = document.createElement('p');
+  desc.textContent = article.description;
+
+  card.appendChild(title);
+  card.appendChild(desc);
+  grid.appendChild(card);
+});
+</script>
+
+</body>
+</html>

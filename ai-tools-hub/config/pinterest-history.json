@@ -655,5 +655,113 @@
     "board": "AI Video Tools",
     "posted_at": "2026-04-06T22:24:44.408Z",
     "success": true
+  },
+  {
+    "slug": "descript",
+    "pin_type": "tool-review",
+    "title": "Descript Review: Effortless AI Video Editing (4.5/5)",
+    "link": "https://pilottools.ai/tools/descript/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-07T17:10:28.672Z",
+    "success": true
+  },
+  {
+    "slug": "simplified-vs-canva",
+    "pin_type": "comparison",
+    "title": "Simplified vs Canva: Which Design Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/simplified-vs-canva/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-07T17:10:32.831Z",
+    "success": true
+  },
+  {
+    "slug": "category-productivity",
+    "pin_type": "category",
+    "title": "AI Productivity Powerhouse! Top Tools of 2026 🚀",
+    "link": "https://pilottools.ai/category/productivity/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-07T17:10:36.880Z",
+    "success": true
+  },
+  {
+    "slug": "semrush",
+    "pin_type": "tool-review",
+    "title": "Semrush AI SEO Review: Worth the Price?",
+    "link": "https://pilottools.ai/tools/semrush/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-07T22:27:40.197Z",
+    "success": true
+  },
+  {
+    "slug": "elevenlabs",
+    "pin_type": "tool-review",
+    "title": "ElevenLabs AI Voice Magic: Is it Worth the Hype? (4.8/5)",
+    "link": "https://pilottools.ai/tools/elevenlabs/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-04-07T22:27:44.403Z",
+    "success": true
+  },
+  {
+    "slug": "jasper-vs-writesonic",
+    "pin_type": "comparison",
+    "title": "Jasper vs Writesonic: AI Content Showdown! Which Tool Wins?",
+    "link": "https://pilottools.ai/compare/jasper-vs-writesonic/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-07T22:27:48.552Z",
+    "success": true
+  },
+  {
+    "slug": "category-seo",
+    "pin_type": "category",
+    "title": "Top AI SEO Tools DOMINATING 2026: Boost Your Rankings!",
+    "link": "https://pilottools.ai/category/seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-08T17:15:03.379Z",
+    "success": true
+  },
+  {
+    "slug": "copy-ai-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Copy.ai vs ChatGPT: Which AI Copywriting Tool is Best?",
+    "link": "https://pilottools.ai/compare/copy-ai-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-08T17:15:07.655Z",
+    "success": true
+  },
+  {
+    "slug": "ai-tools-teachers-2026",
+    "pin_type": "article",
+    "title": "AI for Teachers: Save Time & Boost Student Success!",
+    "link": "https://pilottools.ai/blog/ai-tools-teachers-2026/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-08T17:15:11.776Z",
+    "success": true
+  },
+  {
+    "slug": "rytr-vs-jasper",
+    "pin_type": "comparison",
+    "title": "Rytr vs Jasper AI: Which AI Writer Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/rytr-vs-jasper/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-08T22:29:03.044Z",
+    "success": true
+  },
+  {
+    "slug": "copy-ai",
+    "pin_type": "tool-review",
+    "title": "Copy.ai Review: Level Up Your Marketing with AI! 🤖",
+    "link": "https://pilottools.ai/tools/copy-ai/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-04-08T22:29:07.144Z",
+    "success": true
+  },
+  {
+    "slug": "category-image",
+    "pin_type": "category",
+    "title": "AI Image Magic: Top Tools Transforming Visuals in 2026!",
+    "link": "https://pilottools.ai/category/image/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-04-08T22:29:11.550Z",
+    "success": true
   }
 ]

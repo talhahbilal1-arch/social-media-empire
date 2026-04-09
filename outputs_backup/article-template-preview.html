@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">The Iron Standard | Fitness Made Easy — Best of 2026, Expert Verified</title>
+    <meta name="description" content="Expert-verified fitness guide with science-backed recommendations.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Theme-specific overrides */
+        :root {
+            --bg-color: #0A0A0A;
+            --accent-color: #CCFF00;
+            --text-color: #FFFFFF;
+            --heading-font: 'Oswald', sans-serif;
+            --body-font: 'Inter', sans-serif;
+            --site-name: 'Fitness Made Easy';
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--body-font);
+            transition: all 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--heading-font);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .accent-text {
+            color: var(--accent-color);
+        }
+
+        .accent-bg {
+            background-color: var(--accent-color);
+        }
+
+        .accent-border {
+            border-color: var(--accent-color);
+        }
+
+        /* Theme switch */
+        body.menopause-theme {
+            --bg-color: #FDF5E6;
+            --accent-color: #6B8E23;
+            --text-color: #4A4A4A;
+            --heading-font: 'Lora', serif;
+            --body-font: 'Inter', sans-serif;
+            --site-name: 'Menopause Planner';
+        }
+
+        body.deals-theme {
+            --bg-color: #FAF9F6;
+            --accent-color: #D4AF37;
+            --text-color: #1A1A1A;
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'Inter', sans-serif;
+            --site-name: 'Daily Deal Darling';
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-width: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        body.menopause-theme .theme-toggle {
+            background: rgba(107, 142, 35, 0.1);
+        }
+
+        body.deals-theme .theme-toggle {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .theme-btn {
+            padding: 8px 14px;
+            border: 2px solid var(--accent-color);
+            background: transparent;
+            color: var(--accent-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .expert-card {
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        body.menopause-theme .expert-card,
+        body.deals-theme .expert-card {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .expert-initials {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .geo-badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        body.menopause-theme .geo-badge,
+        body.deals-theme .geo-badge {
+            color: #FFFFFF;
+        }
+
+        .product-card {
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        body.menopause-theme .product-card,
+        body.deals-theme .product-card {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+
+        .amazon-btn {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-color);
+        }
+
+        body.menopause-theme .amazon-btn,
+        body.deals-theme .amazon-btn {
+            color: #FFFFFF;
+        }
+
+        .amazon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .sticky-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 15px 20px;
+            text-align: center;
+            font-weight: 700;
+            z-index: 40;
+            animation: slideUp 0.3s ease;
+        }
+
+        body.menopause-theme .sticky-cta,
+        body.deals-theme .sticky-cta {
+            color: #FFFFFF;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .content {
+            padding-bottom: 60px;
+        }
+
+        .affiliate-disclosure {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        body.menopause-theme .affiliate-disclosure,
+        body.deals-theme .affiliate-disclosure {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .email-signup {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        body.menopause-theme .email-signup,
+        body.deals-theme .email-signup {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .email-signup input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--accent-color);
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: var(--body-font);
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .email-signup button {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        body.menopause-theme .email-signup button,
+        body.deals-theme .email-signup button {
+            color: #FFFFFF;
+        }
+
+        .email-signup button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Schema.org comment */
+        .schema-comment {
+            display: none;
+        }
+
+        /* Analytics comment */
+        .analytics-comment {
+            display: none;
+        }
+
+        .site-name {
+            font-family: var(--heading-font);
+        }
+
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-description {
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            opacity: 0.75;
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                max-width: 280px;
+            }
+
+            .hero-image {
+                height: 250px;
+            }
+
+            .content {
+                padding: 20px;
+                padding-bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body class="fitness-theme">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn active" data-theme="fitness">Iron Standard</button>
+        <button class="theme-btn" data-theme="menopause">Wellness Whisper</button>
+        <button class="theme-btn" data-theme="deals">Aesthetic Edit</button>
+    </div>
+
+    <!-- Schema.org structured data comment -->
+    <div class="schema-comment">
+        <!--
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "The Complete Guide to Strength Training After 35",
+            "datePublished": "2026-03-01",
+            "dateModified": "2026-03-03",
+            "author": {
+                "@type": "Person",
+                "name": "Talhah Bilal",
+                "credential": ["NASM-CPT", "Kinesiology Degree"]
+            },
+            "image": "https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg",
+            "articleBody": "..."
+        }
+        </script>
+        -->
+    </div>
+
+    <!-- Analytics comment -->
+    <div class="analytics-comment">
+        <!--
+        GA4 Event: page_view
+        UTM: utm_source=pinterest&utm_medium=pin&utm_campaign=fitness_strength_training
+        ConvertKit Form ID: 5641382
+        -->
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Header -->
+        <header id="header" class="bg-opacity-10 py-6 px-4 md:px-20">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-sm font-bold accent-text mb-4">EXPERT GUIDE</div>
+                <h1 id="mainTitle" class="text-4xl md:text-5xl font-bold mb-4">The Complete Guide to Strength Training After 35</h1>
+                <p id="subtitle" class="text-lg opacity-90">Science-backed strategies to build muscle, prevent injury, and dominate your fitness goals in your prime years.</p>
+            </div>
+        </header>
+
+        <!-- Hero Image -->
+        <div id="heroContainer" class="w-full">
+            <img id="heroImage" src="https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg" alt="Hero image" class="hero-image">
+        </div>
+
+        <!-- Main Content -->
+        <article id="article" class="max-w-4xl mx-auto px-4 md:px-20 py-12">
+
+            <!-- Expert Card -->
+            <div class="expert-card mb-8 flex items-start gap-4">
+                <div class="expert-initials">TB</div>
+                <div>
+                    <h4 class="font-bold mb-1">Talhah Bilal</h4>
+                    <p class="text-sm opacity-75">NASM-CPT • Kinesiology Degree • 12+ years coaching</p>
+                    <p class="text-xs opacity-60 mt-2">Expert reviewed & science-backed</p>
+                </div>
+            </div>
+
+            <!-- Geo Badge -->
+            <div class="geo-badge">
+                ✓ Verified for fast Prime delivery to the Greater San Francisco Bay Area
+            </div>
+
+            <!-- Section 1 -->
+            <section class="my-12">
+                <h2 class="text-2xl font-bold mb-4">Why Your 30s & 40s Are Your Strength Prime</h2>
+                <p class="mb-4 leading-relaxed">
+                    Contrary to popular belief, your 30s and 40s aren't when your body starts declining—they're when you finally have the experience, stability, and commitment to build serious strength. Most men who start training in their teenage years plateau by 25-30. But at 35+, you have a unique advantage: mental toughness and consistency.
+                </p>
+                <p class="mb-4 leading-relaxed">
+                    Research from the Journal of Applied Physiology shows that men who train consistently in their 30s and 40s can build muscle at nearly the same rate as younger trainees, provided they optimize recovery and nutrition. The key is understanding what changes—and what doesn't.
+                </p>
+            </section>
+
+            <!-- Product Card 1 -->
+            <div id="product-0" class="product-card my-8">
+                <h3 class="product-title">Essential Training Tool: Competition Kettlebell (35 lbs)</h3>
+                <p class="product-description">A competition kettlebell is one of the most versatile tools for over-35 training. Its fixed handle diameter and centered balance point make it ideal for explosive movements like swings, snatches, and Turkish get-ups—all of which build functional strength while protecting your joints.</p>
+                <p class="product-price">Price range: $80-150</p>
+                <a href="https://amazon.com/s?k=competition+kettlebell+35lbs&tag=dailydealdarl-20" class="amazon-btn">See on Amazon</a>
+            </div>
+
+            <!-- Section 2 -->
+            <section class="my-12">
+                <h2 class="text-2xl font-bold mb-4">The 5 Pillars of Strength After 35</h2>
+
+                <h3 class="text-xl font-bold mt-8 mb-3">1. Progressive Overload with Intention</h3>
+                <p class="mb-4">Don't chase ego. Progressive overload means adding 1-2 reps or 5 lbs every 2 weeks, not jumping 30 lbs and blowing your back out. Track every set, every rep.</p>
+
+                <h3 class="text-xl font-bold mt-8 mb-3">2. Compound Movements First</h3>
+                <p class="mb-4">Squats, deadlifts, bench press, and rows. These movements recruit the most muscle fibers and create the greatest hormonal response. Prioritize them in your training day when your energy is highest.</p>
+
+                <h3 class="text-xl font-bold mt-8 mb-3">3. Recovery is Non-Negotiable</h3>
+                <p class="mb-4">8+ hours of sleep, manage stress, and space your hard training days. Your 35+ body heals slower and needs more recovery between intense sessions.</p>
+
+                <h3 class="text-xl font-bold mt-8 mb-3">4. Protein Intake: 0.8-1g per lb of Body Weight</h3>
+                <p class="mb-4">At 35+, muscle protein synthesis is slightly blunted. You need more protein to trigger the same muscle-building response. Spread it across 3-4 meals.</p>
+
+                <h3 class="text-xl font-bold mt-8 mb-3">5. Movement Quality Over Volume</h3>
+                <p class="mb-4">High volume training puts stress on connective tissue. Focus on perfect form, controlled tempo, and complete range of motion. 3-4 sets per exercise is enough if executed perfectly.</p>
+            </section>
+
+            <!-- Product Card 2 -->
+            <div id="product-1" class="product-card my-8">
+                <h3 class="product-title">Recovery Essential: Whey Protein Isolate</h3>
+                <p class="product-description">A clean, fast-digesting protein source to hit your daily targets. Whey isolate has minimal lactose and carbs—just pure muscle-building amino acids. Mix with water or unsweetened almond milk within 30 minutes of training.</p>
+                <p class="product-price">Price range: $30-60 per container</p>
+                <a href="https://amazon.com/s?k=whey+protein+isolate&tag=dailydealdarl-20" class="amazon-btn">See on Amazon</a>
+            </div>
+
+            <!-- Section 3 -->
+            <section class="my-12">
+                <h2 class="text-2xl font-bold mb-4">Sample 4-Day Training Split for Over-35 Athletes</h2>
+                <p class="mb-4">This program balances strength and hypertrophy while allowing 3 full recovery days:</p>
+
+                <div class="product-card my-6">
+                    <h4 class="font-bold mb-2">Monday: Lower Power + Hypertrophy</h4>
+                    <p class="text-sm">Back Squat 4x3, Leg Press 3x8, Romanian Deadlift 3x6, Leg Curl 2x10, Ab Wheel 3x8</p>
+                </div>
+
+                <div class="product-card my-6">
+                    <h4 class="font-bold mb-2">Wednesday: Upper Power + Hypertrophy</h4>
+                    <p class="text-sm">Bench Press 4x3, Incline Dumbbell Press 3x8, Barbell Rows 4x5, Face Pulls 3x12, Dips 3x8</p>
+                </div>
+
+                <div class="product-card my-6">
+                    <h4 class="font-bold mb-2">Friday: Lower Hypertrophy</h4>
+                    <p class="text-sm">Front Squat 3x6, Hack Squat 3x8, Leg Extension 3x10, Seated Leg Curl 3x10, Calf Raise 3x12</p>
+                </div>
+
+                <div class="product-card my-6">
+                    <h4 class="font-bold mb-2">Sunday: Upper Hypertrophy</h4>
+                    <p class="text-sm">Deadlift 3x3, Pendlay Row 3x6, Dumbbell Bench Press 3x8, Pull-ups 3x6-10, Machine Flye 2x10</p>
+                </div>
+            </section>
+
+            <!-- Email Signup -->
+            <div class="email-signup">
+                <h3 class="text-2xl font-bold mb-2">Get Your Free Over-35 Training Blueprint</h3>
+                <p class="mb-6 opacity-85">12-week progressive overload program, joint-friendly variations, and nutrition guide.</p>
+                <form onsubmit="event.preventDefault(); alert('Form ID: 5641382 - This would submit to ConvertKit');">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Get Free Blueprint</button>
+                </form>
+                <p class="text-xs opacity-60 mt-4">We respect your privacy. Unsubscribe anytime.</p>
+            </div>
+
+            <!-- Affiliate Disclosure -->
+            <div class="affiliate-disclosure">
+                <strong>Affiliate Disclosure:</strong> This article contains affiliate links to Amazon products. We earn a small commission when you purchase through these links at no extra cost to you. This helps us keep delivering free, expert-verified content. All recommendations are based on genuine product quality and effectiveness, not commission rates.
+            </div>
+
+            <!-- Section 4 -->
+            <section class="my-12">
+                <h2 class="text-2xl font-bold mb-4">Common Mistakes Men Over 35 Make</h2>
+
+                <div class="bg-opacity-10 p-6 rounded-lg my-6">
+                    <h4 class="font-bold mb-2">❌ Not adjusting rep ranges</h4>
+                    <p class="text-sm opacity-85">Doing 20+ rep sets doesn't build strength. Over-35 athletes need 3-8 rep ranges for power development.</p>
+                </div>
+
+                <div class="bg-opacity-10 p-6 rounded-lg my-6">
+                    <h4 class="font-bold mb-2">❌ Skipping warm-ups</h4>
+                    <p class="text-sm opacity-85">A 10-minute dynamic warm-up is non-negotiable at 35+. It primes your nervous system and protects connective tissue.</p>
+                </div>
+
+                <div class="bg-opacity-10 p-6 rounded-lg my-6">
+                    <h4 class="font-bold mb-2">❌ Inadequate caloric surplus</h4>
+                    <p class="text-sm opacity-85">You need 300-500 calories above maintenance to build muscle at 35+. Undereating sabotages gains.</p>
+                </div>
+
+                <div class="bg-opacity-10 p-6 rounded-lg my-6">
+                    <h4 class="font-bold mb-2">❌ Ignoring mobility work</h4>
+                    <p class="text-sm opacity-85">Tight hips and shoulders limit your range of motion and increase injury risk. 10 minutes of mobility 3-4x/week is essential.</p>
+                </div>
+            </section>
+
+            <!-- Product Card 3 -->
+            <div id="product-2" class="product-card my-8">
+                <h3 class="product-title">Mobility Tool: Lacrosse Ball Set</h3>
+                <p class="product-description">Self-myofascial release is a game-changer at 35+. Use lacrosse balls to release tension in your feet, calves, glutes, and upper back. 5 minutes daily prevents movement compensations.</p>
+                <p class="product-price">Price range: $15-30</p>
+                <a href="https://amazon.com/s?k=lacrosse+ball+massage+set&tag=dailydealdarl-20" class="amazon-btn">See on Amazon</a>
+            </div>
+
+            <!-- Final Section -->
+            <section class="my-12">
+                <h2 class="text-2xl font-bold mb-4">Your Next Step</h2>
+                <p class="mb-4">The best time to start was 10 years ago. The second-best time is today. Strength training after 35 isn't harder—it's different. You now have the wisdom to avoid the mistakes of youth, the mental toughness to stay consistent, and the biological capacity to build serious muscle and strength.</p>
+                <p class="mb-4">Start with the basics: compound movements, progressive overload, adequate nutrition, and sleep. The rest is execution.</p>
+                <p class="font-bold accent-text">Get that blueprint. Start training smarter, not harder.</p>
+            </section>
+
+        </article>
+    </div>
+
+    <!-- Sticky Bottom CTA -->
+    <div id="stickyCtaBar" class="sticky-cta">
+        <span id="ctaText">Master Strength Training After 35 — Download Your Free Blueprint</span>
+    </div>
+
+    <script>
+        // Theme data
+        const themes = {
+            fitness: {
+                bgColor: '#0A0A0A',
+                accentColor: '#CCFF00',
+                textColor: '#FFFFFF',
+                headingFont: "'Oswald', sans-serif",
+                bodyFont: "'Inter', sans-serif",
+                siteName: 'Fitness Made Easy',
+                themeClass: 'fitness-theme',
+                heroImage: 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg',
+                pageTitle: 'The Complete Guide to Strength Training After 35 | Fitness Made Easy — Best of 2026, Expert Verified',
+                mainTitle: 'The Complete Guide to Strength Training After 35',
+                subtitle: 'Science-backed strategies to build muscle, prevent injury, and dominate your fitness goals in your prime years.',
+                ctaText: 'Master Strength Training After 35 — Download Your Free Blueprint',
+                products: [
+                    {
+                        title: 'Essential Training Tool: Competition Kettlebell (35 lbs)',
+                        description: 'A competition kettlebell is one of the most versatile tools for over-35 training. Its fixed handle diameter and centered balance point make it ideal for explosive movements like swings, snatches, and Turkish get-ups—all of which build functional strength while protecting your joints.',
+                        price: '$80-150',
+                        link: 'https://amazon.com/s?k=competition+kettlebell+35lbs&tag=dailydealdarl-20'
+                    },
+                    {
+                        title: 'Recovery Essential: Whey Protein Isolate',
+                        description: 'A clean, fast-digesting protein source to hit your daily targets. Whey isolate has minimal lactose and carbs—just pure muscle-building amino acids. Mix with water or unsweetened almond milk within 30 minutes of training.',
+                        price: '$30-60 per container',
+                        link: 'https://amazon.com/s?k=whey+protein+isolate&tag=dailydealdarl-20'
+                    },
+                    {
+                        title: 'Mobility Tool: Lacrosse Ball Set',
+                        description: 'Self-myofascial release is a game-changer at 35+. Use lacrosse balls to release tension in your feet, calves, glutes, and upper back. 5 minutes daily prevents movement compensations.',
+                        price: '$15-30',
+                        link: 'https://amazon.com/s?k=lacrosse+ball+massage+set&tag=dailydealdarl-20'
+                    }
+                ]
+            },
+            menopause: {
+                bgColor: '#FDF5E6',
+                accentColor: '#6B8E23',
+                textColor: '#4A4A4A',
+                headingFont: "'Lora', serif",
+                bodyFont: "'Inter', sans-serif",
+                siteName: 'Menopause Planner',
+                themeClass: 'menopause-theme',
+                heroImage: 'https://images.pexels.com/photos/3771069/pexels-photo-3771069.jpeg',
+                pageTitle: 'Navigating Menopause: A Complete Wellness Guide | Menopause Planner — Best of 2026, Expert Verified',
+                mainTitle: 'Navigating Menopause: A Complete Wellness Guide',
+                subtitle: 'Evidence-based strategies to manage symptoms, optimize health, and reclaim your vitality during this transformative stage of life.',
+                ctaText: 'Transform Your Menopause Journey — Get Your Personalized Wellness Plan',
+                products: [
+                    {
+                        title: 'Wellness Essential: High-Quality Supplements Bundle',
+                        description: 'A curated bundle designed specifically for menopausal women. Includes Black Cohosh, Red Clover, Evening Primrose Oil, and a premium B-Complex formulated for hormonal balance and energy support during perimenopause and menopause.',
+                        price: '$45-75',
+                        link: 'https://amazon.com/s?k=menopause+supplements+black+cohosh&tag=dailydealdarl-20'
+                    },
+                    {
+                        title: 'Sleep Support: Weighted Organic Blanket',
+                        description: 'Temperature-regulating weighted blanket designed for hot flash relief. The gentle pressure promotes deeper sleep while premium organic materials wick away moisture. A comfort investment that supports your body through this transition.',
+                        price: '$120-200',
+                        link: 'https://amazon.com/s?k=weighted+blanket+cooling&tag=dailydealdarl-20'
+                    },
+                    {
+                        title: 'Wellness Companion: Premium Journal for Symptom Tracking',
+                        description: 'An empathetic, beautifully designed journal to track moods, sleep quality, hot flashes, and wellness breakthroughs. Understanding your personal patterns is the first step to reclaiming balance.',
+                        price: '$25-40',
+                        link: 'https://amazon.com/s?k=wellness+journal+menopause&tag=dailydealdarl-20'
+                    }
+                ]
+            },
+            deals: {
+                bgColor: '#FAF9F6',
+                accentColor: '#D4AF37',
+                textColor: '#1A1A1A',
+                headingFont: "'Playfair Display', serif",
+                bodyFont: "'Inter', sans-serif",
+                siteName: 'Daily Deal Darling',
+                themeClass: 'deals-theme',
+                heroImage: 'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg',
+                pageTitle: 'The Art of Luxury Living on a Budget: Designer Finds Under $50 | Daily Deal Darling — Best of 2026, Expert Verified',
+                mainTitle: 'The Art of Luxury Living on a Budget: Designer Finds Under $50',
+                subtitle: 'Curated luxury home and lifestyle pieces that don\'t compromise on elegance. Discover how to build a sophisticated aesthetic while respecting your budget.',
+                ctaText: 'Unlock Luxury on Budget — Get Our Weekly Curated Deal List',
+                products: [
+                    {
+                        title: 'Artisan Ceramic Vase Collection',
+                        description: 'Hand-crafted ceramic vases that evoke gallery-quality aesthetics. Perfect for styling shelves, tables, or as striking standalone pieces. Available in matte white, sage, and charcoal. These pieces instantly elevate any room.',
+                        price: '$18-35',
+                        link: 'https://amazon.com/s?k=luxury+ceramic+vase+home+decor&tag=dailydealdarl-20'
+                    },
+                    {
+                        title: 'Linen Throw Pillow Set',
+                        description: 'Premium natural linen pillows in neutral tones (cream, taupe, stone). These add texture and sophistication to any sofa or bed. Made from sustainable materials with invisible zippers for a clean aesthetic.',
+                        price: '$22-45',
+                        link: 'https://amazon.com/s?k=linen+throw+pillows+neutral&tag=dailydealdarl-20'
+                    },
+                    {
+                        title: 'Gold-Trimmed Marble Desk Accessories',
+                        description: 'Elevate your workspace with a marble pen holder, desk pad, and catchall tray—all finished with subtle gold accents. Whispers of luxury in every detail, perfect for remote workers and creative professionals.',
+                        price: '$28-50',
+                        link: 'https://amazon.com/s?k=marble+gold+desk+accessories&tag=dailydealdarl-20'
+                    }
+                ]
+            }
+        };
+
+        // Safe DOM update for product cards
+        function updateProductCard(index, product) {
+            const card = document.getElementById('product-' + index);
+            if (card) {
+                const titleEl = card.querySelector('.product-title');
+                const descEl = card.querySelector('.product-description');
+                const priceEl = card.querySelector('.product-price');
+                const btnEl = card.querySelector('.amazon-btn');
+
+                if (titleEl) titleEl.textContent = product.title;
+                if (descEl) descEl.textContent = product.description;
+                if (priceEl) priceEl.textContent = 'Price range: ' + product.price;
+                if (btnEl) {
+                    btnEl.href = product.link;
+                    btnEl.textContent = 'See on Amazon';
+                }
+            }
+        }
+
+        // Theme switching function
+        function switchTheme(themeName) {
+            const theme = themes[themeName];
+            const body = document.body;
+
+            // Remove all theme classes
+            body.classList.remove('fitness-theme', 'menopause-theme', 'deals-theme');
+
+            // Add new theme class
+            body.classList.add(theme.themeClass);
+
+            // Update page title
+            document.getElementById('pageTitle').textContent = theme.pageTitle;
+
+            // Update main content
+            document.getElementById('mainTitle').textContent = theme.mainTitle;
+            document.getElementById('subtitle').textContent = theme.subtitle;
+            document.getElementById('heroImage').src = theme.heroImage;
+            document.getElementById('ctaText').textContent = theme.ctaText;
+
+            // Update product cards safely
+            theme.products.forEach((product, index) => {
+                updateProductCard(index, product);
+            });
+
+            // Update button states
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update CSS variables
+            document.documentElement.style.setProperty('--bg-color', theme.bgColor);
+            document.documentElement.style.setProperty('--accent-color', theme.accentColor);
+            document.documentElement.style.setProperty('--text-color', theme.textColor);
+            document.documentElement.style.setProperty('--heading-font', theme.headingFont);
+            document.documentElement.style.setProperty('--body-font', theme.bodyFont);
+        }
+
+        // Event listeners
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                switchTheme(this.dataset.theme);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1019 @@
+{
+  "metadata": {
+    "brand": "fitover35",
+    "total_pins": 100,
+    "voice": "Direct, authoritative, no fluff. Discipline over motivation. Systems over willpower. Identity work, not fitness content.",
+    "target_audience": "Men 35+",
+    "distribution": {
+      "workouts": 25,
+      "nutrition": 20,
+      "recovery": 20,
+      "mindset": 20,
+      "home_gym": 15
+    },
+    "topic_angles": ["tactical", "why", "mistake", "science", "identity", "system", "contrast"],
+    "boards": ["Workout Tips", "Nutrition", "Recovery & Stretching", "Identity & Discipline", "Home Gym Setup"]
+  },
+  "pins": [
+    {
+      "id": 1,
+      "category": "workouts",
+      "topic_angle": "tactical",
+      "title": "The 3-2-1 Superset Method for Faster Workouts",
+      "description": "Cut your gym time in half without sacrificing gains. 3 compound sets, 2 isolation sets, 1 finisher. The exact rep scheme built for men with zero time to waste. #fitover35 #supersets #efficiency #gymtips",
+      "image_keywords": ["man gym superset", "dumbbell workout timer", "intense weight training"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [2, 6, 10]
+    },
+    {
+      "id": 2,
+      "category": "workouts",
+      "topic_angle": "why",
+      "title": "Why Full-Body Training Beats Bro Splits After 35",
+      "description": "Your recovery window shrinks with age. Full-body sessions 3x per week produce more growth stimulus than hammering one muscle group into the ground. The data is clear. #fitover35 #fullbody #trainingover35",
+      "image_keywords": ["full body workout man", "compound exercise barbell", "gym training mature man"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [1, 7, 14]
+    },
+    {
+      "id": 3,
+      "category": "workouts",
+      "topic_angle": "mistake",
+      "title": "The Warmup Mistake That Wrecks Your Shoulders",
+      "description": "Static stretching before pressing is destroying your rotator cuffs. Do band pull-aparts and arm circles instead. 2 minutes of prep saves 2 months of rehab. #shoulderhealth #fitover35 #warmup",
+      "image_keywords": ["shoulder warmup resistance band", "man stretching shoulders gym", "rotator cuff exercise"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [41, 42, 8]
+    },
+    {
+      "id": 4,
+      "category": "workouts",
+      "topic_angle": "science",
+      "title": "The Hypertrophy Rep Range Is Wider Than You Think",
+      "description": "Research shows muscle growth happens from 5-30 reps if you train close to failure. Stop obsessing over 8-12 reps. Proximity to failure is the real driver, not the number on your rep counter. #hypertrophy #fitover35",
+      "image_keywords": ["man lifting weights close up", "intense rep dumbbell curl", "muscle training science"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [1, 10, 15]
+    },
+    {
+      "id": 5,
+      "category": "workouts",
+      "topic_angle": "identity",
+      "title": "You're Not 'Working Out' — You're Building a Body That Lasts",
+      "description": "The guy who trains for longevity beats the guy who trains for looks every time. Stop chasing aesthetics. Build a body that still works at 65. That's the real flex. #fitover35 #longevity #identity",
+      "image_keywords": ["strong older man training", "functional fitness mature", "man deadlift confident"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [19, 20, 73]
+    },
+    {
+      "id": 6,
+      "category": "workouts",
+      "topic_angle": "system",
+      "title": "The 4-Day Upper/Lower Split Built for Busy Professionals",
+      "description": "Monday upper, Tuesday lower, Thursday upper, Friday lower. 45 minutes each. No fluff accessories. Compound-dominant with built-in progression. Plug and play. #fitover35 #workout #upperlower #system",
+      "image_keywords": ["man upper body workout", "professional gym training", "structured workout plan"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [1, 2, 14]
+    },
+    {
+      "id": 7,
+      "category": "workouts",
+      "topic_angle": "contrast",
+      "title": "20-Year-Old You vs. 40-Year-Old You: How Training Must Change",
+      "description": "At 20 you could abuse your joints and recover overnight. At 40 you need smarter exercise selection, longer warmups, and deload weeks. Adapt or break down. #fitover35 #ageappropriate #training",
+      "image_keywords": ["mature man gym thoughtful", "training adaptation age", "smart workout planning"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [2, 5, 3]
+    },
+    {
+      "id": 8,
+      "category": "workouts",
+      "topic_angle": "tactical",
+      "title": "Reverse Pyramid Training: Heaviest Set First, Then Drop",
+      "description": "Start with your heaviest set when you're freshest. Drop 10% weight each subsequent set and add 1-2 reps. Maximum strength stimulus in minimum time. The protocol serious lifters use. #RPT #fitover35",
+      "image_keywords": ["heavy barbell squat man", "pyramid training weights", "intense lifting session"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [1, 4, 15]
+    },
+    {
+      "id": 9,
+      "category": "workouts",
+      "topic_angle": "why",
+      "title": "Why Barbell Rows Beat Lat Pulldowns for Back Thickness",
+      "description": "Lat pulldowns build width. Rows build thickness and spinal stability. After 35, a thick, stable back protects your spine under load. Prioritize rows 2:1 over pulldowns. #backday #fitover35 #barbellrow",
+      "image_keywords": ["barbell row exercise man", "thick back muscles gym", "man rowing barbell"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [14, 22, 4]
+    },
+    {
+      "id": 10,
+      "category": "workouts",
+      "topic_angle": "mistake",
+      "title": "Stop Chasing Soreness — It's Not a Sign of Progress",
+      "description": "DOMS means your body isn't adapted yet, not that you had a great workout. Progressive overload on the barbell is the real measure. If you're adding weight or reps, you're growing. Period. #fitover35 #gains",
+      "image_keywords": ["man logging workout progress", "barbell progressive overload", "training journal gym"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [4, 8, 1]
+    },
+    {
+      "id": 11,
+      "category": "workouts",
+      "topic_angle": "science",
+      "title": "How Eccentric Training Builds Stronger Tendons After 35",
+      "description": "Slow negatives (3-5 seconds down) strengthen tendons, not just muscles. Research from BJSM shows eccentric loading reduces tendinopathy risk by 40%. Your tendons need this. #eccentrics #fitover35 #tendonhealth",
+      "image_keywords": ["slow eccentric curl man", "controlled weight lowering", "tendon strength exercise"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [3, 42, 4]
+    },
+    {
+      "id": 12,
+      "category": "workouts",
+      "topic_angle": "identity",
+      "title": "The Man Who Never Misses Monday Sets the Tone for His Life",
+      "description": "Monday isn't about the workout. It's about proving to yourself that you keep commitments. Every Monday session is a vote for the man you're becoming. Miss Monday, and the week unravels. #discipline #fitover35",
+      "image_keywords": ["man Monday morning gym", "early workout determined", "gym discipline consistency"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [5, 19, 73]
+    },
+    {
+      "id": 13,
+      "category": "workouts",
+      "topic_angle": "system",
+      "title": "The 5/3/1 Framework: Periodization That Runs on Autopilot",
+      "description": "Jim Wendler's 5/3/1 auto-regulates intensity across 4-week cycles. Set your training maxes, follow the percentages, add 5 lbs per cycle. No thinking required. Just execution. #531 #fitover35 #periodization",
+      "image_keywords": ["barbell training plan", "periodization chart workout", "man bench press focused"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [6, 8, 1]
+    },
+    {
+      "id": 14,
+      "category": "workouts",
+      "topic_angle": "contrast",
+      "title": "Gym Bros Do 20 Sets for Chest. Strong Men Do 5 That Matter.",
+      "description": "Volume for the sake of volume is ego lifting with extra steps. 3-5 hard sets per muscle group per session is plenty when intensity is high. Quality reps build quality physiques. #fitover35 #minimaleffectivedose",
+      "image_keywords": ["man focused bench press", "quality over quantity gym", "efficient chest workout"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [4, 8, 9]
+    },
+    {
+      "id": 15,
+      "category": "workouts",
+      "topic_angle": "tactical",
+      "title": "Cluster Sets: The Rest-Pause Method for Plateaus",
+      "description": "Hit 3 reps, rack it, rest 15 seconds, hit 2 more, rest 15, hit 2 more. You just got 7 quality reps with a weight you can only do 4. This breaks plateaus. #clusterset #fitover35 #strengthgains",
+      "image_keywords": ["man resting between sets barbell", "heavy squat rack gym", "plateau breaking workout"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [8, 1, 4]
+    },
+    {
+      "id": 16,
+      "category": "workouts",
+      "topic_angle": "why",
+      "title": "Why Single-Leg Work Prevents the Knee Pain You'll Get at 50",
+      "description": "Bilateral squats hide imbalances. Bulgarian split squats expose them. Fixing left-right asymmetry now saves your knees from compensatory wear patterns later. Prevention isn't optional. #kneehealth #fitover35",
+      "image_keywords": ["bulgarian split squat man", "single leg exercise gym", "knee stability training"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [3, 11, 42]
+    },
+    {
+      "id": 17,
+      "category": "workouts",
+      "topic_angle": "mistake",
+      "title": "Ego Loading the Leg Press Is a Fast Track to Disc Herniation",
+      "description": "Stacking 8 plates and doing quarter reps impresses nobody. Your lumbar spine rounds at the bottom, loading your discs under extreme force. Use weight you can control through full ROM. #legday #fitover35 #formfirst",
+      "image_keywords": ["leg press proper form", "gym safety heavy weight", "controlled leg press man"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [3, 10, 16]
+    },
+    {
+      "id": 18,
+      "category": "workouts",
+      "topic_angle": "science",
+      "title": "Mechanical Tension Drives Growth — Not the Pump",
+      "description": "The pump feels productive but it's metabolic stress, not mechanical tension. Tension under load through a full range of motion is what triggers myofibrillar hypertrophy. Chase load, not the feeling. #fitover35 #science",
+      "image_keywords": ["controlled heavy lift man", "mechanical tension exercise", "focused barbell training"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [4, 10, 14]
+    },
+    {
+      "id": 19,
+      "category": "workouts",
+      "topic_angle": "identity",
+      "title": "Discipline Is Choosing the Barbell When the Couch Is Calling",
+      "description": "Motivation gets you through week one. Discipline gets you through decade one. The man who trains when he doesn't feel like it is building something most men never will. #discipline #fitover35 #identity",
+      "image_keywords": ["determined man entering gym", "early morning workout dedication", "consistent training lifestyle"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [5, 12, 73]
+    },
+    {
+      "id": 20,
+      "category": "workouts",
+      "topic_angle": "system",
+      "title": "Auto-Regulation: How to Adjust Training Intensity by Feel",
+      "description": "Rate your readiness 1-10 before each session. 8-10: go heavy. 5-7: moderate loads, more volume. Below 5: active recovery only. This system prevents overtraining without a coach. #autoregulation #fitover35",
+      "image_keywords": ["man assessing workout readiness", "training journal planning", "smart workout adjustment"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [13, 6, 15]
+    },
+    {
+      "id": 21,
+      "category": "workouts",
+      "topic_angle": "contrast",
+      "title": "Influencer Workouts Are Entertainment. Your Program Is Engineering.",
+      "description": "Random exercises strung together for camera angles aren't a program. Structured progressive overload with planned deloads is. Stop consuming fitness content and start following a system. #fitover35 #programming",
+      "image_keywords": ["structured workout program", "man following training plan", "disciplined gym session"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [13, 14, 6]
+    },
+    {
+      "id": 22,
+      "category": "workouts",
+      "topic_angle": "tactical",
+      "title": "The Dead-Stop Rep: Kill Momentum and Build Real Strength",
+      "description": "Pause every rep at the bottom for 1 second. No bounce, no stretch reflex. Dead-stop reps eliminate momentum and force your muscles to generate force from zero. Harder. Honest. Effective. #fitover35 #deadstop",
+      "image_keywords": ["paused bench press man", "dead stop deadlift", "controlled rep tempo"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [8, 15, 18]
+    },
+    {
+      "id": 23,
+      "category": "workouts",
+      "topic_angle": "why",
+      "title": "Why Farmers Carries Are the Most Underrated Exercise Over 35",
+      "description": "Grip strength, core stability, shoulder health, cardiovascular conditioning, and mental toughness in one movement. Grab heavy dumbbells and walk. It's the simplest exercise you're not doing. #farmerscarry #fitover35",
+      "image_keywords": ["man farmers carry heavy dumbbells", "loaded carry exercise", "functional strength training"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [9, 16, 5]
+    },
+    {
+      "id": 24,
+      "category": "workouts",
+      "topic_angle": "mistake",
+      "title": "Training Through Joint Pain Is Not Toughness — It's Stupidity",
+      "description": "Sharp joint pain is a signal, not a challenge. Pushing through it turns a 2-week fix into a 6-month injury. Train around pain, never through it. Smart lifters last longer than tough ones. #fitover35 #injury",
+      "image_keywords": ["man holding knee pain gym", "joint protection exercise", "smart training injury prevention"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [3, 17, 11]
+    },
+    {
+      "id": 25,
+      "category": "workouts",
+      "topic_angle": "system",
+      "title": "The 3-Day Full Body Template That Takes 40 Minutes Flat",
+      "description": "Day 1: Squat/Press/Row. Day 2: Deadlift/Incline/Pullup. Day 3: Lunge/OHP/Cable Row. 3 exercises, 3 sets each, 40 minutes. No filler. No fluff. Just the movements that build men. #fitover35 #minimalist",
+      "image_keywords": ["minimalist gym workout man", "compound exercises only", "efficient training session"],
+      "board": "Workout Tips",
+      "do_not_pair_with": [6, 13, 1]
+    },
+    {
+      "id": 26,
+      "category": "nutrition",
+      "topic_angle": "tactical",
+      "title": "The 40/30/30 Macro Split That Builds Muscle and Burns Fat",
+      "description": "40% protein, 30% carbs, 30% fat. At 2200 calories that's 220g protein, 165g carbs, 73g fat. Simple, effective, sustainable. Stop overcomplicating your diet. Plug these numbers in and execute. #macros #fitover35",
+      "image_keywords": ["macro meal prep containers", "balanced nutrition plate", "protein rich meal man"],
+      "board": "Nutrition",
+      "do_not_pair_with": [27, 30, 35]
+    },
+    {
+      "id": 27,
+      "category": "nutrition",
+      "topic_angle": "why",
+      "title": "Why Protein Needs Increase After 35 — And How Much You Actually Need",
+      "description": "Anabolic resistance means your muscles respond less to protein as you age. Research shows 1.0-1.2g per pound of bodyweight is the threshold for men over 35. Most guys eat half that. #protein #fitover35 #musclebuilding",
+      "image_keywords": ["high protein meal steak eggs", "man eating protein rich food", "muscle building nutrition"],
+      "board": "Nutrition",
+      "do_not_pair_with": [26, 30, 33]
+    },
+    {
+      "id": 28,
+      "category": "nutrition",
+      "topic_angle": "mistake",
+      "title": "Skipping Breakfast Isn't Intermittent Fasting — It's Muscle Loss",
+      "description": "If you're not eating until noon and your last meal was 7 PM, that's 17 hours without amino acids. Muscle protein synthesis flatlines. You're not fasting strategically — you're catabolizing. Eat. #fitover35 #breakfast",
+      "image_keywords": ["man eating breakfast protein", "morning meal eggs avocado", "early nutrition muscle"],
+      "board": "Nutrition",
+      "do_not_pair_with": [33, 35, 26]
+    },
+    {
+      "id": 29,
+      "category": "nutrition",
+      "topic_angle": "science",
+      "title": "Leucine: The Amino Acid That Triggers Muscle Growth",
+      "description": "You need 2.5-3g of leucine per meal to flip the muscle protein synthesis switch. Chicken breast has 2.5g per serving. Greek yogurt has 1.5g. Know your leucine numbers. They matter more than total protein. #fitover35",
+      "image_keywords": ["leucine rich foods display", "amino acid nutrition", "protein science muscle"],
+      "board": "Nutrition",
+      "do_not_pair_with": [27, 33, 30]
+    },
+    {
+      "id": 30,
+      "category": "nutrition",
+      "topic_angle": "identity",
+      "title": "A Man Who Controls His Plate Controls His Life",
+      "description": "Meal discipline isn't about restriction. It's about sovereignty. When you decide what enters your body, you take back control most men have surrendered to convenience and dopamine. #fitover35 #discipline #nutrition",
+      "image_keywords": ["man preparing healthy meal", "disciplined meal prep kitchen", "controlled nutrition lifestyle"],
+      "board": "Nutrition",
+      "do_not_pair_with": [26, 35, 73]
+    },
+    {
+      "id": 31,
+      "category": "nutrition",
+      "topic_angle": "system",
+      "title": "The 5-Meal Rotation: Same Groceries, Zero Decision Fatigue",
+      "description": "Pick 5 meals. Rotate them. Monday is salmon. Tuesday is chicken thighs. Repeat. Decision fatigue kills more diets than hunger does. Automate your food so your willpower goes to things that matter. #fitover35 #mealprep",
+      "image_keywords": ["weekly meal prep organized", "simple meal rotation plan", "man meal planning kitchen"],
+      "board": "Nutrition",
+      "do_not_pair_with": [26, 36, 40]
+    },
+    {
+      "id": 32,
+      "category": "nutrition",
+      "topic_angle": "contrast",
+      "title": "Clean Eating Is a Marketing Scam. Hitting Your Macros Is Math.",
+      "description": "No food is inherently clean or dirty. 200g of chicken breast is 200g of chicken breast whether it's organic or not. Track macros, hit protein targets, eat mostly whole foods. Skip the guilt trips. #fitover35 #macros",
+      "image_keywords": ["macro tracking phone app food", "no nonsense nutrition", "practical meal planning"],
+      "board": "Nutrition",
+      "do_not_pair_with": [26, 30, 35]
+    },
+    {
+      "id": 33,
+      "category": "nutrition",
+      "topic_angle": "tactical",
+      "title": "Pre-Bed Casein: The Overnight Muscle-Building Hack",
+      "description": "Casein protein digests over 6-8 hours. A scoop before bed keeps amino acid levels elevated while you sleep. That's 8 hours of muscle protein synthesis most men leave on the table. #casein #fitover35 #nighttime",
+      "image_keywords": ["casein protein shake night", "man protein before bed", "nighttime nutrition muscle"],
+      "board": "Nutrition",
+      "do_not_pair_with": [27, 29, 28]
+    },
+    {
+      "id": 34,
+      "category": "nutrition",
+      "topic_angle": "why",
+      "title": "Why Creatine Is the Only Supplement Worth Your Money After 35",
+      "description": "5g daily. That's it. Creatine monohydrate improves strength, cognitive function, and cell hydration. It's the most researched supplement in history with zero legitimate downsides. Take it. #creatine #fitover35 #supplement",
+      "image_keywords": ["creatine supplement scoop", "man taking creatine powder", "supplement science evidence"],
+      "board": "Nutrition",
+      "do_not_pair_with": [29, 27, 38]
+    },
+    {
+      "id": 35,
+      "category": "nutrition",
+      "topic_angle": "mistake",
+      "title": "Cutting Calories Too Aggressively Tanks Your Testosterone",
+      "description": "Deficits over 500 calories crash your hormones. Testosterone drops, cortisol spikes, muscle wastes. A 300-calorie deficit is sustainable and preserves your hormonal health. Slow cuts win. #fatloss #fitover35 #testosterone",
+      "image_keywords": ["calorie deficit chart", "man healthy weight loss", "sustainable fat loss plan"],
+      "board": "Nutrition",
+      "do_not_pair_with": [26, 28, 32]
+    },
+    {
+      "id": 36,
+      "category": "nutrition",
+      "topic_angle": "science",
+      "title": "How Fiber Regulates Insulin and Keeps You Lean Year-Round",
+      "description": "25-35g of fiber daily slows glucose absorption, stabilizes insulin, and keeps hunger hormones in check. Most men get 12g. Double your vegetable intake and watch what happens to your midsection. #fiber #fitover35",
+      "image_keywords": ["high fiber vegetables plate", "man eating salad greens", "fiber rich whole foods"],
+      "board": "Nutrition",
+      "do_not_pair_with": [31, 26, 29]
+    },
+    {
+      "id": 37,
+      "category": "nutrition",
+      "topic_angle": "identity",
+      "title": "Every Meal Is a Vote for the Body You're Building",
+      "description": "You don't accidentally get lean. You don't accidentally stay strong. Every meal is a decision. Stack enough good decisions and they compound into a physique that reflects who you actually are. #fitover35 #identity",
+      "image_keywords": ["man choosing healthy food", "intentional meal choice", "disciplined eating lifestyle"],
+      "board": "Nutrition",
+      "do_not_pair_with": [30, 73, 75]
+    },
+    {
+      "id": 38,
+      "category": "nutrition",
+      "topic_angle": "system",
+      "title": "The Sunday Prep Protocol: 2 Hours That Save Your Week",
+      "description": "Sunday 10 AM-12 PM: Cook 5 lbs chicken, roast 3 trays of vegetables, prep 10 cups of rice. Store in containers. Now every meal this week takes 3 minutes to assemble. Systems beat willpower. #mealprep #fitover35",
+      "image_keywords": ["Sunday meal prep large batch", "organized food containers kitchen", "bulk cooking chicken rice"],
+      "board": "Nutrition",
+      "do_not_pair_with": [31, 40, 26]
+    },
+    {
+      "id": 39,
+      "category": "nutrition",
+      "topic_angle": "contrast",
+      "title": "Supplement Stacks Cost $200/Month. Whole Food Costs Less and Works Better.",
+      "description": "You don't need a pre-workout, BCAA, fat burner, and test booster stack. You need eggs, beef, salmon, rice, and vegetables. Real food built every strong man before the supplement industry existed. #fitover35 #realfood",
+      "image_keywords": ["whole food vs supplements", "natural protein sources", "grocery shopping healthy man"],
+      "board": "Nutrition",
+      "do_not_pair_with": [34, 32, 33]
+    },
+    {
+      "id": 40,
+      "category": "nutrition",
+      "topic_angle": "tactical",
+      "title": "The Post-Workout Window: What to Eat Within 60 Minutes",
+      "description": "40g protein + 60g fast carbs within 60 minutes post-training. White rice and chicken. Protein shake and a banana. Replenish glycogen and spike insulin to shuttle aminos into muscle. Timing matters. #fitover35 #postworkout",
+      "image_keywords": ["post workout meal protein carbs", "man eating after gym", "recovery nutrition timing"],
+      "board": "Nutrition",
+      "do_not_pair_with": [33, 26, 38]
+    },
+    {
+      "id": 41,
+      "category": "nutrition",
+      "topic_angle": "why",
+      "title": "Why Hydration Affects Strength More Than Any Supplement",
+      "description": "2% dehydration reduces strength output by 10-20%. Your muscles are 75% water. Drink half your bodyweight in ounces daily. Before you buy another supplement, buy a bigger water bottle. #hydration #fitover35 #strength",
+      "image_keywords": ["man drinking water gym", "hydration strength workout", "water bottle fitness"],
+      "board": "Nutrition",
+      "do_not_pair_with": [34, 39, 36]
+    },
+    {
+      "id": 42,
+      "category": "nutrition",
+      "topic_angle": "mistake",
+      "title": "Drinking Your Calories in Alcohol Is Sabotaging Your Gains",
+      "description": "Alcohol suppresses muscle protein synthesis by up to 37% and spikes cortisol. That Friday night beer habit is erasing Wednesday's workout. You don't have to quit. But know the cost. #alcohol #fitover35 #gains",
+      "image_keywords": ["beer vs protein shake", "alcohol fitness impact", "man choosing health over drinks"],
+      "board": "Nutrition",
+      "do_not_pair_with": [35, 28, 43]
+    },
+    {
+      "id": 43,
+      "category": "nutrition",
+      "topic_angle": "science",
+      "title": "Omega-3s Reduce Inflammation and Accelerate Recovery",
+      "description": "EPA and DHA at 2-3g daily lower systemic inflammation markers by 30%. Fatty fish twice a week or a quality fish oil supplement. Your joints, brain, and heart all benefit. Non-negotiable over 35. #omega3 #fitover35",
+      "image_keywords": ["omega 3 salmon fish oil", "anti inflammatory foods", "healthy fats nutrition"],
+      "board": "Nutrition",
+      "do_not_pair_with": [34, 36, 42]
+    },
+    {
+      "id": 44,
+      "category": "nutrition",
+      "topic_angle": "contrast",
+      "title": "Keto, Carnivore, Vegan — Pick the Diet You'll Actually Follow",
+      "description": "The best diet is the one you stick to for 10 years. Not the one that sounds impressive at dinner parties. Consistency beats optimization every single time. Stop chasing perfect. Start being consistent. #fitover35 #nutrition",
+      "image_keywords": ["sustainable diet plan", "consistent healthy eating", "long term nutrition man"],
+      "board": "Nutrition",
+      "do_not_pair_with": [32, 30, 37]
+    },
+    {
+      "id": 45,
+      "category": "nutrition",
+      "topic_angle": "system",
+      "title": "Track Protein Only — The Minimalist Nutrition System",
+      "description": "Can't track every macro? Just track protein. Hit 1g per pound of bodyweight. Let everything else fall into place. One number to hit daily. One habit to build. Simplicity scales. Complexity collapses. #fitover35 #protein",
+      "image_keywords": ["simple protein tracking", "minimalist nutrition app", "protein focused meal"],
+      "board": "Nutrition",
+      "do_not_pair_with": [26, 27, 31]
+    },
+    {
+      "id": 46,
+      "category": "recovery",
+      "topic_angle": "tactical",
+      "title": "The 90-Second Cold Shower Protocol for Post-Training Recovery",
+      "description": "End every shower with 90 seconds of cold water. Not ice baths. Not cryo chambers. Just cold water on your upper back and neck. Reduces inflammation, improves alertness, and costs nothing. #coldexposure #fitover35",
+      "image_keywords": ["cold shower man recovery", "post workout cold exposure", "recovery protocol shower"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [47, 52, 55]
+    },
+    {
+      "id": 47,
+      "category": "recovery",
+      "topic_angle": "why",
+      "title": "Why Sleep Is the Most Anabolic Thing You Can Do Over 35",
+      "description": "Growth hormone peaks during deep sleep. Testosterone restores overnight. Muscle protein synthesis accelerates. 7-9 hours isn't optional. It's where your gains actually happen. Train hard, sleep harder. #sleep #fitover35",
+      "image_keywords": ["man sleeping recovery", "quality sleep bedroom dark", "rest day recovery"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [46, 48, 52]
+    },
+    {
+      "id": 48,
+      "category": "recovery",
+      "topic_angle": "mistake",
+      "title": "The Recovery Mistake: Training 6 Days a Week After 35",
+      "description": "More training does not equal more results. After 35, your recovery capacity shrinks. 3-4 hard sessions per week with real rest days between them produces better results than grinding 6 days. Rest is productive. #fitover35",
+      "image_keywords": ["rest day importance fitness", "man resting recovery", "overtraining prevention"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [47, 52, 56]
+    },
+    {
+      "id": 49,
+      "category": "recovery",
+      "topic_angle": "science",
+      "title": "How Foam Rolling Actually Works — It's Not Breaking Up Fascia",
+      "description": "Foam rolling doesn't physically break adhesions. It stimulates mechanoreceptors that reduce pain perception and improve range of motion temporarily. Use it pre-workout for 60-90 seconds per muscle group. #foamroll #fitover35",
+      "image_keywords": ["man foam rolling legs", "foam roller recovery", "myofascial release exercise"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [53, 57, 46]
+    },
+    {
+      "id": 50,
+      "category": "recovery",
+      "topic_angle": "identity",
+      "title": "Rest Days Aren't Weakness. They're Strategy.",
+      "description": "Weak men feel guilty on rest days. Strong men know that adaptation happens during recovery, not during training. Your rest day discipline reveals whether you understand the process or just like the grind. #fitover35 #recovery",
+      "image_keywords": ["man relaxing rest day", "strategic recovery planning", "disciplined rest lifestyle"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [48, 47, 73]
+    },
+    {
+      "id": 51,
+      "category": "recovery",
+      "topic_angle": "system",
+      "title": "The Nightly Wind-Down Stack: Blue Light, Magnesium, Cool Room",
+      "description": "9 PM: Blue light glasses on. 9:30 PM: 400mg magnesium glycinate. Room temp: 65-67 degrees. Phone in another room. This stack adds 45 minutes of deep sleep per night. Run it every night. No exceptions. #sleep #fitover35",
+      "image_keywords": ["nighttime sleep routine", "magnesium supplement bedtime", "dark cool bedroom"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [47, 52, 46]
+    },
+    {
+      "id": 52,
+      "category": "recovery",
+      "topic_angle": "contrast",
+      "title": "Hustle Culture Says Sleep Less. Science Says Sleep More.",
+      "description": "Every major study on performance confirms it: sleeping 6 hours gives you the cognitive function of someone legally drunk. The 4 AM grind crowd is running on fumes and calling it discipline. #fitover35 #sleep #performance",
+      "image_keywords": ["sleep vs hustle culture", "well rested man morning", "sleep science performance"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [47, 51, 48]
+    },
+    {
+      "id": 53,
+      "category": "recovery",
+      "topic_angle": "tactical",
+      "title": "The 10-Minute Mobility Flow That Saves Your Lower Back",
+      "description": "Cat-cow x10, hip 90/90s x5 each side, dead bugs x10, child's pose 60 seconds, pigeon stretch 60 seconds each side. Every morning. Non-negotiable if you sit at a desk. Your spine will thank you. #mobility #fitover35",
+      "image_keywords": ["morning mobility routine man", "hip mobility exercise floor", "lower back stretch routine"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [49, 57, 59]
+    },
+    {
+      "id": 54,
+      "category": "recovery",
+      "topic_angle": "why",
+      "title": "Why Deload Weeks Aren't Optional After 35",
+      "description": "Every 4-6 weeks, cut your training volume by 40-50%. Your nervous system needs reset time. Tendons repair. Joints recover. Deload weeks are where your body consolidates the work you've done. Skip them and stall. #deload #fitover35",
+      "image_keywords": ["deload week light training", "man easy workout recovery", "periodization rest week"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [48, 50, 13]
+    },
+    {
+      "id": 55,
+      "category": "recovery",
+      "topic_angle": "mistake",
+      "title": "Stretching Cold Muscles Is How You Pull a Hamstring at 40",
+      "description": "Static stretching before training weakens force output and increases injury risk. Save static stretches for after your session. Before training, do dynamic movement: leg swings, arm circles, bodyweight squats. #stretching #fitover35",
+      "image_keywords": ["dynamic warmup stretching man", "pre workout movement prep", "hamstring injury prevention"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [3, 49, 53]
+    },
+    {
+      "id": 56,
+      "category": "recovery",
+      "topic_angle": "science",
+      "title": "Cortisol Peaks Kill Recovery — Here's the Fix",
+      "description": "Chronic stress elevates cortisol, which blocks testosterone and inhibits muscle repair. 10 minutes of deep breathing post-workout activates the parasympathetic system and drops cortisol by 25%. Breathe. Recover. Grow. #cortisol #fitover35",
+      "image_keywords": ["man deep breathing relaxation", "stress reduction exercise", "cortisol management calm"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [47, 51, 48]
+    },
+    {
+      "id": 57,
+      "category": "recovery",
+      "topic_angle": "identity",
+      "title": "The Man Who Stretches Daily Is Playing a 30-Year Game",
+      "description": "Flexibility isn't for yoga people. It's for men who want to tie their shoes at 70 without groaning. Daily stretching is a long-term investment in functional independence. Short-term ego, long-term regret. #flexibility #fitover35",
+      "image_keywords": ["man stretching daily routine", "flexibility training mature", "long term mobility health"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [53, 50, 5]
+    },
+    {
+      "id": 58,
+      "category": "recovery",
+      "topic_angle": "system",
+      "title": "The Active Recovery Day Template: Walk, Stretch, Sauna",
+      "description": "30-minute walk (zone 2 heart rate). 15 minutes stretching (hips, shoulders, thoracic spine). 15 minutes sauna or hot bath. This is your recovery day protocol. Not Netflix on the couch. Active recovery is still a system. #fitover35",
+      "image_keywords": ["man walking outdoor recovery", "active recovery day routine", "sauna recovery session"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [50, 53, 46]
+    },
+    {
+      "id": 59,
+      "category": "recovery",
+      "topic_angle": "contrast",
+      "title": "Ice Baths Are Trendy. Consistent Sleep Is Proven.",
+      "description": "Influencers will sell you a $5,000 cold plunge. Research shows 8 hours of quality sleep beats every recovery gadget combined. Master the basics before chasing expensive shortcuts. #recovery #fitover35 #sleep",
+      "image_keywords": ["sleep vs ice bath recovery", "simple recovery basics", "bedroom sleep quality"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [46, 52, 47]
+    },
+    {
+      "id": 60,
+      "category": "recovery",
+      "topic_angle": "tactical",
+      "title": "Trigger Point Release: The Tennis Ball Protocol for Tight Glutes",
+      "description": "Sit on a tennis ball, find the tight spot in your glute, apply pressure for 30-60 seconds until it releases. Do both sides. Takes 3 minutes and eliminates the hip pain that wrecks your squat. #triggerpoint #fitover35",
+      "image_keywords": ["tennis ball glute release", "trigger point therapy self", "hip pain relief exercise"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [49, 53, 55]
+    },
+    {
+      "id": 61,
+      "category": "recovery",
+      "topic_angle": "why",
+      "title": "Why Walking 8,000 Steps Daily Outperforms Extra Gym Sessions",
+      "description": "Low-intensity steady-state movement improves blood flow to recovering muscles, lowers resting heart rate, and burns fat without spiking cortisol. Walking is the recovery tool hiding in plain sight. #walking #fitover35 #LISS",
+      "image_keywords": ["man walking outdoors fitness", "daily step count walking", "low intensity exercise path"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [58, 48, 52]
+    },
+    {
+      "id": 62,
+      "category": "recovery",
+      "topic_angle": "mistake",
+      "title": "NSAIDs After Every Workout Are Blocking Your Muscle Growth",
+      "description": "Ibuprofen reduces inflammation — which is exactly the signal your body needs to adapt and grow. Chronic NSAID use blunts the anabolic response to training by up to 50%. Save them for injuries, not soreness. #fitover35 #recovery",
+      "image_keywords": ["ibuprofen pills fitness", "natural recovery workout", "inflammation muscle growth"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [10, 46, 56]
+    },
+    {
+      "id": 63,
+      "category": "recovery",
+      "topic_angle": "science",
+      "title": "Heart Rate Variability: The Recovery Metric That Matters",
+      "description": "High HRV means your nervous system is recovered and ready. Low HRV means you need rest. A $30 chest strap and a free app gives you objective data on when to push and when to pull back. Stop guessing. #HRV #fitover35",
+      "image_keywords": ["heart rate variability monitor", "HRV tracking fitness", "recovery data metrics"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [20, 56, 47]
+    },
+    {
+      "id": 64,
+      "category": "recovery",
+      "topic_angle": "system",
+      "title": "The 48-Hour Rule: Never Train the Same Muscle Back-to-Back",
+      "description": "Muscle protein synthesis stays elevated 24-48 hours after training. Training a muscle before that window closes interrupts recovery. Space sessions for the same body parts by at least 48 hours. Simple rule, massive impact. #fitover35",
+      "image_keywords": ["training schedule calendar", "workout split planning", "recovery timing system"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [48, 54, 6]
+    },
+    {
+      "id": 65,
+      "category": "recovery",
+      "topic_angle": "contrast",
+      "title": "Recovery Gadgets Cost Thousands. Discipline Costs Nothing.",
+      "description": "Percussion guns, compression boots, red light panels. None of them work as well as 8 hours of sleep, 2 liters of water, and a rest day. The unglamorous basics outperform the expensive gadgets. Every time. #fitover35 #recovery",
+      "image_keywords": ["simple recovery tools water sleep", "recovery basics fitness", "no gadgets needed workout"],
+      "board": "Recovery & Stretching",
+      "do_not_pair_with": [59, 52, 46]
+    },
+    {
+      "id": 66,
+      "category": "mindset",
+      "topic_angle": "tactical",
+      "title": "The 2-Minute Rule: How to Never Miss a Workout Again",
+      "description": "On days you don't feel like training, commit to 2 minutes. Just walk in, do one set. If you still want to leave, leave. You won't. The hardest part is starting. Remove the barrier to starting. #consistency #fitover35",
+      "image_keywords": ["man entering gym door", "overcoming workout resistance", "starting exercise habit"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [67, 72, 19]
+    },
+    {
+      "id": 67,
+      "category": "mindset",
+      "topic_angle": "why",
+      "title": "Why Motivation Fails and Systems Win Every Time",
+      "description": "Motivation is an emotion. It comes and goes. A system is a structure. It runs regardless of how you feel. Build a training schedule, prep your meals, set your alarm. Then execute. Feelings are irrelevant. #systems #fitover35",
+      "image_keywords": ["structured daily routine man", "system over motivation", "disciplined schedule planning"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [66, 72, 73]
+    },
+    {
+      "id": 68,
+      "category": "mindset",
+      "topic_angle": "mistake",
+      "title": "Comparing Your Chapter 1 to Someone's Chapter 20 Will Destroy You",
+      "description": "That guy with the perfect physique has 15 years of training behind him. You have 15 weeks. Comparison at different stages is irrational. Compare yourself to who you were 90 days ago. That's the only metric. #fitover35 #mindset",
+      "image_keywords": ["personal progress journey fitness", "man looking at gym mirror", "self comparison growth"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [70, 75, 80]
+    },
+    {
+      "id": 69,
+      "category": "mindset",
+      "topic_angle": "science",
+      "title": "Neuroplasticity: Your Brain Rewires Around the Habits You Repeat",
+      "description": "Every time you complete a workout, you strengthen the neural pathway for discipline. After 66 days, the habit becomes automatic. Your brain literally changes shape around consistent action. Use this. #neuroplasticity #fitover35",
+      "image_keywords": ["brain habits neural pathways", "habit formation science", "consistent routine man"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [67, 72, 66]
+    },
+    {
+      "id": 70,
+      "category": "mindset",
+      "topic_angle": "identity",
+      "title": "You're Not Getting in Shape. You're Becoming Someone New.",
+      "description": "Fitness isn't a goal. It's an identity shift. You're not trying to lose 20 lbs. You're becoming the man who trains 4x a week, eats with intention, and sleeps 8 hours. Results follow identity. Not the other way around. #fitover35",
+      "image_keywords": ["man transformation identity", "new identity fitness", "personal evolution training"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [73, 75, 5]
+    },
+    {
+      "id": 71,
+      "category": "mindset",
+      "topic_angle": "system",
+      "title": "The Non-Negotiable List: 5 Things You Do Every Day Without Fail",
+      "description": "1) Train or walk. 2) Hit protein target. 3) Sleep 7+ hours. 4) Drink 2L water. 5) 10 minutes of quiet. Write these down. Do them daily. Non-negotiable means non-negotiable. No exceptions. No excuses. #fitover35 #discipline",
+      "image_keywords": ["daily checklist discipline", "man writing goals list", "non negotiable habits fitness"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [67, 66, 72]
+    },
+    {
+      "id": 72,
+      "category": "mindset",
+      "topic_angle": "contrast",
+      "title": "Comfortable Men Stay Weak. Uncomfortable Men Get Strong.",
+      "description": "Every rep you don't want to do is an opportunity. Every cold shower, every early alarm, every meal prepped instead of ordered. Discomfort is the currency of growth. Pay it willingly or stay where you are. #fitover35 #growth",
+      "image_keywords": ["man pushing through discomfort", "hard workout determination", "growth through challenge"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [66, 67, 73]
+    },
+    {
+      "id": 73,
+      "category": "mindset",
+      "topic_angle": "identity",
+      "title": "The Gym Didn't Change My Body. It Changed Who I Am.",
+      "description": "Before the gym I was reactive, unfocused, and drifting. Training taught me discipline, patience, and delayed gratification. The physique is a side effect. The real transformation is internal. #fitover35 #identity #transformation",
+      "image_keywords": ["man reflection gym mirror", "personal growth fitness", "internal transformation training"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [70, 5, 19]
+    },
+    {
+      "id": 74,
+      "category": "mindset",
+      "topic_angle": "tactical",
+      "title": "Temptation Bundling: Pair Hard Tasks with Things You Enjoy",
+      "description": "Only listen to your favorite podcast during cardio. Only watch your show while stretching. Pair the thing you resist with the thing you crave. Your brain stops resisting and starts anticipating. Behavioral design. #fitover35 #habits",
+      "image_keywords": ["man listening podcast gym", "cardio entertainment treadmill", "habit stacking workout"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [66, 69, 71]
+    },
+    {
+      "id": 75,
+      "category": "mindset",
+      "topic_angle": "why",
+      "title": "Why Your Environment Matters More Than Your Willpower",
+      "description": "Put your gym clothes out the night before. Keep junk food out of the house. Surround yourself with people who train. Environment design removes the need for willpower. Willpower is finite. Your environment is not. #fitover35 #environment",
+      "image_keywords": ["gym clothes laid out ready", "environment design fitness", "prepared workout gear"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [67, 71, 74]
+    },
+    {
+      "id": 76,
+      "category": "mindset",
+      "topic_angle": "mistake",
+      "title": "Waiting for the Perfect Plan Is the Excuse That Keeps You Average",
+      "description": "There is no perfect program. There is no perfect diet. There is only action and inaction. The man who starts a mediocre plan today outperforms the man who researches the perfect plan for 6 months. Start now. #fitover35 #action",
+      "image_keywords": ["man starting workout immediately", "action over perfection", "just start training"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [68, 72, 80]
+    },
+    {
+      "id": 77,
+      "category": "mindset",
+      "topic_angle": "science",
+      "title": "Dopamine Detox: How Cheap Dopamine Kills Your Drive to Train",
+      "description": "Scrolling, sugar, and streaming flood your dopamine receptors. When training can't compete with instant gratification, you skip sessions. Reduce cheap dopamine sources and hard things become rewarding again. #dopamine #fitover35",
+      "image_keywords": ["man putting away phone", "dopamine detox focus", "discipline over distraction"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [69, 74, 72]
+    },
+    {
+      "id": 78,
+      "category": "mindset",
+      "topic_angle": "system",
+      "title": "The Weekly Review: 15 Minutes That Keep You on Track",
+      "description": "Every Sunday: Did I hit all training sessions? Did I hit protein daily? How was my sleep? Rate the week 1-10. Adjust one variable. This 15-minute audit prevents months of wasted effort. #fitover35 #weeklyreview #system",
+      "image_keywords": ["man reviewing fitness journal", "weekly planning fitness", "progress tracking notebook"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [71, 67, 20]
+    },
+    {
+      "id": 79,
+      "category": "mindset",
+      "topic_angle": "contrast",
+      "title": "Talkers Post About Fitness. Builders Just Show Up and Lift.",
+      "description": "The loudest people in the gym are rarely the strongest. Real progress is quiet, unglamorous, and consistent. You don't need to announce your discipline. The results will speak for themselves. #fitover35 #quietstrength",
+      "image_keywords": ["quiet focused man lifting", "consistent gym no phone", "humble strong training"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [21, 72, 73]
+    },
+    {
+      "id": 80,
+      "category": "mindset",
+      "topic_angle": "tactical",
+      "title": "The Identity Statement: Write Down Who You're Becoming",
+      "description": "Write this sentence and read it daily: 'I am a man who trains consistently, eats with discipline, and prioritizes recovery.' Repeated identity statements rewire your self-image. Behavior follows belief. #fitover35 #identity",
+      "image_keywords": ["man writing journal morning", "identity affirmation fitness", "personal statement discipline"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [70, 73, 71]
+    },
+    {
+      "id": 81,
+      "category": "mindset",
+      "topic_angle": "why",
+      "title": "Why Accountability Partners Have a 95% Higher Success Rate",
+      "description": "The American Society of Training found accountability increases follow-through by 95%. Find one training partner, one check-in per week. You won't skip when someone else is counting on you. #accountability #fitover35",
+      "image_keywords": ["two men training together gym", "workout partner accountability", "gym buddy support"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [75, 78, 67]
+    },
+    {
+      "id": 82,
+      "category": "mindset",
+      "topic_angle": "mistake",
+      "title": "Overthinking Your Program Is Just Procrastination in Disguise",
+      "description": "Analyzing 15 programs, watching 30 YouTube reviews, reading 10 Reddit threads. You're not researching. You're avoiding the discomfort of starting. Pick one. Run it for 12 weeks. Evaluate after. Not before. #fitover35 #starttoday",
+      "image_keywords": ["analysis paralysis fitness", "man overwhelmed options", "just start workout"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [76, 68, 21]
+    },
+    {
+      "id": 83,
+      "category": "mindset",
+      "topic_angle": "contrast",
+      "title": "Motivation Gets You to January 15th. Identity Gets You to December.",
+      "description": "New Year's resolution gyms are packed for 2 weeks. The men still there in March didn't find better motivation. They built an identity that requires them to show up. Be that man. #fitover35 #newyear #discipline",
+      "image_keywords": ["empty gym February consistency", "long term fitness commitment", "year round training man"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [67, 70, 72]
+    },
+    {
+      "id": 84,
+      "category": "mindset",
+      "topic_angle": "system",
+      "title": "Habit Stacking: Attach New Habits to Existing Ones",
+      "description": "After I pour my coffee, I take my creatine. After I park at work, I walk 10 minutes. After dinner, I lay out gym clothes. Attach new behaviors to existing routines and they stick without willpower. #habitstacking #fitover35",
+      "image_keywords": ["morning routine habit stack", "coffee creatine habit", "routine building man"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [74, 71, 66]
+    },
+    {
+      "id": 85,
+      "category": "mindset",
+      "topic_angle": "science",
+      "title": "The Zeigarnik Effect: Why Starting Is More Powerful Than Planning",
+      "description": "Your brain fixates on unfinished tasks. Once you start a workout, your mind wants to complete it. The psychological pull to finish is stronger than the resistance to begin. Just start the first rep. #psychology #fitover35",
+      "image_keywords": ["man doing first rep gym", "starting workout psychology", "beginning exercise session"],
+      "board": "Identity & Discipline",
+      "do_not_pair_with": [66, 76, 69]
+    },
+    {
+      "id": 86,
+      "category": "home_gym",
+      "topic_angle": "tactical",
+      "title": "The $500 Home Gym That Replaces a $50/Month Membership",
+      "description": "Adjustable dumbbells ($200), pull-up bar ($30), flat bench ($100), resistance bands ($30), ab wheel ($15). That's everything you need for a complete training program. Pays for itself in 10 months. #homegym #fitover35",
+      "image_keywords": ["budget home gym setup", "adjustable dumbbells bench", "minimal home workout equipment"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [87, 91, 93]
+    },
+    {
+      "id": 87,
+      "category": "home_gym",
+      "topic_angle": "why",
+      "title": "Why a Home Gym Eliminates Your #1 Excuse for Skipping",
+      "description": "Commute time is the most common reason men skip workouts. A home gym is 10 steps away. No driving, no parking, no waiting for equipment. Remove the friction and the habit becomes automatic. #homegym #fitover35 #noexcuses",
+      "image_keywords": ["garage gym convenient", "home workout no commute", "man training at home"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [86, 91, 88]
+    },
+    {
+      "id": 88,
+      "category": "home_gym",
+      "topic_angle": "mistake",
+      "title": "Buying a Treadmill First Is the Wrong Move for a Home Gym",
+      "description": "Treadmills take up space, cost $1000+, and become clothes racks. Start with a barbell, plates, and a rack. You can always walk outside for cardio. Strength equipment first. Cardio equipment last. #homegym #fitover35 #priorities",
+      "image_keywords": ["treadmill clothes rack joke", "barbell rack home gym", "strength equipment priority"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [86, 93, 91]
+    },
+    {
+      "id": 89,
+      "category": "home_gym",
+      "topic_angle": "science",
+      "title": "Rubber Flooring Absorbs 90% of Impact — Your Joints and Neighbors Thank You",
+      "description": "3/4 inch rubber horse stall mats from a farm supply store: $45 for a 4x6 section. They protect your floor, deaden sound, and cushion dropped weights. The best value upgrade for any home gym. #homegym #fitover35 #flooring",
+      "image_keywords": ["rubber gym flooring home", "stall mat home gym", "floor protection workout area"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [86, 96, 93]
+    },
+    {
+      "id": 90,
+      "category": "home_gym",
+      "topic_angle": "identity",
+      "title": "Building a Home Gym Is Building a Shrine to Your Commitment",
+      "description": "Every piece of equipment you buy is a statement: I'm not quitting. A home gym isn't a purchase. It's a physical manifestation of the man you've decided to become. Invest in iron. It never lies. #homegym #fitover35 #commitment",
+      "image_keywords": ["personal home gym pride", "man standing in garage gym", "dedicated training space"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [87, 70, 73]
+    },
+    {
+      "id": 91,
+      "category": "home_gym",
+      "topic_angle": "system",
+      "title": "The Home Gym Tier System: Build in Phases, Not All at Once",
+      "description": "Tier 1: Dumbbells + bench ($300). Tier 2: Add barbell + plates ($400). Tier 3: Add squat rack ($300). Tier 4: Add cable pulley ($150). Build over 12 months. Each tier unlocks new exercises without breaking the bank. #homegym #fitover35",
+      "image_keywords": ["home gym phases build", "progressive equipment purchase", "garage gym tiers setup"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [86, 88, 93]
+    },
+    {
+      "id": 92,
+      "category": "home_gym",
+      "topic_angle": "contrast",
+      "title": "Commercial Gym: 45-Min Drive. Home Gym: 45 Steps.",
+      "description": "By the time most men drive to the gym, find parking, change, and wait for a squat rack, they've burned 45 minutes. Your garage rack is ready in 45 seconds. Time is the asset you can't get back. #homegym #fitover35 #efficiency",
+      "image_keywords": ["garage gym vs commercial", "quick home workout setup", "time efficient training home"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [87, 86, 97]
+    },
+    {
+      "id": 93,
+      "category": "home_gym",
+      "topic_angle": "tactical",
+      "title": "The Craigslist Strategy: How to Build a Home Gym for 60% Off",
+      "description": "January and June: people sell equipment they never used. Set alerts for 'Olympic barbell,' 'squat rack,' 'bumper plates' on Craigslist and Facebook Marketplace. Patience saves hundreds. Buy quality, buy used. #homegym #fitover35 #budget",
+      "image_keywords": ["used gym equipment deals", "second hand barbell plates", "marketplace gym finds"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [86, 91, 88]
+    },
+    {
+      "id": 94,
+      "category": "home_gym",
+      "topic_angle": "why",
+      "title": "Why Rings and a Pull-Up Bar Are the Most Versatile Home Setup",
+      "description": "Gymnastic rings ($35) hung from a pull-up bar give you push-ups, dips, rows, flyes, L-sits, and muscle-ups. Infinite progression from beginner to advanced. Takes up zero floor space. #rings #homegym #fitover35 #calisthenics",
+      "image_keywords": ["gymnastic rings home setup", "pull up bar rings workout", "bodyweight training rings"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [86, 91, 87]
+    },
+    {
+      "id": 95,
+      "category": "home_gym",
+      "topic_angle": "mistake",
+      "title": "Don't Buy Cheap Adjustable Dumbbells — They Break Under Load",
+      "description": "Sub-$100 adjustable dumbbells use plastic locking mechanisms that fail at higher weights. Invest in Powerblocks or Ironmasters ($300-500). They last decades. Cheap equipment becomes expensive when it breaks or injures you. #homegym #fitover35",
+      "image_keywords": ["quality adjustable dumbbells", "powerblock dumbbells home", "durable home gym equipment"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [86, 93, 91]
+    },
+    {
+      "id": 96,
+      "category": "home_gym",
+      "topic_angle": "system",
+      "title": "The Garage Gym Layout: How to Fit Everything in a 10x10 Space",
+      "description": "Rack against the back wall. Bench perpendicular when in use, stored vertically against the side. Dumbbells on a corner shelf. Bands on hooks. Rubber mat under the rack. 100 sq ft is all you need for a complete setup. #homegym #fitover35",
+      "image_keywords": ["small garage gym layout", "compact home gym organized", "efficient gym space design"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [89, 91, 86]
+    },
+    {
+      "id": 97,
+      "category": "home_gym",
+      "topic_angle": "contrast",
+      "title": "$1,200 Per Year on a Gym Membership vs. $1,200 Once on Equipment",
+      "description": "A commercial gym at $100/month costs $6,000 over 5 years with nothing to show. A $1,200 home gym setup lasts 20+ years and is always available. The math isn't even close. Own your training space. #homegym #fitover35 #investment",
+      "image_keywords": ["gym cost comparison chart", "home gym investment value", "long term fitness savings"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [92, 86, 93]
+    },
+    {
+      "id": 98,
+      "category": "home_gym",
+      "topic_angle": "science",
+      "title": "Proper Ventilation in a Garage Gym Prevents CO2 Buildup and Fatigue",
+      "description": "Training in a sealed garage raises CO2 levels, causing premature fatigue and headaches. A $40 box fan creating cross-ventilation solves this. Open the side door, point the fan out. Fresh air means more productive sets. #homegym #fitover35",
+      "image_keywords": ["garage gym ventilation fan", "air flow workout space", "well ventilated home gym"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [89, 96, 92]
+    },
+    {
+      "id": 99,
+      "category": "home_gym",
+      "topic_angle": "identity",
+      "title": "Your Home Gym Is the One Room in the House That's Yours",
+      "description": "No compromises. No shared space negotiations. Your music, your rules, your pace. The home gym is where you go to build the version of yourself that the rest of the house benefits from. Protect that space. #homegym #fitover35",
+      "image_keywords": ["man alone garage gym", "personal training sanctuary", "private workout space home"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [90, 87, 92]
+    },
+    {
+      "id": 100,
+      "category": "home_gym",
+      "topic_angle": "tactical",
+      "title": "Wall-Mounted Fold-Out Rack: The Solution for Multi-Use Garage Spaces",
+      "description": "A fold-out wall rack ($250-400) gives you a full squat station that folds flat in 30 seconds. Park your car and train in the same space. No permanent footprint required. Best investment for shared garages. #homegym #fitover35 #spacesaver",
+      "image_keywords": ["fold out wall rack garage", "space saving squat rack", "compact garage gym solution"],
+      "board": "Home Gym Setup",
+      "do_not_pair_with": [96, 86, 91]
+    }
+  ]
+}
