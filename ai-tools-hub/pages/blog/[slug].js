@@ -60,7 +60,7 @@ export default function ArticlePage({ article }) {
             <span>By {article.author}</span>
             <span>{new Date(article.published_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             <span>{getReadingTime(article.word_count)}</span>
-            <span>{article.word_count.toLocaleString()} words</span>
+            <span>{(article.word_count || 0).toLocaleString()} words</span>
           </div>
         </header>
 
