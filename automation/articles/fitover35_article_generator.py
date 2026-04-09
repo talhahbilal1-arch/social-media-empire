@@ -199,12 +199,13 @@ Use this outline:
 
 RESEARCH TO WEAVE INTO THE ARTICLE (cite conversationally, not as footnotes):
 {research_json}
-
+{search_results_block}
 Examples of good inline citations:
 - "A 2023 study in the Journal of Strength and Conditioning Research found that..."
 - "According to Dr. Brad Schoenfeld, one of the leading hypertrophy researchers..."
 - "The American College of Sports Medicine recommends..."
 Do NOT add a references section at the end. Weave citations naturally into the text.
+IMPORTANT: Use the provided trending context and latest web research data above (if any). Reference current events, recent studies, and up-to-date statistics. Do NOT rely solely on training data — incorporate the real-time research provided.
 
 WRITING GUIDELINES:
 - Total length: 1000-2000 words
