@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-09",
+  "last_updated": "2026-04-10",
   "items": [
     {
       "id": 1,
@@ -425,10 +425,11 @@
       "id": 58,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-seo-tools",
       "keyword": "best ai seo tools 2026",
-      "title": "7 Best AI SEO Tools in 2026"
+      "title": "7 Best AI SEO Tools in 2026",
+      "published_date": "2026-04-10"
     },
     {
       "id": 59,
@@ -1619,19 +1620,21 @@
       "id": 199,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-students",
       "keyword": "best ai tools for students",
-      "title": "Best AI Tools for Students 2026"
+      "title": "Best AI Tools for Students 2026",
+      "published_date": "2026-04-10"
     },
     {
       "id": 200,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-freelancers",
       "keyword": "best ai tools for freelancers",
-      "title": "Best AI Tools for Freelancers 2026"
+      "title": "Best AI Tools for Freelancers 2026",
+      "published_date": "2026-04-10"
     },
     {
       "id": 201,
