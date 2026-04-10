@@ -81,9 +81,10 @@ RESEARCH_AND_OUTLINE_PROMPT = """You are an expert fitness content researcher an
 The site owner has a Bachelor's in Kinesiology, Master's in Education, 15+ years fitness experience, and is a natural bodybuilder/coach.
 
 Your task has TWO parts for the keyword: "{keyword}"
-
+{trending_context_block}
 ═══ PART 1: RESEARCH ═══
 Compile research on this topic as it specifically applies to men over 35:
+IMPORTANT: Use the provided trending context and real-time research data above (if any). Reference current events, recent studies, and up-to-date statistics. Do NOT rely solely on training data — incorporate the real-time research provided.
 - 3-5 statistics with sources (journals, health organizations, or well-known studies — cite author/org and year)
 - 2-3 expert perspectives or quotes (real researchers, coaches, or doctors who have published on this topic)
 - 1-2 common misconceptions the audience likely holds about this topic
@@ -198,12 +199,13 @@ Use this outline:
 
 RESEARCH TO WEAVE INTO THE ARTICLE (cite conversationally, not as footnotes):
 {research_json}
-
+{search_results_block}
 Examples of good inline citations:
 - "A 2023 study in the Journal of Strength and Conditioning Research found that..."
 - "According to Dr. Brad Schoenfeld, one of the leading hypertrophy researchers..."
 - "The American College of Sports Medicine recommends..."
 Do NOT add a references section at the end. Weave citations naturally into the text.
+IMPORTANT: Use the provided trending context and latest web research data above (if any). Reference current events, recent studies, and up-to-date statistics. Do NOT rely solely on training data — incorporate the real-time research provided.
 
 WRITING GUIDELINES:
 - Total length: 1000-2000 words
@@ -497,10 +499,26 @@ class FitOver35ArticleGenerator:
 
         raise ValueError(f"No valid JSON found in response: {text[:200]}...")
 
-    def research_and_outline(self, keyword: str) -> dict:
+    def research_and_outline(self, keyword: str, trending_context: str = '',
+                             search_results_summary: str = '') -> dict:
         """Generate research + article outline with retry on parse failure."""
         logger.info(f"Researching and outlining: {keyword}")
-        prompt = RESEARCH_AND_OUTLINE_PROMPT.format(keyword=keyword)
+
+        # Build optional trending context block inserted into prompt
+        if trending_context or search_results_summary:
+            parts = []
+            if trending_context:
+                parts.append(f"WHY THIS TOPIC IS TRENDING NOW:\n{trending_context}")
+            if search_results_summary:
+                parts.append(f"LATEST WEB RESEARCH (use this real-time data):\n{search_results_summary}")
+            trending_context_block = "\n\n" + "\n\n".join(parts) + "\n\n"
+        else:
+            trending_context_block = ""
+
+        prompt = RESEARCH_AND_OUTLINE_PROMPT.format(
+            keyword=keyword,
+            trending_context_block=trending_context_block,
+        )
         last_error = None
         for attempt in range(3):
             response = self._call_llm(prompt, json_mode=True)
@@ -540,7 +558,8 @@ class FitOver35ArticleGenerator:
 
     def generate_article_content(self, keyword: str, title: str, outline: dict,
                                   winning_hook: str = '', hook_transition: str = '',
-                                  research: Optional[dict] = None) -> str:
+                                  research: Optional[dict] = None,
+                                  search_results_summary: str = '') -> str:
         """Generate the full article HTML content."""
         logger.info(f"Generating article content for: {keyword}")
 
@@ -553,6 +572,16 @@ class FitOver35ArticleGenerator:
 
         research_json = json.dumps(research, indent=2) if research else "No research data available — use your knowledge."
 
+        # Optional block of live web search results
+        if search_results_summary:
+            search_results_block = (
+                "\nLATEST WEB RESEARCH (real-time data — incorporate this into the article):\n"
+                + search_results_summary
+                + "\n"
+            )
+        else:
+            search_results_block = ""
+
         prompt = ARTICLE_CONTENT_PROMPT.format(
             keyword=keyword,
             title=title,
@@ -560,7 +589,8 @@ class FitOver35ArticleGenerator:
             hook_transition=hook_transition or "Transition naturally into the first section.",
             outline_json=json.dumps(outline, indent=2),
             research_json=research_json,
-            internal_links=internal_links
+            search_results_block=search_results_block,
+            internal_links=internal_links,
         )
         return self._call_llm(prompt)
 
@@ -620,36 +650,64 @@ class FitOver35ArticleGenerator:
                 for item in faq_items
             ]
 
-    def generate_full_article(self, keyword: str, category: str) -> dict:
+    def generate_full_article(self, keyword: str, category: str,
+                              trending_context: str = '',
+                              search_results_summary: str = '') -> dict:
         """
         Generate a complete article with all components.
 
         Uses the content-research-writer methodology:
-        1. Research + Outline (combined)
+        1. Research + Outline (combined, with trending context if available)
         2. Hook Evaluation (pick best opening)
-        3. Article Content (with research + winning hook)
+        3. Article Content (with research + winning hook + live web data)
         4. Editorial Review (polish voice, citations, flow)
         5. Product Recommendations (unchanged)
         6. FAQ (unchanged)
 
         Set ENHANCED_ARTICLES=false env var to skip steps 2 + 4 (research/review).
 
+        Trending context is loaded automatically from trending_context.json if it
+        exists in the working directory (written by trending_topic_selector.py).
+
         Args:
             keyword: Target keyword
             category: Article category
+            trending_context: Why this topic is trending right now (optional)
+            search_results_summary: Latest web research results (optional)
 
         Returns:
             Dict with all article components needed for HTML generation
         """
         enhanced = os.getenv('ENHANCED_ARTICLES', 'true').lower() != 'false'
 
+        # Auto-load trending context from sidecar file if not passed explicitly
+        if not trending_context and not search_results_summary:
+            ctx_file = Path('trending_context.json')
+            if ctx_file.exists():
+                try:
+                    ctx = json.loads(ctx_file.read_text())
+                    # Only apply context if it's for this keyword (or any keyword when
+                    # the caller didn't pass one — e.g. when the workflow auto-selects)
+                    if ctx.get('keyword', '').lower() in (keyword.lower(), ''):
+                        trending_context = ctx.get('trending_context', '')
+                        search_results_summary = ctx.get('search_results_summary', '')
+                        logger.info("Loaded trending context from trending_context.json")
+                except Exception as e:
+                    logger.warning(f"Could not load trending_context.json: {e}")
+
         logger.info(f"{'='*60}")
         logger.info(f"Generating full article for: {keyword}")
         logger.info(f"Category: {category} | Enhanced: {enhanced}")
+        logger.info(f"Trending context: {'yes' if trending_context else 'no'}")
+        logger.info(f"Web search data: {'yes' if search_results_summary else 'no'}")
         logger.info(f"{'='*60}")
 
         # Step 1: Research + Outline
-        outline = self.research_and_outline(keyword)
+        outline = self.research_and_outline(
+            keyword,
+            trending_context=trending_context,
+            search_results_summary=search_results_summary,
+        )
         title = outline.get('title', keyword.title())
         meta_description = outline.get('meta_description', '')
         research = outline.get('research', {})
@@ -670,12 +728,13 @@ class FitOver35ArticleGenerator:
             winning_hook = hooks.get('bold_statement', '')
             hook_selected = 'bold_statement (default)'
 
-        # Step 3: Generate article content (with research + hook)
+        # Step 3: Generate article content (with research + hook + live web data)
         content_html = self.generate_article_content(
             keyword, title, outline,
             winning_hook=winning_hook,
             hook_transition=hook_transition,
-            research=research if enhanced else None
+            research=research if enhanced else None,
+            search_results_summary=search_results_summary,
         )
 
         # Step 4: Editorial Review (skip if not enhanced)
