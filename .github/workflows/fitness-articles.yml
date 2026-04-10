@@ -28,7 +28,7 @@ env:
 jobs:
   generate-fitover35-article:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     # Always run for fitover35
     if: >
       github.event.inputs.brand != 'deals' ||
@@ -46,22 +46,29 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Select keyword
         id: keyword
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          INPUT_KEYWORD: ${{ github.event.inputs.keyword }}
         run: |
-          if [ -n "${{ github.event.inputs.keyword }}" ]; then
-            KEYWORD="${{ github.event.inputs.keyword }}"
-            SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-60)
+          if [ -n "$INPUT_KEYWORD" ]; then
+            SLUG=$(echo "$INPUT_KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-60)
             FILENAME="${SLUG}.html"
-            echo "keyword=$KEYWORD" >> $GITHUB_OUTPUT
+            echo "keyword=$INPUT_KEYWORD" >> $GITHUB_OUTPUT
             echo "category=auto" >> $GITHUB_OUTPUT
             echo "slug=$SLUG" >> $GITHUB_OUTPUT
             echo "filename=$FILENAME" >> $GITHUB_OUTPUT
           else
-            python automation/articles/fitover35_keywords.py \
+            # trending_topic_selector: queries Supabase daily_trending first,
+            # falls back to static keyword list if no trending data for today.
+            python3 automation/articles/trending_topic_selector.py \
+              --brand fitness \
               --mark-used \
               --state-file fitover35_keyword_state.json
           fi
@@ -71,57 +78,69 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          ARTICLE_KEYWORD: ${{ steps.keyword.outputs.keyword }}
+          ARTICLE_CATEGORY: ${{ steps.keyword.outputs.category }}
+          ARTICLE_FILENAME: ${{ steps.keyword.outputs.filename }}
         run: |
-          KEYWORD="${{ steps.keyword.outputs.keyword }}"
-          CATEGORY="${{ steps.keyword.outputs.category }}"
-          SLUG="${{ steps.keyword.outputs.slug }}"
-          FILENAME="${{ steps.keyword.outputs.filename }}"
-
-          echo "Generating FitOver35 article for: $KEYWORD"
-
-          python automation/articles/fitover35_article_generator.py \
-            --keyword "$KEYWORD" \
-            --category "$CATEGORY" \
-            --output "outputs/fitover35-website/articles/$FILENAME"
+          echo "Generating FitOver35 article for: $ARTICLE_KEYWORD"
+          python3 automation/articles/fitover35_article_generator.py \
+            --keyword "$ARTICLE_KEYWORD" \
+            --category "$ARTICLE_CATEGORY" \
+            --output "outputs/fitover35-website/articles/$ARTICLE_FILENAME"
 
       - name: Update blog listing
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          ARTICLE_PATH: ${{ steps.keyword.outputs.filename }}
+          ARTICLE_TITLE: ${{ steps.generate.outputs.title }}
+          ARTICLE_CATEGORY: ${{ steps.generate.outputs.category }}
+          ARTICLE_EXCERPT: ${{ steps.generate.outputs.excerpt }}
+          ARTICLE_READ_TIME: ${{ steps.generate.outputs.read_time }}
+          ARTICLE_IMAGE: ${{ steps.generate.outputs.hero_image }}
         run: |
-          python automation/articles/update_blog_index.py \
+          python3 automation/articles/update_blog_index.py \
             --brand fitover35 \
-            --article-path "articles/${{ steps.keyword.outputs.filename }}" \
-            --title "${{ steps.generate.outputs.title }}" \
-            --category "${{ steps.generate.outputs.category }}" \
-            --excerpt "${{ steps.generate.outputs.excerpt }}" \
-            --read-time "${{ steps.generate.outputs.read_time }}" \
-            --image-url "${{ steps.generate.outputs.hero_image }}"
+            --article-path "articles/$ARTICLE_PATH" \
+            --title "$ARTICLE_TITLE" \
+            --category "$ARTICLE_CATEGORY" \
+            --excerpt "$ARTICLE_EXCERPT" \
+            --read-time "$ARTICLE_READ_TIME" \
+            --image-url "$ARTICLE_IMAGE"
 
       - name: Commit and push
+        env:
+          ARTICLE_TITLE: ${{ steps.generate.outputs.title }}
         run: |
           git config user.name "FitOver35 Bot"
           git config user.email "bot@fitover35.com"
           git add outputs/fitover35-website/articles/
           git add outputs/fitover35-website/blog.html
-          git add fitover35_keyword_state.json || true
+          git add fitover35_keyword_state.json trending_context.json || true
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            TITLE="${{ steps.generate.outputs.title }}"
-            git commit -m "Publish FitOver35 article: ${TITLE}"
+            git commit -m "Publish FitOver35 article: ${ARTICLE_TITLE}"
             git pull --rebase origin main
             git push
           fi
 
       - name: Summary
+        env:
+          ARTICLE_TITLE: ${{ steps.generate.outputs.title }}
+          ARTICLE_KEYWORD: ${{ steps.keyword.outputs.keyword }}
         run: |
           echo "## FitOver35 Article Published" >> $GITHUB_STEP_SUMMARY
-          echo "**Title:** ${{ steps.generate.outputs.title }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Keyword:** ${{ steps.keyword.outputs.keyword }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Title:** $ARTICLE_TITLE" >> $GITHUB_STEP_SUMMARY
+          echo "**Keyword:** $ARTICLE_KEYWORD" >> $GITHUB_STEP_SUMMARY
 
   generate-deals-article:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    # Only run when manually triggered for deals (placeholder — not yet implemented)
+    timeout-minutes: 30
+    # Only run when manually triggered for deals
     if: >
       github.event.inputs.brand == 'deals' ||
       github.event.inputs.brand == 'both'
@@ -138,25 +157,89 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Select keyword
+        id: keyword
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          INPUT_KEYWORD: ${{ github.event.inputs.keyword }}
+        run: |
+          if [ -n "$INPUT_KEYWORD" ]; then
+            SLUG=$(echo "$INPUT_KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | cut -c1-60)
+            echo "keyword=$INPUT_KEYWORD" >> $GITHUB_OUTPUT
+            echo "category=auto" >> $GITHUB_OUTPUT
+            echo "slug=$SLUG" >> $GITHUB_OUTPUT
+            echo "filename=${SLUG}.html" >> $GITHUB_OUTPUT
+          else
+            python3 automation/articles/trending_topic_selector.py \
+              --brand deals \
+              --mark-used \
+              --state-file dailydealdarling_keyword_state.json
+          fi
+
       - name: Generate deals article
+        id: generate
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          ARTICLE_KEYWORD: ${{ steps.keyword.outputs.keyword }}
+          ARTICLE_CATEGORY: ${{ steps.keyword.outputs.category }}
+          ARTICLE_FILENAME: ${{ steps.keyword.outputs.filename }}
         run: |
-          python -c "
-          import sys
-          sys.path.insert(0, '.')
+          python3 automation/articles/dailydealdarling_article_generator.py \
+            --keyword "$ARTICLE_KEYWORD" \
+            --category "$ARTICLE_CATEGORY" \
+            --output "outputs/dailydealdarling-website/articles/$ARTICLE_FILENAME"
 
-          # Placeholder for deals article generation
-          # Will use Claude API to generate lifestyle/home articles
-          print('Deals article generation - to be implemented')
-          print('Will generate articles for dailydealdarling.com')
-          "
+      - name: Update blog listing
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          ARTICLE_PATH: ${{ steps.keyword.outputs.filename }}
+          ARTICLE_TITLE: ${{ steps.generate.outputs.title }}
+          ARTICLE_CATEGORY: ${{ steps.generate.outputs.category }}
+          ARTICLE_EXCERPT: ${{ steps.generate.outputs.excerpt }}
+          ARTICLE_READ_TIME: ${{ steps.generate.outputs.read_time }}
+          ARTICLE_IMAGE: ${{ steps.generate.outputs.hero_image }}
+        run: |
+          python3 automation/articles/update_blog_index.py \
+            --brand deals \
+            --article-path "articles/$ARTICLE_PATH" \
+            --title "$ARTICLE_TITLE" \
+            --category "$ARTICLE_CATEGORY" \
+            --excerpt "$ARTICLE_EXCERPT" \
+            --read-time "$ARTICLE_READ_TIME" \
+            --image-url "$ARTICLE_IMAGE"
+
+      - name: Commit and push
+        env:
+          ARTICLE_TITLE: ${{ steps.generate.outputs.title }}
+        run: |
+          git config user.name "DailyDealDarling Bot"
+          git config user.email "bot@dailydealdarling.com"
+          git add outputs/dailydealdarling-website/articles/
+          git add outputs/dailydealdarling-website/blog.html
+          git add dailydealdarling_keyword_state.json trending_context.json || true
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Publish DailyDealDarling article: ${ARTICLE_TITLE}"
+            git pull --rebase origin main
+            git push
+          fi
 
       - name: Summary
+        env:
+          ARTICLE_TITLE: ${{ steps.generate.outputs.title }}
+          ARTICLE_KEYWORD: ${{ steps.keyword.outputs.keyword }}
         run: |
-          echo "## Daily Deal Darling Article" >> $GITHUB_STEP_SUMMARY
-          echo "Deals article generation placeholder" >> $GITHUB_STEP_SUMMARY
+          echo "## Daily Deal Darling Article Published" >> $GITHUB_STEP_SUMMARY
+          echo "**Title:** $ARTICLE_TITLE" >> $GITHUB_STEP_SUMMARY
+          echo "**Keyword:** $ARTICLE_KEYWORD" >> $GITHUB_STEP_SUMMARY

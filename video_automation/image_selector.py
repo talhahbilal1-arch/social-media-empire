@@ -186,15 +186,33 @@ def get_unique_pexels_image(search_query, brand, supabase_client):
         "size": "large"
     }
 
-    response = requests.get(
-        "https://api.pexels.com/v1/search",
-        headers=headers,
-        params=params,
-        timeout=15
-    )
+    import time as _time_img
+    response = None
+    for _attempt in range(3):
+        try:
+            response = requests.get(
+                "https://api.pexels.com/v1/search",
+                headers=headers,
+                params=params,
+                timeout=15
+            )
+            if response.status_code == 429:
+                wait = 30 * (_attempt + 1)
+                logger.warning(f"Pexels rate limit (429). Waiting {wait}s (attempt {_attempt + 1}/3)")
+                _time_img.sleep(wait)
+                continue
+            break
+        except requests.exceptions.RequestException as _e:
+            if _attempt < 2:
+                logger.warning(f"Pexels network error (attempt {_attempt + 1}/3): {_e}. Retrying in 10s...")
+                _time_img.sleep(10)
+            else:
+                raise
 
-    if response.status_code != 200:
-        raise Exception(f"Pexels API error: {response.status_code} - {response.text[:200]}")
+    if response is None or response.status_code != 200:
+        status = response.status_code if response is not None else 'no response'
+        body = response.text[:200] if response is not None else ''
+        raise Exception(f"Pexels API error: {status} - {body}")
 
     photos = response.json().get('photos', [])
 

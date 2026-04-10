@@ -2,7 +2,7 @@ name: Daily Trend Scout
 
 on:
   schedule:
-    # 5 AM PST (13:00 UTC) — 4 hours before first content-engine run (9AM PST)
+    # 5 AM PST (13:00 UTC) — runs before content-engine (6AM/9AM PST)
     - cron: '0 13 * * *'
   workflow_dispatch:
 
@@ -15,7 +15,7 @@ env:
 jobs:
   discover-trends:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -29,7 +29,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run daily trend scout
@@ -41,32 +41,60 @@ jobs:
           python3 << 'PYEOF'
           import sys
           import json
+          import os
+          import time
           from datetime import datetime, timezone
 
           sys.path.insert(0, '.')
-          from database.supabase_client import get_supabase_client
-          from video_automation.daily_trend_scout import run_daily_trend_scout
 
-          db = get_supabase_client()
-          results = run_daily_trend_scout(db.client)
+          try:
+              from database.supabase_client import get_supabase_client
+              from video_automation.daily_trend_scout import run_daily_trend_scout
+          except ImportError as e:
+              print(f"ERROR: Import failed - {e}")
+              sys.exit(1)
 
-          # Print summary for GitHub Actions step summary
+          MAX_ATTEMPTS = 3
+          last_error = None
+          results = None
+
+          for attempt in range(1, MAX_ATTEMPTS + 1):
+              try:
+                  print(f"=== Trend scout attempt {attempt}/{MAX_ATTEMPTS} ===")
+                  db = get_supabase_client()
+                  results = run_daily_trend_scout(db.client)
+                  print("Trend scout completed successfully.")
+                  break
+              except Exception as e:
+                  last_error = e
+                  print(f"Attempt {attempt} failed: {e}")
+                  if attempt < MAX_ATTEMPTS:
+                      wait = 30 * attempt
+                      print(f"Retrying in {wait}s...")
+                      time.sleep(wait)
+
+          if results is None:
+              print(f"All {MAX_ATTEMPTS} attempts failed. Last: {last_error}")
+              print("Content engine will fall back to static keyword lists today.")
+              sys.exit(0)
+
           summary_lines = ["# Daily Trend Scout Results\n"]
           for brand, data in results.items():
               summary_lines.append(f"## {brand.upper()}")
               topics = data.get('topics', [])
               if topics:
                   for t in topics:
-                      summary_lines.append(f"- **#{t['rank']}** {t['topic']} (score: {t.get('trend_score', '?')})")
+                      rank = t.get('rank', '?')
+                      topic = t.get('topic', '?')
+                      score = t.get('trend_score', '?')
+                      summary_lines.append(f"- #{rank} {topic} (score: {score})")
               else:
-                  summary_lines.append("- _No trends discovered (using fallback)_")
+                  summary_lines.append("- No trends discovered (content engine uses static fallback)")
               summary_lines.append("")
 
           summary = "\n".join(summary_lines)
           print(summary)
 
-          # Write to GitHub step summary
-          import os
           summary_file = os.environ.get('GITHUB_STEP_SUMMARY', '')
           if summary_file:
               with open(summary_file, 'a') as f:

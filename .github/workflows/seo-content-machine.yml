@@ -27,22 +27,55 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Run SEO Content Machine
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: python3 video_automation/seo_content_machine.py
+        run: |
+          python3 << 'PYEOF'
+          import sys
+          import time
+
+          sys.path.insert(0, '.')
+
+          MAX_ATTEMPTS = 2
+          last_error = None
+
+          for attempt in range(1, MAX_ATTEMPTS + 1):
+              try:
+                  print(f"SEO content machine attempt {attempt}/{MAX_ATTEMPTS}")
+                  import video_automation.seo_content_machine as seo_machine
+                  seo_machine.main()
+                  print("SEO content machine completed.")
+                  break
+              except Exception as e:
+                  last_error = e
+                  print(f"Attempt {attempt} failed: {e}")
+                  import traceback; traceback.print_exc()
+                  if attempt < MAX_ATTEMPTS:
+                      print("Retrying in 60s...")
+                      time.sleep(60)
+
+          if last_error and attempt == MAX_ATTEMPTS:
+              print(f"SEO machine failed after {MAX_ATTEMPTS} attempts: {last_error}")
+              sys.exit(1)
+          PYEOF
 
       - name: Commit and push new articles + internal links
         run: |
           git config user.name "SEO Content Machine"
           git config user.email "bot@fitover35.com"
           git add outputs/
-          git diff --staged --quiet && echo "No new content to commit" || (
-            git commit -m "content: SEO machine — new articles + internal links $(date -u +%Y-%m-%d)"
+          if git diff --staged --quiet; then
+            echo "No new content to commit"
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "content: SEO machine — new articles + internal links ${TODAY}"
             git pull --rebase origin main
             git push
-          )
+          fi
