@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Optional
 
 from .config import BrandConfig, get_api_key
+from .pinterest_destination_mapper import resolve_destination
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +127,10 @@ def post_to_pinterest(
     # Build hashtag string
     hashtags = " ".join(script_data.get("hashtags", []))
 
+    # Deep-link the pin to the most relevant article (not the homepage) with
+    # UTM tracking. See pinterest_destination_mapper.resolve_destination.
+    dest_url = resolve_destination(brand, script_data)
+
     payload = {
         "brand": brand.key,
         "brand_name": brand.name,
@@ -133,7 +138,7 @@ def post_to_pinterest(
         "description": f"{script_data['hook']}\n\n{hashtags}",
         "video_url": public_video_url,
         "image_url": public_video_url,  # Make.com uses image_url for the pin thumbnail
-        "link": brand.site_url,
+        "link": dest_url,
         "affiliate_tag": brand.affiliate_tag,
         "pin_type": "video",
         "timestamp": datetime.now(timezone.utc).isoformat(),

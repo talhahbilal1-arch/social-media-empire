@@ -27,6 +27,7 @@ from typing import Optional
 from playwright.sync_api import sync_playwright, Page, BrowserContext, TimeoutError as PWTimeout
 
 from .config import get_brand, BrandConfig, load_env
+from .pinterest_destination_mapper import resolve_destination
 
 logger = logging.getLogger(__name__)
 
@@ -324,7 +325,9 @@ def _post_single(
             logger.info(f"No board configured for brand '{brand.key}' — skipping board selection")
 
         # ── 6. Add destination link ───────────────────────────────────────────
-        dest_url = brand.site_url
+        # Deep-link to the most relevant article (not homepage) + UTM params.
+        # See pinterest_destination_mapper.resolve_destination for precedence.
+        dest_url = resolve_destination(brand, script_data, board_name=board_name)
         logger.info(f"Setting destination link: {dest_url}")
 
         link_selectors = [
