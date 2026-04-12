@@ -172,8 +172,9 @@ jobs:
           brand_filter = os.environ.get('BRAND_INPUT', '').strip()
           brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ALL_BRANDS
 
-          MAX_PINS_PER_DAY = 5  # 5 pins/brand/day across 5 scheduled runs
-          MAX_PINS_PER_RUN = 1  # 1 pin/brand/run — spread pins across day for better engagement
+          MAX_PINS_PER_DAY = 10  # 10 pins/brand/day across 5 scheduled runs (2 per run)
+          MAX_PINS_PER_RUN = 2   # 2 pins/brand/run — spread across day for engagement
+          force_mode = os.environ.get('FORCE_INPUT', 'false') == 'true'
           today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
           for brand in brands_to_generate:
