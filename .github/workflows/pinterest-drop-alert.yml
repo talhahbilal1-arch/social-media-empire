@@ -1,0 +1,70 @@
+name: Pinterest Drop Alert
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # 23:00 UTC daily — after last posting run
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: pip install supabase --quiet
+      - name: Check brand post counts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAKE_WEBHOOK_ACTIVATOR: ${{ secrets.MAKE_WEBHOOK_ACTIVATOR }}
+        run: |
+          python3 << 'PYEOF'
+          import os, sys, json, urllib.request
+          from datetime import datetime, timezone, timedelta
+          from supabase import create_client
+
+          db = create_client(os.environ['SUPABASE_URL'], os.environ['SUPABASE_KEY'])
+          cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+
+          problems = []
+          for brand in ['fitness', 'deals', 'menopause']:
+              r = db.table('pinterest_pins').select('id', count='exact') \
+                  .eq('status', 'posted').eq('brand', brand) \
+                  .gte('created_at', cutoff).execute()
+              count = r.count if hasattr(r, 'count') and r.count is not None else len(r.data or [])
+              mark = 'OK' if count >= 3 else 'FAIL'
+              print(f'  {mark} {brand}: {count} pins in last 24h (min=3)')
+              if count < 3:
+                  problems.append(f'{brand}: only {count}/3 expected')
+
+          if not problems:
+              print('All brands healthy - no action needed')
+              sys.exit(0)
+
+          print('DROP ALERT: ' + ', '.join(problems))
+          db.table('errors').insert({
+              'error_type': 'pinterest_drop_alert',
+              'error_message': '; '.join(problems),
+              'context': json.dumps({'cutoff': cutoff}),
+              'severity': 'critical',
+          }).execute()
+
+          activator = os.environ.get('MAKE_WEBHOOK_ACTIVATOR', '')
+          if activator:
+              try:
+                  req = urllib.request.Request(
+                      activator,
+                      data=json.dumps({'action': 'activate_all'}).encode(),
+                      headers={'Content-Type': 'application/json'},
+                      method='POST')
+                  urllib.request.urlopen(req, timeout=10)
+                  print('Sent activate_all to Make.com activator')
+              except Exception as e:
+                  print('Activator call failed: ' + str(e))
+
+          sys.exit(1)
+          PYEOF

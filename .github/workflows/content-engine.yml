@@ -61,6 +61,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK: ${{ secrets.MAKE_WEBHOOK }}
         run: python3 scripts/preflight_check.py
 
       - name: Render and publish pins
@@ -72,6 +73,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK: ${{ secrets.MAKE_WEBHOOK }}
           MAKE_WEBHOOK_ACTIVATOR: ${{ secrets.MAKE_WEBHOOK_ACTIVATOR }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
@@ -617,20 +619,47 @@ jobs:
           # links directly to the conversion article, not the homepage.
           # Scenarios stay active via builtin:Ignore error handler.
           # ══════════════════════════════════════════════════════════════
+          # Brand-specific webhooks (legacy per-brand scenarios)
           WEBHOOKS = {
               'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
               'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
               'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
           }
+          # Unified fallback — used when a brand-specific secret is empty.
+          # The unified Make.com scenario routes by the `brand` field in the payload.
+          UNIFIED_WEBHOOK = os.environ.get('MAKE_WEBHOOK', '')
+
+          # Map Python short keys → hyphenated slugs that Make.com filters expect.
+          # Imported from video_automation/brand_slugs.py — single source of truth.
+          # See docs/MANUAL_SETUP_GUIDE.md — filters use `brand == "fitness-made-easy"` etc.
+          from video_automation.brand_slugs import BRAND_SLUG
 
           print('\n=== PHASE 1b: Posting pins to Pinterest ===')
           posted_count = 0
+          posted_brands = set()
           for pin in rendered_pins:
               pin_id = pin['id']
               brand = pin['brand']
-              webhook_url = WEBHOOKS.get(brand, '')
+              webhook_url = WEBHOOKS.get(brand, '') or UNIFIED_WEBHOOK
               if not webhook_url:
-                  print(f'  [{brand}] SKIP — no webhook URL configured')
+                  print(f'  [{brand}] SKIP — no webhook URL configured (neither MAKE_WEBHOOK_{brand.upper()} nor MAKE_WEBHOOK is set)')
+                  # Loud failure — log to Supabase so watchdog + dashboards see it.
+                  log_pipeline_error(
+                      '1b',
+                      brand,
+                      f'No Make.com webhook configured for {brand} — pin {pin_id} dropped. Set MAKE_WEBHOOK_{brand.upper()} or MAKE_WEBHOOK in GitHub Secrets.',
+                      severity='high',
+                  )
+                  try:
+                      db.client.table('pinterest_pins').update({
+                          'status': 'failed',
+                          'error_message': f'No webhook configured for {brand}',
+                      }).eq('id', pin_id).execute()
+                  except Exception:
+                      try:
+                          db.client.table('pinterest_pins').update({'status': 'failed'}).eq('id', pin_id).execute()
+                      except Exception:
+                          pass
                   continue
               if dry_run:
                   print(f'  [{brand}] DRY RUN — would POST to article: {pin.get("destination_url","")[:70]}')
@@ -677,9 +706,14 @@ jobs:
                   continue
 
               destination_url = pin.get('destination_url', '')
+              brand_slug = BRAND_SLUG.get(brand, brand)
               payload = {
                   'pin_id': str(pin_id),
-                  'brand': brand,
+                  # Hyphenated slug — matches Make.com route filters
+                  # (fitness-made-easy / daily-deal-darling / menopause-planner).
+                  'brand': brand_slug,
+                  # Short key kept for any consumers that still expect it.
+                  'brand_key': brand,
                   'title': pin.get('title', '')[:100],
                   'description': pin.get('description', '')[:500],
                   'image_url': image_url,
@@ -716,6 +750,7 @@ jobs:
                               'status': 'posted'
                           }).eq('id', pin_id).execute()
                       posted_count += 1
+                      posted_brands.add(brand)
                       success = True
                       break
                   except urllib.error.HTTPError as e:
@@ -753,6 +788,18 @@ jobs:
                           log_pipeline_error('1b', brand, e, severity='high')
 
           print(f'  Posted {posted_count}/{len(rendered_pins)} pins to Pinterest')
+
+          # Partial-post assertion: detects silent Make.com filter drops.
+          # Fires when ≥2 brands ran but at least one got 0 successful posts.
+          if not dry_run and len(brands_to_generate) > 1 and rendered_pins:
+              brands_with_pins = {p['brand'] for p in rendered_pins}
+              missed = brands_with_pins - posted_brands
+              if missed:
+                  _msg = (f'Partial post: brands {sorted(missed)} had rendered pins '
+                          f'but none reached posted status. Webhook accepted but Make.com '
+                          f'may have filtered them silently.')
+                  print(f'  WARNING {_msg}')
+                  log_pipeline_error('1b', 'all', _msg, severity='high')
 
           # ══════════════════════════════════════════════════════════════
           # PHASE 4: Verify results — log any lingering failures

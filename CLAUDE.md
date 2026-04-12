@@ -57,9 +57,10 @@ Phase 4: Render PIL image → upload Supabase Storage → post via Make.com webh
 | `PEXELS_API_KEY` | Background images |
 | `SUPABASE_URL` | Database |
 | `SUPABASE_KEY` | Database |
-| `MAKE_WEBHOOK_FITNESS` | Make.com webhook — fitness brand |
-| `MAKE_WEBHOOK_DEALS` | Make.com webhook — deals brand |
-| `MAKE_WEBHOOK_MENOPAUSE` | Make.com webhook — menopause brand |
+| `MAKE_WEBHOOK_FITNESS` | Make.com webhook — fitness brand (optional if `MAKE_WEBHOOK` is set) |
+| `MAKE_WEBHOOK_DEALS` | Make.com webhook — deals brand (optional if `MAKE_WEBHOOK` is set) |
+| `MAKE_WEBHOOK_MENOPAUSE` | Make.com webhook — menopause brand (optional if `MAKE_WEBHOOK` is set) |
+| `MAKE_WEBHOOK` | Unified Make.com webhook — used as fallback when a brand-specific webhook is empty. The unified scenario routes by the hyphenated `brand` field in the payload. |
 | `VERCEL_BRAND_TOKEN` | Vercel deploy (personal access token) |
 | `VERCEL_FITOVER35_PROJECT_ID` | Vercel project ID for fitover35 |
 | `VERCEL_DEALS_PROJECT_ID` | Vercel project ID for deals |
@@ -67,8 +68,14 @@ Phase 4: Render PIL image → upload Supabase Storage → post via Make.com webh
 
 ## Brand Key Convention
 
-Python code uses short keys: `fitness`, `deals`, `menopause`
-Make.com payload uses hyphenated names: `fitness-made-easy`, `daily-deal-darling`, `menopause-planner`
+Python code uses short keys: `fitness`, `deals`, `menopause`.
+
+Make.com webhook payload uses **hyphenated slugs**: `fitness-made-easy`,
+`daily-deal-darling`, `menopause-planner`. Route filters inside Make.com compare
+against this hyphenated field — sending the short key causes filtered routes to
+silently drop the pin. The content-engine Phase 1b payload maps short key →
+hyphenated slug before POSTing; the original short key is also included as
+`brand_key` for any legacy consumers.
 
 ## Supabase Projects (CRITICAL — two separate projects)
 
@@ -84,12 +91,23 @@ Make.com payload uses hyphenated names: `fitness-made-easy`, `daily-deal-darling
 - `content_history`: requires `trending_topic`, `status` columns — included in migration
 - `agent_runs`: unique on `agent_name` — upserted on every pipeline run
 
-## Make.com Scenario
+## Make.com Scenarios (per-brand + unified fallback)
 
-- **ID**: 3977247 | **Webhook hook ID**: 1802056
-- **URL** (all brands): `https://hook.us2.make.com/8d51h67qpdt77jgz5brhvd5c9hgvaap8`
-- Routes by `brand` field in payload → brand-specific Pinterest connection
+Two posting paths exist. The content engine tries the brand-specific webhook
+first, then falls back to the unified one.
+
+**Per-brand dedicated scenarios** (no filter — each has its own Pinterest OAuth):
+- Fitness v3 — secret `MAKE_WEBHOOK_FITNESS`
+- Deals v4 — secret `MAKE_WEBHOOK_DEALS`
+- Menopause v4 — secret `MAKE_WEBHOOK_MENOPAUSE`
+
+**Unified fallback scenario** (router + per-route filter on the `brand` field):
+- Secret `MAKE_WEBHOOK`
+- Filter: `brand == "fitness-made-easy"` | `"daily-deal-darling"` | `"menopause-planner"`
 - Board ID provided dynamically in payload (`board_id` field)
+
+If a brand's dedicated scenario is disabled/broken, set `MAKE_WEBHOOK` and the
+content engine will automatically fall back to it without code changes.
 
 ## PIL Pin Image Styles (5 overlays)
 
