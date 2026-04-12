@@ -85,6 +85,7 @@ jobs:
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          FORCE_INPUT: ${{ github.event.inputs.force || 'false' }}
           BRAND_INPUT: ${{ github.event.inputs.brand || '' }}
         run: |
           python3 << 'PYEOF'
