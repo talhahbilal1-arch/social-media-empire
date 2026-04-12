@@ -20,6 +20,11 @@ on:
         required: false
         type: boolean
         default: false
+      force:
+        description: 'Force generation even if daily cap is already hit'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
