@@ -236,9 +236,10 @@ def generate_pin_image(brand: str, topic: str, style: str = "default") -> bytes:
             if attempt < 2:
                 time.sleep(wait)
 
-    # Fallback: fetch from Pexels and return raw bytes
+    # Fallback: fetch from Pexels, then apply text overlay
     logger.warning(f"[{brand}] Gemini failed after 3 attempts ({last_error}), falling back to Pexels")
-    return _pexels_fallback(brand, topic)
+    pexels_bytes = _pexels_fallback(brand, topic)
+    return add_text_overlay(pexels_bytes, topic, brand)
 
 
 def _pexels_fallback(brand: str, topic: str) -> bytes:
