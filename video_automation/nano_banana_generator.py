@@ -218,3 +218,95 @@ def generate_pin_batch(brand: str, topics: list, count: int = 5) -> list:
             logger.error(f"[{brand}] Pin {i + 1} failed for '{topic}': {e}")
 
     return results
+
+
+def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
+    """Apply a bold PIL text overlay to image bytes — safety net for all pin images.
+
+    Uses system fonts (no network downloads) so it works reliably in CI.
+    Called on every pin right before Supabase upload.
+
+    Args:
+        image_bytes: PNG or JPEG bytes from any image source
+        headline: Pin title/headline to render on the image
+        brand: Brand key ('fitness', 'deals', 'menopause') for color theming
+
+    Returns:
+        JPEG bytes with dark bottom band + white bold headline text
+    """
+    from PIL import Image, ImageDraw, ImageFont
+    from io import BytesIO
+
+    # Brand accent colors for the bottom band
+    _BRAND_ACCENTS = {
+        "fitness": (204, 255, 0),      # CCFF00 lime
+        "deals": (212, 175, 55),       # D4AF37 gold
+        "menopause": (61, 107, 79),    # 3D6B4F sage green
+    }
+    accent = _BRAND_ACCENTS.get(brand, (255, 255, 255))
+
+    img = Image.open(BytesIO(image_bytes)).convert("RGBA")
+    w, h = img.size
+
+    # Semi-transparent dark band covering bottom 35%
+    band_h = int(h * 0.35)
+    band = Image.new("RGBA", (w, band_h), (0, 0, 0, 200))
+    img.paste(band, (0, h - band_h), band)
+
+    # Thin accent stripe at the very bottom
+    stripe_h = max(8, h // 100)
+    stripe = Image.new("RGBA", (w, stripe_h), accent + (230,))
+    img.paste(stripe, (0, h - stripe_h), stripe)
+
+    draw = ImageDraw.Draw(img)
+
+    # Load a bold system font — no downloads, works in GitHub Actions (Ubuntu)
+    font_size = max(56, w // 11)
+    font = None
+    for font_path in [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+        "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+        "/System/Library/Fonts/Helvetica.ttc",
+    ]:
+        try:
+            font = ImageFont.truetype(font_path, font_size)
+            break
+        except Exception:
+            continue
+    if font is None:
+        try:
+            font = ImageFont.load_default(font_size)
+        except TypeError:
+            font = ImageFont.load_default()
+
+    # Word-wrap the headline to fit within the band width
+    words = headline.split()
+    lines, line = [], []
+    for word in words:
+        test = " ".join(line + [word])
+        bbox = draw.textbbox((0, 0), test, font=font)
+        if bbox[2] - bbox[0] > w - 80 and line:
+            lines.append(" ".join(line))
+            line = [word]
+        else:
+            line.append(word)
+    if line:
+        lines.append(" ".join(line))
+
+    line_h = font_size + 10
+    total_h = len(lines) * line_h
+    text_y = (h - band_h) + (band_h - total_h) // 2 - stripe_h
+
+    for text in lines:
+        bbox = draw.textbbox((0, 0), text, font=font)
+        x = (w - (bbox[2] - bbox[0])) // 2
+        # Drop shadow for legibility
+        draw.text((x + 2, text_y + 2), text, fill=(0, 0, 0, 220), font=font)
+        draw.text((x, text_y), text, fill=(255, 255, 255, 255), font=font)
+        text_y += line_h
+
+    out = BytesIO()
+    img.convert("RGB").save(out, "JPEG", quality=92)
+    return out.getvalue()
