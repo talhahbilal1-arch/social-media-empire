@@ -51,6 +51,20 @@ BRAND_CONFIGS = {
     },
 }
 
+# Brand URLs shown in small text at pin bottom
+BRAND_URLS = {
+    "fitness": "fitover35.com",
+    "deals": "dailydealdarling.com",
+    "menopause": "menopauseplanner.com",
+}
+
+# Brand overlay bar colors (RGBA) for PIL text overlay
+BRAND_OVERLAY_COLORS = {
+    "fitness": (20, 20, 20, 210),      # near-black, energetic
+    "deals": (30, 60, 30, 200),        # dark forest green
+    "menopause": (55, 30, 65, 200),    # deep purple
+}
+
 # Pexels brand-safe fallback queries
 _PEXELS_FALLBACK = {
     "fitness": "man fitness workout gym strength",
