@@ -844,5 +844,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-11T22:19:57.970Z",
     "success": true
+  },
+  {
+    "slug": "synthesia-vs-runway",
+    "pin_type": "comparison",
+    "title": "Synthesia vs Runway AI: Which Video Tool Wins?",
+    "link": "https://pilottools.ai/compare/synthesia-vs-runway/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-12T16:50:54.990Z",
+    "success": true
+  },
+  {
+    "slug": "semrush-vs-ahrefs",
+    "pin_type": "comparison",
+    "title": "Semrush vs Ahrefs: Which SEO Powerhouse Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/semrush-vs-ahrefs/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-12T16:50:59.185Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-writing-tools-for-bloggers-2026-the-ultimate-buyers-guide",
+    "pin_type": "article",
+    "title": "AI Writing Tools: Blogger's 2026 Buyer's Guide",
+    "link": "https://pilottools.ai/blog/best-ai-writing-tools-for-bloggers-2026-the-ultimate-buyers-guide/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-12T16:51:03.173Z",
+    "success": true
   }
 ]
