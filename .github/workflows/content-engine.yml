@@ -630,17 +630,13 @@ jobs:
           UNIFIED_WEBHOOK = os.environ.get('MAKE_WEBHOOK', '')
 
           # Map Python short keys → hyphenated slugs that Make.com filters expect.
+          # Imported from video_automation/brand_slugs.py — single source of truth.
           # See docs/MANUAL_SETUP_GUIDE.md — filters use `brand == "fitness-made-easy"` etc.
-          # The previous payload sent the short key, so any filtered route rejected the pin
-          # silently and only brands with a dedicated (unfiltered) scenario got posts.
-          BRAND_SLUG = {
-              'fitness': 'fitness-made-easy',
-              'deals': 'daily-deal-darling',
-              'menopause': 'menopause-planner',
-          }
+          from video_automation.brand_slugs import BRAND_SLUG
 
           print('\n=== PHASE 1b: Posting pins to Pinterest ===')
           posted_count = 0
+          posted_brands = set()
           for pin in rendered_pins:
               pin_id = pin['id']
               brand = pin['brand']
@@ -754,6 +750,7 @@ jobs:
                               'status': 'posted'
                           }).eq('id', pin_id).execute()
                       posted_count += 1
+                      posted_brands.add(brand)
                       success = True
                       break
                   except urllib.error.HTTPError as e:
@@ -791,6 +788,18 @@ jobs:
                           log_pipeline_error('1b', brand, e, severity='high')
 
           print(f'  Posted {posted_count}/{len(rendered_pins)} pins to Pinterest')
+
+          # Partial-post assertion: detects silent Make.com filter drops.
+          # Fires when ≥2 brands ran but at least one got 0 successful posts.
+          if not dry_run and len(brands_to_generate) > 1 and rendered_pins:
+              brands_with_pins = {p['brand'] for p in rendered_pins}
+              missed = brands_with_pins - posted_brands
+              if missed:
+                  _msg = (f'Partial post: brands {sorted(missed)} had rendered pins '
+                          f'but none reached posted status. Webhook accepted but Make.com '
+                          f'may have filtered them silently.')
+                  print(f'  WARNING {_msg}')
+                  log_pipeline_error('1b', 'all', _msg, severity='high')
 
           # ══════════════════════════════════════════════════════════════
           # PHASE 4: Verify results — log any lingering failures

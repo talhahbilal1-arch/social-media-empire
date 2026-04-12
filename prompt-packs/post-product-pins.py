@@ -19,6 +19,9 @@ import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from video_automation.brand_slugs import BRAND_SLUG
+
 # ─── CONFIGURE THESE ONCE GUMROAD IS LIVE ──────────────────────────────────────
 GUMROAD_URLS = {
     "product_1": "https://talhahbilal.gumroad.com/l/lupkl",        # $27 AI Fitness Coach Vault
@@ -217,7 +220,7 @@ def post_pin(pin_data, image_url, destination_url):
         return False
 
     payload = {
-        "brand": "fitness-made-easy",
+        "brand": BRAND_SLUG.get(brand, brand),
         "title": pin_data["title"],
         "description": pin_data["description"],
         "image_url": image_url,
