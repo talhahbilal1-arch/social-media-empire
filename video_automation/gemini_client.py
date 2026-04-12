@@ -94,7 +94,9 @@ def _get_thinking_config():
     try:
         from google.genai import types
         return types.ThinkingConfig(thinking_budget=0)
-    except (ImportError, AttributeError, TypeError):
+    except Exception:
+        # Catches pydantic_core.ValidationError on newer SDK versions that
+        # reject thinking_budget=0 as an extra/invalid field.
         return None
 
 
