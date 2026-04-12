@@ -226,6 +226,7 @@ def generate_pin_image(brand: str, topic: str, style: str = "default") -> bytes:
                             img_bytes = base64.b64decode(img_bytes)
                         if img_bytes:
                             logger.info(f"[{brand}] Gemini image generated ({len(img_bytes)} bytes)")
+                            img_bytes = add_text_overlay(img_bytes, topic, brand)
                             return img_bytes
             raise RuntimeError("Gemini returned no image data")
         except Exception as e:
