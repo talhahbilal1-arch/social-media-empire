@@ -97,6 +97,7 @@ jobs:
           sys.path.insert(0, '.')
           from video_automation.image_selector import get_unique_pexels_image
           from video_automation.pin_image_generator import render_pin_to_bytes, compute_image_hash, map_visual_style
+          from video_automation.nano_banana_generator import add_text_overlay
           from video_automation.supabase_storage import upload_pin_image
           from video_automation.pin_article_generator import (
               generate_article_for_pin, article_to_html, save_and_register_article,
