@@ -89,16 +89,17 @@ def _get_client():
 def _build_prompt(brand: str, topic: str) -> str:
     """Construct a brand-specific image generation prompt."""
     cfg = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
+    # Headline is the #1 instruction — Gemini often ignores text buried mid-prompt
+    headline = topic[:60].upper()
     return (
-        f"Create a professional Pinterest pin image at portrait 2:3 ratio (1000x1500px). "
-        f"Topic: {topic}. "
-        f"Brand: {cfg['name']}. Aesthetic: {cfg['aesthetic']}. "
-        f"Color palette: {cfg['colors']}. Typography: {cfg['style']}. "
-        f"Mood: {cfg['mood']}. Content: {cfg['content_frame']}. "
-        f"Include bold, readable headline text overlay on the image about: {topic}. "
-        f"The text must be high-contrast and legible on a small mobile screen. "
-        f"Requirements: professional Pinterest quality, clean composition, not cluttered. "
-        f"No watermarks, no borders, no Instagram filters."
+        f"IMPORTANT: This image MUST have the following TEXT rendered directly on it "
+        f"in large, bold, white letters as the dominant visual element: '{headline}'. "
+        f"The text must fill at least 30% of the image area, placed in the upper third "
+        f"or center, over a dark semi-transparent overlay bar so it is clearly readable. "
+        f"Do NOT omit the text. The text is required. "
+        f"Background scene: {cfg['aesthetic']}, {cfg['mood']} mood, {cfg['content_frame']}. "
+        f"Color palette: {cfg['colors']}. Typography style: {cfg['style']}. "
+        f"Portrait 2:3 ratio (1000x1500px), professional Pinterest quality, no watermarks, no borders."
     )
 
 
