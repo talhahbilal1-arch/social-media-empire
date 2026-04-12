@@ -189,8 +189,11 @@ jobs:
                           .execute()
                       pins_today = today_count.count if hasattr(today_count, 'count') else len(today_count.data or [])
                       if pins_today >= MAX_PINS_PER_DAY:
-                          print(f'  [{brand}] SKIP — already {pins_today} pins today (max {MAX_PINS_PER_DAY})')
-                          continue
+                          if force_mode:
+                              print(f'  [{brand}] FORCE mode — bypassing cap ({pins_today}/{MAX_PINS_PER_DAY} today)')
+                          else:
+                              print(f'  [{brand}] SKIP — already {pins_today} pins today (max {MAX_PINS_PER_DAY})')
+                              continue
                   except Exception as _e:
                       print(f'  [{brand}] Pin count check failed ({_e}), continuing...')
 
