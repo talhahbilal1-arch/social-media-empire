@@ -39,8 +39,8 @@ def main():
         if not check(f"{var} ({purpose})", ok, "set" if ok else "MISSING"):
             failures.append(f"Missing {var}")
 
-    # At least one Make.com webhook must be configured
-    webhook_vars = ["MAKE_WEBHOOK_FITNESS", "MAKE_WEBHOOK_DEALS", "MAKE_WEBHOOK_MENOPAUSE"]
+    # At least one Make.com webhook must be configured (brand-specific OR unified fallback)
+    webhook_vars = ["MAKE_WEBHOOK_FITNESS", "MAKE_WEBHOOK_DEALS", "MAKE_WEBHOOK_MENOPAUSE", "MAKE_WEBHOOK"]
     any_webhook = any(os.environ.get(v, "") for v in webhook_vars)
     if not check("At least one Make.com webhook", any_webhook,
                  "found" if any_webhook else "ALL MISSING — no pins will be posted"):
@@ -123,16 +123,26 @@ def main():
         "MAKE_WEBHOOK_DEALS": "deals",
         "MAKE_WEBHOOK_MENOPAUSE": "menopause",
     }
+    unified_url = os.environ.get("MAKE_WEBHOOK", "")
+    unified_ok = bool(unified_url and unified_url.startswith("https://hook.us2.make.com/"))
+    check("webhook:unified (MAKE_WEBHOOK)", unified_ok,
+          "configured — used as fallback when brand-specific webhook is missing" if unified_ok
+          else "not configured (optional fallback)")
     # IMPORTANT: Do NOT make HTTP requests to webhook URLs.
     # Make.com fires the scenario on ANY HTTP method (HEAD, GET, POST, etc.).
     # Calling the URL with an empty body causes Pinterest 400 errors, deactivating
     # the scenario before the actual pin posting step runs.
-    any_configured = False
+    any_configured = unified_ok
     for env_var, label in webhook_map.items():
         url = os.environ.get(env_var, "")
         ok = bool(url and url.startswith("https://hook.us2.make.com/"))
-        if check(f"webhook:{label}", ok, "configured" if ok else "not configured"):
+        if ok:
+            check(f"webhook:{label}", True, "configured")
             any_configured = True
+        elif unified_ok:
+            check(f"webhook:{label}", True, "using unified fallback")
+        else:
+            check(f"webhook:{label}", False, "not configured")
 
     if not any_configured:
         failures.append("No Make.com webhooks configured")

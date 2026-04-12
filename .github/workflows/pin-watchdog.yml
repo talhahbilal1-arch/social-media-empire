@@ -54,6 +54,7 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK: ${{ secrets.MAKE_WEBHOOK }}
           FORCE_REPAIR: ${{ github.event.inputs.force_repair || 'false' }}
         run: |
           python3 << 'PYEOF'
@@ -159,16 +160,19 @@ jobs:
 
           # ── 5. Make.com webhooks ────────────────────────────────────
           print('\n[5/5] Make.com webhooks')
+          unified = os.environ.get('MAKE_WEBHOOK', '')
           webhook_map = {
               'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
               'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
               'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
           }
           for brand, url in webhook_map.items():
-              if url and url.startswith('https://'):
-                  print(f'  ✓ {brand}: configured')
+              effective = url or unified
+              if effective and effective.startswith('https://'):
+                  source = 'brand-specific' if url else 'unified fallback'
+                  print(f'  ✓ {brand}: configured ({source})')
               else:
-                  issues.append(f'{brand} webhook not configured')
+                  issues.append(f'{brand} webhook not configured (set MAKE_WEBHOOK_{brand.upper()} or MAKE_WEBHOOK)')
                   print(f'  ✗ {brand}: MISSING')
 
           # ── 6. Check last successful pipeline run ───────────────────
