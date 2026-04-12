@@ -300,25 +300,41 @@ jobs:
                   else:
                       subheadline = pin.get('overlay_subtext') or ''
 
-                  # Render with deduplication: retry up to 3 times with different backgrounds
+                  # ── Image generation: try Nano Banana (AI) first, fall back to Pexels+PIL ──
+                  from video_automation.nano_banana_generator import generate_pin_image as nb_generate
                   image_bytes = None
                   img_hash = None
-                  for _attempt in range(3):
-                      image = get_unique_pexels_image(search_term, brand, db.client)
-                      image_bytes = render_pin_to_bytes(
-                          brand=brand,
-                          headline=headline,
-                          subheadline=subheadline,
-                          keyword_or_url=image['url'],
-                          style=pin_style,
-                      )
+                  _nb_used = False
+                  topic_for_image = pin.get('topic') or pin.get('title', '') or search_term
+                  try:
+                      print(f'  [{brand}] Nano Banana: generating AI image for: {topic_for_image[:50]}')
+                      image_bytes = nb_generate(brand, topic_for_image)
                       img_hash = compute_image_hash(image_bytes)
-                      if not check_image_hash_exists(img_hash, db.client):
-                          break
-                      print(f'  [{brand}] Duplicate image hash detected, retrying...')
+                      _nb_used = True
+                      print(f'  [{brand}] Nano Banana: {len(image_bytes)} bytes generated')
+                  except Exception as _nb_err:
+                      print(f'  [{brand}] Nano Banana failed ({_nb_err}), falling back to Pexels+PIL')
+                      image_bytes = None
+
+                  if not _nb_used:
+                      # Pexels+PIL fallback with deduplication (up to 3 attempts)
+                      for _attempt in range(3):
+                          image = get_unique_pexels_image(search_term, brand, db.client)
+                          image_bytes = render_pin_to_bytes(
+                              brand=brand,
+                              headline=headline,
+                              subheadline=subheadline,
+                              keyword_or_url=image['url'],
+                              style=pin_style,
+                          )
+                          img_hash = compute_image_hash(image_bytes)
+                          if not check_image_hash_exists(img_hash, db.client):
+                              break
+                          print(f'  [{brand}] Duplicate image hash detected, retrying...')
 
                   timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
-                  filename = f"{brand}_{pin_id}_{timestamp}.jpg"
+                  ext = 'png' if _nb_used else 'jpg'
+                  filename = f"{brand}_{pin_id}_{timestamp}.{ext}"
                   image_url = upload_pin_image(image_bytes, filename)
                   pin['image_hash'] = img_hash  # Pass to log_pin_to_history later
 
