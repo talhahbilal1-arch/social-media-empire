@@ -871,5 +871,32 @@
     "board": "Best AI Tools 2026",
     "posted_at": "2026-04-12T16:51:03.173Z",
     "success": true
+  },
+  {
+    "slug": "jasper-vs-copy-ai-marketing",
+    "pin_type": "comparison",
+    "title": "Jasper vs Copy.ai: Which AI Content Tool Wins?",
+    "link": "https://pilottools.ai/compare/jasper-vs-copy-ai-marketing/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-12T22:21:56.408Z",
+    "success": true
+  },
+  {
+    "slug": "cursor",
+    "pin_type": "tool-review",
+    "title": "Cursor: AI Coding Assistant - Is It Worth It? (4.8/5)",
+    "link": "https://pilottools.ai/tools/cursor/",
+    "board": "AI Coding Tools",
+    "posted_at": "2026-04-12T22:22:00.499Z",
+    "success": true
+  },
+  {
+    "slug": "midjourney-vs-runway",
+    "pin_type": "comparison",
+    "title": "Midjourney vs Runway: Which AI Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/midjourney-vs-runway/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-12T22:22:04.380Z",
+    "success": true
   }
 ]
