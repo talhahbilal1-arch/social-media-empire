@@ -41,8 +41,8 @@ env/
 *.pem
 credentials.json
 
-# Fonts (downloaded at runtime)
-assets/fonts/*.ttf
+# Fonts committed to repo — no runtime download needed
+# assets/fonts/*.ttf
 
 # Generated pin images
 outputs/pins/
@@ -99,3 +99,6 @@ build/
 venv/
 .env
 *_keyword_state.json
+
+# Sample pin images (local QA only)
+samples/
