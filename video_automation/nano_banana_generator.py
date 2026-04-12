@@ -16,7 +16,7 @@ import time
 logger = logging.getLogger(__name__)
 
 # Current Gemini image generation model — portrait 2:3 ratio recommended for Pinterest
-IMAGE_MODEL = "gemini-2.5-flash-preview-image-generation"
+IMAGE_MODEL = "gemini-2.0-flash-preview-image-generation"
 
 # Brand-specific visual identity for prompt engineering
 BRAND_CONFIGS = {
