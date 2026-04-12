@@ -333,6 +333,10 @@ jobs:
                               break
                           print(f'  [{brand}] Duplicate image hash detected, retrying...')
 
+                  # Safety net: apply bold PIL text overlay using system fonts
+                  # (render_pin_to_bytes uses downloaded Google Fonts which can fail in CI)
+                  image_bytes = add_text_overlay(image_bytes, headline, brand)
+
                   timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
                   ext = 'png' if _nb_used else 'jpg'
                   filename = f"{brand}_{pin_id}_{timestamp}.{ext}"
