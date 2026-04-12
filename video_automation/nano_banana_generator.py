@@ -1,128 +1,220 @@
+"""Nano Banana — AI-generated Pinterest pin images via Gemini 2.5 Flash Image.
+
+Replaces generic Pexels stock photos with brand-tailored AI-generated images.
+Free tier: 500 images/day (we need ~15). Falls back to Pexels on failure.
+
+Usage:
+    from video_automation.nano_banana_generator import generate_pin_image, generate_pin_batch
+    img_bytes = generate_pin_image('fitness', 'Best strength exercises for men over 35')
+    pins = generate_pin_batch('deals', ['topic1', 'topic2'], count=5)
 """
-Generate Pinterest pin images using Gemini 2.0 Flash Exp (Nano Banana).
-Free tier: 500 images/day. We need ~15/day (5 per brand).
-"""
+
+import logging
 import os
 import time
-import logging
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-# Brand-specific prompt configs
+# Current Gemini image generation model — portrait 2:3 ratio recommended for Pinterest
+IMAGE_MODEL = "gemini-2.5-flash-preview-image-generation"
+
+# Brand-specific visual identity for prompt engineering
 BRAND_CONFIGS = {
     "fitness": {
         "name": "FitOver35",
-        "colors": "warm orange, coral, and white",
-        "style": "energetic fitness, bold sporty typography",
-        "audience": "women over 35",
-        "aesthetic": "Clean, motivational, modern fitness aesthetic"
+        "colors": "warm orange, coral red, charcoal black, and athletic white",
+        "style": "bold condensed sans-serif, sports editorial, high-impact gym aesthetic",
+        "audience": "men over 35 who train seriously",
+        "aesthetic": "athletic, energetic, masculine — like a fitness magazine cover for men",
+        "content_frame": "strength training, muscle building, fat loss, healthy lifestyle for men",
+        "mood": "powerful and motivational",
     },
     "deals": {
         "name": "DailyDealDarling",
-        "colors": "emerald green, gold, and cream",
-        "style": "exciting deal/savings energy, sale tag typography",
-        "audience": "savvy shoppers looking for deals",
-        "aesthetic": "Eye-catching, deal-focused, urgency-driven"
+        "colors": "warm gold, forest green, cream white, and rich burgundy",
+        "style": "bold sale-tag energy, large numbers, clean sans-serif, price-badge design",
+        "audience": "savvy home shoppers looking for Amazon deals",
+        "aesthetic": "organised home flat-lay, modern clean lifestyle aesthetic",
+        "content_frame": "Amazon finds, home organisation, budget lifestyle, product savings",
+        "mood": "exciting deal discovery, aspirational and inviting",
     },
     "menopause": {
         "name": "MenopausePlanner",
-        "colors": "soft purple, teal, and lavender",
-        "style": "calming wellness, elegant serif typography",
-        "audience": "women navigating menopause",
-        "aesthetic": "Calming, supportive, medical-wellness aesthetic"
-    }
+        "colors": "soft purple, teal, blush pink, warm cream, and sage green",
+        "style": "elegant serif headings, calming wellness brand typography",
+        "audience": "women navigating perimenopause and menopause",
+        "aesthetic": "calming wellness retreat, natural light, botanical elements",
+        "content_frame": "menopause wellness, hormone balance, midlife health tips",
+        "mood": "empowering, serene, and supportive — a knowledgeable friend",
+    },
+}
+
+# Pexels brand-safe fallback queries
+_PEXELS_FALLBACK = {
+    "fitness": "man fitness workout gym strength",
+    "deals": "home organisation modern minimal products",
+    "menopause": "wellness calm nature woman relaxed",
 }
 
 
-def generate_pin_image(brand: str, topic: str, headline: str = "") -> Optional[bytes]:
-    """Generate a single Pinterest pin image with text overlay using Gemini."""
+def _get_client():
+    """Lazy-init Gemini client — reuses shared module when available."""
     try:
+        from video_automation.gemini_client import get_client
+        return get_client()
+    except Exception:
         from google import genai
+        api_key = os.environ.get("GEMINI_API_KEY", "")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable is not set")
+        return genai.Client(api_key=api_key)
 
-        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
-        config = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
 
-        if not headline:
-            headline = topic.upper()[:50]  # Use topic as headline, max 50 chars
+def _build_prompt(brand: str, topic: str) -> str:
+    """Construct a brand-specific image generation prompt."""
+    cfg = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
+    return (
+        f"Create a professional Pinterest pin image at portrait 2:3 ratio (1000x1500px). "
+        f"Topic: {topic}. "
+        f"Brand: {cfg['name']}. Aesthetic: {cfg['aesthetic']}. "
+        f"Color palette: {cfg['colors']}. Typography: {cfg['style']}. "
+        f"Mood: {cfg['mood']}. Content: {cfg['content_frame']}. "
+        f"Include bold, readable headline text overlay on the image about: {topic}. "
+        f"The text must be high-contrast and legible on a small mobile screen. "
+        f"Requirements: professional Pinterest quality, clean composition, not cluttered. "
+        f"No watermarks, no borders, no Instagram filters."
+    )
 
-        prompt = f"""Create a Pinterest pin image (1000x1500 pixels, portrait 2:3 ratio).
 
-HEADLINE TEXT ON IMAGE: "{headline}"
+def generate_pin_image(brand: str, topic: str, style: str = "default") -> bytes:
+    """Generate a Pinterest pin image using Gemini image generation.
 
-Style: {config['aesthetic']}
-Color palette: {config['colors']}
-Typography: {config['style']}
-Target audience: {config['audience']}
-Topic: {topic}
+    Args:
+        brand: Brand key — 'fitness', 'deals', or 'menopause'
+        topic: Pin topic used to craft the visual and text overlay prompt
+        style: Visual style hint (reserved for future sub-styles)
 
-Requirements:
-- The headline text MUST be large, bold, and easily readable on mobile
-- High contrast between text and background
-- Professional Pinterest aesthetic - clean, not cluttered
-- No watermarks or logos
-- The image should stop someone scrolling and make them want to click
-- Brand name "{config['name']}" in smaller text at bottom"""
+    Returns:
+        PNG image bytes ready for upload to Supabase Storage
 
-        response = client.models.generate_content(
-            model="gemini-2.0-flash-exp",
-            contents=prompt,
-            config=genai.types.GenerateContentConfig(
-                response_modalities=["TEXT", "IMAGE"]
+    Raises:
+        RuntimeError: If Gemini fails after 3 retries AND Pexels fallback also fails
+    """
+    from google.genai import types
+
+    client = _get_client()
+    prompt = _build_prompt(brand, topic)
+    last_error = None
+
+    for attempt in range(3):
+        try:
+            response = client.models.generate_content(
+                model=IMAGE_MODEL,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_modalities=["TEXT", "IMAGE"]
+                ),
             )
-        )
+            for candidate in response.candidates or []:
+                for part in candidate.content.parts or []:
+                    if hasattr(part, "inline_data") and part.inline_data:
+                        img_bytes = part.inline_data.data
+                        if isinstance(img_bytes, str):
+                            import base64
+                            img_bytes = base64.b64decode(img_bytes)
+                        if img_bytes:
+                            logger.info(f"[{brand}] Gemini image generated ({len(img_bytes)} bytes)")
+                            return img_bytes
+            raise RuntimeError("Gemini returned no image data")
+        except Exception as e:
+            last_error = e
+            wait = 2 ** attempt
+            logger.warning(f"[{brand}] Gemini image attempt {attempt + 1}/3 failed: {e} — retry in {wait}s")
+            if attempt < 2:
+                time.sleep(wait)
 
-        # Extract image from response
-        for part in response.candidates[0].content.parts:
-            if hasattr(part, 'inline_data') and part.inline_data:
-                return part.inline_data.data
-
-        logger.warning(f"No image in Gemini response for {brand}/{topic}")
-        return None
-
-    except Exception as e:
-        logger.error(f"Nano Banana generation failed for {brand}/{topic}: {e}")
-        return None
+    # Fallback: fetch from Pexels and return raw bytes
+    logger.warning(f"[{brand}] Gemini failed after 3 attempts ({last_error}), falling back to Pexels")
+    return _pexels_fallback(brand, topic)
 
 
-def generate_pin_image_with_retry(brand: str, topic: str, headline: str = "", max_retries: int = 3) -> Optional[bytes]:
-    """Generate with retry and exponential backoff."""
-    for attempt in range(max_retries):
-        result = generate_pin_image(brand, topic, headline)
-        if result:
-            return result
-        if attempt < max_retries - 1:
-            wait = 2 ** attempt * 5  # 5s, 10s, 20s
-            logger.info(f"Retry {attempt+1}/{max_retries} in {wait}s...")
-            time.sleep(wait)
+def _pexels_fallback(brand: str, topic: str) -> bytes:
+    """Fetch a Pexels image and return raw bytes as last-resort fallback."""
+    import requests
 
-    # Fallback to Pexels
-    logger.warning(f"Falling back to Pexels for {brand}/{topic}")
+    api_key = os.environ.get("PEXELS_API_KEY", "")
+    if not api_key:
+        raise RuntimeError(f"[{brand}] Gemini and Pexels both unavailable (no PEXELS_API_KEY)")
+
+    query = _PEXELS_FALLBACK.get(brand, topic)
+    resp = requests.get(
+        "https://api.pexels.com/v1/search",
+        headers={"Authorization": api_key},
+        params={"query": query, "per_page": 5, "orientation": "portrait"},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    photos = resp.json().get("photos", [])
+    if not photos:
+        raise RuntimeError(f"[{brand}] Pexels returned no photos for '{query}'")
+    img_resp = requests.get(photos[0]["src"]["large2x"], timeout=30)
+    img_resp.raise_for_status()
+    return img_resp.content
+
+
+def _generate_metadata(brand: str, topic: str) -> dict:
+    """Generate Pinterest-optimized title and description via Gemini text."""
     try:
-        from video_automation.pexels_fetcher import fetch_pexels_image
-        return fetch_pexels_image(topic)
+        from video_automation.gemini_client import generate_json
+        import json
+
+        cfg = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
+        prompt = (
+            f"Generate a Pinterest pin title and description.\n"
+            f"Topic: {topic}\nBrand: {cfg['name']} ({cfg['audience']})\n"
+            f"- Title: 50-80 chars, keyword-rich, compelling, no clickbait\n"
+            f"- Description: 150-250 chars, 3-5 relevant hashtags at the end\n"
+            f'Return ONLY valid JSON: {{"title": "...", "description": "..."}}'
+        )
+        data = json.loads(generate_json(prompt, max_tokens=300))
+        return {"title": data.get("title", topic[:80]), "description": data.get("description", topic)}
     except Exception as e:
-        logger.error(f"Pexels fallback also failed: {e}")
-        return None
+        logger.warning(f"[{brand}] Metadata generation failed: {e}")
+        return {"title": topic[:80], "description": topic}
 
 
 def generate_pin_batch(brand: str, topics: list, count: int = 5) -> list:
-    """Generate a batch of pin images for a brand."""
-    results = []
-    for i, topic in enumerate(topics[:count]):
-        logger.info(f"Generating pin {i+1}/{count} for {brand}: {topic}")
+    """Generate a batch of Pinterest pins with AI images and metadata.
 
-        image_bytes = generate_pin_image_with_retry(brand, topic)
-        if image_bytes:
-            config = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
+    Args:
+        brand: Brand key — 'fitness', 'deals', or 'menopause'
+        topics: List of topic strings (cycled if fewer than count)
+        count: Number of pins to generate
+
+    Returns:
+        List of dicts: image_bytes, topic, title, description, filename
+    """
+    import datetime
+
+    if not topics:
+        topics = [brand]
+    selected = [topics[i % len(topics)] for i in range(count)]
+    results = []
+
+    for i, topic in enumerate(selected):
+        try:
+            image_bytes = generate_pin_image(brand, topic)
+            metadata = _generate_metadata(brand, topic)
+            timestamp = datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
             results.append({
                 "image_bytes": image_bytes,
                 "topic": topic,
-                "title": f"{topic} | {config['name']}",
-                "description": f"{topic} - Tips and insights for {config['audience']}. Follow {config['name']} for more!",
-                "filename": f"{brand}_{topic.lower().replace(' ', '_')[:40]}_{int(time.time())}.png"
+                "title": metadata["title"],
+                "description": metadata["description"],
+                "filename": f"{brand}_ai_{i}_{timestamp}.png",
             })
-        else:
-            logger.error(f"Failed to generate pin for {brand}/{topic}")
+            logger.info(f"[{brand}] Pin {i + 1}/{count} done: {metadata['title'][:50]}")
+        except Exception as e:
+            logger.error(f"[{brand}] Pin {i + 1} failed for '{topic}': {e}")
 
     return results
