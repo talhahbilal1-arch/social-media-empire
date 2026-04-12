@@ -9,8 +9,10 @@ Usage:
     pins = generate_pin_batch('deals', ['topic1', 'topic2'], count=5)
 """
 
+import io
 import logging
 import os
+import textwrap
 import time
 
 logger = logging.getLogger(__name__)
