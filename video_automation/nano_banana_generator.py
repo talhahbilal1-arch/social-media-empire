@@ -103,6 +103,91 @@ def _build_prompt(brand: str, topic: str) -> str:
     )
 
 
+def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
+    """Composite bold headline text onto the image — guaranteed fallback text layer.
+
+    Always called after Gemini generates the image so text is present regardless
+    of whether Gemini rendered it. Brand-specific overlay bar color.
+
+    Args:
+        image_bytes: Raw image bytes (any PIL-readable format)
+        headline: Pin headline text (will be word-wrapped)
+        brand: Brand key for brand-specific styling
+
+    Returns:
+        PNG bytes with text composited onto the image
+    """
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        logger.warning("Pillow not installed — skipping text overlay. Run: pip install Pillow")
+        return image_bytes
+
+    img = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+    w, h = img.size
+
+    # --- Overlay bar: bottom third ---
+    overlay_color = BRAND_OVERLAY_COLORS.get(brand, (20, 20, 20, 210))
+    bar_top = int(h * 0.62)
+    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    draw_overlay = ImageDraw.Draw(overlay)
+    draw_overlay.rectangle([(0, bar_top), (w, h)], fill=overlay_color)
+    img = Image.alpha_composite(img, overlay)
+
+    draw = ImageDraw.Draw(img)
+
+    # --- Headline font: try to load a bundled bold font, fall back to default ---
+    headline_size = max(52, w // 12)
+    small_size = max(24, w // 30)
+    font_headline = ImageFont.load_default()
+    font_small = ImageFont.load_default()
+    try:
+        # Common bold fonts available on most Linux (GitHub Actions) + macOS
+        for font_path in [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+            "/System/Library/Fonts/Helvetica.ttc",
+            "/System/Library/Fonts/SFNSDisplay-Bold.otf",
+            "/Library/Fonts/Arial Bold.ttf",
+        ]:
+            if os.path.exists(font_path):
+                font_headline = ImageFont.truetype(font_path, headline_size)
+                font_small = ImageFont.truetype(font_path, small_size)
+                break
+    except Exception:
+        pass  # Default bitmap font is fine as last resort
+
+    # --- Word-wrap headline to fit bar width ---
+    max_chars = max(12, int(w / (headline_size * 0.55)))
+    lines = textwrap.wrap(headline.upper(), width=max_chars)[:3]  # max 3 lines
+
+    text_y = bar_top + int(h * 0.03)
+    for line in lines:
+        bbox = draw.textbbox((0, 0), line, font=font_headline)
+        text_w = bbox[2] - bbox[0]
+        x = (w - text_w) // 2
+        # Soft shadow for depth
+        draw.text((x + 2, text_y + 2), line, font=font_headline, fill=(0, 0, 0, 160))
+        draw.text((x, text_y), line, font=font_headline, fill=(255, 255, 255, 255))
+        text_y += (bbox[3] - bbox[1]) + int(h * 0.012)
+
+    # --- Brand URL at very bottom ---
+    url = BRAND_URLS.get(brand, "")
+    if url:
+        bbox = draw.textbbox((0, 0), url, font=font_small)
+        url_w = bbox[2] - bbox[0]
+        draw.text(
+            ((w - url_w) // 2, h - int(h * 0.04)),
+            url,
+            font=font_small,
+            fill=(200, 200, 200, 200),
+        )
+
+    out = io.BytesIO()
+    img.convert("RGB").save(out, format="PNG", optimize=True)
+    return out.getvalue()
+
+
 def generate_pin_image(brand: str, topic: str, style: str = "default") -> bytes:
     """Generate a Pinterest pin image using Gemini image generation.
 
