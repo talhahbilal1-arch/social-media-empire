@@ -81,7 +81,11 @@ def fetch_portrait_images(
     Returns:
         List of Path objects to downloaded JPEG files
     """
-    api_key = get_api_key("PEXELS_API_KEY")
+    # PEXELS_API_KEY only needed for fallback — don't fail if missing
+    try:
+        api_key = get_api_key("PEXELS_API_KEY")
+    except Exception:
+        api_key = ""
 
     if output_dir is None:
         output_dir = Path("/tmp")
