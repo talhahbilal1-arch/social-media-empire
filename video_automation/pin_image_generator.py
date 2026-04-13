@@ -812,51 +812,296 @@ def _render_comparison(draw, headline, subheadline, heading_font, sub_font,
 
 
 # ═══════════════════════════════════════════════════════════════
+# BRAND-SPECIFIC TEMPLATE RENDERERS
+# ═══════════════════════════════════════════════════════════════
+
+def _load_brand_font(size, bold=True, extra_bold=False):
+    """Load Montserrat from assets/fonts/ with download fallback."""
+    candidates = []
+    if extra_bold:
+        candidates = ["Montserrat-ExtraBold.ttf", "Montserrat-Bold.ttf"]
+    elif bold:
+        candidates = ["Montserrat-Bold.ttf", "Montserrat-ExtraBold.ttf"]
+    else:
+        candidates = ["Montserrat-Medium.ttf", "Montserrat-Regular.ttf", "Montserrat-Bold.ttf"]
+
+    for fname in candidates:
+        p = FONTS_DIR / fname
+        if p.exists():
+            try:
+                return ImageFont.truetype(str(p), size)
+            except Exception:
+                continue
+
+    # Fall back to load_font (downloads from Google, then PIL default)
+    return load_font("Montserrat", size, bold=bold)
+
+
+def _wrap_brand_text(draw, text, font, max_width):
+    """Word-wrap text to fit max_width, return list of lines."""
+    words = text.split()
+    lines, current = [], []
+    for word in words:
+        test = " ".join(current + [word])
+        bbox = draw.textbbox((0, 0), test, font=font)
+        if bbox[2] - bbox[0] > max_width and current:
+            lines.append(" ".join(current))
+            current = [word]
+        else:
+            current.append(word)
+    if current:
+        lines.append(" ".join(current))
+    return lines
+
+
+def _render_fitness_pin(headline, subheadline, image_bytes=None):
+    """Fitness brand template: black canvas, huge yellow ALL-CAPS text at top, photo below."""
+    canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT), (0, 0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    # Paste photo into bottom 62% of canvas
+    photo_top = int(PIN_HEIGHT * 0.38)
+    photo_h = PIN_HEIGHT - photo_top
+    if image_bytes:
+        try:
+            bg = Image.open(BytesIO(image_bytes)).convert("RGB")
+            bg = resize_and_crop(bg, PIN_WIDTH, photo_h)
+            canvas.paste(bg, (0, photo_top))
+        except Exception:
+            pass
+
+    # Thin yellow accent line separating text area from photo
+    draw.line([(0, photo_top), (PIN_WIDTH, photo_top)], fill=(255, 215, 0), width=4)
+
+    # Headline — ALL CAPS, massive, yellow
+    font_size = 130
+    headline_font = _load_brand_font(font_size, bold=True, extra_bold=True)
+    margin = 60
+    text = headline.upper()
+    lines = _wrap_brand_text(draw, text, headline_font, PIN_WIDTH - margin * 2)[:3]
+
+    y = 55
+    line_h = font_size + 18
+    for line in lines:
+        bbox = draw.textbbox((0, 0), line, font=headline_font)
+        lw = bbox[2] - bbox[0]
+        x = (PIN_WIDTH - lw) // 2
+        # Subtle shadow
+        draw.text((x + 3, y + 3), line, fill=(0, 0, 0), font=headline_font)
+        draw.text((x, y), line, fill=(255, 215, 0), font=headline_font)  # bright yellow
+        y += line_h
+
+    # Brand URL at very bottom
+    wm_font = _load_brand_font(28, bold=False)
+    wm = "fitover35.com"
+    wm_bbox = draw.textbbox((0, 0), wm, font=wm_font)
+    wm_w = wm_bbox[2] - wm_bbox[0]
+    draw.text(((PIN_WIDTH - wm_w) // 2, PIN_HEIGHT - 48), wm, fill=(180, 180, 180), font=wm_font)
+
+    out = BytesIO()
+    canvas.save(out, "JPEG", quality=92)
+    return out.getvalue()
+
+
+def _render_deals_pin(headline, subheadline, image_bytes=None):
+    """Deals brand template: warm beige canvas, dark headline, centered photo, SHOP NOW button."""
+    beige = (245, 230, 211)      # #F5E6D3
+    dark_brown = (44, 24, 16)    # #2C1810
+    button_brown = (61, 43, 31)  # #3D2B1F
+
+    canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT), beige)
+    draw = ImageDraw.Draw(canvas)
+
+    # Headline at top in dark brown
+    headline_font = _load_brand_font(98, bold=True)
+    margin = 60
+    lines = _wrap_brand_text(draw, headline, headline_font, PIN_WIDTH - margin * 2)[:3]
+
+    y = 55
+    line_h = 112
+    for line in lines:
+        bbox = draw.textbbox((0, 0), line, font=headline_font)
+        lw = bbox[2] - bbox[0]
+        x = (PIN_WIDTH - lw) // 2
+        draw.text((x, y), line, fill=dark_brown, font=headline_font)
+        y += line_h
+
+    # Photo in center section
+    photo_top = y + 30
+    photo_w, photo_h = 860, 520
+    if image_bytes:
+        try:
+            bg = Image.open(BytesIO(image_bytes)).convert("RGB")
+            bg = resize_and_crop(bg, photo_w, photo_h)
+            photo_x = (PIN_WIDTH - photo_w) // 2
+            canvas.paste(bg, (photo_x, photo_top))
+        except Exception:
+            pass
+
+    # SHOP NOW button
+    btn_w, btn_h = 620, 118
+    btn_x = (PIN_WIDTH - btn_w) // 2
+    btn_y = 1148
+    draw.rounded_rectangle(
+        [(btn_x, btn_y), (btn_x + btn_w, btn_y + btn_h)],
+        radius=22,
+        fill=button_brown,
+    )
+    btn_font = _load_brand_font(50, bold=True, extra_bold=True)
+    btn_text = "SHOP NOW"
+    btn_bbox = draw.textbbox((0, 0), btn_text, font=btn_font)
+    btw = btn_bbox[2] - btn_bbox[0]
+    bth = btn_bbox[3] - btn_bbox[1]
+    draw.text(
+        ((PIN_WIDTH - btw) // 2, btn_y + (btn_h - bth) // 2 - 4),
+        btn_text, fill=(255, 255, 255), font=btn_font,
+    )
+
+    # Brand URL at bottom
+    wm_font = _load_brand_font(26, bold=False)
+    wm = "dailydealdarling.com"
+    wm_bbox = draw.textbbox((0, 0), wm, font=wm_font)
+    wm_w = wm_bbox[2] - wm_bbox[0]
+    draw.text(((PIN_WIDTH - wm_w) // 2, PIN_HEIGHT - 46), wm, fill=dark_brown, font=wm_font)
+
+    out = BytesIO()
+    canvas.save(out, "JPEG", quality=92)
+    return out.getvalue()
+
+
+def _render_menopause_pin(headline, subheadline, image_bytes=None):
+    """Menopause brand template: soft pink-to-lavender gradient, botanical corners, elegant text."""
+    top_color = (251, 232, 232)  # #FBE8E8 blush pink
+    bot_color = (240, 230, 246)  # #F0E6F6 lavender
+
+    # Build gradient background
+    canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT))
+    draw = ImageDraw.Draw(canvas)
+    for y_pos in range(PIN_HEIGHT):
+        t = y_pos / (PIN_HEIGHT - 1)
+        r = int(top_color[0] + (bot_color[0] - top_color[0]) * t)
+        g = int(top_color[1] + (bot_color[1] - top_color[1]) * t)
+        b = int(top_color[2] + (bot_color[2] - top_color[2]) * t)
+        draw.line([(0, y_pos), (PIN_WIDTH - 1, y_pos)], fill=(r, g, b))
+
+    # Botanical decorations — leaf clusters in corners
+    leaf_light = (185, 215, 185)   # sage green light
+    leaf_mid   = (148, 190, 155)   # sage green mid
+    leaf_dark  = (115, 165, 130)   # sage green dark
+
+    # Top-left cluster
+    draw.ellipse([(-40, -30), (130, 90)],  fill=leaf_mid)
+    draw.ellipse([(10,  20), (140, 120)],  fill=leaf_light)
+    draw.ellipse([(-20, 55), (95,  165)],  fill=leaf_dark)
+    draw.ellipse([(50,  -10), (170, 65)],  fill=leaf_light)
+
+    # Bottom-right cluster
+    draw.ellipse([(870, 1390), (1040, 1530)], fill=leaf_mid)
+    draw.ellipse([(920, 1355), (1060, 1455)], fill=leaf_light)
+    draw.ellipse([(840, 1430), (975,  1535)], fill=leaf_dark)
+
+    # Small flower dots scattered near edges
+    pink  = (225, 165, 165)
+    lilac = (195, 170, 215)
+    dots = [
+        (175, 38, 11), (72, 195, 9),  (48, 360, 7),
+        (825, 55, 10), (945, 235, 8), (958, 405, 7),
+        (115, 1355, 9), (205, 1455, 7),
+        (785, 1295, 8), (875, 1435, 10),
+    ]
+    for dx, dy, dr in dots:
+        color = pink if (dx + dy) % 3 != 0 else lilac
+        draw.ellipse([(dx - dr, dy - dr), (dx + dr, dy + dr)], fill=color)
+
+    # Headline — large bold, centered, dark
+    headline_font = _load_brand_font(88, bold=True)
+    margin = 90
+    max_w = PIN_WIDTH - margin * 2
+    lines = _wrap_brand_text(draw, headline, headline_font, max_w)[:3]
+
+    line_h = 102
+    text_start_y = max(340, int((PIN_HEIGHT - len(lines) * line_h) * 0.35))
+    y = text_start_y
+    for line in lines:
+        bbox = draw.textbbox((0, 0), line, font=headline_font)
+        lw = bbox[2] - bbox[0]
+        x = (PIN_WIDTH - lw) // 2
+        draw.text((x, y), line, fill=(26, 26, 26), font=headline_font)
+        y += line_h
+
+    # Separator line
+    sep_y = y + 22
+    draw.line(
+        [(margin + 40, sep_y), (PIN_WIDTH - margin - 40, sep_y)],
+        fill=(180, 145, 185), width=2,
+    )
+
+    # Subtitle
+    if subheadline:
+        sub_font = _load_brand_font(40, bold=False)
+        sub_lines = _wrap_brand_text(draw, subheadline[:120], sub_font, max_w)[:2]
+        sy = sep_y + 28
+        for line in sub_lines:
+            bbox = draw.textbbox((0, 0), line, font=sub_font)
+            lw = bbox[2] - bbox[0]
+            draw.text(((PIN_WIDTH - lw) // 2, sy), line, fill=(100, 80, 105), font=sub_font)
+            sy += 52
+
+    # Brand URL at bottom
+    wm_font = _load_brand_font(26, bold=False)
+    wm = "menopauseplanner.com"
+    wm_bbox = draw.textbbox((0, 0), wm, font=wm_font)
+    wm_w = wm_bbox[2] - wm_bbox[0]
+    draw.text(((PIN_WIDTH - wm_w) // 2, PIN_HEIGHT - 46), wm, fill=(135, 105, 140), font=wm_font)
+
+    out = BytesIO()
+    canvas.save(out, "JPEG", quality=92)
+    return out.getvalue()
+
+
+# ═══════════════════════════════════════════════════════════════
 # MAIN RENDER FUNCTIONS
 # ═══════════════════════════════════════════════════════════════
 
 def render_pin_to_bytes(brand, headline, subheadline, keyword_or_url, style="gradient"):
     """Render a pin image and return JPEG bytes (for pipeline use).
 
+    Routes to brand-specific template renderers that match high-performing designs:
+      - fitness:   black canvas, huge yellow ALL-CAPS text at top, photo below
+      - deals:     warm beige canvas, dark headline, centered photo, SHOP NOW button
+      - menopause: soft pink-to-lavender gradient, botanical corners, elegant centered text
+
     Args:
-        brand: Brand key (e.g. 'fitness', 'deals', 'menopause')
-        headline: Main text overlay (3-8 word hook)
-        subheadline: Secondary text (full title or list items)
-        keyword_or_url: Either a Pexels image URL or search keyword
-        style: One of 'gradient', 'box_dark', 'numbered_list', 'big_stat', 'split_layout'
+        brand: Brand key ('fitness', 'deals', 'menopause')
+        headline: Main text overlay
+        subheadline: Secondary text (used as subtitle for menopause)
+        keyword_or_url: Pexels image URL (fetched as background photo) or search keyword
+        style: Ignored — brand templates override this
 
     Returns:
-        bytes: JPEG image data
+        bytes: JPEG image data (always 1000x1500px)
     """
-    brand_style = BRAND_VIDEO_STYLES.get(brand)
-    if not brand_style:
-        raise ValueError(f"Unknown brand '{brand}'. Available: {list(BRAND_VIDEO_STYLES.keys())}")
+    # Fetch background image from URL for use in brand templates
+    image_bytes = None
+    if keyword_or_url and (
+        keyword_or_url.startswith("http://") or keyword_or_url.startswith("https://")
+    ):
+        try:
+            resp = requests.get(keyword_or_url, timeout=30)
+            resp.raise_for_status()
+            image_bytes = resp.content
+        except Exception as e:
+            logger.warning(f"[{brand}] Failed to fetch background: {e}")
 
-    if style not in OVERLAY_STYLES:
-        logger.warning(f"Unknown style '{style}', falling back to gradient")
-        style = "gradient"
-
-    # Get background image
-    if keyword_or_url and (keyword_or_url.startswith("http://") or keyword_or_url.startswith("https://")):
-        bg = fetch_background_from_url(keyword_or_url)
+    if brand == "fitness":
+        return _render_fitness_pin(headline, subheadline, image_bytes)
+    elif brand == "deals":
+        return _render_deals_pin(headline, subheadline, image_bytes)
+    elif brand == "menopause":
+        return _render_menopause_pin(headline, subheadline, image_bytes)
     else:
-        config = get_config()
-        bg = fetch_background(keyword_or_url or "abstract background", config.pexels_api_key)
-
-    # Resize/crop to pin dimensions
-    bg = resize_and_crop(bg, PIN_WIDTH, PIN_HEIGHT)
-
-    # Apply overlay
-    bg = OVERLAY_STYLES[style](bg, brand_style["colors"])
-
-    # Render text
-    watermark = brand_style.get("watermark_text", brand.replace("_", " ").title())
-    bg = render_text(bg, headline, subheadline, watermark, brand_style, style)
-
-    # Convert to JPEG bytes
-    buffer = BytesIO()
-    bg.save(buffer, "JPEG", quality=92, optimize=True)
-    return buffer.getvalue()
+        logger.warning(f"[{brand}] Unknown brand, using fitness template")
+        return _render_fitness_pin(headline, subheadline, image_bytes)
 
 
 def generate_pin(brand, headline, keyword, style="gradient",

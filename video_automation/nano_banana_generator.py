@@ -71,19 +71,44 @@ def _get_client():
 
 
 def _build_prompt(brand: str, topic: str) -> str:
-    """Construct a brand-specific image generation prompt."""
-    cfg = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
-    return (
-        f"Create a professional Pinterest pin image at portrait 2:3 ratio (1000x1500px). "
-        f"Topic: {topic}. "
-        f"Brand: {cfg['name']}. Aesthetic: {cfg['aesthetic']}. "
-        f"Color palette: {cfg['colors']}. Typography: {cfg['style']}. "
-        f"Mood: {cfg['mood']}. Content: {cfg['content_frame']}. "
-        f"Include bold, readable headline text overlay on the image about: {topic}. "
-        f"The text must be high-contrast and legible on a small mobile screen. "
-        f"Requirements: professional Pinterest quality, clean composition, not cluttered. "
-        f"No watermarks, no borders, no Instagram filters."
-    )
+    """Construct a brand-specific image generation prompt.
+
+    These prompts target the background/photo zone of each brand template:
+      - fitness:   bottom 62% photo slot — dramatic fitness photography
+      - deals:     center rectangle photo slot — warm product lifestyle shot
+      - menopause: full image (template renders over it with soft overlay)
+    """
+    if brand == "fitness":
+        return (
+            f"Professional fitness photography, portrait orientation. "
+            f"Subject: muscular man over 35 exercising, weight training, or active lifestyle. "
+            f"Topic: {topic}. "
+            f"Style: dramatic contrast lighting, dark gym background, powerful and motivational. "
+            f"No text, no watermarks. Clean composition suitable as a photo background."
+        )
+    elif brand == "deals":
+        return (
+            f"Professional product lifestyle photography, portrait orientation. "
+            f"Topic: {topic}. "
+            f"Style: warm golden-hour lighting, clean minimalist background, "
+            f"aspirational home or beauty aesthetic. Products styled attractively. "
+            f"No text, no watermarks. Warm beige and cream tones preferred."
+        )
+    elif brand == "menopause":
+        return (
+            f"Soft watercolor-style illustration of a woman in midlife, botanical elements, "
+            f"gentle and empowering mood. Topic: {topic}. "
+            f"Pastel colors: blush pink, lavender, sage green. Natural light. "
+            f"Serene wellness retreat aesthetic. "
+            f"No text, no watermarks. Portrait orientation."
+        )
+    else:
+        cfg = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
+        return (
+            f"Create a professional Pinterest pin background image, portrait orientation. "
+            f"Topic: {topic}. Aesthetic: {cfg['aesthetic']}. Mood: {cfg['mood']}. "
+            f"No text, no watermarks, clean composition."
+        )
 
 
 def generate_pin_image(brand: str, topic: str, style: str = "default") -> bytes:
@@ -220,55 +245,68 @@ def generate_pin_batch(brand: str, topics: list, count: int = 5) -> list:
 
 
 def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
-    """Apply a bold PIL text overlay to image bytes — safety net for all pin images.
+    """Apply brand-specific template to image bytes — safety net for all pin images.
 
-    Uses system fonts (no network downloads) so it works reliably in CI.
-    Called on every pin right before Supabase upload.
+    For already-rendered brand templates (1000x1500 JPEG from render_pin_to_bytes),
+    returns the image unchanged to avoid double-rendering.
+
+    For raw AI images (Nano Banana), applies the brand-specific template so every
+    pin has consistent high-quality styling regardless of source.
 
     Args:
         image_bytes: PNG or JPEG bytes from any image source
         headline: Pin title/headline to render on the image
-        brand: Brand key ('fitness', 'deals', 'menopause') for color theming
+        brand: Brand key ('fitness', 'deals', 'menopause')
 
     Returns:
-        JPEG bytes with dark bottom band + white bold headline text
+        JPEG bytes with brand template applied
     """
+    from PIL import Image
+    from io import BytesIO
+
+    # If this is already a finished 1000x1500 brand template (from render_pin_to_bytes),
+    # skip re-rendering — it would use the rendered pin as the background photo.
+    try:
+        img = Image.open(BytesIO(image_bytes))
+        if img.size == (1000, 1500):
+            return image_bytes
+    except Exception:
+        pass
+
+    # Raw AI image (Nano Banana) — apply full brand template
+    try:
+        from video_automation.pin_image_generator import (
+            _render_fitness_pin,
+            _render_deals_pin,
+            _render_menopause_pin,
+        )
+        if brand == "fitness":
+            return _render_fitness_pin(headline, "", image_bytes)
+        elif brand == "deals":
+            return _render_deals_pin(headline, "", image_bytes)
+        elif brand == "menopause":
+            return _render_menopause_pin(headline, "", image_bytes)
+        else:
+            return _render_fitness_pin(headline, "", image_bytes)
+    except Exception as e:
+        logger.warning(f"[{brand}] Brand template overlay failed: {e} — using fallback band")
+
+    # Last-resort fallback: dark bottom band with white text (system fonts only)
     from PIL import Image, ImageDraw, ImageFont
     from io import BytesIO
 
-    # Brand accent colors for the bottom band
-    _BRAND_ACCENTS = {
-        "fitness": (204, 255, 0),      # CCFF00 lime
-        "deals": (212, 175, 55),       # D4AF37 gold
-        "menopause": (61, 107, 79),    # 3D6B4F sage green
-    }
-    accent = _BRAND_ACCENTS.get(brand, (255, 255, 255))
-
     img = Image.open(BytesIO(image_bytes)).convert("RGBA")
     w, h = img.size
-
-    # Solid dark band covering bottom 40% — opaque enough for instant readability
-    # on mobile. 220/255 opacity gives ~86% black — text pops against any background.
     band_h = int(h * 0.40)
     band = Image.new("RGBA", (w, band_h), (0, 0, 0, 220))
     img.paste(band, (0, h - band_h), band)
-
-    # Thin accent stripe at the very bottom
-    stripe_h = max(10, h // 80)
-    stripe = Image.new("RGBA", (w, stripe_h), accent + (240,))
-    img.paste(stripe, (0, h - stripe_h), stripe)
-
     draw = ImageDraw.Draw(img)
 
-    # Font size: pins display at ~300px wide on mobile, so we need the text
-    # to be readable at that scale. w//7 ≈ 143px for a 1000px image → ~43px
-    # apparent size on mobile (well above the 36px legibility threshold).
-    font_size = max(100, w // 7)
+    font_size = max(80, w // 8)
     font = None
     for font_path in [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-        "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
         "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
         "/System/Library/Fonts/Helvetica.ttc",
     ]:
@@ -283,7 +321,6 @@ def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
         except TypeError:
             font = ImageFont.load_default()
 
-    # Word-wrap the headline to fit within the band width (leave 80px margins)
     words = headline.split()
     lines, line = [], []
     for word in words:
@@ -297,16 +334,12 @@ def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
     if line:
         lines.append(" ".join(line))
 
-    line_h = font_size + 16
-    total_h = len(lines) * line_h
-    # Center text vertically within the band (above the accent stripe)
-    text_y = (h - band_h) + (band_h - total_h) // 2 - stripe_h
-
+    line_h = font_size + 12
+    text_y = (h - band_h) + (band_h - len(lines) * line_h) // 2
     for text in lines:
         bbox = draw.textbbox((0, 0), text, font=font)
         x = (w - (bbox[2] - bbox[0])) // 2
-        # Heavy drop shadow (4px offset in 8 directions) for max legibility
-        for dx, dy in [(-4, -4), (0, -4), (4, -4), (-4, 0), (4, 0), (-4, 4), (0, 4), (4, 4)]:
+        for dx, dy in [(-3, -3), (0, -3), (3, -3), (-3, 0), (3, 0), (-3, 3), (0, 3), (3, 3)]:
             draw.text((x + dx, text_y + dy), text, fill=(0, 0, 0, 230), font=font)
         draw.text((x, text_y), text, fill=(255, 255, 255, 255), font=font)
         text_y += line_h
