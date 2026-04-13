@@ -1157,7 +1157,7 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
 
     plum = (74, 25, 66)       # #4A1942 deep plum
     line_h = 102
-    text_start_y = max(340, int((PIN_HEIGHT - len(lines) * line_h) * 0.35))
+    text_start_y = 60  # upper portion — image occupies y=400-1000
     y = text_start_y
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=headline_font)
