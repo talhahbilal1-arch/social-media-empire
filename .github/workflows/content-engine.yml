@@ -428,25 +428,37 @@ jobs:
                       cover_url = upload_pin_image(cover_bytes, f'{brand}_video_cover_{ts}.jpg')
                       print(f'  [{brand}] Uploaded to Supabase')
 
-                      # Step 4: Post to Pinterest via Late API
+                      # Step 4: Post to Pinterest via Make.com webhook
+                      video_webhook = VIDEO_WEBHOOKS.get(brand, '')
+                      if not video_webhook:
+                          print(f'  [{brand}] Video pin SKIPPED — MAKE_WEBHOOK_VIDEO_{brand.upper()} not set')
+                          log_pipeline_error('1v', brand, f'No video webhook for {brand}', severity='medium')
+                          continue
+
                       board_name = video_content.get('board', '')
                       board_id = get_board_id(brand, board_name)
                       dest_url = video_content.get('destination_url', '')
-                      late_key_env = LATE_KEY_MAP.get(brand, 'LATE_API_KEY')
 
-                      post_result = video_poster.create_video_idea_pin(
-                          board_id=str(board_id),
-                          title=video_content.get('title', '')[:100],
-                          description=video_content.get('description', '')[:500],
-                          video_url=video_url,
-                          link=dest_url,
-                          api_key_env=late_key_env,
-                      )
-
-                      if post_result.get('success'):
+                      video_payload = {
+                          'title': video_content.get('title', '')[:100],
+                          'description': video_content.get('description', '')[:500],
+                          'image_url': video_url,
+                          'board_id': str(board_id),
+                          'link': dest_url,
+                      }
+                      try:
+                          _vreq = urllib.request.Request(
+                              video_webhook,
+                              data=json.dumps(video_payload).encode('utf-8'),
+                              headers={'Content-Type': 'application/json'},
+                              method='POST',
+                          )
+                          with urllib.request.urlopen(_vreq, timeout=30) as _vr:
+                              _vstatus = _vr.status
+                              _vr_body = _vr.read().decode('utf-8', errors='replace')
+                          print(f'  [{brand}] Video webhook → HTTP {_vstatus} "{_vr_body[:60]}"')
                           video_posted += 1
-                          print(f'  [{brand}] Video pin POSTED via Late API')
-                          # Log to history
+                          print(f'  [{brand}] Video pin POSTED via Make.com')
                           try:
                               log_pin_to_history({
                                   **video_content,
@@ -457,9 +469,12 @@ jobs:
                               }, db.client)
                           except Exception:
                               pass
-                      else:
-                          print(f'  [{brand}] Late API failed: {post_result.get("error", "unknown")}')
-                          log_pipeline_error('1v', brand, post_result.get('error', 'Late API failed'), severity='high')
+                      except urllib.error.HTTPError as _ve:
+                          print(f'  [{brand}] Video webhook HTTP {_ve.code}: {_ve.read().decode("utf-8", errors="replace")[:100]}')
+                          log_pipeline_error('1v', brand, f'Video webhook HTTP {_ve.code}', severity='high')
+                      except Exception as _ve:
+                          print(f'  [{brand}] Video webhook failed: {_ve}')
+                          log_pipeline_error('1v', brand, f'Video webhook error: {_ve}', severity='high')
 
                   except Exception as e:
                       print(f'  [{brand}] Video pin ERROR: {e}')
