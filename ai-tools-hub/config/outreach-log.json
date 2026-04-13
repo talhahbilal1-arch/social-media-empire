@@ -133,5 +133,50 @@
     "subject": "PilotTools.ai Review of Perplexity AI: 4.7/5",
     "sent_at": "2026-04-06T15:56:12.049Z",
     "status": "failed"
+  },
+  {
+    "identifier": "testimonial-scalenut",
+    "type": "testimonial",
+    "tool_slug": "scalenut",
+    "to": "hello@scalenut.com",
+    "subject": "PilotTools.ai Review of Scalenut: 4.4/5 Rating!",
+    "sent_at": "2026-04-13T16:19:43.857Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-surfer-seo",
+    "type": "testimonial",
+    "tool_slug": "surfer-seo",
+    "to": "hello@surferseo.com",
+    "subject": "PilotTools.ai Review of Surfer SEO: 4.5/5",
+    "sent_at": "2026-04-13T16:19:48.723Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-otter-ai",
+    "type": "testimonial",
+    "tool_slug": "otter-ai",
+    "to": "hello@otter.ai",
+    "subject": "PilotTools.ai Review of Otter.ai - 4.4/5 Rating",
+    "sent_at": "2026-04-13T16:19:53.652Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-stable-diffusion",
+    "type": "testimonial",
+    "tool_slug": "stable-diffusion",
+    "to": "hello@stability.ai",
+    "subject": "PilotTools.ai Review of Stable Diffusion (4.3/5)",
+    "sent_at": "2026-04-13T16:19:58.468Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-luma-ai",
+    "type": "testimonial",
+    "tool_slug": "luma-ai",
+    "to": "hello@lumalabs.ai",
+    "subject": "PilotTools.ai Review of Luma AI: 4.3/5",
+    "sent_at": "2026-04-13T16:20:03.117Z",
+    "status": "failed"
   }
 ]
