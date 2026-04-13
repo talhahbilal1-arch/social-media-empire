@@ -410,11 +410,13 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     sub_color = hex_to_rgb(colors.get("text_secondary", "#CCCCCC"))
     wm_color = hex_to_rgb(colors.get("accent", "#FFFFFF"))
 
-    # Load fonts — sized for thumbnail readability (Pinterest shows pins small)
-    heading_font = load_font(fonts["heading"], 84, bold=True)
-    sub_font = load_font(fonts["body"], 40)
-    cta_font = load_font(fonts.get("cta", fonts["body"]), 34)
-    watermark_font = load_font(fonts["body"], 26)
+    # Font sizes are set for mobile readability at Pinterest's ~300px display width.
+    # At 300px/1000px = 0.3x scale: 120px → ~36px apparent (minimum legible),
+    # 140px → ~42px apparent (clearly readable while scrolling).
+    heading_font = load_font(fonts["heading"], 120, bold=True)
+    sub_font = load_font(fonts["body"], 48)
+    cta_font = load_font(fonts.get("cta", fonts["body"]), 38)
+    watermark_font = load_font(fonts["body"], 28)
 
     text_margin = 80
     max_text_width = PIN_WIDTH - (text_margin * 2)
