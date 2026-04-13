@@ -898,5 +898,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-12T22:22:04.380Z",
     "success": true
+  },
+  {
+    "slug": "semrush-vs-ahrefs-beginners",
+    "pin_type": "article",
+    "title": "Semrush vs Ahrefs: Best SEO Tool for Beginners in 2026?",
+    "link": "https://pilottools.ai/blog/semrush-vs-ahrefs-beginners/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-13T17:13:50.883Z",
+    "success": true
+  },
+  {
+    "slug": "category-research",
+    "pin_type": "category",
+    "title": "Future-Proof Your Research: Top AI Tools 2026",
+    "link": "https://pilottools.ai/category/research/",
+    "board": "AI Research Tools",
+    "posted_at": "2026-04-13T17:13:55.091Z",
+    "success": true
+  },
+  {
+    "slug": "canva-vs-adobe-express-ai",
+    "pin_type": "comparison",
+    "title": "Canva AI vs. Adobe Express AI: Which is Right for You?",
+    "link": "https://pilottools.ai/compare/canva-vs-adobe-express-ai/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-13T17:13:59.290Z",
+    "success": true
   }
 ]
