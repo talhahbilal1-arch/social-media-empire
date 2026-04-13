@@ -854,6 +854,19 @@ jobs:
               _brand_articles = sum(1 for a in articles_generated if a.startswith(f'{_brand}:'))
               _brand_styles = [p.get('visual_style', 'gradient') for p in rendered_pins if p.get('brand') == _brand]
               print(f'  [{_brand}] rendered={_brand_rendered} articles={_brand_articles} styles={",".join(_brand_styles) or "none"}')
+
+          # DAILY PIN SUMMARY — one line for easy grep in GH Actions log
+          _summary_parts = [f'{b}={posted_per_brand.get(b, 0)}' for b in ALL_BRANDS]
+          print(f'DAILY PIN SUMMARY: {", ".join(_summary_parts)}')
+
+          # Health check: if any brand had rendered pins but posted 0 → failure email
+          if not dry_run:
+              _brands_with_rendered = {p['brand'] for p in rendered_pins}
+              _zero_brands = sorted(b for b in _brands_with_rendered if posted_per_brand.get(b, 0) == 0)
+              if _zero_brands:
+                  print(f'❌ HEALTH CHECK FAILED: brands {_zero_brands} had rendered pins but 0 posted!')
+                  sys.exit(1)
+
           if not content_ready_pins:
               print('  ⚠ No content_ready pins — pipeline idle')
           try:
