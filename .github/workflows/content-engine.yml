@@ -75,6 +75,9 @@ jobs:
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
           MAKE_WEBHOOK: ${{ secrets.MAKE_WEBHOOK }}
           MAKE_WEBHOOK_ACTIVATOR: ${{ secrets.MAKE_WEBHOOK_ACTIVATOR }}
+          MAKE_WEBHOOK_VIDEO_FITNESS: ${{ secrets.MAKE_WEBHOOK_VIDEO_FITNESS }}
+          MAKE_WEBHOOK_VIDEO_DEALS: ${{ secrets.MAKE_WEBHOOK_VIDEO_DEALS }}
+          MAKE_WEBHOOK_VIDEO_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_VIDEO_MENOPAUSE }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
