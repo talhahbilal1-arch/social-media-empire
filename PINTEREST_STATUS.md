@@ -1,5 +1,16 @@
 # Pinterest Automation Status Report
-Generated: 2026-04-12
+Generated: 2026-04-12 (updated: 2026-04-12 late session)
+
+## 2026-04-12 Late Session Update
+
+- **Architecture change verified**: `nano_banana_generator.generate_pin_image()` now **raises RuntimeError** on Gemini failure (instead of silently returning raw Pexels bytes). The caller (`content-engine.yml` Phase 1b) handles fallback via `render_pin_to_bytes` which applies the full branded PIL template. This produces on-brand fallback images instead of plain stock photos.
+- **`add_text_overlay`** is applied ONLY to Nano Banana AI images — NOT to Pexels+PIL renders (which already have the brand template baked in). Applying it twice would ghost the headline.
+- **Test fixes**:
+  - `test_fitness_brand_targets_men` now accepts `man`/`men`/`masculine` (current prompt uses "muscular man over 35")
+  - `test_generate_pin_image_retries_then_falls_back_to_pexels` → renamed to `test_generate_pin_image_retries_then_raises` to match current architecture
+- **All 15 Pinterest tests passing**, all 31 workflow YAMLs syntax-valid, all key Python modules compile cleanly.
+- **Current `IMAGE_MODEL`**: `gemini-2.0-flash-exp` (changed again from prior attempts).
+
 
 ## What's Working
 

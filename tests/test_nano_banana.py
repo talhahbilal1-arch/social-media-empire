@@ -29,10 +29,10 @@ def test_brand_prompts_are_unique():
 
 
 def test_fitness_brand_targets_men():
-    """FitOver35 is men-only — prompt must not mention women."""
+    """FitOver35 is men-only — prompt must target men, not women."""
     prompt = _build_prompt("fitness", "strength training")
     prompt_lower = prompt.lower()
-    assert "men" in prompt_lower or "masculine" in prompt_lower
+    assert "men" in prompt_lower or "man" in prompt_lower or "masculine" in prompt_lower
     assert "women over 35" not in prompt_lower  # regression: was wrong in old version
 
 
@@ -92,20 +92,22 @@ def test_generate_pin_image_uses_correct_model():
 
 # ── generate_pin_image — failure / fallback ───────────────────────────────────
 
-def test_generate_pin_image_retries_then_falls_back_to_pexels():
-    """When Gemini fails 3 times, we must call the Pexels fallback."""
-    fake_pexels_bytes = b"PEXELS_IMAGE_DATA"
+def test_generate_pin_image_retries_then_raises():
+    """When Gemini fails 3 times, generate_pin_image must raise RuntimeError.
 
+    Architecture note: The caller (content-engine.yml Phase 1b) handles the
+    Pexels+PIL branded-template fallback via render_pin_to_bytes — so this
+    function must raise rather than silently returning raw Pexels bytes,
+    which would bypass the brand template.
+    """
     mock_client = MagicMock()
     mock_client.models.generate_content.side_effect = RuntimeError("API quota exceeded")
 
     with patch("video_automation.nano_banana_generator._get_client", return_value=mock_client), \
-         patch("video_automation.nano_banana_generator._pexels_fallback", return_value=fake_pexels_bytes) as mock_pexels, \
          patch("time.sleep"):  # Skip actual sleeps in tests
-        result = generate_pin_image("menopause", "hot flash relief tips")
+        with pytest.raises(RuntimeError):
+            generate_pin_image("menopause", "hot flash relief tips")
 
-    assert result == fake_pexels_bytes
-    mock_pexels.assert_called_once_with("menopause", "hot flash relief tips")
     assert mock_client.models.generate_content.call_count == 3  # exhausted all retries
 
 
