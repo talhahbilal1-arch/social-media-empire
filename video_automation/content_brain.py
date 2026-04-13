@@ -924,6 +924,10 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
     pin_data['destination_url'] = config['destination_base_url']
     pin_data['keywords_used'] = selected_keywords
 
+    # ── Step 10: Fitness brand content safety check ──
+    if brand_key == 'fitness':
+        _assert_fitness_safe(pin_data)
+
     return pin_data
 
 
