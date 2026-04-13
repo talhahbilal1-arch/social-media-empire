@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-10",
+  "last_updated": "2026-04-13",
   "items": [
     {
       "id": 1,
@@ -1640,28 +1640,31 @@
       "id": 201,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-real-estate-agents",
       "keyword": "best ai tools for real estate agents",
-      "title": "Best AI Tools for Real Estate Agents 2026"
+      "title": "Best AI Tools for Real Estate Agents 2026",
+      "published_date": "2026-04-13"
     },
     {
       "id": 202,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-lawyers",
       "keyword": "best ai tools for lawyers",
-      "title": "Best AI Tools for Lawyers 2026"
+      "title": "Best AI Tools for Lawyers 2026",
+      "published_date": "2026-04-13"
     },
     {
       "id": 203,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-teachers",
       "keyword": "best ai tools for teachers",
-      "title": "Best AI Tools for Teachers 2026"
+      "title": "Best AI Tools for Teachers 2026",
+      "published_date": "2026-04-13"
     },
     {
       "id": 204,
