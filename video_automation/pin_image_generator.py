@@ -483,7 +483,7 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     # ── Standard layout (gradient, box_dark, split_layout) ──
     headline_lines = _wrap_text(headline, heading_font, max_text_width)
     y = text_area_top
-    line_height = 98  # Increased for 84pt heading font
+    line_height = 136  # Sized for 120pt heading font
 
     for line in headline_lines:
         bbox = heading_font.getbbox(line)
