@@ -660,6 +660,7 @@ jobs:
           print('\n=== PHASE 1b: Posting pins to Pinterest ===')
           posted_count = 0
           posted_brands = set()
+          posted_per_brand = {b: 0 for b in ALL_BRANDS}
           for pin in rendered_pins:
               pin_id = pin['id']
               brand = pin['brand']
