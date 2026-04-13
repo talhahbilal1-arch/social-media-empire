@@ -1,6 +1,8 @@
 """
-Fetch portrait-orientation images from Pexels for video backgrounds.
-Returns local file paths after downloading.
+Fetch portrait-orientation images for video backgrounds.
+Primary: Nano Banana (Gemini AI) — on-brand, no stock photo feel.
+Fallback: Pexels stock photos.
+Returns local file paths after downloading/generating.
 """
 
 import json
@@ -14,10 +16,59 @@ from .config import get_api_key
 logger = logging.getLogger(__name__)
 
 
+def _try_nano_banana(query: str, brand: str, output_path: Path) -> bool:
+    """Try generating a video background image via Nano Banana (Gemini).
+
+    Uses a landscape/scenery prompt override so images suit video backgrounds
+    rather than the portrait pin style.
+
+    Returns True and writes to output_path on success, False on any failure.
+    """
+    try:
+        import sys
+        import os
+        # Locate project root (two levels up from video_pipeline/)
+        project_root = Path(__file__).resolve().parent.parent
+        if str(project_root) not in sys.path:
+            sys.path.insert(0, str(project_root))
+
+        from video_automation.nano_banana_generator import _get_client
+        from google.genai import types as genai_types
+
+        # Landscape prompt suited for video scene backgrounds
+        prompt = (
+            f"Wide landscape photography, cinematic quality, no people in foreground. "
+            f"Scene: {query}. "
+            f"Style: wide establishing shot, natural light, rich colors, photorealistic. "
+            f"No text, no watermarks, no UI elements. Suitable as a full-screen video background."
+        )
+
+        client = _get_client()
+        response = client.models.generate_content(
+            model="gemini-2.0-flash-exp",
+            contents=prompt,
+            config=genai_types.GenerateContentConfig(
+                response_modalities=["IMAGE"],
+            ),
+        )
+
+        for part in response.candidates[0].content.parts:
+            if part.inline_data and part.inline_data.data:
+                output_path.write_bytes(part.inline_data.data)
+                logger.info(f"Nano Banana: generated video background for '{query[:40]}' → {output_path.name}")
+                return True
+
+        return False
+    except Exception as e:
+        logger.debug(f"Nano Banana video background failed for '{query}': {e}")
+        return False
+
+
 def fetch_portrait_images(
     queries: list[str],
     count: int = 4,
     output_dir: Optional[Path] = None,
+    brand: str = "fitness",
 ) -> list[Path]:
     """
     Download portrait-orientation images from Pexels API.
