@@ -1101,6 +1101,24 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         b = int(top_color[2] + (bot_color[2] - top_color[2]) * t)
         draw.line([(0, y_pos), (PIN_WIDTH - 1, y_pos)], fill=(r, g, b))
 
+    # Place AI-generated image in center (y=400 to y=1000)
+    if image_bytes:
+        try:
+            img_w, img_h = 800, 600
+            img_top = 400
+            bg = Image.open(BytesIO(image_bytes)).convert("RGB")
+            bg = resize_and_crop(bg, img_w, img_h)
+            img_x = (PIN_WIDTH - img_w) // 2
+            canvas.paste(bg, (img_x, img_top))
+            # Soft white overlay so text above/below stays readable
+            overlay = Image.new("RGBA", (img_w, img_h), (255, 255, 255, 80))
+            canvas_rgba = canvas.convert("RGBA")
+            canvas_rgba.paste(overlay, (img_x, img_top), overlay)
+            canvas = canvas_rgba.convert("RGB")
+            draw = ImageDraw.Draw(canvas)
+        except Exception:
+            pass
+
     # Botanical decorations — leaf clusters in corners
     leaf_light = (185, 215, 185)   # sage green light
     leaf_mid   = (148, 190, 155)   # sage green mid
