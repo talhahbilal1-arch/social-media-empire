@@ -308,10 +308,10 @@ def apply_gradient_overlay(img, colors):
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
 
-    gradient_start = int(PIN_HEIGHT * 0.4)
+    gradient_start = int(PIN_HEIGHT * 0.38)
     for y in range(gradient_start, PIN_HEIGHT):
         progress = (y - gradient_start) / (PIN_HEIGHT - gradient_start)
-        alpha = int(210 * progress)
+        alpha = int(240 * progress)
         draw.line([(0, y), (PIN_WIDTH, y)], fill=(0, 0, 0, alpha))
 
     img = img.convert("RGBA")
@@ -410,11 +410,13 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     sub_color = hex_to_rgb(colors.get("text_secondary", "#CCCCCC"))
     wm_color = hex_to_rgb(colors.get("accent", "#FFFFFF"))
 
-    # Load fonts — sized for thumbnail readability (Pinterest shows pins small)
-    heading_font = load_font(fonts["heading"], 84, bold=True)
-    sub_font = load_font(fonts["body"], 40)
-    cta_font = load_font(fonts.get("cta", fonts["body"]), 34)
-    watermark_font = load_font(fonts["body"], 26)
+    # Font sizes are set for mobile readability at Pinterest's ~300px display width.
+    # At 300px/1000px = 0.3x scale: 120px → ~36px apparent (minimum legible),
+    # 140px → ~42px apparent (clearly readable while scrolling).
+    heading_font = load_font(fonts["heading"], 120, bold=True)
+    sub_font = load_font(fonts["body"], 48)
+    cta_font = load_font(fonts.get("cta", fonts["body"]), 38)
+    watermark_font = load_font(fonts["body"], 28)
 
     text_margin = 80
     max_text_width = PIN_WIDTH - (text_margin * 2)
@@ -481,7 +483,7 @@ def render_text(img, headline, subheadline, watermark, brand_style, overlay_styl
     # ── Standard layout (gradient, box_dark, split_layout) ──
     headline_lines = _wrap_text(headline, heading_font, max_text_width)
     y = text_area_top
-    line_height = 98  # Increased for 84pt heading font
+    line_height = 136  # Sized for 120pt heading font
 
     for line in headline_lines:
         bbox = heading_font.getbbox(line)

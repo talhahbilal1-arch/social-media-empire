@@ -247,20 +247,23 @@ def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
     img = Image.open(BytesIO(image_bytes)).convert("RGBA")
     w, h = img.size
 
-    # Semi-transparent dark band covering bottom 35%
-    band_h = int(h * 0.35)
-    band = Image.new("RGBA", (w, band_h), (0, 0, 0, 200))
+    # Solid dark band covering bottom 40% — opaque enough for instant readability
+    # on mobile. 220/255 opacity gives ~86% black — text pops against any background.
+    band_h = int(h * 0.40)
+    band = Image.new("RGBA", (w, band_h), (0, 0, 0, 220))
     img.paste(band, (0, h - band_h), band)
 
     # Thin accent stripe at the very bottom
-    stripe_h = max(8, h // 100)
-    stripe = Image.new("RGBA", (w, stripe_h), accent + (230,))
+    stripe_h = max(10, h // 80)
+    stripe = Image.new("RGBA", (w, stripe_h), accent + (240,))
     img.paste(stripe, (0, h - stripe_h), stripe)
 
     draw = ImageDraw.Draw(img)
 
-    # Load a bold system font — no downloads, works in GitHub Actions (Ubuntu)
-    font_size = max(56, w // 11)
+    # Font size: pins display at ~300px wide on mobile, so we need the text
+    # to be readable at that scale. w//7 ≈ 143px for a 1000px image → ~43px
+    # apparent size on mobile (well above the 36px legibility threshold).
+    font_size = max(100, w // 7)
     font = None
     for font_path in [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
@@ -280,7 +283,7 @@ def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
         except TypeError:
             font = ImageFont.load_default()
 
-    # Word-wrap the headline to fit within the band width
+    # Word-wrap the headline to fit within the band width (leave 80px margins)
     words = headline.split()
     lines, line = [], []
     for word in words:
@@ -294,15 +297,17 @@ def add_text_overlay(image_bytes: bytes, headline: str, brand: str) -> bytes:
     if line:
         lines.append(" ".join(line))
 
-    line_h = font_size + 10
+    line_h = font_size + 16
     total_h = len(lines) * line_h
+    # Center text vertically within the band (above the accent stripe)
     text_y = (h - band_h) + (band_h - total_h) // 2 - stripe_h
 
     for text in lines:
         bbox = draw.textbbox((0, 0), text, font=font)
         x = (w - (bbox[2] - bbox[0])) // 2
-        # Drop shadow for legibility
-        draw.text((x + 2, text_y + 2), text, fill=(0, 0, 0, 220), font=font)
+        # Heavy drop shadow (4px offset in 8 directions) for max legibility
+        for dx, dy in [(-4, -4), (0, -4), (4, -4), (-4, 0), (4, 0), (-4, 4), (0, 4), (4, 4)]:
+            draw.text((x + dx, text_y + dy), text, fill=(0, 0, 0, 230), font=font)
         draw.text((x, text_y), text, fill=(255, 255, 255, 255), font=font)
         text_y += line_h
 
