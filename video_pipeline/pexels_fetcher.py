@@ -146,7 +146,8 @@ def fetch_portrait_images(
 
     if not downloaded:
         raise RuntimeError(
-            f"No images downloaded from Pexels. Check PEXELS_API_KEY and queries: {queries}"
+            f"No images from Nano Banana or Pexels. "
+            f"Check GEMINI_API_KEY / PEXELS_API_KEY and queries: {queries}"
         )
 
     logger.info(f"Pexels: {len(downloaded)} images saved to {output_dir}")
