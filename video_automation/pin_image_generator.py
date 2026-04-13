@@ -1006,26 +1006,41 @@ def _render_fitness_pin(headline, subheadline, image_bytes=None):
 
 
 def _render_deals_pin(headline, subheadline, image_bytes=None):
-    """Deals brand template: warm beige canvas, dark headline, centered photo, SHOP NOW button."""
+    """Deals brand template: warm beige canvas, dark headline with accent word, photo, SHOP NOW →."""
     beige = (245, 230, 211)      # #F5E6D3
     dark_brown = (44, 24, 16)    # #2C1810
     button_brown = (61, 43, 31)  # #3D2B1F
+    accent_gold = (180, 120, 20) # warm gold accent for last keyword
 
     canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT), beige)
     draw = ImageDraw.Draw(canvas)
 
-    # Headline at top in dark brown
+    # Shorten headline to a punchy hook
+    hook = _create_hook_headline(headline, "deals")
+
     headline_font = _load_brand_font(98, bold=True)
     margin = 60
-    lines = _wrap_brand_text(draw, headline, headline_font, PIN_WIDTH - margin * 2)[:3]
+    max_w = PIN_WIDTH - margin * 2
+    lines = _wrap_brand_text(draw, hook, headline_font, max_w)[:3]
 
     y = 55
     line_h = 112
-    for line in lines:
+    for i, line in enumerate(lines):
         bbox = draw.textbbox((0, 0), line, font=headline_font)
         lw = bbox[2] - bbox[0]
         x = (PIN_WIDTH - lw) // 2
-        draw.text((x, y), line, fill=dark_brown, font=headline_font)
+
+        # On the LAST line, draw the last word in accent gold for visual pop
+        words = line.split()
+        if i == len(lines) - 1 and len(words) > 1:
+            main_part = ' '.join(words[:-1]) + ' '
+            accent_word = words[-1]
+            main_bbox = draw.textbbox((0, 0), main_part, font=headline_font)
+            main_w = main_bbox[2] - main_bbox[0]
+            draw.text((x, y), main_part, fill=dark_brown, font=headline_font)
+            draw.text((x + main_w, y), accent_word, fill=accent_gold, font=headline_font)
+        else:
+            draw.text((x, y), line, fill=dark_brown, font=headline_font)
         y += line_h
 
     # Photo in center section
@@ -1040,7 +1055,7 @@ def _render_deals_pin(headline, subheadline, image_bytes=None):
         except Exception:
             pass
 
-    # SHOP NOW button
+    # SHOP NOW → button
     btn_w, btn_h = 620, 118
     btn_x = (PIN_WIDTH - btn_w) // 2
     btn_y = 1148
@@ -1050,7 +1065,7 @@ def _render_deals_pin(headline, subheadline, image_bytes=None):
         fill=button_brown,
     )
     btn_font = _load_brand_font(50, bold=True, extra_bold=True)
-    btn_text = "SHOP NOW"
+    btn_text = "SHOP NOW \u2192"
     btn_bbox = draw.textbbox((0, 0), btn_text, font=btn_font)
     btw = btn_bbox[2] - btn_bbox[0]
     bth = btn_bbox[3] - btn_bbox[1]
