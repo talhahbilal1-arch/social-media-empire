@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-          <loc>https://menopause-planner-website.vercel.app/</loc>
-          <lastmod>2026-03-20</lastmod>
+          <loc>https://menopauseplanner.netlify.app</loc>
+          <lastmod>2026-04-13</lastmod>
           <changefreq>weekly</changefreq>
           <priority>1.0</priority>
     </url>
     <url>
-          <loc>https://menopause-planner-website.vercel.app/privacy.html</loc>
+          <loc>https://menopauseplanner.netlify.app/articles/best-supplements-hot-flashes.html</loc>
+          <lastmod>2026-04-13</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>0.8</priority>
+    </url>
+    <url>
+          <loc>https://menopauseplanner.netlify.app/articles/sleep-hacks-menopausal-insomnia.html</loc>
+          <lastmod>2026-04-13</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>0.8</priority>
+    </url>
+    <url>
+          <loc>https://menopauseplanner.netlify.app/articles/menopause-symptom-tracker.html</loc>
+          <lastmod>2026-04-13</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>0.8</priority>
+    </url>
+    <url>
+          <loc>https://menopauseplanner.netlify.app/articles/menopause-diet-guide.html</loc>
+          <lastmod>2026-04-13</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>0.8</priority>
+    </url>
+    <url>
+          <loc>https://menopauseplanner.netlify.app/articles/hrt-vs-natural-remedies.html</loc>
+          <lastmod>2026-04-13</lastmod>
+          <changefreq>monthly</changefreq>
+          <priority>0.8</priority>
+    </url>
+    <url>
+          <loc>https://menopauseplanner.netlify.app/privacy.html</loc>
           <lastmod>2026-03-20</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.5</priority>

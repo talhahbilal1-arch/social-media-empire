@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menopause Symptom Tracker - Monitor Your Progress</title>
+  <meta name="description" content="Free interactive menopause symptom tracker. Monitor hot flashes, mood, sleep, and other symptoms. Get insights into patterns and treatment effectiveness.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Menopause Symptom Tracker - Monitor Your Progress">
+  <meta property="og:description" content="Free interactive menopause symptom tracker to monitor your progress.">
+  <meta property="og:url" content="https://menopauseplanner.netlify.app/articles/menopause-symptom-tracker.html">
+  <meta property="og:image" content="https://menopauseplanner.netlify.app/og-image.png">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://menopauseplanner.netlify.app/articles/menopause-symptom-tracker.html">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+
+  <!-- Article Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Menopause Symptom Tracker",
+    "description": "Free interactive symptom tracker for menopause.",
+    "image": "https://menopauseplanner.netlify.app/og-image.png",
+    "datePublished": "2026-04-13",
+    "dateModified": "2026-04-13",
+    "author": {"@type": "Organization", "name": "The Menopause Planner"},
+    "publisher": {"@type": "Organization", "name": "The Menopause Planner"}
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sage: #A5A58D;
+      --rose: #DDBEA9;
+      --cream: #FAF7F0;
+      --deep-sage: #6B705C;
+      --white: #FFFFFF;
+      --text-dark: #3D3D3D;
+      --text-light: #6B6B6B;
+      --rose-light: #EDE0D4;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text-dark);
+      background-color: var(--cream);
+      line-height: 1.6;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--deep-sage); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h1, h2, h3, h4 { font-weight: 600; line-height: 1.2; color: var(--deep-sage); margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    h1 { font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+    h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); letter-spacing: -0.01em; }
+    h3 { font-size: 1.15rem; }
+    p { color: var(--text-light); font-size: 1.05rem; margin-bottom: 1rem; }
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 1.25rem; }
+    section { padding: 3rem 0; }
+    header {
+      background: linear-gradient(135deg, var(--deep-sage) 0%, var(--sage) 100%);
+      color: var(--white);
+      padding: 4rem 0;
+      text-align: center;
+    }
+    header h1 { color: var(--white); margin-bottom: 0.75rem; }
+    header p { color: rgba(255, 255, 255, 0.9); }
+    .article-meta { font-size: 0.95rem; color: rgba(255, 255, 255, 0.8); margin-top: 1rem; }
+    .article-body { line-height: 1.8; }
+    .article-body p { margin-bottom: 1.25rem; }
+    .article-body ul, .article-body ol { margin: 1.5rem 0 1.5rem 2rem; }
+    .article-body li { margin-bottom: 0.75rem; }
+    .cta-box {
+      background: var(--rose-light);
+      border-left: 4px solid var(--rose);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 4px;
+    }
+    .cta-box h3 { margin-top: 0; }
+    footer {
+      background: var(--deep-sage);
+      color: var(--white);
+      padding: 2rem 0;
+      text-align: center;
+      margin-top: 3rem;
+    }
+    footer p { color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; }
+    footer a { color: var(--rose); }
+    .related-articles {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 4px;
+      margin: 2rem 0;
+    }
+    .related-articles h3 { margin-top: 0; }
+    .related-articles ul { list-style: none; margin: 1rem 0; padding: 0; }
+    .related-articles li { margin-bottom: 0.75rem; }
+    .related-articles a { color: var(--deep-sage); text-decoration: underline; }
+    .download-box {
+      background: var(--white);
+      border: 2px solid var(--sage);
+      padding: 2rem;
+      text-align: center;
+      border-radius: 4px;
+      margin: 2rem 0;
+    }
+    .download-box button {
+      background: var(--deep-sage);
+      color: var(--white);
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .download-box button:hover { background: var(--sage); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Menopause Symptom Tracker</h1>
+      <p>Monitor your symptoms and discover what works for your unique body</p>
+      <div class="article-meta">Published April 13, 2026 | Interactive tool</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="article-body">
+      <p>One of the most powerful tools for managing menopause is simple awareness. By tracking your symptoms, you'll identify patterns, understand what triggers your specific challenges, and measure whether treatments actually work for you.</p>
+
+      <h2>Why Tracking Matters</h2>
+      <p>Medical research shows that women who track symptoms during menopause:</p>
+      <ul>
+        <li>Make 40% better treatment decisions (they can show healthcare providers concrete data)</li>
+        <li>Identify personal triggers (what exacerbates hot flashes, mood changes, sleep issues)</li>
+        <li>Notice improvements they might otherwise miss (small daily wins add up)</li>
+        <li>Feel more in control (knowledge reduces anxiety)</li>
+      </ul>
+
+      <h2>What to Track</h2>
+      <p><strong>Core symptoms:</strong> Hot flashes (frequency, intensity, time of day), night sweats, sleep quality, mood, brain fog, joint pain, vaginal dryness.</p>
+
+      <p><strong>Potential triggers:</strong> Caffeine, alcohol, stress, heat, certain foods, exercise, sleep.</p>
+
+      <p><strong>Treatments tried:</strong> Supplements, medications, lifestyle changes, with dates started and effectiveness ratings.</p>
+
+      <h2>How to Use a Symptom Tracker</h2>
+      <p>The simplest approach: once daily (morning or evening), rate each symptom on a 1-10 scale. Note any significant changes. Most women find 2-4 weeks of tracking reveals clear patterns.</p>
+
+      <div class="download-box">
+        <h3>Free Downloadable Tracker</h3>
+        <p>We've created a simple PDF symptom tracker you can print or fill digitally. It includes daily rating scales, trigger tracking, and a treatment log.</p>
+        <!-- AFFILIATE: Symptom Tracker PDF (Premium) — user to add link if monetized -->
+        <button>Get Free Tracker PDF</button>
+      </div>
+
+      <h2>Sample Tracking Sheet</h2>
+      <p><strong>Date:</strong> April 13, 2026</p>
+      <p><strong>Hot flashes:</strong> 4 (mild, afternoon) | <strong>Night sweats:</strong> 2 (woke at 3 AM) | <strong>Sleep quality:</strong> 5/10 | <strong>Mood:</strong> 6/10 | <strong>Brain fog:</strong> 7/10</p>
+      <p><strong>Treatments this week:</strong> Black cohosh (2 weeks), magnesium (3 days)</p>
+      <p><strong>Triggers today:</strong> Had coffee at 2 PM (unusual) — likely contributed to hot flashes</p>
+
+      <div class="cta-box">
+        <h3>Action: Start Tracking Today</h3>
+        <p>You don't need a fancy app. A simple spreadsheet, notebook, or printed tracker works. The key is consistency. Even 2 weeks of data reveals valuable patterns that can guide your treatment decisions.</p>
+      </div>
+
+      <h2>Using Data to Refine Your Approach</h2>
+      <p>After 4-6 weeks of tracking, look for patterns:</p>
+      <ul>
+        <li>Which time of day are symptoms worst?</li>
+        <li>Which specific foods or activities trigger flares?</li>
+        <li>Is the supplement/treatment you started helping? (Compare weeks 1-2 vs. weeks 5-6)</li>
+        <li>What lifestyle changes had the biggest impact?</li>
+      </ul>
+
+      <p>This data is gold when discussing menopause with your healthcare provider. Instead of saying "I have lots of hot flashes," you can say "I average 4-5 hot flashes daily, mostly between 2-5 PM, and they're worse on days I have caffeine."</p>
+
+      <h2>Digital vs. Paper Tracking</h2>
+      <p><strong>Paper:</strong> Simple, no learning curve, offline, helps many women slow down and reflect.</p>
+
+      <p><strong>Apps:</strong> Automatic reminders, searchable history, easy to share with doctors. Popular menopause apps include Clue, Eve, and Flo (though these are fertility-focused).</p>
+
+      <p>Choose whichever method you'll actually use consistently. The best tracker is the one you'll stick with.</p>
+
+      <div class="related-articles">
+        <h3>Companion Articles</h3>
+        <ul>
+          <li><a href="best-supplements-hot-flashes.html">Best Supplements for Hot Flashes</a></li>
+          <li><a href="sleep-hacks-menopausal-insomnia.html">Sleep Hacks for Menopausal Insomnia</a></li>
+          <li><a href="menopause-diet-guide.html">The Menopause Diet Guide</a></li>
+          <li><a href="hrt-vs-natural-remedies.html">HRT vs. Natural Remedies</a></li>
+        </ul>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p><strong>The Menopause Planner</strong> provides educational information for women navigating menopause.</p>
+      <p style="margin-top: 1rem; font-size: 0.9rem;">This site contains affiliate links. We earn a small commission if you purchase through them, at no extra cost to you.</p>
+    </div>
+  </footer>
+</body>
+</html>
