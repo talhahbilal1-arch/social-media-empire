@@ -854,6 +854,80 @@ def _wrap_brand_text(draw, text, font, max_width):
     return lines
 
 
+def _create_hook_headline(topic: str, brand: str) -> str:
+    """Transform a long article topic into a short punchy Pinterest hook (2-4 words).
+
+    Strips subtitles, filler phrases, and brand-specific qualifiers so the
+    remaining words can be rendered huge on the pin.
+    """
+    import re
+
+    # Remove subtitle after colon (e.g. "8 Tips: How to Lose Fat" → "8 Tips")
+    if ':' in topic:
+        topic = topic.split(':')[0].strip()
+
+    # Strip common filler patterns
+    fillers = [
+        r'\bfor men over \d+\b', r'\bfor women over \d+\b',
+        r'\bfor (men|women|you|your|us)\b',
+        r'\bhow to\b', r'\bthe best\b', r'\bbest \d+\b', r'\btop \d+\b',
+        r'\b(simple|easy|quick|fast|effective|amazing|powerful)\b',
+        r'\bthat (actually|really|truly|will|you|can)\b',
+        r'\bto (boost|improve|help|enhance|increase|reduce|fix)\b',
+        r'\b(you need to know|to know|explained|guide|tips)\b',
+        r'\bwhat (you|to)\b', r'\bwhy\b', r'\bsecret(s)?\b',
+        r'\bthe\b',
+    ]
+    for pattern in fillers:
+        topic = re.sub(pattern, ' ', topic, flags=re.IGNORECASE)
+
+    # Clean up whitespace
+    topic = re.sub(r'\s+', ' ', topic).strip()
+
+    # Take first 4 impactful words
+    words = [w for w in topic.split() if w][:4]
+    if not words:
+        words = topic.split()[:4]
+
+    short = ' '.join(words)
+
+    if brand == "fitness":
+        return short.upper()          # ALL CAPS for high-energy fitness style
+    elif brand == "menopause":
+        return f'"{short.title()}"'   # Quoted for emotional resonance
+    else:
+        return short.title()          # Title case for deals
+
+
+def _fit_text(draw, text, font_path, max_width, max_height, start_size=130, min_size=60):
+    """Find the largest font size where word-wrapped text fits in the given area.
+
+    Steps down by 4pt from start_size until both total height and each line width
+    fit within the bounds. Returns (ImageFont, list_of_lines).
+    """
+    font_path = str(font_path)
+    for size in range(start_size, min_size - 1, -4):
+        try:
+            font = ImageFont.truetype(font_path, size)
+        except Exception:
+            continue
+        lines = _wrap_brand_text(draw, text, font, max_width)
+        line_h = size + 18
+        total_h = len(lines) * line_h
+        too_wide = any(
+            (draw.textbbox((0, 0), l, font=font)[2] - draw.textbbox((0, 0), l, font=font)[0]) > max_width
+            for l in lines
+        )
+        if total_h <= max_height and not too_wide:
+            return font, lines
+    # Fallback: use minimum size regardless
+    try:
+        font = ImageFont.truetype(font_path, min_size)
+    except Exception:
+        font = ImageFont.load_default(min_size)
+    return font, _wrap_brand_text(draw, text, font, max_width)
+
+
 def _render_fitness_pin(headline, subheadline, image_bytes=None):
     """Fitness brand template: black canvas, huge yellow ALL-CAPS text at top, photo below."""
     canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT), (0, 0, 0))
