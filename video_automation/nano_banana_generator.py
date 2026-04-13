@@ -16,7 +16,7 @@ import time
 logger = logging.getLogger(__name__)
 
 # Current Gemini image generation model — portrait 2:3 ratio recommended for Pinterest
-IMAGE_MODEL = "gemini-2.0-flash-preview-image-generation"
+IMAGE_MODEL = "gemini-2.0-flash-exp"
 
 # Brand-specific visual identity for prompt engineering
 BRAND_CONFIGS = {
@@ -133,9 +133,8 @@ def generate_pin_image(brand: str, topic: str, style: str = "default") -> bytes:
             if attempt < 2:
                 time.sleep(wait)
 
-    # Fallback: fetch from Pexels and return raw bytes
-    logger.warning(f"[{brand}] Gemini failed after 3 attempts ({last_error}), falling back to Pexels")
-    return _pexels_fallback(brand, topic)
+    # Raise so the caller's Pexels+PIL fallback (render_pin_to_bytes) kicks in
+    raise RuntimeError(f"[{brand}] Gemini image generation failed after 3 attempts: {last_error}")
 
 
 def _pexels_fallback(brand: str, topic: str) -> bytes:
