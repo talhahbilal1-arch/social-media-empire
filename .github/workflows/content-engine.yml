@@ -399,6 +399,7 @@ jobs:
               }
 
               video_posted = 0
+              video_posted_per_brand = {b: 0 for b in brands_to_generate}
 
               for brand in brands_to_generate:
                   try:
@@ -458,6 +459,7 @@ jobs:
                               _vr_body = _vr.read().decode('utf-8', errors='replace')
                           print(f'  [{brand}] Video webhook → HTTP {_vstatus} "{_vr_body[:60]}"')
                           video_posted += 1
+                          video_posted_per_brand[brand] = video_posted_per_brand.get(brand, 0) + 1
                           print(f'  [{brand}] Video pin POSTED via Make.com')
                           try:
                               log_pin_to_history({
@@ -872,6 +874,12 @@ jobs:
           # DAILY PIN SUMMARY — one line for easy grep in GH Actions log
           _summary_parts = [f'{b}={posted_per_brand.get(b, 0)}' for b in ALL_BRANDS]
           print(f'DAILY PIN SUMMARY: {", ".join(_summary_parts)}')
+          try:
+              _video_summary_parts = [f'{b}={video_posted_per_brand.get(b, 0)}' for b in ALL_BRANDS]
+              print(f'DAILY VIDEO SUMMARY: {", ".join(_video_summary_parts)}')
+          except NameError:
+              # video_posted_per_brand only defined when VIDEO_PIN_ENABLED
+              pass
 
           # Health check: if any brand had rendered pins but posted 0 → failure email
           if not dry_run:
