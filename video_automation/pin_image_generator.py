@@ -1130,12 +1130,14 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         color = pink if (dx + dy) % 3 != 0 else lilac
         draw.ellipse([(dx - dr, dy - dr), (dx + dr, dy + dr)], fill=color)
 
-    # Headline — large bold, centered, dark
+    # Headline — hook-style quoted phrase, deep plum color
+    hook = _create_hook_headline(headline, "menopause")  # returns "Quoted Title" string
     headline_font = _load_brand_font(88, bold=True)
     margin = 90
     max_w = PIN_WIDTH - margin * 2
-    lines = _wrap_brand_text(draw, headline, headline_font, max_w)[:3]
+    lines = _wrap_brand_text(draw, hook, headline_font, max_w)[:3]
 
+    plum = (74, 25, 66)       # #4A1942 deep plum
     line_h = 102
     text_start_y = max(340, int((PIN_HEIGHT - len(lines) * line_h) * 0.35))
     y = text_start_y
@@ -1143,7 +1145,7 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         bbox = draw.textbbox((0, 0), line, font=headline_font)
         lw = bbox[2] - bbox[0]
         x = (PIN_WIDTH - lw) // 2
-        draw.text((x, y), line, fill=(26, 26, 26), font=headline_font)
+        draw.text((x, y), line, fill=plum, font=headline_font)
         y += line_h
 
     # Separator line
@@ -1153,7 +1155,8 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         fill=(180, 145, 185), width=2,
     )
 
-    # Subtitle
+    # Subtitle — warm gray for elegance
+    warm_gray = (107, 91, 115)  # #6B5B73
     if subheadline:
         sub_font = _load_brand_font(40, bold=False)
         sub_lines = _wrap_brand_text(draw, subheadline[:120], sub_font, max_w)[:2]
@@ -1161,7 +1164,7 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         for line in sub_lines:
             bbox = draw.textbbox((0, 0), line, font=sub_font)
             lw = bbox[2] - bbox[0]
-            draw.text(((PIN_WIDTH - lw) // 2, sy), line, fill=(100, 80, 105), font=sub_font)
+            draw.text(((PIN_WIDTH - lw) // 2, sy), line, fill=warm_gray, font=sub_font)
             sy += 52
 
     # Brand URL at bottom
