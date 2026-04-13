@@ -443,7 +443,7 @@ jobs:
                       video_payload = {
                           'title': video_content.get('title', '')[:100],
                           'description': video_content.get('description', '')[:500],
-                          'image_url': video_url,
+                          'image_url': cover_url,
                           'board_id': str(board_id),
                           'link': dest_url,
                       }
