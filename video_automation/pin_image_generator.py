@@ -308,10 +308,10 @@ def apply_gradient_overlay(img, colors):
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
 
-    gradient_start = int(PIN_HEIGHT * 0.4)
+    gradient_start = int(PIN_HEIGHT * 0.38)
     for y in range(gradient_start, PIN_HEIGHT):
         progress = (y - gradient_start) / (PIN_HEIGHT - gradient_start)
-        alpha = int(210 * progress)
+        alpha = int(240 * progress)
         draw.line([(0, y), (PIN_WIDTH, y)], fill=(0, 0, 0, alpha))
 
     img = img.convert("RGBA")
