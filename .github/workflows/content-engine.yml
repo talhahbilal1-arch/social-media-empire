@@ -387,21 +387,17 @@ jobs:
               from video_automation.video_pin_generator import generate_video_pin
               from video_automation.content_brain import generate_video_pin_content
               from video_automation.supabase_storage import upload_pin_video
-              from video_automation.pinterest_idea_pins import PinterestIdeaPinCreator
               from video_automation.pinterest_boards import get_board_id
 
-              print('\n=== PHASE 1v: Generating & posting video pins ===')
+              print('\n=== PHASE 1v: Generating & posting video pins via Make.com ===')
 
-              # Late API key mapping per brand
-              # Match rescue-poster.yml mapping:
-              # KEY_3 = fitness, KEY_2 = deals, KEY_4 = menopause
-              LATE_KEY_MAP = {
-                  'fitness': 'LATE_API_KEY_3',
-                  'deals': 'LATE_API_KEY_2',
-                  'menopause': 'LATE_API_KEY_4',
+              # Video pin Make.com webhooks — same pattern as image pin webhooks
+              VIDEO_WEBHOOKS = {
+                  'fitness': os.environ.get('MAKE_WEBHOOK_VIDEO_FITNESS', ''),
+                  'deals': os.environ.get('MAKE_WEBHOOK_VIDEO_DEALS', ''),
+                  'menopause': os.environ.get('MAKE_WEBHOOK_VIDEO_MENOPAUSE', ''),
               }
 
-              video_poster = PinterestIdeaPinCreator()
               video_posted = 0
 
               for brand in brands_to_generate:
