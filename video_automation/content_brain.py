@@ -598,6 +598,41 @@ DESCRIPTION_OPENERS = [
 ]
 
 # ═══════════════════════════════════════════════════════════════
+# FITNESS BRAND CONTENT SAFETY — block off-brand coaching/business content
+# The fitness audience = men over 35 who want to GET FIT, not run a business
+# ═══════════════════════════════════════════════════════════════
+
+_FITNESS_CONTENT_BLOCKLIST = [
+    "coaching client", "online client", "coaching business", "client acquisition",
+    "sales funnel", "lead generation", "email list", "course launch", "monetize",
+    "freelance", "side hustle", "discovery call", "objection handling", "dm script",
+    "sales script", "online coach", "personal trainer", "fitness coach",
+    "coachingbusiness", "clientacquisition", "salesfunnel", "aitools for coach",
+]
+
+
+def _assert_fitness_safe(pin_data: dict) -> None:
+    """Log a warning if fitness pin content contains off-brand business/marketing terms.
+
+    Does not block the pin (to avoid pipeline failure), but flags it clearly
+    so the issue can be caught in logs.
+    """
+    check_text = " ".join([
+        pin_data.get("title", ""),
+        pin_data.get("graphic_title", ""),
+        pin_data.get("description", ""),
+        pin_data.get("topic", ""),
+    ]).lower()
+
+    blocked = [kw for kw in _FITNESS_CONTENT_BLOCKLIST if kw in check_text]
+    if blocked:
+        logger.warning(
+            f"[fitness] OFF-BRAND CONTENT DETECTED — blocked keywords found: {blocked}. "
+            f"Title: {pin_data.get('title', '')[:80]}"
+        )
+
+
+# ═══════════════════════════════════════════════════════════════
 # TOPIC-TO-BOARD MAPPING (deterministic board selection by category)
 # ═══════════════════════════════════════════════════════════════
 
