@@ -1,3 +1,6 @@
+# Local tooling worktrees (Claire / Claude worktrees scratch space)
+.claire/
+
 # Python
 __pycache__/
 *.py[cod]
