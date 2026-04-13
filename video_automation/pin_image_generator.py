@@ -854,13 +854,87 @@ def _wrap_brand_text(draw, text, font, max_width):
     return lines
 
 
+def _create_hook_headline(topic: str, brand: str) -> str:
+    """Transform a long article topic into a short punchy Pinterest hook (2-4 words).
+
+    Strips subtitles, filler phrases, and brand-specific qualifiers so the
+    remaining words can be rendered huge on the pin.
+    """
+    import re
+
+    # Remove subtitle after colon (e.g. "8 Tips: How to Lose Fat" → "8 Tips")
+    if ':' in topic:
+        topic = topic.split(':')[0].strip()
+
+    # Strip common filler patterns
+    fillers = [
+        r'\bfor men over \d+\b', r'\bfor women over \d+\b',
+        r'\bfor (men|women|you|your|us)\b',
+        r'\bhow to\b', r'\bthe best\b', r'\bbest \d+\b', r'\btop \d+\b',
+        r'\b(simple|easy|quick|fast|effective|amazing|powerful)\b',
+        r'\bthat (actually|really|truly|will|you|can)\b',
+        r'\bto (boost|improve|help|enhance|increase|reduce|fix)\b',
+        r'\b(you need to know|to know|explained|guide|tips)\b',
+        r'\bwhat (you|to)\b', r'\bwhy\b', r'\bsecret(s)?\b',
+        r'\bthe\b',
+    ]
+    for pattern in fillers:
+        topic = re.sub(pattern, ' ', topic, flags=re.IGNORECASE)
+
+    # Clean up whitespace
+    topic = re.sub(r'\s+', ' ', topic).strip()
+
+    # Take first 4 impactful words
+    words = [w for w in topic.split() if w][:4]
+    if not words:
+        words = topic.split()[:4]
+
+    short = ' '.join(words)
+
+    if brand == "fitness":
+        return short.upper()          # ALL CAPS for high-energy fitness style
+    elif brand == "menopause":
+        return f'"{short.title()}"'   # Quoted for emotional resonance
+    else:
+        return short.title()          # Title case for deals
+
+
+def _fit_text(draw, text, font_path, max_width, max_height, start_size=130, min_size=60):
+    """Find the largest font size where word-wrapped text fits in the given area.
+
+    Steps down by 4pt from start_size until both total height and each line width
+    fit within the bounds. Returns (ImageFont, list_of_lines).
+    """
+    font_path = str(font_path)
+    for size in range(start_size, min_size - 1, -4):
+        try:
+            font = ImageFont.truetype(font_path, size)
+        except Exception:
+            continue
+        lines = _wrap_brand_text(draw, text, font, max_width)
+        line_h = size + 18
+        total_h = len(lines) * line_h
+        too_wide = any(
+            (draw.textbbox((0, 0), l, font=font)[2] - draw.textbbox((0, 0), l, font=font)[0]) > max_width
+            for l in lines
+        )
+        if total_h <= max_height and not too_wide:
+            return font, lines
+    # Fallback: use minimum size regardless
+    try:
+        font = ImageFont.truetype(font_path, min_size)
+    except Exception:
+        font = ImageFont.load_default(min_size)
+    return font, _wrap_brand_text(draw, text, font, max_width)
+
+
 def _render_fitness_pin(headline, subheadline, image_bytes=None):
-    """Fitness brand template: black canvas, huge yellow ALL-CAPS text at top, photo below."""
+    """Fitness brand template: black canvas, huge yellow ALL-CAPS hook text at top, photo below."""
     canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT), (0, 0, 0))
     draw = ImageDraw.Draw(canvas)
 
-    # Paste photo into bottom 62% of canvas
-    photo_top = int(PIN_HEIGHT * 0.38)
+    # Bottom 62% of canvas is the photo
+    photo_top = int(PIN_HEIGHT * 0.38)  # 570px
     photo_h = PIN_HEIGHT - photo_top
     if image_bytes:
         try:
@@ -870,25 +944,53 @@ def _render_fitness_pin(headline, subheadline, image_bytes=None):
         except Exception:
             pass
 
-    # Thin yellow accent line separating text area from photo
+    # Yellow accent line separating text area from photo
     draw.line([(0, photo_top), (PIN_WIDTH, photo_top)], fill=(255, 215, 0), width=4)
 
-    # Headline — ALL CAPS, massive, yellow
-    font_size = 130
-    headline_font = _load_brand_font(font_size, bold=True, extra_bold=True)
-    margin = 60
-    text = headline.upper()
-    lines = _wrap_brand_text(draw, text, headline_font, PIN_WIDTH - margin * 2)[:3]
+    # Shorten headline to a punchy 2-4 word hook
+    hook = _create_hook_headline(headline, "fitness")
 
-    y = 55
+    # Dynamic font sizing: shrink until all hook text fits in the text area
+    margin = 60
+    max_text_w = PIN_WIDTH - margin * 2   # 880px
+    text_area_top = 45
+    text_area_bottom = photo_top - 40     # Leave padding above the accent line
+    max_text_h = text_area_bottom - text_area_top  # ~485px
+
+    font_path = FONTS_DIR / "Montserrat-ExtraBold.ttf"
+    if not font_path.exists():
+        font_path = FONTS_DIR / "Montserrat-Bold.ttf"
+    if not font_path.exists():
+        fp = ensure_font("Montserrat", bold=True)
+        font_path = fp if fp else None
+
+    if font_path:
+        headline_font, lines = _fit_text(draw, hook, font_path, max_text_w, max_text_h,
+                                         start_size=130, min_size=60)
+    else:
+        headline_font = _load_brand_font(110, bold=True, extra_bold=True)
+        lines = _wrap_brand_text(draw, hook, headline_font, max_text_w)
+
+    # Vertically center the text block within the text area
+    try:
+        font_size = headline_font.size
+    except AttributeError:
+        font_size = 110
     line_h = font_size + 18
+    total_text_h = len(lines) * line_h
+    y = text_area_top + max(0, (max_text_h - total_text_h) // 2)
+
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=headline_font)
         lw = bbox[2] - bbox[0]
         x = (PIN_WIDTH - lw) // 2
-        # Subtle shadow
-        draw.text((x + 3, y + 3), line, fill=(0, 0, 0), font=headline_font)
-        draw.text((x, y), line, fill=(255, 215, 0), font=headline_font)  # bright yellow
+        # Thick black outline: draw in 8 directions for strong contrast
+        for dx in (-4, 0, 4):
+            for dy in (-4, 0, 4):
+                if dx != 0 or dy != 0:
+                    draw.text((x + dx, y + dy), line, fill=(0, 0, 0), font=headline_font)
+        # Bright yellow on top
+        draw.text((x, y), line, fill=(255, 215, 0), font=headline_font)
         y += line_h
 
     # Brand URL at very bottom
@@ -904,26 +1006,41 @@ def _render_fitness_pin(headline, subheadline, image_bytes=None):
 
 
 def _render_deals_pin(headline, subheadline, image_bytes=None):
-    """Deals brand template: warm beige canvas, dark headline, centered photo, SHOP NOW button."""
+    """Deals brand template: warm beige canvas, dark headline with accent word, photo, SHOP NOW →."""
     beige = (245, 230, 211)      # #F5E6D3
     dark_brown = (44, 24, 16)    # #2C1810
     button_brown = (61, 43, 31)  # #3D2B1F
+    accent_gold = (180, 120, 20) # warm gold accent for last keyword
 
     canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT), beige)
     draw = ImageDraw.Draw(canvas)
 
-    # Headline at top in dark brown
+    # Shorten headline to a punchy hook
+    hook = _create_hook_headline(headline, "deals")
+
     headline_font = _load_brand_font(98, bold=True)
     margin = 60
-    lines = _wrap_brand_text(draw, headline, headline_font, PIN_WIDTH - margin * 2)[:3]
+    max_w = PIN_WIDTH - margin * 2
+    lines = _wrap_brand_text(draw, hook, headline_font, max_w)[:3]
 
     y = 55
     line_h = 112
-    for line in lines:
+    for i, line in enumerate(lines):
         bbox = draw.textbbox((0, 0), line, font=headline_font)
         lw = bbox[2] - bbox[0]
         x = (PIN_WIDTH - lw) // 2
-        draw.text((x, y), line, fill=dark_brown, font=headline_font)
+
+        # On the LAST line, draw the last word in accent gold for visual pop
+        words = line.split()
+        if i == len(lines) - 1 and len(words) > 1:
+            main_part = ' '.join(words[:-1]) + ' '
+            accent_word = words[-1]
+            main_bbox = draw.textbbox((0, 0), main_part, font=headline_font)
+            main_w = main_bbox[2] - main_bbox[0]
+            draw.text((x, y), main_part, fill=dark_brown, font=headline_font)
+            draw.text((x + main_w, y), accent_word, fill=accent_gold, font=headline_font)
+        else:
+            draw.text((x, y), line, fill=dark_brown, font=headline_font)
         y += line_h
 
     # Photo in center section
@@ -938,7 +1055,7 @@ def _render_deals_pin(headline, subheadline, image_bytes=None):
         except Exception:
             pass
 
-    # SHOP NOW button
+    # SHOP NOW → button
     btn_w, btn_h = 620, 118
     btn_x = (PIN_WIDTH - btn_w) // 2
     btn_y = 1148
@@ -948,7 +1065,7 @@ def _render_deals_pin(headline, subheadline, image_bytes=None):
         fill=button_brown,
     )
     btn_font = _load_brand_font(50, bold=True, extra_bold=True)
-    btn_text = "SHOP NOW"
+    btn_text = "SHOP NOW \u2192"
     btn_bbox = draw.textbbox((0, 0), btn_text, font=btn_font)
     btw = btn_bbox[2] - btn_bbox[0]
     bth = btn_bbox[3] - btn_bbox[1]
@@ -1013,12 +1130,14 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         color = pink if (dx + dy) % 3 != 0 else lilac
         draw.ellipse([(dx - dr, dy - dr), (dx + dr, dy + dr)], fill=color)
 
-    # Headline — large bold, centered, dark
+    # Headline — hook-style quoted phrase, deep plum color
+    hook = _create_hook_headline(headline, "menopause")  # returns "Quoted Title" string
     headline_font = _load_brand_font(88, bold=True)
     margin = 90
     max_w = PIN_WIDTH - margin * 2
-    lines = _wrap_brand_text(draw, headline, headline_font, max_w)[:3]
+    lines = _wrap_brand_text(draw, hook, headline_font, max_w)[:3]
 
+    plum = (74, 25, 66)       # #4A1942 deep plum
     line_h = 102
     text_start_y = max(340, int((PIN_HEIGHT - len(lines) * line_h) * 0.35))
     y = text_start_y
@@ -1026,7 +1145,7 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         bbox = draw.textbbox((0, 0), line, font=headline_font)
         lw = bbox[2] - bbox[0]
         x = (PIN_WIDTH - lw) // 2
-        draw.text((x, y), line, fill=(26, 26, 26), font=headline_font)
+        draw.text((x, y), line, fill=plum, font=headline_font)
         y += line_h
 
     # Separator line
@@ -1036,7 +1155,8 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         fill=(180, 145, 185), width=2,
     )
 
-    # Subtitle
+    # Subtitle — warm gray for elegance
+    warm_gray = (107, 91, 115)  # #6B5B73
     if subheadline:
         sub_font = _load_brand_font(40, bold=False)
         sub_lines = _wrap_brand_text(draw, subheadline[:120], sub_font, max_w)[:2]
@@ -1044,7 +1164,7 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         for line in sub_lines:
             bbox = draw.textbbox((0, 0), line, font=sub_font)
             lw = bbox[2] - bbox[0]
-            draw.text(((PIN_WIDTH - lw) // 2, sy), line, fill=(100, 80, 105), font=sub_font)
+            draw.text(((PIN_WIDTH - lw) // 2, sy), line, fill=warm_gray, font=sub_font)
             sy += 52
 
     # Brand URL at bottom
