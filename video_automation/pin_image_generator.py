@@ -1066,45 +1066,42 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
 def render_pin_to_bytes(brand, headline, subheadline, keyword_or_url, style="gradient"):
     """Render a pin image and return JPEG bytes (for pipeline use).
 
+    Routes to brand-specific template renderers that match high-performing designs:
+      - fitness:   black canvas, huge yellow ALL-CAPS text at top, photo below
+      - deals:     warm beige canvas, dark headline, centered photo, SHOP NOW button
+      - menopause: soft pink-to-lavender gradient, botanical corners, elegant centered text
+
     Args:
-        brand: Brand key (e.g. 'fitness', 'deals', 'menopause')
-        headline: Main text overlay (3-8 word hook)
-        subheadline: Secondary text (full title or list items)
-        keyword_or_url: Either a Pexels image URL or search keyword
-        style: One of 'gradient', 'box_dark', 'numbered_list', 'big_stat', 'split_layout'
+        brand: Brand key ('fitness', 'deals', 'menopause')
+        headline: Main text overlay
+        subheadline: Secondary text (used as subtitle for menopause)
+        keyword_or_url: Pexels image URL (fetched as background photo) or search keyword
+        style: Ignored — brand templates override this
 
     Returns:
-        bytes: JPEG image data
+        bytes: JPEG image data (always 1000x1500px)
     """
-    brand_style = BRAND_VIDEO_STYLES.get(brand)
-    if not brand_style:
-        raise ValueError(f"Unknown brand '{brand}'. Available: {list(BRAND_VIDEO_STYLES.keys())}")
+    # Fetch background image from URL for use in brand templates
+    image_bytes = None
+    if keyword_or_url and (
+        keyword_or_url.startswith("http://") or keyword_or_url.startswith("https://")
+    ):
+        try:
+            resp = requests.get(keyword_or_url, timeout=30)
+            resp.raise_for_status()
+            image_bytes = resp.content
+        except Exception as e:
+            logger.warning(f"[{brand}] Failed to fetch background: {e}")
 
-    if style not in OVERLAY_STYLES:
-        logger.warning(f"Unknown style '{style}', falling back to gradient")
-        style = "gradient"
-
-    # Get background image
-    if keyword_or_url and (keyword_or_url.startswith("http://") or keyword_or_url.startswith("https://")):
-        bg = fetch_background_from_url(keyword_or_url)
+    if brand == "fitness":
+        return _render_fitness_pin(headline, subheadline, image_bytes)
+    elif brand == "deals":
+        return _render_deals_pin(headline, subheadline, image_bytes)
+    elif brand == "menopause":
+        return _render_menopause_pin(headline, subheadline, image_bytes)
     else:
-        config = get_config()
-        bg = fetch_background(keyword_or_url or "abstract background", config.pexels_api_key)
-
-    # Resize/crop to pin dimensions
-    bg = resize_and_crop(bg, PIN_WIDTH, PIN_HEIGHT)
-
-    # Apply overlay
-    bg = OVERLAY_STYLES[style](bg, brand_style["colors"])
-
-    # Render text
-    watermark = brand_style.get("watermark_text", brand.replace("_", " ").title())
-    bg = render_text(bg, headline, subheadline, watermark, brand_style, style)
-
-    # Convert to JPEG bytes
-    buffer = BytesIO()
-    bg.save(buffer, "JPEG", quality=92, optimize=True)
-    return buffer.getvalue()
+        logger.warning(f"[{brand}] Unknown brand, using fitness template")
+        return _render_fitness_pin(headline, subheadline, image_bytes)
 
 
 def generate_pin(brand, headline, keyword, style="gradient",
