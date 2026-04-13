@@ -71,19 +71,44 @@ def _get_client():
 
 
 def _build_prompt(brand: str, topic: str) -> str:
-    """Construct a brand-specific image generation prompt."""
-    cfg = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
-    return (
-        f"Create a professional Pinterest pin image at portrait 2:3 ratio (1000x1500px). "
-        f"Topic: {topic}. "
-        f"Brand: {cfg['name']}. Aesthetic: {cfg['aesthetic']}. "
-        f"Color palette: {cfg['colors']}. Typography: {cfg['style']}. "
-        f"Mood: {cfg['mood']}. Content: {cfg['content_frame']}. "
-        f"Include bold, readable headline text overlay on the image about: {topic}. "
-        f"The text must be high-contrast and legible on a small mobile screen. "
-        f"Requirements: professional Pinterest quality, clean composition, not cluttered. "
-        f"No watermarks, no borders, no Instagram filters."
-    )
+    """Construct a brand-specific image generation prompt.
+
+    These prompts target the background/photo zone of each brand template:
+      - fitness:   bottom 62% photo slot — dramatic fitness photography
+      - deals:     center rectangle photo slot — warm product lifestyle shot
+      - menopause: full image (template renders over it with soft overlay)
+    """
+    if brand == "fitness":
+        return (
+            f"Professional fitness photography, portrait orientation. "
+            f"Subject: muscular man over 35 exercising, weight training, or active lifestyle. "
+            f"Topic: {topic}. "
+            f"Style: dramatic contrast lighting, dark gym background, powerful and motivational. "
+            f"No text, no watermarks. Clean composition suitable as a photo background."
+        )
+    elif brand == "deals":
+        return (
+            f"Professional product lifestyle photography, portrait orientation. "
+            f"Topic: {topic}. "
+            f"Style: warm golden-hour lighting, clean minimalist background, "
+            f"aspirational home or beauty aesthetic. Products styled attractively. "
+            f"No text, no watermarks. Warm beige and cream tones preferred."
+        )
+    elif brand == "menopause":
+        return (
+            f"Soft watercolor-style illustration of a woman in midlife, botanical elements, "
+            f"gentle and empowering mood. Topic: {topic}. "
+            f"Pastel colors: blush pink, lavender, sage green. Natural light. "
+            f"Serene wellness retreat aesthetic. "
+            f"No text, no watermarks. Portrait orientation."
+        )
+    else:
+        cfg = BRAND_CONFIGS.get(brand, BRAND_CONFIGS["fitness"])
+        return (
+            f"Create a professional Pinterest pin background image, portrait orientation. "
+            f"Topic: {topic}. Aesthetic: {cfg['aesthetic']}. Mood: {cfg['mood']}. "
+            f"No text, no watermarks, clean composition."
+        )
 
 
 def generate_pin_image(brand: str, topic: str, style: str = "default") -> bytes:
