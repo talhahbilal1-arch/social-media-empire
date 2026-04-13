@@ -94,7 +94,7 @@ jobs:
           today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
           current_hour = datetime.now(timezone.utc).hour
           brands = ['fitness', 'deals', 'menopause']
-          MAX_PINS_PER_DAY = 5
+          MAX_PINS_PER_DAY = 10
 
           total_pins_today = 0
           brands_missing = []
