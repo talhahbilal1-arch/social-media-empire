@@ -93,6 +93,16 @@ def fetch_portrait_images(
     for i, query in enumerate(queries):
         if len(downloaded) >= count:
             break
+
+        img_path = output_dir / f"img_{i:02d}.jpg"
+
+        # Primary: Nano Banana AI generation (on-brand, wide landscape for video)
+        if _try_nano_banana(query, brand, img_path):
+            downloaded.append(img_path)
+            logger.info(f"NanoBanana [{len(downloaded)}/{count}]: {img_path.name} ← '{query}'")
+            continue
+
+        # Fallback: Pexels stock photos
         try:
             url = (
                 "https://api.pexels.com/v1/search"
@@ -114,7 +124,6 @@ def fetch_portrait_images(
             photo = photos[0]
             # portrait is ~1080x1620, original can be huge — portrait is ideal
             img_url = photo["src"].get("portrait") or photo["src"].get("original")
-            img_path = output_dir / f"img_{i:02d}.jpg"
 
             img_req = urllib.request.Request(
                 img_url,
@@ -125,7 +134,7 @@ def fetch_portrait_images(
                     f.write(img_resp.read())
 
             downloaded.append(img_path)
-            logger.info(f"Downloaded [{len(downloaded)}/{count}]: {img_path.name} ← '{query}'")
+            logger.info(f"Pexels [{len(downloaded)}/{count}]: {img_path.name} ← '{query}'")
 
         except Exception as e:
             logger.warning(f"Pexels fetch failed for '{query}': {e}")
