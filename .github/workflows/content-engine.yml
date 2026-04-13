@@ -775,6 +775,7 @@ jobs:
                           }).eq('id', pin_id).execute()
                       posted_count += 1
                       posted_brands.add(brand)
+                      posted_per_brand[brand] = posted_per_brand.get(brand, 0) + 1
                       success = True
                       break
                   except urllib.error.HTTPError as e:
