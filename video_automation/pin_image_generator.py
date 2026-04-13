@@ -929,12 +929,12 @@ def _fit_text(draw, text, font_path, max_width, max_height, start_size=130, min_
 
 
 def _render_fitness_pin(headline, subheadline, image_bytes=None):
-    """Fitness brand template: black canvas, huge yellow ALL-CAPS text at top, photo below."""
+    """Fitness brand template: black canvas, huge yellow ALL-CAPS hook text at top, photo below."""
     canvas = Image.new("RGB", (PIN_WIDTH, PIN_HEIGHT), (0, 0, 0))
     draw = ImageDraw.Draw(canvas)
 
-    # Paste photo into bottom 62% of canvas
-    photo_top = int(PIN_HEIGHT * 0.38)
+    # Bottom 62% of canvas is the photo
+    photo_top = int(PIN_HEIGHT * 0.38)  # 570px
     photo_h = PIN_HEIGHT - photo_top
     if image_bytes:
         try:
@@ -944,25 +944,53 @@ def _render_fitness_pin(headline, subheadline, image_bytes=None):
         except Exception:
             pass
 
-    # Thin yellow accent line separating text area from photo
+    # Yellow accent line separating text area from photo
     draw.line([(0, photo_top), (PIN_WIDTH, photo_top)], fill=(255, 215, 0), width=4)
 
-    # Headline — ALL CAPS, massive, yellow
-    font_size = 130
-    headline_font = _load_brand_font(font_size, bold=True, extra_bold=True)
-    margin = 60
-    text = headline.upper()
-    lines = _wrap_brand_text(draw, text, headline_font, PIN_WIDTH - margin * 2)[:3]
+    # Shorten headline to a punchy 2-4 word hook
+    hook = _create_hook_headline(headline, "fitness")
 
-    y = 55
+    # Dynamic font sizing: shrink until all hook text fits in the text area
+    margin = 60
+    max_text_w = PIN_WIDTH - margin * 2   # 880px
+    text_area_top = 45
+    text_area_bottom = photo_top - 40     # Leave padding above the accent line
+    max_text_h = text_area_bottom - text_area_top  # ~485px
+
+    font_path = FONTS_DIR / "Montserrat-ExtraBold.ttf"
+    if not font_path.exists():
+        font_path = FONTS_DIR / "Montserrat-Bold.ttf"
+    if not font_path.exists():
+        fp = ensure_font("Montserrat", bold=True)
+        font_path = fp if fp else None
+
+    if font_path:
+        headline_font, lines = _fit_text(draw, hook, font_path, max_text_w, max_text_h,
+                                         start_size=130, min_size=60)
+    else:
+        headline_font = _load_brand_font(110, bold=True, extra_bold=True)
+        lines = _wrap_brand_text(draw, hook, headline_font, max_text_w)
+
+    # Vertically center the text block within the text area
+    try:
+        font_size = headline_font.size
+    except AttributeError:
+        font_size = 110
     line_h = font_size + 18
+    total_text_h = len(lines) * line_h
+    y = text_area_top + max(0, (max_text_h - total_text_h) // 2)
+
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=headline_font)
         lw = bbox[2] - bbox[0]
         x = (PIN_WIDTH - lw) // 2
-        # Subtle shadow
-        draw.text((x + 3, y + 3), line, fill=(0, 0, 0), font=headline_font)
-        draw.text((x, y), line, fill=(255, 215, 0), font=headline_font)  # bright yellow
+        # Thick black outline: draw in 8 directions for strong contrast
+        for dx in (-4, 0, 4):
+            for dy in (-4, 0, 4):
+                if dx != 0 or dy != 0:
+                    draw.text((x + dx, y + dy), line, fill=(0, 0, 0), font=headline_font)
+        # Bright yellow on top
+        draw.text((x, y), line, fill=(255, 215, 0), font=headline_font)
         y += line_h
 
     # Brand URL at very bottom
