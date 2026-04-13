@@ -1239,6 +1239,9 @@ OUTPUT ONLY THIS JSON:
     pin_data['keywords_used'] = selected_keywords
     pin_data['daily_trend'] = True
 
+    if brand_key == 'fitness':
+        _assert_fitness_safe(pin_data)
+
     return pin_data
 
 
