@@ -1166,19 +1166,19 @@ def _render_menopause_pin(headline, subheadline, image_bytes=None):
         draw.text((x, y), line, fill=plum, font=headline_font)
         y += line_h
 
-    # Separator line
-    sep_y = y + 22
+    # Separator line — between headline and image
+    sep_y = y + 12
     draw.line(
         [(margin + 40, sep_y), (PIN_WIDTH - margin - 40, sep_y)],
         fill=(180, 145, 185), width=2,
     )
 
-    # Subtitle — warm gray for elegance
+    # Subtitle — below the image (y=1020+)
     warm_gray = (107, 91, 115)  # #6B5B73
     if subheadline:
         sub_font = _load_brand_font(40, bold=False)
         sub_lines = _wrap_brand_text(draw, subheadline[:120], sub_font, max_w)[:2]
-        sy = sep_y + 28
+        sy = 1030
         for line in sub_lines:
             bbox = draw.textbbox((0, 0), line, font=sub_font)
             lw = bbox[2] - bbox[0]
