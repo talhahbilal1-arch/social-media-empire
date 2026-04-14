@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-13",
+  "last_updated": "2026-04-14",
   "items": [
     {
       "id": 1,
@@ -1670,28 +1670,31 @@
       "id": 204,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-doctors",
       "keyword": "best ai tools for doctors",
-      "title": "Best AI Tools for Doctors 2026"
+      "title": "Best AI Tools for Doctors 2026",
+      "published_date": "2026-04-14"
     },
     {
       "id": 205,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-nurses",
       "keyword": "best ai tools for nurses",
-      "title": "Best AI Tools for Nurses 2026"
+      "title": "Best AI Tools for Nurses 2026",
+      "published_date": "2026-04-14"
     },
     {
       "id": 206,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-accountants",
       "keyword": "best ai tools for accountants",
-      "title": "Best AI Tools for Accountants 2026"
+      "title": "Best AI Tools for Accountants 2026",
+      "published_date": "2026-04-14"
     },
     {
       "id": 207,
