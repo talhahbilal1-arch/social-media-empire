@@ -952,5 +952,32 @@
     "board": "AI Writing Tools",
     "posted_at": "2026-04-13T22:34:28.678Z",
     "success": true
+  },
+  {
+    "slug": "canva-vs-midjourney",
+    "pin_type": "comparison",
+    "title": "Canva AI vs Midjourney: Which AI Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/canva-vs-midjourney/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-14T17:18:27.145Z",
+    "success": true
+  },
+  {
+    "slug": "midjourney",
+    "pin_type": "tool-review",
+    "title": "Midjourney AI Review: Stunning Images Made Easy! (Rated 4.9/5)",
+    "link": "https://pilottools.ai/tools/midjourney/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-04-14T17:18:31.242Z",
+    "success": true
+  },
+  {
+    "slug": "scalenut",
+    "pin_type": "tool-review",
+    "title": "Scalenut AI: Level Up Your SEO (Rated 4.4/5!)",
+    "link": "https://pilottools.ai/tools/scalenut/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-14T17:18:35.342Z",
+    "success": true
   }
 ]
