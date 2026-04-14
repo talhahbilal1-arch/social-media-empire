@@ -979,5 +979,32 @@
     "board": "AI SEO Tools",
     "posted_at": "2026-04-14T17:18:35.342Z",
     "success": true
+  },
+  {
+    "slug": "stable-diffusion",
+    "pin_type": "tool-review",
+    "title": "Stable Diffusion Review: Create Stunning AI Art! (4.3/5)",
+    "link": "https://pilottools.ai/tools/stable-diffusion/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-04-14T22:35:54.276Z",
+    "success": true
+  },
+  {
+    "slug": "jasper",
+    "pin_type": "tool-review",
+    "title": "Jasper AI: Is It Worth the Hype? (4.5/5 Stars!)",
+    "link": "https://pilottools.ai/tools/jasper/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-04-14T22:35:58.129Z",
+    "success": true
+  },
+  {
+    "slug": "cursor-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Cursor vs ChatGPT: Which AI Code Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/cursor-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-14T22:36:02.301Z",
+    "success": true
   }
 ]
