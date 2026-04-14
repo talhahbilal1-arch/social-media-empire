@@ -377,10 +377,10 @@ jobs:
           print(f'  Rendered {len(rendered_pins)}/{len(content_ready_pins)} pins')
 
           # ══════════════════════════════════════════════════════════════
-          # PHASE 1v: Generate + post VIDEO pins via Late API
-          # Generates one video pin per brand per run using PIL+ffmpeg,
-          # uploads to Supabase, posts via Late API (bypasses Pinterest
-          # API denial by using Late's approved OAuth app).
+          # PHASE 1v: Generate + post VIDEO FRAME pins via image webhooks
+          # Renders video, extracts cover frame (branded JPEG), uploads to
+          # Supabase, posts via the same Make.com image webhooks as normal
+          # pins. Video URL is included in description for viewer access.
           # ══════════════════════════════════════════════════════════════
           from video_automation.video_pin_generator import is_video_pin_enabled
           if is_video_pin_enabled():
@@ -390,13 +390,6 @@ jobs:
               from video_automation.pinterest_boards import get_board_id
 
               print('\n=== PHASE 1v: Generating & posting video pins via Make.com ===')
-
-              # Video pin Make.com webhooks — same pattern as image pin webhooks
-              VIDEO_WEBHOOKS = {
-                  'fitness': os.environ.get('MAKE_WEBHOOK_VIDEO_FITNESS', ''),
-                  'deals': os.environ.get('MAKE_WEBHOOK_VIDEO_DEALS', ''),
-                  'menopause': os.environ.get('MAKE_WEBHOOK_VIDEO_MENOPAUSE', ''),
-              }
 
               video_posted = 0
               video_posted_per_brand = {b: 0 for b in brands_to_generate}
@@ -429,39 +422,49 @@ jobs:
                       cover_url = upload_pin_image(cover_bytes, f'{brand}_video_cover_{ts}.jpg')
                       print(f'  [{brand}] Uploaded to Supabase')
 
-                      # Step 4: Post to Pinterest via Make.com webhook
-                      video_webhook = VIDEO_WEBHOOKS.get(brand, '')
-                      if not video_webhook:
-                          print(f'  [{brand}] Video pin SKIPPED — MAKE_WEBHOOK_VIDEO_{brand.upper()} not set')
-                          log_pipeline_error('1v', brand, f'No video webhook for {brand}', severity='medium')
+                      # Step 4: Post as image pin via working image webhooks
+                      # cover_bytes is a branded JPEG already rendered from the video frame
+                      IMAGE_WEBHOOKS = {
+                          'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
+                          'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
+                          'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+                      }
+                      image_webhook = IMAGE_WEBHOOKS.get(brand, '')
+                      if not image_webhook:
+                          print(f'  [{brand}] Video frame pin SKIPPED — MAKE_WEBHOOK_{brand.upper()} not set')
+                          log_pipeline_error('1v', brand, f'No image webhook for {brand}', severity='medium')
                           continue
 
                       board_name = video_content.get('board', '')
                       board_id = get_board_id(brand, board_name)
                       dest_url = video_content.get('destination_url', '')
 
-                      video_payload = {
+                      # Include video URL in description so viewers can watch the full video
+                      desc = video_content.get('description', '')[:450]
+                      if video_url:
+                          desc = desc + '\n\n🎥 Watch the full video: ' + video_url
+
+                      video_frame_payload = {
                           'title': video_content.get('title', '')[:100],
-                          'description': video_content.get('description', '')[:500],
-                          'image_url': video_url,
-                          'cover_image_url': cover_url,
+                          'description': desc[:500],
+                          'image_url': cover_url,
                           'board_id': str(board_id),
                           'link': dest_url,
                       }
                       try:
                           _vreq = urllib.request.Request(
-                              video_webhook,
-                              data=json.dumps(video_payload).encode('utf-8'),
+                              image_webhook,
+                              data=json.dumps(video_frame_payload).encode('utf-8'),
                               headers={'Content-Type': 'application/json'},
                               method='POST',
                           )
                           with urllib.request.urlopen(_vreq, timeout=30) as _vr:
                               _vstatus = _vr.status
                               _vr_body = _vr.read().decode('utf-8', errors='replace')
-                          print(f'  [{brand}] Video webhook → HTTP {_vstatus} "{_vr_body[:60]}"')
+                          print(f'  [{brand}] Video frame webhook → HTTP {_vstatus} "{_vr_body[:60]}"')
                           video_posted += 1
                           video_posted_per_brand[brand] = video_posted_per_brand.get(brand, 0) + 1
-                          print(f'  [{brand}] Video pin POSTED via Make.com')
+                          print(f'  [{brand}] Video frame pin POSTED via image webhook ✅')
                           try:
                               log_pin_to_history({
                                   **video_content,
@@ -473,11 +476,11 @@ jobs:
                           except Exception:
                               pass
                       except urllib.error.HTTPError as _ve:
-                          print(f'  [{brand}] Video webhook HTTP {_ve.code}: {_ve.read().decode("utf-8", errors="replace")[:100]}')
-                          log_pipeline_error('1v', brand, f'Video webhook HTTP {_ve.code}', severity='high')
+                          print(f'  [{brand}] Video frame webhook HTTP {_ve.code}: {_ve.read().decode("utf-8", errors="replace")[:100]}')
+                          log_pipeline_error('1v', brand, f'Video frame webhook HTTP {_ve.code}', severity='high')
                       except Exception as _ve:
-                          print(f'  [{brand}] Video webhook failed: {_ve}')
-                          log_pipeline_error('1v', brand, f'Video webhook error: {_ve}', severity='high')
+                          print(f'  [{brand}] Video frame webhook failed: {_ve}')
+                          log_pipeline_error('1v', brand, f'Video frame webhook error: {_ve}', severity='high')
 
                   except Exception as e:
                       print(f'  [{brand}] Video pin ERROR: {e}')
