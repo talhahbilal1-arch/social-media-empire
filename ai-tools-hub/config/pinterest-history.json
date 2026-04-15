@@ -1006,5 +1006,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-14T22:36:02.301Z",
     "success": true
+  },
+  {
+    "slug": "rytr",
+    "pin_type": "tool-review",
+    "title": "Rytr AI: Write Faster, Better (4.4/5 Rating!)",
+    "link": "https://pilottools.ai/tools/rytr/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-04-15T17:14:52.958Z",
+    "success": true
+  },
+  {
+    "slug": "claude",
+    "pin_type": "tool-review",
+    "title": "Claude AI Review: Is it Worth $20/mo?",
+    "link": "https://pilottools.ai/tools/claude/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-04-15T17:14:57.062Z",
+    "success": true
+  },
+  {
+    "slug": "writesonic",
+    "pin_type": "tool-review",
+    "title": "Writesonic Review: Is This AI Writing Tool Worth It?",
+    "link": "https://pilottools.ai/tools/writesonic/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-04-15T17:15:01.277Z",
+    "success": true
   }
 ]
