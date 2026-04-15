@@ -1,0 +1,18 @@
+{
+  "name": "affiliate-signups",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Assisted affiliate program signup suite — Playwright-driven form pre-fill with human-in-the-loop CAPTCHA + final submit",
+  "scripts": {
+    "apply": "node apply.js",
+    "followup": "node follow-up-tracker.js",
+    "postinstall": "npx playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

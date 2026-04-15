@@ -102,3 +102,9 @@ build/
 venv/
 .env
 *_keyword_state.json
+
+# Affiliate signup assistant — never commit real applicant data, browser auth,
+# or application reports / screenshots.
+automation/affiliate_signups/applicant-profile.json
+automation/**/.auth/
+automation/**/reports/

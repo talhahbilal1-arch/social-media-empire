@@ -1,0 +1,98 @@
+{
+  "semrush": {
+    "name": "Semrush Affiliate Program",
+    "slug": "semrush",
+    "apply_url": "https://www.semrush.com/kb/affiliate-program/",
+    "signup_url": "https://www.semrush.com/affiliates/",
+    "network": "Impact",
+    "commission": "Up to $200 per sale + $10 per free trial activation",
+    "approval_time_days": 7,
+    "cookie_window_days": 120,
+    "payout_methods": ["PayPal", "Wire Transfer"],
+    "required_fields": [
+      "email",
+      "full_name",
+      "website",
+      "promotion_methods",
+      "monthly_pageviews",
+      "country"
+    ],
+    "notes": "Hosted on Impact Radius. May redirect to app.impact.com/campaign-promo-signup. Expect a multi-step signup: account creation first, then media-property association."
+  },
+  "hostinger": {
+    "name": "Hostinger Affiliates",
+    "slug": "hostinger",
+    "apply_url": "https://www.hostinger.com/affiliates",
+    "signup_url": "https://affiliate.hostinger.com/signup",
+    "network": "In-house",
+    "commission": "40% - 60% per sale (tiered)",
+    "approval_time_days": 3,
+    "cookie_window_days": 30,
+    "payout_methods": ["PayPal", "Bank Transfer"],
+    "required_fields": [
+      "email",
+      "full_name",
+      "website",
+      "promotion_description",
+      "audience_size"
+    ],
+    "notes": "Fast approval. One of the highest-paying web-hosting programs. Requires a short description of how you will promote."
+  },
+  "ahrefs": {
+    "name": "Ahrefs Affiliate Program",
+    "slug": "ahrefs",
+    "apply_url": "https://ahrefs.com/affiliates",
+    "signup_url": "https://ahrefs.firstpromoter.com/",
+    "network": "FirstPromoter",
+    "commission": "20% lifetime recurring",
+    "approval_time_days": 14,
+    "cookie_window_days": 90,
+    "payout_methods": ["PayPal", "Wire Transfer"],
+    "required_fields": [
+      "email",
+      "full_name",
+      "website",
+      "paypal_email",
+      "promotion_methods"
+    ],
+    "notes": "FirstPromoter account required. Recurring = every renewal, for life of customer. Strong manual review — link working content to your application."
+  },
+  "frase": {
+    "name": "Frase Partners",
+    "slug": "frase",
+    "apply_url": "https://www.frase.io/partners",
+    "signup_url": "https://frase.firstpromoter.com/",
+    "network": "FirstPromoter",
+    "commission": "30% recurring for 12 months",
+    "approval_time_days": 5,
+    "cookie_window_days": 60,
+    "payout_methods": ["PayPal", "Stripe"],
+    "required_fields": [
+      "email",
+      "full_name",
+      "website",
+      "promotion_methods"
+    ],
+    "notes": "AI content tool — pairs well with SEO niches. FirstPromoter-based signup is short."
+  },
+  "clickbank": {
+    "name": "ClickBank Marketplace",
+    "slug": "clickbank",
+    "apply_url": "https://www.clickbank.com/signup/",
+    "signup_url": "https://accounts.clickbank.com/signup/",
+    "network": "ClickBank",
+    "commission": "Varies by product (typically 40-75%)",
+    "approval_time_days": 1,
+    "cookie_window_days": 60,
+    "payout_methods": ["Direct Deposit", "Check", "Wire", "Payoneer"],
+    "required_fields": [
+      "email",
+      "full_name",
+      "address",
+      "phone",
+      "tax_id",
+      "paypal_email"
+    ],
+    "notes": "Instant account creation — affiliate access is automatic. You'll need tax info (W-9 for US) before first payout. Massive marketplace of health/wellness/fitness products — directly relevant to the menopause + fitover35 brands."
+  }
+}
