@@ -1,6 +1,10 @@
 # Local tooling worktrees (Claire / Claude worktrees scratch space)
 .claire/
 
+# URL converter operational output (regenerated every dry-run)
+scripts/unconvertable_urls.txt
+scripts/conversion_report_*.md
+
 # Python
 __pycache__/
 *.py[cod]
