@@ -1,0 +1,202 @@
+name: Daily Revenue Digest
+
+on:
+  schedule:
+    - cron: '0 13 * * *'  # 13:00 UTC daily (after analytics-collector at 23:00 UTC prior day)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  build-digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install requests supabase google-analytics-data google-auth || true
+
+      - name: Build revenue digest
+        env:
+          GUMROAD_ACCESS_TOKEN: ${{ secrets.GUMROAD_ACCESS_TOKEN }}
+          GA4_SERVICE_ACCOUNT_KEY: ${{ secrets.GA4_SERVICE_ACCOUNT_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python3 << 'PYEOF'
+          import os
+          import json
+          import sys
+          import tempfile
+          import urllib.request
+          import urllib.error
+          from datetime import datetime, timezone, timedelta
+
+          today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+          yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime('%Y-%m-%d')
+
+          os.makedirs('monitoring', exist_ok=True)
+          out_path = f'monitoring/revenue-digest-{today}.md'
+
+          lines = []
+          lines.append(f'# Daily Revenue Digest — {today}')
+          lines.append('')
+          lines.append(f'_Generated at {datetime.now(timezone.utc).isoformat()}_')
+          lines.append('')
+
+          # ─────────────────────────────────────────────────────
+          # SECTION 1: Gumroad sales
+          # ─────────────────────────────────────────────────────
+          lines.append('## Gumroad Sales (last 24h)')
+          lines.append('')
+          gumroad_token = os.environ.get('GUMROAD_ACCESS_TOKEN', '').strip()
+          if not gumroad_token:
+              lines.append('_Skipped — `GUMROAD_ACCESS_TOKEN` secret not set._')
+          else:
+              try:
+                  url = f'https://api.gumroad.com/v2/sales?access_token={gumroad_token}&after={yesterday}'
+                  req = urllib.request.Request(url, method='GET')
+                  with urllib.request.urlopen(req, timeout=30) as resp:
+                      data = json.loads(resp.read().decode('utf-8'))
+                  sales = data.get('sales', []) or []
+                  total_cents = sum(int(s.get('price', 0) or 0) for s in sales)
+                  lines.append(f'- **Sales count**: {len(sales)}')
+                  lines.append(f'- **Revenue**: ${total_cents / 100:.2f}')
+                  if sales:
+                      lines.append('')
+                      lines.append('| Product | Amount | Buyer |')
+                      lines.append('|---------|--------|-------|')
+                      for s in sales[:20]:
+                          pname = str(s.get('product_name', '')).replace('|', '/')[:50]
+                          amt = int(s.get('price', 0) or 0) / 100
+                          buyer = str(s.get('email', '')).replace('|', '/')[:40]
+                          lines.append(f'| {pname} | ${amt:.2f} | {buyer} |')
+              except urllib.error.HTTPError as e:
+                  lines.append(f'_Gumroad API error: HTTP {e.code}_')
+              except Exception as e:
+                  lines.append(f'_Gumroad API error: {e}_')
+          lines.append('')
+
+          # ─────────────────────────────────────────────────────
+          # SECTION 2: GA4 pageviews per brand
+          # ─────────────────────────────────────────────────────
+          lines.append('## GA4 Pageviews (last 24h)')
+          lines.append('')
+          ga4_key = os.environ.get('GA4_SERVICE_ACCOUNT_KEY', '').strip()
+          BRAND_GA4 = {
+              'fitover35':       'G-1FC6FH34L9',
+              'dailydealdarling':'G-HVCLZPEYNS',
+              'menopause':       'G-02ZPS3H3GC',
+          }
+          if not ga4_key:
+              lines.append('_Skipped — `GA4_SERVICE_ACCOUNT_KEY` secret not set._')
+          else:
+              try:
+                  # Write key to a temp file for google-auth
+                  key_json = json.loads(ga4_key) if ga4_key.strip().startswith('{') else {}
+                  with tempfile.NamedTemporaryFile('w', suffix='.json', delete=False) as f:
+                      json.dump(key_json, f)
+                      key_path = f.name
+                  os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = key_path
+
+                  try:
+                      from google.analytics.data_v1beta import BetaAnalyticsDataClient
+                      from google.analytics.data_v1beta.types import (
+                          DateRange, Metric, RunReportRequest,
+                      )
+                      client = BetaAnalyticsDataClient()
+                      lines.append('| Brand | Measurement ID | Pageviews |')
+                      lines.append('|-------|----------------|-----------|')
+                      for brand, mid in BRAND_GA4.items():
+                          # GA4 API uses numeric property IDs, not measurement IDs.
+                          # We surface the measurement ID only — actual property-id lookup
+                          # requires GA4_PROPERTY_ID_<BRAND> secrets not yet configured.
+                          # Placeholder row until property IDs provided.
+                          lines.append(f'| {brand} | {mid} | _property id needed_ |')
+                  except ImportError:
+                      lines.append('_Skipped — google-analytics-data SDK not installed._')
+                  except Exception as e:
+                      lines.append(f'_GA4 query error: {e}_')
+              except json.JSONDecodeError:
+                  lines.append('_Skipped — GA4_SERVICE_ACCOUNT_KEY is not valid JSON._')
+              except Exception as e:
+                  lines.append(f'_GA4 setup error: {e}_')
+          lines.append('')
+
+          # ─────────────────────────────────────────────────────
+          # SECTION 3: Supabase activity counts
+          # ─────────────────────────────────────────────────────
+          lines.append('## Supabase Activity (last 24h)')
+          lines.append('')
+          sb_url = os.environ.get('SUPABASE_URL', '').strip()
+          sb_key = os.environ.get('SUPABASE_KEY', '').strip()
+          if not sb_url or not sb_key:
+              lines.append('_Skipped — SUPABASE_URL or SUPABASE_KEY not set._')
+          else:
+              cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+              headers = {
+                  'apikey': sb_key,
+                  'Authorization': f'Bearer {sb_key}',
+                  'Prefer': 'count=exact',
+              }
+              def _count(table, filter_qs=''):
+                  q_url = f'{sb_url}/rest/v1/{table}?select=id&created_at=gte.{cutoff}'
+                  if filter_qs:
+                      q_url += f'&{filter_qs}'
+                  try:
+                      req = urllib.request.Request(q_url, headers={**headers, 'Range': '0-0'}, method='GET')
+                      with urllib.request.urlopen(req, timeout=15) as resp:
+                          cr = resp.headers.get('Content-Range', '')
+                          # Format: "0-0/TOTAL" or "*/TOTAL"
+                          if '/' in cr:
+                              return int(cr.rsplit('/', 1)[-1])
+                          return 0
+                  except Exception as e:
+                      return f'error: {e}'
+
+              ch_count = _count('content_history')
+              err_count = _count('errors')
+              err_high = _count('errors', 'severity=in.(high,critical)')
+              lines.append(f'- **content_history** rows (24h): {ch_count}')
+              lines.append(f'- **errors** rows (24h): {err_count}')
+              lines.append(f'- **errors** high/critical (24h): {err_high}')
+          lines.append('')
+
+          lines.append('---')
+          lines.append(f'_Digest generated by `.github/workflows/daily-revenue-digest.yml`_')
+
+          with open(out_path, 'w') as f:
+              f.write('\n'.join(lines) + '\n')
+          print(f'Wrote digest to {out_path}')
+          PYEOF
+
+      - name: Commit digest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add monitoring/revenue-digest-*.md
+          if git diff --staged --quiet; then
+            echo "No digest changes to commit"
+          else
+            git commit -m "monitoring: daily revenue digest $(date -u +%Y-%m-%d)"
+            for i in 1 2 3; do
+              git push && break || { echo "push attempt $i failed"; sleep 5; }
+            done
+          fi

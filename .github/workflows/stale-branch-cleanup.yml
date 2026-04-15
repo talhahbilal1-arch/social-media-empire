@@ -1,0 +1,117 @@
+name: Stale Branch Cleanup
+
+on:
+  schedule:
+    - cron: '0 9 * * 0'  # Sunday 09:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (list only, no deletion)'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Identify and delete stale claude/* branches
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
+          IS_SCHEDULE: ${{ github.event_name == 'schedule' }}
+        run: |
+          set -euo pipefail
+          # Scheduled runs default to real delete; manual runs honor dry_run input.
+          if [ "$IS_SCHEDULE" = "true" ]; then
+            DRY_RUN="false"
+          fi
+          echo "=== Stale Branch Cleanup ==="
+          echo "Dry run: $DRY_RUN"
+          echo ""
+
+          git fetch --all --prune
+
+          NOW=$(date +%s)
+          THIRTY_DAYS=$((30 * 24 * 60 * 60))
+
+          # Collect merged branches into main
+          MERGED=$(git branch -r --merged origin/main 2>/dev/null \
+            | sed 's#^ *origin/##' \
+            | grep -E '^claude/' || true)
+
+          # Collect all claude/* remote branches
+          ALL_CLAUDE=$(git branch -r 2>/dev/null \
+            | sed 's#^ *origin/##' \
+            | grep -E '^claude/' || true)
+
+          TO_DELETE=""
+          REASONS_FILE=$(mktemp)
+
+          for branch in $ALL_CLAUDE; do
+            # Skip HEAD/origin references
+            case "$branch" in
+              HEAD|*\ ->*) continue;;
+            esac
+            merged=false
+            stale=false
+            for m in $MERGED; do
+              if [ "$m" = "$branch" ]; then merged=true; break; fi
+            done
+            tip=$(git log -1 --format=%ct "origin/$branch" 2>/dev/null || echo "0")
+            if [ "$tip" -gt 0 ]; then
+              age=$((NOW - tip))
+              if [ "$age" -gt "$THIRTY_DAYS" ]; then stale=true; fi
+            fi
+            if [ "$merged" = "true" ] || [ "$stale" = "true" ]; then
+              reason=""
+              [ "$merged" = "true" ] && reason="${reason}merged "
+              [ "$stale"  = "true" ] && reason="${reason}stale(>30d)"
+              echo "  $branch — $reason"
+              echo "$branch $reason" >> "$REASONS_FILE"
+              TO_DELETE="$TO_DELETE $branch"
+            fi
+          done
+
+          COUNT=$(echo "$TO_DELETE" | wc -w)
+          echo ""
+          echo "=== Summary ==="
+          echo "Total claude/* branches: $(echo "$ALL_CLAUDE" | wc -w)"
+          echo "Candidates for deletion: $COUNT"
+          echo ""
+
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN — no branches deleted. To actually delete, re-run with dry_run=false."
+            exit 0
+          fi
+
+          DELETED=0
+          FAILED=0
+          for branch in $TO_DELETE; do
+            # Never delete main or any protected branch
+            case "$branch" in
+              main|master|develop) echo "  SKIP protected: $branch"; continue;;
+            esac
+            echo "  Deleting origin/$branch ..."
+            if git push origin --delete "$branch" 2>&1; then
+              DELETED=$((DELETED + 1))
+            else
+              echo "    FAILED to delete $branch"
+              FAILED=$((FAILED + 1))
+            fi
+          done
+
+          echo ""
+          echo "=== Result ==="
+          echo "Deleted: $DELETED"
+          echo "Failed:  $FAILED"
