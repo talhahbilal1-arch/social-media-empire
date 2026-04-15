@@ -1033,5 +1033,32 @@
     "board": "AI Writing Tools",
     "posted_at": "2026-04-15T17:15:01.277Z",
     "success": true
+  },
+  {
+    "slug": "canva",
+    "pin_type": "tool-review",
+    "title": "Canva Review: Is It Worth It? (4.7/5 Rating!)",
+    "link": "https://pilottools.ai/tools/canva/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-04-15T22:32:41.056Z",
+    "success": true
+  },
+  {
+    "slug": "elevenlabs-vs-murf",
+    "pin_type": "comparison",
+    "title": "ElevenLabs vs Murf AI: Which Voice AI Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/elevenlabs-vs-murf/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-15T22:32:45.306Z",
+    "success": true
+  },
+  {
+    "slug": "tome",
+    "pin_type": "tool-review",
+    "title": "Tome AI: Boost Productivity or Overhyped Hype?",
+    "link": "https://pilottools.ai/tools/tome/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-15T22:32:49.527Z",
+    "success": true
   }
 ]
