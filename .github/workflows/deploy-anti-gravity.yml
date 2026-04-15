@@ -1,0 +1,70 @@
+name: Deploy Anti-Gravity Site
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'deploy' to confirm"
+        required: false
+        default: "deploy"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Install site dependencies
+        working-directory: anti_gravity/site
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Deploy to Vercel (production)
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_BRAND_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_ANTI_GRAVITY_PROJECT_ID }}
+          SKIP_INSTALL_PROMPT: "1"
+        run: |
+          set -euo pipefail
+          bash scripts/deploy_anti_gravity.sh | tee deploy-output.log
+          URL="$(grep -Eo 'https://[A-Za-z0-9._-]+\.vercel\.app' deploy-output.log | tail -n 1 || true)"
+          if [ -z "${URL}" ] && [ -f anti_gravity/DEPLOYED_URL.txt ]; then
+            URL="$(cat anti_gravity/DEPLOYED_URL.txt)"
+          fi
+          echo "deploy_url=${URL}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload deploy URL artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: anti-gravity-deploy-url
+          path: anti_gravity/DEPLOYED_URL.txt
+          if-no-files-found: ignore
+
+      - name: Write deploy summary
+        if: always()
+        run: |
+          {
+            echo "## Anti-Gravity deploy"
+            if [ -n "${{ steps.deploy.outputs.deploy_url }}" ]; then
+              echo ""
+              echo "Deployed URL: ${{ steps.deploy.outputs.deploy_url }}"
+              echo ""
+              echo "- Update GA4 ID in \`anti_gravity/site/app/layout.tsx\`"
+              echo "- Update \`anti_gravity/site/public/sitemap.xml\` once custom domain is attached"
+              echo "- Attach custom domain via Vercel dashboard"
+            else
+              echo ""
+              echo "Deploy URL could not be parsed. Check the deploy job logs."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
