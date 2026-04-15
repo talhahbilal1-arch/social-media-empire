@@ -1,0 +1,60 @@
+{
+  "baseUrl": "https://promptbase.com",
+  "defaults": {
+    "category": "Money",
+    "price": 25,
+    "model": "GPT-4",
+    "visibility": "draft"
+  },
+  "prompts": [
+    {
+      "slug": "freelancer-ai-toolkit",
+      "title": "Freelancer AI Toolkit — 30 Prompts to Land, Scope, and Deliver Client Work",
+      "description": "A tight library of 30 battle-tested prompts that help freelancers write proposals that win, scope projects without leaving money on the table, respond to scope-creep emails diplomatically, and produce deliverables 3x faster. Covers cold outreach, discovery calls, SOW drafting, revision loops, and invoicing follow-ups. Each prompt includes variable placeholders and a one-line usage note so you can plug them into ChatGPT, Claude, or Gemini without prompt engineering experience. Built for solopreneurs who bill by the project and want their non-billable hours back.",
+      "example_prompt": "See pack for full prompts.",
+      "price": 25
+    },
+    {
+      "slug": "ai-content-machine",
+      "title": "AI Content Machine — End-to-End Content Production Prompt Stack",
+      "description": "A 30-prompt system that turns a single topic into a week of publishable content: blog post outlines, long-form drafts, Twitter threads, LinkedIn carousels, YouTube scripts, and Pinterest pin copy. Prompts chain together so output from one step feeds the next, eliminating blank-page paralysis. Includes SEO-friendly title generators, hook-writers, and CTA frameworks. Works out-of-the-box with ChatGPT, Claude, and Gemini. Ideal for solo creators, ghostwriters, and small agencies who need to scale volume without sacrificing voice.",
+      "example_prompt": "See pack for full prompts.",
+      "price": 25
+    },
+    {
+      "slug": "digital-product-launch-system",
+      "title": "Digital Product Launch System — Prompt Pack for Zero-to-Launch in 14 Days",
+      "description": "Everything you need to research, validate, price, package, and launch a digital product without an audience. 30 prompts covering niche selection, competitor teardown, landing page copy, sales email sequences, launch-day social posts, and affiliate partner outreach. Designed around the 14-day sprint framework so each prompt maps to a specific day. Includes bonus refund-handling and post-launch survey prompts. Works for ebooks, Notion templates, prompt packs themselves, and micro-courses.",
+      "example_prompt": "See pack for full prompts.",
+      "price": 25
+    },
+    {
+      "slug": "ai-copywriter",
+      "title": "AI Copywriter — 30 High-Converting Prompts for Sales and Marketing Copy",
+      "description": "A direct-response copywriting toolkit built around proven frameworks: PAS, AIDA, 4Ps, QUEST, and BAB. 30 prompts cover headlines, hero sections, feature-to-benefit rewrites, cold emails, VSL scripts, abandoned-cart flows, and upsell pages. Each prompt forces the AI to name the avatar, the pain, and the desired action — so the output doesn't read like generic AI slop. Includes a prompt for rewriting your existing copy with a specific swipe-file voice. Ships with guardrails so the model avoids hype and false claims.",
+      "example_prompt": "See pack for full prompts.",
+      "price": 25
+    },
+    {
+      "slug": "side-hustle-finder",
+      "title": "Side Hustle Finder — Prompts to Match Your Skills to Profitable Side Income",
+      "description": "A 25-prompt discovery system that audits your skills, time budget, risk tolerance, and capital, then suggests specific side hustles with realistic ramp-up timelines and income ceilings. Prompts go beyond generic lists — they force the AI to consider your city, your weekly hours, and which platforms you already have traction on. Includes validation prompts (TAM, CAC, break-even) and a first-90-days action plan generator. Great for W2 employees exploring exit ramps without quitting.",
+      "example_prompt": "See pack for full prompts.",
+      "price": 25
+    },
+    {
+      "slug": "etsy-ecommerce-assistant",
+      "title": "Etsy Ecommerce Assistant — SEO, Listings, and Customer Service Prompts",
+      "description": "30 prompts tuned to the Etsy algorithm and buyer psychology. Covers keyword research, title optimization (140-char limit aware), tag stacking, listing descriptions that convert, photo alt text, policy pages, FAQ auto-responders, and review-response templates. Also includes bundle/upsell prompts and a seasonal-calendar content planner. Written for handmade sellers, print-on-demand shops, and digital download sellers who want Etsy-native output instead of generic ecommerce copy.",
+      "example_prompt": "See pack for full prompts.",
+      "price": 25
+    },
+    {
+      "slug": "ai-business-automation-playbook",
+      "title": "AI Business Automation Playbook — 30 Prompts to Replace Manual Operations",
+      "description": "A systems-thinking prompt pack that maps recurring business tasks to AI-assisted workflows. 30 prompts span inbox triage, meeting notes to action items, proposal generation, pipeline reviews, SOP drafting, KPI dashboard narratives, and end-of-week retrospectives. Each prompt is engineered to be callable as a Zapier/Make.com webhook payload, so you can move from manual ChatGPT use to fully automated runs. Comes with a 'context loading' prompt that lets the model reuse brand voice across every other prompt in the pack.",
+      "example_prompt": "See pack for full prompts.",
+      "price": 25
+    }
+  ]
+}

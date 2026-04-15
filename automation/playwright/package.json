@@ -1,0 +1,17 @@
+{
+  "name": "social-media-empire-playwright",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Playwright automation for Gumroad ZIP uploads and PromptBase listings.",
+  "scripts": {
+    "install-browsers": "playwright install chromium",
+    "gumroad": "node gumroad-zip-uploader.js",
+    "gumroad:dry": "node gumroad-zip-uploader.js --dry-run",
+    "promptbase": "node promptbase-lister.js",
+    "promptbase:dry": "node promptbase-lister.js --dry-run"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}

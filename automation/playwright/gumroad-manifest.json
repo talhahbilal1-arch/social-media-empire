@@ -1,0 +1,45 @@
+{
+  "baseUrl": "https://gumroad.com",
+  "products": [
+    {
+      "slug": "freelancer-ai-toolkit",
+      "title": "Freelancer AI Toolkit",
+      "zip": "../../prompt-packs/products/freelancer-ai-toolkit.zip"
+    },
+    {
+      "slug": "ai-content-machine",
+      "title": "AI Content Machine",
+      "zip": "../../prompt-packs/products/ai-content-machine.zip"
+    },
+    {
+      "slug": "digital-product-launch-system",
+      "title": "Digital Product Launch System",
+      "zip": "../../prompt-packs/products/digital-product-launch-system.zip"
+    },
+    {
+      "slug": "ai-copywriter",
+      "title": "AI Copywriter",
+      "zip": "../../prompt-packs/products/ai-copywriter.zip"
+    },
+    {
+      "slug": "side-hustle-finder",
+      "title": "Side Hustle Finder",
+      "zip": "../../prompt-packs/products/side-hustle-finder.zip"
+    },
+    {
+      "slug": "etsy-ecommerce-assistant",
+      "title": "Etsy Ecommerce Assistant",
+      "zip": "../../prompt-packs/products/etsy-ecommerce-assistant.zip"
+    },
+    {
+      "slug": "ai-business-automation-playbook",
+      "title": "AI Business Automation Playbook",
+      "zip": "../../prompt-packs/products/ai-business-automation-playbook.zip"
+    },
+    {
+      "slug": "ai-money-maker-mega-bundle",
+      "title": "AI Money Maker Mega Bundle",
+      "zip": "../../prompt-packs/ai-money-maker-mega-bundle.zip"
+    }
+  ]
+}
