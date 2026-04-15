@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14",
+  "last_updated": "2026-04-15",
   "items": [
     {
       "id": 1,
@@ -1700,28 +1700,31 @@
       "id": 207,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-hr-managers",
       "keyword": "best ai tools for hr managers",
-      "title": "Best AI Tools for Hr Managers 2026"
+      "title": "Best AI Tools for Hr Managers 2026",
+      "published_date": "2026-04-15"
     },
     {
       "id": 208,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-project-managers",
       "keyword": "best ai tools for project managers",
-      "title": "Best AI Tools for Project Managers 2026"
+      "title": "Best AI Tools for Project Managers 2026",
+      "published_date": "2026-04-15"
     },
     {
       "id": 209,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-ux-designers",
       "keyword": "best ai tools for ux designers",
-      "title": "Best AI Tools for Ux Designers 2026"
+      "title": "Best AI Tools for Ux Designers 2026",
+      "published_date": "2026-04-15"
     },
     {
       "id": 210,
