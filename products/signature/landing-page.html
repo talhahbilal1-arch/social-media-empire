@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The FitOver35 Body Recomposition Blueprint — Build Muscle, Burn Fat, Protect Joints After 35</title>
+<meta name="description" content="The 12-week body recomposition system for men 35-55. Build muscle, burn fat, protect joints — on 3-5 hours a week. Instant PDF download, $97.">
+<meta property="og:title" content="The FitOver35 Body Recomposition Blueprint">
+<meta property="og:description" content="Build muscle, burn fat, protect joints — all after 35, in 12 weeks.">
+<meta property="og:type" content="product">
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1FC6FH34L9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-1FC6FH34L9');
+</script>
+
+<style>
+  :root {
+    --brass: #b8964e;
+    --brass-light: #d4b978;
+    --brass-dark: #96793d;
+    --obsidian: #111014;
+    --obsidian-light: #1a181e;
+    --obsidian-mid: #242228;
+    --ivory: #f5f0e8;
+    --cream: #faf8f4;
+    --gray-600: #6b6976;
+    --gray-300: #c5c3cc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--obsidian);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  .hero {
+    background: var(--obsidian);
+    color: var(--ivory);
+    padding: 96px 0 80px;
+    text-align: center;
+    border-bottom: 1px solid var(--brass-dark);
+  }
+  .hero .eyebrow {
+    color: var(--brass);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    margin-bottom: 24px;
+    color: var(--ivory);
+  }
+  .hero .subhead {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--gray-300);
+    max-width: 680px;
+    margin: 0 auto 40px;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--brass);
+    color: var(--obsidian);
+    font-weight: 600;
+    font-size: 17px;
+    padding: 18px 40px;
+    text-decoration: none;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .cta-btn:hover { background: var(--brass-light); transform: translateY(-1px); }
+  .cta-subtext { display: block; margin-top: 14px; font-size: 13px; color: var(--gray-300); }
+
+  /* Sections */
+  section { padding: 80px 0; }
+  section h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  section .lede {
+    text-align: center;
+    color: var(--gray-600);
+    max-width: 680px;
+    margin: 0 auto 56px;
+    font-size: 17px;
+  }
+
+  /* Trust bar */
+  .trust-bar {
+    background: var(--ivory);
+    padding: 32px 0;
+    text-align: center;
+    border-top: 1px solid rgba(17,16,20,0.06);
+    border-bottom: 1px solid rgba(17,16,20,0.06);
+  }
+  .trust-bar p {
+    color: var(--gray-600);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .trust-logos {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .logo-placeholder {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 22px;
+    color: var(--obsidian);
+    opacity: 0.4;
+  }
+
+  /* Problem */
+  .problem { background: var(--cream); }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+    margin-top: 40px;
+  }
+  .problem-card {
+    background: white;
+    padding: 32px;
+    border-left: 3px solid var(--brass);
+    border-radius: 4px;
+  }
+  .problem-card h3 { font-size: 22px; margin-bottom: 12px; }
+  .problem-card p { color: var(--gray-600); font-size: 15px; }
+
+  /* Solution pillars */
+  .solution { background: var(--obsidian); color: var(--ivory); }
+  .solution h2 { color: var(--ivory); }
+  .solution .lede { color: var(--gray-300); }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .pillar {
+    text-align: center;
+    padding: 32px 20px;
+    border: 1px solid var(--obsidian-mid);
+    border-radius: 6px;
+    background: var(--obsidian-light);
+  }
+  .pillar .num {
+    display: inline-block;
+    width: 44px; height: 44px; line-height: 44px;
+    border: 2px solid var(--brass);
+    color: var(--brass);
+    border-radius: 50%;
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  .pillar h3 { font-size: 18px; color: var(--ivory); margin-bottom: 8px; }
+  .pillar p { font-size: 14px; color: var(--gray-300); }
+
+  /* Inside */
+  .inside { background: var(--cream); }
+  .inside-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .inside-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border-radius: 6px;
+  }
+  .icon {
+    flex-shrink: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--brass);
+    position: relative;
+  }
+  .icon::before {
+    content: '';
+    position: absolute;
+    width: 12px; height: 6px;
+    border: solid var(--obsidian);
+    border-width: 0 0 2px 2px;
+    transform: rotate(-45deg);
+    top: 14px; left: 13px;
+  }
+  .inside-item h4 { font-size: 16px; margin-bottom: 4px; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+  .inside-item p { font-size: 14px; color: var(--gray-600); }
+
+  /* Guarantee */
+  .guarantee {
+    background: var(--ivory);
+    text-align: center;
+  }
+  .guarantee-seal {
+    display: inline-block;
+    padding: 12px 28px;
+    border: 2px solid var(--brass);
+    color: var(--brass-dark);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    border-radius: 999px;
+  }
+  .guarantee p {
+    max-width: 620px;
+    margin: 0 auto 16px;
+    font-size: 17px;
+  }
+
+  /* FAQ */
+  .faq { background: var(--cream); }
+  .faq-item {
+    max-width: 760px;
+    margin: 0 auto 16px;
+    background: white;
+    padding: 24px 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(17,16,20,0.06);
+  }
+  .faq-item h3 { font-size: 18px; margin-bottom: 8px; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+  .faq-item p { font-size: 15px; color: var(--gray-600); }
+
+  /* Final CTA */
+  .final-cta {
+    background: var(--obsidian);
+    color: var(--ivory);
+    text-align: center;
+  }
+  .final-cta h2 { color: var(--ivory); }
+  .final-cta .price {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 56px;
+    color: var(--brass);
+    margin: 16px 0;
+  }
+  .final-cta .price small {
+    display: block;
+    font-size: 14px;
+    color: var(--gray-300);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* Kit exit-intent form */
+  .kit-capture {
+    background: var(--ivory);
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid rgba(17,16,20,0.06);
+  }
+  .kit-capture p { color: var(--gray-600); margin-bottom: 16px; }
+  /* Kit form embed placeholder — replaced by actual Kit script at deploy */
+  .kit-form-placeholder {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px;
+    border: 1px dashed var(--brass);
+    border-radius: 6px;
+    color: var(--brass-dark);
+    font-size: 13px;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--obsidian);
+    color: var(--gray-600);
+    padding: 32px 0;
+    text-align: center;
+    font-size: 13px;
+    border-top: 1px solid var(--obsidian-mid);
+  }
+  footer a { color: var(--brass); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    section { padding: 56px 0; }
+    .hero { padding: 64px 0 56px; }
+    .trust-logos { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">FitOver35.com Presents</div>
+    <h1>The Body Recomposition Blueprint</h1>
+    <p class="subhead">Build muscle, burn fat, protect joints — all after 35, in 12 weeks. On 3-5 hours a week.</p>
+    <a href="https://talhahbilal.gumroad.com/l/fitover35-blueprint" class="cta-btn" data-event="hero_cta">Get The Blueprint — $97</a>
+    <span class="cta-subtext">Instant PDF download. 60-day unconditional refund.</span>
+  </div>
+</section>
+
+<!-- Trust bar -->
+<div class="trust-bar">
+  <div class="container">
+    <p>Mentioned by 1,000+ men over 35 across our Pinterest network</p>
+    <div class="trust-logos">
+      <span class="logo-placeholder">As Seen On</span>
+      <span class="logo-placeholder">Pinterest</span>
+      <span class="logo-placeholder">Reddit r/Fitness30plus</span>
+    </div>
+  </div>
+</div>
+
+<!-- Problem -->
+<section class="problem">
+  <div class="container">
+    <h2>Every Program You've Tried Was Built For Someone Else</h2>
+    <p class="lede">Generic fitness programs break men over 35 for three specific reasons. Every one of them is fixable — but only if the program admits they exist.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <h3>Volume assumptions</h3>
+        <p>Five days a week, two-hour sessions. You have a job, kids, a spouse. The math doesn't work and you burn out by week 4.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Recovery assumptions</h3>
+        <p>Young lifters recover from a heavy day in 48 hours. You need 72-96. The program doesn't account for it and you spiral into overtraining.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Injury assumptions</h3>
+        <p>Hip mobility, shoulder impingement, cranky lower back. The 22-year-old program assumes you don't have any of these. You do. By week 10, you're hurt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Solution / pillars -->
+<section class="solution">
+  <div class="container">
+    <h2>The Five Pillars Of The Blueprint</h2>
+    <p class="lede">Every protocol is explicit. Sets, reps, grams, hours. No hand-waving, no mindset fluff.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="num">1</div>
+        <h3>Progressive Training</h3>
+        <p>Three phases: Rebuild, Grow, Cut. 3-5 day variants.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">2</div>
+        <h3>Macro Precision</h3>
+        <p>Auto-adjusting spreadsheet, weekly weigh-in based.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">3</div>
+        <h3>Joint Protection</h3>
+        <p>Injury-risk screen plus 10-min daily mobility.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">4</div>
+        <h3>Sleep &amp; Recovery</h3>
+        <p>Wearable-agnostic protocol anyone can follow.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">5</div>
+        <h3>Plateau Protocols</h3>
+        <p>Troubleshooting flowchart for when progress stalls.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- What's inside -->
+<section class="inside">
+  <div class="container">
+    <h2>What You Get</h2>
+    <p class="lede">Ten core deliverables plus three fast-action bonuses. All digital, all downloadable, all yours for life.</p>
+    <div class="inside-grid">
+      <div class="inside-item"><div class="icon"></div><div><h4>12-Week Training Program</h4><p>Three phases with 3, 4, and 5 day variants.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Macro Calculator</h4><p>Spreadsheet auto-adjusts on your weekly weigh-in.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Supplement Decision Tree</h4><p>What's worth the money, what's marketing.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Sleep &amp; Recovery Protocol</h4><p>No wearable required. Just the rules that work.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Daily Mobility Routine</h4><p>10 minutes. Hips, shoulders, thoracic.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Injury-Risk Screen</h4><p>5 bodyweight tests, pass/fail scoring.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>30 High-Protein Recipes</h4><p>All under 20 minutes to prepare.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Progress Tracker</h4><p>Weekly template: lifts, weight, waist, photos.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Troubleshooting Flowchart</h4><p>Exactly what to adjust when progress stalls.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Deload &amp; Travel Protocols</h4><p>Keep your gains through vacations and work trips.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Bonus: Private Discord</h4><p>Verified buyers only. Direct author access.</p></div></div>
+      <div class="inside-item"><div class="icon"></div><div><h4>Bonus: Quarterly Q&amp;A Library</h4><p>Rolling archive, updated every quarter.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Guarantee -->
+<section class="guarantee">
+  <div class="container">
+    <div class="guarantee-seal">60-Day Unconditional Refund</div>
+    <h2>If It Doesn't Work, You Don't Pay</h2>
+    <p>Try the Blueprint for 60 days. If you don't see visible progress — or you just don't like it for any reason — email me and I'll refund you in full. No forms, no questions.</p>
+    <p><strong>Second guarantee:</strong> I'll personally answer any training question you have while you're working the program. Reply to your purchase receipt. I read every one.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <h2>Questions Men Over 35 Actually Ask</h2>
+    <p class="lede">If your question isn't here, email <a href="mailto:support@fitover35.com">support@fitover35.com</a>.</p>
+    <div class="faq-item"><h3>I haven't trained seriously in 2+ years. Will this work?</h3><p>Yes. Phase 1 (Rebuild) is specifically for you. You won't be thrown into a heavy barbell program on day one.</p></div>
+    <div class="faq-item"><h3>I only have 3 hours a week. Is that enough?</h3><p>Yes. The program has 3, 4, and 5 day variants. The 3-day variant is the default for busy professionals.</p></div>
+    <div class="faq-item"><h3>Do I need a gym, or can I do this at home?</h3><p>Gym strongly preferred for the barbell work. Home-gym variants (adjustable dumbbells + bench + pull-up bar) are included.</p></div>
+    <div class="faq-item"><h3>Do I need supplements?</h3><p>No. The supplement decision tree tells you what's actually worth buying and what's marketing. Most of it is marketing.</p></div>
+    <div class="faq-item"><h3>What if I have an existing injury?</h3><p>The injury-risk screen flags movement patterns to avoid. If you have a diagnosed injury, clear it with your physio first.</p></div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Start Monday. See Results By Week 6.</h2>
+    <div class="price">$97<small>One-time. Lifetime access.</small></div>
+    <a href="https://talhahbilal.gumroad.com/l/fitover35-blueprint" class="cta-btn" data-event="final_cta">Get The Blueprint Now</a>
+    <span class="cta-subtext">Instant PDF download. 60-day unconditional refund.</span>
+  </div>
+</section>
+
+<!-- Kit exit-intent email capture -->
+<section class="kit-capture">
+  <div class="container">
+    <p>Not ready yet? Get the free FitOver35 starter kit.</p>
+    <div class="kit-form-placeholder" data-kit-form-id="8946984">
+      Kit form embed placeholder — form ID 8946984 (fitover35). Replace this div with the Kit embed script at deploy time.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; FitOver35.com — <a href="/disclaimer.html">Disclaimer</a> &middot; <a href="/contact.html">Contact</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
