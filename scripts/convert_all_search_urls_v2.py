@@ -21,7 +21,10 @@ from urllib.parse import unquote_plus
 
 # Allow running from repo root or scripts/ dir
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from asin_dictionary import ASIN_DICT, TAGS  # noqa: E402
+try:
+    from asin_dictionary_extra import ALL_ASINS as ASIN_DICT, TAGS  # noqa: E402
+except ImportError:
+    from asin_dictionary import ASIN_DICT, TAGS  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
