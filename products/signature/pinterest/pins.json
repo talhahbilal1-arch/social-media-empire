@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "product": "FitOver35 Body Recomposition Blueprint",
+    "price": "$97 (PWYW floor $47)",
+    "landing_page": "https://fitover35.com/products/blueprint/",
+    "brand": "fitness",
+    "board_id_source": "video_automation/pinterest_boards.py — fitness / Workouts for Men Over 35",
+    "notes": "3 angles chosen to cover the buyer's three biggest objections: (1) it works at 40+, (2) you don't need 6 days/week, (3) recomposition is real."
+  },
+  "pins": [
+    {
+      "id": "blueprint_pin_01_big_stat",
+      "title": "Lost 22 Pounds at 41 Without Running a Single Mile",
+      "graphic_title": "22 LBS DOWN AT 41",
+      "description": "Body recomposition after 35 is real, and it does not require endless cardio. The Blueprint is the exact 12-week strength plan that took me from soft and stuck to lean and strong. Three lifts per week. No cardio. Real food, no shakes. If you have lifted before but stalled, this is the system. Tap to see the full plan and the first week free.\n\n#fitover35 #menshealth #musclebuilding #strengthtraining #fatlossafter35 #menover40 #bodyrecomposition #fitnessafter35",
+      "style": "big_stat",
+      "image_query": "muscular man over 40 lifting barbell home gym dramatic side lighting",
+      "link_url": "https://fitover35.com/products/blueprint/",
+      "board_id": "418834902785123337",
+      "brand": "fitness",
+      "topic": "body recomposition after 35",
+      "category": "fat_loss",
+      "tips": [
+        "22 lbs of fat lost without a single cardio session",
+        "Three full-body lifts per week, 45 minutes each",
+        "Protein target hit with real meals not shakes",
+        "Recovery weeks built in every fourth block",
+        "Joint friendly swaps for every heavy lift"
+      ]
+    },
+    {
+      "id": "blueprint_pin_02_numbered_list",
+      "title": "5 Lifts That Build Muscle After 40 (Most Guys Skip 3)",
+      "graphic_title": "5 Lifts That Work After 40",
+      "description": "Building muscle after 40 comes down to five lifts done well, not twenty done badly. These are the exact movements inside the Blueprint that put 9 pounds of lean mass on a 43-year-old desk worker in 12 weeks. Joint friendly variations included for every lift. Save this for your next session and tap for the full progression chart.\n\n#muscleafter35 #menover40 #fitover35 #strengthtraining #musclebuilding #bodyrecomposition #mensfitness #workoutover35",
+      "style": "numbered_list",
+      "image_query": "man over 40 deadlift barbell gym strong back muscle definition",
+      "link_url": "https://fitover35.com/products/blueprint/",
+      "board_id": "418834902785123337",
+      "brand": "fitness",
+      "topic": "best lifts for muscle after 40",
+      "category": "workouts",
+      "tips": [
+        "Trap bar deadlift for safer lower back loading",
+        "Incline dumbbell press for shoulder friendly chest",
+        "Goblet squat to relearn pattern before you load",
+        "Single arm row to fix decades of desk posture",
+        "Loaded carry to build the grip and core nobody trains"
+      ]
+    },
+    {
+      "id": "blueprint_pin_03_gradient",
+      "title": "The 3-Day Lifting Split for Busy Men Over 35",
+      "graphic_title": "3 Days. 45 Minutes. Real Results.",
+      "description": "If you cannot train six days a week and refuse to give up your weekends, this is for you. The Blueprint is built around three 45-minute sessions per week. No two-a-days, no fasted cardio, no nonsense. Designed for men with a job, a family, and 35+ years on the body. Tap for the full 12-week schedule and the recovery rules that make it work.\n\n#fitover35 #mensfitness #strengthtraining #busymendad #workoutover35 #menover40 #musclebuilding #bodyrecomposition",
+      "style": "gradient",
+      "image_query": "man over 35 mid lift barbell home gym focused intense single light",
+      "link_url": "https://fitover35.com/products/blueprint/",
+      "board_id": "418834902785123337",
+      "brand": "fitness",
+      "topic": "3 day lifting split for busy men over 35",
+      "category": "workouts",
+      "tips": [
+        "Three full body sessions per week, 45 minutes each",
+        "No fasted cardio required at any point",
+        "Built in deload every fourth week for recovery",
+        "Compound first, isolation last, no junk volume",
+        "Weekend off so you can actually live your life"
+      ]
+    }
+  ]
+}
