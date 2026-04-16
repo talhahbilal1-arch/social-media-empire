@@ -1087,5 +1087,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-16T17:23:41.172Z",
     "success": true
+  },
+  {
+    "slug": "murf-ai",
+    "pin_type": "tool-review",
+    "title": "Murf AI Review: Stunning AI Voiceovers Made Easy!",
+    "link": "https://pilottools.ai/tools/murf-ai/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-04-16T22:29:19.518Z",
+    "success": true
+  },
+  {
+    "slug": "heygen-vs-synthesia",
+    "pin_type": "comparison",
+    "title": "HeyGen vs Synthesia AI Video: Which Tool Wins?",
+    "link": "https://pilottools.ai/compare/heygen-vs-synthesia/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-16T22:29:23.419Z",
+    "success": true
+  },
+  {
+    "slug": "hostinger-ai",
+    "pin_type": "tool-review",
+    "title": "Hostinger AI Review: Boost Your Productivity! 🚀",
+    "link": "https://pilottools.ai/tools/hostinger-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-16T22:29:27.496Z",
+    "success": true
   }
 ]
