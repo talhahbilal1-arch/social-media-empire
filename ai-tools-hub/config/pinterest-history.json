@@ -1060,5 +1060,32 @@
     "board": "AI Productivity Tools",
     "posted_at": "2026-04-15T22:32:49.527Z",
     "success": true
+  },
+  {
+    "slug": "jasper-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Jasper vs ChatGPT: Which AI Tool Wins for Your Business?",
+    "link": "https://pilottools.ai/compare/jasper-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-16T17:23:32.845Z",
+    "success": true
+  },
+  {
+    "slug": "frase",
+    "pin_type": "tool-review",
+    "title": "Frase AI: Is it the SEO Content Tool You NEED? (4.5/5)",
+    "link": "https://pilottools.ai/tools/frase/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-16T17:23:36.917Z",
+    "success": true
+  },
+  {
+    "slug": "frase-vs-surfer-seo",
+    "pin_type": "comparison",
+    "title": "Frase vs Surfer SEO: Which AI Content Tool Wins?",
+    "link": "https://pilottools.ai/compare/frase-vs-surfer-seo/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-16T17:23:41.172Z",
+    "success": true
   }
 ]
