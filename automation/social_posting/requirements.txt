@@ -1,0 +1,6 @@
+# Isolated requirements for automation/social_posting/
+# Install with: pip install -r automation/social_posting/requirements.txt
+tweepy==4.14.0
+requests==2.31.0
+python-dotenv==1.0.0
+pydantic==2.12.5
