@@ -36,7 +36,7 @@ BRAND_SITE_DIRS = {
 
 BRAND_BASE_URLS = {
     'fitness': 'https://fitover35.com',
-    'deals': 'https://dailydealdarling.com',
+    'deals': 'https://www.dailydealdarling.com',
     'menopause': 'https://menopause-planner-website.vercel.app',
 }
 

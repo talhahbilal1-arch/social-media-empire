@@ -235,7 +235,7 @@ BRAND_SITE_CONFIG = {
     },
     "deals": {
         "site_name": "Daily Deal Darling",
-        "base_url": "https://dailydealdarling.com",
+        "base_url": "https://www.dailydealdarling.com",
         "output_dir": "outputs/dailydealdarling-website/articles",
         "primary_color": "#E91E63",
         "accent_color": "#C2185B",
