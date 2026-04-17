@@ -1114,5 +1114,32 @@
     "board": "AI Productivity Tools",
     "posted_at": "2026-04-16T22:29:27.496Z",
     "success": true
+  },
+  {
+    "slug": "neuronwriter",
+    "pin_type": "tool-review",
+    "title": "NeuronWriter Review: AI SEO Powerhouse (4.3/5)",
+    "link": "https://pilottools.ai/tools/neuronwriter/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-17T17:00:40.886Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-tools-small-business",
+    "pin_type": "article",
+    "title": "Top 10 AI Tools to Skyrocket Your Small Business in 2026!",
+    "link": "https://pilottools.ai/blog/best-ai-tools-small-business/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-17T17:00:44.913Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Grammarly vs ChatGPT: Which AI Writing Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/grammarly-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-17T17:00:48.990Z",
+    "success": true
   }
 ]
