@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — The Menopause Planner</title>
+  <meta name="description" content="Get in touch with The Menopause Planner. Questions, corrections, feedback, or partnership enquiries. We reply within 1–2 business days.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://menopauseplanner.netlify.app/contact.html">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --sage: #A5A58D; --rose: #DDBEA9; --cream: #FAF7F0; --deep-sage: #6B705C; --white: #FFFFFF; --text-dark: #3D3D3D; --text-light: #6B6B6B; --rose-light: #EDE0D4; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text-dark); background-color: var(--cream); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    a { color: var(--deep-sage); }
+    h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); color: var(--deep-sage); font-weight: 600; line-height: 1.3; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.2rem; color: var(--deep-sage); margin-top: 2rem; margin-bottom: 0.75rem; font-weight: 600; }
+    p { color: var(--text-light); margin-bottom: 1rem; }
+    .nav { background: var(--white); border-bottom: 1px solid var(--rose-light); padding: 0.85rem 0; position: sticky; top: 0; z-index: 100; }
+    .nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .nav-brand { font-size: 1.2rem; font-weight: 700; color: var(--deep-sage); display: flex; align-items: center; gap: 0.4rem; text-decoration: none; }
+    .nav-back { font-size: 0.95rem; color: var(--text-light); text-decoration: none; }
+    .container { width: 100%; max-width: 720px; margin: 0 auto; padding: 0 1.25rem; }
+    .content { padding: 3rem 0 4rem; }
+    .email-card { background: var(--rose-light); border-left: 4px solid var(--rose); padding: 1.25rem 1.5rem; border-radius: 6px; margin: 1.5rem 0; }
+    .email-card a { font-weight: 600; color: var(--deep-sage); }
+    form { display: flex; flex-direction: column; gap: 14px; margin-top: 1.5rem; }
+    label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: var(--deep-sage); font-size: 0.95rem; }
+    input, textarea, select { padding: 11px 14px; border: 1px solid var(--rose-light); border-radius: 6px; font: inherit; font-weight: 400; color: var(--text-dark); background: var(--white); }
+    input:focus, textarea:focus, select:focus { outline: 2px solid var(--rose); outline-offset: 1px; border-color: var(--rose); }
+    textarea { min-height: 140px; resize: vertical; }
+    button { padding: 13px 28px; background: var(--deep-sage); color: var(--white); border: 0; border-radius: 6px; font-weight: 600; font-size: 1rem; cursor: pointer; align-self: flex-start; transition: background 0.2s; }
+    button:hover { background: var(--sage); }
+    .response-note { font-size: 0.9rem; color: var(--sage); margin-top: 1.5rem; }
+    .medical-disclaimer { font-size: 0.85rem; color: var(--text-light); max-width: 720px; margin: 1rem auto; text-align: center; line-height: 1.5; padding: 0 1rem; }
+    .footer { background: var(--deep-sage); color: rgba(255,255,255,0.7); padding: 1.5rem 0; text-align: center; }
+    .footer p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+    .footer a { color: rgba(255,255,255,0.85); }
+  </style>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossorigin="anonymous"></script>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container" style="max-width:1100px">
+      <a href="/" class="nav-brand"><span>🌿</span> The Menopause Planner</a>
+      <a href="/" class="nav-back">&larr; Back to Home</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>Questions about articles, corrections, partnership enquiries, or just want to share what's working for you? We read every message personally and reply within 1–2 business days.</p>
+
+      <div class="email-card">
+        <p style="margin: 0;"><strong>Direct email:</strong> <a href="mailto:hello@menopauseplanner.com">hello@menopauseplanner.com</a></p>
+      </div>
+
+      <h2>Send us a message</h2>
+      <!-- TODO: replace REPLACE_WITH_FORMSPREE_ID with your Formspree form ID; sign up free at formspree.io. Until replaced, the mailto above handles all contact. -->
+      <form name="contact" method="POST" action="https://formspree.io/f/REPLACE_WITH_FORMSPREE_ID" data-netlify="true">
+        <label>
+          Name
+          <input type="text" name="name" required autocomplete="name">
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>
+          What's on your mind?
+          <select name="topic">
+            <option>General question</option>
+            <option>Article correction or feedback</option>
+            <option>Question about our planners</option>
+            <option>Partnership or collaboration</option>
+            <option>Press or media</option>
+            <option>Something else</option>
+          </select>
+        </label>
+        <label>
+          Message
+          <textarea name="message" required placeholder="Include any relevant details — we'd rather have context than not."></textarea>
+        </label>
+        <button type="submit">Send message</button>
+      </form>
+
+      <p class="response-note"><strong>Please note:</strong> We can't respond to individual medical questions — we're not medical practitioners. For anything clinical, please reach out to your healthcare provider or a certified menopause specialist. If you have a correction to an article or a question about content accuracy, we absolutely want to hear from you.</p>
+
+      <h2>Where your message goes</h2>
+      <p>Your message arrives in our editorial inbox. We reply from <strong>hello@menopauseplanner.com</strong>. We never share your email with third parties — see our <a href="/privacy.html">Privacy Policy</a> for full details.</p>
+    </div>
+  </main>
+
+  <p class="medical-disclaimer"><strong>Medical Disclaimer:</strong> Content on The Menopause Planner is for informational purposes only and is not medical advice. Always consult a qualified healthcare provider for decisions about your health.</p>
+
+  <footer class="footer">
+    <div class="container" style="max-width:1100px">
+      <p>&copy; 2026 The Menopause Planner. All rights reserved. | <a href="/">Home</a> | <a href="/privacy.html">Privacy</a> | <a href="/terms.html">Terms</a> | <a href="/about.html">About</a></p>
+    </div>
+  </footer>
+</body>
+</html>
