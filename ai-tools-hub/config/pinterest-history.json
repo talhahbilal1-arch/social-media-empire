@@ -1141,5 +1141,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-17T17:00:48.990Z",
     "success": true
+  },
+  {
+    "slug": "cursor-vs-github-copilot",
+    "pin_type": "comparison",
+    "title": "Cursor vs ChatGPT: AI Coding Showdown!",
+    "link": "https://pilottools.ai/compare/cursor-vs-github-copilot/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-17T22:27:25.918Z",
+    "success": true
+  },
+  {
+    "slug": "lumen5",
+    "pin_type": "tool-review",
+    "title": "Lumen5: AI Video Creation Made Easy (4.2/5)",
+    "link": "https://pilottools.ai/tools/lumen5/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-17T22:27:30.170Z",
+    "success": true
+  },
+  {
+    "slug": "semrush-vs-surfer-seo",
+    "pin_type": "comparison",
+    "title": "Semrush vs Surfer SEO: Which SEO Tool Wins?",
+    "link": "https://pilottools.ai/compare/semrush-vs-surfer-seo/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-17T22:27:34.389Z",
+    "success": true
   }
 ]
