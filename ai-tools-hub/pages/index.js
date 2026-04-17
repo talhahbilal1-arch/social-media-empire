@@ -6,8 +6,9 @@ import AdSlot from '../components/AdSlot'
 import HeroIllustration, { WaveDivider } from '../components/HeroIllustration'
 import Link from 'next/link'
 import { getAllTools, getAllCategories, getAllComparisons, getFeaturedTools } from '../lib/tools'
+import { getAllArticles, getReadingTime } from '../lib/articles'
 
-export default function Home({ featuredTools, categories, comparisons, totalTools, allTools }) {
+export default function Home({ featuredTools, categories, comparisons, totalTools, allTools, latestGuides }) {
   // Category icons mapping
   const CATEGORY_ICONS = {
     writing: '✍️', coding: '💻', image: '🎨', video: '🎬', marketing: '📈',
@@ -171,6 +172,41 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         </div>
       </section>
 
+      {/* Guides & Editorial — signals editorial depth beyond the tool directory */}
+      {latestGuides && latestGuides.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-dt mb-2">Guides &amp; Deep Dives</h2>
+              <p className="text-dt-muted max-w-2xl">
+                Long-form reviews, how-tos, and category explainers from the PilotTools editors — beyond the tool directory.
+              </p>
+            </div>
+            <Link href="/blog/" className="btn-secondary whitespace-nowrap">
+              View all guides &rarr;
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {latestGuides.map(article => (
+              <Link
+                key={article.slug}
+                href={`/blog/${article.slug}/`}
+                className="card hover:border-accent/30 flex flex-col"
+              >
+                <span className="badge-blue self-start mb-3">{article.category}</span>
+                <h3 className="font-bold text-dt mb-2 leading-snug">{article.title}</h3>
+                <p className="text-sm text-dt-muted line-clamp-3 mb-4">{article.excerpt}</p>
+                <div className="mt-auto flex items-center gap-3 text-xs text-dt-muted">
+                  <span>{article.author}</span>
+                  <span>·</span>
+                  <span>{article.readingTime}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Newsletter Signup */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <NewsletterSignup variant="banner" />
@@ -219,6 +255,14 @@ export async function getStaticProps() {
       comparisons: getAllComparisons(),
       totalTools: getAllTools().length,
       allTools: getAllTools().map(t => ({ slug: t.slug, name: t.name, category: t.category, tagline: t.tagline, rating: t.rating, best_for: t.best_for })),
+      latestGuides: getAllArticles().slice(0, 6).map(a => ({
+        slug: a.slug,
+        title: a.title || '',
+        excerpt: a.excerpt || a.meta_description || '',
+        category: a.category || 'Guide',
+        author: a.author || 'PilotTools Editors',
+        readingTime: getReadingTime(a.word_count || 0),
+      })),
     },
   }
 }
