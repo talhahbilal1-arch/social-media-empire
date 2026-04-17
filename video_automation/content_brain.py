@@ -355,7 +355,7 @@ Be conversational, relatable, and helpful.""",
             "#homeorganization", "#kitchengadgets", "#selfcare", "#worthbuying"
         ],
 
-        "destination_base_url": "https://dailydealdarling.com",
+        "destination_base_url": "https://www.dailydealdarling.com",
         "pinterest_boards": [
             "Home Organization Finds",
             "Kitchen Must-Haves",

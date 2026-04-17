@@ -310,7 +310,7 @@ jobs:
               # ── Phase 6: Website uptime ──
               print('\n=== Phase 6: Website Uptime ===')
               sites = {
-                  'dailydealdarling.com': 'https://dailydealdarling.com',
+                  'dailydealdarling.com': 'https://www.dailydealdarling.com',
                   'fitover35.com': 'https://fitover35.com',
                   'menopause-planner': 'https://menopause-planner-website.vercel.app',
               }
