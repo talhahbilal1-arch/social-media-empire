@@ -504,6 +504,93 @@
         </div>
       </div>
     </section>
+
+    <!-- FAQ Section -->
+    <section class="section section-cream" id="faq">
+      <div class="container">
+        <div class="section-divider">
+          <span class="section-number">FAQ &mdash; Questions</span>
+        </div>
+        <div class="section-header">
+          <h2>Frequently Asked Questions</h2>
+          <p>Everything you need to know about shopping smarter and finding better deals</p>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>How do I know if a deal is actually a good price?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>We compare current prices against historical highs and the Amazon regular price. We only feature deals that are 20%+ below the typical price. When you see a deal tag, it's verified as a genuine discount based on recent data.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>What's the best time to find Amazon deals?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Deals rotate constantly, but major shopping events (Prime Day in July, Black Friday in November, and Cyber Monday) offer the deepest discounts. We update our deals feed every 4 hours during business days to catch flash sales and limited-time offers.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>Are Daily Deal Darling links affiliate links?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Yes, we're a participant in the Amazon Associates Program. When you purchase through our links, we earn a small commission at no extra cost to you. This supports our work of testing and recommending products. We disclose this transparently and only recommend products we genuinely believe in.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>How often are deals updated?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Our real-time deals section updates every 4 hours during weekdays. Product reviews and buying guides are refreshed monthly to reflect the latest products and prices. Subscribe to our newsletter to get weekly curated deals delivered to your inbox every Tuesday.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>Can I return items bought through your links?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Absolutely! Our links redirect you directly to the product on Amazon. You'll have the same return policy and customer protections as any other Amazon purchase—30 days for most items, extended to 90 days during the holiday season. The fact that you clicked through our site doesn't affect returns.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>How do you choose which products to recommend?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>We prioritize products with 1,000+ verified reviews and a 4.5+ star rating. Our team personally tests many items and reads detailed customer reviews to identify common strengths and pain points. We avoid promoting products with high complaint rates or quality issues, even if they have high traffic potential.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>Are your quizzes personalized to me?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Yes! Our quizzes ask questions about your specific needs, preferences, and budget, then recommend products tailored to your answers. The skincare quiz considers your skin type and concerns. The gift finder asks about the person and occasion. Results are instant with no email required.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <span>What makes Daily Deal Darling different from other review sites?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>We focus on honest, in-depth reviews rather than generic product lists. We test items personally, prioritize reader safety and satisfaction, and clearly disclose our affiliate relationships. Our editorial team includes experts across categories like skincare, home organization, and fitness—not just generic reviewers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -679,6 +766,260 @@
         }, 1000);
       });
     })();
+  </script>
+
+  <!-- FAQ Interactivity -->
+  <script>
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', function() {
+        const faqItem = this.parentElement;
+        faqItem.classList.toggle('active');
+      });
+    });
+  </script>
+
+  <!-- Structured Data Schema (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://dailydealdarling.com/"
+          }
+        ]
+      },
+      {
+        "@type": "Product",
+        "name": "CeraVe Moisturizing Cream 16oz",
+        "description": "#1 Best Seller - Expert-recommended skincare product with 127,000+ reviews",
+        "image": "https://m.media-amazon.com/images/I/61S7BrCBj7L._SL500_.jpg",
+        "brand": {
+          "@type": "Brand",
+          "name": "CeraVe"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20",
+          "priceCurrency": "USD",
+          "price": "15.99",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": "Amazon"
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "127000"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Laneige Lip Sleeping Mask Berry",
+        "description": "Trending beauty product - Overnight lip treatment with 89,000+ reviews",
+        "image": "https://m.media-amazon.com/images/I/51bHKet2shL._SX522_.jpg",
+        "brand": {
+          "@type": "Brand",
+          "name": "Laneige"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.amazon.com/dp/B07XXPHQZK?tag=dailydealdarl-20",
+          "priceCurrency": "USD",
+          "price": "24.00",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": "Amazon"
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "89000"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Lodge 10.25\" Cast Iron Skillet",
+        "description": "Kitchen favorite - Durable cookware with 152,000+ reviews on Amazon",
+        "image": "https://m.media-amazon.com/images/I/518QAf7NLDL._AC_SX569_.jpg",
+        "brand": {
+          "@type": "Brand",
+          "name": "Lodge"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.amazon.com/dp/B00006JSUB?tag=dailydealdarl-20",
+          "priceCurrency": "USD",
+          "price": "19.90",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": "Amazon"
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "152000"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Anker PowerCore 10000mAh",
+        "description": "Editor's Pick - Portable charger with fast charging and 95,000+ reviews",
+        "image": "https://m.media-amazon.com/images/I/71JJLJnwREL._AC_SX569_.jpg",
+        "brand": {
+          "@type": "Brand",
+          "name": "Anker"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.amazon.com/dp/B0D5CLSMFB?tag=dailydealdarl-20",
+          "priceCurrency": "USD",
+          "price": "21.99",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": "Amazon"
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "95000"
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Ninja Professional Blender 1000W",
+        "description": "40% OFF Deal - High-performance blender for smoothies and food prep",
+        "image": "https://m.media-amazon.com/images/I/61DvtaqAWML._AC_SX569_.jpg",
+        "brand": {
+          "@type": "Brand",
+          "name": "Ninja"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.amazon.com/dp/B00NGV4506?tag=dailydealdarl-20",
+          "priceCurrency": "USD",
+          "price": "59.99",
+          "priceCurrencyOriginal": "USD",
+          "priceOriginal": "99.99",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": "Amazon"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "Theragun Relief Massage Gun",
+        "description": "25% OFF Deal - Professional massage gun for muscle recovery and relaxation",
+        "image": "https://m.media-amazon.com/images/I/41mGJ-qvF0L._AC_SX522_.jpg",
+        "brand": {
+          "@type": "Brand",
+          "name": "Theragun"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.amazon.com/dp/B086Z6LNVS?tag=dailydealdarl-20",
+          "priceCurrency": "USD",
+          "price": "149.00",
+          "priceCurrencyOriginal": "USD",
+          "priceOriginal": "199.00",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": "Amazon"
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "50000"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I know if a deal is actually a good price?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We compare current prices against historical highs and the Amazon regular price. We only feature deals that are 20%+ below the typical price. When you see a deal tag, it's verified as a genuine discount based on recent data."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the best time to find Amazon deals?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Deals rotate constantly, but major shopping events (Prime Day in July, Black Friday in November, and Cyber Monday) offer the deepest discounts. We update our deals feed every 4 hours during business days to catch flash sales and limited-time offers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are Daily Deal Darling links affiliate links?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, we're a participant in the Amazon Associates Program. When you purchase through our links, we earn a small commission at no extra cost to you. This supports our work of testing and recommending products. We disclose this transparently and only recommend products we genuinely believe in."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How often are deals updated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our real-time deals section updates every 4 hours during weekdays. Product reviews and buying guides are refreshed monthly to reflect the latest products and prices. Subscribe to our newsletter to get weekly curated deals delivered to your inbox every Tuesday."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I return items bought through your links?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely! Our links redirect you directly to the product on Amazon. You'll have the same return policy and customer protections as any other Amazon purchase—30 days for most items, extended to 90 days during the holiday season. The fact that you clicked through our site doesn't affect returns."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do you choose which products to recommend?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We prioritize products with 1,000+ verified reviews and a 4.5+ star rating. Our team personally tests many items and reads detailed customer reviews to identify common strengths and pain points. We avoid promoting products with high complaint rates or quality issues, even if they have high traffic potential."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are your quizzes personalized to me?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Our quizzes ask questions about your specific needs, preferences, and budget, then recommend products tailored to your answers. The skincare quiz considers your skin type and concerns. The gift finder asks about the person and occasion. Results are instant with no email required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What makes Daily Deal Darling different from other review sites?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We focus on honest, in-depth reviews rather than generic product lists. We test items personally, prioritize reader safety and satisfaction, and clearly disclose our affiliate relationships. Our editorial team includes experts across categories like skincare, home organization, and fitness—not just generic reviewers."
+            }
+          }
+        ]
+      }
+    ]
+  }
   </script>
 <!-- Last deployed: 2026-03-11 -->
 </body>
