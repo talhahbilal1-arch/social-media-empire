@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-16",
+  "last_updated": "2026-04-17",
   "items": [
     {
       "id": 1,
@@ -1750,28 +1750,31 @@
       "id": 212,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-youtubers",
       "keyword": "best ai tools for youtubers",
-      "title": "Best AI Tools for Youtubers 2026"
+      "title": "Best AI Tools for Youtubers 2026",
+      "published_date": "2026-04-17"
     },
     {
       "id": 213,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-etsy-sellers",
       "keyword": "best ai tools for etsy sellers",
-      "title": "Best AI Tools for Etsy Sellers 2026"
+      "title": "Best AI Tools for Etsy Sellers 2026",
+      "published_date": "2026-04-17"
     },
     {
       "id": 214,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-amazon-sellers",
       "keyword": "best ai tools for amazon sellers",
-      "title": "Best AI Tools for Amazon Sellers 2026"
+      "title": "Best AI Tools for Amazon Sellers 2026",
+      "published_date": "2026-04-17"
     },
     {
       "id": 215,
