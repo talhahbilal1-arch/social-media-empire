@@ -86,10 +86,19 @@ export default function AboutPage() {
 
           <h2>Who We Are</h2>
           <p>
-            PilotTools is run by a small, dedicated team of technology enthusiasts and AI practitioners
-            who use these tools daily in our own work. We combine hands-on experience with systematic
-            evaluation to help you make informed decisions. Our backgrounds span software development,
-            digital marketing, content creation, and small business operations.
+            PilotTools is founded and operated by Talhah Bilal, an automation systems expert with 6+ years of experience
+            building and testing AI-driven workflows and productivity tools. We combine hands-on experience with systematic
+            evaluation to help you make informed decisions.
+          </p>
+          <p>
+            Our approach is grounded in real-world usage: we test AI tools as they are actually used by professionals,
+            creators, and developers in their day-to-day work. We focus specifically on agentic AI workflows&mdash;systems
+            where AI agents autonomously handle complex tasks with minimal human intervention.
+          </p>
+          <p>
+            We do not accept bias-inducing partnerships, sponsored reviews, or promotional payments. Our only revenue comes
+            from affiliate commissions on tools we genuinely recommend and affiliate advertising&mdash;creating alignment
+            between your success and ours.
           </p>
 
           <h2>Trust & Transparency</h2>

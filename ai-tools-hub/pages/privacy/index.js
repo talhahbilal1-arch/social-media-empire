@@ -29,6 +29,17 @@ export default function PrivacyPage() {
             These cookies do not personally identify you. You can disable cookies in your browser settings.
           </p>
 
+          <h2>Advertising & Cookies</h2>
+          <p>
+            This site uses Google AdSense, a third-party advertising service provided by Google. Google, as a third-party vendor, uses cookies to serve ads on this site. Google&apos;s use of the DoubleClick DART cookie enables it and its partners to serve ads to visitors based on their visit to this site and other sites on the internet.
+          </p>
+          <p>
+            You may opt out of the use of the DART cookie by visiting the <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google Ads and Content Network Privacy Policy</a>. You can also manage personalised advertising via the <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">Google Ads Settings page</a>.
+          </p>
+          <p>
+            Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites. This site may also use other third-party advertising partners; any cookies they place are governed by their own privacy policies.
+          </p>
+
           <h2>Third-Party Services</h2>
           <ul>
             <li><strong>Google Analytics 4</strong> &mdash; Web analytics (privacy-friendly, IP anonymization enabled)</li>
