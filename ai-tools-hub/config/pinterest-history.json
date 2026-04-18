@@ -1168,5 +1168,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-17T22:27:34.389Z",
     "success": true
+  },
+  {
+    "slug": "notion-ai-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Notion AI vs ChatGPT: Which AI Tool is Right For YOU?",
+    "link": "https://pilottools.ai/compare/notion-ai-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-18T16:52:27.401Z",
+    "success": true
+  },
+  {
+    "slug": "notion-ai",
+    "pin_type": "tool-review",
+    "title": "Notion AI Review: Is It Worth the Hype? (4.6/5)",
+    "link": "https://pilottools.ai/tools/notion-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-18T16:52:31.581Z",
+    "success": true
+  },
+  {
+    "slug": "surfer-seo",
+    "pin_type": "tool-review",
+    "title": "Surfer SEO Review: Dominate Search Results with AI!",
+    "link": "https://pilottools.ai/tools/surfer-seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-18T16:52:35.882Z",
+    "success": true
   }
 ]
