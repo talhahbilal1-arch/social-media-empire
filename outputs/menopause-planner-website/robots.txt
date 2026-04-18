@@ -1,0 +1,12 @@
+# Robots.txt for menopause-planner-website.vercel.app
+
+User-agent: *
+Allow: /
+
+Sitemap: https://menopause-planner-website.vercel.app/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
