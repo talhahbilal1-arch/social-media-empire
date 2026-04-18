@@ -1,9 +1,12 @@
-"""Template-based article renderer.
+"""Clean brand-specific article renderer.
 
-Reads standalone HTML template files and fills in variables.
-Design changes = edit the HTML file (preview in browser).
-Data changes = edit the JSON prompt.
-Rendering = simple variable replacement (can't break).
+Three distinct article designs:
+- Deals (DailyDealDarling): Product-forward, first-person, PAS framework
+- Fitness (FitOver35): Value-first education, dark theme, gear at end only
+- Menopause (MenopausePlanner): Warm wellness, free resource + Etsy product
+
+No before/after cards, no comparison tables, no trust badges, no payment icons,
+no fake social proof, no sticky bars, no methodology sections.
 """
 
 import html
@@ -15,83 +18,7 @@ from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
-# ── Brand configurations (colors, fonts, experts) ─────────────────────────
-
-BRAND_THEMES = {
-    'fitness': {
-        'heading_font': 'Instrument Serif',
-        'body_font': 'DM Sans',
-        'font_import': 'Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700',
-        'colors': {
-            'bg': '#111014', 'surface': '#1a181e', 'border': '#2e2c33',
-            'accent': '#d4a843', 'accent_light': '#2a2520', 'text': '#e8e6ed',
-            'muted': '#8a8894', 'warm': '#1e1c22',
-        },
-        'expert_name': 'Talhah Bilal',
-        'expert_initials': 'TB',
-        'expert_credentials': 'ISSA-CPT · Kinesiology Degree',
-        'expert_bio': 'Reviewed by Talhah Bilal, a Kinesiology degree holder, ISSA-certified personal trainer, and competitive bodybuilder with over a decade of experience.',
-        'site_tagline': 'Expert Verified',
-        'cta_text': 'Check Current Price on Amazon',
-    },
-    'menopause': {
-        'heading_font': 'Fraunces',
-        'body_font': 'DM Sans',
-        'font_import': 'Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700',
-        'colors': {
-            'bg': '#FDFBF7', 'surface': '#FFFFFF', 'border': '#E8D5A3',
-            'accent': '#3D6B4F', 'accent_light': '#EAF2EC', 'text': '#3A3A3A',
-            'muted': '#8B7355', 'warm': '#F5EDE0',
-        },
-        'expert_name': 'The Menopause Planner Team',
-        'expert_initials': 'MP',
-        'expert_credentials': 'Wellness Guide · Research-Backed Reviews',
-        'expert_bio': 'Reviewed in consultation with certified women\'s health practitioners and menopause specialists. Every recommendation is based on verified reviews and published research.',
-        'site_tagline': 'Wellness Guide · Expert Reviewed',
-        'cta_text': 'View Today\'s Amazon Deal',
-    },
-    'deals': {
-        'heading_font': 'Fraunces',
-        'body_font': 'DM Sans',
-        'font_import': 'Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700',
-        'colors': {
-            'bg': '#FAF9F6', 'surface': '#FFFFFF', 'border': '#E5E5E5',
-            'accent': '#D4AF37', 'accent_light': '#FBF5E6', 'text': '#1A1A1A',
-            'muted': '#6B6B6B', 'warm': '#F5F0E8',
-        },
-        'expert_name': 'Daily Deal Darling Team',
-        'expert_initials': 'DD',
-        'expert_credentials': 'Trending on Pinterest · Product Tested',
-        'expert_bio': 'Our team tests and compares dozens of products monthly so you don\'t have to. We only recommend what we\'d buy ourselves.',
-        'site_tagline': 'Trending · Product Tested',
-        'cta_text': 'Check Today\'s Price on Amazon',
-    },
-}
-
-# ── Fallback face images (always available, royalty-free) ──────────────────
-
-FALLBACK_FACES = {
-    'fitness': [
-        'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/1300402/pexels-photo-1300402.jpeg?auto=compress&cs=tinysrgb&w=80',
-    ],
-    'menopause': [
-        'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/3807770/pexels-photo-3807770.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/3807537/pexels-photo-3807537.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=80',
-    ],
-    'deals': [
-        'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/3807770/pexels-photo-3807770.jpeg?auto=compress&cs=tinysrgb&w=80',
-        'https://images.pexels.com/photos/3807537/pexels-photo-3807537.jpeg?auto=compress&cs=tinysrgb&w=80',
-    ],
-}
-
-# ── Fallback hero images by category (always available) ────────────────────
+# ── Fallback hero images ─────────────────────────────────────────────────
 
 FALLBACK_HERO_IMAGES = {
     'fitness': 'https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=900',
@@ -100,11 +27,18 @@ FALLBACK_HERO_IMAGES = {
     'default': 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=900',
 }
 
-FALLBACK_PRODUCT_IMAGES = {
-    'fitness': 'https://images.pexels.com/photos/4164761/pexels-photo-4164761.jpeg?auto=compress&cs=tinysrgb&w=700',
-    'menopause': 'https://images.pexels.com/photos/6311652/pexels-photo-6311652.jpeg?auto=compress&cs=tinysrgb&w=700',
-    'deals': 'https://images.pexels.com/photos/5632381/pexels-photo-5632381.jpeg?auto=compress&cs=tinysrgb&w=700',
-    'default': 'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&w=700',
+# Brand Google Analytics IDs
+_BRAND_GA_IDS = {
+    'fitness': 'G-1FC6FH34L9',
+    'deals': 'G-HVCLZPEYNS',
+    'menopause': 'G-02ZPS3H3GC',
+}
+
+# Brand Kit signup form IDs
+_BRAND_FORM_IDS = {
+    'fitness': '8946984',
+    'deals': '9144859',
+    'menopause': '9144926',
 }
 
 
@@ -114,209 +48,14 @@ def _esc(text):
 
 
 def _ensure_image(url, fallback):
-    """Return url if truthy, otherwise fallback. NEVER returns empty string."""
+    """Return url if truthy, otherwise fallback."""
     if url and isinstance(url, str) and url.startswith('http'):
         return url
     return fallback
 
 
-def _get_template_path():
-    """Get the path to the base template file."""
-    this_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(this_dir, 'article_page_templates', 'base_template.html')
-
-
-def _build_quick_picks_html(products, theme):
-    """Build the quick picks summary section."""
-    picks = []
-    badge_classes = ['top', 'great', 'budget']
-    for i, p in enumerate(products[:3]):
-        badge_class = badge_classes[i] if i < len(badge_classes) else 'budget'
-        badge_text = p.get('badge', ['Our Pick', 'Also Great', 'Budget'][min(i, 2)])
-        rating = p.get('rating', 4.5)
-        review_count = p.get('review_count', '1,000+')
-        price_low = p.get('price_low', 0)
-        price_high = p.get('price_high', 0)
-        price_str = f'${price_low}\u2013{price_high}' if price_low and price_high else ''
-        picks.append(
-            f'<div class="pick">'
-            f'<span class="pick-badge {badge_class}">{_esc(badge_text)}</span>'
-            f'<div class="pick-info">'
-            f'<div class="pick-name">{_esc(p.get("name", ""))}</div>'
-            f'<div class="pick-meta">\u2605 {rating} \u00b7 {_esc(review_count)} reviews</div>'
-            f'</div>'
-            f'<div class="pick-price">{price_str}</div>'
-            f'</div>'
-        )
-    return f'<div class="picks">{"".join(picks)}</div>'
-
-
-def _build_product_block_html(product, index, brand_key, theme):
-    """Build a single product card."""
-    badge_classes = ['top-pick', 'also-great', 'budget-pick']
-    badge_emojis = ['\U0001f3c6', '\u26a1', '\U0001f4b0']
-    badge_class = badge_classes[min(index, 2)]
-    badge_emoji = badge_emojis[min(index, 2)]
-    badge_text = product.get('badge', ['Our Pick', 'Also Great', 'Budget Pick'][min(index, 2)])
-
-    name = _esc(product.get('name', 'Product'))
-    rating = product.get('rating', 4.5)
-    review_count = _esc(product.get('review_count', '1,000+'))
-    price_low = product.get('price_low', 0)
-    price_high = product.get('price_high', 0)
-    price_str = f'${price_low} \u2013 ${price_high}' if price_low and price_high else ''
-    subscribe_save = product.get('subscribe_save', '')
-    if subscribe_save:
-        price_str += f' \u00b7 Subscribe & Save {_esc(subscribe_save)}'
-
-    amazon_url = _esc(product.get('amazon_url', '#'))
-    image_url = _ensure_image(
-        product.get('hero_image', ''),
-        FALLBACK_PRODUCT_IMAGES.get(brand_key, FALLBACK_PRODUCT_IMAGES['default'])
-    )
-    who_for = _esc(product.get('who_for', ''))
-
-    # Pros
-    pros_html = ''
-    for pro in product.get('pros', []):
-        pros_html += f'<li>{_esc(pro)}</li>'
-
-    # Cons
-    cons_html = ''
-    for con in product.get('cons', []):
-        cons_html += f'<li>{_esc(con)}</li>'
-
-    bottom_line = _esc(product.get('bottom_line', ''))
-
-    # Amazon rating badge (replaces fake testimonials for FTC compliance)
-    rating_badge_html = (
-        f'<div class="amazon-rating-badge" style="display:flex;align-items:center;gap:8px;'
-        f'padding:10px 14px;background:var(--warm);border-radius:8px;margin:12px 0">'
-        f'<span style="color:#FF9900;font-weight:700">\u2605 {rating}</span>'
-        f'<span style="font-size:.82rem;color:var(--muted)">Based on Amazon reviews</span>'
-        f'</div>'
-    )
-
-    # Star display
-    full_stars = int(rating)
-    stars_html = '<span class="star">' + '\u2605' * full_stars + '</span>' + '\u2606' * (5 - full_stars)
-
-    # Payment icons (only on first product)
-    payments_html = ''
-    if index == 0:
-        payments_html = (
-            '<div class="payments">'
-            '<span class="pay">Visa</span>'
-            '<span class="pay">Mastercard</span>'
-            '<span class="pay">PayPal</span>'
-            '<span class="pay">Amazon Pay</span>'
-            '<span class="pay">Apple Pay</span>'
-            '</div>'
-        )
-
-    return (
-        f'<div class="product">'
-        f'<div class="product-header">'
-        f'<span class="product-badge {badge_class}">{badge_emoji} {_esc(badge_text)}</span>'
-        f'<span class="product-stars">{stars_html} {rating} ({review_count} reviews)</span>'
-        f'</div>'
-        f'<h2>{name}</h2>'
-        f'<p class="product-price">{price_str}</p>'
-        f'<img class="product-img" src="{image_url}" alt="{name}" loading="lazy">'
-        f'<div class="who-for"><strong>Best for:</strong> {who_for}</div>'
-        f'<div class="pc">'
-        f'<div class="pc-col pros"><h4>What We Like</h4><ul>{pros_html}</ul></div>'
-        f'<div class="pc-col cons"><h4>Watch Out For</h4><ul>{cons_html}</ul></div>'
-        f'</div>'
-        f'<div class="bottom-line"><strong>Bottom line:</strong> {bottom_line}</div>'
-        f'{rating_badge_html}'
-        f'<a class="cta" href="{amazon_url}" target="_blank" rel="nofollow sponsored">'
-        f'Check Today\'s Price on Amazon \u2192'
-        f'<small>Free returns \u00b7 30-day guarantee \u00b7 Subscribe & Save available</small></a>'
-        f'{payments_html}'
-        f'</div>'
-    )
-
-
-def _build_comparison_table_html(products):
-    """Build the comparison table."""
-    if len(products) < 2:
-        return ''
-    headers = ['']
-    for i, p in enumerate(products[:3]):
-        emoji = ['\U0001f3c6', '\u26a1', '\U0001f4b0'][min(i, 2)]
-        headers.append(f'{_esc(p.get("name", "")[:20])} {emoji}')
-
-    rows = []
-    fields = [
-        ('Price', lambda p: f'${p.get("price_low", "?")}\u2013{p.get("price_high", "?")}'),
-        ('Best for', lambda p: _esc(p.get('who_for', '')[:30])),
-        ('Rating', lambda p: f'\u2605 {p.get("rating", "?")}'),
-        ('Reviews', lambda p: _esc(p.get('review_count', '?'))),
-        ('Buy first?', lambda p: ''),  # set below
-    ]
-    for label, getter in fields:
-        row = f'<tr><td><strong>{label}</strong></td>'
-        for i, p in enumerate(products[:3]):
-            val = getter(p)
-            if label == 'Buy first?':
-                val = '<strong>YES</strong>' if i == 0 else ('Add 2nd' if i == 1 else 'Optional')
-            css = ' class="winner"' if i == 0 else ''
-            row += f'<td{css}>{val}</td>'
-        row += '</tr>'
-        rows.append(row)
-
-    header_html = ''.join(f'<th>{h}</th>' for h in headers)
-    return (
-        f'<div class="comp"><table>'
-        f'<tr>{header_html}</tr>'
-        f'{"".join(rows)}'
-        f'</table></div>'
-    )
-
-
-def _build_methodology_html(steps):
-    """Build the How We Chose section grid."""
-    items = []
-    for i, step in enumerate(steps[:4], 1):
-        items.append(
-            f'<div class="method-item">'
-            f'<div class="method-num">{i}</div>'
-            f'<div class="method-text">{step}</div>'
-            f'</div>'
-        )
-    return ''.join(items)
-
-
-def _build_etsy_html(brand_key):
-    """Return Etsy CTA HTML for menopause brand, empty string otherwise."""
-    if brand_key != 'menopause':
-        return ''
-    return (
-        '<div class="etsy">'
-        '<div class="etsy-label">Digital Download \u2014 The Menopause Planner</div>'
-        '<h3>Track What\'s Actually Helping</h3>'
-        '<p>Log night sweats, sleep quality, and what you changed \u2014 see patterns your doctor can use.</p>'
-        '<a href="https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic" target="_blank" rel="noopener">Get the Planner on Etsy \u2192</a>'
-        '</div>'
-    )
-
-
-def _build_faq_html(faq_items):
-    """Build FAQ items HTML."""
-    items = []
-    for faq in faq_items:
-        items.append(
-            f'<div class="faq-item">'
-            f'<div class="faq-q">{_esc(faq.get("q", ""))}</div>'
-            f'<div class="faq-a">{_esc(faq.get("a", ""))}</div>'
-            f'</div>'
-        )
-    return ''.join(items)
-
-
-def _build_schemas(title, meta_desc, slug, site_config, expert_name, products, faq_items):
-    """Build all Schema.org JSON-LD tags."""
+def _build_schema_json(title, meta_desc, slug, site_config, faq_items=None):
+    """Build Article + FAQ Schema.org JSON-LD."""
     article_url = site_config['base_url'] + '/articles/' + slug + '.html'
     now_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
@@ -336,7 +75,8 @@ def _build_schemas(title, meta_desc, slug, site_config, expert_name, products, f
         'mainEntityOfPage': {'@type': 'WebPage', '@id': article_url},
     })
 
-    faq_schema = ''
+    schemas = f'<script type="application/ld+json">{article_schema}</script>'
+
     if faq_items:
         faq_entities = []
         for faq in faq_items:
@@ -345,170 +85,564 @@ def _build_schemas(title, meta_desc, slug, site_config, expert_name, products, f
                 'name': faq.get('q', ''),
                 'acceptedAnswer': {'@type': 'Answer', 'text': faq.get('a', '')},
             })
-        faq_schema = f'<script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities})}</script>'
+        schemas += f'\n<script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities})}</script>'
 
-    product_schema = ''
-    if products:
-        p = products[0]
-        product_schema = f'<script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "Product", "name": p.get("name", title), "url": p.get("amazon_url", "")})}</script>'
+    return schemas
 
-    return (
-        f'<script type="application/ld+json">{article_schema}</script>',
-        faq_schema,
-        product_schema,
-    )
+
+def _star_html(rating):
+    """Render star rating as text."""
+    full = int(float(rating))
+    return '\u2605' * full + '\u2606' * (5 - full) + f' {rating}'
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# DEALS — DailyDealDarling: Product-forward, first-person, PAS framework
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _render_deals_article(article_data, site_config, slug):
+    """Render a clean deals article — conversational product review blog post."""
+    title = _esc(article_data.get('title', slug.replace('-', ' ').title()))
+    meta_desc = _esc(article_data.get('meta_description', title))
+    hero_url = _ensure_image(article_data.get('hero_url', ''), FALLBACK_HERO_IMAGES['deals'])
+    ga_id = _BRAND_GA_IDS.get('deals', '')
+    form_id = _BRAND_FORM_IDS.get('deals', '')
+    year = datetime.now(timezone.utc).year
+    date_display = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    faq_items = article_data.get('faq', [])
+    schemas = _build_schema_json(title, meta_desc, slug, site_config, faq_items)
+
+    # Intro paragraphs
+    intro_html = ''
+    for p in article_data.get('intro_paragraphs', []):
+        intro_html += f'<p>{_esc(p)}</p>\n'
+
+    # Product cards
+    products_html = ''
+    for product in article_data.get('products', []):
+        is_winner = product.get('is_winner', False)
+        name = _esc(product.get('name', 'Product'))
+        price = _esc(product.get('price', ''))
+        rating = product.get('rating', 4.5)
+        review_count = _esc(product.get('review_count', '1,000+'))
+        review_text = _esc(product.get('personal_review_text', ''))
+        section_heading = _esc(product.get('section_heading', name))
+        amazon_url = _esc(product.get('amazon_url', '#'))
+        product_img = _esc(product.get('product_image', ''))
+
+        winner_border = 'border: 2px solid #C47D8E;' if is_winner else 'border: 1px solid #e5e7eb;'
+        winner_label = '<span style="display:inline-block;background:#C47D8E;color:#fff;font-size:0.78em;padding:3px 12px;border-radius:4px;margin-bottom:10px;font-weight:600;">The one I bought</span>' if is_winner else ''
+
+        img_block = ''
+        if product_img:
+            img_block = (
+                f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" style="flex-shrink:0;">'
+                f'<img src="{product_img}" alt="{name}" width="100" height="100" '
+                f'style="object-fit:contain;border-radius:8px;background:#fff;padding:4px;" loading="lazy" '
+                f'onerror="this.parentElement.style.display=\'none\'"></a>'
+            )
+
+        products_html += f'''
+        <div style="{winner_border}border-radius:12px;padding:20px;margin:24px 0;background:#fff;">
+          {winner_label}
+          <h2 style="font-family:'Lora',serif;font-size:1.3em;margin:0 0 8px;color:#2D2D2D;">{section_heading}</h2>
+          <div style="display:flex;gap:16px;align-items:flex-start;margin:12px 0;">
+            {img_block}
+            <div>
+              <div style="font-size:0.9em;color:#666;margin-bottom:6px;">{_star_html(rating)} &middot; {review_count} reviews &middot; {price}</div>
+              <p style="margin:0;color:#444;line-height:1.6;">{review_text}</p>
+            </div>
+          </div>
+          <a href="{amazon_url}" target="_blank" rel="nofollow sponsored"
+             style="display:inline-block;background:#C47D8E;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.95em;margin-top:12px;">
+            See it on Amazon &rarr;</a>
+        </div>'''
+
+    # Verdict
+    verdict_html = ''
+    verdict_text = article_data.get('verdict_text', '')
+    if verdict_text:
+        verdict_html = f'''
+        <div style="border-left:3px solid #C47D8E;padding:16px 20px;margin:28px 0;background:#fdf5f7;border-radius:0 8px 8px 0;">
+          <p style="margin:0;font-family:'Lora',serif;font-style:italic;color:#2D2D2D;line-height:1.6;">{_esc(verdict_text)}</p>
+        </div>'''
+
+    # FAQ
+    faq_html = ''
+    for faq in faq_items:
+        faq_html += f'''
+        <div style="margin:16px 0;">
+          <h3 style="font-family:'Lora',serif;font-size:1.05em;color:#2D2D2D;margin:0 0 6px;">{_esc(faq.get('q', ''))}</h3>
+          <p style="color:#555;margin:0;line-height:1.6;">{_esc(faq.get('a', ''))}</p>
+        </div>'''
+
+    # Email signup
+    signup_html = ''
+    if form_id:
+        signup_html = f'''
+        <div style="background:#fdf5f7;border-radius:12px;padding:24px;margin:32px 0;text-align:center;">
+          <p style="font-family:'Lora',serif;font-size:1.1em;color:#2D2D2D;margin:0 0 12px;">Get the best deals in your inbox every week</p>
+          <script async data-uid="{form_id}" src="https://dailydealdarling.ck.page/{form_id}/index.js"></script>
+        </div>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | Daily Deal Darling</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{_esc(site_config['base_url'])}/articles/{slug}.html">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+{schemas}
+{"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+</head>
+<body style="margin:0;padding:0;background:#FAFAFA;color:#2D2D2D;font-family:'Inter',sans-serif;line-height:1.7;">
+
+<nav style="background:#fff;border-bottom:1px solid #eee;padding:14px 20px;">
+  <div style="max-width:680px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+    <a href="../index.html" style="text-decoration:none;font-family:'Lora',serif;font-size:1.15em;color:#2D2D2D;font-weight:600;">Daily Deal <span style="color:#C47D8E;">Darling</span></a>
+    <a href="./" style="text-decoration:none;color:#666;font-size:0.9em;">All Articles</a>
+  </div>
+</nav>
+
+<main style="max-width:680px;margin:0 auto;padding:32px 20px;">
+  <p style="font-size:0.82em;color:#999;margin:0 0 8px;">{date_display}</p>
+  <h1 style="font-family:'Lora',serif;font-size:1.8em;line-height:1.3;margin:0 0 20px;color:#2D2D2D;">{title}</h1>
+
+  <img src="{hero_url}" alt="{title}" style="width:100%;border-radius:10px;margin:0 0 24px;" loading="lazy">
+
+  {intro_html}
+
+  {products_html}
+
+  {verdict_html}
+
+  {f'<h2 style="font-family:Lora,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
+
+  {signup_html}
+</main>
+
+<footer style="border-top:1px solid #eee;padding:24px 20px;text-align:center;color:#999;font-size:0.82em;">
+  <p>&copy; {year} Daily Deal Darling. Affiliate links may earn a commission.</p>
+</footer>
+
+</body>
+</html>'''
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FITNESS — FitOver35: Dark theme, value-first education, gear at end only
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _render_fitness_article(article_data, site_config, slug):
+    """Render a clean fitness article — 90% education, compact gear section at bottom."""
+    title = _esc(article_data.get('title', slug.replace('-', ' ').title()))
+    meta_desc = _esc(article_data.get('meta_description', title))
+    hero_url = _ensure_image(article_data.get('hero_url', ''), FALLBACK_HERO_IMAGES['fitness'])
+    ga_id = _BRAND_GA_IDS.get('fitness', '')
+    form_id = _BRAND_FORM_IDS.get('fitness', '')
+    year = datetime.now(timezone.utc).year
+    date_display = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    faq_items = article_data.get('faq', [])
+    schemas = _build_schema_json(title, meta_desc, slug, site_config, faq_items)
+
+    # Intro hook
+    intro_hook = article_data.get('intro_hook', '')
+    intro_html = f'<p style="font-size:1.05em;line-height:1.7;color:#ccc;">{_esc(intro_hook)}</p>' if intro_hook else ''
+
+    # Educational sections with tip boxes
+    sections_html = ''
+    for section in article_data.get('sections', []):
+        heading = _esc(section.get('heading', ''))
+        body_html = ''
+        for p in section.get('body_paragraphs', []):
+            body_html += f'<p style="color:#ccc;line-height:1.7;margin:0 0 14px;">{_esc(p)}</p>\n'
+
+        tip_box = ''
+        tip_text = section.get('tip_box_text', '')
+        if tip_text:
+            tip_box = f'''
+            <div style="background:#1a1a0a;border-left:3px solid #E8C547;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0;">
+              <p style="margin:0;color:#E8C547;font-weight:600;font-size:0.88em;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">The Fix</p>
+              <p style="margin:0;color:#ddd;line-height:1.6;">{_esc(tip_text)}</p>
+            </div>'''
+
+        sections_html += f'''
+        <section style="margin:32px 0;">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.35em;color:#fff;margin:0 0 14px;">{heading}</h2>
+          {body_html}
+          {tip_box}
+        </section>'''
+
+    # Compact gear section at the bottom
+    gear_html = ''
+    gear_items = article_data.get('gear_recommendations', [])
+    if gear_items:
+        gear_cards = ''
+        for item in gear_items:
+            name = _esc(item.get('name', ''))
+            price = _esc(item.get('price', ''))
+            rating = item.get('rating', 4.5)
+            review_count = _esc(item.get('review_count', ''))
+            note = _esc(item.get('one_line_note', ''))
+            amazon_url = _esc(item.get('amazon_url', '#'))
+            product_img = _esc(item.get('product_image', ''))
+
+            img_block = ''
+            if product_img:
+                img_block = (
+                    f'<img src="{product_img}" alt="{name}" width="56" height="56" '
+                    f'style="object-fit:contain;border-radius:6px;background:#222;padding:3px;flex-shrink:0;" loading="lazy" '
+                    f'onerror="this.style.display=\'none\'">'
+                )
+
+            gear_cards += f'''
+            <div style="display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #222;">
+              {img_block}
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:600;color:#fff;font-size:0.95em;">{name}</div>
+                <div style="font-size:0.82em;color:#888;">{_star_html(rating)} &middot; {review_count} &middot; {price}</div>
+                <div style="font-size:0.88em;color:#aaa;margin-top:2px;">{note}</div>
+              </div>
+              <a href="{amazon_url}" target="_blank" rel="nofollow sponsored"
+                 style="color:#E8C547;text-decoration:none;font-size:0.85em;white-space:nowrap;font-weight:500;">
+                See on Amazon &rarr;</a>
+            </div>'''
+
+        gear_html = f'''
+        <section style="margin:40px 0;padding-top:28px;border-top:1px solid #333;">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1em;color:#E8C547;margin:0 0 4px;">What I Use</h2>
+          <p style="color:#888;font-size:0.88em;margin:0 0 14px;">Here&rsquo;s my gear if you&rsquo;re curious. No pressure.</p>
+          {gear_cards}
+        </section>'''
+
+    # FAQ
+    faq_html = ''
+    for faq in faq_items:
+        faq_html += f'''
+        <div style="margin:16px 0;">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1em;color:#fff;margin:0 0 6px;">{_esc(faq.get('q', ''))}</h3>
+          <p style="color:#aaa;margin:0;line-height:1.6;">{_esc(faq.get('a', ''))}</p>
+        </div>'''
+
+    # Email signup
+    signup_html = ''
+    if form_id:
+        signup_html = f'''
+        <div style="background:#1a1a0a;border:1px solid #333;border-radius:10px;padding:22px;margin:32px 0;text-align:center;">
+          <p style="font-family:'Space Grotesk',sans-serif;color:#E8C547;font-size:1em;margin:0 0 10px;">Free: 7-Day Fat Burn Kickstart Plan</p>
+          <script async data-uid="{form_id}" src="https://fitover35.ck.page/{form_id}/index.js"></script>
+        </div>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | FitOver35</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{_esc(site_config['base_url'])}/articles/{slug}.html">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+{schemas}
+{"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+</head>
+<body style="margin:0;padding:0;background:#111;color:#fff;font-family:'Inter',sans-serif;line-height:1.7;">
+
+<nav style="background:#0a0a0a;border-bottom:1px solid #222;padding:14px 20px;">
+  <div style="max-width:700px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+    <a href="../index.html" style="text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:1.15em;color:#fff;font-weight:600;">Fit<span style="color:#E8C547;">Over35</span></a>
+    <div style="display:flex;gap:16px;">
+      <a href="../blog.html" style="text-decoration:none;color:#888;font-size:0.9em;">Articles</a>
+      <a href="../about.html" style="text-decoration:none;color:#888;font-size:0.9em;">About</a>
+    </div>
+  </div>
+</nav>
+
+<main style="max-width:700px;margin:0 auto;padding:32px 20px;">
+  <p style="font-size:0.82em;color:#666;margin:0 0 8px;">{date_display} &middot; By Talhah Bilal, ISSA-CPT</p>
+  <h1 style="font-family:'Space Grotesk',sans-serif;font-size:1.8em;line-height:1.3;margin:0 0 20px;color:#fff;">{title}</h1>
+
+  <img src="{hero_url}" alt="{title}" style="width:100%;border-radius:10px;margin:0 0 24px;" loading="lazy">
+
+  {intro_html}
+
+  {sections_html}
+
+  {gear_html}
+
+  {f'<section style="margin:36px 0;"><h2 style="font-family:Space Grotesk,sans-serif;font-size:1.2em;color:#E8C547;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
+
+  {signup_html}
+</main>
+
+<footer style="border-top:1px solid #222;padding:24px 20px;text-align:center;color:#666;font-size:0.82em;">
+  <p>&copy; {year} FitOver35. Affiliate links may earn a commission.</p>
+</footer>
+
+</body>
+</html>'''
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MENOPAUSE — MenopausePlanner: Warm wellness, free tracker + Etsy planner
+# ═══════════════════════════════════════════════════════════════════════════
+
+ETSY_PLANNER_URL = 'https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic'
+
+
+def _render_menopause_article(article_data, site_config, slug):
+    """Render a clean menopause article — warm wellness, value-first, Etsy at end."""
+    title = _esc(article_data.get('title', slug.replace('-', ' ').title()))
+    meta_desc = _esc(article_data.get('meta_description', title))
+    hero_url = _ensure_image(article_data.get('hero_url', ''), FALLBACK_HERO_IMAGES['menopause'])
+    ga_id = _BRAND_GA_IDS.get('menopause', '')
+    form_id = _BRAND_FORM_IDS.get('menopause', '')
+    year = datetime.now(timezone.utc).year
+    date_display = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    faq_items = article_data.get('faq', [])
+    schemas = _build_schema_json(title, meta_desc, slug, site_config, faq_items)
+
+    # Intro hook
+    intro_hook = article_data.get('intro_hook', '')
+    intro_html = f'<p style="font-size:1.05em;line-height:1.7;color:#555;">{_esc(intro_hook)}</p>' if intro_hook else ''
+
+    # Educational sections with tip boxes
+    sections_html = ''
+    for section in article_data.get('sections', []):
+        heading = _esc(section.get('heading', ''))
+        body_html = ''
+        for p in section.get('body_paragraphs', []):
+            body_html += f'<p style="color:#555;line-height:1.7;margin:0 0 14px;">{_esc(p)}</p>\n'
+
+        tip_box = ''
+        tip_text = section.get('tip_box_text', '')
+        if tip_text:
+            tip_box = f'''
+            <div style="background:#f0ebe3;border-left:3px solid #6B705C;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0;">
+              <p style="margin:0;color:#6B705C;font-weight:600;font-size:0.88em;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Try This</p>
+              <p style="margin:0;color:#444;line-height:1.6;">{_esc(tip_text)}</p>
+            </div>'''
+
+        sections_html += f'''
+        <section style="margin:32px 0;">
+          <h2 style="font-family:'DM Serif Display',serif;font-size:1.35em;color:#3a3a3a;margin:0 0 14px;">{heading}</h2>
+          {body_html}
+          {tip_box}
+        </section>'''
+
+    # Free resource CTA
+    free_resource_html = ''
+    free_resource = article_data.get('free_resource_cta', {})
+    if free_resource:
+        fr_heading = _esc(free_resource.get('heading', 'Free: Symptom Tracker Printable'))
+        fr_desc = _esc(free_resource.get('description', 'Track your symptoms and spot patterns.'))
+        fr_button = _esc(free_resource.get('button_text', 'Download Free Tracker'))
+        free_resource_html = f'''
+        <div style="background:linear-gradient(135deg,#f5ede0,#e8dcc8);border-radius:12px;padding:24px;margin:32px 0;text-align:center;">
+          <p style="font-family:'DM Serif Display',serif;font-size:1.15em;color:#3a3a3a;margin:0 0 8px;">{fr_heading}</p>
+          <p style="color:#666;margin:0 0 14px;font-size:0.92em;">{fr_desc}</p>
+          <script async data-uid="{form_id}" src="https://menopause-planner.ck.page/{form_id}/index.js"></script>
+        </div>'''
+
+    # Etsy planner CTA
+    etsy_html = ''
+    etsy_section = article_data.get('etsy_product_section', {})
+    if etsy_section:
+        etsy_heading = _esc(etsy_section.get('heading', 'The Menopause Wellness Planner'))
+        etsy_desc = _esc(etsy_section.get('description', ''))
+        etsy_price = _esc(etsy_section.get('price', '$14.99'))
+        etsy_button = _esc(etsy_section.get('button_text', 'Get the Planner on Etsy'))
+        etsy_html = f'''
+        <div style="background:#fff;border:2px solid #DDBEA9;border-radius:12px;padding:24px;margin:32px 0;text-align:center;">
+          <p style="font-size:0.78em;font-weight:600;letter-spacing:0.08em;color:#6B705C;text-transform:uppercase;margin:0 0 6px;">Digital Download &mdash; {etsy_price}</p>
+          <p style="font-family:'DM Serif Display',serif;font-size:1.2em;color:#3a3a3a;margin:0 0 10px;">{etsy_heading}</p>
+          <p style="color:#666;margin:0 0 16px;font-size:0.92em;">{etsy_desc}</p>
+          <a href="{ETSY_PLANNER_URL}" target="_blank" rel="noopener"
+             style="display:inline-block;background:#6B705C;color:#fff;padding:11px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.95em;">
+            {etsy_button} &rarr;</a>
+          <p style="margin:10px 0 0;font-size:0.78em;color:#999;">Instant download &bull; Print at home &bull; One-time purchase</p>
+        </div>'''
+    else:
+        # Always include Etsy CTA even if Gemini didn't generate one
+        etsy_html = f'''
+        <div style="background:#fff;border:2px solid #DDBEA9;border-radius:12px;padding:24px;margin:32px 0;text-align:center;">
+          <p style="font-size:0.78em;font-weight:600;letter-spacing:0.08em;color:#6B705C;text-transform:uppercase;margin:0 0 6px;">Digital Download &mdash; $14.99</p>
+          <p style="font-family:'DM Serif Display',serif;font-size:1.2em;color:#3a3a3a;margin:0 0 10px;">The Menopause Wellness Planner</p>
+          <p style="color:#666;margin:0 0 16px;font-size:0.92em;">Track symptoms, sleep, supplements, and mood in one place. Built for women navigating this transition.</p>
+          <a href="{ETSY_PLANNER_URL}" target="_blank" rel="noopener"
+             style="display:inline-block;background:#6B705C;color:#fff;padding:11px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.95em;">
+            Get the Planner on Etsy &rarr;</a>
+          <p style="margin:10px 0 0;font-size:0.78em;color:#999;">Instant download &bull; Print at home &bull; One-time purchase</p>
+        </div>'''
+
+    # Amazon products (gentle, compact)
+    amazon_html = ''
+    amazon_items = article_data.get('amazon_products', [])
+    if amazon_items:
+        amazon_cards = ''
+        for item in amazon_items:
+            name = _esc(item.get('name', ''))
+            price = _esc(item.get('price', ''))
+            rating = item.get('rating', 4.5)
+            review_count = _esc(item.get('review_count', ''))
+            note = _esc(item.get('one_line_note', ''))
+            amazon_url = _esc(item.get('amazon_url', '#'))
+            product_img = _esc(item.get('product_image', ''))
+
+            img_block = ''
+            if product_img:
+                img_block = (
+                    f'<img src="{product_img}" alt="{name}" width="52" height="52" '
+                    f'style="object-fit:contain;border-radius:6px;background:#f9f6f0;padding:3px;flex-shrink:0;" loading="lazy" '
+                    f'onerror="this.style.display=\'none\'">'
+                )
+
+            amazon_cards += f'''
+            <div style="display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #e8dcc8;">
+              {img_block}
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:600;color:#3a3a3a;font-size:0.92em;">{name}</div>
+                <div style="font-size:0.8em;color:#8B7355;">{_star_html(rating)} &middot; {review_count} &middot; {price}</div>
+                <div style="font-size:0.85em;color:#666;margin-top:2px;">{note}</div>
+              </div>
+              <a href="{amazon_url}" target="_blank" rel="nofollow sponsored"
+                 style="color:#6B705C;text-decoration:none;font-size:0.82em;white-space:nowrap;font-weight:500;">
+                See on Amazon &rarr;</a>
+            </div>'''
+
+        amazon_html = f'''
+        <section style="margin:32px 0;padding-top:24px;border-top:1px solid #e8dcc8;">
+          <h2 style="font-family:'DM Serif Display',serif;font-size:1.1em;color:#6B705C;margin:0 0 4px;">What&rsquo;s Been Helping Me</h2>
+          <p style="color:#999;font-size:0.85em;margin:0 0 12px;">A few things I keep on my nightstand.</p>
+          {amazon_cards}
+        </section>'''
+
+    # FAQ
+    faq_html = ''
+    for faq in faq_items:
+        faq_html += f'''
+        <div style="margin:16px 0;">
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1em;color:#3a3a3a;margin:0 0 6px;">{_esc(faq.get('q', ''))}</h3>
+          <p style="color:#666;margin:0;line-height:1.6;">{_esc(faq.get('a', ''))}</p>
+        </div>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | The Menopause Planner</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{_esc(site_config['base_url'])}/articles/{slug}.html">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+{schemas}
+{"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+</head>
+<body style="margin:0;padding:0;background:#FAF7F0;color:#3a3a3a;font-family:'Outfit',sans-serif;line-height:1.7;">
+
+<nav style="background:#fff;border-bottom:1px solid #e8dcc8;padding:14px 20px;">
+  <div style="max-width:680px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+    <a href="../index.html" style="text-decoration:none;font-family:'DM Serif Display',serif;font-size:1.15em;color:#3a3a3a;">The Menopause <span style="color:#6B705C;">Planner</span></a>
+    <a href="./" style="text-decoration:none;color:#8B7355;font-size:0.9em;">All Articles</a>
+  </div>
+</nav>
+
+<main style="max-width:680px;margin:0 auto;padding:32px 20px;">
+  <p style="font-size:0.82em;color:#A5A58D;margin:0 0 8px;">{date_display}</p>
+  <h1 style="font-family:'DM Serif Display',serif;font-size:1.8em;line-height:1.3;margin:0 0 20px;color:#3a3a3a;">{title}</h1>
+
+  <img src="{hero_url}" alt="{title}" style="width:100%;border-radius:10px;margin:0 0 24px;" loading="lazy">
+
+  {intro_html}
+
+  {sections_html}
+
+  {free_resource_html}
+
+  {etsy_html}
+
+  {amazon_html}
+
+  {f'<section style="margin:36px 0;"><h2 style="font-family:DM Serif Display,serif;font-size:1.2em;color:#6B705C;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
+</main>
+
+<footer style="border-top:1px solid #e8dcc8;padding:24px 20px;text-align:center;color:#A5A58D;font-size:0.82em;">
+  <p>&copy; {year} The Menopause Planner. Affiliate links may earn a commission.</p>
+</footer>
+
+</body>
+</html>'''
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PUBLIC API — dispatcher
+# ═══════════════════════════════════════════════════════════════════════════
+
+def render_clean_article(brand_key, article_data, site_config, slug):
+    """Render a complete article page using the brand-specific clean template.
+
+    This is the main entry point. Dispatches to the correct brand builder.
+    """
+    renderers = {
+        'deals': _render_deals_article,
+        'fitness': _render_fitness_article,
+        'menopause': _render_menopause_article,
+    }
+    renderer = renderers.get(brand_key, _render_deals_article)
+    return renderer(article_data, site_config, slug)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# LEGACY COMPATIBILITY — keep render_article_from_template working
+# for any code that still calls it (article_templates.py, etc.)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Old BRAND_THEMES kept for any imports
+BRAND_THEMES = {
+    'fitness': {
+        'heading_font': 'Space Grotesk', 'body_font': 'Inter',
+        'font_import': 'Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700',
+        'colors': {'bg': '#111', 'surface': '#1a1a1a', 'border': '#333',
+                   'accent': '#E8C547', 'accent_light': '#1a1a0a', 'text': '#fff',
+                   'muted': '#888', 'warm': '#1a1a0a'},
+        'expert_name': 'Talhah Bilal', 'expert_initials': 'TB',
+        'expert_credentials': 'ISSA-CPT', 'expert_bio': '',
+        'site_tagline': 'Expert Verified', 'cta_text': 'See on Amazon',
+    },
+    'menopause': {
+        'heading_font': 'DM Serif Display', 'body_font': 'Outfit',
+        'font_import': 'DM+Serif+Display&family=Outfit:wght@400;500;600;700',
+        'colors': {'bg': '#FAF7F0', 'surface': '#fff', 'border': '#e8dcc8',
+                   'accent': '#6B705C', 'accent_light': '#f0ebe3', 'text': '#3a3a3a',
+                   'muted': '#8B7355', 'warm': '#f5ede0'},
+        'expert_name': 'The Menopause Planner Team', 'expert_initials': 'MP',
+        'expert_credentials': 'Wellness Guide', 'expert_bio': '',
+        'site_tagline': 'Wellness Guide', 'cta_text': 'See on Amazon',
+    },
+    'deals': {
+        'heading_font': 'Lora', 'body_font': 'Inter',
+        'font_import': 'Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700',
+        'colors': {'bg': '#FAFAFA', 'surface': '#fff', 'border': '#e5e7eb',
+                   'accent': '#C47D8E', 'accent_light': '#fdf5f7', 'text': '#2D2D2D',
+                   'muted': '#999', 'warm': '#fdf5f7'},
+        'expert_name': 'Daily Deal Darling Team', 'expert_initials': 'DD',
+        'expert_credentials': 'Product Tested', 'expert_bio': '',
+        'site_tagline': 'Product Tested', 'cta_text': 'See it on Amazon',
+    },
+}
+
+FALLBACK_FACES = {
+    'fitness': [''] * 4, 'menopause': [''] * 4, 'deals': [''] * 4,
+}
+FALLBACK_PRODUCT_IMAGES = {
+    'fitness': FALLBACK_HERO_IMAGES['fitness'],
+    'menopause': FALLBACK_HERO_IMAGES['menopause'],
+    'deals': FALLBACK_HERO_IMAGES['deals'],
+    'default': FALLBACK_HERO_IMAGES['default'],
+}
 
 
 def render_article_from_template(brand_key, article_data, site_config, slug):
-    """Render a complete article page from the HTML template file.
-
-    This is the ONLY function you need to call. It reads the template,
-    fills in all variables, and returns complete HTML.
-
-    Args:
-        brand_key: 'fitness', 'menopause', or 'deals'
-        article_data: Dict with title, products, faq, etc. (from Claude API)
-        site_config: Dict with base_url, site_name, output_dir
-        slug: URL-safe article name
-
-    Returns:
-        Complete HTML string ready to save to disk.
-    """
-    theme = BRAND_THEMES.get(brand_key, BRAND_THEMES['deals'])
-    c = theme['colors']
-
-    # Read the template file
-    template_path = _get_template_path()
-    try:
-        with open(template_path, 'r', encoding='utf-8') as f:
-            template_html = f.read()
-    except FileNotFoundError:
-        logger.error(f'Template file not found: {template_path}')
-        raise
-
-    # Extract data with safe defaults
-    title = article_data.get('title', slug.replace('-', ' ').title())
-    meta_desc = article_data.get('meta_description', title)
-    products = article_data.get('products', [])
-    faq_items = article_data.get('faq', [])
-    year = datetime.now(timezone.utc).year
-    date_display = datetime.now(timezone.utc).strftime('%B %Y')
-
-    # Ensure hero image always exists
-    hero_image = _ensure_image(
-        article_data.get('hero_url', ''),
-        FALLBACK_HERO_IMAGES.get(brand_key, FALLBACK_HERO_IMAGES['default'])
-    )
-
-    # Build dynamic sections
-    quick_picks = _build_quick_picks_html(products, theme)
-
-    product_blocks = []
-    for i, product in enumerate(products[:3]):
-        product_blocks.append(_build_product_block_html(product, i, brand_key, theme))
-    product_blocks_html = '\n'.join(product_blocks)
-
-    comparison_html = _build_comparison_table_html(products)
-    methodology = article_data.get('methodology', [
-        f'Analyzed <strong>{article_data.get("reviews_analyzed", "5,000+")}</strong> verified reviews',
-        'Cross-referenced with product specifications and expert opinions',
-        'Excluded anything under <strong>4.0 stars</strong> or fewer than 500 reviews',
-        'Prioritized <strong>value for money</strong> and real-world performance',
-    ])
-    methodology_html = _build_methodology_html(methodology)
-    etsy_html = _build_etsy_html(brand_key)
-    faq_html = _build_faq_html(faq_items)
-
-    # Build schemas
-    schema_article, schema_faq, schema_product = _build_schemas(
-        title, meta_desc, slug, site_config, theme['expert_name'], products, faq_items
-    )
-
-    # Top product info (for sticky CTA)
-    top_product = products[0] if products else {}
-    top_name = top_product.get('name', title)
-    top_url = top_product.get('amazon_url', '#')
-    top_price = f'${top_product.get("price_low", "?")}-${top_product.get("price_high", "?")}'
-    top_rating = top_product.get('rating', 4.5)
-    top_save = top_product.get('subscribe_save', '')
-
-    # Face images
-    faces = FALLBACK_FACES.get(brand_key, FALLBACK_FACES['deals'])
-
-    # Before/After
-    before = article_data.get('before', {'emoji': '\U0001f630', 'text': 'The problem you had before'})
-    after = article_data.get('after', {'emoji': '\U0001f60a', 'text': 'How life improves after'})
-
-    # Final CTA text
-    final_cta = article_data.get('final_cta_text', f'Start with the {top_name}. Most people notice a difference within the first week.')
-
-    # ── Replace ALL template variables ─────────────────────────────────────
-    replacements = {
-        '{{PAGE_TITLE}}': _esc(title),
-        '{{SITE_NAME}}': _esc(site_config.get('site_name', '')),
-        '{{META_DESCRIPTION}}': _esc(meta_desc),
-        '{{SEO_KEYWORDS}}': _esc(', '.join(article_data.get('seo_keywords', [slug.replace('-', ', ')]))),
-        '{{ARTICLE_URL}}': _esc(site_config['base_url'] + '/articles/' + slug + '.html'),
-        '{{HERO_IMAGE}}': hero_image,
-        '{{FONT_IMPORT}}': theme['font_import'],
-        '{{HEADING_FONT}}': theme['heading_font'],
-        '{{BODY_FONT}}': theme['body_font'],
-        '{{COLOR_BG}}': c['bg'],
-        '{{COLOR_SURFACE}}': c['surface'],
-        '{{COLOR_BORDER}}': c['border'],
-        '{{COLOR_ACCENT}}': c['accent'],
-        '{{COLOR_ACCENT_LIGHT}}': c['accent_light'],
-        '{{COLOR_TEXT}}': c['text'],
-        '{{COLOR_MUTED}}': c['muted'],
-        '{{COLOR_WARM}}': c['warm'],
-        '{{SITE_TAGLINE}}': theme['site_tagline'],
-        '{{CATEGORY}}': _esc(article_data.get('category', 'Wellness')),
-        '{{CRUMB_TITLE}}': _esc(title[:40]),
-        '{{DATE_DISPLAY}}': date_display,
-        '{{BRANDS_TESTED}}': str(article_data.get('brands_tested', 8)),
-        '{{READ_TIME}}': article_data.get('read_time', '4 min'),
-        '{{REVIEWS_ANALYZED}}': _esc(article_data.get('reviews_analyzed', '5,000+')),
-        '{{EXPERT_NAME}}': _esc(theme['expert_name']),
-        '{{EXPERT_INITIALS}}': theme['expert_initials'],
-        '{{EXPERT_CREDENTIALS}}': _esc(theme['expert_credentials']),
-        '{{EXPERT_BIO}}': _esc(theme['expert_bio']),
-        '{{FACE_1}}': faces[0],
-        '{{FACE_2}}': faces[1],
-        '{{FACE_3}}': faces[2],
-        '{{FACE_4}}': faces[3],
-        '{{BEFORE_EMOJI}}': before.get('emoji', '\U0001f630'),
-        '{{BEFORE_TEXT}}': _esc(before.get('text', '')),
-        '{{AFTER_EMOJI}}': after.get('emoji', '\U0001f60a'),
-        '{{AFTER_TEXT}}': _esc(after.get('text', '')),
-        '{{VERDICT_TEXT}}': article_data.get('verdict', ''),
-        '{{QUICK_PICKS_HTML}}': quick_picks,
-        '{{PRODUCT_BLOCKS_HTML}}': product_blocks_html,
-        '{{COMPARISON_TABLE_HTML}}': comparison_html,
-        '{{METHODOLOGY_HTML}}': methodology_html,
-        '{{ETSY_CTA_HTML}}': etsy_html,
-        '{{FAQ_ITEMS_HTML}}': faq_html,
-        '{{FINAL_CTA_TEXT}}': _esc(final_cta),
-        '{{TOP_PRODUCT_NAME}}': _esc(top_name),
-        '{{TOP_PRODUCT_URL}}': _esc(top_url),
-        '{{TOP_PRODUCT_PRICE}}': top_price,
-        '{{TOP_PRODUCT_RATING}}': str(top_rating),
-        '{{TOP_PRODUCT_SAVE}}': _esc(top_save) if top_save else 'Free returns',
-        '{{YEAR}}': str(year),
-        '{{SCHEMA_ARTICLE}}': schema_article,
-        '{{SCHEMA_FAQ}}': schema_faq,
-        '{{SCHEMA_PRODUCT}}': schema_product,
-    }
-
-    result = template_html
-    for placeholder, value in replacements.items():
-        result = result.replace(placeholder, str(value))
-
-    # Verify no unfilled placeholders remain
-    remaining = re.findall(r'\{\{[A-Z_]+\}\}', result)
-    if remaining:
-        logger.warning(f'Unfilled template placeholders in {slug}: {remaining}')
-        # Fill remaining with empty string so page doesn't break
-        for r in remaining:
-            result = result.replace(r, '')
-
-    return result
+    """Legacy compatibility wrapper — routes to the new clean renderer."""
+    return render_clean_article(brand_key, article_data, site_config, slug)

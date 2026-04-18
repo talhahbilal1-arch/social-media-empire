@@ -502,54 +502,81 @@ jobs:
           def _generate_article_for_pin(pin):
               brand = pin['brand']
               print(f'\n  --- Article for {brand}: {pin.get("title", "")[:50]} ---')
+              pin_data = {
+                  'title': pin.get('title', ''),
+                  'description': pin.get('description', ''),
+                  'topic': pin.get('topic', '') or pin.get('niche', ''),
+                  'trending_topic': pin.get('topic', ''),
+                  'destination_url': pin.get('destination_url', ''),
+                  'image_url': pin.get('image_url', ''),
+                  'board': pin.get('board_id', ''),
+                  'pexels_search_term': pin.get('pexels_search_term', '') or pin.get('title', ''),
+                  'tips': pin.get('tips', []) or pin.get('tips_list', []) or [],
+                  'category': pin.get('category', ''),
+              }
+              site = BRAND_SITE_CONFIG.get(brand, {})
+              base_url = site.get('base_url', '')
+              articles_index_url = f'{base_url}/articles/' if base_url else ''
+
+              # Try article generation with one retry on failure
+              for attempt in range(2):
+                  try:
+                      slug, article_md = generate_article_for_pin(brand, pin_data, db.client)
+                      if slug and article_md:
+                          html = article_to_html(article_md, brand, slug, pin_data)
+                          article_url = save_and_register_article(html, brand, slug, pin_data, db.client)
+                          pin['destination_url'] = article_url
+                          try:
+                              db.client.table('pinterest_pins').update({
+                                  'destination_url': article_url,
+                                  'article_generated': True
+                              }).eq('id', pin['id']).execute()
+                          except Exception:
+                              pass
+                          with _articles_lock:
+                              articles_generated.append(f'{brand}: {slug}')
+                          print(f'  [{brand}] Article → {article_url}')
+                          return  # Success
+                      elif slug:
+                          article_url = f'{base_url}/articles/{slug}.html'
+                          pin['destination_url'] = article_url
+                          try:
+                              db.client.table('pinterest_pins').update({
+                                  'destination_url': article_url,
+                                  'article_generated': True
+                              }).eq('id', pin['id']).execute()
+                          except Exception:
+                              pass
+                          print(f'  [{brand}] Article exists: {article_url}')
+                          return  # Success — article already existed
+                      elif attempt == 0:
+                          print(f'  [{brand}] No topic/slug — retrying once...')
+                          continue
+                  except Exception as e:
+                      if attempt == 0:
+                          print(f'  [{brand}] Article attempt 1 failed ({e}), retrying...')
+                          import traceback; traceback.print_exc()
+                          continue
+                      print(f'  [{brand}] Article attempt 2 failed: {e}')
+                      import traceback; traceback.print_exc()
+                      log_pipeline_error('2', brand, e, severity='medium')
+
+              # Both attempts failed — fall back to /articles/ index, NOT homepage
+              fallback_url = articles_index_url or base_url
+              pin['destination_url'] = fallback_url
+              print(f'  [{brand}] Article generation failed — falling back to: {fallback_url}')
+              log_pipeline_error(
+                  '2', brand,
+                  f'Article gen failed after 2 attempts for pin {pin.get("id", "?")}. Fallback: {fallback_url}',
+                  severity='high'
+              )
               try:
-                  pin_data = {
-                      'title': pin.get('title', ''),
-                      'description': pin.get('description', ''),
-                      'topic': pin.get('topic', '') or pin.get('niche', ''),
-                      'trending_topic': pin.get('topic', ''),
-                      'destination_url': pin.get('destination_url', ''),
-                      'image_url': pin.get('image_url', ''),
-                      'board': pin.get('board_id', ''),
-                      'pexels_search_term': pin.get('pexels_search_term', '') or pin.get('title', ''),
-                      'tips': pin.get('tips', []) or pin.get('tips_list', []) or [],
-                      'category': pin.get('category', ''),
-                  }
-                  slug, article_md = generate_article_for_pin(brand, pin_data, db.client)
-                  if slug and article_md:
-                      html = article_to_html(article_md, brand, slug, pin_data)
-                      article_url = save_and_register_article(html, brand, slug, pin_data, db.client)
-                      # Update in-memory pin so Phase 1b uses the article URL as the "Visit Site" link
-                      pin['destination_url'] = article_url
-                      try:
-                          db.client.table('pinterest_pins').update({
-                              'destination_url': article_url,
-                              'article_generated': True
-                          }).eq('id', pin['id']).execute()
-                      except Exception:
-                          pass
-                      with _articles_lock:
-                          articles_generated.append(f'{brand}: {slug}')
-                      print(f'  [{brand}] Article → {article_url}')
-                  elif slug:
-                      site = BRAND_SITE_CONFIG.get(brand, {})
-                      base_url = site.get('base_url', pin_data.get('destination_url', ''))
-                      article_url = f'{base_url}/articles/{slug}.html'
-                      pin['destination_url'] = article_url  # Update in-memory
-                      try:
-                          db.client.table('pinterest_pins').update({
-                              'destination_url': article_url,
-                              'article_generated': True
-                          }).eq('id', pin['id']).execute()
-                      except Exception:
-                          pass
-                      print(f'  [{brand}] Article exists: {article_url}')
-                  else:
-                      print(f'  [{brand}] No topic — pin will link to homepage')
-              except Exception as e:
-                  print(f'  Article failed for {brand}: {e}')
-                  import traceback; traceback.print_exc()
-                  log_pipeline_error('2', brand, e, severity='medium')
+                  db.client.table('pinterest_pins').update({
+                      'destination_url': fallback_url,
+                      'article_generated': False
+                  }).eq('id', pin['id']).execute()
+              except Exception:
+                  pass
 
           if rendered_pins:
               # Sequential to avoid Gemini API rate limits (429 errors)

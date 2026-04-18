@@ -477,10 +477,201 @@ def _make_slug(topic):
     return slug[:60]
 
 
-def generate_article_for_pin(brand_key, pin_data, supabase_client):
-    """Generate a high-converting affiliate buying guide matching a pin's topic.
+def _build_deals_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for deals brand — first-person product review, PAS framework."""
+    return f"""You are a conversational product reviewer writing for DailyDealDarling.com.
+Write as a real person sharing honest product opinions. First-person, warm, relatable.
 
-    Returns (slug, content) where content is either JSON (v3) or markdown (v2 fallback).
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- First-person conversational ("I grabbed this on a whim and honestly...")
+- PAS framework in intro: Problem the reader has → Agitate why it's annoying → Solution you found
+- Honest personal reviews — mention what you actually like AND what's meh
+- Natural scarcity: "goes in/out of stock", "I've seen the price bounce around"
+- Outcome-specific CTAs: "Get the exact blanket I bought", "See if it's still in stock"
+- NO: comparison tables, trust badges, methodology sections, before/after cards, payment icons
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Catchy first-person title about {topic} ({year})",
+  "meta_description": "155 chars max, conversational, SEO-optimized",
+  "intro_paragraphs": [
+    "PAS paragraph 1 — state the problem the reader probably has",
+    "Agitate paragraph — why this problem is annoying/costly",
+    "Solution paragraph — how you found the answer, transition to products"
+  ],
+  "products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "12,400+",
+      "is_winner": true,
+      "section_heading": "The One I Actually Kept",
+      "personal_review_text": "3-4 sentences of honest first-person review. What you love, what's just okay, who it's perfect for. Sound like a real person, not a copywriter."
+    }}
+  ],
+  "verdict_text": "2-3 sentences wrapping up your honest take. Restate the winner and why.",
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer."}}
+  ]
+}}
+
+RULES:
+- 2-4 products, the FIRST one should be is_winner: true (gets the special "The one I bought" card)
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado"
+- Output ONLY valid JSON"""
+
+
+def _build_fitness_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for fitness brand — educational article, gear at end only."""
+    return f"""You are an experienced fitness coach writing educational content for FitOver35.com.
+Your readers are men over 35 who want actionable advice, not product pitches.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- 90% education, 10% product recommendations AT THE END only
+- Teach something real: recovery science, nutrition timing, training principles
+- Each section gets an actionable "The fix" tip box with a specific protocol
+- Write with authority — cite studies, give specific numbers (reps, sets, grams, timing)
+- Products appear ONLY in a compact "What I Use" section at the very bottom
+- NO big CTAs in the body, no hard sell. Earn trust through knowledge.
+- Voice: direct, confident, like a coach talking to a training partner
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Educational title about {topic} ({year})",
+  "meta_description": "155 chars max, value-first, SEO-optimized",
+  "intro_hook": "2-3 sentences that hook with a surprising fact, common mistake, or bold claim about {topic}. Make the reader think 'I need to know this.'",
+  "sections": [
+    {{
+      "heading": "Section heading — educational, not salesy",
+      "body_paragraphs": [
+        "Paragraph 1 — teach the concept, cite a study or mechanism",
+        "Paragraph 2 — explain why this matters for men over 35 specifically",
+        "Paragraph 3 — practical application"
+      ],
+      "tip_box_text": "THE FIX: Specific actionable protocol. Example: 'Take 5g creatine monohydrate daily with your post-workout shake. Timing doesn't matter — consistency does. Load phase is optional.'"
+    }}
+  ],
+  "gear_recommendations": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "8,200+",
+      "one_line_note": "What I use for [specific purpose]. Does the job, nothing fancy."
+    }}
+  ],
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with specific numbers."}}
+  ]
+}}
+
+RULES:
+- 3-5 educational sections (this is the meat of the article)
+- 2-4 gear recommendations at the end only
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "unlock your potential"
+- Output ONLY valid JSON"""
+
+
+def _build_menopause_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for menopause brand — warm wellness, Etsy product at end."""
+    return f"""You are a warm, knowledgeable wellness writer for TheMenopausePlanner.com.
+Your readers are women navigating perimenopause and menopause who want practical relief.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- Value-first wellness content — teach practical advice (triggers, sleep, supplements, routines)
+- Warm, empathetic tone — acknowledge the struggle, then provide solutions
+- Each section gets a "Try this" tip box with something she can do TODAY
+- Products at the end only: first a FREE symptom tracker download (trust builder), then the Etsy planner
+- For Amazon products, keep it gentle: "Here's what's been helping me" — small cards, no hard sell
+- NO: comparison tables, trust badges, payment icons, before/after cards, methodology sections
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Warm, practical title about {topic} ({year})",
+  "meta_description": "155 chars max, empathetic, SEO-optimized",
+  "intro_hook": "2-3 sentences that connect emotionally. Acknowledge what she's going through with {topic}, then promise practical help. No medical claims.",
+  "sections": [
+    {{
+      "heading": "Section heading — practical and supportive",
+      "body_paragraphs": [
+        "Paragraph 1 — explain the symptom/issue in plain language",
+        "Paragraph 2 — why this happens during menopause (hormonal context, not medical advice)",
+        "Paragraph 3 — what actually helps, based on research and real experience"
+      ],
+      "tip_box_text": "TRY THIS: Specific actionable tip she can start tonight. Example: 'Keep your bedroom at 65°F. Use bamboo sheets instead of cotton — they wick moisture 3x faster. Put a cooling towel on your nightstand.'"
+    }}
+  ],
+  "free_resource_cta": {{
+    "heading": "Free: Symptom Tracker Printable",
+    "description": "Track your hot flashes, sleep quality, and what's actually helping — so you can spot patterns and share real data with your doctor.",
+    "button_text": "Download Free Tracker"
+  }},
+  "etsy_product_section": {{
+    "heading": "The Menopause Wellness Planner",
+    "description": "Everything in the free tracker plus daily logging, supplement tracking, appointment prep sheets, and mood patterns. Built specifically for women navigating this transition.",
+    "price": "$14.99",
+    "button_text": "Get the Planner on Etsy"
+  }},
+  "amazon_products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "5,200+",
+      "one_line_note": "Helps with [specific symptom]. I keep this on my nightstand."
+    }}
+  ],
+  "faq": [
+    {{"q": "Common question about {topic} during menopause?", "a": "Helpful 2-sentence answer. No medical claims."}}
+  ]
+}}
+
+RULES:
+- 3-5 educational/wellness sections
+- 1-3 Amazon products at the end (gentle, not salesy)
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- NEVER make medical claims. Use "may help", "research suggests", "many women find"
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado"
+- Output ONLY valid JSON"""
+
+
+def generate_article_for_pin(brand_key, pin_data, supabase_client):
+    """Generate a brand-specific article matching a pin's topic.
+
+    Returns (slug, content) where content is JSON string or None.
     Or (None, None) if skipped.
     """
     from .content_brain import BRAND_CONFIGS
@@ -532,7 +723,7 @@ def generate_article_for_pin(brand_key, pin_data, supabase_client):
             product_links.append(f'- {product}')
     products_text = '\n'.join(product_links) if product_links else 'none available'
 
-    # Get tips from pin if available (for the article to expand on)
+    # Get tips from pin if available
     tips = pin_data.get('tips', [])
     tips_section = ''
     if tips:
@@ -541,244 +732,37 @@ PIN TIPS (expand on each of these in the article):
 {chr(10).join(f'{i+1}. {t}' for i, t in enumerate(tips))}
 """
 
-    seo_keywords = ', '.join(config.get('seo_keywords', [])[:6])
     year = datetime.now(timezone.utc).year
     affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
 
-    # Brand-specific trust section
-    trust_text = {
-        'fitness': 'Written by Talhah Bilal, ISSA-certified personal trainer with 6+ years experience training men over 35.',
-        'menopause': "Reviewed by our editorial team in consultation with women's health practitioners.",
-        'deals': 'Our team tests and compares dozens of products monthly.',
-    }.get(brand_key, 'Our team tests and compares dozens of products monthly.')
-
-    # Brand-specific writing style notes
-    if brand_key == 'fitness':
-        style_notes = (
-            'Include a "Pro-Coach Insight" blockquote (use > **Pro-Coach Insight:**) '
-            'with specific timing, dosage, or technique advice. '
-            'Write with high confidence and data-backed authority. '
-            'Cite specific numbers or studies where possible.'
-        )
-    elif brand_key == 'menopause':
-        style_notes = (
-            'Include a "Symptom Checklist" section with specific symptoms this addresses '
-            '(night sweats, fatigue, brain fog, mood changes). '
-            'Write with warmth and empathy — acknowledge the struggle, then provide solutions.'
-        )
-    else:
-        style_notes = (
-            'Include a "Why It\'s Trending" or "Social Proof" mention (star ratings, '
-            'review counts, Pinterest saves). '
-            'Write in a curated, editorial tone — like a boutique magazine recommending the best.'
-        )
-
-    # Etsy CTA for menopause brand only
-    etsy_section = ''
-    if brand_key == 'menopause':
-        etsy_section = (
-            '\n\nETSY PLANNER CTA: In the conclusion, naturally mention and link to the '
-            'Menopause Wellness Planner Bundle on Etsy as a practical next step.\n'
-            'Use this exact link: https://www.etsy.com/listing/4435219468/'
-            'menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic\n'
-            'Format: [Menopause Wellness Planner Bundle](link) — one sentence, benefit-driven.'
-        )
-
-    # ── Try JSON generation first ──────────────────────────────────────────
+    # ── Build brand-specific prompt ───────────────────────────────────────
     available_keys = [k for k in brand_amazon.keys() if k != '_default']
     available_keys_str = ', '.join(available_keys) if available_keys else 'none available'
 
-    json_prompt = f"""You are a high-converting buying guide expert. Generate ONLY valid JSON (no markdown, no backticks).
-
-AVAILABLE PRODUCT KEYS: {available_keys_str}
-
-BRAND VOICE:
-{config['voice']}
-
-ARTICLE TOPIC: {topic}
-PIN TITLE: {pin_data.get('title', '')}
-CATEGORY: {category}
-{tips_section}
-
-AFFILIATE TAG: {affiliate_tag}
-
-REVENUE OPTIMIZATION RULES:
-- The FIRST product recommendation MUST appear within the first 200 words (above the fold)
-- Include a "Quick Pick" callout box at the very top with the #1 product and its price
-- Use urgency language: "currently X% off", "selling fast", "price just dropped"
-- Each product MUST have a specific price range (never say "affordable" without a number)
-- End EVERY product section with a clear "Check price on Amazon" CTA
-
-Output EXACTLY this JSON structure (no markdown, no code fences, ONLY valid JSON):
-{{
-  "title": "Best [Product] for [Audience] ({year})",
-  "meta_description": "155 chars max, SEO-optimized",
-  "read_time": "4 min",
-  "brands_tested": 8,
-  "reviews_analyzed": "14,000+",
-  "verdict": "Bold one-sentence finding after testing.",
-  "before": {{"emoji": "😰", "title": "Before", "text": "The problem"}},
-  "after": {{"emoji": "😴", "title": "After", "text": "The solution"}},
-  "urgency_text": "Currently 15% off with Subscribe & Save on Amazon",
-  "products": [
-    {{
-      "name": "Product Name",
-      "badge": "Our Pick",
-      "badge_type": "top",
-      "price_low": 28,
-      "price_high": 38,
-      "rating": 4.6,
-      "review_count": "12,400+",
-      "subscribe_save": "15% off",
-      "pexels_image_query": "vivid specific query for Pexels",
-      "pexels_thumb_queries": ["query1", "query2", "query3"],
-      "benefit_icons": [{{"emoji": "💧", "text": "Benefit"}}],
-      "benefit_image_query": "detail image query",
-      "benefit_headline": "Why X beats Y",
-      "benefit_description": "Explanation.",
-      "pros": ["Pro 1", "Pro 2", "Pro 3", "Pro 4"],
-      "cons": ["Con 1", "Con 2"],
-      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS"
-    }}
-  ],
-  "comparison_extra_rows": [{{"label": "Subscribe & Save", "values": ["✓ 15%", "✓ 10%", "✗"]}}],
-  "methodology": ["Point 1", "Point 2", "Point 3", "Point 4"],
-  "faq": [{{"q": "Question?", "a": "Answer."}}],
-  "related_product_keys": ["key1", "key2", "key3"]
-}}
-
-RULES:
-- 2-3 products only, use ONLY keys from AVAILABLE PRODUCT KEYS
-- Ratings: 4.3-4.8 range (never 5.0)
-- Review counts: realistic 1000-50000 range
-- Do NOT include testimonials or fake reviews (FTC compliance)
-- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "unlock your potential"
-- Output ONLY JSON, no markdown, no backticks, no code fences"""
+    prompt_builders = {
+        'deals': _build_deals_prompt,
+        'fitness': _build_fitness_prompt,
+        'menopause': _build_menopause_prompt,
+    }
+    builder = prompt_builders.get(brand_key, _build_deals_prompt)
+    json_prompt = builder(
+        topic, pin_data, config, available_keys_str, products_text,
+        tips_section, affiliate_tag, year
+    )
 
     try:
         article_json = generate_json(json_prompt, max_tokens=4000)
         parsed = _try_parse_json(article_json)
         if parsed and isinstance(parsed, dict):
-            logger.info(f"JSON article generated successfully for '{topic}'")
-            return slug, article_json
+            # Tag with brand_key so the HTML builder knows which template to use
+            parsed['_brand_key'] = brand_key
+            logger.info(f"JSON article generated successfully for '{topic}' ({brand_key})")
+            return slug, json.dumps(parsed)
         else:
-            logger.warning(f"JSON parsing failed, falling back to markdown for '{topic}'")
+            logger.warning(f"JSON parsing failed for '{topic}' ({brand_key})")
     except Exception as e:
-        logger.warning(f"JSON generation failed: {e}, falling back to markdown")
+        logger.warning(f"JSON generation failed for '{topic}' ({brand_key}): {e}")
 
-    # ── Fallback to markdown generation ──────────────────────────────────
-    markdown_prompt = f"""Write a high-converting affiliate buying guide for the {config['name']} website.
-This is NOT a generic blog post. It answers: "Which one should I buy?"
-
-BRAND VOICE:
-{config['voice']}
-
-ARTICLE TOPIC: {topic}
-PIN TITLE: {pin_data.get('title', '')}
-CATEGORY: {category}
-{tips_section}
-BRAND STYLE: {style_notes}
-
-REQUIRED STRUCTURE (follow EXACTLY):
-
-1. HERO + QUICK VERDICT (first 200 words, above the fold)
-   - H1 title with buyer-intent keyword: "Best [Product] for [Audience] ({year})"
-   - One-sentence expert verdict: "After researching X options, [Top Pick] is the best for most [audience] because [specific reason]."
-   - QUICK PICKS BOX with 2-3 products:
-     * Our Pick: [Product Name] — [one-line why]
-     * Also Great: [Product Name] — [one-line why]
-     * Budget Pick: [Product Name] — [one-line why]
-   - Each pick must include its Amazon link from the APPROVED PRODUCTS list
-   - IMMEDIATELY after Quick Picks, add: [SIGNUP_FORM_PLACEHOLDER]
-     (This captures readers who just want the recommendation and are about to leave)
-
-2. WHY TRUST THIS GUIDE (50-100 words)
-   {trust_text}
-
-3. On its own line exactly: [SIGNUP_FORM_PLACEHOLDER]
-
-4. DETAILED REVIEW FOR EACH PRODUCT (200-300 words each, 2-4 products)
-   For EACH product include ALL of the following:
-   - H2: "[Product Name] — Best for [specific use case]"
-   - A product card comment on its OWN LINE (the template renders this as a visual card):
-     <!--PRODUCT_CARD: name="Product Name" | url="amazon_url" | rating="4.7" | reviews="12400" | price_range="$30-50" | badge="Our Pick" -->
-   - WHO IT'S FOR: Best for [specific audience/scenario]
-   - WHAT WE LIKE: 3 specific, testable pros (NOT generic praise)
-   - WHAT WE DON'T: 1-2 honest cons (builds trust, increases conversion)
-   - BOTTOM LINE: One sentence summary with embedded Amazon link
-
-5. COMPARISON TABLE (use markdown table format):
-   | Feature | Product 1 | Product 2 | Product 3 |
-   |---------|-----------|-----------|-----------|
-   | Price Range | ... | ... | ... |
-   | Best For | ... | ... | ... |
-   | Our Rating | ... | ... | ... |
-
-6. HOW WE CHOSE (100-150 words)
-   What criteria matter and why we chose these products.
-
-7. FAQ SECTION (3-5 questions)
-   Format each EXACTLY as:
-   **Q: [Question with long-tail keyword]?**
-   A: [Concise 2-3 sentence answer]
-
-8. FINAL VERDICT + CTA (100 words)
-   Restate the top pick with its Amazon link.
-   Use action-oriented CTAs like: "See today's price on Amazon", "Check if it's in stock", "View current deals"
-   — NOT generic phrases like "pick what works for you"
-
-9. QUICK VERDICT BOX (early in article, after intro)
-   Include a 2-3 sentence verdict box with the top pick recommendation.
-   Format as a blockquote or highlighted section with:
-   - The winning product name
-   - One key reason it's the best
-   - Link to detailed review section below
-   Position this above the "Why Trust This Guide" section for maximum visibility.
-
-10. RELATED ARTICLES (internal links — boosts SEO and time on site)
-   Add "You Might Also Like" section at bottom with 2-3 related article links:
-   - "[Related Topic Title](../articles/related-topic-slug.html)"
-   Use realistic topic slugs based on common topics for this brand.
-   These help Google understand site structure and keep readers browsing longer.
-
-CRITICAL RULES:
-- ALL Amazon links must use DIRECT /dp/ASIN URLs from the approved list below. NEVER invent /dp/ URLs.
-- If a product is NOT in the approved list, DO NOT LINK IT. Only recommend products we have links for.
-- ALL Amazon links must include tag={affiliate_tag}
-- For non-product articles (e.g. "benefits of creatine"), STILL end with 1-2 specific product recommendations with PRODUCT_CARD data.
-- EVERY product mention must include the <!--PRODUCT_CARD: ...--> comment on its own line.
-- Star ratings: realistic range 4.3-4.8 (never 5.0)
-- Review counts: realistic range 1,000-50,000
-- Price ranges: approximate but realistic
-- badge values: "Our Pick", "Also Great", "Budget Pick", or "Best Value"
-- CALL-TO-ACTION RULE: Use strong, action-oriented CTAs. Examples: "See today's price on Amazon", "Check if it's in stock", "View current deals", "Check current price". Never use vague phrases like "check price" or "buy now" without context.
-
-APPROVED PRODUCTS WITH AMAZON LINKS (use these EXACT URLs):
-{products_text}
-
-SEO KEYWORDS: Naturally include: {seo_keywords}
-
-BANNED PHRASES: "In today's world", "it's important to note", "when it comes to",
-"let's dive in", "without further ado", "at the end of the day", "it goes without saying"
-{etsy_section}
-OUTPUT FORMAT — Markdown with frontmatter:
----
-title: "Article Title"
-slug: "{slug}"
-meta_description: "155 char description"
-date: "{datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
-brand: "{brand_key}"
-keywords: ["keyword1", "keyword2", "keyword3"]
----
-
-[Article content in Markdown]"""
-
-    try:
-        article_md = generate_text(markdown_prompt, max_tokens=4000)
-        if article_md:
-            return slug, article_md
-    except Exception as e:
-        logger.error(f"Article generation failed for '{topic}': {e}")
     return slug, None
 
 
@@ -960,120 +944,46 @@ def _inline_format(text, brand_key='deals'):
     return text
 
 
-def _build_v3_article(article_data, brand_key, slug, pin_data=None):
-    """Build v3 article from structured JSON data.
-
-    Fetches images from Pexels and returns complete HTML.
-    """
-    from .article_templates import render_article_page
-
-    site = BRAND_SITE_CONFIG[brand_key]
-
-    # Resolve amazon_product_key → actual Amazon URLs
+def _resolve_product_urls(products_list, brand_key, key_field='amazon_product_key'):
+    """Resolve amazon_product_key → actual Amazon URLs for a list of products."""
     brand_amazon = AMAZON_AFFILIATE_LINKS.get(brand_key, {})
-
-    # Fetch hero image + optional video
-    hero_query = article_data.get('title', slug)
-    hero_url = _fetch_pexels_image(hero_query)
-    video_url = _fetch_pexels_video(hero_query)
-
-    # Enrich products with images
-    for product in article_data.get('products', []):
-        product_key = product.get('amazon_product_key', '')
+    for product in products_list:
+        product_key = product.get(key_field, '')
         if product_key and product_key in brand_amazon:
             product['amazon_url'] = brand_amazon[product_key]
         else:
             product['amazon_url'] = brand_amazon.get('_default', '')
-
-        # Fetch hero image for this product
-        hero_img_query = product.get('pexels_image_query', product.get('name', ''))
-        hero_img = _fetch_pexels_image(hero_img_query) if hero_img_query else None
-        product['hero_image'] = hero_img
-
-        # Fetch thumbnail images
-        thumb_queries = product.get('pexels_thumb_queries', [])
-        thumb_images = []
-        for tq in thumb_queries[:3]:
-            ti = _fetch_pexels_image(tq) if tq else None
-            if ti:
-                thumb_images.append(ti)
-        product['thumb_images'] = thumb_images
-
-        # Fetch benefit image
-        benefit_img_query = product.get('benefit_image_query', '')
-        benefit_img = _fetch_pexels_image(benefit_img_query) if benefit_img_query else None
-        product['benefit_image'] = benefit_img
-
-    # Fetch related product images
-    related_products = []
-    for key in article_data.get('related_product_keys', [])[:3]:
-        if key in brand_amazon:
-            img = _fetch_pexels_image(key)
-            related_products.append({
-                'name': key,
-                'amazon_url': brand_amazon[key],
-                'image': img,
-            })
-
-    # Build enriched article data
-    enriched_data = dict(article_data)
-    enriched_data['hero_url'] = hero_url
-    enriched_data['video_url'] = video_url
-    enriched_data['category'] = pin_data.get('category', '') if pin_data else ''
-    enriched_data['related_products'] = related_products
-
-    # Store in pin_data for template
-    if pin_data is None:
-        pin_data = {}
-    pin_data['_article_data'] = enriched_data
-
-    # Use the new template-based renderer (permanent fix)
-    from .template_renderer import render_article_from_template
-    return render_article_from_template(
-        brand_key=brand_key,
-        article_data=enriched_data,
-        site_config=site,
-        slug=slug,
-    )
+        # Generate Amazon product image from ASIN
+        asin_m = re.search(r'/dp/([A-Z0-9]{10})', product.get('amazon_url', ''))
+        if asin_m:
+            product['product_image'] = f"https://m.media-amazon.com/images/P/{asin_m.group(1)}.01.LZZZZZZZ.jpg"
+        else:
+            product['product_image'] = ''
 
 
-def _build_v2_article(markdown_content, brand_key, slug, pin_data=None):
-    """Build v2 article from markdown (fallback path).
+def _build_article_html(article_data, brand_key, slug, pin_data=None):
+    """Build a clean brand-specific article from structured JSON data.
 
-    Uses the same new template as v3 — generates minimal article_data
-    from the markdown content and renders through template_renderer.
+    Dispatches to the appropriate brand builder.
     """
-    from .template_renderer import render_article_from_template
+    from .template_renderer import render_clean_article
 
     site = BRAND_SITE_CONFIG[brand_key]
-    title, meta_desc = _extract_frontmatter(markdown_content)
-    if not title:
-        title = slug.replace('-', ' ').title()
-    if not meta_desc:
-        meta_desc = f"{title} - {site['site_name']}"
 
     # Fetch hero image
-    pexels_query = (pin_data or {}).get('pexels_search_term', '') \
-        or (pin_data or {}).get('image_search_query', '') \
-        or slug.replace('-', ' ')
-    hero_url = _fetch_pexels_image(pexels_query)
+    hero_query = article_data.get('title', slug)
+    hero_url = _fetch_pexels_image(hero_query)
+    article_data['hero_url'] = hero_url
 
-    # Build article_data for the new template (minimal but valid)
-    article_data = {
-        'title': title,
-        'meta_description': meta_desc,
-        'hero_url': hero_url,
-        'read_time': '4 min',
-        'brands_tested': 8,
-        'reviews_analyzed': '5,000+',
-        'verdict': f'<strong>We researched the best options</strong> so you don\'t have to.',
-        'before': {'emoji': '\U0001f630', 'text': 'Hours scrolling through thousands of options'},
-        'after': {'emoji': '\U0001f60a', 'text': 'Confident purchase backed by real reviews'},
-        'products': [],
-        'faq': [],
-    }
+    # Resolve product URLs for all product lists
+    if brand_key == 'deals':
+        _resolve_product_urls(article_data.get('products', []), brand_key)
+    elif brand_key == 'fitness':
+        _resolve_product_urls(article_data.get('gear_recommendations', []), brand_key)
+    elif brand_key == 'menopause':
+        _resolve_product_urls(article_data.get('amazon_products', []), brand_key)
 
-    return render_article_from_template(
+    return render_clean_article(
         brand_key=brand_key,
         article_data=article_data,
         site_config=site,
@@ -1082,36 +992,85 @@ def _build_v2_article(markdown_content, brand_key, slug, pin_data=None):
 
 
 def article_to_html(markdown_content, brand_key, slug, pin_data=None):
-    """Convert article content to complete bridge-page HTML.
+    """Convert article content to complete HTML page.
 
-    Handles two paths:
-    - JSON (v3): Structured data → fetch images → v3 template with enhanced sections
-    - Markdown (v2 fallback): Existing path with product cards + FAQ schema
+    Parses JSON from Gemini and dispatches to brand-specific template builder.
     """
     article_data = _try_parse_json(markdown_content)
 
     if article_data and isinstance(article_data, dict):
-        return _build_v3_article(article_data, brand_key, slug, pin_data)
+        return _build_article_html(article_data, brand_key, slug, pin_data)
     else:
-        return _build_v2_article(markdown_content, brand_key, slug, pin_data)
+        # Fallback: if we somehow got non-JSON, build minimal article_data
+        logger.warning(f"Non-JSON content for {brand_key}/{slug}, building minimal article")
+        title = slug.replace('-', ' ').title()
+        minimal_data = {
+            'title': title,
+            'meta_description': f'{title} - {BRAND_SITE_CONFIG[brand_key]["site_name"]}',
+        }
+        if brand_key == 'deals':
+            minimal_data['intro_paragraphs'] = [str(markdown_content)[:500] if markdown_content else '']
+            minimal_data['products'] = []
+            minimal_data['verdict_text'] = ''
+            minimal_data['faq'] = []
+        elif brand_key == 'fitness':
+            minimal_data['intro_hook'] = str(markdown_content)[:500] if markdown_content else ''
+            minimal_data['sections'] = []
+            minimal_data['gear_recommendations'] = []
+            minimal_data['faq'] = []
+        else:
+            minimal_data['intro_hook'] = str(markdown_content)[:500] if markdown_content else ''
+            minimal_data['sections'] = []
+            minimal_data['amazon_products'] = []
+            minimal_data['faq'] = []
+        return _build_article_html(minimal_data, brand_key, slug, pin_data)
 
 
 def _sanitize_affiliate_links(html_content, brand_key):
-    """Post-generation sanitization — triple-checks every Amazon link.
+    """Post-generation sanitization — checks every Amazon link.
 
-    1. Enforces per-brand affiliate tags (fitover3509-20 for fitness, dailydealdarl-20 for deals/menopause)
-    2. Converts fake/placeholder ASINs to working search URLs
-    3. Fixes known AI-generated tag typos (truncated, wrong account)
-    4. Logs any issues found for monitoring
+    1. Rejects amazon.com/s?k= search URLs — replaces with /dp/ASIN from approved list or removes
+    2. Enforces per-brand affiliate tags
+    3. Converts fake/placeholder ASINs to approved defaults
+    4. Fixes known AI-generated tag typos
+    5. Logs any issues found for monitoring
     """
     CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
+    brand_amazon = AMAZON_AFFILIATE_LINKS.get(brand_key, {})
+    default_url = brand_amazon.get('_default', '')
     issues = []
+
+    # ── Pass 0: Replace search URLs with real /dp/ASIN links ──
+    def _fix_search_url(m):
+        url = m.group(0)
+        # Extract the search query to try matching against approved products
+        query_match = re.search(r'[?&]k=([^&"]+)', url)
+        if query_match:
+            query = urllib.parse.unquote_plus(query_match.group(1)).lower()
+            # Try to match against approved product keys
+            for product_key, product_url in brand_amazon.items():
+                if product_key == '_default':
+                    continue
+                if product_key.lower() in query or query in product_key.lower():
+                    issues.append(f'Replaced search URL with approved ASIN for: {product_key}')
+                    return product_url
+        # No match — use brand default
+        if default_url:
+            issues.append(f'Replaced unmatched search URL with brand default')
+            return default_url
+        issues.append(f'Removed unmatched search URL (no default available)')
+        return ''
+
+    html_content = re.sub(
+        r'https://www\.amazon\.com/s\?k=[^"]+',
+        _fix_search_url,
+        html_content,
+    )
 
     # ── Pass 1: Fix known tag typos ──
     typo_map = {
         'menopauseplan-20': 'dailydealdarl-20',
     }
-    # Only fix fitover35 typo if we're NOT in the fitness brand
     if brand_key != 'fitness':
         typo_map['fitover3509-20'] = CANONICAL_TAG
     for wrong, right in typo_map.items():
@@ -1120,17 +1079,21 @@ def _sanitize_affiliate_links(html_content, brand_key):
             issues.append(f'Fixed tag typo: {wrong} → {right} ({count}x)')
             html_content = html_content.replace(wrong, right)
 
-    # ── Pass 2: Fix obviously fake ASINs (X-padded, all-zeros) ──
-    # Only replace clearly fake ASINs, preserve all others for revenue
+    # ── Pass 2: Fix obviously fake ASINs ──
     fake_asin_pattern = re.compile(r'^[X0]{5,}|^XXXXXXXXXX$|^B0{9}$')
 
     def _fix_bad_asin(m):
         full_match = m.group(0)
         asin = m.group(1)
         if not fake_asin_pattern.match(asin):
-            return full_match  # Keep real ASINs even if not in approved list
+            return full_match
         issues.append(f'Replaced fake ASIN: {asin}')
-        return f'amazon.com/s?k={asin.lower()}&tag={CANONICAL_TAG}'
+        # Use default product URL instead of search URL
+        if default_url:
+            asin_m = re.search(r'/dp/([A-Z0-9]{10})', default_url)
+            if asin_m:
+                return f'amazon.com/dp/{asin_m.group(1)}?tag={CANONICAL_TAG}'
+        return f'amazon.com/dp/B001ARYU58?tag={CANONICAL_TAG}'
 
     html_content = re.sub(
         r'amazon\.com/dp/([A-Z0-9]{10})\?tag=[a-z0-9-]+',
@@ -1138,7 +1101,7 @@ def _sanitize_affiliate_links(html_content, brand_key):
         html_content,
     )
 
-    # ── Pass 3: Force correct tag on ALL Amazon links (catch-all) ──
+    # ── Pass 3: Force correct tag on ALL Amazon links ──
     def _enforce_tag(m):
         prefix = m.group(1)
         current_tag = m.group(2)
@@ -1173,6 +1136,81 @@ def _sanitize_affiliate_links(html_content, brand_key):
     return html_content
 
 
+def validate_amazon_links(html_content, brand_key):
+    """Validate every Amazon URL in the article via HTTP HEAD requests.
+
+    - Sends HEAD request with browser user-agent, 10s timeout
+    - If 404 or redirects to search page: replaces with verified ASIN from approved list
+    - Verifies correct affiliate tag per brand
+    - Rejects any remaining /s?k= search URLs
+    - Returns (fixed_html, validation_log) tuple
+    """
+    CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
+    brand_amazon = AMAZON_AFFILIATE_LINKS.get(brand_key, {})
+    default_url = brand_amazon.get('_default', '')
+    log = []
+
+    # Find all Amazon URLs
+    amazon_urls = re.findall(r'https://www\.amazon\.com/[^"<\s]+', html_content)
+    if not amazon_urls:
+        log.append('No Amazon links found')
+        return html_content, log
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    }
+
+    for url in set(amazon_urls):
+        # Skip already-validated /dp/ URLs from our approved list
+        asin_m = re.search(r'/dp/([A-Z0-9]{10})', url)
+
+        # Reject search URLs outright
+        if '/s?k=' in url or '/s?' in url:
+            log.append(f'REJECTED search URL: {url[:80]}')
+            # Try to find a replacement
+            query_m = re.search(r'[?&]k=([^&"]+)', url)
+            replacement = default_url
+            if query_m:
+                query = urllib.parse.unquote_plus(query_m.group(1)).lower()
+                for key, approved_url in brand_amazon.items():
+                    if key == '_default':
+                        continue
+                    if key.lower() in query or query in key.lower():
+                        replacement = approved_url
+                        break
+            if replacement:
+                html_content = html_content.replace(url, replacement)
+                log.append(f'  → Replaced with: {replacement[:80]}')
+            continue
+
+        # Verify /dp/ links via HEAD request
+        if asin_m:
+            try:
+                resp = requests.head(url, headers=headers, timeout=10, allow_redirects=True)
+                final_url = resp.url if hasattr(resp, 'url') else ''
+                if resp.status_code == 404 or '/s?k=' in final_url or '/gp/search/' in final_url:
+                    log.append(f'BROKEN link (HTTP {resp.status_code}): {url[:80]}')
+                    if default_url:
+                        html_content = html_content.replace(url, default_url)
+                        log.append(f'  → Replaced with default: {default_url[:80]}')
+                else:
+                    log.append(f'OK: {url[:80]} → HTTP {resp.status_code}')
+            except requests.RequestException as e:
+                log.append(f'HEAD request failed for {url[:60]}: {e}')
+                # Don't replace on timeout — might just be rate limited
+
+        # Verify affiliate tag
+        if f'tag={CANONICAL_TAG}' not in url and 'tag=' in url:
+            old_tag_m = re.search(r'tag=([a-z0-9-]+)', url)
+            if old_tag_m:
+                fixed_url = url.replace(f'tag={old_tag_m.group(1)}', f'tag={CANONICAL_TAG}')
+                html_content = html_content.replace(url, fixed_url)
+                log.append(f'Fixed tag: {old_tag_m.group(1)} → {CANONICAL_TAG}')
+
+    logger.info(f'Amazon link validation ({brand_key}): {len(log)} entries')
+    return html_content, log
+
+
 def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_client):
     """Save article HTML to disk and register in Supabase.
 
@@ -1180,6 +1218,16 @@ def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_
     """
     # Sanitize affiliate links before saving
     html_content = _sanitize_affiliate_links(html_content, brand_key)
+
+    # Validate Amazon links (HTTP HEAD checks, reject search URLs)
+    try:
+        html_content, validation_log = validate_amazon_links(html_content, brand_key)
+        if validation_log:
+            logger.info(f'Link validation for {brand_key}/{slug}: {len(validation_log)} checks')
+            for entry in validation_log[:10]:
+                logger.info(f'  {entry}')
+    except Exception as e:
+        logger.warning(f'Amazon link validation skipped for {brand_key}/{slug}: {e}')
 
     site = BRAND_SITE_CONFIG[brand_key]
 
