@@ -1195,5 +1195,32 @@
     "board": "AI SEO Tools",
     "posted_at": "2026-04-18T16:52:35.882Z",
     "success": true
+  },
+  {
+    "slug": "category-coding",
+    "pin_type": "category",
+    "title": "AI Coding Superpowers: Best Tools of 2026!",
+    "link": "https://pilottools.ai/category/coding/",
+    "board": "AI Coding Tools",
+    "posted_at": "2026-04-18T22:22:25.888Z",
+    "success": true
+  },
+  {
+    "slug": "pictory-vs-synthesia",
+    "pin_type": "comparison",
+    "title": "Pictory vs Synthesia: Which AI Video Tool is Right for YOU?",
+    "link": "https://pilottools.ai/compare/pictory-vs-synthesia/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-18T22:22:30.042Z",
+    "success": true
+  },
+  {
+    "slug": "category-design",
+    "pin_type": "category",
+    "title": "Top AI Design Tools Shaping 2026: Design Smarter, Not Harder!",
+    "link": "https://pilottools.ai/category/design/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-04-18T22:22:34.374Z",
+    "success": true
   }
 ]
