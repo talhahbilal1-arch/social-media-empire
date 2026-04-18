@@ -956,7 +956,15 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
     pin_data['creatomate_template'] = selected_style['creatomate_template']
     pin_data['board'] = selected_board
     pin_data['description_opener'] = selected_opener
-    pin_data['destination_url'] = config['destination_base_url']
+    # Set initial destination to article URL based on topic slug (not homepage)
+    _topic_for_url = pin_data.get('topic', '') or pin_data.get('trending_topic', '')
+    _slug_for_url = _topic_for_url.lower().strip()
+    import re as _re
+    _slug_for_url = _re.sub(r'[^a-z0-9]+', '-', _slug_for_url).strip('-')[:80]
+    if _slug_for_url:
+        pin_data['destination_url'] = f"{config['destination_base_url']}/articles/{_slug_for_url}.html"
+    else:
+        pin_data['destination_url'] = f"{config['destination_base_url']}/articles/"
     pin_data['keywords_used'] = selected_keywords
 
     # ── Step 10: Fitness brand content safety check ──

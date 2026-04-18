@@ -439,6 +439,42 @@ jobs:
                       board_id = get_board_id(brand, board_name)
                       dest_url = video_content.get('destination_url', '')
 
+                      # ── FIX: Video pins must link to articles, not homepage ──
+                      # Generate an article for this video's topic if one doesn't exist
+                      site = BRAND_SITE_CONFIG.get(brand, {})
+                      video_base_url = site.get('base_url', '')
+                      if not dest_url or '/articles/' not in dest_url:
+                          video_topic = video_content.get('topic', '') or video_content.get('hook', '')[:50]
+                          if video_topic:
+                              try:
+                                  video_pin_data = {
+                                      'title': video_content.get('title', ''),
+                                      'topic': video_topic,
+                                      'trending_topic': video_topic,
+                                      'description': video_content.get('description', ''),
+                                      'destination_url': dest_url,
+                                      'tips': video_content.get('tips', []),
+                                      'category': video_content.get('category', ''),
+                                  }
+                                  slug, article_md = generate_article_for_pin(brand, video_pin_data, db.client)
+                                  if slug and article_md:
+                                      html = article_to_html(article_md, brand, slug, video_pin_data)
+                                      article_url = save_and_register_article(html, brand, slug, video_pin_data, db.client)
+                                      dest_url = article_url
+                                      print(f'  [{brand}] Video article generated → {article_url}')
+                                  elif slug:
+                                      dest_url = f'{video_base_url}/articles/{slug}.html'
+                                      print(f'  [{brand}] Video article exists → {dest_url}')
+                                  else:
+                                      dest_url = f'{video_base_url}/articles/'
+                                      print(f'  [{brand}] Video article gen failed — using articles index')
+                              except Exception as _ae:
+                                  print(f'  [{brand}] Video article gen error: {_ae}')
+                                  dest_url = f'{video_base_url}/articles/'
+                          else:
+                              dest_url = f'{video_base_url}/articles/'
+                              print(f'  [{brand}] No video topic — using articles index')
+
                       # Include video URL in description so viewers can watch the full video
                       desc = video_content.get('description', '')[:450]
                       if video_url:
