@@ -685,38 +685,43 @@ def generate_article_for_pin(brand_key, pin_data, supabase_client):
     if not slug:
         return None, None
 
-    # Check if article already exists — but regenerate if using old template
+    # Check if article already exists — regenerate if using old template
+    TEMPLATE_VERSION = 2  # Bump this to force regeneration of all articles
     try:
-        existing = supabase_client.table('generated_articles') \
-            .select('slug') \
-            .eq('brand', brand_key) \
-            .eq('slug', slug) \
-            .limit(1) \
-            .execute()
+        # First try with template_version column
+        try:
+            existing = supabase_client.table('generated_articles') \
+                .select('slug,template_version') \
+                .eq('brand', brand_key) \
+                .eq('slug', slug) \
+                .limit(1) \
+                .execute()
+        except Exception:
+            # Column might not exist yet — query without it
+            existing = supabase_client.table('generated_articles') \
+                .select('slug') \
+                .eq('brand', brand_key) \
+                .eq('slug', slug) \
+                .limit(1) \
+                .execute()
         if existing.data:
-            # Check if the on-disk HTML uses the old gimmicky template
-            site_cfg = BRAND_SITE_CONFIG[brand_key]
-            article_path = os.path.join(
-                os.environ.get('GITHUB_WORKSPACE', '.'),
-                site_cfg.get('output_dir', ''),
-                f'{slug}.html'
-            )
-            needs_regen = False
-            if os.path.exists(article_path):
+            row = existing.data[0]
+            existing_version = row.get('template_version') or 1
+            if existing_version >= TEMPLATE_VERSION:
+                logger.info(f"Article '{slug}' already at template v{existing_version}, skipping")
+                return slug, None
+            else:
+                logger.info(f"Article '{slug}' needs upgrade (v{existing_version} → v{TEMPLATE_VERSION}) — regenerating")
+                # Delete old record so upsert creates a fresh one
                 try:
-                    with open(article_path, 'r', encoding='utf-8') as af:
-                        first_2k = af.read(2000)
-                    # Old template markers: payment icons, before/after cards, comparison tables
-                    old_markers = ['class="pay"', 'ba-card before', 'comp table', 'pick-badge', 'class="trust"', 'product-badge top-pick']
-                    if any(marker in first_2k for marker in old_markers):
-                        needs_regen = True
-                        logger.info(f"Article '{slug}' uses old template — regenerating with clean design")
+                    supabase_client.table('generated_articles') \
+                        .delete() \
+                        .eq('brand', brand_key) \
+                        .eq('slug', slug) \
+                        .execute()
                 except Exception:
                     pass
-            if not needs_regen:
-                logger.info(f"Article already exists for slug '{slug}', skipping")
-                return slug, None
-            # Fall through to regenerate with new template
+                # Fall through to regenerate with new template
     except Exception as e:
         logger.warning(f"Could not check existing articles: {e}")
 
@@ -1264,14 +1269,21 @@ def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_
 
     # Register in Supabase
     try:
-        supabase_client.table('generated_articles').insert({
+        record = {
             'brand': brand_key,
             'slug': slug,
             'trending_topic': pin_data.get('topic', '') or pin_data.get('trending_topic', ''),
             'content_preview': html_content[:500],
             'word_count': len(html_content.split()),
-            'created_at': datetime.now(timezone.utc).isoformat()
-        }).execute()
+            'created_at': datetime.now(timezone.utc).isoformat(),
+        }
+        # Try with template_version first, fall back without if column doesn't exist
+        try:
+            record['template_version'] = 2
+            supabase_client.table('generated_articles').upsert(record, on_conflict='brand,slug').execute()
+        except Exception:
+            record.pop('template_version', None)
+            supabase_client.table('generated_articles').upsert(record, on_conflict='brand,slug').execute()
     except Exception as e:
         logger.error(f"Failed to log article to Supabase: {e}")
 
