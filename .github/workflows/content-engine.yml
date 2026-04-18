@@ -742,9 +742,9 @@ jobs:
               # instead of posting a broken link to Pinterest.
               dest_url = pin.get('destination_url', '')
               if dest_url and not validate_destination_link(dest_url):
-                  from video_automation.content_brain import BRAND_CONFIGS
-                  fallback = BRAND_CONFIGS.get(brand, {}).get('destination_base_url', '')
-                  print(f'  [{brand}] WARN — destination link broken ({dest_url[:60]}), falling back to: {fallback}')
+                  site = BRAND_SITE_CONFIG.get(brand, {})
+                  fallback = f"{site.get('base_url', '')}/articles/"
+                  print(f'  [{brand}] WARN — destination link broken ({dest_url[:60]}), falling back to articles index: {fallback}')
                   pin['destination_url'] = fallback
                   # Log to Supabase so rescue poster can redeploy + repost later
                   try:
@@ -777,6 +777,22 @@ jobs:
                   continue
 
               destination_url = pin.get('destination_url', '')
+
+              # ── GUARD: Block pins that link to homepage instead of an article ──
+              if destination_url and '/articles/' not in destination_url and '/articles' not in destination_url:
+                  site = BRAND_SITE_CONFIG.get(brand, {})
+                  articles_fallback = f"{site.get('base_url', '')}/articles/"
+                  print(f'  [{brand}] GUARD — destination is homepage ({destination_url[:60]}), redirecting to articles index')
+                  destination_url = articles_fallback
+                  pin['destination_url'] = articles_fallback
+
+              # ── GUARD: Reject empty destination URLs ──
+              if not destination_url or not destination_url.startswith('http'):
+                  site = BRAND_SITE_CONFIG.get(brand, {})
+                  destination_url = f"{site.get('base_url', '')}/articles/"
+                  pin['destination_url'] = destination_url
+                  print(f'  [{brand}] GUARD — empty destination, using articles index: {destination_url}')
+
               brand_slug = BRAND_SLUG.get(brand, brand)
               payload = {
                   'pin_id': str(pin_id),
@@ -1072,11 +1088,12 @@ jobs:
               if not brand or brand not in BRAND_HOMEPAGES:
                   continue
               homepage = BRAND_HOMEPAGES[brand]
-              print(f'[{brand}] Deploy failed — updating recent article-linked pins to homepage')
+              articles_url = f'{homepage}/articles/'
+              print(f'[{brand}] Deploy failed — updating recent article-linked pins to articles index: {articles_url}')
 
-              # Update pins that were just posted with article URLs to homepage
+              # Update pins that were just posted with broken article URLs to articles index (NOT homepage)
               url = f'{SUPABASE_URL}/rest/v1/pinterest_pins?brand=eq.{brand}&status=in.(posting,posted)&created_at=gte.{cutoff}&destination_url=like.*articles*'
-              body = json.dumps({'destination_url': homepage}).encode()
+              body = json.dumps({'destination_url': articles_url}).encode()
               req = Request(url, data=body, headers=headers, method='PATCH')
               try:
                   with urlopen(req, timeout=15) as resp:
