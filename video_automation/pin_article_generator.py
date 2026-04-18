@@ -685,7 +685,7 @@ def generate_article_for_pin(brand_key, pin_data, supabase_client):
     if not slug:
         return None, None
 
-    # Check if article already exists
+    # Check if article already exists — but regenerate if using old template
     try:
         existing = supabase_client.table('generated_articles') \
             .select('slug') \
@@ -694,8 +694,29 @@ def generate_article_for_pin(brand_key, pin_data, supabase_client):
             .limit(1) \
             .execute()
         if existing.data:
-            logger.info(f"Article already exists for slug '{slug}', skipping")
-            return slug, None
+            # Check if the on-disk HTML uses the old gimmicky template
+            site_cfg = BRAND_SITE_CONFIG[brand_key]
+            article_path = os.path.join(
+                os.environ.get('GITHUB_WORKSPACE', '.'),
+                site_cfg.get('output_dir', ''),
+                f'{slug}.html'
+            )
+            needs_regen = False
+            if os.path.exists(article_path):
+                try:
+                    with open(article_path, 'r', encoding='utf-8') as af:
+                        first_2k = af.read(2000)
+                    # Old template markers: payment icons, before/after cards, comparison tables
+                    old_markers = ['class="pay"', 'ba-card before', 'comp table', 'pick-badge', 'class="trust"', 'product-badge top-pick']
+                    if any(marker in first_2k for marker in old_markers):
+                        needs_regen = True
+                        logger.info(f"Article '{slug}' uses old template — regenerating with clean design")
+                except Exception:
+                    pass
+            if not needs_regen:
+                logger.info(f"Article already exists for slug '{slug}', skipping")
+                return slug, None
+            # Fall through to regenerate with new template
     except Exception as e:
         logger.warning(f"Could not check existing articles: {e}")
 
