@@ -7,6 +7,7 @@ breaking: the function returns None when the key is missing and logs a no-op.
 
 import logging
 import os
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +21,8 @@ def post_to_all_platforms(
     title: str,
     description: str,
     link: str,
-    platforms: list | None = None,
-) -> dict | None:
+    platforms: Optional[list] = None,
+) -> Optional[dict]:
     """Post a video to Pinterest + TikTok + Instagram Reels + YouTube Shorts.
 
     Args:

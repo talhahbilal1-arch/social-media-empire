@@ -17,6 +17,7 @@ import subprocess
 import tempfile
 import time
 from pathlib import Path
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -38,9 +39,27 @@ RENDER_TIMEOUT_SEC = 240  # 15s video + Remotion boot overhead
 DEFAULT_CTA = "Save This For Later"
 
 
-def _find_npx() -> str | None:
+def _find_npx() -> Optional[str]:
     """Locate the npx executable, preferring the one on PATH."""
     return shutil.which("npx")
+
+
+def _find_system_chrome() -> Optional[str]:
+    """Find an installed Chrome/Chromium binary — used when Remotion's bundled
+    headless-shell download fails (happens in sandboxed CI and some networks).
+    """
+    candidates = [
+        shutil.which("chromium-browser"),  # Ubuntu runners after apt install
+        shutil.which("chromium"),
+        shutil.which("google-chrome"),
+        shutil.which("chrome"),
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",  # macOS dev
+        "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    ]
+    for path in candidates:
+        if path and os.path.exists(path):
+            return path
+    return None
 
 
 def _write_scene_images(brand: str, scene_images: list) -> tuple:
@@ -88,7 +107,7 @@ def _extract_cover_frame(video_path: Path) -> bytes:
         cover_path.unlink(missing_ok=True)
 
 
-def _cleanup(scene_dir: Path, video_path: Path | None) -> None:
+def _cleanup(scene_dir: Path, video_path: Optional[Path]) -> None:
     """Remove generated scene images and temp video after render."""
     try:
         if scene_dir.exists():
@@ -102,7 +121,7 @@ def _cleanup(scene_dir: Path, video_path: Path | None) -> None:
         logger.warning(f"video cleanup failed: {e}")
 
 
-def render_remotion_video(brand: str, video_content: dict, scene_images: list) -> dict | None:
+def render_remotion_video(brand: str, video_content: dict, scene_images: list) -> Optional[dict]:
     """Render a 15-second slideshow video via Remotion.
 
     Args:
@@ -156,14 +175,21 @@ def render_remotion_video(brand: str, video_content: dict, scene_images: list) -
 
         logger.info(f"[{brand}] Remotion render starting ({composition_id})…")
         start = time.time()
+        cmd = [
+            npx, "remotion", "render",
+            composition_id,
+            str(video_path),
+            f"--props={props_json}",
+            "--concurrency=1",  # GitHub Actions runners have limited RAM
+        ]
+        # Point Remotion at an existing Chrome binary when available — avoids the
+        # runtime download that fails behind some networks and in fresh CI runners.
+        chrome = os.environ.get("REMOTION_CHROME_EXECUTABLE") or _find_system_chrome()
+        if chrome:
+            cmd.append(f"--browser-executable={chrome}")
+
         result = subprocess.run(
-            [
-                npx, "remotion", "render",
-                composition_id,
-                str(video_path),
-                f"--props={props_json}",
-                "--concurrency=1",  # GitHub Actions runners have limited RAM
-            ],
+            cmd,
             cwd=str(REMOTION_DIR),
             timeout=RENDER_TIMEOUT_SEC,
             capture_output=True,
