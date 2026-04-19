@@ -46,6 +46,16 @@ jobs:
       - name: Install system dependencies
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: remotion-videos/package-lock.json
+
+      - name: Install Remotion dependencies
+        run: cd remotion-videos && npm ci
+
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
@@ -403,6 +413,8 @@ jobs:
               from video_automation.content_brain import generate_video_pin_content
               from video_automation.supabase_storage import upload_pin_video
               from video_automation.pinterest_boards import get_board_id
+              from video_automation.video_scene_generator import generate_scene_images
+              from video_automation.remotion_renderer import render_remotion_video
 
               print('\n=== PHASE 1v: Generating & posting video pins via Make.com ===')
 
@@ -416,9 +428,17 @@ jobs:
                       video_content = generate_video_pin_content(brand, db.client)
                       print(f'  [{brand}] Hook: "{video_content.get("hook", "")[:50]}"')
 
-                      # Step 2: Render video (PIL frames → ffmpeg → MP4)
+                      # Step 2: Render video — try Remotion first, fall back to PIL+ffmpeg
                       print(f'  [{brand}] Rendering video...')
-                      result = generate_video_pin(brand, video_content)
+                      try:
+                          scene_images = generate_scene_images(brand, video_content)
+                          result = render_remotion_video(brand, video_content, scene_images)
+                      except Exception as _re:
+                          print(f'  [{brand}] Remotion pipeline errored: {_re}')
+                          result = None
+                      if not result:
+                          print(f'  [{brand}] Remotion unavailable — falling back to PIL+ffmpeg')
+                          result = generate_video_pin(brand, video_content)
                       if not result:
                           print(f'  [{brand}] Video generation returned None — skipping')
                           continue
