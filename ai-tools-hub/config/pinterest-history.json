@@ -1249,5 +1249,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-19T16:52:06.622Z",
     "success": true
+  },
+  {
+    "slug": "luma-ai",
+    "pin_type": "tool-review",
+    "title": "Luma AI Review: Transform Your Videos with AI! ✨",
+    "link": "https://pilottools.ai/tools/luma-ai/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-19T22:23:28.895Z",
+    "success": true
+  },
+  {
+    "slug": "ahrefs-vs-surfer-seo",
+    "pin_type": "comparison",
+    "title": "Ahrefs vs Surfer SEO: Which is BEST for Your SEO Strategy?",
+    "link": "https://pilottools.ai/compare/ahrefs-vs-surfer-seo/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-19T22:23:32.913Z",
+    "success": true
+  },
+  {
+    "slug": "midjourney-vs-dall-e-3-business",
+    "pin_type": "comparison",
+    "title": "Midjourney vs ChatGPT: AI Art SHOWDOWN!",
+    "link": "https://pilottools.ai/compare/midjourney-vs-dall-e-3-business/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-19T22:23:37.204Z",
+    "success": true
   }
 ]
