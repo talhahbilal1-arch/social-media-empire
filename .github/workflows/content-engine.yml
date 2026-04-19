@@ -168,7 +168,7 @@ jobs:
           # mix in the feed without doubling total pin volume.
           # ══════════════════════════════════════════════════════════════
           import random
-          is_video_run = random.random() < 0.5  # 50% chance each run is video-focused
+          is_video_run = True  # 2026 algorithm: video pins get 5x distribution  # 50% chance each run is video-focused
           print(f'=== RUN TYPE: {"VIDEO" if is_video_run else "IMAGE"} ===')
 
           # ══════════════════════════════════════════════════════════════
