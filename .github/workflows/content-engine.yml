@@ -2,13 +2,12 @@ name: Content Engine
 
 on:
   schedule:
-    # 5 runs per day — 1 pin per brand per run, spread across Pinterest peak times
-    # 5 runs x 1 pin x 3 brands = 15 pins/day total
-    - cron: '0 14 * * *'  #  6 AM PST — early morning
-    - cron: '0 17 * * *'  #  9 AM PST — morning engagement
-    - cron: '0 20 * * *'  # 12 PM PST — midday
-    - cron: '0 23 * * *'  #  3 PM PST — afternoon peak
-    - cron: '0 3 * * *'   #  7 PM PST — evening peak
+    # 3 runs per day — 1 pin per brand per run, spaced 8 hours apart
+    # 3 runs x 1 pin x 3 brands = 9 pins/day total (max 3/brand/day)
+    # Pinterest 2026 algorithm rewards quality + spacing over volume
+    - cron: '0 15 * * *'  #  7 AM PST — morning
+    - cron: '0 23 * * *'  #  3 PM PST — afternoon
+    - cron: '0 4 * * *'   #  8 PM PST — evening
   workflow_dispatch:
     inputs:
       brand:
@@ -163,18 +162,34 @@ jobs:
                   print(f'  Scenario activator skipped: {_e}')
 
           # ══════════════════════════════════════════════════════════════
+          # VIDEO/IMAGE RUN DECISION — 50% video mix for Pinterest 2026
+          # Pinterest's algorithm now prioritizes video pins. Alternating
+          # between video-only and image-only runs ensures a natural 50/50
+          # mix in the feed without doubling total pin volume.
+          # ══════════════════════════════════════════════════════════════
+          import random
+          is_video_run = random.random() < 0.5  # 50% chance each run is video-focused
+          print(f'=== RUN TYPE: {"VIDEO" if is_video_run else "IMAGE"} ===')
+
+          # ══════════════════════════════════════════════════════════════
           # PHASE 0: Generate fresh pin content → insert as content_ready
+          # (SKIPPED on video runs — video pins use Phase 1v instead)
           # ══════════════════════════════════════════════════════════════
           print('=== PHASE 0: Generating pin content ===')
+          if is_video_run:
+              print('  SKIPPED — this is a video run (Phase 1v will handle content)')
+
           ALL_BRANDS = ['fitness', 'deals', 'menopause']
           brand_filter = os.environ.get('BRAND_INPUT', '').strip()
           brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ALL_BRANDS
 
-          MAX_PINS_PER_DAY = 10  # 10 pins/brand/day (raised to allow catchup runs)
+          MAX_PINS_PER_DAY = 3  # 3 pins/brand/day — Pinterest 2026 algorithm penalizes high volume
           MAX_PINS_PER_RUN = 1  # 1 pin/brand/run — spread pins across day for better engagement
           today_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
           for brand in brands_to_generate:
+              if is_video_run:
+                  continue  # Skip image pin generation on video runs
               try:
                   # Guardrail: check daily pin count before generating
                   pins_today = 0
@@ -238,8 +253,8 @@ jobs:
                   log_pipeline_error('0', brand, e, severity='high')
           print()
 
-          # ── Product pin injection (30% chance per run, fitness only) ──
-          if should_inject_product_pin():
+          # ── Product pin injection (30% chance per run, fitness only, image runs only) ──
+          if not is_video_run and should_inject_product_pin():
               try:
                   promo = get_product_pin()
                   promo_board_id = get_board_id('fitness', promo.get('board', ''))
@@ -383,7 +398,7 @@ jobs:
           # pins. Video URL is included in description for viewer access.
           # ══════════════════════════════════════════════════════════════
           from video_automation.video_pin_generator import is_video_pin_enabled
-          if is_video_pin_enabled():
+          if is_video_run or is_video_pin_enabled():
               from video_automation.video_pin_generator import generate_video_pin
               from video_automation.content_brain import generate_video_pin_content
               from video_automation.supabase_storage import upload_pin_video
@@ -525,7 +540,7 @@ jobs:
 
               print(f'  Video pins posted: {video_posted}/{len(brands_to_generate)}')
           else:
-              print('  Video pins: disabled (VIDEO_PIN_ENABLED = False)')
+              print('  Video pins: disabled (not a video run and VIDEO_PIN_ENABLED = False)')
 
           # ══════════════════════════════════════════════════════════════
           # PHASE 2: Generate articles FIRST so pins link to articles

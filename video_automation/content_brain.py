@@ -726,31 +726,63 @@ def generate_pin_content(brand_key, supabase_client):
             .select('topic, angle_framework, visual_style, board, description_opener, image_query, title') \
             .eq('brand', brand_key) \
             .order('created_at', desc=True) \
-            .limit(30) \
+            .limit(90) \
             .execute()
         recent_data = recent.data if recent.data else []
     except Exception:
         recent_data = []
 
-    recent_topics = [r.get('topic', '') for r in recent_data[:25]]
+    # Dedup window: 90 pins (~30 days at 3 pins/day) to prevent topic repetition
+    recent_topics = [r.get('topic', '') for r in recent_data[:90]]
     recent_angles = [r.get('angle_framework', '') for r in recent_data[:5]]
     recent_styles = [r.get('visual_style', '') for r in recent_data[:4]]
     recent_boards = [r.get('board', '') for r in recent_data[:3]]
     recent_openers = [r.get('description_opener', '') for r in recent_data[:5]]
-    recent_image_queries = [r.get('image_query', '') for r in recent_data[:25]]
+    recent_image_queries = [r.get('image_query', '') for r in recent_data[:90]]
     recent_titles = [r.get('title', '') for r in recent_data[:20]]
 
-    # ── Step 2: Select topic (not used in last 25 pins) ──
-    all_topics = []
-    for category, topics in config['topics_by_category'].items():
-        for topic in topics:
-            all_topics.append({"category": category, "topic": topic})
+    # ── Step 2: Select topic — TRENDING FIRST, then static fallback ──
+    # Priority: daily_trending unused topics → static topics not in last 90 pins
+    selected_topic = None
 
-    available_topics = [t for t in all_topics if t['topic'] not in recent_topics]
-    if not available_topics:
-        available_topics = all_topics  # Reset if all used
+    # Try daily_trending table first for fresh, relevant topics
+    try:
+        today_str_topic = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        trend_result = supabase_client.table('daily_trending') \
+            .select('topics') \
+            .eq('brand', brand_key) \
+            .eq('trend_date', today_str_topic) \
+            .limit(1) \
+            .execute()
+        if trend_result.data:
+            raw_topics = trend_result.data[0]['topics']
+            trending_topics = json.loads(raw_topics) if isinstance(raw_topics, str) else raw_topics
+            # Find a trending topic not already used in the last 90 pins
+            for t in trending_topics:
+                topic_text = t.get('topic', '')
+                if topic_text and topic_text not in recent_topics:
+                    selected_topic = {
+                        "category": "daily_trending",
+                        "topic": topic_text,
+                        "trending_data": t,  # Carry along why_trending, content_angle, etc.
+                    }
+                    logger.info(f"[{brand_key}] Using trending topic: {topic_text}")
+                    break
+    except Exception as e:
+        logger.warning(f"[{brand_key}] Could not query daily_trending: {e}")
 
-    selected_topic = random.choice(available_topics)
+    # Fall back to static topics if no trending topic available
+    if not selected_topic:
+        all_topics = []
+        for category, topics in config['topics_by_category'].items():
+            for topic in topics:
+                all_topics.append({"category": category, "topic": topic})
+
+        available_topics = [t for t in all_topics if t['topic'] not in recent_topics]
+        if not available_topics:
+            available_topics = all_topics  # Reset if all used
+
+        selected_topic = random.choice(available_topics)
 
     # ── Step 3: Select angle framework (not used in last 5 pins) ──
     available_angles = [a for a in config['hook_frameworks'] if a not in recent_angles]
@@ -920,6 +952,14 @@ This is the large bold text visible on the image itself. It serves a completely 
 - Query must match THIS topic specifically, not be generic stock photo terms
 - For Fitness Made Easy: image query MUST feature men/male subjects. Include "man", "male", or "guy" in the query. NEVER use gender-neutral terms that could return female images.
 - Alt text: brief accessible description for screen readers
+
+═══ PINTEREST SEO RULES (2026 algorithm) ═══
+- Pin title MUST contain 2-3 searchable keywords that people actually type into Pinterest search
+- Description must be 150-300 characters with natural keyword placement
+- First 50 characters of description are most important for search ranking
+- Include branded hashtag: {"#FitOver35" if brand_key == "fitness" else "#DailyDealDarling" if brand_key == "deals" else "#MenopausePlanner"}
+- Include 3-5 niche hashtags relevant to the topic
+- NEVER stuff keywords — write naturally but strategically
 
 ═══ BANNED PHRASES ═══
 Never use: "unlock", "transform your", "game-changer", "must-have", "you won't believe", "amazing", "incredible", "life-changing", "revolutionary", "ultimate guide"
@@ -1537,27 +1577,49 @@ def generate_video_pin_content(brand_key, supabase_client):
     """
     config = BRAND_CONFIGS[brand_key]
 
-    # ── Select topic (avoid recent) ──
+    # ── Select topic (avoid recent — 90-pin dedup window) ──
     try:
         recent = supabase_client.table('content_history') \
             .select('topic') \
             .eq('brand', brand_key) \
             .order('created_at', desc=True) \
-            .limit(25) \
+            .limit(90) \
             .execute()
         recent_topics = [r.get('topic', '') for r in (recent.data or [])]
     except Exception:
         recent_topics = []
 
-    all_topics = []
-    for category, topics in config['topics_by_category'].items():
-        for topic in topics:
-            all_topics.append({"category": category, "topic": topic})
+    # Try daily_trending first for video topics too
+    selected_topic = None
+    try:
+        today_str_vid = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        trend_result = supabase_client.table('daily_trending') \
+            .select('topics') \
+            .eq('brand', brand_key) \
+            .eq('trend_date', today_str_vid) \
+            .limit(1) \
+            .execute()
+        if trend_result.data:
+            raw_topics = trend_result.data[0]['topics']
+            trending_topics = json.loads(raw_topics) if isinstance(raw_topics, str) else raw_topics
+            for t in trending_topics:
+                topic_text = t.get('topic', '')
+                if topic_text and topic_text not in recent_topics:
+                    selected_topic = {"category": "daily_trending", "topic": topic_text}
+                    break
+    except Exception:
+        pass
 
-    available_topics = [t for t in all_topics if t['topic'] not in recent_topics]
-    if not available_topics:
-        available_topics = all_topics
-    selected_topic = random.choice(available_topics)
+    if not selected_topic:
+        all_topics = []
+        for category, topics in config['topics_by_category'].items():
+            for topic in topics:
+                all_topics.append({"category": category, "topic": topic})
+
+        available_topics = [t for t in all_topics if t['topic'] not in recent_topics]
+        if not available_topics:
+            available_topics = all_topics
+        selected_topic = random.choice(available_topics)
 
     # ── Board selection ──
     selected_board = _get_board_for_topic(brand_key, selected_topic['category'], selected_topic['topic'])

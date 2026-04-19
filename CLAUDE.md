@@ -235,7 +235,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 ## Current Status
 <!-- UPDATE THIS AFTER EVERY WORK SESSION — just tell Claude "update CLAUDE.md status" -->
 - **AI API**: Gemini (gemini-2.5-flash) — migrated from 2.0-flash before June 1 deprecation. Paid tier enabled.
-- **Pinterest posting**: Active — 5x daily (6AM, 9AM, 12PM, 3PM, 7PM PST), 5 pins/brand/day (15 total)
+- **Pinterest posting**: Active — 3x daily (7AM, 3PM, 8PM PST), 3 pins/brand/day (9 total), 50% video mix, 90-pin dedup window, 8 trending topics/brand/day
 - **All workflows**: Green — content engine, rescue poster, social distribution all active
 - **Content generated**: 418 articles across 3 brands (373 indexed in sitemaps)
 - **Affiliate links**: CLEAN — 0 duplicate tags, 0 wrong tags, 0 missing tags. 1106 direct /dp/ links, 672 search URLs remaining.
@@ -246,7 +246,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 - **Gumroad products**: 4 professional PDFs built — AI Fitness Vault, Pinterest Blueprint, AI Coach Machine, Free Lead Magnet
 - **Make.com**: 9 active scenarios healthy
 - **Revenue dashboard**: Created at outputs/fitover35-website/dashboard/index.html
-- **Last session**: April 8, 2026 — Overnight revenue fix: removed 810 duplicate affiliate tags, converted 170+ search URLs to direct product links, expanded ASIN dictionary 32→154, built 4 Gumroad PDFs.
+- **Last session**: April 18, 2026 — Pinterest growth strategy overhaul: cut pin volume 10→3/brand/day, reduced cron 5→3 runs (8h spacing), 50% video pin mix, expanded dedup window 25→90, trending topics priority over static, trend scout 3→8 topics/brand, added Pinterest 2026 SEO rules to Gemini prompts.
 
 ## Active Priorities (April 2026)
 1. Sign up for top affiliate programs — Semrush ($200/sale), Grammarly, Ahrefs, Hostinger (see PHONE-ACTION-CHECKLIST.md)
