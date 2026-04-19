@@ -44,7 +44,7 @@ jobs:
           cache: 'pip'
 
       - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg && npx @puppeteer/browsers install chromium@latest --path /tmp/chromium-browsers
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg && npx @puppeteer/browsers install chromium@latest --path /tmp/chromium-browsers && echo "CHROME_PATH=$(find /tmp/chromium-browsers -name chrome -type f | head -1)" >> $GITHUB_ENV
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -87,7 +87,7 @@ jobs:
           MAKE_WEBHOOK_VIDEO_FITNESS: ${{ secrets.MAKE_WEBHOOK_VIDEO_FITNESS }}
           MAKE_WEBHOOK_VIDEO_DEALS: ${{ secrets.MAKE_WEBHOOK_VIDEO_DEALS }}
           MAKE_WEBHOOK_VIDEO_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_VIDEO_MENOPAUSE }}
-          REMOTION_CHROME_EXECUTABLE: /tmp/chromium-browsers/chromium/linux-*/chrome-linux64/chrome
+          REMOTION_CHROME_EXECUTABLE: ${{ env.CHROME_PATH }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}

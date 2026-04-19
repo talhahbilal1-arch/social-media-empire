@@ -15,7 +15,7 @@ from io import BytesIO
 
 logger = logging.getLogger(__name__)
 
-IMAGE_MODEL = "gemini-2.0-flash-exp"
+IMAGE_MODEL = "gemini-2.5-flash-image"
 TARGET_SIZE = (1080, 1920)
 
 # Per-brand scene-specific Pexels search queries (last-resort fallback).
