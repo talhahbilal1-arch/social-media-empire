@@ -1222,5 +1222,32 @@
     "board": "AI Design Tools",
     "posted_at": "2026-04-18T22:22:34.374Z",
     "success": true
+  },
+  {
+    "slug": "fliki",
+    "pin_type": "tool-review",
+    "title": "Fliki AI Review: Turn Text into Stunning Videos! ✨",
+    "link": "https://pilottools.ai/tools/fliki/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-19T16:51:58.647Z",
+    "success": true
+  },
+  {
+    "slug": "simplified",
+    "pin_type": "tool-review",
+    "title": "Simplified Review: Your AI Design Secret Weapon! (4.3/5)",
+    "link": "https://pilottools.ai/tools/simplified/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-04-19T16:52:02.540Z",
+    "success": true
+  },
+  {
+    "slug": "synthesia-vs-heygen-ai-video",
+    "pin_type": "comparison",
+    "title": "Synthesia vs HeyGen: AI Video Generator Showdown!",
+    "link": "https://pilottools.ai/compare/synthesia-vs-heygen-ai-video/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-19T16:52:06.622Z",
+    "success": true
   }
 ]
