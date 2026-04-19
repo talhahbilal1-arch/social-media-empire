@@ -42,14 +42,14 @@ AMAZON_AFFILIATE_LINKS = {
         "ashwagandha": "https://www.amazon.com/dp/B078K6DHN1?tag=fitover3509-20",
         "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover3509-20",
         "whey protein": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover3509-20",
-        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover3509-20",
-        "collagen": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover3509-20",
+        "collagen peptides": "https://www.amazon.com/dp/B07CG8BCWK?tag=fitover3509-20",
+        "collagen": "https://www.amazon.com/dp/B07CG8BCWK?tag=fitover3509-20",
         "zinc": "https://www.amazon.com/dp/B003QB97MC?tag=fitover3509-20",
         "bcaa": "https://www.amazon.com/dp/B00E7GV65Q?tag=fitover3509-20",
         "pre workout": "https://www.amazon.com/dp/B07DNRXWF7?tag=fitover3509-20",
         "multivitamin": "https://www.amazon.com/dp/B000GG2I9O?tag=fitover3509-20",
         "probiotics": "https://www.amazon.com/dp/B07K2GKZLM?tag=fitover3509-20",
-        "turmeric": "https://www.amazon.com/dp/B01K2JUMJQ?tag=fitover3509-20",
+        "turmeric": "https://www.amazon.com/dp/B0C1G7YCJF?tag=fitover3509-20",
         "melatonin": "https://www.amazon.com/dp/B005DEK990?tag=fitover3509-20",
         "testosterone booster": "https://www.amazon.com/dp/B07DWR9BNJ?tag=fitover3509-20",
         "tongkat ali": "https://www.amazon.com/dp/B084GJJT3N?tag=fitover3509-20",
@@ -61,13 +61,13 @@ AMAZON_AFFILIATE_LINKS = {
         "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=fitover3509-20",
         "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=fitover3509-20",
         "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=fitover3509-20",
-        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=fitover3509-20",
+        "massage gun": "https://www.amazon.com/dp/B0CG6FQPC5?tag=fitover3509-20",
         "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=fitover3509-20",
         "weight bench": "https://www.amazon.com/dp/B07DNHHNNN?tag=fitover3509-20",
         "barbell": "https://www.amazon.com/dp/B001K4OPY2?tag=fitover3509-20",
         "power rack": "https://www.amazon.com/dp/B01NBFIIIA?tag=fitover3509-20",
         "squat rack": "https://www.amazon.com/dp/B01NBFIIIA?tag=fitover3509-20",
-        "ab roller": "https://www.amazon.com/dp/B010FN6I2C?tag=fitover3509-20",
+        "ab roller": "https://www.amazon.com/dp/B0007IS74G?tag=fitover3509-20",
         "jump rope": "https://www.amazon.com/dp/B01ID497GU?tag=fitover3509-20",
         "weight plates": "https://www.amazon.com/dp/B074DZ9GHM?tag=fitover3509-20",
         "dip station": "https://www.amazon.com/dp/B002Y2SUU4?tag=fitover3509-20",
@@ -76,15 +76,15 @@ AMAZON_AFFILIATE_LINKS = {
         "knee sleeves": "https://www.amazon.com/dp/B019NSMQ9E?tag=fitover3509-20",
         "weighted vest": "https://www.amazon.com/dp/B078Z3SRNG?tag=fitover3509-20",
         "battle ropes": "https://www.amazon.com/dp/B00KFXIBXW?tag=fitover3509-20",
-        "suspension trainer": "https://www.amazon.com/dp/B002YIA5QE?tag=fitover3509-20",
+        "suspension trainer": "https://www.amazon.com/dp/B08BCKK41K?tag=fitover3509-20",
         "stability ball": "https://www.amazon.com/dp/B0074TWTMU?tag=fitover3509-20",
-        "grip strengthener": "https://www.amazon.com/dp/B07B1D47FB?tag=fitover3509-20",
+        "grip strengthener": "https://www.amazon.com/dp/B092DRRGFC?tag=fitover3509-20",
         # Nutrition & Recovery
         "food scale": "https://www.amazon.com/dp/B004164SRA?tag=fitover3509-20",
         "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=fitover3509-20",
         "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=fitover3509-20",
         "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=fitover3509-20",
-        "lacrosse ball": "https://www.amazon.com/dp/B06XK3DLVQ?tag=fitover3509-20",
+        "lacrosse ball": "https://www.amazon.com/dp/B07K3B17Q3?tag=fitover3509-20",
         "ice pack": "https://www.amazon.com/dp/B01N926DGN?tag=fitover3509-20",
         # Tech
         "fitness tracker": "https://www.amazon.com/dp/B0B5F5SG6P?tag=fitover3509-20",
@@ -101,7 +101,7 @@ AMAZON_AFFILIATE_LINKS = {
         "food processor": "https://www.amazon.com/dp/B01AXM4WOO?tag=dailydealdarl-20",
         "slow cooker": "https://www.amazon.com/dp/B004P2NG0K?tag=dailydealdarl-20",
         "electric kettle": "https://www.amazon.com/dp/B07TZ5YHJN?tag=dailydealdarl-20",
-        "stand mixer": "https://www.amazon.com/dp/B00LEAWBQO?tag=dailydealdarl-20",
+        "stand mixer": "https://www.amazon.com/dp/B005PVPI2E?tag=dailydealdarl-20",
         # Kitchen Tools
         "knife set": "https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarl-20",
         "chef knife": "https://www.amazon.com/dp/B000IBVB8E?tag=dailydealdarl-20",
@@ -121,7 +121,7 @@ AMAZON_AFFILIATE_LINKS = {
         "drawer dividers": "https://www.amazon.com/dp/B073VB74FJ?tag=dailydealdarl-20",
         "closet organizer": "https://www.amazon.com/dp/B07N4KFMHZ?tag=dailydealdarl-20",
         "shoe rack": "https://www.amazon.com/dp/B079DJZTJH?tag=dailydealdarl-20",
-        "hangers": "https://www.amazon.com/dp/B0796P2FNM?tag=dailydealdarl-20",
+        "hangers": "https://www.amazon.com/dp/B09MFQL6P5?tag=dailydealdarl-20",
         "lazy susan": "https://www.amazon.com/dp/B07WNRVMPH?tag=dailydealdarl-20",
         "vacuum storage bags": "https://www.amazon.com/dp/B07B6LGWJR?tag=dailydealdarl-20",
         "command hooks": "https://www.amazon.com/dp/B00I62F5JW?tag=dailydealdarl-20",
@@ -139,8 +139,8 @@ AMAZON_AFFILIATE_LINKS = {
         "throw pillows": "https://www.amazon.com/dp/B08RDSBWTK?tag=dailydealdarl-20",
         "LED candles": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
         "fairy lights": "https://www.amazon.com/dp/B07BKY4XL2?tag=dailydealdarl-20",
-        "throw blanket": "https://www.amazon.com/dp/B0BYK2N6S3?tag=dailydealdarl-20",
-        "area rug": "https://www.amazon.com/dp/B076J4QSGY?tag=dailydealdarl-20",
+        "throw blanket": "https://www.amazon.com/dp/B08NWSLV61?tag=dailydealdarl-20",
+        "area rug": "https://www.amazon.com/dp/B098DP5MH8?tag=dailydealdarl-20",
         "curtains": "https://www.amazon.com/dp/B0725T8FD5?tag=dailydealdarl-20",
         "diffuser": "https://www.amazon.com/dp/B07L4R62GQ?tag=dailydealdarl-20",
         "scented candles": "https://www.amazon.com/dp/B079SCMFDC?tag=dailydealdarl-20",
@@ -155,7 +155,7 @@ AMAZON_AFFILIATE_LINKS = {
     },
     "menopause": {
         # Supplements
-        "black cohosh": "https://www.amazon.com/dp/B0019LTI86?tag=dailydealdarl-20",
+        "black cohosh": "https://www.amazon.com/dp/B000GG6ABI?tag=dailydealdarl-20",
         "evening primrose oil": "https://www.amazon.com/dp/B00DWCZWHK?tag=dailydealdarl-20",
         "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20",
         "magnesium": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20",
@@ -180,7 +180,7 @@ AMAZON_AFFILIATE_LINKS = {
         "cooling pajamas": "https://www.amazon.com/dp/B07YC684QN?tag=dailydealdarl-20",
         "weighted blanket": "https://www.amazon.com/dp/B07H2DKQGJ?tag=dailydealdarl-20",
         "silk pillowcase": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
-        "white noise machine": "https://www.amazon.com/dp/B00MY8V86O?tag=dailydealdarl-20",
+        "white noise machine": "https://www.amazon.com/dp/B07VRJSFVC?tag=dailydealdarl-20",
         "sleep mask": "https://www.amazon.com/dp/B07KC5DWCC?tag=dailydealdarl-20",
         "cooling mattress pad": "https://www.amazon.com/dp/B07X3BKDPH?tag=dailydealdarl-20",
         "cooling blanket": "https://www.amazon.com/dp/B092QNCL7Q?tag=dailydealdarl-20",
@@ -1209,20 +1209,42 @@ def validate_amazon_links(html_content, brand_key):
                 log.append(f'  → Replaced with: {replacement[:80]}')
             continue
 
-        # Verify /dp/ links via HEAD request
+        # Verify /dp/ links via GET request (Amazon blocks HEAD with 405)
         if asin_m:
             try:
-                resp = requests.head(url, headers=headers, timeout=10, allow_redirects=True)
+                resp = requests.get(url, headers=headers, timeout=10, allow_redirects=True, stream=True)
                 final_url = resp.url if hasattr(resp, 'url') else ''
-                if resp.status_code == 404 or '/s?k=' in final_url or '/gp/search/' in final_url:
+                resp.close()  # Don't download the full page
+                is_broken = False
+                if resp.status_code == 404:
+                    is_broken = True
+                elif '/s?k=' in final_url or '/gp/search/' in final_url:
+                    is_broken = True
+                elif resp.status_code == 200 and 'Page Not Found' in resp.text[:500]:
+                    is_broken = True
+                
+                if is_broken:
                     log.append(f'BROKEN link (HTTP {resp.status_code}): {url[:80]}')
-                    if default_url:
+                    # Try to find a product-specific replacement from approved list
+                    asin_val = asin_m.group(1)
+                    replacement_found = False
+                    for key, approved_url in brand_amazon.items():
+                        if key == '_default':
+                            continue
+                        if asin_val in approved_url and approved_url != url:
+                            html_content = html_content.replace(url, approved_url)
+                            log.append(f'  → Replaced with approved: {approved_url[:80]}')
+                            replacement_found = True
+                            break
+                    if not replacement_found and default_url:
                         html_content = html_content.replace(url, default_url)
                         log.append(f'  → Replaced with default: {default_url[:80]}')
+                elif resp.status_code in (405, 503):
+                    log.append(f'SKIP: {url[:60]} → HTTP {resp.status_code} (Amazon rate limit, not broken)')
                 else:
                     log.append(f'OK: {url[:80]} → HTTP {resp.status_code}')
             except requests.RequestException as e:
-                log.append(f'HEAD request failed for {url[:60]}: {e}')
+                log.append(f'Request failed for {url[:60]}: {e}')
                 # Don't replace on timeout — might just be rate limited
 
         # Verify affiliate tag
