@@ -2,7 +2,7 @@ name: Amazon ASIN Health Check
 
 on:
   schedule:
-    - cron: '0 10 * * 1'  # Every Monday at 10 AM UTC (2 AM PST)
+    - cron: '0 10 * * *'  # Every day at 10 AM UTC (2 AM PST)
   workflow_dispatch:  # Manual trigger
 
 jobs:
