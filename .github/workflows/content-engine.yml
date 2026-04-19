@@ -437,17 +437,24 @@ jobs:
                       cover_url = upload_pin_image(cover_bytes, f'{brand}_video_cover_{ts}.jpg')
                       print(f'  [{brand}] Uploaded to Supabase')
 
-                      # Step 4: Post as image pin via working image webhooks
-                      # cover_bytes is a branded JPEG already rendered from the video frame
+                      # Step 4: Post as VIDEO pin via video webhook scenarios
+                      # These scenarios handle Pinterest's 3-step video upload flow
+                      VIDEO_WEBHOOKS = {
+                          'fitness': os.environ.get('MAKE_WEBHOOK_VIDEO_FITNESS', ''),
+                          'deals': os.environ.get('MAKE_WEBHOOK_VIDEO_DEALS', ''),
+                          'menopause': os.environ.get('MAKE_WEBHOOK_VIDEO_MENOPAUSE', ''),
+                      }
+                      # Fall back to image webhooks if video webhook not configured
                       IMAGE_WEBHOOKS = {
                           'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
                           'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
                           'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
                       }
-                      image_webhook = IMAGE_WEBHOOKS.get(brand, '')
-                      if not image_webhook:
-                          print(f'  [{brand}] Video frame pin SKIPPED — MAKE_WEBHOOK_{brand.upper()} not set')
-                          log_pipeline_error('1v', brand, f'No image webhook for {brand}', severity='medium')
+                      video_webhook = VIDEO_WEBHOOKS.get(brand, '') or IMAGE_WEBHOOKS.get(brand, '')
+                      is_native_video = bool(VIDEO_WEBHOOKS.get(brand, ''))
+                      if not video_webhook:
+                          print(f'  [{brand}] Video pin SKIPPED — no webhook configured')
+                          log_pipeline_error('1v', brand, f'No video webhook for {brand}', severity='medium')
                           continue
 
                       board_name = video_content.get('board', '')
@@ -498,13 +505,14 @@ jobs:
                       video_frame_payload = {
                           'title': video_content.get('title', '')[:100],
                           'description': desc[:500],
-                          'image_url': cover_url,
+                          'image_url': video_url if is_native_video else cover_url,
+                          'cover_url': cover_url,
                           'board_id': str(board_id),
                           'link': dest_url,
                       }
                       try:
                           _vreq = urllib.request.Request(
-                              image_webhook,
+                              video_webhook,
                               data=json.dumps(video_frame_payload).encode('utf-8'),
                               headers={'Content-Type': 'application/json'},
                               method='POST',
@@ -512,10 +520,11 @@ jobs:
                           with urllib.request.urlopen(_vreq, timeout=30) as _vr:
                               _vstatus = _vr.status
                               _vr_body = _vr.read().decode('utf-8', errors='replace')
-                          print(f'  [{brand}] Video frame webhook → HTTP {_vstatus} "{_vr_body[:60]}"')
+                          pin_type = 'VIDEO' if is_native_video else 'IMAGE+COVER'
+                          print(f'  [{brand}] {pin_type} webhook → HTTP {_vstatus} "{_vr_body[:60]}"')
                           video_posted += 1
                           video_posted_per_brand[brand] = video_posted_per_brand.get(brand, 0) + 1
-                          print(f'  [{brand}] Video frame pin POSTED via image webhook ✅')
+                          print(f'  [{brand}] {pin_type} pin POSTED ✅')
                           try:
                               log_pin_to_history({
                                   **video_content,
