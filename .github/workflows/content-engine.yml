@@ -87,6 +87,7 @@ jobs:
           MAKE_WEBHOOK_VIDEO_FITNESS: ${{ secrets.MAKE_WEBHOOK_VIDEO_FITNESS }}
           MAKE_WEBHOOK_VIDEO_DEALS: ${{ secrets.MAKE_WEBHOOK_VIDEO_DEALS }}
           MAKE_WEBHOOK_VIDEO_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_VIDEO_MENOPAUSE }}
+          ZERNIO_API_KEY: ${{ secrets.ZERNIO_API_KEY }}
           REMOTION_CHROME_EXECUTABLE: ${{ env.CHROME_PATH }}
           LATE_API_KEY: ${{ secrets.LATE_API_KEY }}
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
@@ -458,8 +459,38 @@ jobs:
                       cover_url = upload_pin_image(cover_bytes, f'{brand}_video_cover_{ts}.jpg')
                       print(f'  [{brand}] Uploaded to Supabase')
 
-                      # Step 4: Post pin via image webhook (cover frame as image pin)
-                      # Video poster scenarios require manual Make.com UI config — using image posters
+                      # Step 4: Post video pin via Zernio API (handles Pinterest 3-step video upload)
+                      # Falls back to Make.com image webhook if Zernio not configured
+                      from video_automation.zernio_poster import is_zernio_configured, post_video_pin as zernio_post_video
+                      
+                      if is_zernio_configured():
+                          zernio_result = zernio_post_video(
+                              video_url=video_url,
+                              title=video_content.get('title', '')[:100],
+                              description=desc[:500],
+                              board_id=str(board_id),
+                              link=dest_url,
+                          )
+                          if zernio_result:
+                              video_posted += 1
+                              video_posted_per_brand[brand] = video_posted_per_brand.get(brand, 0) + 1
+                              pin_url = zernio_result.get('pin_url', '')
+                              print(f'  [{brand}] VIDEO PIN POSTED via Zernio ✅ {pin_url}')
+                              try:
+                                  log_pin_to_history({
+                                      **video_content,
+                                      'visual_style': 'video_pin',
+                                      'angle_framework': 'video',
+                                      'description_opener': 'video',
+                                      'image_search_query': video_content.get('search_query', ''),
+                                  }, db.client)
+                              except Exception:
+                                  pass
+                              continue  # Success — skip Make.com fallback
+                          else:
+                              print(f'  [{brand}] Zernio failed — falling back to Make.com webhook')
+                      
+                      # Fallback: Make.com image webhook
                       IMAGE_WEBHOOKS = {
                           'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
                           'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
