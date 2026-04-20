@@ -462,6 +462,10 @@ jobs:
                       # Calculate board_id and dest_url before posting
                       board_name = video_content.get('board', '')
                       board_id = get_board_id(brand, board_name)
+                      dest_url = video_content.get('destination_url', '')
+                      site = BRAND_SITE_CONFIG.get(brand, {})
+                      if not dest_url or '/articles/' not in dest_url:
+                          dest_url = f"{site.get('base_url', '')}/articles/"
 
                       # Step 4: Post video pin via Zernio API (handles Pinterest 3-step video upload)
                       # Falls back to Make.com image webhook if Zernio not configured
