@@ -467,7 +467,7 @@ jobs:
                           zernio_result = zernio_post_video(
                               video_url=video_url,
                               title=video_content.get('title', '')[:100],
-                              description=desc[:500],
+                              description=video_content.get('description', '')[:500],
                               board_id=str(board_id),
                               link=dest_url,
                           )
