@@ -459,6 +459,10 @@ jobs:
                       cover_url = upload_pin_image(cover_bytes, f'{brand}_video_cover_{ts}.jpg')
                       print(f'  [{brand}] Uploaded to Supabase')
 
+                      # Calculate board_id and dest_url before posting
+                      board_name = video_content.get('board', '')
+                      board_id = get_board_id(brand, board_name)
+
                       # Step 4: Post video pin via Zernio API (handles Pinterest 3-step video upload)
                       # Falls back to Make.com image webhook if Zernio not configured
                       from video_automation.zernio_poster import is_zernio_configured, post_video_pin as zernio_post_video
@@ -503,9 +507,7 @@ jobs:
                           log_pipeline_error('1v', brand, f'No webhook for {brand}', severity='medium')
                           continue
 
-                      board_name = video_content.get('board', '')
-                      board_id = get_board_id(brand, board_name)
-                      dest_url = video_content.get('destination_url', '')
+                      # dest_url already set by article generation above
 
                       # ── FIX: Video pins must link to articles, not homepage ──
                       # Generate an article for this video's topic if one doesn't exist
