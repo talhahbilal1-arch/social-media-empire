@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-17",
+  "last_updated": "2026-04-20",
   "items": [
     {
       "id": 1,
@@ -1780,19 +1780,21 @@
       "id": 215,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-small-business-owners",
       "keyword": "best ai tools for small business owners",
-      "title": "Best AI Tools for Small Business Owners 2026"
+      "title": "Best AI Tools for Small Business Owners 2026",
+      "published_date": "2026-04-20"
     },
     {
       "id": 216,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-agencies",
       "keyword": "best ai tools for agencies",
-      "title": "Best AI Tools for Agencies 2026"
+      "title": "Best AI Tools for Agencies 2026",
+      "published_date": "2026-04-20"
     },
     {
       "id": 217,
