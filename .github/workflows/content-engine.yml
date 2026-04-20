@@ -458,24 +458,18 @@ jobs:
                       cover_url = upload_pin_image(cover_bytes, f'{brand}_video_cover_{ts}.jpg')
                       print(f'  [{brand}] Uploaded to Supabase')
 
-                      # Step 4: Post as VIDEO pin via video webhook scenarios
-                      # These scenarios handle Pinterest's 3-step video upload flow
-                      VIDEO_WEBHOOKS = {
-                          'fitness': os.environ.get('MAKE_WEBHOOK_VIDEO_FITNESS', ''),
-                          'deals': os.environ.get('MAKE_WEBHOOK_VIDEO_DEALS', ''),
-                          'menopause': os.environ.get('MAKE_WEBHOOK_VIDEO_MENOPAUSE', ''),
-                      }
-                      # Fall back to image webhooks if video webhook not configured
+                      # Step 4: Post pin via image webhook (cover frame as image pin)
+                      # Video poster scenarios require manual Make.com UI config — using image posters
                       IMAGE_WEBHOOKS = {
                           'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
                           'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
                           'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
                       }
-                      video_webhook = VIDEO_WEBHOOKS.get(brand, '') or IMAGE_WEBHOOKS.get(brand, '')
-                      is_native_video = bool(VIDEO_WEBHOOKS.get(brand, ''))
+                      video_webhook = IMAGE_WEBHOOKS.get(brand, '')
+                      is_native_video = False
                       if not video_webhook:
-                          print(f'  [{brand}] Video pin SKIPPED — no webhook configured')
-                          log_pipeline_error('1v', brand, f'No video webhook for {brand}', severity='medium')
+                          print(f'  [{brand}] Pin SKIPPED — no webhook configured')
+                          log_pipeline_error('1v', brand, f'No webhook for {brand}', severity='medium')
                           continue
 
                       board_name = video_content.get('board', '')
