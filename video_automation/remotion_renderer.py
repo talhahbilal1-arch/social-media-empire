@@ -93,6 +93,7 @@ def _extract_cover_frame(video_path: Path) -> bytes:
         subprocess.run(
             [
                 ffmpeg, "-y", "-loglevel", "error",
+                "-ss", "3",  # Skip intro — grab frame at 3 seconds (first scene visible)
                 "-i", str(video_path),
                 "-vframes", "1", "-q:v", "2",
                 str(cover_path),
