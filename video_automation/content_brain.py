@@ -2052,11 +2052,15 @@ def build_destination_url(base_url, brand, posting_method, campaign="pins",
 def generate_video_pin_content(brand_key, supabase_client):
     """Generate content specifically for a video pin (hook/solution/CTA format).
 
-    Uses Claude to create short, punchy text optimized for 8-second video pins
-    where each text frame is on screen for ~2.5 seconds.
+    Uses Claude to create short, punchy text optimized for video pins.
+
+    The legacy Remotion pipeline consumes hook/solution/cta as 3 text frames
+    in an 8-second slideshow. The Short Video Maker pipeline consumes `tips`
+    (5 items) as middle scenes in a 6-scene voiceover video. Both schemas
+    are produced together so either renderer can consume the same row.
 
     Returns dict with: hook, solution, cta, title, description, board_id,
-    search_query, topic, category.
+    search_query, tips (list[5]), topic, category.
     """
     config = BRAND_CONFIGS[brand_key]
 
@@ -2115,10 +2119,9 @@ def generate_video_pin_content(brand_key, supabase_client):
     # ── Call Claude for video-specific copy ──
     prompt = f"""You are creating text for a Pinterest VIDEO pin for "{config['name']}".
 
-The video is 8 seconds. There are 3 text screens:
-- Screen 1 (0-3s): HOOK — grab attention, state the problem. 5-8 words MAX.
-- Screen 2 (3-6s): SOLUTION — the payoff/benefit. 6-10 words MAX.
-- Screen 3 (6-8s): CTA — action phrase. 4-6 words MAX.
+This content feeds two renderers — both consume the same JSON:
+(A) An 8-second slideshow with 3 text screens (hook/solution/cta).
+(B) A 20-30 second voiceover video with 6 scenes (hook + 4 tips + cta).
 
 ═══ BRAND VOICE ═══
 {config['voice']}
@@ -2136,6 +2139,9 @@ The video is 8 seconds. There are 3 text screens:
 4. title: Pinterest SEO title, 40-60 chars, include primary keyword.
 5. description: 2-3 sentences, problem→solution format, include keyword naturally.
 6. search_query: 2-3 word Pexels search term for a PORTRAIT video background.
+7. tips: EXACTLY 5 actionable tips, each 8-12 words, written as a voiceover
+   line (spoken aloud). Each tip should stand alone — they play as separate
+   scenes in the long video. No numbering, no emoji, no "tip 1:" prefix.
 
 Respond in JSON only:
 {{
@@ -2144,7 +2150,8 @@ Respond in JSON only:
   "cta": "...",
   "title": "...",
   "description": "...",
-  "search_query": "..."
+  "search_query": "...",
+  "tips": ["...", "...", "...", "...", "..."]
 }}"""
 
     content = _generate_text(prompt, max_tokens=500)
@@ -2158,14 +2165,34 @@ Respond in JSON only:
         else:
             logger.error(f"[{brand_key}] Video pin content parse failed")
             # Fallback: hardcoded content
+            topic_label = selected_topic['topic']
             pin_data = {
                 "hook": "Are You Making This Mistake?",
                 "solution": f"Here's What {config['name']} Recommends Instead",
                 "cta": "Save This For Later",
-                "title": f"{selected_topic['topic']} Tips",
-                "description": f"Quick tips about {selected_topic['topic']}.",
-                "search_query": selected_topic['topic'].lower(),
+                "title": f"{topic_label} Tips",
+                "description": f"Quick tips about {topic_label}.",
+                "search_query": topic_label.lower(),
+                "tips": [
+                    f"Start with the basics of {topic_label} today",
+                    f"Small daily habits beat crash approaches every time",
+                    f"Track what works for you and adjust weekly",
+                    f"Consistency matters more than intensity with {topic_label}",
+                    f"Save this post so you remember what to try next",
+                ],
             }
+
+    # Guarantee tips exist — the local video renderer relies on exactly 5.
+    # If Claude returned something malformed (too few, too many, empty), pad
+    # or truncate to 5 so downstream code never has to branch on this.
+    tips = pin_data.get('tips') or []
+    if not isinstance(tips, list):
+        tips = []
+    tips = [str(t).strip() for t in tips if str(t).strip()]
+    topic_label = selected_topic['topic']
+    while len(tips) < 5:
+        tips.append(f"Try one small change with {topic_label} this week")
+    pin_data['tips'] = tips[:5]
 
     # Add metadata
     pin_data['brand'] = brand_key
