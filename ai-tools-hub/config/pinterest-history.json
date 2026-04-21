@@ -1294,5 +1294,14 @@
     "board": "Best AI Tools 2026",
     "posted_at": "2026-04-20T22:33:47.081Z",
     "success": true
+  },
+  {
+    "slug": "chatgpt-vs-claude",
+    "pin_type": "comparison",
+    "title": "ChatGPT vs. Claude: Which AI Reigns Supreme in 2024?",
+    "link": "https://pilottools.ai/compare/chatgpt-vs-claude/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-21T17:12:26.790Z",
+    "success": true
   }
 ]
