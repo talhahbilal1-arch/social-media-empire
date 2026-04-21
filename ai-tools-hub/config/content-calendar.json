@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-20",
+  "last_updated": "2026-04-21",
   "items": [
     {
       "id": 1,
@@ -1800,10 +1800,11 @@
       "id": 217,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-startups",
       "keyword": "best ai tools for startups",
-      "title": "Best AI Tools for Startups 2026"
+      "title": "Best AI Tools for Startups 2026",
+      "published_date": "2026-04-21"
     },
     {
       "id": 218,
