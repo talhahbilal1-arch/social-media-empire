@@ -99,6 +99,9 @@ jobs:
           LATE_API_KEY_2: ${{ secrets.LATE_API_KEY_2 }}
           LATE_API_KEY_3: ${{ secrets.LATE_API_KEY_3 }}
           LATE_API_KEY_4: ${{ secrets.LATE_API_KEY_4 }}
+          # 'remotion' (default) = render in CI. 'local' = stage content to
+          # Supabase; scripts/local_video_pipeline.py on the Mac renders it.
+          VIDEO_STRATEGY: ${{ secrets.VIDEO_STRATEGY || 'remotion' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           BRAND_INPUT: ${{ github.event.inputs.brand || '' }}
         run: |
@@ -424,17 +427,64 @@ jobs:
               from video_automation.video_scene_generator import generate_scene_images
               from video_automation.remotion_renderer import render_remotion_video
 
-              print('\n=== PHASE 1v: Generating & posting video pins via Make.com ===')
+              # VIDEO_STRATEGY routes between two video pipelines:
+              #   'remotion' (default): render in CI, post in CI (existing flow)
+              #   'local'              : stage content to Supabase with
+              #                          video_state='video_pending'; the Mac
+              #                          launchd job renders via Short Video
+              #                          Maker and posts
+              VIDEO_STRATEGY = os.environ.get('VIDEO_STRATEGY', 'remotion').lower().strip()
+              print(f'\n=== PHASE 1v: video strategy = {VIDEO_STRATEGY} ===')
 
               video_posted = 0
               video_posted_per_brand = {b: 0 for b in brands_to_generate}
+              video_pending_staged = 0
 
               for brand in brands_to_generate:
                   try:
-                      # Step 1: Generate video content (hook/solution/CTA) via Claude
+                      # Step 1: Generate video content (hook/solution/CTA/tips) via Claude
                       print(f'  [{brand}] Generating video content...')
                       video_content = generate_video_pin_content(brand, db.client)
                       print(f'  [{brand}] Hook: "{video_content.get("hook", "")[:50]}"')
+
+                      # Local strategy: stage content to Supabase and stop.
+                      # The Mac-side launchd job (scripts/local_video_pipeline.py)
+                      # picks this row up, renders via Short Video Maker, posts.
+                      if VIDEO_STRATEGY == 'local':
+                          board_name = video_content.get('board', '')
+                          board_id = get_board_id(brand, board_name)
+                          dest_url = video_content.get('destination_url', '')
+                          site = BRAND_SITE_CONFIG.get(brand, {})
+                          if not dest_url or '/articles/' not in dest_url:
+                              dest_url = f"{site.get('base_url', '')}/articles/"
+                          if dry_run:
+                              print(f'  [{brand}] DRY RUN — would stage video_pending pin')
+                              continue
+                          try:
+                              db.client.table('pinterest_pins').insert({
+                                  'brand': brand,
+                                  'title': video_content.get('title', '')[:200],
+                                  'description': video_content.get('description', '')[:1000],
+                                  'topic': video_content.get('topic', ''),
+                                  'category': video_content.get('category', ''),
+                                  'destination_url': dest_url,
+                                  'board': board_name,
+                                  'overlay_headline': video_content.get('hook', ''),
+                                  'overlay_subtext': video_content.get('solution', ''),
+                                  'pexels_search_term': video_content.get('search_query', ''),
+                                  'pin_type': 'video',
+                                  'content_json': video_content,
+                                  'tips': video_content.get('tips', []),
+                                  'status': 'pending',
+                                  'video_state': 'video_pending',
+                                  'created_at': datetime.now(timezone.utc).isoformat(),
+                              }).execute()
+                              video_pending_staged += 1
+                              print(f'  [{brand}] Staged video_pending pin (board {board_id})')
+                          except Exception as _se:
+                              print(f'  [{brand}] Failed to stage pending pin: {_se}')
+                              log_pipeline_error('1v', brand, f'stage pending: {_se}', severity='high')
+                          continue  # skip render + post — local pipeline handles it
 
                       # Step 2: Render video — try Remotion first, fall back to PIL+ffmpeg
                       print(f'  [{brand}] Rendering video...')
@@ -608,7 +658,10 @@ jobs:
                       import traceback; traceback.print_exc()
                       log_pipeline_error('1v', brand, e, severity='medium')
 
-              print(f'  Video pins posted: {video_posted}/{len(brands_to_generate)}')
+              if VIDEO_STRATEGY == 'local':
+                  print(f'  Video pins staged for local render: {video_pending_staged}/{len(brands_to_generate)}')
+              else:
+                  print(f'  Video pins posted: {video_posted}/{len(brands_to_generate)}')
           else:
               print('  Video pins: disabled (not a video run and VIDEO_PIN_ENABLED = False)')
 
