@@ -91,6 +91,50 @@ SCOUT_CONFIGS = {
             "EXCLUDE: pregnancy, fertility, pediatric, men's health."
         ),
     },
+    "pilottools": {
+        "rss_feeds": [
+            "https://www.pinterest.com/hubspot/productivity-tips/.rss",
+            "https://www.pinterest.com/buffer/social-media-tips/.rss",
+            "https://www.pinterest.com/canva/design-tips/.rss",
+        ],
+        "pytrends_seeds": ["AI tools", "productivity apps", "ChatGPT tips"],
+        "news_keywords": ["AI tools launch", "best productivity software", "AI startup"],
+        "relevance_filter": (
+            "AI tools, SaaS products, productivity software, content creation tools, "
+            "automation, writing tools, design tools, marketing tools, freelancing. "
+            "EXCLUDE: hardware, gaming, cryptocurrency, enterprise-only B2B."
+        ),
+    },
+    "homedecor": {
+        "rss_feeds": [
+            "https://www.pinterest.com/realsimple/home-decorating-ideas/.rss",
+            "https://www.pinterest.com/bhg/decorating/.rss",
+            "https://www.pinterest.com/housebeautiful/decorating/.rss",
+            "https://www.pinterest.com/apartmenttherapy/home-decor/.rss",
+        ],
+        "pytrends_seeds": ["home decor ideas", "room makeover", "budget decorating"],
+        "news_keywords": ["home decor trends", "interior design budget", "room makeover"],
+        "relevance_filter": (
+            "Home decor, interior design, room makeovers, budget decorating, DIY decor, "
+            "living room, bedroom, kitchen styling, small spaces, apartment decor. "
+            "EXCLUDE: construction, real estate, commercial interiors, luxury >$1000."
+        ),
+    },
+    "beauty": {
+        "rss_feeds": [
+            "https://www.pinterest.com/allure/beauty/.rss",
+            "https://www.pinterest.com/byrdie/skincare/.rss",
+            "https://www.pinterest.com/glamour/beauty/.rss",
+            "https://www.pinterest.com/cosmopolitan/beauty/.rss",
+        ],
+        "pytrends_seeds": ["skincare routine", "drugstore makeup", "beauty dupes"],
+        "news_keywords": ["skincare products new", "beauty trends", "drugstore beauty"],
+        "relevance_filter": (
+            "Skincare, makeup, hair care, beauty products, beauty routines, dupes, "
+            "clean beauty, drugstore beauty, product reviews, self care. "
+            "EXCLUDE: cosmetic surgery, medical dermatology, men's grooming, luxury >$200."
+        ),
+    },
 }
 
 

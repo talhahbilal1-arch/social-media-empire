@@ -515,6 +515,466 @@ This audience is going through something hard and wants to feel seen and helped.
             "Perimenopause Tips & Support",
             "Menopause Nutrition & Wellness"
         ]
+    },
+
+    "pilottools": {
+        "name": "PilotTools",
+        "problem_solution_matrix": {
+            "problems": [
+                "Tool overwhelm — hundreds of AI tools launch weekly, impossible to know which ones actually save time",
+                "Wasted subscriptions — paying for 5+ SaaS tools when 2 could do the job better",
+                "Productivity theater — spending more time setting up tools than actually doing deep work",
+            ],
+            "solution": "Battle-tested AI tool reviews from someone who actually uses them daily. No sponsored fluff — just what works, what's overhyped, and what saves real money.",
+        },
+        "text_overlay_hooks": [
+            "Stop Paying for 5 Tools: This One AI Does It All.",
+            "The Free AI Tool That Replaced My $200/Month Stack.",
+            "3 AI Tools Every Freelancer Needs in 2026.",
+        ],
+        "voice": """You are a 30-year-old tech-savvy creator who tests AI tools obsessively.
+You've been in the SaaS/productivity space for 5+ years, running your own content business.
+You're honest about what works and what's just hype. You've wasted money on overhyped tools and learned the hard way.
+You talk like a smart friend who's already done the research — direct, data-driven, occasionally sarcastic.
+You use specific numbers: "saved me 4 hours/week" not "saves time."
+You compare tools head-to-head and pick clear winners.
+NEVER sound like a press release. NEVER say "leverage" or "empower" or "cutting-edge."
+Be specific. Name real tools. Give real use cases.""",
+
+        "hook_frameworks": [
+            "I Tested {number} AI Tools — Only {small_number} Were Worth Paying For",
+            "The Free {tool_type} That Outperforms {expensive_tool} (Not Kidding)",
+            "Stop Paying ${price}/Month for {tool} — This ${cheaper} Alternative Is Better",
+            "{Number} AI Tools That Actually {specific_outcome} (I Tested Every One)",
+            "Why I Cancelled {popular_tool} After {timeframe} (And What I Use Now)",
+            "The ${price} AI Stack That Runs My Entire Business",
+            "I Replaced {number} Tools With This One AI — Here's How",
+            "The AI Tool {percentage}% of Creators Don't Know About Yet",
+            "{Tool} vs {Other_Tool} — The Winner After {timeframe} of Real Use",
+            "My Honest {tool} Review After {timeframe} — Worth ${price}/Month?",
+            "The {adjective} AI Tool That {specific_result} (Most People Overlook It)",
+            "What I Actually Use Daily vs What I Cancelled (AI Tool Audit)",
+            "{Number} Free AI Tools That Do What ${price}/Month Tools Can't",
+            "The AI Workflow That Saves Me {number} Hours Every Week",
+            "I Built a ${revenue} Business Using Only These {number} AI Tools"
+        ],
+
+        "affiliate_products": {
+            "writing_tools": ["Jasper AI", "Copy.ai", "Writesonic", "Grammarly", "Hemingway Editor", "Surfer SEO", "Frase"],
+            "design_tools": ["Canva Pro", "Midjourney", "Adobe Firefly", "Remove.bg", "Lumen5", "Descript"],
+            "productivity": ["Notion AI", "Zapier", "Make.com", "Calendly", "Loom", "Otter.ai", "Superhuman"],
+            "seo_marketing": ["Semrush", "Ahrefs", "Ubersuggest", "Mangools", "SE Ranking", "Hostinger", "ConvertKit"],
+            "ai_platforms": ["ChatGPT Plus", "Claude Pro", "Perplexity Pro", "Gemini Advanced", "Poe", "You.com"]
+        },
+
+        "board_priority": [
+            "Best AI Tools",
+            "Productivity Hacks",
+            "AI for Business",
+            "Content Creation Tools",
+            "Free AI Tools"
+        ],
+
+        "topics_by_category": {
+            "ai_tools": [
+                "best AI writing assistants compared head to head",
+                "AI image generators ranked by quality and price",
+                "free AI tools that rival paid alternatives",
+                "AI video editing tools for content creators",
+                "AI chatbot comparison ChatGPT vs Claude vs Gemini",
+                "AI tools for email marketing automation",
+                "AI presentation makers that save hours",
+                "AI transcription tools accuracy comparison",
+                "AI code assistants for non-developers",
+                "AI tools for social media scheduling and analytics",
+                "AI voice cloning tools ethical use cases",
+                "AI research tools that replace hours of googling",
+                "AI data analysis tools for non-technical users",
+                "AI customer service tools for solopreneurs",
+                "best AI browser extensions for productivity"
+            ],
+            "productivity": [
+                "building a second brain with AI tools",
+                "automating repetitive tasks with Zapier and Make",
+                "the minimal viable tool stack for freelancers",
+                "Notion templates that actually improve workflow",
+                "time blocking with AI calendar assistants",
+                "inbox zero using AI email tools",
+                "project management tools for solo creators",
+                "AI meeting note takers compared",
+                "workflow automation for content creators",
+                "digital declutter reducing SaaS subscriptions",
+                "focus tools that block distractions effectively",
+                "AI tools for faster client communication",
+                "batch content creation workflow with AI",
+                "knowledge management systems for creators",
+                "the morning routine of productive creators"
+            ],
+            "business": [
+                "starting an AI services business from scratch",
+                "pricing AI freelance services competitively",
+                "building passive income with AI content",
+                "AI tools for market research and competitor analysis",
+                "creating digital products with AI assistance",
+                "AI for financial planning and invoicing",
+                "scaling a one-person business with automation",
+                "AI tools for building landing pages fast",
+                "email list growth strategies using AI",
+                "AI-powered customer feedback analysis",
+                "monetizing AI skills as a freelancer",
+                "AI tools for proposal and contract writing",
+                "building an agency with AI as the backbone",
+                "affiliate marketing with AI content creation",
+                "AI tools for podcast production and distribution"
+            ],
+            "content_creation": [
+                "AI content repurposing one piece into ten",
+                "SEO writing with AI tools best practices",
+                "AI thumbnail generators for YouTube and Pinterest",
+                "creating viral short form video with AI",
+                "AI tools for blog post optimization",
+                "podcast show notes generation with AI",
+                "AI for creating lead magnets and ebooks",
+                "social media caption generators compared",
+                "AI tools for creating online courses",
+                "content calendar automation with AI",
+                "AI copywriting formulas that convert",
+                "using AI for A/B testing headlines",
+                "AI tools for creating infographics",
+                "newsletter writing with AI assistance",
+                "AI tools for brand voice consistency"
+            ]
+        },
+
+        "seo_keywords": [
+            "best AI tools", "AI productivity tools", "free AI tools",
+            "AI for business", "content creation tools", "AI writing tools",
+            "AI automation", "SaaS tools", "AI marketing tools",
+            "productivity apps", "AI for creators", "best free AI",
+            "AI tool review", "AI workflow", "AI side hustle"
+        ],
+
+        "hashtags": [
+            "#AItools", "#productivity", "#SaaS", "#AIforBusiness",
+            "#contentcreation", "#techtools", "#freelancer", "#AIautomation"
+        ],
+
+        "destination_base_url": "https://pilottools.ai",
+        "pinterest_boards": [
+            "Best AI Tools",
+            "Productivity Hacks",
+            "AI for Business",
+            "Content Creation Tools",
+            "Free AI Tools"
+        ]
+    },
+
+    "homedecor": {
+        "name": "Home Decor Edit",
+        "problem_solution_matrix": {
+            "problems": [
+                "Room feels blah — you know something's off but can't pinpoint what to change without spending thousands",
+                "Pinterest vs reality — gorgeous rooms on the app but no idea how to recreate the look on a real budget",
+                "Decision paralysis — thousands of options for throw pillows alone and no clue what actually goes together",
+            ],
+            "solution": "Room-by-room transformation guides with specific, affordable product picks that create the 'expensive' look without the price tag.",
+        },
+        "text_overlay_hooks": [
+            "Stop Buying Random Decor: Follow This Room Formula Instead.",
+            "My Living Room Glow-Up Cost Under $150 Total.",
+            "3 Budget Swaps That Make Any Room Look Expensive.",
+        ],
+        "voice": """You are a 34-year-old woman with a natural eye for design who decorates on a real budget.
+You've transformed multiple rental apartments and your own home without spending a fortune.
+You're practical, creative, and obsessed with finding pieces that look high-end but cost under $50.
+You talk like a friend showing you around her newly decorated space — excited, specific, visual.
+You use room-specific language and always explain WHY something works (scale, color theory, texture).
+NEVER sound like a home staging manual. NEVER say 'elevate your space' or 'curate your aesthetic.'
+Be specific about dimensions, colors, and where things go.""",
+
+        "hook_frameworks": [
+            "My {room} Before & After — Total Budget: ${price}",
+            "The ${price} {product} That Makes Any {room} Look ${expensive}",
+            "{Number} Budget Swaps That Transformed My {room}",
+            "Stop Buying {product} Until You See This ${price} Dupe",
+            "The {room} Trick Interior Designers Charge ${price} to Tell You",
+            "I Decorated My Entire {room} for Under ${price} (Here's How)",
+            "Why Your {room} Looks Cheap (And the ${price} Fix)",
+            "{Number} Things I Removed From My {room} (It Looks 10x Better)",
+            "The One {product} That Changed My Whole {room}",
+            "Renters: {Number} Ways to {outcome} Without Damaging Walls",
+            "What ${expensive} {rooms} Have That Yours Doesn't (Budget Version)",
+            "The {product} Everyone Asks Me About — It's ${price}",
+            "Small {room} Ideas That Actually Make It Feel Bigger",
+            "{Season} {room} Refresh: {Number} Easy Swaps Under ${price}",
+            "I Tried the Viral {trend} — Here's My Honest Take"
+        ],
+
+        "affiliate_products": {
+            "living_room": ["throw pillows", "area rug", "curtains", "throw blanket", "accent mirror", "coffee table books", "vases"],
+            "bedroom": ["duvet cover", "nightstand lamp", "decorative pillows", "wall art", "floating shelves", "bed frame", "blackout curtains"],
+            "kitchen": ["bar stools", "kitchen rug", "utensil holder", "cutting board display", "herb garden kit", "pendant light", "dish towels"],
+            "bathroom": ["shower curtain", "bath mat", "towel set", "vanity tray", "soap dispenser", "bathroom shelves", "scented candles"],
+            "general": ["picture frames", "artificial plants", "storage baskets", "table lamp", "decorative tray", "coasters", "blanket ladder"]
+        },
+
+        "board_priority": [
+            "Living Room Ideas",
+            "Bedroom Decor",
+            "Kitchen Styling",
+            "Budget Home Makeover",
+            "Cozy Home Vibes",
+            "Small Space Solutions"
+        ],
+
+        "topics_by_category": {
+            "living_room": [
+                "living room layout ideas for small apartments",
+                "how to style a coffee table like a designer",
+                "best throw pillow combinations by color scheme",
+                "choosing the right area rug size and placement",
+                "creating a cozy reading nook on a budget",
+                "gallery wall layouts that actually look good",
+                "mixing modern and vintage decor in a living room",
+                "affordable accent chairs under $200",
+                "curtain hanging tricks that make rooms feel taller",
+                "bookshelf styling ideas with budget accessories",
+                "TV wall decor ideas that hide the awkward blank space",
+                "neutral living room ideas that aren't boring",
+                "how to make a small living room look spacious",
+                "layering textures for a cozy living room feel",
+                "statement lighting ideas for under $100"
+            ],
+            "bedroom": [
+                "budget bedroom makeover ideas under $200 total",
+                "creating a hotel-style bed at home affordably",
+                "nightstand styling ideas that look curated",
+                "bedroom color schemes that help you sleep better",
+                "how to make your bedroom feel like a retreat",
+                "closet organization without built-ins",
+                "best bedding materials ranked by comfort and price",
+                "accent wall ideas without paint for renters",
+                "small bedroom storage solutions that look good",
+                "bedroom lighting layers for ambiance",
+                "DIY headboard ideas under $50",
+                "dresser top styling ideas that reduce clutter",
+                "the perfect bedroom rug placement guide",
+                "minimalist bedroom essentials checklist",
+                "seasonal bedding swaps for a fresh look"
+            ],
+            "kitchen": [
+                "kitchen counter organization that looks clean",
+                "open shelving styling in the kitchen",
+                "affordable kitchen updates that add value",
+                "small kitchen storage solutions that maximize space",
+                "kitchen rug ideas that are practical and stylish",
+                "pantry organization with matching containers",
+                "how to style a kitchen island affordably",
+                "pendant lighting over kitchen island options",
+                "farmhouse kitchen decor on a budget",
+                "kitchen backsplash alternatives for renters"
+            ],
+            "small_spaces": [
+                "studio apartment layout ideas that actually work",
+                "vertical storage solutions for small rooms",
+                "multifunctional furniture for tiny spaces",
+                "mirror placement tricks to make rooms feel larger",
+                "entryway organization for apartments with no foyer",
+                "small bathroom storage ideas that look good",
+                "balcony and patio decor for apartment living",
+                "room divider ideas for open floor plans",
+                "floating shelf arrangements for small walls",
+                "compact dining solutions for small kitchens"
+            ],
+            "seasonal": [
+                "spring refresh decor swaps for every room",
+                "summer living room updates light and airy",
+                "fall cozy home transition throw blankets and candles",
+                "holiday decorating on a budget room by room",
+                "winter bedroom cozy layering ideas",
+                "outdoor patio styling for warm weather",
+                "back to school home office refresh",
+                "new year home organization reset"
+            ]
+        },
+
+        "seo_keywords": [
+            "home decor ideas", "budget decorating", "living room ideas",
+            "bedroom makeover", "small space decor", "apartment decorating",
+            "cozy home", "room transformation", "affordable home decor",
+            "DIY decor", "interior design tips", "home styling",
+            "room makeover budget", "decor ideas 2026", "rental decorating"
+        ],
+
+        "hashtags": [
+            "#homedecor", "#interiordesign", "#budgetdecor", "#apartmentdecor",
+            "#cozyhome", "#roommakeover", "#homedecorinspo", "#smallspaceliving"
+        ],
+
+        "destination_base_url": "https://www.dailydealdarling.com",
+        "pinterest_boards": [
+            "Living Room Ideas",
+            "Bedroom Decor",
+            "Kitchen Styling",
+            "Budget Home Makeover",
+            "Cozy Home Vibes",
+            "Small Space Solutions"
+        ]
+    },
+
+    "beauty": {
+        "name": "The Beauty Shelf",
+        "problem_solution_matrix": {
+            "problems": [
+                "Skincare confusion — too many products, conflicting advice, no idea what actually works for your skin type",
+                "Expensive habit — beauty routines cost $200+/month and half the products sit unused in the drawer",
+                "Dupe anxiety — viral products everywhere but no honest reviews on whether the $12 version is actually as good as the $65 one",
+            ],
+            "solution": "Honest, personal product reviews with real before/after experience. Budget-friendly finds that actually work, tested by someone who's tried the expensive versions too.",
+        },
+        "text_overlay_hooks": [
+            "Stop Wasting Money on Skincare: Only 3 Products Actually Matter.",
+            "The $12 Serum That Outperforms My $65 One (Dermatologist Agrees).",
+            "My Entire Skincare Routine Costs Less Than One Fancy Moisturizer.",
+        ],
+        "voice": """You are a 28-year-old beauty enthusiast who's spent years testing products obsessively.
+You've tried the luxury brands AND the drugstore dupes, so you know what's actually worth the money.
+You're honest, relatable, and specific — you mention exact shades, textures, and how products feel on skin.
+You talk like you're doing a friend's makeup and explaining why you picked each product.
+You always mention your skin type so readers can relate (combination, acne-prone).
+NEVER sound like a beauty counter salesperson. NEVER say 'holy grail' or 'obsessed' without context.
+Be specific about ingredients, application tips, and realistic expectations.""",
+
+        "hook_frameworks": [
+            "The ${price} Dupe for {expensive_product} — I Can't Tell the Difference",
+            "I Tested {number} {product_type}s — Only This One Actually {result}",
+            "My {skin_type} Skin Routine: {number} Products, Under ${price} Total",
+            "Stop Buying {product} Without Checking This ${price} Alternative",
+            "{Number} Drugstore Products That Outperform Luxury ({category})",
+            "The One {product} I'll Never Stop Repurchasing (${price})",
+            "My Honest Review After {timeframe} of {product} — Worth the Hype?",
+            "Why Your {product} Isn't Working (And the Simple Fix)",
+            "{Number} Beauty Mistakes I Made in My 20s (Don't Repeat These)",
+            "The {ingredient} Product That Changed My Skin in {timeframe}",
+            "What I Stopped Using and My Skin Thanked Me",
+            "Morning vs Night Routine: What Goes When (And Why It Matters)",
+            "The Viral {product} Everyone's Buying — My Honest Take",
+            "I Spent ${price} on Skincare So You Don't Have To",
+            "{Number} Products I'll Never Buy Full-Price Again (Best Dupes)"
+        ],
+
+        "affiliate_products": {
+            "skincare": ["vitamin C serum", "retinol cream", "hyaluronic acid serum", "niacinamide serum", "sunscreen SPF 50", "moisturizer", "cleanser", "toner"],
+            "makeup": ["mascara", "lip gloss", "setting spray", "foundation", "concealer", "blush", "eyeshadow palette", "makeup brushes"],
+            "haircare": ["hair oil", "dry shampoo", "heat protectant", "leave-in conditioner", "hair mask", "scalp scrub", "detangling brush"],
+            "tools": ["jade roller", "beauty blender", "makeup mirror", "eyelash curler", "facial steamer", "LED face mask", "ice roller"],
+            "body": ["body lotion", "body oil", "lip balm", "nail polish", "hand cream", "exfoliating gloves", "shower oil"]
+        },
+
+        "board_priority": [
+            "Skincare Routine",
+            "Makeup Must-Haves",
+            "Hair Care Tips",
+            "Beauty Dupes",
+            "Self Care Sunday",
+            "Clean Beauty"
+        ],
+
+        "topics_by_category": {
+            "skincare": [
+                "building a simple skincare routine that works",
+                "vitamin C serum comparison affordable vs luxury",
+                "retinol for beginners how to start without irritation",
+                "the correct order to apply skincare products",
+                "sunscreen that doesn't leave a white cast budget options",
+                "double cleansing method explained with product picks",
+                "niacinamide benefits and best affordable serums",
+                "how to treat acne scars with over the counter products",
+                "winter skincare routine adjustments for dry skin",
+                "the skincare ingredients you should never mix",
+                "morning skincare routine for combination skin",
+                "night skincare routine for anti-aging on a budget",
+                "slug method for dry skin explained step by step",
+                "best moisturizers by skin type under $25",
+                "how to pick the right exfoliant for your skin"
+            ],
+            "makeup": [
+                "natural everyday makeup look in under 10 minutes",
+                "best drugstore foundation for every skin type",
+                "concealer tricks that make you look more awake",
+                "blush placement guide for different face shapes",
+                "eyebrow products ranked from natural to bold",
+                "setting spray vs setting powder which lasts longer",
+                "lip products that stay on through meals",
+                "best mascara for volume vs length vs curl",
+                "cream vs powder products which is better for your age",
+                "how to make makeup last all day in humid weather",
+                "travel makeup bag essentials minimal and effective",
+                "drugstore vs high end makeup honest comparison",
+                "color correcting made simple for dark circles",
+                "the viral makeup techniques that actually work",
+                "how to match your foundation shade online"
+            ],
+            "haircare": [
+                "hair oiling routine for stronger healthier hair",
+                "best dry shampoos ranked by hair type",
+                "heat protectant products that actually prevent damage",
+                "scalp care routine for hair growth",
+                "how to refresh curls between wash days",
+                "hair masks worth the time and money",
+                "best affordable hair tools that don't fry your hair",
+                "overnight hair treatments for damaged hair",
+                "protein vs moisture balance for hair health",
+                "color-treated hair care routine on a budget"
+            ],
+            "dupes_deals": [
+                "best drugstore dupes for luxury skincare",
+                "makeup dupes that perform better than the original",
+                "affordable alternatives to TikTok viral products",
+                "beauty products worth splurging on vs saving",
+                "dollar store beauty finds that actually work",
+                "Amazon beauty finds under $15 that went viral",
+                "best beauty deals during sales events",
+                "subscription box beauty products worth buying full size",
+                "clean beauty products that don't cost a fortune",
+                "K-beauty products that outperform western brands"
+            ],
+            "self_care": [
+                "at home spa night routine product picks",
+                "self care sunday rituals that cost under $20",
+                "bath products that feel luxurious on a budget",
+                "nail care routine for stronger nails at home",
+                "body care routine for smooth glowing skin",
+                "lip care routine for soft hydrated lips",
+                "hand care products for dry cracked skin",
+                "sleep beauty routine products that work overnight",
+                "aromatherapy products for relaxation and stress",
+                "seasonal self care transitions spring to summer"
+            ]
+        },
+
+        "seo_keywords": [
+            "best skincare products", "drugstore beauty", "skincare routine",
+            "beauty dupes", "makeup tips", "affordable skincare",
+            "hair care routine", "beauty products review", "self care routine",
+            "clean beauty", "beauty on a budget", "skincare for beginners",
+            "best drugstore makeup", "beauty essentials", "skin care tips"
+        ],
+
+        "hashtags": [
+            "#skincare", "#beautytips", "#drugstoremakeup", "#beautydupes",
+            "#skincareproducts", "#cleanbeauty", "#selfcare", "#beautyroutine"
+        ],
+
+        "destination_base_url": "https://www.dailydealdarling.com",
+        "pinterest_boards": [
+            "Skincare Routine",
+            "Makeup Must-Haves",
+            "Hair Care Tips",
+            "Beauty Dupes",
+            "Self Care Sunday",
+            "Clean Beauty"
+        ]
     }
 }
 
@@ -660,6 +1120,29 @@ TOPIC_TO_BOARD_MAP = {
         "planning": "Perimenopause Tips & Support",
         "mental_health": "Hormone Balance Naturally",
         "_default": "Menopause Symptoms & Relief"
+    },
+    "pilottools": {
+        "ai_tools": "Best AI Tools",
+        "productivity": "Productivity Hacks",
+        "business": "AI for Business",
+        "content_creation": "Content Creation Tools",
+        "_default": "Free AI Tools"
+    },
+    "homedecor": {
+        "living_room": "Living Room Ideas",
+        "bedroom": "Bedroom Decor",
+        "kitchen": "Kitchen Styling",
+        "small_spaces": "Small Space Solutions",
+        "seasonal": "Budget Home Makeover",
+        "_default": "Cozy Home Vibes"
+    },
+    "beauty": {
+        "skincare": "Skincare Routine",
+        "makeup": "Makeup Must-Haves",
+        "haircare": "Hair Care Tips",
+        "dupes_deals": "Beauty Dupes",
+        "self_care": "Self Care Sunday",
+        "_default": "Clean Beauty"
     }
 }
 
@@ -957,7 +1440,7 @@ This is the large bold text visible on the image itself. It serves a completely 
 - Pin title MUST contain 2-3 searchable keywords that people actually type into Pinterest search
 - Description must be 150-300 characters with natural keyword placement
 - First 50 characters of description are most important for search ranking
-- Include branded hashtag: {"#FitOver35" if brand_key == "fitness" else "#DailyDealDarling" if brand_key == "deals" else "#MenopausePlanner"}
+- Include branded hashtag: {"#FitOver35" if brand_key == "fitness" else "#DailyDealDarling" if brand_key == "deals" else "#MenopausePlanner" if brand_key == "menopause" else "#PilotTools" if brand_key == "pilottools" else "#HomeDecorEdit" if brand_key == "homedecor" else "#TheBeautyShelf"}
 - Include 3-5 niche hashtags relevant to the topic
 - NEVER stuff keywords — write naturally but strategically
 

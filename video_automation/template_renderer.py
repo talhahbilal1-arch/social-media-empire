@@ -24,6 +24,9 @@ FALLBACK_HERO_IMAGES = {
     'fitness': 'https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=900',
     'menopause': 'https://images.pexels.com/photos/6585764/pexels-photo-6585764.jpeg?auto=compress&cs=tinysrgb&w=900',
     'deals': 'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&w=900',
+    'pilottools': 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=900',
+    'homedecor': 'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=900',
+    'beauty': 'https://images.pexels.com/photos/3373739/pexels-photo-3373739.jpeg?auto=compress&cs=tinysrgb&w=900',
     'default': 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=900',
 }
 
@@ -576,6 +579,398 @@ def _render_menopause_article(article_data, site_config, slug):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# PILOTTOOLS — Dark/tech theme, value-first education, SaaS tool recs
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _render_pilottools_article(article_data, site_config, slug):
+    """Render a clean PilotTools article — dark tech theme, AI tool education."""
+    title = _esc(article_data.get('title', slug.replace('-', ' ').title()))
+    meta_desc = _esc(article_data.get('meta_description', title))
+    hero_url = _ensure_image(article_data.get('hero_url', ''), FALLBACK_HERO_IMAGES.get('pilottools', FALLBACK_HERO_IMAGES['default']))
+    ga_id = _BRAND_GA_IDS.get('pilottools', '')
+    form_id = _BRAND_FORM_IDS.get('pilottools', '')
+    year = datetime.now(timezone.utc).year
+    date_display = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    faq_items = article_data.get('faq', [])
+    schemas = _build_schema_json(title, meta_desc, slug, site_config, faq_items)
+
+    # Intro hook
+    intro_hook = article_data.get('intro_hook', '')
+    intro_html = f'<p style="font-size:1.05em;line-height:1.7;color:#94a3b8;">{_esc(intro_hook)}</p>' if intro_hook else ''
+
+    # Educational sections with tip boxes
+    sections_html = ''
+    for section in article_data.get('sections', []):
+        heading = _esc(section.get('heading', ''))
+        body_html = ''
+        for p in section.get('body_paragraphs', []):
+            body_html += f'<p style="color:#cbd5e1;line-height:1.7;margin:0 0 14px;">{_esc(p)}</p>\n'
+
+        tip_box = ''
+        tip_text = section.get('tip_box_text', '')
+        if tip_text:
+            tip_box = f'''
+            <div style="background:#0c2d48;border-left:3px solid #0EA5E9;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0;">
+              <p style="margin:0;color:#0EA5E9;font-weight:600;font-size:0.88em;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Pro Tip</p>
+              <p style="margin:0;color:#e2e8f0;line-height:1.6;">{_esc(tip_text)}</p>
+            </div>'''
+
+        sections_html += f'''
+        <section style="margin:32px 0;">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.35em;color:#f1f5f9;margin:0 0 14px;">{heading}</h2>
+          {body_html}
+          {tip_box}
+        </section>'''
+
+    # Tool recommendations
+    tools_html = ''
+    tool_items = article_data.get('tool_recommendations', [])
+    if tool_items:
+        tool_cards = ''
+        for item in tool_items:
+            name = _esc(item.get('name', ''))
+            price = _esc(item.get('price', ''))
+            best_for = _esc(item.get('best_for', ''))
+            note = _esc(item.get('one_line_note', ''))
+            category = _esc(item.get('category', ''))
+            aff_url = _esc(item.get('affiliate_url', '#'))
+
+            tool_cards += f'''
+            <div style="display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #1e293b;">
+              <div style="background:#0EA5E9;color:#fff;padding:6px 10px;border-radius:6px;font-size:0.75em;font-weight:600;text-transform:uppercase;white-space:nowrap;">{category}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:600;color:#f1f5f9;font-size:0.95em;">{name}</div>
+                <div style="font-size:0.82em;color:#64748b;">{price} &middot; {best_for}</div>
+                <div style="font-size:0.88em;color:#94a3b8;margin-top:2px;">{note}</div>
+              </div>
+              <a href="{aff_url}" target="_blank" rel="nofollow sponsored"
+                 style="color:#0EA5E9;text-decoration:none;font-size:0.85em;white-space:nowrap;font-weight:500;">
+                Try it &rarr;</a>
+            </div>'''
+
+        tools_html = f'''
+        <section style="margin:40px 0;padding-top:28px;border-top:1px solid #1e293b;">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1em;color:#0EA5E9;margin:0 0 4px;">Recommended Tools</h2>
+          <p style="color:#64748b;font-size:0.88em;margin:0 0 14px;">The tools mentioned in this article, with current pricing.</p>
+          {tool_cards}
+        </section>'''
+
+    # FAQ
+    faq_html = ''
+    for faq in faq_items:
+        faq_html += f'''
+        <div style="margin:16px 0;">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1em;color:#f1f5f9;margin:0 0 6px;">{_esc(faq.get('q', ''))}</h3>
+          <p style="color:#94a3b8;margin:0;line-height:1.6;">{_esc(faq.get('a', ''))}</p>
+        </div>'''
+
+    # Email signup
+    signup_html = ''
+    if form_id:
+        signup_html = f'''
+        <div style="background:#0c2d48;border:1px solid #1e293b;border-radius:10px;padding:22px;margin:32px 0;text-align:center;">
+          <p style="font-family:'Space Grotesk',sans-serif;color:#0EA5E9;font-size:1em;margin:0 0 10px;">Free: Top 25 AI Tools Cheat Sheet (2026)</p>
+          <script async data-uid="{form_id}" src="https://pilottools.ck.page/{form_id}/index.js"></script>
+        </div>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | PilotTools</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{_esc(site_config['base_url'])}/articles/{slug}.html">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+{schemas}
+{"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+</head>
+<body style="margin:0;padding:0;background:#0f172a;color:#f1f5f9;font-family:'Inter',sans-serif;line-height:1.7;">
+
+<nav style="background:#020617;border-bottom:1px solid #1e293b;padding:14px 20px;">
+  <div style="max-width:700px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+    <a href="../index.html" style="text-decoration:none;font-family:'Space Grotesk',sans-serif;font-size:1.15em;color:#f1f5f9;font-weight:600;">Pilot<span style="color:#0EA5E9;">Tools</span></a>
+    <div style="display:flex;gap:16px;">
+      <a href="../blog.html" style="text-decoration:none;color:#64748b;font-size:0.9em;">Articles</a>
+      <a href="../about.html" style="text-decoration:none;color:#64748b;font-size:0.9em;">About</a>
+    </div>
+  </div>
+</nav>
+
+<main style="max-width:700px;margin:0 auto;padding:32px 20px;">
+  <p style="font-size:0.82em;color:#475569;margin:0 0 8px;">{date_display}</p>
+  <h1 style="font-family:'Space Grotesk',sans-serif;font-size:1.8em;line-height:1.3;margin:0 0 20px;color:#f1f5f9;">{title}</h1>
+
+  <img src="{hero_url}" alt="{title}" style="width:100%;border-radius:10px;margin:0 0 24px;" loading="lazy">
+
+  {intro_html}
+
+  {sections_html}
+
+  {tools_html}
+
+  {f'<section style="margin:36px 0;"><h2 style="font-family:Space Grotesk,sans-serif;font-size:1.2em;color:#0EA5E9;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
+
+  {signup_html}
+</main>
+
+<footer style="border-top:1px solid #1e293b;padding:24px 20px;text-align:center;color:#475569;font-size:0.82em;">
+  <p>&copy; {year} PilotTools. Some links may earn a commission.</p>
+</footer>
+
+</body>
+</html>'''
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# HOMEDECOR — Warm cream/sage theme, room transformation, product-forward
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _render_homedecor_article(article_data, site_config, slug):
+    """Render a clean home decor article — warm palette, room-by-room transformation."""
+    title = _esc(article_data.get('title', slug.replace('-', ' ').title()))
+    meta_desc = _esc(article_data.get('meta_description', title))
+    hero_url = _ensure_image(article_data.get('hero_url', ''), FALLBACK_HERO_IMAGES.get('homedecor', FALLBACK_HERO_IMAGES['default']))
+    ga_id = _BRAND_GA_IDS.get('homedecor', '')
+    form_id = _BRAND_FORM_IDS.get('homedecor', '')
+    year = datetime.now(timezone.utc).year
+    date_display = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    faq_items = article_data.get('faq', [])
+    schemas = _build_schema_json(title, meta_desc, slug, site_config, faq_items)
+
+    # Intro paragraphs (PAS framework like deals)
+    intro_html = ''
+    for p in article_data.get('intro_paragraphs', []):
+        intro_html += f'<p>{_esc(p)}</p>\n'
+
+    # Product cards
+    products_html = ''
+    for product in article_data.get('products', []):
+        is_winner = product.get('is_winner', False)
+        name = _esc(product.get('name', 'Product'))
+        price = _esc(product.get('price', ''))
+        rating = product.get('rating', 4.5)
+        review_count = _esc(product.get('review_count', '1,000+'))
+        review_text = _esc(product.get('personal_review_text', ''))
+        section_heading = _esc(product.get('section_heading', name))
+        amazon_url = _esc(product.get('amazon_url', '#'))
+        product_img = _esc(product.get('product_image', ''))
+
+        winner_border = 'border: 2px solid #6B705C;' if is_winner else 'border: 1px solid #e8dcc8;'
+        winner_label = '<span style="display:inline-block;background:#6B705C;color:#fff;font-size:0.78em;padding:3px 12px;border-radius:4px;margin-bottom:10px;font-weight:600;">Editor\'s Pick</span>' if is_winner else ''
+
+        img_block = ''
+        if product_img:
+            img_block = (
+                f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" style="flex-shrink:0;">'
+                f'<img src="{product_img}" alt="{name}" width="100" height="100" '
+                f'style="object-fit:contain;border-radius:8px;background:#fff;padding:4px;" loading="lazy" '
+                f'onerror="this.parentElement.style.display=\'none\'"></a>'
+            )
+
+        products_html += f'''
+        <div style="{winner_border}border-radius:12px;padding:20px;margin:24px 0;background:#fff;">
+          {winner_label}
+          <h2 style="font-family:'DM Serif Display',serif;font-size:1.3em;margin:0 0 8px;color:#3a3a3a;">{section_heading}</h2>
+          <div style="display:flex;gap:16px;align-items:flex-start;margin:12px 0;">
+            {img_block}
+            <div>
+              <div style="font-size:0.9em;color:#8B7355;margin-bottom:6px;">{_star_html(rating)} &middot; {review_count} reviews &middot; {price}</div>
+              <p style="margin:0;color:#555;line-height:1.6;">{review_text}</p>
+            </div>
+          </div>
+          <a href="{amazon_url}" target="_blank" rel="nofollow sponsored"
+             style="display:inline-block;background:#6B705C;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.95em;margin-top:12px;">
+            See it on Amazon &rarr;</a>
+        </div>'''
+
+    # Verdict
+    verdict_html = ''
+    verdict_text = article_data.get('verdict_text', '')
+    if verdict_text:
+        verdict_html = f'''
+        <div style="border-left:3px solid #A5A58D;padding:16px 20px;margin:28px 0;background:#f5f0e8;border-radius:0 8px 8px 0;">
+          <p style="margin:0;font-family:'DM Serif Display',serif;font-style:italic;color:#3a3a3a;line-height:1.6;">{_esc(verdict_text)}</p>
+        </div>'''
+
+    # FAQ
+    faq_html = ''
+    for faq in faq_items:
+        faq_html += f'''
+        <div style="margin:16px 0;">
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1.05em;color:#3a3a3a;margin:0 0 6px;">{_esc(faq.get('q', ''))}</h3>
+          <p style="color:#666;margin:0;line-height:1.6;">{_esc(faq.get('a', ''))}</p>
+        </div>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | Home Decor Edit</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{_esc(site_config['base_url'])}/articles/{slug}.html">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+{schemas}
+{"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+</head>
+<body style="margin:0;padding:0;background:#FAF7F0;color:#3a3a3a;font-family:'Outfit',sans-serif;line-height:1.7;">
+
+<nav style="background:#fff;border-bottom:1px solid #e8dcc8;padding:14px 20px;">
+  <div style="max-width:680px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+    <a href="../index.html" style="text-decoration:none;font-family:'DM Serif Display',serif;font-size:1.15em;color:#3a3a3a;">Home Decor <span style="color:#6B705C;">Edit</span></a>
+    <a href="./" style="text-decoration:none;color:#8B7355;font-size:0.9em;">All Articles</a>
+  </div>
+</nav>
+
+<main style="max-width:680px;margin:0 auto;padding:32px 20px;">
+  <p style="font-size:0.82em;color:#A5A58D;margin:0 0 8px;">{date_display}</p>
+  <h1 style="font-family:'DM Serif Display',serif;font-size:1.8em;line-height:1.3;margin:0 0 20px;color:#3a3a3a;">{title}</h1>
+
+  <img src="{hero_url}" alt="{title}" style="width:100%;border-radius:10px;margin:0 0 24px;" loading="lazy">
+
+  {intro_html}
+
+  {products_html}
+
+  {verdict_html}
+
+  {f'<h2 style="font-family:DM Serif Display,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
+</main>
+
+<footer style="border-top:1px solid #e8dcc8;padding:24px 20px;text-align:center;color:#A5A58D;font-size:0.82em;">
+  <p>&copy; {year} Home Decor Edit. Affiliate links may earn a commission.</p>
+</footer>
+
+</body>
+</html>'''
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# BEAUTY — Soft pink/rose theme, personal review style, product-forward
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _render_beauty_article(article_data, site_config, slug):
+    """Render a clean beauty article — soft pink theme, honest product reviews."""
+    title = _esc(article_data.get('title', slug.replace('-', ' ').title()))
+    meta_desc = _esc(article_data.get('meta_description', title))
+    hero_url = _ensure_image(article_data.get('hero_url', ''), FALLBACK_HERO_IMAGES.get('beauty', FALLBACK_HERO_IMAGES['default']))
+    ga_id = _BRAND_GA_IDS.get('beauty', '')
+    form_id = _BRAND_FORM_IDS.get('beauty', '')
+    year = datetime.now(timezone.utc).year
+    date_display = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    faq_items = article_data.get('faq', [])
+    schemas = _build_schema_json(title, meta_desc, slug, site_config, faq_items)
+
+    # Intro paragraphs (PAS framework)
+    intro_html = ''
+    for p in article_data.get('intro_paragraphs', []):
+        intro_html += f'<p>{_esc(p)}</p>\n'
+
+    # Product cards
+    products_html = ''
+    for product in article_data.get('products', []):
+        is_winner = product.get('is_winner', False)
+        name = _esc(product.get('name', 'Product'))
+        price = _esc(product.get('price', ''))
+        rating = product.get('rating', 4.5)
+        review_count = _esc(product.get('review_count', '1,000+'))
+        review_text = _esc(product.get('personal_review_text', ''))
+        section_heading = _esc(product.get('section_heading', name))
+        amazon_url = _esc(product.get('amazon_url', '#'))
+        product_img = _esc(product.get('product_image', ''))
+
+        winner_border = 'border: 2px solid #D4A0A0;' if is_winner else 'border: 1px solid #f0e0e0;'
+        winner_label = '<span style="display:inline-block;background:#D4A0A0;color:#fff;font-size:0.78em;padding:3px 12px;border-radius:4px;margin-bottom:10px;font-weight:600;">My Top Pick</span>' if is_winner else ''
+
+        img_block = ''
+        if product_img:
+            img_block = (
+                f'<a href="{amazon_url}" target="_blank" rel="nofollow sponsored" style="flex-shrink:0;">'
+                f'<img src="{product_img}" alt="{name}" width="100" height="100" '
+                f'style="object-fit:contain;border-radius:8px;background:#fff;padding:4px;" loading="lazy" '
+                f'onerror="this.parentElement.style.display=\'none\'"></a>'
+            )
+
+        products_html += f'''
+        <div style="{winner_border}border-radius:12px;padding:20px;margin:24px 0;background:#fff;">
+          {winner_label}
+          <h2 style="font-family:'Lora',serif;font-size:1.3em;margin:0 0 8px;color:#3a3a3a;">{section_heading}</h2>
+          <div style="display:flex;gap:16px;align-items:flex-start;margin:12px 0;">
+            {img_block}
+            <div>
+              <div style="font-size:0.9em;color:#b08080;margin-bottom:6px;">{_star_html(rating)} &middot; {review_count} reviews &middot; {price}</div>
+              <p style="margin:0;color:#555;line-height:1.6;">{review_text}</p>
+            </div>
+          </div>
+          <a href="{amazon_url}" target="_blank" rel="nofollow sponsored"
+             style="display:inline-block;background:#D4A0A0;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.95em;margin-top:12px;">
+            See it on Amazon &rarr;</a>
+        </div>'''
+
+    # Verdict
+    verdict_html = ''
+    verdict_text = article_data.get('verdict_text', '')
+    if verdict_text:
+        verdict_html = f'''
+        <div style="border-left:3px solid #D4A0A0;padding:16px 20px;margin:28px 0;background:#fdf5f5;border-radius:0 8px 8px 0;">
+          <p style="margin:0;font-family:'Lora',serif;font-style:italic;color:#3a3a3a;line-height:1.6;">{_esc(verdict_text)}</p>
+        </div>'''
+
+    # FAQ
+    faq_html = ''
+    for faq in faq_items:
+        faq_html += f'''
+        <div style="margin:16px 0;">
+          <h3 style="font-family:'Lora',serif;font-size:1.05em;color:#3a3a3a;margin:0 0 6px;">{_esc(faq.get('q', ''))}</h3>
+          <p style="color:#666;margin:0;line-height:1.6;">{_esc(faq.get('a', ''))}</p>
+        </div>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | The Beauty Shelf</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{_esc(site_config['base_url'])}/articles/{slug}.html">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+{schemas}
+{"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+</head>
+<body style="margin:0;padding:0;background:#FFF5F5;color:#3a3a3a;font-family:'Inter',sans-serif;line-height:1.7;">
+
+<nav style="background:#fff;border-bottom:1px solid #f0e0e0;padding:14px 20px;">
+  <div style="max-width:680px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+    <a href="../index.html" style="text-decoration:none;font-family:'Lora',serif;font-size:1.15em;color:#3a3a3a;font-weight:600;">The Beauty <span style="color:#D4A0A0;">Shelf</span></a>
+    <a href="./" style="text-decoration:none;color:#b08080;font-size:0.9em;">All Articles</a>
+  </div>
+</nav>
+
+<main style="max-width:680px;margin:0 auto;padding:32px 20px;">
+  <p style="font-size:0.82em;color:#b08080;margin:0 0 8px;">{date_display}</p>
+  <h1 style="font-family:'Lora',serif;font-size:1.8em;line-height:1.3;margin:0 0 20px;color:#3a3a3a;">{title}</h1>
+
+  <img src="{hero_url}" alt="{title}" style="width:100%;border-radius:10px;margin:0 0 24px;" loading="lazy">
+
+  {intro_html}
+
+  {products_html}
+
+  {verdict_html}
+
+  {f'<h2 style="font-family:Lora,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
+</main>
+
+<footer style="border-top:1px solid #f0e0e0;padding:24px 20px;text-align:center;color:#b08080;font-size:0.82em;">
+  <p>&copy; {year} The Beauty Shelf. Affiliate links may earn a commission.</p>
+</footer>
+
+</body>
+</html>'''
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # PUBLIC API — dispatcher
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -588,6 +983,9 @@ def render_clean_article(brand_key, article_data, site_config, slug):
         'deals': _render_deals_article,
         'fitness': _render_fitness_article,
         'menopause': _render_menopause_article,
+        'pilottools': _render_pilottools_article,
+        'homedecor': _render_homedecor_article,
+        'beauty': _render_beauty_article,
     }
     renderer = renderers.get(brand_key, _render_deals_article)
     return renderer(article_data, site_config, slug)
@@ -627,6 +1025,36 @@ BRAND_THEMES = {
                    'accent': '#C47D8E', 'accent_light': '#fdf5f7', 'text': '#2D2D2D',
                    'muted': '#999', 'warm': '#fdf5f7'},
         'expert_name': 'Daily Deal Darling Team', 'expert_initials': 'DD',
+        'expert_credentials': 'Product Tested', 'expert_bio': '',
+        'site_tagline': 'Product Tested', 'cta_text': 'See it on Amazon',
+    },
+    'pilottools': {
+        'heading_font': 'Space Grotesk', 'body_font': 'Inter',
+        'font_import': 'Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700',
+        'colors': {'bg': '#0f172a', 'surface': '#1e293b', 'border': '#334155',
+                   'accent': '#0EA5E9', 'accent_light': '#0c2d48', 'text': '#f1f5f9',
+                   'muted': '#64748b', 'warm': '#0c2d48'},
+        'expert_name': 'PilotTools Team', 'expert_initials': 'PT',
+        'expert_credentials': 'AI Tools Expert', 'expert_bio': '',
+        'site_tagline': 'AI Tools Expert', 'cta_text': 'Try it',
+    },
+    'homedecor': {
+        'heading_font': 'DM Serif Display', 'body_font': 'Outfit',
+        'font_import': 'DM+Serif+Display&family=Outfit:wght@400;500;600;700',
+        'colors': {'bg': '#FAF7F0', 'surface': '#fff', 'border': '#e8dcc8',
+                   'accent': '#6B705C', 'accent_light': '#f5f0e8', 'text': '#3a3a3a',
+                   'muted': '#8B7355', 'warm': '#f5ede0'},
+        'expert_name': 'Home Decor Edit Team', 'expert_initials': 'HD',
+        'expert_credentials': 'Design Tested', 'expert_bio': '',
+        'site_tagline': 'Design Tested', 'cta_text': 'See it on Amazon',
+    },
+    'beauty': {
+        'heading_font': 'Lora', 'body_font': 'Inter',
+        'font_import': 'Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700',
+        'colors': {'bg': '#FFF5F5', 'surface': '#fff', 'border': '#f0e0e0',
+                   'accent': '#D4A0A0', 'accent_light': '#fdf5f5', 'text': '#3a3a3a',
+                   'muted': '#b08080', 'warm': '#fdf5f5'},
+        'expert_name': 'The Beauty Shelf Team', 'expert_initials': 'BS',
         'expert_credentials': 'Product Tested', 'expert_bio': '',
         'site_tagline': 'Product Tested', 'cta_text': 'See it on Amazon',
     },

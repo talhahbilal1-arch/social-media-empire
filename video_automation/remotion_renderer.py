@@ -33,6 +33,9 @@ BRAND_MAP = {
     "fitness":   ("fitnessmadeasy",     "Slideshow-FitOver35"),
     "deals":     ("daily_deal_darling", "Slideshow-DailyDealDarling"),
     "menopause": ("menopause_planner",  "Slideshow-MenopausePlanner"),
+    "pilottools": ("pilottools_ai",     "Slideshow-PilotTools"),
+    "homedecor":  ("home_decor_edit",   "Slideshow-HomeDecor"),
+    "beauty":     ("beauty_shelf",      "Slideshow-Beauty"),
 }
 
 RENDER_TIMEOUT_SEC = 240  # 15s video + Remotion boot overhead

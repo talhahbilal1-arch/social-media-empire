@@ -70,6 +70,9 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK_PILOTTOOLS: ${{ secrets.MAKE_WEBHOOK_PILOTTOOLS }}
+          MAKE_WEBHOOK_HOMEDECOR: ${{ secrets.MAKE_WEBHOOK_HOMEDECOR }}
+          MAKE_WEBHOOK_BEAUTY: ${{ secrets.MAKE_WEBHOOK_BEAUTY }}
           MAKE_WEBHOOK: ${{ secrets.MAKE_WEBHOOK }}
         run: python3 scripts/preflight_check.py
 
@@ -82,6 +85,9 @@ jobs:
           MAKE_WEBHOOK_FITNESS: ${{ secrets.MAKE_WEBHOOK_FITNESS }}
           MAKE_WEBHOOK_DEALS: ${{ secrets.MAKE_WEBHOOK_DEALS }}
           MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          MAKE_WEBHOOK_PILOTTOOLS: ${{ secrets.MAKE_WEBHOOK_PILOTTOOLS }}
+          MAKE_WEBHOOK_HOMEDECOR: ${{ secrets.MAKE_WEBHOOK_HOMEDECOR }}
+          MAKE_WEBHOOK_BEAUTY: ${{ secrets.MAKE_WEBHOOK_BEAUTY }}
           MAKE_WEBHOOK: ${{ secrets.MAKE_WEBHOOK }}
           MAKE_WEBHOOK_ACTIVATOR: ${{ secrets.MAKE_WEBHOOK_ACTIVATOR }}
           MAKE_WEBHOOK_VIDEO_FITNESS: ${{ secrets.MAKE_WEBHOOK_VIDEO_FITNESS }}
@@ -191,7 +197,7 @@ jobs:
           if is_video_run:
               print('  SKIPPED — this is a video run (Phase 1v will handle content)')
 
-          ALL_BRANDS = ['fitness', 'deals', 'menopause']
+          ALL_BRANDS = ['fitness', 'deals', 'menopause', 'pilottools', 'homedecor', 'beauty']
           brand_filter = os.environ.get('BRAND_INPUT', '').strip()
           brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ALL_BRANDS
 
@@ -503,6 +509,9 @@ jobs:
                           'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
                           'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
                           'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+                          'pilottools': os.environ.get('MAKE_WEBHOOK_PILOTTOOLS', ''),
+                          'homedecor': os.environ.get('MAKE_WEBHOOK_HOMEDECOR', ''),
+                          'beauty': os.environ.get('MAKE_WEBHOOK_BEAUTY', ''),
                       }
                       video_webhook = IMAGE_WEBHOOKS.get(brand, '')
                       is_native_video = False
@@ -806,6 +815,9 @@ jobs:
               'fitness': os.environ.get('MAKE_WEBHOOK_FITNESS', ''),
               'deals': os.environ.get('MAKE_WEBHOOK_DEALS', ''),
               'menopause': os.environ.get('MAKE_WEBHOOK_MENOPAUSE', ''),
+              'pilottools': os.environ.get('MAKE_WEBHOOK_PILOTTOOLS', ''),
+              'homedecor': os.environ.get('MAKE_WEBHOOK_HOMEDECOR', ''),
+              'beauty': os.environ.get('MAKE_WEBHOOK_BEAUTY', ''),
           }
           # Unified fallback — used when a brand-specific secret is empty.
           # The unified Make.com scenario routes by the `brand` field in the payload.

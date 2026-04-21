@@ -203,12 +203,103 @@ AMAZON_AFFILIATE_LINKS = {
         "air purifier": "https://www.amazon.com/dp/B07VVK39F7?tag=dailydealdarl-20",
         "_default": "https://www.amazon.com/dp/B002FH5I0I?tag=dailydealdarl-20",
     },
+    "pilottools": {
+        # PilotTools does NOT use Amazon — SaaS affiliate programs instead
+        # These are placeholder URLs; actual affiliate links are managed externally
+        "_default": "https://pilottools.ai/tools/",
+    },
+    "homedecor": {
+        # Home Decor — uses dailydealdarl-20 tag
+        "throw pillows": "https://www.amazon.com/dp/B0714K41PB?tag=dailydealdarl-20",
+        "accent pillows": "https://www.amazon.com/dp/B0714K41PB?tag=dailydealdarl-20",
+        "curtains": "https://www.amazon.com/dp/B01CS31R94?tag=dailydealdarl-20",
+        "blackout curtains": "https://www.amazon.com/dp/B01CS31R94?tag=dailydealdarl-20",
+        "area rug": "https://www.amazon.com/dp/B098DP5MH8?tag=dailydealdarl-20",
+        "rug": "https://www.amazon.com/dp/B098DP5MH8?tag=dailydealdarl-20",
+        "wall art": "https://www.amazon.com/dp/B07TYWLQFR?tag=dailydealdarl-20",
+        "canvas art": "https://www.amazon.com/dp/B07TYWLQFR?tag=dailydealdarl-20",
+        "scented candles": "https://www.amazon.com/dp/B0CR7L79Q2?tag=dailydealdarl-20",
+        "candles": "https://www.amazon.com/dp/B0CR7L79Q2?tag=dailydealdarl-20",
+        "picture frames": "https://www.amazon.com/dp/B08GFY4NKT?tag=dailydealdarl-20",
+        "frames": "https://www.amazon.com/dp/B08GFY4NKT?tag=dailydealdarl-20",
+        "vases": "https://www.amazon.com/dp/B0BXDSH6CJ?tag=dailydealdarl-20",
+        "vase": "https://www.amazon.com/dp/B0BXDSH6CJ?tag=dailydealdarl-20",
+        "table lamp": "https://www.amazon.com/dp/B08GKF46GW?tag=dailydealdarl-20",
+        "lamp": "https://www.amazon.com/dp/B08GKF46GW?tag=dailydealdarl-20",
+        "decorative tray": "https://www.amazon.com/dp/B08XZHGS9J?tag=dailydealdarl-20",
+        "tray": "https://www.amazon.com/dp/B08XZHGS9J?tag=dailydealdarl-20",
+        "storage baskets": "https://www.amazon.com/dp/B07WNHP7PK?tag=dailydealdarl-20",
+        "baskets": "https://www.amazon.com/dp/B07WNHP7PK?tag=dailydealdarl-20",
+        "floating shelves": "https://www.amazon.com/dp/B0B5LMDCB7?tag=dailydealdarl-20",
+        "shelves": "https://www.amazon.com/dp/B0B5LMDCB7?tag=dailydealdarl-20",
+        "accent mirror": "https://www.amazon.com/dp/B07W4LXHP5?tag=dailydealdarl-20",
+        "mirror": "https://www.amazon.com/dp/B07W4LXHP5?tag=dailydealdarl-20",
+        "artificial plants": "https://www.amazon.com/dp/B0834LBKHQ?tag=dailydealdarl-20",
+        "fake plants": "https://www.amazon.com/dp/B0834LBKHQ?tag=dailydealdarl-20",
+        "throw blanket": "https://www.amazon.com/dp/B08NWSLV61?tag=dailydealdarl-20",
+        "blanket": "https://www.amazon.com/dp/B08NWSLV61?tag=dailydealdarl-20",
+        "coasters": "https://www.amazon.com/dp/B07PZMQBPJ?tag=dailydealdarl-20",
+        "duvet cover": "https://www.amazon.com/dp/B07VHFTQH7?tag=dailydealdarl-20",
+        "nightstand lamp": "https://www.amazon.com/dp/B08GKF46GW?tag=dailydealdarl-20",
+        "blanket ladder": "https://www.amazon.com/dp/B09CTQG1CX?tag=dailydealdarl-20",
+        "coffee table books": "https://www.amazon.com/dp/B0BLHB8VT1?tag=dailydealdarl-20",
+        "bar stools": "https://www.amazon.com/dp/B0B9GJ6M8T?tag=dailydealdarl-20",
+        "shower curtain": "https://www.amazon.com/dp/B07DFBQRSF?tag=dailydealdarl-20",
+        "bath mat": "https://www.amazon.com/dp/B08D3Y5PFZ?tag=dailydealdarl-20",
+        "towel set": "https://www.amazon.com/dp/B07D4JRLHH?tag=dailydealdarl-20",
+        "soap dispenser": "https://www.amazon.com/dp/B07Z8P1R4P?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B0714K41PB?tag=dailydealdarl-20",
+    },
+    "beauty": {
+        # Beauty — uses dailydealdarl-20 tag
+        "vitamin C serum": "https://www.amazon.com/dp/B01M4MCUAF?tag=dailydealdarl-20",
+        "vitamin c serum": "https://www.amazon.com/dp/B01M4MCUAF?tag=dailydealdarl-20",
+        "retinol cream": "https://www.amazon.com/dp/B01MSSDEPK?tag=dailydealdarl-20",
+        "retinol": "https://www.amazon.com/dp/B01MSSDEPK?tag=dailydealdarl-20",
+        "jade roller": "https://www.amazon.com/dp/B0FRMB9NJV?tag=dailydealdarl-20",
+        "face masks": "https://www.amazon.com/dp/B09BFQG17F?tag=dailydealdarl-20",
+        "LED face mask": "https://www.amazon.com/dp/B0F18BBHCC?tag=dailydealdarl-20",
+        "makeup brushes": "https://www.amazon.com/dp/B01LY3QHOE?tag=dailydealdarl-20",
+        "brush set": "https://www.amazon.com/dp/B01LY3QHOE?tag=dailydealdarl-20",
+        "setting spray": "https://www.amazon.com/dp/B003YPZN5O?tag=dailydealdarl-20",
+        "mascara": "https://www.amazon.com/dp/B004Y9GTYE?tag=dailydealdarl-20",
+        "lip gloss": "https://www.amazon.com/dp/B004EHXZ22?tag=dailydealdarl-20",
+        "moisturizer": "https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20",
+        "sunscreen": "https://www.amazon.com/dp/B01MQXX9US?tag=dailydealdarl-20",
+        "SPF": "https://www.amazon.com/dp/B01MQXX9US?tag=dailydealdarl-20",
+        "hair oil": "https://www.amazon.com/dp/B003WJI070?tag=dailydealdarl-20",
+        "dry shampoo": "https://www.amazon.com/dp/B00B3TMSUQ?tag=dailydealdarl-20",
+        "makeup mirror": "https://www.amazon.com/dp/B01M0ABYIY?tag=dailydealdarl-20",
+        "beauty blender": "https://www.amazon.com/dp/B003ZVJEEM?tag=dailydealdarl-20",
+        "sponge": "https://www.amazon.com/dp/B003ZVJEEM?tag=dailydealdarl-20",
+        "nail polish": "https://www.amazon.com/dp/B00FO4UQ5K?tag=dailydealdarl-20",
+        "hyaluronic acid serum": "https://www.amazon.com/dp/B01INENT5G?tag=dailydealdarl-20",
+        "hyaluronic acid": "https://www.amazon.com/dp/B01INENT5G?tag=dailydealdarl-20",
+        "niacinamide serum": "https://www.amazon.com/dp/B07Q2GKX7Y?tag=dailydealdarl-20",
+        "niacinamide": "https://www.amazon.com/dp/B07Q2GKX7Y?tag=dailydealdarl-20",
+        "cleanser": "https://www.amazon.com/dp/B000052YMQ?tag=dailydealdarl-20",
+        "toner": "https://www.amazon.com/dp/B00016XJ4M?tag=dailydealdarl-20",
+        "foundation": "https://www.amazon.com/dp/B01DF1ERRG?tag=dailydealdarl-20",
+        "concealer": "https://www.amazon.com/dp/B004Y9GZII?tag=dailydealdarl-20",
+        "blush": "https://www.amazon.com/dp/B002LCZFIK?tag=dailydealdarl-20",
+        "eyeshadow palette": "https://www.amazon.com/dp/B019FME2S6?tag=dailydealdarl-20",
+        "eyelash curler": "https://www.amazon.com/dp/B0002JFI5Q?tag=dailydealdarl-20",
+        "heat protectant": "https://www.amazon.com/dp/B00JNA436S?tag=dailydealdarl-20",
+        "leave-in conditioner": "https://www.amazon.com/dp/B001AO0WCG?tag=dailydealdarl-20",
+        "body lotion": "https://www.amazon.com/dp/B001E6OCOM?tag=dailydealdarl-20",
+        "lip balm": "https://www.amazon.com/dp/B00XKYUKFA?tag=dailydealdarl-20",
+        "ice roller": "https://www.amazon.com/dp/B09CL65JBT?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B01M4MCUAF?tag=dailydealdarl-20",
+    },
 }
 
 BRAND_AFFILIATE_TAGS = {
     "fitness": "fitover3509-20",
     "deals": "dailydealdarl-20",
     "menopause": "dailydealdarl-20",
+    "pilottools": "none",
+    "homedecor": "dailydealdarl-20",
+    "beauty": "dailydealdarl-20",
 }
 
 
@@ -266,6 +357,58 @@ BRAND_SITE_CONFIG = {
         "lead_magnet": "FREE Menopause Symptom Tracker & Relief Guide",
         "signup_form_id": "9144926",
         "signup_button_text": "Get Free Guide",
+    },
+    "pilottools": {
+        "site_name": "PilotTools",
+        "base_url": "https://pilottools.ai",
+        "output_dir": "outputs/pilottools-website/articles",
+        "primary_color": "#0EA5E9",
+        "accent_color": "#0284C7",
+        "logo_html": 'Pilot<span style="color:#0EA5E9">Tools</span>',
+        "nav_links": [
+            ("Home", "../index.html"),
+            ("Articles", "../blog.html"),
+            ("Tools", "../tools.html"),
+            ("About", "../about.html"),
+        ],
+        "has_css": True,
+        "lead_magnet": "FREE: Top 25 AI Tools Cheat Sheet (2026 Edition)",
+        "signup_form_id": "",
+        "signup_button_text": "Get Free Cheat Sheet",
+    },
+    "homedecor": {
+        "site_name": "Home Decor Edit",
+        "base_url": "https://www.dailydealdarling.com",
+        "output_dir": "outputs/homedecor-website/articles",
+        "primary_color": "#6B705C",
+        "accent_color": "#A5A58D",
+        "logo_html": 'Home Decor <span style="color:#6B705C">Edit</span>',
+        "nav_links": [
+            ("Home", "../index.html"),
+            ("Articles", "./"),
+            ("About", "../about.html"),
+        ],
+        "has_css": False,
+        "lead_magnet": "FREE Room-by-Room Budget Decorating Checklist",
+        "signup_form_id": "",
+        "signup_button_text": "Get Free Checklist",
+    },
+    "beauty": {
+        "site_name": "The Beauty Shelf",
+        "base_url": "https://www.dailydealdarling.com",
+        "output_dir": "outputs/beauty-website/articles",
+        "primary_color": "#D4A0A0",
+        "accent_color": "#C47D8E",
+        "logo_html": 'The Beauty <span style="color:#D4A0A0">Shelf</span>',
+        "nav_links": [
+            ("Home", "../index.html"),
+            ("Articles", "./"),
+            ("About", "../about.html"),
+        ],
+        "has_css": False,
+        "lead_magnet": "FREE: 5-Step Skincare Routine Builder",
+        "signup_form_id": "",
+        "signup_button_text": "Get Free Routine",
     },
 }
 
@@ -668,6 +811,177 @@ RULES:
 - Output ONLY valid JSON"""
 
 
+def _build_pilottools_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for pilottools brand — value-first AI tool education, SaaS recs at end."""
+    return f"""You are a tech-savvy creator writing educational AI tool content for PilotTools.ai.
+Your readers are creators, freelancers, and small business owners who want to work smarter with AI.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- 80% education, 20% tool recommendations
+- Teach real workflows: how to use tools, compare alternatives, save time
+- Each section gets a "Pro Tip" box with a specific technique or workflow
+- Write with authority — cite specific features, pricing, limitations
+- Tool recommendations appear throughout naturally (not just at the end)
+- Voice: direct, data-driven, like a smart friend who's tested everything
+- Include specific pricing: "$20/month" not "affordable"
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Educational title about {topic} ({year})",
+  "meta_description": "155 chars max, value-first, SEO-optimized",
+  "intro_hook": "2-3 sentences that hook with a pain point about {topic}. Make the reader think 'I need to know this.'",
+  "sections": [
+    {{
+      "heading": "Section heading — educational, specific",
+      "body_paragraphs": [
+        "Paragraph 1 — explain the concept or problem",
+        "Paragraph 2 — specific tool or technique that solves it, with pricing",
+        "Paragraph 3 — practical step-by-step application"
+      ],
+      "tip_box_text": "PRO TIP: Specific actionable workflow. Example: 'Use Claude for long-form writing and ChatGPT for brainstorming. This combo costs $40/month total and replaces a $2000/month content agency.'"
+    }}
+  ],
+  "tool_recommendations": [
+    {{
+      "name": "Tool Name",
+      "category": "writing/design/productivity/marketing",
+      "price": "$XX/month or Free",
+      "best_for": "One-line description of ideal use case",
+      "affiliate_url": "https://toolname.com",
+      "one_line_note": "What makes this stand out from alternatives."
+    }}
+  ],
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with specific tool names and prices."}}
+  ]
+}}
+
+RULES:
+- 3-5 educational sections (this is the meat of the article)
+- 3-5 tool recommendations with real pricing
+- Do NOT use Amazon links — PilotTools uses SaaS affiliate programs
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "leverage", "empower"
+- Output ONLY valid JSON"""
+
+
+def _build_homedecor_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for homedecor brand — room transformation, product-forward."""
+    return f"""You are a home decor enthusiast writing room-by-room transformation guides.
+Your readers are women 25-45 who want beautiful homes on a real budget.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- Visual and descriptive — help readers SEE the transformation
+- Product-forward but educational: explain WHY each piece works (color theory, scale, texture)
+- First-person conversational: "When I swapped my old curtains for these..."
+- Each section gets a "Style Tip" box with a specific decorating technique
+- Always mention approximate prices: "this $35 rug" not just "this rug"
+- Reference specific room sizes: "in my 12x14 living room..."
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Room transformation title about {topic} ({year})",
+  "meta_description": "155 chars max, visual, SEO-optimized",
+  "intro_paragraphs": [
+    "Set the scene — describe the room problem the reader probably has",
+    "Agitate — why this problem makes the room feel off",
+    "Solution — how specific product swaps transform the look"
+  ],
+  "products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "12,400+",
+      "is_winner": true,
+      "section_heading": "The Piece That Changed Everything",
+      "personal_review_text": "3-4 sentences describing how this piece transformed the room. Be specific about colors, dimensions, and how it pairs with other items."
+    }}
+  ],
+  "verdict_text": "2-3 sentences summarizing the room transformation and total budget.",
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with decorating advice."}}
+  ]
+}}
+
+RULES:
+- 2-4 products, the FIRST one should be is_winner: true
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "elevate your space", "curate your aesthetic"
+- Output ONLY valid JSON"""
+
+
+def _build_beauty_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for beauty brand — personal review style, product-forward."""
+    return f"""You are a beauty enthusiast writing honest product reviews and routine guides.
+Your readers are women 20-40 who want effective skincare and makeup without overspending.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- First-person, honest personal reviews: "I've been using this for 6 weeks and..."
+- Mention your skin type (combination, acne-prone) so readers can relate
+- Be specific about texture, scent, how it feels on skin, application tips
+- Each section gets a "Beauty Tip" box with a specific technique
+- Compare to well-known products: "performs like the $52 version but costs $14"
+- Always mention specific ingredients: "the 20% vitamin C concentration"
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Honest review title about {topic} ({year})",
+  "meta_description": "155 chars max, personal, SEO-optimized",
+  "intro_paragraphs": [
+    "Problem — the beauty frustration the reader has",
+    "Agitate — why most products don't solve it (or cost too much)",
+    "Solution — how you found products that actually work"
+  ],
+  "products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "12,400+",
+      "is_winner": true,
+      "section_heading": "The One I Keep Repurchasing",
+      "personal_review_text": "3-4 sentences of honest first-person review. Mention texture, scent, how it feels on skin, how long it lasts. Compare to expensive alternatives if relevant."
+    }}
+  ],
+  "verdict_text": "2-3 sentences with your honest recommendation and who each product is best for.",
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with beauty advice."}}
+  ]
+}}
+
+RULES:
+- 2-4 products, the FIRST one should be is_winner: true
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "holy grail", "obsessed"
+- Output ONLY valid JSON"""
+
+
 def generate_article_for_pin(brand_key, pin_data, supabase_client):
     """Generate a brand-specific article matching a pin's topic.
 
@@ -769,6 +1083,9 @@ PIN TIPS (expand on each of these in the article):
         'deals': _build_deals_prompt,
         'fitness': _build_fitness_prompt,
         'menopause': _build_menopause_prompt,
+        'pilottools': _build_pilottools_prompt,
+        'homedecor': _build_homedecor_prompt,
+        'beauty': _build_beauty_prompt,
     }
     builder = prompt_builders.get(brand_key, _build_deals_prompt)
     json_prompt = builder(
@@ -1002,12 +1319,13 @@ def _build_article_html(article_data, brand_key, slug, pin_data=None):
     article_data['hero_url'] = hero_url
 
     # Resolve product URLs for all product lists
-    if brand_key == 'deals':
+    if brand_key in ('deals', 'homedecor', 'beauty'):
         _resolve_product_urls(article_data.get('products', []), brand_key)
     elif brand_key == 'fitness':
         _resolve_product_urls(article_data.get('gear_recommendations', []), brand_key)
     elif brand_key == 'menopause':
         _resolve_product_urls(article_data.get('amazon_products', []), brand_key)
+    # pilottools uses SaaS affiliate links, not Amazon — no URL resolution needed
 
     return render_clean_article(
         brand_key=brand_key,
@@ -1034,15 +1352,16 @@ def article_to_html(markdown_content, brand_key, slug, pin_data=None):
             'title': title,
             'meta_description': f'{title} - {BRAND_SITE_CONFIG[brand_key]["site_name"]}',
         }
-        if brand_key == 'deals':
+        if brand_key in ('deals', 'homedecor', 'beauty'):
             minimal_data['intro_paragraphs'] = [str(markdown_content)[:500] if markdown_content else '']
             minimal_data['products'] = []
             minimal_data['verdict_text'] = ''
             minimal_data['faq'] = []
-        elif brand_key == 'fitness':
+        elif brand_key in ('fitness', 'pilottools'):
             minimal_data['intro_hook'] = str(markdown_content)[:500] if markdown_content else ''
             minimal_data['sections'] = []
-            minimal_data['gear_recommendations'] = []
+            minimal_data['gear_recommendations'] = [] if brand_key == 'fitness' else []
+            minimal_data['tool_recommendations'] = [] if brand_key == 'pilottools' else []
             minimal_data['faq'] = []
         else:
             minimal_data['intro_hook'] = str(markdown_content)[:500] if markdown_content else ''
