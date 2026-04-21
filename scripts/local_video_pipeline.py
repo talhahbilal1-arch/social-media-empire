@@ -77,18 +77,51 @@ def _supabase_client():
 
 
 def _query_pending_pins(client, brand: Optional[str], limit: Optional[int]) -> list:
-    """Return pins waiting for local render, newest first."""
-    q = (
-        client.table("pinterest_pins")
-        .select("*")
-        .eq("video_state", "video_pending")
-        .order("created_at", desc=True)
-    )
-    if brand:
-        q = q.eq("brand", brand)
-    if limit:
-        q = q.limit(limit)
-    return q.execute().data or []
+    """Return pins waiting for local render, newest first.
+    
+    Tries video_state column first. If column doesn't exist yet (migration
+    not run), falls back to querying recent pins that don't have videos.
+    """
+    try:
+        q = (
+            client.table("pinterest_pins")
+            .select("*")
+            .eq("video_state", "video_pending")
+            .order("created_at", desc=True)
+        )
+        if brand:
+            q = q.eq("brand", brand)
+        if limit:
+            q = q.limit(limit)
+        result = q.execute().data or []
+        if result:
+            return result
+    except Exception as e:
+        if "video_state" in str(e):
+            logger.info("video_state column not found — using fallback query")
+        else:
+            logger.warning(f"Pending pins query failed: {e}")
+
+    # Fallback: get recent pins (last 24h) that are posted but might need video
+    from datetime import timedelta
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    try:
+        q = (
+            client.table("pinterest_pins")
+            .select("*")
+            .gte("created_at", cutoff)
+            .order("created_at", desc=True)
+        )
+        if brand:
+            q = q.eq("brand", brand)
+        if limit:
+            q = q.limit(limit)
+        else:
+            q = q.limit(6)  # 1 per brand max
+        return q.execute().data or []
+    except Exception as e:
+        logger.error(f"Fallback query failed: {e}")
+        return []
 
 
 def _pin_to_video_content(pin: dict) -> dict:
@@ -137,7 +170,17 @@ def _mark(client, pin_id, **updates) -> None:
     try:
         client.table("pinterest_pins").update(updates).eq("id", pin_id).execute()
     except Exception as e:
-        logger.error(f"pin {pin_id}: state update failed — {e}")
+        # If video_state column doesn't exist, retry without it
+        if "video_state" in str(e) and "video_state" in updates:
+            safe_updates = {k: v for k, v in updates.items() if k != "video_state"}
+            if safe_updates:
+                try:
+                    client.table("pinterest_pins").update(safe_updates).eq("id", pin_id).execute()
+                except Exception:
+                    pass
+            logger.info(f"pin {pin_id}: skipped video_state update (column not migrated)")
+        else:
+            logger.error(f"pin {pin_id}: state update failed — {e}")
 
 
 def _render_and_upload(brand: str, video_content: dict) -> Optional[dict]:
