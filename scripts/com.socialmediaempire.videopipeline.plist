@@ -5,9 +5,15 @@
     <key>Label</key>
     <string>com.socialmediaempire.videopipeline</string>
 
+    <!--
+      Use system python3 (/usr/bin/python3) — the repo's requirements are
+      installed against it, and video_automation/__init__.py eagerly pulls
+      in google.genai and other heavy deps that aren't on the homebrew
+      pythons. If you switch pythons, reinstall requirements.txt first.
+    -->
     <key>ProgramArguments</key>
     <array>
-        <string>/opt/homebrew/bin/python3.12</string>
+        <string>/usr/bin/python3</string>
         <string>/Users/homefolder/Desktop/social-media-empire/scripts/local_video_pipeline.py</string>
     </array>
 
