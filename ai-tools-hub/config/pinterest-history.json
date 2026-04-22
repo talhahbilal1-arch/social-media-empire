@@ -1321,5 +1321,32 @@
     "board": "AI SEO Tools",
     "posted_at": "2026-04-22T17:11:02.145Z",
     "success": true
+  },
+  {
+    "slug": "rytr-vs-jasper",
+    "pin_type": "comparison",
+    "title": "Rytr vs Jasper AI: Which Content Creation Tool Wins?",
+    "link": "https://pilottools.ai/compare/rytr-vs-jasper/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-22T22:37:23.325Z",
+    "success": true
+  },
+  {
+    "slug": "semrush",
+    "pin_type": "tool-review",
+    "title": "Semrush: Is This AI SEO Tool Worth It? (4.6/5 Rating)",
+    "link": "https://pilottools.ai/tools/semrush/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-22T22:37:27.223Z",
+    "success": true
+  },
+  {
+    "slug": "chatgpt-vs-perplexity",
+    "pin_type": "comparison",
+    "title": "ChatGPT vs. Perplexity AI: Which AI Tool Wins?",
+    "link": "https://pilottools.ai/compare/chatgpt-vs-perplexity/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-22T22:37:31.418Z",
+    "success": true
   }
 ]
