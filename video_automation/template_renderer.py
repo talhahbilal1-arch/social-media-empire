@@ -199,6 +199,9 @@ def _render_deals_article(article_data, site_config, slug):
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 {schemas}
 {"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+  <!-- AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-7018489366035978">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossorigin="anonymous"></script>
 </head>
 <body style="margin:0;padding:0;background:#FAFAFA;color:#2D2D2D;font-family:'Inter',sans-serif;line-height:1.7;">
 
@@ -349,6 +352,9 @@ def _render_fitness_article(article_data, site_config, slug):
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 {schemas}
 {"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+  <!-- AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-7018489366035978">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossorigin="anonymous"></script>
 </head>
 <body style="margin:0;padding:0;background:#111;color:#fff;font-family:'Inter',sans-serif;line-height:1.7;">
 
@@ -541,6 +547,9 @@ def _render_menopause_article(article_data, site_config, slug):
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 {schemas}
 {"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+  <!-- AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-7018489366035978">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossorigin="anonymous"></script>
 </head>
 <body style="margin:0;padding:0;background:#FAF7F0;color:#3a3a3a;font-family:'Outfit',sans-serif;line-height:1.7;">
 
@@ -684,6 +693,9 @@ def _render_pilottools_article(article_data, site_config, slug):
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 {schemas}
 {"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+  <!-- AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-7018489366035978">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossorigin="anonymous"></script>
 </head>
 <body style="margin:0;padding:0;background:#0f172a;color:#f1f5f9;font-family:'Inter',sans-serif;line-height:1.7;">
 
@@ -813,6 +825,9 @@ def _render_homedecor_article(article_data, site_config, slug):
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 {schemas}
 {"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+  <!-- AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-7018489366035978">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossorigin="anonymous"></script>
 </head>
 <body style="margin:0;padding:0;background:#FAF7F0;color:#3a3a3a;font-family:'Outfit',sans-serif;line-height:1.7;">
 
@@ -937,6 +952,9 @@ def _render_beauty_article(article_data, site_config, slug):
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 {schemas}
 {"<script async src='https://www.googletagmanager.com/gtag/js?id=" + ga_id + "'></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','" + ga_id + "')</script>" if ga_id else ''}
+  <!-- AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-7018489366035978">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7018489366035978" crossorigin="anonymous"></script>
 </head>
 <body style="margin:0;padding:0;background:#FFF5F5;color:#3a3a3a;font-family:'Inter',sans-serif;line-height:1.7;">
 
