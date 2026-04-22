@@ -461,24 +461,28 @@ jobs:
                               print(f'  [{brand}] DRY RUN — would stage video_pending pin')
                               continue
                           try:
-                              db.client.table('pinterest_pins').insert({
+                              # Only use columns that exist in the pinterest_pins table
+                              pin_row = {
                                   'brand': brand,
                                   'title': video_content.get('title', '')[:200],
                                   'description': video_content.get('description', '')[:1000],
                                   'topic': video_content.get('topic', ''),
                                   'category': video_content.get('category', ''),
                                   'destination_url': dest_url,
-                                  'board': board_name,
+                                  'board_id': str(board_id),
                                   'overlay_headline': video_content.get('hook', ''),
                                   'overlay_subtext': video_content.get('solution', ''),
                                   'pexels_search_term': video_content.get('search_query', ''),
-                                  'pin_type': 'video',
-                                  'content_json': video_content,
-                                  'tips': video_content.get('tips', []),
                                   'status': 'pending',
-                                  'video_state': 'video_pending',
                                   'created_at': datetime.now(timezone.utc).isoformat(),
-                              }).execute()
+                              }
+                              # Try adding video_state if column exists (migration 004)
+                              try:
+                                  pin_row['video_state'] = 'video_pending'
+                                  db.client.table('pinterest_pins').insert(pin_row).execute()
+                              except Exception:
+                                  pin_row.pop('video_state', None)
+                                  db.client.table('pinterest_pins').insert(pin_row).execute()
                               video_pending_staged += 1
                               print(f'  [{brand}] Staged video_pending pin (board {board_id})')
                           except Exception as _se:

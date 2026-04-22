@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install requests google-genai supabase
+        run: pip install requests google-genai supabase python-dotenv
       - name: Validate and fix broken ASINs
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
