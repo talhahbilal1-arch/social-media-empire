@@ -1303,5 +1303,23 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-21T17:12:26.790Z",
     "success": true
+  },
+  {
+    "slug": "heygen",
+    "pin_type": "tool-review",
+    "title": "HeyGen Review: AI Video Magic! ✨ (Rated 4.5/5)",
+    "link": "https://pilottools.ai/tools/heygen/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-22T17:10:40.818Z",
+    "success": true
+  },
+  {
+    "slug": "ahrefs",
+    "pin_type": "tool-review",
+    "title": "Ahrefs Review: Is This AI SEO Tool Worth $99/mo?",
+    "link": "https://pilottools.ai/tools/ahrefs/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-22T17:11:02.145Z",
+    "success": true
   }
 ]
