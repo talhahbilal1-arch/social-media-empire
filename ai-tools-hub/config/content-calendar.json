@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-21",
+  "last_updated": "2026-04-22",
   "items": [
     {
       "id": 1,
@@ -1810,19 +1810,21 @@
       "id": 218,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-nonprofits",
       "keyword": "best ai tools for nonprofits",
-      "title": "Best AI Tools for Nonprofits 2026"
+      "title": "Best AI Tools for Nonprofits 2026",
+      "published_date": "2026-04-22"
     },
     {
       "id": 219,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-authors",
       "keyword": "best ai tools for authors",
-      "title": "Best AI Tools for Authors 2026"
+      "title": "Best AI Tools for Authors 2026",
+      "published_date": "2026-04-22"
     },
     {
       "id": 220,
