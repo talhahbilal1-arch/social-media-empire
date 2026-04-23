@@ -85,10 +85,26 @@ export default function AboutPage() {
           </ul>
 
           <h2>Who We Are</h2>
+          <div style={{display:'flex',gap:'2rem',flexWrap:'wrap',margin:'1.5rem 0',padding:'1.5rem',background:'#0a1628',borderRadius:'12px',border:'1px solid #1e3a5f'}}>
+            <div style={{textAlign:'center',flex:1,minWidth:'120px'}}>
+              <div style={{fontSize:'2rem',fontWeight:700,color:'#00d4ff'}}>460+</div>
+              <div style={{fontSize:'0.85rem',color:'#8899aa'}}>Tools Reviewed</div>
+            </div>
+            <div style={{textAlign:'center',flex:1,minWidth:'120px'}}>
+              <div style={{fontSize:'2rem',fontWeight:700,color:'#00d4ff'}}>2,000+</div>
+              <div style={{fontSize:'0.85rem',color:'#8899aa'}}>Hours Testing</div>
+            </div>
+            <div style={{textAlign:'center',flex:1,minWidth:'120px'}}>
+              <div style={{fontSize:'2rem',fontWeight:700,color:'#00d4ff'}}>Updated</div>
+              <div style={{fontSize:'0.85rem',color:'#8899aa'}}>Weekly</div>
+            </div>
+          </div>
           <p>
-            PilotTools is founded and operated by Talhah Bilal, an automation systems expert with 6+ years of experience
-            building and testing AI-driven workflows and productivity tools. We combine hands-on experience with systematic
-            evaluation to help you make informed decisions.
+            PilotTools is founded and operated by <strong>Talhah Bilal</strong>, an automation systems expert and 
+            ISSA-certified professional with 6+ years of experience building AI-driven workflows for businesses.
+            Previously at Equinox and SBM Fitness, Talhah brings a systematic, data-driven approach to evaluating 
+            every tool on this platform. We combine hands-on experience with structured evaluation frameworks
+            to help you make informed decisions.
           </p>
           <p>
             Our approach is grounded in real-world usage: we test AI tools as they are actually used by professionals,
@@ -106,6 +122,13 @@ export default function AboutPage() {
             PilotTools provides independent AI tool guidance for professionals, creators, and developers.
             We publish detailed reviews, transparent ratings, and clear comparison methodologies &mdash; not just opinions.
             If you find any inaccuracy in our reviews, <a href="/contact/">contact us</a> and we will investigate and correct it promptly.
+          </p>
+
+          <h2>Corrections Policy</h2>
+          <p>
+            We take accuracy seriously. If a tool updates its pricing, features, or capabilities after we publish a review,
+            we update our content within 48 hours of being notified. All corrections are logged with timestamps.
+            If you notice anything outdated or incorrect, <a href="/contact/">let us know</a> — we investigate every report.
           </p>
 
           <h2>Affiliate Disclosure</h2>
