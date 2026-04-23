@@ -1,89 +1,160 @@
-# Project Audit — 2026-04-23
+# Fix-All Plan — 2026-04-23
 
-## Scope
-
-Internal audit of all active projects across the `talhahbilal1-arch/social-media-empire` monorepo.
-
-**Important scope limitation:** GitHub MCP access in this session is restricted to ONE repo — `talhahbilal1-arch/social-media-empire`. The authenticated account reports 3 public repos; the other two could not be inspected in this session. Everything below is based on this monorepo plus any local filesystem content.
-
-## Plan
-- [x] Confirm auth + repo access scope
-- [x] Pull open PRs, issues, branches
-- [x] Re-read existing audit/status docs (AUDIT_REPORT, PINTEREST_STATUS, MORNING_REPORT, workflow-health, system-health)
-- [x] Recent commit pattern + article counts + sitemap counts
-- [x] Inspect side projects (PilotTools/ai-tools-hub, Anti-Gravity, TikTok, Gumroad, quizzes, Etsy)
-- [x] Compile-check core modules, YAML-validate every workflow
+Goal: address every issue surfaced in the 2026-04-23 audit. Scoped realistically — separates "I can do now" from "you unblock".
 
 ---
+
+## Phase 0 — Commit pending audit (≈1 min)
+
+**Why:** stop-hook is complaining about uncommitted changes (`tasks/todo.md` was edited by the audit).
+- [ ] `git add tasks/todo.md && git commit -m "docs(audit): 2026-04-23 internal audit + fix plan"`
+- [ ] `git push -u origin claude/audit-projects-ad4IW`
+- [ ] Confirm push succeeded.
+
+---
+
+## Phase 1 — Merge unblocking PRs (≈15 min, needs your OK)
+
+Four PRs from Apr 17 are stale. Article-count gates in their bodies are now satisfied.
+
+- [ ] **PR #30** — pilottools ads.txt. Trivial. Low risk. **Recommend merge.**
+- [ ] **PR #32** — DDD AdSense + affiliate `rel="nofollow sponsored"` fix. DDD has 140 articles (gate was 18–20). **Recommend merge.**
+- [ ] **PR #33** — Menopause AdSense + YMYL disclaimers + Terms/Contact/About. Menopause has 118 articles (gate was 20). **Recommend merge.** *Note: Formspree contact form needs a form ID; your PR body already flags this as a post-merge task.*
+- [ ] **PR #31** — pilottools editorial layer. Not trivial (460 pages rebuilt, homepage changed). **Recommend visual spot-check first** — I'll pull the branch, `next build`, and confirm before merging.
+
+**Risk:** PRs modify shared state (deployed sites). I'll ask for explicit approval per PR before merging.
+
+---
+
+## Phase 2 — Branch cleanup (≈5 min, destructive → needs your OK)
+
+- [ ] List all `claude/*` branches on origin.
+- [ ] For each: check if tip SHA is an ancestor of `main` OR if the branch's most recent commit is >14 days old with no open PR.
+- [ ] Bulk-delete the merged/abandoned ones. Keep: `claude/audit-projects-ad4IW` (current), any branches attached to open PRs, anything touched in last 7 days.
+- [ ] Fix `auto-merge.yml` — current pattern `claude/{check-github-automation,merge-to-main,check-workflow-status}-*` misses audit/feature branches. Add `claude/audit-*` and `claude/fix-*` (already matches some, but not all).
+
+**Risk:** deleting a branch that had unmerged work. Mitigation: only delete if tip SHA is in main's ancestry OR commit author was github-actions[bot] (auto-generated, replayable).
+
+---
+
+## Phase 3 — Diagnostic visibility: real workflow run status (≈30 min)
+
+I can't see Actions runs via MCP. I'll build you a local tool.
+
+- [ ] Create `scripts/check_workflow_runs.py`:
+  - Reads `GITHUB_TOKEN` from env (or `.env`)
+  - Hits `GET /repos/talhahbilal1-arch/social-media-empire/actions/workflows`
+  - For each workflow: fetch last 5 runs, show conclusion (success/failure/cancelled/in_progress), timestamp, duration
+  - Outputs a markdown table identical in shape to the audit's workflow table, but with REAL pass/fail data
+  - Also dumps a ranked list of "workflows with ≥3 failures in last 10 runs"
+- [ ] Run it once, paste output into `monitoring/workflow-runs-<date>.md`.
+- [ ] **This replaces guesswork with ground truth — you'll know exactly which workflows are red.**
+
+**Dependency:** needs a GitHub PAT with `actions:read` scope. I'll document how to create one.
+
+---
+
+## Phase 4 — Converge video pipeline to one strategy (needs your decision)
+
+Three video paths coexist. I'll keep exactly one and delete the others.
+
+**Options (pick one):**
+
+| Option | What stays | What gets deleted | Best for |
+|---|---|---|---|
+| **A — Remotion in CI** (current default) | `video_pipeline/remotion_*`, CI render step | `scripts/local_video_pipeline.py`, launchd plist, Short Video Maker client | Fully cloud — no local Mac dependency |
+| **B — Local Mac via Short Video Maker** (the April 21–22 direction) | `scripts/local_video_pipeline.py`, launchd plist, `short_video_maker_client.py` | Remotion path, Zernio-only flow | Faster iteration, offloads GPU render from CI |
+| **C — Keep both, clean seams** | Both paths, but gate cleanly via `VIDEO_STRATEGY` flag and document | Late API dead-ends + any duplicate scene-building code | If you genuinely want redundancy |
+
+**Regardless of choice:**
+- [ ] Delete the 4 `LATE_API_KEY*` references and call sites. They all 401. If you want to keep Late as a fallback, re-add after you refresh tokens.
+- [ ] Run Supabase migration 004 (`video_state` column on `pinterest_pins`) — required for option B, harmless for A. SQL is in `database/migrations/004_*.sql`.
+- [ ] Post-convergence: re-run content-engine once with `dry_run=true` to confirm.
+
+**My default recommendation:** Option A (Remotion in CI) — keeps everything reproducible without a running Mac. Local pipeline adds a failure mode ("is my laptop awake?") you don't want for a revenue system.
+
+---
+
+## Phase 5 — Create `docs/NEEDS-USER-ACTION.md` (≈15 min)
+
+A single, prioritized checklist of the things only you can do. I'll generate it; you execute.
+
+- [ ] **CONVERTKIT_API_KEY + CONVERTKIT_API_SECRET** — highest revenue impact. Unblocks: menopause-newsletter, revenue-activation, toolpilot-newsletter, weekly-summary, email-automation. Instructions: app.kit.com → Settings → Developer.
+- [ ] **RESEND_API_KEY + ALERT_EMAIL** — unblocks: emergency-alert, toolpilot-outreach (real send, not just log), toolpilot-report, weekly-summary. Instructions: resend.com/api-keys.
+- [ ] **MAKE_WEBHOOK_PILOTTOOLS** — unblocks PilotTools Pinterest posting. Create scenario in Make.com, copy webhook URL.
+- [ ] **VERCEL_ORG_ID** — unblocks toolpilot-{content,deploy,weekly} deploys. Copy from Vercel dashboard → Settings → General.
+- [ ] **Refresh LATE_API_KEY** — only needed if Phase 4 picks option that keeps Late. Otherwise delete.
+- [ ] **Supabase migration 004** — run `database/migrations/004_*.sql` in Supabase SQL editor. Required for `VIDEO_STRATEGY=local`.
+- [ ] **Gumroad: upload 10 product ZIPs** from `prompt-packs/products/` to their listings. Files exist and are ready.
+- [ ] **Etsy shop**: complete banking/billing setup. Manual, no code side.
+- [ ] **Twitter/LinkedIn secrets** — verify if you've already set these (recent commits suggest yes); if not, instructions per workflow.
+
+Each item gets: what, where, estimated time, revenue/risk impact.
+
+---
+
+## Phase 6 — Repo hygiene (≈30 min, low risk)
+
+### 6a. Root doc consolidation
+- [ ] Move into `docs/reports/`: AUDIT_REPORT.md, AUDIT_MAKE_COM.md, AUDIT_FINDINGS_SUMMARY.txt, MORNING_REPORT.md, OVERNIGHT-SESSION-REPORT.md, PINTEREST_STATUS.md, REVENUE_FIX_REPORT.md, SECRETS_AUDIT_2026-03-21.md, SECRETS_QUICK_REFERENCE.txt, TASK_COMPLETION_REPORT.txt, WORKFLOW_GUIDE.md, PROMPT_PACK_HANDOFF.md, PINTEREST_CTR_NOTES.md, SUBMISSION_GUIDE.md, ANTI_GRAVITY_DEPLOY.md, AG_PLAN.md.
+- [ ] Keep at root: CLAUDE.md, README.md, LICENSE, CNAME, PHONE-ACTION-CHECKLIST.md.
+- [ ] Update any references to moved files.
+
+### 6b. Archive cleanup decision
+- [ ] 24 workflows in `.github/workflows/archive/`. Options:
+  - **Keep all** (current, zero risk) — reference material
+  - **Delete ones that will never return** (tiktok-*, youtube-*, video-automation-*, creatomate-dependent) — saves ~12 files; git history preserves them anyway
+- Recommend: delete the 12 that explicitly depend on abandoned services (TikTok token, YouTube creds, Creatomate, ElevenLabs, Late).
+
+### 6c. Duplicate site directories (HIGHER RISK — verify first)
+- `dailydealdarling_website/`, `menopause-planner-site/` (legacy roots) vs `outputs/{brand}-website/` (deploy source per CLAUDE.md).
+- `outputs_backup/` — snapshot, safe to delete once confirmed it's not a live deploy target.
+- [ ] Grep CI workflows + vercel.json for any path reference to the legacy roots.
+- [ ] If zero references: delete legacy dirs + outputs_backup/.
+- [ ] Commit in isolation so a revert is clean if something breaks.
+
+---
+
+## Phase 7 — Strategic decisions on dormant projects (needs your input)
+
+Each needs a finish-or-deprecate call. I'll mark explicitly in CLAUDE.md whichever you pick.
+
+| Project | State | Finish = | Deprecate = |
+|---|---|---|---|
+| **TikTok automation** | Token missing, workflows archived, code in `tiktok_automation/` | Refresh token, restore tiktok-content + tiktok-poster workflows, unblock | Delete `tiktok_automation/`, delete secondary Supabase project tables, remove from CLAUDE.md |
+| **YouTube Shorts** | Deferred per AG_PLAN, no credentials, workflow archived | Add YouTube OAuth creds, re-enable `youtube-fitness.yml` | Delete `youtube-fitness.yml` from archive, remove references in prior workflows |
+| **Anti-Gravity site** | `anti_gravity/` has site + DB + 5 articles, never deployed | `vercel --prod` deploy, add to CLAUDE.md brands table | Delete `anti_gravity/`, remove from AG_PLAN/ANTI_GRAVITY_DEPLOY |
+| **Etsy shop** | Listings JSON exists, banking setup pending | Complete banking → `etsy-product-pins.yml` becomes meaningful | Archive `etsy-product-pins.yml`, delete `etsy_listings.json` |
+| **Phase 13 stash** | `git stash pop` restores it | Review what's in stash, merge or drop | `git stash drop` after inspection |
+
+**My default recommendation:** deprecate TikTok + YouTube + Anti-Gravity (consistent with the "3 active brands" principle in CLAUDE.md). Finish Etsy only if the revenue forecast justifies the banking-setup friction. Pop the Phase 13 stash and decide per-file.
+
+---
+
+## Phase 8 — Post-cleanup verification (≈10 min)
+
+- [ ] Re-run: `python3 -m py_compile` on core modules
+- [ ] Re-run: YAML validate on all workflows
+- [ ] Re-run: `scripts/check_workflow_runs.py` (from Phase 3) → paste new numbers to `monitoring/workflow-runs-<date>.md`
+- [ ] Update CLAUDE.md "Current Status" section with post-cleanup state
+- [ ] Final commit + push
+
+---
+
+## Decisions I need from you before I start
+
+1. **Phase 1 PR merges** — green-light all four, or handle case-by-case?
+2. **Phase 2 branch deletion** — OK to auto-delete branches whose tips are already in main?
+3. **Phase 4 video strategy** — A (Remotion CI), B (Local Mac), or C (keep both)?
+4. **Phase 6c duplicate dir deletion** — OK to delete after grep verification, or you want to see the list first?
+5. **Phase 7 dormant projects** — deprecate TikTok/YouTube/Anti-Gravity, or finish any?
+6. **Phase 3 GitHub PAT** — will you create one, or should I write a version that reads `~/.config/gh/hosts.yml` from an existing `gh` CLI login?
+
+## What this plan does NOT cover
+
+- Live runtime Supabase queries (would need `.env` loaded in this session)
+- Visual QA on deployed brand sites (no browser in this session)
+- The other 2 repos under your `talhahbilal1-arch` GitHub account (MCP token scope)
 
 ## Review
-
-### 1. WORKING ✅ — production pipelines running on schedule
-
-| System | Evidence |
-|---|---|
-| **Content Engine** (content-engine.yml, 5x/day) | Bot commits "pinterest: auto-post 2026-04-22" at 17:11 + 22:37 UTC yesterday, plus "content: auto-generated 2026-04-22" 07:32 UTC. Daily cadence unbroken across 4 weeks of git log. |
-| **Article generation** | Counts grew substantially since the April 2 audit: FitOver35 148 → **200** (+52), DailyDealDarling 99 → **140** (+41), Menopause 86 → **118** (+32). Sitemaps: 189 / 127 / 108 URLs. |
-| **Pinterest posting (images)** | Per-brand Make.com webhooks firing; MORNING_REPORT confirms HTTP 200 end-to-end for fitness/deals/menopause. Make.com dashboard (last captured 2026-03-31) shows 9 active scenarios, 0 errors, 2,904 ops. |
-| **Analytics dashboard** | "analytics: update dashboard" committed daily (latest 2026-04-22). |
-| **Vercel deploys** | 3 brand sites + PilotTools auto-deploy on push; ads.txt present at all 4 properties. |
-| **Supabase Production** | `errors`/`content_history`/`agent_runs` upserts working (no recent schema-column errors in commits). |
-| **Compile / YAML health** | Core Python modules compile clean. **All 39 workflow YAMLs parse valid.** |
-| **Gumroad products** | 10/11 ZIPs present in `prompt-packs/products/` — just need manual Gumroad upload. |
-| **Hygiene: archived workflows** | 24 broken workflows correctly moved to `.github/workflows/archive/` rather than deleted (reversible). |
-
-### 2. IN-FLIGHT / RECENTLY LANDED — be aware
-
-| Item | State |
-|---|---|
-| **Video-pin pipeline rewrite** | Mid-refactor. Last week (Apr 19–22): switched from Make.com video path to Zernio API, added Remotion, then pivoted again to a local "Short Video Maker" Mac pipeline via launchd (commits `503b1cc`, `9e9e981`, `c6116db`). `VIDEO_STRATEGY=local` flag gates which path runs. **Posting only enabled for `fitness` brand** in `local_video_pipeline.py` (`POSTING_BRANDS={'fitness'}`). Deals + menopause video pins render + stage but do not post. |
-| **DB migration 004** | `video_state` column on `pinterest_pins` needs to be run in Supabase before `VIDEO_STRATEGY=local` is flipped in production (see `e3a34fe`). CI has a graceful fallback (`e47d871`) but the migration is required for steady-state. |
-| **AdSense compliance** | Live on all 6 brand renderers (b31064d, 2026-04-22). Root-level ads.txt at all 4 sites. |
-| **20 buyer-intent articles** | Landed 2026-04-22 — 7 FitOver35, 7 DDD, 6 Menopause. Sitemap regenerated (412 URLs total). |
-
-### 3. NOT WORKING / BLOCKED ❌
-
-| Problem | Impact | Fix |
-|---|---|---|
-| **4 open PRs stale since 2026-04-17 (6 days)** — #30 pilottools ads.txt, #31 pilottools editorial layer, #32 DDD AdSense, #33 Menopause AdSense | Blocks AdSense revenue activation on DDD, Menopause, PilotTools. **Article-count gates in the PR bodies are now satisfied** (DDD 140 ≥ 18, Menopause 118 ≥ 20), so the stated blocker is stale. | Merge #30 + #32 + #33 (AdSense prep). Merge #31 only after visual spot-check. |
-| **~47 orphan `claude/*` branches on GitHub** | Noise; confuses audit surface; slows branch pickers | Bulk-delete branches whose tips are merged into main; keep only active feature branches. |
-| **ConvertKit API keys still missing** | 4 workflows can't run: `menopause-newsletter`, `revenue-activation`, `toolpilot-newsletter`, `weekly-summary`. Forms are embedded on 333+ articles but no welcome sequence or broadcast. Biggest revenue leak in the audit. | Add `CONVERTKIT_API_KEY` + `CONVERTKIT_API_SECRET` as repo secrets. |
-| **Resend API key missing** | Emergency alerts, outreach, weekly reports, toolpilot-report all non-functional. Dead-man's-switch has no teeth. | `RESEND_API_KEY` + `ALERT_EMAIL`. |
-| **All Twitter / LinkedIn secrets missing** | PilotTools Twitter, Repurpose, LinkedIn workflows are shipping dry-run. AG_PLAN calls this "BUILD COMPLETE" but the external accounts are not wired. | Add Twitter 4-tuple + `LINKEDIN_ACCESS_TOKEN` + `LINKEDIN_PERSON_ID`. |
-| **`MAKE_WEBHOOK_PILOTTOOLS` missing** | PilotTools Pinterest fires but no scenario receives. | Create Make.com scenario, add secret. |
-| **Late API keys expired (401)** | Video-pin posting via Late broken. Partly mitigated by the Zernio switch, but any remaining Late call paths return 401. | Refresh at getlate.dev, OR delete the Late code paths now that Zernio/local-pipeline is the strategy. |
-| **Gemini image-gen model 404** | Pins fall back to Pexels+PIL (functional but no AI image). PINTEREST_STATUS notes `gemini-2.0-flash-preview-image-generation` returns 404. Recent commit `22f87b9` flipped to `gemini-2.5-flash-image`; status doc hasn't been reconciled. | Verify current image model works in one live run; update PINTEREST_STATUS.md. |
-| **Phase 13 work stashed** (per CLAUDE.md) | Unfinished work sitting in git stash | Decide: `git stash pop` to resume, or drop. |
-| **TikTok pipeline dormant** | `tiktok_automation/` present, Supabase secondary project has tables, but `TIKTOK_ACCESS_TOKEN` missing and workflows archived. | Either deprecate (delete `tiktok_automation/`) or refresh token + restore workflow. |
-| **YouTube Shorts dormant** | AG_PLAN marks it "deferred". No credentials. Workflow archived. | Confirm deferred; keep archive. |
-| **Anti-Gravity site not deployed** | `anti_gravity/` has site + SQLite DB + setup script; 5 seed articles per system-health-report; never deployed to Vercel. | Decide: deploy to Vercel, or deprioritize and mark dormant. |
-| **Etsy shop** | Listings JSON exists (`etsy_listings.json`); banking/billing setup still manual per CLAUDE.md. | Manual — out of scope for code. |
-
-### 4. HYGIENE / TECHNICAL DEBT
-
-- **Monorepo bloat** — root contains 10+ top-level status docs (AUDIT_REPORT, AUDIT_MAKE_COM, AUDIT_FINDINGS_SUMMARY, MORNING_REPORT, OVERNIGHT-SESSION-REPORT, PINTEREST_STATUS, REVENUE_FIX_REPORT, SECRETS_AUDIT, PROMPT_PACK_HANDOFF, TASK_COMPLETION_REPORT, PHONE-ACTION-CHECKLIST…). Each was useful at the time; together they make the repo hard to navigate and the "source of truth" ambiguous. Recommend: move to `docs/reports/` and keep only `CLAUDE.md` + `README.md` at root.
-- **Duplicate site directories** — `dailydealdarling_website/`, `menopause-planner-site/`, `anti_gravity/site/`, `sites/`, `outputs/*-website/`, plus an `outputs_backup/`. The deploy targets are under `outputs/`; the others are either legacy or variant experiments. Confirm and prune.
-- **672 Amazon search URLs remaining** (per CLAUDE.md) — these don't map to single products; long-tail. Consider leaving as-is and investing elsewhere.
-- **Late API code paths** — if Zernio/local is the chosen video strategy, remove Late code rather than keeping dead branches.
-- **24 archived workflows** — acceptable to keep in `archive/`, but if no plan to resurrect (youtube, tiktok, late rescue-poster, creatomate), delete to reduce cognitive load.
-
-### 5. OUT OF SCOPE THIS SESSION
-
-- **Other GitHub repos under `talhahbilal1-arch`** (3 public total per `/me`). MCP token is scoped to `social-media-empire` only. If you want those audited, grant the MCP server access to each repo or paste the list of repo names.
-- **Live runtime data** — I can't query Supabase directly from this session (no env), so "errors in last 24h" and "content_history row counts" are inferred from git commit cadence, not measured. If desired, a one-off `scripts/` runner with `.env` loaded would pull the exact numbers.
-- **Browser-based sanity checks** — I did not load fitover35.com, dailydealdarling.com, menopauseplanner.com, or pilottools.ai in a browser. If any rendering regression happened on live sites, it would not show up in this audit.
-
----
-
-## Recommended next actions (in priority order)
-
-1. **Set `CONVERTKIT_API_KEY` + `CONVERTKIT_API_SECRET`** — unblocks the highest-revenue workflow (email monetization on 333 articles with forms already embedded).
-2. **Merge PRs #30, #32, #33** (pilottools/DDD/menopause AdSense compliance) — article-count blockers in the PR bodies are now satisfied. PR #31 gets a visual check before merge.
-3. **Decide on video-pipeline strategy** — the repo currently contains three video paths (Remotion in CI, Zernio posting, local Short Video Maker via launchd). Pick one, delete the other two.
-4. **Run Supabase migration 004** (`video_state` column) before flipping `VIDEO_STRATEGY=local` in production.
-5. **Delete or archive the 47 orphan `claude/*` branches** on GitHub.
-6. **Move root-level status docs into `docs/reports/`** to reduce repo clutter.
-7. **Make a call on TikTok / YouTube / Anti-Gravity / Etsy** — each is half-built; either finish or explicitly mark dormant in CLAUDE.md.
-8. **Refresh Late API keys OR delete the Late code paths** (pick one, don't leave 401 paths live).
-9. **Add `RESEND_API_KEY` + `ALERT_EMAIL`** — the emergency-alert dead-man's-switch is currently silent.
-10. **After secrets land, re-check PilotTools social (Twitter/LinkedIn) — AG_PLAN claims "complete" but the workflows are shipping dry-run.**
+_(to be filled after execution)_
