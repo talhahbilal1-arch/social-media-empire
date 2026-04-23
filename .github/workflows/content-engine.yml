@@ -201,8 +201,19 @@ jobs:
               print('  SKIPPED — this is a video run (Phase 1v will handle content)')
 
           ALL_BRANDS = ['fitness', 'deals', 'menopause', 'pilottools', 'homedecor', 'beauty']
+          
+          # Stagger brands across runs to avoid Gemini API rate limits
+          # 6 brands × content gen = too many API calls for free tier
+          # Rotate: even hours = Group A (fitness, deals, menopause)
+          #         odd hours = Group B (pilottools, homedecor, beauty)
+          import datetime as _dt
+          _hour = _dt.datetime.now(_dt.timezone.utc).hour
+          GROUP_A = ['fitness', 'deals', 'menopause']
+          GROUP_B = ['pilottools', 'homedecor', 'beauty']
+          ACTIVE_GROUP = GROUP_A if (_hour % 2 == 0) else GROUP_B
           brand_filter = os.environ.get('BRAND_INPUT', '').strip()
-          brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ALL_BRANDS
+          brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ACTIVE_GROUP
+          print(f'=== ACTIVE BRANDS THIS RUN: {brands_to_generate} (hour={_hour}) ===')
 
           MAX_PINS_PER_DAY = 3  # 3 pins/brand/day — Pinterest 2026 algorithm penalizes high volume
           MAX_PINS_PER_RUN = 1  # 1 pin/brand/run — spread pins across day for better engagement
