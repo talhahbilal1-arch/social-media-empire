@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-22",
+  "last_updated": "2026-04-23",
   "items": [
     {
       "id": 1,
@@ -1830,10 +1830,11 @@
       "id": 220,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-journalists",
       "keyword": "best ai tools for journalists",
-      "title": "Best AI Tools for Journalists 2026"
+      "title": "Best AI Tools for Journalists 2026",
+      "published_date": "2026-04-23"
     },
     {
       "id": 221,
