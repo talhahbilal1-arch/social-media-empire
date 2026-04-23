@@ -1,160 +1,171 @@
-# Fix-All Plan — 2026-04-23
+# Fix-All Plan — 2026-04-23 (plain-English version)
 
-Goal: address every issue surfaced in the 2026-04-23 audit. Scoped realistically — separates "I can do now" from "you unblock".
+## How to read this
 
----
+Each item below says:
+- **What happens** — the actual change
+- **Why it matters** — what gets better for you
+- **Who does it** — me vs. you
+- **Risk** — what could go wrong
 
-## Phase 0 — Commit pending audit (≈1 min)
-
-**Why:** stop-hook is complaining about uncommitted changes (`tasks/todo.md` was edited by the audit).
-- [ ] `git add tasks/todo.md && git commit -m "docs(audit): 2026-04-23 internal audit + fix plan"`
-- [ ] `git push -u origin claude/audit-projects-ad4IW`
-- [ ] Confirm push succeeded.
-
----
-
-## Phase 1 — Merge unblocking PRs (≈15 min, needs your OK)
-
-Four PRs from Apr 17 are stale. Article-count gates in their bodies are now satisfied.
-
-- [ ] **PR #30** — pilottools ads.txt. Trivial. Low risk. **Recommend merge.**
-- [ ] **PR #32** — DDD AdSense + affiliate `rel="nofollow sponsored"` fix. DDD has 140 articles (gate was 18–20). **Recommend merge.**
-- [ ] **PR #33** — Menopause AdSense + YMYL disclaimers + Terms/Contact/About. Menopause has 118 articles (gate was 20). **Recommend merge.** *Note: Formspree contact form needs a form ID; your PR body already flags this as a post-merge task.*
-- [ ] **PR #31** — pilottools editorial layer. Not trivial (460 pages rebuilt, homepage changed). **Recommend visual spot-check first** — I'll pull the branch, `next build`, and confirm before merging.
-
-**Risk:** PRs modify shared state (deployed sites). I'll ask for explicit approval per PR before merging.
+I grouped items by outcome, not by phase, so you can pick what matters most.
 
 ---
 
-## Phase 2 — Branch cleanup (≈5 min, destructive → needs your OK)
+## GROUP A: Start earning money that's currently blocked
 
-- [ ] List all `claude/*` branches on origin.
-- [ ] For each: check if tip SHA is an ancestor of `main` OR if the branch's most recent commit is >14 days old with no open PR.
-- [ ] Bulk-delete the merged/abandoned ones. Keep: `claude/audit-projects-ad4IW` (current), any branches attached to open PRs, anything touched in last 7 days.
-- [ ] Fix `auto-merge.yml` — current pattern `claude/{check-github-automation,merge-to-main,check-workflow-status}-*` misses audit/feature branches. Add `claude/audit-*` and `claude/fix-*` (already matches some, but not all).
+### A1. Merge the 3 stuck AdSense PRs (#30, #32, #33)
+- **What happens:** Three pull requests from April 17 get merged into main. They add Google AdSense tags + legal pages (Terms/Contact/About) + a fix that tells Google "these are ad links, don't count them for SEO" to dailydealdarling.com, menopauseplanner.com, and pilottools.ai.
+- **Why it matters:** You can't earn AdSense revenue until these are live. All three sites now have enough articles to pass Google's "low value content" bar, which was the reason you paused. Money is currently sitting on the table.
+- **Who does it:** I merge them after you say yes. Then you manually click "Request Review" in your AdSense console once Google re-scans the sites (~48 hours after merge).
+- **Risk:** Low. The changes are additive — they don't modify existing article content. One task on your side: plug a Formspree form ID into the new menopause Contact page (or just use the mailto link that's already there).
 
-**Risk:** deleting a branch that had unmerged work. Mitigation: only delete if tip SHA is in main's ancestry OR commit author was github-actions[bot] (auto-generated, replayable).
+### A2. Set up ConvertKit API keys
+- **What happens:** You add 2 secrets to GitHub (`CONVERTKIT_API_KEY`, `CONVERTKIT_API_SECRET`). I don't need to change any code — the automation already exists.
+- **Why it matters:** 333 articles across your 3 brands have email signup forms baked in. Every visitor who signs up right now goes into a list that never sends them anything. Adding the keys activates:
+  - Welcome email sequences for new subscribers
+  - Weekly newsletter for Menopause Planner
+  - PilotTools newsletter
+  - Weekly summary reports to you
+- **Who does it:** You — get keys from app.kit.com → Settings → Developer, paste into GitHub repo secrets.
+- **Risk:** None. Without the keys the workflows just skip. With them, they start working.
 
----
-
-## Phase 3 — Diagnostic visibility: real workflow run status (≈30 min)
-
-I can't see Actions runs via MCP. I'll build you a local tool.
-
-- [ ] Create `scripts/check_workflow_runs.py`:
-  - Reads `GITHUB_TOKEN` from env (or `.env`)
-  - Hits `GET /repos/talhahbilal1-arch/social-media-empire/actions/workflows`
-  - For each workflow: fetch last 5 runs, show conclusion (success/failure/cancelled/in_progress), timestamp, duration
-  - Outputs a markdown table identical in shape to the audit's workflow table, but with REAL pass/fail data
-  - Also dumps a ranked list of "workflows with ≥3 failures in last 10 runs"
-- [ ] Run it once, paste output into `monitoring/workflow-runs-<date>.md`.
-- [ ] **This replaces guesswork with ground truth — you'll know exactly which workflows are red.**
-
-**Dependency:** needs a GitHub PAT with `actions:read` scope. I'll document how to create one.
+### A3. Upload 10 Gumroad product ZIP files
+- **What happens:** You drag-drop 10 ZIP files from `prompt-packs/products/` into their Gumroad listings.
+- **Why it matters:** Some of your Gumroad products may not have a deliverable attached — customers pay and can't download. This takes maybe 20 minutes total.
+- **Who does it:** You. I can't access your Gumroad account.
+- **Risk:** None.
 
 ---
 
-## Phase 4 — Converge video pipeline to one strategy (needs your decision)
+## GROUP B: Stop things that are silently broken
 
-Three video paths coexist. I'll keep exactly one and delete the others.
+### B1. Pick one video-pin strategy, delete the other two
+- **What happens:** Right now your repo has three different ways to make and post video pins to Pinterest, all partially wired. Pick one, I delete the code for the other two.
+  - **Option A — Remotion in GitHub Actions** (simplest, runs in cloud, no Mac required)
+  - **Option B — Local pipeline on your Mac** (faster, but only works when your laptop is awake)
+  - **Option C — Keep both** (more resilient, more to maintain)
+- **Why it matters:** Having three strategies means three places for bugs to hide. Every time you touch video code, you have to remember which path is actually live. Removing two simplifies everything.
+- **Who does it:** You decide which one; I do the delete.
+- **Risk:** Low if we pick carefully. I'll test with `dry_run=true` before committing.
 
-**Options (pick one):**
+### B2. Remove dead Late API code
+- **What happens:** `LATE_API_KEY`, `LATE_API_KEY_2`, `_3`, `_4` are all expired. Any code that tries to use them returns 401 errors. I delete the code paths.
+- **Why it matters:** Cleaner logs. If you decide later to go back to Late, we add it back — git history keeps everything.
+- **Who does it:** Me (after Group B1 decision).
+- **Risk:** Low. These calls currently fail anyway.
 
-| Option | What stays | What gets deleted | Best for |
-|---|---|---|---|
-| **A — Remotion in CI** (current default) | `video_pipeline/remotion_*`, CI render step | `scripts/local_video_pipeline.py`, launchd plist, Short Video Maker client | Fully cloud — no local Mac dependency |
-| **B — Local Mac via Short Video Maker** (the April 21–22 direction) | `scripts/local_video_pipeline.py`, launchd plist, `short_video_maker_client.py` | Remotion path, Zernio-only flow | Faster iteration, offloads GPU render from CI |
-| **C — Keep both, clean seams** | Both paths, but gate cleanly via `VIDEO_STRATEGY` flag and document | Late API dead-ends + any duplicate scene-building code | If you genuinely want redundancy |
-
-**Regardless of choice:**
-- [ ] Delete the 4 `LATE_API_KEY*` references and call sites. They all 401. If you want to keep Late as a fallback, re-add after you refresh tokens.
-- [ ] Run Supabase migration 004 (`video_state` column on `pinterest_pins`) — required for option B, harmless for A. SQL is in `database/migrations/004_*.sql`.
-- [ ] Post-convergence: re-run content-engine once with `dry_run=true` to confirm.
-
-**My default recommendation:** Option A (Remotion in CI) — keeps everything reproducible without a running Mac. Local pipeline adds a failure mode ("is my laptop awake?") you don't want for a revenue system.
-
----
-
-## Phase 5 — Create `docs/NEEDS-USER-ACTION.md` (≈15 min)
-
-A single, prioritized checklist of the things only you can do. I'll generate it; you execute.
-
-- [ ] **CONVERTKIT_API_KEY + CONVERTKIT_API_SECRET** — highest revenue impact. Unblocks: menopause-newsletter, revenue-activation, toolpilot-newsletter, weekly-summary, email-automation. Instructions: app.kit.com → Settings → Developer.
-- [ ] **RESEND_API_KEY + ALERT_EMAIL** — unblocks: emergency-alert, toolpilot-outreach (real send, not just log), toolpilot-report, weekly-summary. Instructions: resend.com/api-keys.
-- [ ] **MAKE_WEBHOOK_PILOTTOOLS** — unblocks PilotTools Pinterest posting. Create scenario in Make.com, copy webhook URL.
-- [ ] **VERCEL_ORG_ID** — unblocks toolpilot-{content,deploy,weekly} deploys. Copy from Vercel dashboard → Settings → General.
-- [ ] **Refresh LATE_API_KEY** — only needed if Phase 4 picks option that keeps Late. Otherwise delete.
-- [ ] **Supabase migration 004** — run `database/migrations/004_*.sql` in Supabase SQL editor. Required for `VIDEO_STRATEGY=local`.
-- [ ] **Gumroad: upload 10 product ZIPs** from `prompt-packs/products/` to their listings. Files exist and are ready.
-- [ ] **Etsy shop**: complete banking/billing setup. Manual, no code side.
-- [ ] **Twitter/LinkedIn secrets** — verify if you've already set these (recent commits suggest yes); if not, instructions per workflow.
-
-Each item gets: what, where, estimated time, revenue/risk impact.
+### B3. Run the Supabase migration (video_state column)
+- **What happens:** You paste a small SQL file into Supabase SQL Editor and hit Run. Takes 5 seconds.
+- **Why it matters:** The local video pipeline (if you picked Option B above) needs this column to track which pins are waiting to be rendered. Without it, the pipeline silently falls back to old behavior.
+- **Who does it:** You. The SQL is at `database/migrations/004_add_video_state_to_pinterest_pins.sql`.
+- **Risk:** None — it's an ADD COLUMN, doesn't touch existing data.
 
 ---
 
-## Phase 6 — Repo hygiene (≈30 min, low risk)
+## GROUP C: Actually see what your automation is doing
 
-### 6a. Root doc consolidation
-- [ ] Move into `docs/reports/`: AUDIT_REPORT.md, AUDIT_MAKE_COM.md, AUDIT_FINDINGS_SUMMARY.txt, MORNING_REPORT.md, OVERNIGHT-SESSION-REPORT.md, PINTEREST_STATUS.md, REVENUE_FIX_REPORT.md, SECRETS_AUDIT_2026-03-21.md, SECRETS_QUICK_REFERENCE.txt, TASK_COMPLETION_REPORT.txt, WORKFLOW_GUIDE.md, PROMPT_PACK_HANDOFF.md, PINTEREST_CTR_NOTES.md, SUBMISSION_GUIDE.md, ANTI_GRAVITY_DEPLOY.md, AG_PLAN.md.
-- [ ] Keep at root: CLAUDE.md, README.md, LICENSE, CNAME, PHONE-ACTION-CHECKLIST.md.
-- [ ] Update any references to moved files.
+### C1. Build a workflow status checker
+- **What happens:** I write a small Python script you can run any time (`python3 scripts/check_workflow_runs.py`) that prints a table: workflow name, last 5 runs, green or red, how long each took.
+- **Why it matters:** Right now, nobody (including me) actually knows how many of your 39 workflows are succeeding vs. failing. I've been inferring from git commits, which only catches some of them. This script gives you the real answer.
+- **Who does it:** I write it. You run it with a GitHub token (I'll give you one-line instructions to create one).
+- **Risk:** None — script only reads data, never modifies anything.
 
-### 6b. Archive cleanup decision
-- [ ] 24 workflows in `.github/workflows/archive/`. Options:
-  - **Keep all** (current, zero risk) — reference material
-  - **Delete ones that will never return** (tiktok-*, youtube-*, video-automation-*, creatomate-dependent) — saves ~12 files; git history preserves them anyway
-- Recommend: delete the 12 that explicitly depend on abandoned services (TikTok token, YouTube creds, Creatomate, ElevenLabs, Late).
-
-### 6c. Duplicate site directories (HIGHER RISK — verify first)
-- `dailydealdarling_website/`, `menopause-planner-site/` (legacy roots) vs `outputs/{brand}-website/` (deploy source per CLAUDE.md).
-- `outputs_backup/` — snapshot, safe to delete once confirmed it's not a live deploy target.
-- [ ] Grep CI workflows + vercel.json for any path reference to the legacy roots.
-- [ ] If zero references: delete legacy dirs + outputs_backup/.
-- [ ] Commit in isolation so a revert is clean if something breaks.
+### C2. One clean "Things only you can do" checklist
+- **What happens:** I create `docs/NEEDS-USER-ACTION.md` — a single file with every pending manual task in priority order, each one saying: what to do, where to do it, how long it takes, what it unblocks.
+- **Why it matters:** Instead of scattered action items across 8+ old audit docs, you get one page. Cross items off as you go.
+- **Who does it:** I write it. You work through it.
+- **Risk:** None.
 
 ---
 
-## Phase 7 — Strategic decisions on dormant projects (needs your input)
+## GROUP D: Clean up the repo (easier to navigate)
 
-Each needs a finish-or-deprecate call. I'll mark explicitly in CLAUDE.md whichever you pick.
+### D1. Delete ~47 abandoned branches
+- **What happens:** Your GitHub repo has 47+ branches named things like `claude/blissful-villani` from old Claude sessions. Most have no unique work. I delete the ones whose commits are already in `main` (so nothing is lost) or that are older than 14 days with no pull request.
+- **Why it matters:** Branch picker in GitHub UI becomes usable. Current state is unreadable.
+- **Who does it:** Me, after you say yes.
+- **Risk:** Very low. I only delete branches where the work is already merged OR abandoned + ancient.
 
-| Project | State | Finish = | Deprecate = |
-|---|---|---|---|
-| **TikTok automation** | Token missing, workflows archived, code in `tiktok_automation/` | Refresh token, restore tiktok-content + tiktok-poster workflows, unblock | Delete `tiktok_automation/`, delete secondary Supabase project tables, remove from CLAUDE.md |
-| **YouTube Shorts** | Deferred per AG_PLAN, no credentials, workflow archived | Add YouTube OAuth creds, re-enable `youtube-fitness.yml` | Delete `youtube-fitness.yml` from archive, remove references in prior workflows |
-| **Anti-Gravity site** | `anti_gravity/` has site + DB + 5 articles, never deployed | `vercel --prod` deploy, add to CLAUDE.md brands table | Delete `anti_gravity/`, remove from AG_PLAN/ANTI_GRAVITY_DEPLOY |
-| **Etsy shop** | Listings JSON exists, banking setup pending | Complete banking → `etsy-product-pins.yml` becomes meaningful | Archive `etsy-product-pins.yml`, delete `etsy_listings.json` |
-| **Phase 13 stash** | `git stash pop` restores it | Review what's in stash, merge or drop | `git stash drop` after inspection |
+### D2. Move 15 old audit docs out of the repo root
+- **What happens:** Files like `AUDIT_REPORT.md`, `MORNING_REPORT.md`, `OVERNIGHT-SESSION-REPORT.md`, etc. move from the root folder into `docs/reports/`. Active files (CLAUDE.md, README.md, PHONE-ACTION-CHECKLIST.md) stay at the root.
+- **Why it matters:** When you open the repo, you see ~15 current/useful files instead of ~30 mixed ones. The old reports are still there for reference, just in a subfolder.
+- **Who does it:** Me.
+- **Risk:** Low. I check for any code that references the moved files first and update paths.
 
-**My default recommendation:** deprecate TikTok + YouTube + Anti-Gravity (consistent with the "3 active brands" principle in CLAUDE.md). Finish Etsy only if the revenue forecast justifies the banking-setup friction. Pop the Phase 13 stash and decide per-file.
+### D3. Delete duplicate site directories (AFTER checking nothing breaks)
+- **What happens:** You have `outputs/dailydealdarling-website/` (live) AND `dailydealdarling_website/` (legacy). Same for menopause. Plus `outputs_backup/`. I delete the unused copies.
+- **Why it matters:** Right now it's not obvious which folder deploys to which site. After cleanup, each brand has exactly one folder.
+- **Who does it:** Me, after grepping the codebase to confirm nothing reads from the legacy folders.
+- **Risk:** **Medium.** This is where I'll pause and show you the list before deleting.
+
+### D4. Delete ~12 obsolete archived workflows
+- **What happens:** In `.github/workflows/archive/` there are workflows for TikTok, YouTube, Creatomate video rendering, ElevenLabs voiceover, and the old Late rescue-poster. If you're never bringing these services back, I delete the files. (Git history keeps them if you change your mind.)
+- **Why it matters:** Fewer files to sift through when searching.
+- **Who does it:** Me, after Group E below.
+- **Risk:** Low — they're already archived, so deleting them changes nothing runtime-wise.
 
 ---
 
-## Phase 8 — Post-cleanup verification (≈10 min)
+## GROUP E: Decide what to do with half-built projects
 
-- [ ] Re-run: `python3 -m py_compile` on core modules
-- [ ] Re-run: YAML validate on all workflows
-- [ ] Re-run: `scripts/check_workflow_runs.py` (from Phase 3) → paste new numbers to `monitoring/workflow-runs-<date>.md`
-- [ ] Update CLAUDE.md "Current Status" section with post-cleanup state
-- [ ] Final commit + push
+Each of these was started but isn't currently running. Pick "finish" or "kill" for each.
+
+### E1. TikTok automation
+- **Currently:** Code exists in `tiktok_automation/`, workflows archived, token missing.
+- **Finish:** Get TikTok API token, restore workflows, start posting.
+- **Kill:** Delete `tiktok_automation/`, delete the TikTok tables in your secondary Supabase project.
+- **My recommendation:** Kill. You said in CLAUDE.md you're focused on 3 brands on Pinterest.
+
+### E2. YouTube Shorts
+- **Currently:** Workflow archived, no credentials.
+- **Finish:** Set up YouTube OAuth, re-enable workflow.
+- **Kill:** Delete the archived workflow file.
+- **My recommendation:** Kill. You marked this "deferred" a year ago.
+
+### E3. Anti-Gravity home office site
+- **Currently:** 5 seed articles, SQLite database, never deployed.
+- **Finish:** Run `vercel --prod`, add as 4th brand to the system.
+- **Kill:** Delete `anti_gravity/`.
+- **My recommendation:** Your call — you've mentioned deploying it before. If you're not going to in the next 30 days, kill it and restart later if you want.
+
+### E4. Etsy shop
+- **Currently:** Product listings exist as JSON, banking setup incomplete, Etsy pin workflow live but posting to nothing useful.
+- **Finish:** Complete Etsy banking/billing setup (manual, on etsy.com).
+- **Kill:** Archive the workflow, delete listings JSON.
+- **My recommendation:** Finish only if you're ready to commit to running an Etsy store. Otherwise kill.
+
+### E5. Phase 13 stashed work
+- **Currently:** Some unfinished work is sitting in `git stash`.
+- **Options:** I run `git stash show` to see what's in it, then either pop (restore) or drop (delete).
+- **My recommendation:** Show you the contents, then you decide.
 
 ---
 
-## Decisions I need from you before I start
+## What you need to decide
 
-1. **Phase 1 PR merges** — green-light all four, or handle case-by-case?
-2. **Phase 2 branch deletion** — OK to auto-delete branches whose tips are already in main?
-3. **Phase 4 video strategy** — A (Remotion CI), B (Local Mac), or C (keep both)?
-4. **Phase 6c duplicate dir deletion** — OK to delete after grep verification, or you want to see the list first?
-5. **Phase 7 dormant projects** — deprecate TikTok/YouTube/Anti-Gravity, or finish any?
-6. **Phase 3 GitHub PAT** — will you create one, or should I write a version that reads `~/.config/gh/hosts.yml` from an existing `gh` CLI login?
+Answer these 6 questions and I start executing:
 
-## What this plan does NOT cover
+1. **AdSense PRs** — merge all 4? Or skip any?
+2. **Abandoned branches** — OK to bulk-delete merged/old branches?
+3. **Video strategy** — A (cloud/Remotion), B (local Mac), or C (keep both)?
+4. **Duplicate site folders** — delete after I show you the list, or don't touch?
+5. **TikTok / YouTube / Anti-Gravity / Etsy** — finish any, or kill all?
+6. **GitHub token for workflow status script** — you'll create one, or should I make the script reuse your existing `gh` CLI login if you have one?
 
-- Live runtime Supabase queries (would need `.env` loaded in this session)
-- Visual QA on deployed brand sites (no browser in this session)
-- The other 2 repos under your `talhahbilal1-arch` GitHub account (MCP token scope)
+## What happens after you answer
+
+Once you approve:
+1. I execute each group, committing after each logical chunk so you can see progress
+2. After everything, I re-run the audit and post "what changed" before/after numbers
+3. You work through `docs/NEEDS-USER-ACTION.md` at your own pace (ConvertKit keys, Gumroad uploads, etc.)
+
+## What this plan WON'T do
+
+- Touch live deployed sites (only the merges trigger deploys, via Vercel auto-deploy)
+- Modify any content in existing articles
+- Delete anything without showing you first (for the medium-risk items in Group D)
+- Affect the other 2 repos in your GitHub account (I don't have access)
 
 ## Review
 _(to be filled after execution)_
