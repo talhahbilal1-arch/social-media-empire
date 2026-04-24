@@ -181,24 +181,26 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg">
           <h2>Why Use PilotTools to Find AI Tools?</h2>
           <p>
-            The AI tools landscape is evolving rapidly, with new products launching every week.
-            PilotTools cuts through the noise with honest, data-driven reviews and side-by-side
-            comparisons that help you make informed decisions &mdash; and save you money.
+            PilotTools was built by <Link href="/about/"><strong>Talhah Bilal</strong></Link>, an ISSA-certified
+            professional and AI automation practitioner who got tired of affiliate-first &ldquo;review&rdquo; sites
+            that rank tools by commission rate rather than quality. Every tool on PilotTools has been
+            hands-on tested across real workflows &mdash; minimum 15 hours per tool, 5+ distinct use cases.
           </p>
           <h3>What Makes Our Reviews Different</h3>
           <ul>
-            <li><strong>Hands-on testing</strong> &mdash; Every tool is evaluated on real-world tasks</li>
-            <li><strong>Transparent scoring</strong> &mdash; Our ratings break down into specific categories</li>
-            <li><strong>Updated pricing</strong> &mdash; We track pricing changes so you always see current rates</li>
-            <li><strong>Comparison tables</strong> &mdash; Side-by-side feature and pricing comparisons</li>
-            <li><strong>No sponsored rankings</strong> &mdash; Our rankings are based purely on quality and value</li>
+            <li><strong>Hands-on testing only</strong> &mdash; Every tool is evaluated on real-world tasks, not synthetic benchmarks or marketing demos</li>
+            <li><strong>Transparent scoring</strong> &mdash; Our 0–5.0 ratings break down into five weighted dimensions: output quality, ease of use, features, pricing, and community</li>
+            <li><strong>Updated pricing</strong> &mdash; We track pricing changes monthly so you always see the real cost of ownership</li>
+            <li><strong>Side-by-side comparisons</strong> &mdash; Feature and pricing comparisons against the top 3–5 competitors per category</li>
+            <li><strong>Zero paid rankings</strong> &mdash; No tool can pay for a better position. Our affiliate disclosure is public.</li>
           </ul>
           <h3>Finding the Right AI Tool for You</h3>
           <p>
             Whether you need an AI writing assistant for blog posts, an AI code editor for development,
             an image generator for marketing visuals, or a video tool for content creation,
-            our curated directory and detailed comparisons will help you find the perfect match
-            for your workflow and budget. Try our <Link href="/quiz/">Tool Finder Quiz</Link> to get personalized recommendations.
+            our curated directory and detailed comparisons will help you find the right match.
+            Try our <Link href="/quiz/">Tool Finder Quiz</Link> for personalized recommendations, or browse
+            our <Link href="/editorial-guidelines/">editorial guidelines</Link> to understand exactly how we evaluate tools.
           </p>
         </div>
       </section>
