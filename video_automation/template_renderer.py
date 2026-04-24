@@ -796,6 +796,8 @@ def _render_pilottools_article(article_data, site_config, slug):
   {f'<section style="margin:36px 0;"><h2 style="font-family:Space Grotesk,sans-serif;font-size:1.2em;color:#0EA5E9;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
 
   {signup_html}
+
+  {_cross_promo_section('pilottools')}
 </main>
 
 <footer style="border-top:1px solid #1e293b;padding:24px 20px;text-align:center;color:#475569;font-size:0.82em;">
