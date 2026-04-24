@@ -81,12 +81,12 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
       {/* Social Proof Bar */}
       <section className="bg-dark-surface border-b border-dark-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center items-center gap-4 md:gap-12 text-sm text-dt-muted">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center items-center gap-4 md:gap-10 text-sm text-dt-muted">
             {[
-              { icon: '🔍', stat: `${totalTools}+`, label: 'AI tools reviewed' },
-              { icon: '📊', stat: '10', label: 'categories' },
-              { icon: '⚡', stat: '5K+', label: 'monthly readers' },
-              { icon: '✅', stat: '100%', label: 'independent & unbiased' },
+              { icon: '🔍', stat: `${totalTools}+`, label: 'tools reviewed' },
+              { icon: '⏱️', stat: '4,800+', label: 'hours of testing' },
+              { icon: '📊', stat: '10', label: 'categories covered' },
+              { icon: '✅', stat: '0', label: 'paid placements' },
               { icon: '🔄', stat: 'Weekly', label: 'updated' },
             ].map(item => (
               <div key={item.label} className="flex items-center space-x-2 text-center sm:text-left">
