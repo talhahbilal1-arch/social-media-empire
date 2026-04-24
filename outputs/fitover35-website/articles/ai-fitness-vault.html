@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Fitness Vault — 50+ AI Prompts for Men Over 35 | FitOver35</title>
+<meta name="description" content="Get 50+ battle-tested AI prompts designed specifically for men over 35. Build custom workout plans, meal plans, and recovery protocols in minutes — not hours.">
+<link rel="canonical" href="https://fitover35.com/articles/ai-fitness-vault.html">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1FC6FH34L9"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-1FC6FH34L9')</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #E8C547;
+    --gold-dim: #b8952f;
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --text: #f5f5f5;
+    --muted: #888;
+    --warm-dark: #1a1a0a;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.7; }
+
+  /* ── NAV ── */
+  nav { background: #0a0a0a; border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 760px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo { text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-size: 1.15em; color: #fff; font-weight: 600; }
+  .nav-logo span { color: var(--gold); }
+  .nav-link { text-decoration: none; color: var(--muted); font-size: 0.9em; }
+
+  /* ── HERO ── */
+  .hero { padding: 80px 20px 64px; text-align: center; background: radial-gradient(ellipse 80% 60% at 50% 0%, #1a1505 0%, var(--bg) 70%); }
+  .hero-badge { display: inline-block; background: var(--warm-dark); border: 1px solid var(--gold); color: var(--gold); font-family: 'Space Grotesk', sans-serif; font-size: 0.75em; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 24px; }
+  .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2em, 5vw, 3em); line-height: 1.15; color: #fff; max-width: 700px; margin: 0 auto 20px; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero-sub { font-size: 1.1em; color: #bbb; max-width: 560px; margin: 0 auto 36px; line-height: 1.6; }
+  .price-display { font-family: 'Space Grotesk', sans-serif; font-size: 1em; color: var(--muted); margin-bottom: 24px; }
+  .price-display strong { font-size: 2.2em; color: var(--gold); margin-right: 8px; }
+  .price-display s { color: #555; font-size: 1.1em; }
+
+  /* ── CTA BUTTON ── */
+  .btn-primary { display: inline-block; background: var(--gold); color: #0d0d0d; font-family: 'Space Grotesk', sans-serif; font-size: 1.05em; font-weight: 700; padding: 16px 40px; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .btn-primary:hover { background: #f5d458; transform: translateY(-1px); }
+  .cta-sub { font-size: 0.8em; color: var(--muted); margin-top: 10px; }
+
+  /* ── WRAPPER ── */
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── PROBLEM SECTION ── */
+  .section { padding: 64px 20px; }
+  .section-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.75em; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .section h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.5em, 3vw, 2em); color: #fff; line-height: 1.25; margin-bottom: 20px; }
+  .section p { color: #bbb; font-size: 1.02em; line-height: 1.7; margin-bottom: 16px; }
+
+  /* ── PROBLEM LIST ── */
+  .pain-list { list-style: none; margin: 28px 0; display: flex; flex-direction: column; gap: 14px; }
+  .pain-list li { display: flex; align-items: flex-start; gap: 12px; color: #bbb; font-size: 1em; line-height: 1.5; }
+  .pain-list li::before { content: '✗'; color: #ff5555; font-weight: 700; font-size: 1.1em; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── WHAT'S INSIDE ── */
+  .inside-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 36px; }
+  .inside-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+  .inside-card .card-num { font-family: 'Space Grotesk', sans-serif; font-size: 2em; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 8px; }
+  .inside-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1em; font-weight: 600; color: #fff; margin-bottom: 8px; }
+  .inside-card p { font-size: 0.9em; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  /* ── PROMPTS PREVIEW ── */
+  .prompt-preview { background: var(--warm-dark); border: 1px solid #2a2800; border-radius: 12px; padding: 20px; margin: 16px 0; }
+  .prompt-preview .prompt-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.72em; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .prompt-preview p { font-family: 'Space Grotesk', sans-serif; color: #ddd; font-size: 0.95em; line-height: 1.5; margin: 0; font-style: italic; }
+
+  /* ── HOW IT WORKS ── */
+  .steps { display: flex; flex-direction: column; gap: 20px; margin-top: 32px; }
+  .step { display: flex; gap: 20px; align-items: flex-start; }
+  .step-num { width: 44px; height: 44px; background: var(--gold); color: #0d0d0d; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1em; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-body h3 { font-family: 'Space Grotesk', sans-serif; color: #fff; font-size: 1.05em; margin-bottom: 4px; }
+  .step-body p { color: var(--muted); font-size: 0.92em; margin: 0; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 32px; }
+  .testimonial { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+  .stars { color: var(--gold); font-size: 0.95em; margin-bottom: 10px; }
+  .testimonial blockquote { color: #ccc; font-size: 0.92em; line-height: 1.6; font-style: italic; margin: 0 0 12px; }
+  .testimonial cite { font-family: 'Space Grotesk', sans-serif; font-size: 0.82em; font-weight: 600; color: var(--gold); font-style: normal; }
+
+  /* ── GUARANTEE ── */
+  .guarantee { background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 36px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .guarantee-badge { width: 72px; height: 72px; background: var(--warm-dark); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; }
+  .guarantee h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3em; color: #fff; }
+  .guarantee p { color: var(--muted); max-width: 480px; font-size: 0.95em; }
+
+  /* ── FINAL CTA ── */
+  .final-cta { background: radial-gradient(ellipse 80% 60% at 50% 100%, #1a1505 0%, var(--bg) 70%); padding: 80px 20px; text-align: center; }
+  .final-cta h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.6em, 3.5vw, 2.2em); color: #fff; margin-bottom: 16px; }
+  .final-cta p { color: #bbb; max-width: 480px; margin: 0 auto 32px; }
+
+  /* ── FAQ ── */
+  .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .faq-item h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.02em; color: #fff; margin-bottom: 8px; }
+  .faq-item p { color: var(--muted); font-size: 0.92em; line-height: 1.6; margin: 0; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 20px; text-align: center; color: var(--muted); font-size: 0.82em; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">Fit<span>Over35</span></a>
+    <a href="../blog.html" class="nav-link">All Articles</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Digital Download — Instant Access</div>
+  <h1>The <em>AI Fitness Vault</em><br>for Men Over 35</h1>
+  <p class="hero-sub">50+ battle-tested AI prompts that build your perfect workout plan, meal plan, and recovery protocol — in under 10 minutes.</p>
+  <div class="price-display">
+    <strong>$27</strong><s>$47</s> — one-time payment, yours forever
+  </div>
+  <a href="https://talhahbilal.gumroad.com/l/lupkl" target="_blank" rel="noopener" class="btn-primary">Get Instant Access →</a>
+  <p class="cta-sub">Delivered instantly via Gumroad &bull; PDF + copy-paste prompts &bull; Works with ChatGPT, Claude &amp; Gemini</p>
+</section>
+
+<!-- PROBLEM -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">The Problem</p>
+    <h2>Generic fitness advice is built for 22-year-olds.<br>Your body operates differently now.</h2>
+    <p>After 35, recovery slows, testosterone drops, and injuries happen easier. Yet every "AI fitness plan" you try spits out the same bro-split designed for guys half your age.</p>
+    <ul class="pain-list">
+      <li>You've tried AI prompts but got generic plans that ignored your age, injuries, and schedule</li>
+      <li>You spent hours asking follow-up questions just to get something semi-usable</li>
+      <li>The plans didn't account for recovery time, joint health, or hormone changes after 35</li>
+      <li>You ended up giving up and going back to YouTube routines that don't fit your goals</li>
+    </ul>
+    <p>The fix isn't a better AI — it's knowing <strong style="color: #fff;">exactly how to ask it</strong> for what a man over 35 actually needs.</p>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">What's Inside</p>
+    <h2>50+ prompts across every part of your fitness life</h2>
+    <p>Each prompt is engineered with the right context — your age range, hormonal reality, recovery needs, and time constraints — so AI gives you plans that actually work.</p>
+    <div class="inside-grid">
+      <div class="inside-card">
+        <div class="card-num">15</div>
+        <h3>Workout Program Prompts</h3>
+        <p>3-day, 4-day, and 5-day splits. Home gym, commercial gym, minimal equipment. Tailored for men 35–60.</p>
+      </div>
+      <div class="inside-card">
+        <div class="card-num">12</div>
+        <h3>Nutrition &amp; Meal Plan Prompts</h3>
+        <p>High-protein meal plans by calorie target, dietary preference, and time budget. Includes macro calculation prompts.</p>
+      </div>
+      <div class="inside-card">
+        <div class="card-num">8</div>
+        <h3>Recovery &amp; Injury Prompts</h3>
+        <p>Shoulder, knee, and lower-back injury modifications. Deload week builders. Sleep and stress recovery protocols.</p>
+      </div>
+      <div class="inside-card">
+        <div class="card-num">7</div>
+        <h3>Hormone &amp; Supplement Prompts</h3>
+        <p>Testosterone-supporting lifestyle stacks. Supplement timing and dosing. What to ask your doctor (evidence-based).</p>
+      </div>
+      <div class="inside-card">
+        <div class="card-num">5</div>
+        <h3>Progress Tracking Prompts</h3>
+        <p>Weekly check-in systems. Plateau-breaking protocols. How to adjust your plan based on results.</p>
+      </div>
+      <div class="inside-card">
+        <div class="card-num">5+</div>
+        <h3>Bonus: Travel &amp; Busy Week Prompts</h3>
+        <p>Hotel gym workouts, time-crunched 20-minute sessions, and vacation maintenance plans.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMPT PREVIEWS -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">Sample Prompts</p>
+    <h2>See exactly what you're getting</h2>
+    <p>These are real prompts from the vault. Copy, paste, and customize with your own details.</p>
+
+    <div class="prompt-preview">
+      <div class="prompt-label">Workout Builder Prompt #3</div>
+      <p>"I'm a 42-year-old man with a desk job, mild lower back stiffness, and 4 hours/week available to train. I have access to a full commercial gym. Build me a 4-day upper/lower split that prioritizes muscle building while avoiding spinal loading on heavy deadlift days. Include warm-up protocols for each session."</p>
+    </div>
+
+    <div class="prompt-preview">
+      <div class="prompt-label">Nutrition Prompt #7</div>
+      <p>"I'm 38, 195 lbs, trying to lose fat without losing muscle. I work long hours and can't prep elaborate meals. Create a 2,400-calorie daily meal plan using foods that take under 20 minutes to prepare. High protein (at least 180g), no meal prep on weekdays. Include a weekend batch-cook option."</p>
+    </div>
+
+    <div class="prompt-preview">
+      <div class="prompt-label">Recovery Prompt #2</div>
+      <p>"I train 4 days per week but my joints always feel beat up by Thursday. I'm 47 with a history of left shoulder impingement. Design a 15-minute joint health protocol I can do on rest days, plus modifications for my pressing movements that reduce shoulder strain."</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">How It Works</p>
+    <h2>Your custom plan in under 10 minutes</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Download the PDF</h3>
+          <p>Instant access via Gumroad. Open on any device. All 50+ prompts organized by category with usage notes.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Copy a prompt and fill in your details</h3>
+          <p>Each prompt has clear brackets where you insert your age, weight, goals, equipment, and time constraints.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Paste into ChatGPT, Claude, or Gemini</h3>
+          <p>Works with any major AI. No special subscriptions needed — free tiers work fine for most prompts.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Get your personalized plan instantly</h3>
+          <p>The AI delivers a complete, age-appropriate plan. Save it, print it, or copy it into your notes app.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">Early Access Feedback</p>
+    <h2>What guys are saying</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I tried writing my own AI prompts for months and always got generic garbage. These actually knew what a 45-year-old needs. Had a real program running in 8 minutes."</blockquote>
+        <cite>— Marcus T., 45, Dallas TX</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The injury modification prompts alone are worth 10x the price. My shoulder has been an issue for 2 years. The AI gave me a full pressing protocol around it."</blockquote>
+        <cite>— Derek H., 51, Portland OR</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Used the meal plan prompt on a Sunday morning. Had a full week of meals planned in 15 minutes. My wife thought I hired a nutritionist."</blockquote>
+        <cite>— James R., 39, Chicago IL</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="section">
+  <div class="wrap">
+    <div class="guarantee">
+      <div class="guarantee-badge">🛡</div>
+      <h3>30-Day Money-Back Guarantee</h3>
+      <p>If you buy the AI Fitness Vault, use the prompts with any AI, and don't get a useful fitness plan out of it — email me and I'll refund you immediately. No questions asked. I'm a certified personal trainer. I know these work. But if they don't work for you, you shouldn't pay for them.</p>
+      <p style="color: var(--gold); font-family: 'Space Grotesk', sans-serif; font-size: 0.85em; font-weight: 600;">— Talhah Bilal, ISSA-CPT</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">FAQ</p>
+    <h2>Common questions</h2>
+    <div style="margin-top: 28px;">
+      <div class="faq-item">
+        <h3>Do I need a paid AI subscription?</h3>
+        <p>No. The prompts work with free versions of ChatGPT, Claude, and Gemini. A paid subscription gets faster results but isn't required.</p>
+      </div>
+      <div class="faq-item">
+        <h3>I'm not tech-savvy. Is this hard to use?</h3>
+        <p>If you can copy and paste text, you can use this. Each prompt comes with a clear instruction on what to fill in and where to paste it.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What format is the download?</h3>
+        <p>A professionally formatted PDF with all 50+ prompts organized by category. Easy to search, print, or reference on your phone.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Will this work if I'm over 55?</h3>
+        <p>Yes. Several prompts are specifically built for the 50–65 age range, addressing lower testosterone, joint wear, and modified training volume.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use these prompts more than once?</h3>
+        <p>Absolutely. The prompts are templates — you can re-run them monthly as your goals change, your weight shifts, or your schedule evolves.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Stop wasting time on plans built for<br>someone half your age.</h2>
+  <p>$27 gets you 50+ expert-engineered prompts that understand how a man over 35 actually trains, eats, and recovers.</p>
+  <a href="https://talhahbilal.gumroad.com/l/lupkl" target="_blank" rel="noopener" class="btn-primary">Get the AI Fitness Vault — $27 →</a>
+  <p class="cta-sub" style="margin-top: 12px;">30-day money-back guarantee &bull; Instant PDF download &bull; Works with any AI</p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 FitOver35 · <a href="../index.html">Home</a> · <a href="../blog.html">Articles</a></p>
+    <p style="margin-top: 8px;">Talhah Bilal is an ISSA Certified Personal Trainer. Individual results vary.</p>
+  </div>
+</footer>
+
+</body>
+</html>
