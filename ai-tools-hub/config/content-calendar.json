@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-23",
+  "last_updated": "2026-04-24",
   "items": [
     {
       "id": 1,
@@ -1840,19 +1840,21 @@
       "id": 221,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-salespeople",
       "keyword": "best ai tools for salespeople",
-      "title": "Best AI Tools for Salespeople 2026"
+      "title": "Best AI Tools for Salespeople 2026",
+      "published_date": "2026-04-24"
     },
     {
       "id": 222,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-customer-service-teams",
       "keyword": "best ai tools for customer service teams",
-      "title": "Best AI Tools for Customer Service Teams 2026"
+      "title": "Best AI Tools for Customer Service Teams 2026",
+      "published_date": "2026-04-24"
     },
     {
       "id": 223,
