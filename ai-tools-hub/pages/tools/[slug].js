@@ -7,7 +7,7 @@ import FAQAccordion from '../../components/FAQAccordion'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import AdSlot from '../../components/AdSlot'
 import Link from 'next/link'
-import { getAllTools, getToolBySlug, getToolsByCategory, formatPrice, getAllComparisons, getAffiliateUrl, getAlternativesForTool } from '../../lib/tools'
+import { getAllTools, getToolBySlug, getToolsByCategory, formatPrice, getAllComparisons, getAffiliateUrl, getAlternativesForTool, getOfferBadge } from '../../lib/tools'
 
 const SITE_URL = 'https://pilottools.ai'
 
@@ -25,6 +25,7 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
   const affiliateUrl = tool.affiliateUrlWithUtm
   const canonicalUrl = `${SITE_URL}/tools/${tool.slug}/`
   const primaryCTA = tool.pricing.free_tier ? `Start ${tool.name} Free Today` : `See ${tool.name} Pricing & Plans`
+  const offerBadge = tool.offerBadge
 
   const structuredData = [
     {
@@ -116,6 +117,14 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
               <AffiliateLink href={affiliateUrl} tool={tool.slug} className="btn-primary" placement="hero_cta">
                 {primaryCTA} &rarr;
               </AffiliateLink>
+              {offerBadge && (
+                <span className={`text-xs font-medium flex items-center gap-1 ${tool.pricing.free_tier ? 'text-green-400' : 'text-accent'}`}>
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {offerBadge}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -207,6 +216,14 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
               >
                 {primaryCTA} &rarr;
               </AffiliateLink>
+              {offerBadge && (
+                <p className={`mt-3 text-xs font-medium flex items-center justify-center gap-1 ${tool.pricing.free_tier ? 'text-green-400' : 'text-accent'}`}>
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {offerBadge}
+                </p>
+              )}
             </section>
 
             {/* Pricing */}
@@ -301,6 +318,14 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
               <AffiliateLink href={affiliateUrl} tool={tool.slug} className="btn-primary w-full justify-center mt-6" placement="sidebar_cta">
                 {primaryCTA} &rarr;
               </AffiliateLink>
+              {offerBadge && (
+                <p className={`mt-2 text-xs font-medium flex items-center justify-center gap-1 ${tool.pricing.free_tier ? 'text-green-400' : 'text-accent'}`}>
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {offerBadge}
+                </p>
+              )}
               <a href={tool.website} target="_blank" rel="noopener noreferrer" className="btn-secondary w-full justify-center mt-2 text-sm">
                 Visit Website
               </a>
@@ -390,6 +415,7 @@ export async function getStaticProps({ params }) {
   const tool = getToolBySlug(params.slug)
   const relatedComparisons = getAllComparisons().filter(c => c.tools.includes(params.slug))
   const affiliateUrlWithUtm = getAffiliateUrl(params.slug, 'review')
+  const offerBadge = getOfferBadge(params.slug, tool.pricing.free_tier)
   const alternatives = getAlternativesForTool(params.slug)
   const relatedTools = getToolsByCategory(tool.category)
     .filter(t => t.slug !== params.slug)
@@ -398,7 +424,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
-      tool: { ...tool, affiliateUrlWithUtm },
+      tool: { ...tool, affiliateUrlWithUtm, offerBadge },
       relatedComparisons,
       relatedTools,
       alternatives,
