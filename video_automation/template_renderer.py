@@ -451,6 +451,8 @@ def _render_fitness_article(article_data, site_config, slug):
   {f'<section style="margin:36px 0;"><h2 style="font-family:Space Grotesk,sans-serif;font-size:1.2em;color:#E8C547;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
 
   {signup_html}
+
+  {_cross_promo_section('fitness')}
 </main>
 
 <footer style="border-top:1px solid #222;padding:24px 20px;text-align:center;color:#666;font-size:0.82em;">
