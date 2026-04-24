@@ -1,0 +1,102 @@
+{
+  "fitness": {
+    "brand_value": "fitness",
+    "ready_status_string": "content_ready",
+    "board_id_preferred": "418834902785124651",
+    "board_id_alternatives": [
+      "418834902785124651",
+      "418834902785125486",
+      "418834902785123337",
+      "418834902785122642"
+    ],
+    "destination_url_default": "https://fitover35.com",
+    "sample_destination_urls": [
+      "https://fitover35.com/articles/calorie-deficit-without-losing-muscle-how-to-cut-properly.html",
+      "https://fitover35.com/articles/hormone-optimization-for-easier-fat-loss-naturally.html",
+      "https://fitover35.com/articles/neat-and-why-daily-movement-matters-more-than-gym-sessions.html"
+    ],
+    "niches_seen": [
+      "nutrition",
+      "fat_loss",
+      "workouts",
+      "lifestyle"
+    ],
+    "visual_styles_seen": [
+      "numbered_list_teaser",
+      "before_after_split",
+      "step_by_step",
+      "bold_text_overlay",
+      "infographic_stat"
+    ],
+    "posted_row_sample_count": 10,
+    "notes": "account column always null; brand is routing key. pin_title/pin_description/hashtags exist but never populated on posted rows \u2014 use title/description instead."
+  },
+  "deals": {
+    "brand_value": "deals",
+    "ready_status_string": "content_ready",
+    "board_id_preferred": "874683627569113370",
+    "board_id_alternatives": [
+      "874683627569113370",
+      "874683627569113339",
+      "874683627569021288",
+      "874683627569113342",
+      "874683627569114674"
+    ],
+    "destination_url_default": "https://dailydealdarling.com",
+    "sample_destination_urls": [
+      "https://www.dailydealdarling.com/articles/kitchen-organization-containers-under-30-total.html",
+      "https://www.dailydealdarling.com/articles/laundry-room-setup-affordable-upgrades.html",
+      "https://www.dailydealdarling.com/articles/wall-art-and-frames-that-elevate-any-room.html"
+    ],
+    "niches_seen": [
+      "kitchen",
+      "organization",
+      "home_decor",
+      "self_care",
+      "seasonal"
+    ],
+    "visual_styles_seen": [
+      "numbered_list_teaser",
+      "before_after_split",
+      "split_color_block",
+      "infographic_stat",
+      "editorial_magazine"
+    ],
+    "posted_row_sample_count": 10,
+    "notes": "account column always null; brand is routing key. pin_title/pin_description/hashtags exist but never populated on posted rows \u2014 use title/description instead."
+  },
+  "menopause": {
+    "brand_value": "menopause",
+    "ready_status_string": "content_ready",
+    "board_id_preferred": "1076993767079898628",
+    "board_id_alternatives": [
+      "1076993767079898628",
+      "1076993767079898616",
+      "1076993767079887530",
+      "1076993767079898619",
+      "1076993767079898631"
+    ],
+    "destination_url_default": "https://menopause-planner-website.vercel.app",
+    "sample_destination_urls": [
+      "https://menopause-planner-website.vercel.app/articles/when-to-consider-hrt-conversation-guide-for-doctors.html",
+      "https://menopause-planner-website.vercel.app/articles/sugar-and-caffeine-impact-on-menopause-symptoms.html",
+      "https://menopause-planner-website.vercel.app/articles/celebrating-menopause-reframing-the-narrative.html"
+    ],
+    "niches_seen": [
+      "planning",
+      "nutrition",
+      "mental_health",
+      "symptoms",
+      "wellness"
+    ],
+    "visual_styles_seen": [
+      "editorial_magazine",
+      "bold_text_overlay",
+      "checklist",
+      "numbered_list_teaser",
+      "infographic_stat"
+    ],
+    "posted_row_sample_count": 10,
+    "notes": "account column always null; brand is routing key. pin_title/pin_description/hashtags exist but never populated on posted rows \u2014 use title/description instead."
+  }
+}

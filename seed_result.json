@@ -1,0 +1,21 @@
+{
+  "attempt": "full",
+  "inserted_count": 9,
+  "ids": [
+    "b42bc5be-68b3-4130-bef0-03cd87abeac1",
+    "9af609d4-a400-4107-a71c-7a06844d7a5b",
+    "14c73a07-8f86-41d8-a5ad-064025bc9b86",
+    "31098f90-b540-4e65-96bd-3bfa8d9c86d7",
+    "b493fcb8-cce8-4c23-8220-837ab0c69ab1",
+    "04398ef3-5db3-4d7d-9432-c127863d1365",
+    "3f2f8278-5718-40f8-9d25-f85680da95b3",
+    "55e94d55-48af-4b0c-a4a9-281f332382b2",
+    "cf28812c-ca74-48ef-8f4c-d71bfc3bc81d"
+  ],
+  "per_brand": {
+    "fitness": 3,
+    "deals": 3,
+    "menopause": 3
+  },
+  "created_at_iso": "2026-04-24T05:36:45Z"
+}
