@@ -1054,6 +1054,8 @@ def _render_beauty_article(article_data, site_config, slug):
   {verdict_html}
 
   {f'<h2 style="font-family:Lora,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
+
+  {_cross_promo_section('beauty')}
 </main>
 
 <footer style="border-top:1px solid #f0e0e0;padding:24px 20px;text-align:center;color:#b08080;font-size:0.82em;">
