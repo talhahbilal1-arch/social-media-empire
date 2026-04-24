@@ -647,6 +647,8 @@ def _render_menopause_article(article_data, site_config, slug):
   {amazon_html}
 
   {f'<section style="margin:36px 0;"><h2 style="font-family:DM Serif Display,serif;font-size:1.2em;color:#6B705C;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
+
+  {_cross_promo_section('menopause')}
 </main>
 
 <footer style="border-top:1px solid #e8dcc8;padding:24px 20px;text-align:center;color:#A5A58D;font-size:0.82em;">
