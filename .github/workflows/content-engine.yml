@@ -1163,10 +1163,18 @@ jobs:
                   except Exception:
                       all_capped = False
               if not all_capped:
-                  print('\n❌ CRITICAL: Zero pins generated but daily cap NOT reached!')
-                  print('   This usually means the Gemini API or database insert is failing.')
-                  print('   Check the logs above for ERROR lines.')
-                  sys.exit(1)
+                  # Local video strategy stages video_pending pins — that counts as success
+                  try:
+                      _local_video_ok = VIDEO_STRATEGY == 'local' and video_pending_staged > 0
+                  except NameError:
+                      _local_video_ok = False
+                  if _local_video_ok:
+                      print(f'  ✅ {video_pending_staged} video pins staged for local render — run successful')
+                  else:
+                      print('\n❌ CRITICAL: Zero pins generated but daily cap NOT reached!')
+                      print('   This usually means the Gemini API or database insert is failing.')
+                      print('   Check the logs above for ERROR lines.')
+                      sys.exit(1)
               else:
                   print('  All brands at daily cap — legitimate idle run ✓')
           PYEOF
