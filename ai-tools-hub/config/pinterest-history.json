@@ -1375,5 +1375,23 @@
     "board": "AI Marketing Tools",
     "posted_at": "2026-04-23T22:33:34.174Z",
     "success": true
+  },
+  {
+    "slug": "synthesia",
+    "pin_type": "tool-review",
+    "title": "Synthesia AI Review: Create Stunning Videos Easily!",
+    "link": "https://pilottools.ai/tools/synthesia/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-24T17:07:02.505Z",
+    "success": true
+  },
+  {
+    "slug": "category-image",
+    "pin_type": "category",
+    "title": "AI Image Tools 2026: Create Stunning Visuals Effortlessly!",
+    "link": "https://pilottools.ai/category/image/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-04-24T17:07:52.814Z",
+    "success": true
   }
 ]
