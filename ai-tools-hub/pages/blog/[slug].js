@@ -7,7 +7,7 @@ import { getAllArticles, getArticleBySlug, getReadingTime } from '../../lib/arti
 
 const SITE_URL = 'https://pilottools.ai'
 
-export default function ArticlePage({ article }) {
+export default function ArticlePage({ article, relatedArticles }) {
   if (!article) return null
 
   const canonicalUrl = `${SITE_URL}/blog/${article.slug}/`
@@ -83,6 +83,26 @@ export default function ArticlePage({ article }) {
 
         <div className="mt-12 mb-8"><NewsletterSignup variant="banner" /></div>
 
+        {relatedArticles && relatedArticles.length > 0 && (
+          <aside className="mt-12 pt-8 border-t border-dark-border" aria-label="Editor's Picks">
+            <h2 className="text-xl font-bold text-dt mb-4">Editor's Picks</h2>
+            <p className="text-sm text-dt-muted mb-6">Hand-selected reading that pairs with this article.</p>
+            <div className="grid md:grid-cols-3 gap-4">
+              {relatedArticles.map(rel => (
+                <Link
+                  key={rel.slug}
+                  href={`/blog/${rel.slug}/`}
+                  className="card hover:border-accent/30 flex flex-col"
+                >
+                  <span className="badge-blue self-start mb-2 text-xs">{rel.category}</span>
+                  <h3 className="font-semibold text-dt text-sm leading-snug mb-2">{rel.title}</h3>
+                  <p className="text-xs text-dt-muted line-clamp-2 mt-auto">{rel.excerpt}</p>
+                </Link>
+              ))}
+            </div>
+          </aside>
+        )}
+
         <footer className="mt-8 pt-8 border-t border-dark-border">
           <Link href="/blog/" className="text-accent hover:text-cyan-300 font-medium transition-colors">&larr; Back to all articles</Link>
         </footer>
@@ -98,5 +118,24 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const article = getArticleBySlug(params.slug)
   if (!article) return { notFound: true }
-  return { props: { article } }
+
+  // Related articles: prefer same-tag overlap, fall back to same category, then latest.
+  const all = getAllArticles().filter(a => a.slug !== article.slug)
+  const tagSet = new Set(article.tags || [])
+  const scored = all.map(a => {
+    const sharedTags = (a.tags || []).filter(t => tagSet.has(t)).length
+    const sameCategory = a.category === article.category ? 1 : 0
+    return { article: a, score: sharedTags * 10 + sameCategory }
+  })
+  const relatedArticles = scored
+    .sort((x, y) => y.score - x.score || new Date(y.article.published_date) - new Date(x.article.published_date))
+    .slice(0, 3)
+    .map(({ article: a }) => ({
+      slug: a.slug,
+      title: a.title || '',
+      excerpt: a.excerpt || a.meta_description || '',
+      category: a.category || 'Guide',
+    }))
+
+  return { props: { article, relatedArticles } }
 }
