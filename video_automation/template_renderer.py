@@ -925,6 +925,8 @@ def _render_homedecor_article(article_data, site_config, slug):
   {verdict_html}
 
   {f'<h2 style="font-family:DM Serif Display,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
+
+  {_cross_promo_section('homedecor')}
 </main>
 
 <footer style="border-top:1px solid #e8dcc8;padding:24px 20px;text-align:center;color:#A5A58D;font-size:0.82em;">
