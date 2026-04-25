@@ -1,74 +1,6 @@
 {
   "items": [
     {
-      "source_slug": "claude",
-      "source_type": "tool",
-      "generated_at": "2026-03-21",
-      "twitter": {
-        "tweet": "Need an AI assistant for accuracy, nuance, & safety? Meet Claude! Over 8.2M users can't be wrong. Long-form analysis, code review, research & more. Check it out: https://pilottools.ai #AI #Claude #Anthropic #AIAssistant",
-        "thread": [
-          "Tired of AI that hallucinates? Claude by Anthropic focuses on accuracy and safety. Perfect for tasks demanding a careful touch. See how it can help: https://pilottools.ai #AI #Accuracy",
-          "Claude excels at long-form analysis, code review, and complex research. Get in-depth insights with an AI assistant you can trust. Explore Claude: https://pilottools.ai #CodeReview #Research #AItools",
-          "Join the 8.2 million+ users already benefiting from Claude's power! Level up your workflow with this reliable AI assistant. Learn more and get started: https://pilottools.ai #Anthropic #Innovation #Productivity"
-        ]
-      },
-      "linkedin": "---\n\nLooking for a more thoughtful AI assistant? Claude's making waves for its accuracy & nuance. At $20/mo, it could be a game-changer. 🤔\n\nWhat sets it apart? Think deeper analysis & a more human-like understanding. If you're wrestling with complex tasks or need nuanced insights, Claude might be your answer.\n\nWorth exploring how it fits into your workflow. Curious about other AI tools for business?\n\n➡️ Check out https://pilottools.ai for more! #AItools #Business #AIassistant #Productivity #Innovation #ClaudeAI\n---",
-      "pinterest": {
-        "pins": [
-          {
-            "title": "Claude: AI Writing Assistant",
-            "description": "Unlock your writing potential with Claude! This AI tool helps you brainstorm ideas, craft compelling content, and conquer writer's block. Learn more at pilottools.ai.",
-            "board": "Writing Tools & Resources"
-          },
-          {
-            "title": "Boost Your Writing with Claude!",
-            "description": "Struggling with your next blog post or article? Claude offers powerful AI writing assistance. Try it out and see the difference! Explore at pilottools.ai.",
-            "board": "Content Marketing Tips"
-          },
-          {
-            "title": "AI Writing: Claude for Creators",
-            "description": "Claude is your new secret weapon for crafting amazing stories and articles! Get AI-powered help with everything from outlining to editing. See how at pilottools.ai.",
-            "board": "Creative Writing Prompts & Inspiration"
-          }
-        ]
-      },
-      "newsletter": "Struggling to cut through the AI noise? Claude delivers thoughtful, accurate, and nuanced responses that can actually help you get things done. Discover how this AI assistant can transform your workflow and boost your productivity – read the full article on PilotTools: [https://pilottools.ai/tools/claude](https://pilottools.ai/tools/claude)"
-    },
-    {
-      "source_slug": "best-ai-voice-audio-tools-2026-elevenlabs-vs-murf-vs-descript",
-      "source_type": "article",
-      "generated_at": "2026-03-22",
-      "twitter": {
-        "tweet": "AI voice wars are HEATING UP! 🤖🔥 We tested ElevenLabs, Murf, Descript & more to find the BEST AI voice & audio tools of 2026. Which one will reign supreme? Find out: [link to https://pilottools.ai] #AIVoice #TTS #AudioEditing #ElevenLabs #MurfAI #Descript",
-        "thread": [
-          "AI voice tech in 2026 is WILD! 🤯 We dove deep into 8 platforms to find the absolute BEST for voice cloning, TTS (text-to-speech), podcast production, & more. Prepare for some serious sonic showdowns! [link to https://pilottools.ai] #AIAudio #VoiceCloning #PodcastProduction",
-          "ElevenLabs vs. Murf vs. Descript - who comes out on top? 🤔 We break down each platform's strengths & weaknesses based on real-world testing. From realistic voice generation to seamless audio editing, we've got you covered. [link to https://pilottools.ai] #AIVoiceComparison #TechReview",
-          "Ready to upgrade your audio game? Whether you're a podcaster, content creator, or just curious about the future of AI voice, this guide is a MUST-READ! 🎧 Check out our top picks for the best AI voice & audio tools of 2026! [link to https://pilottools.ai] #AudioTech #ContentCreation #AIRevolution"
-        ]
-      },
-      "linkedin": "AI voice tech is booming! 🚀 Just read a fascinating comparison of AI audio tools for 2026, pitting ElevenLabs, Murf AI, and Descript against each other. They tested 8 platforms on voice cloning, TTS, & podcast production to crown winners for specific use cases. Key takeaway? No single tool is a silver bullet! Understanding your needs is crucial. Find the full breakdown and see which tool might be your best fit. 👇 #AItools #VoiceAI #TTS #Podcast #AudioProduction #Business #Innovation #PilotTools\n\n➡️ https://pilottools.ai",
-      "pinterest": {
-        "pins": [
-          {
-            "title": "AI Audio Tools Compared (2026)",
-            "description": "ElevenLabs vs Murf vs Descript: Which AI voice tool reigns supreme in 2026? Find the perfect fit for your audio projects. Learn more at pilottools.ai!",
-            "board": "Audio Production & Editing"
-          },
-          {
-            "title": "Top AI Voice Tools 2026: Review!",
-            "description": "Level up your audio with AI! See our comparison of the best AI voice generators: ElevenLabs, Murf, and Descript. Get the full review on pilottools.ai!",
-            "board": "AI in Audio"
-          },
-          {
-            "title": "AI Audio Showdown: 2026 Edition",
-            "description": "Unsure which AI voice tool to use? We compare ElevenLabs, Murf & Descript to help you choose. Discover your perfect solution at pilottools.ai!",
-            "board": "Voice Over & Narration"
-          }
-        ]
-      },
-      "newsletter": "AI voices sound *real* in 2026, but which platform reigns supreme? We put ElevenLabs, Murf, Descript, and more to the test for voice cloning, TTS, and podcasting, so you can pick the perfect AI for *your* needs! Read the full article on PilotTools: https://pilottools.ai/articles/best-ai-voice-audio-tools-2026-elevenlabs-vs-murf-vs-descript"
-    },
-    {
       "source_slug": "notion-ai",
       "source_type": "tool",
       "generated_at": "2026-03-22",
@@ -1699,6 +1631,74 @@
         ]
       },
       "newsletter": "Feeling overwhelmed by your studies? Get ready to ace 2026 with our curated list of the best AI tools designed to boost your productivity and grades! Discover the cutting-edge tech every student needs to know – read the full article on PilotTools now: https://pilottools.ai/articles/best-ai-tools-students"
+    },
+    {
+      "source_slug": "simplified",
+      "source_type": "tool",
+      "generated_at": "2026-04-25",
+      "twitter": {
+        "tweet": "Struggling to create engaging content? 😩 @SimplifiedApp is your all-in-one solution! Design, write, edit video, & schedule social posts all in one place. Pro plan just $9/month! 🤯 Check it out: https://pilottools.ai #contentcreation #socialmediamarketing #ai",
+        "thread": [
+          "Tired of juggling multiple tools for your content? 🤹‍♀️ @SimplifiedApp combines design, writing, AND video editing into one seamless platform. Say goodbye to app-switching headaches! 🙌 https://pilottools.ai #simplified #contentmarketing #productivity",
+          "For just $9/month, the @SimplifiedApp Pro plan unlocks powerful AI writing assistance, stunning design templates, & easy social media scheduling. Level up your content game without breaking the bank! 💰 https://pilottools.ai #AIwriting #designtools #socialmediamanagement",
+          "Stop wasting time and start creating amazing content today! ✨ Explore @SimplifiedApp and see how their integrated platform can transform your workflow. Start your free trial now! ➡️ https://pilottools.ai #contentcreator #marketingtools #business"
+        ]
+      },
+      "linkedin": "---\n\nLevel up your content game! 👋 Just discovered Simplified, an all-in-one AI design, writing, & video creation platform. For $9/mo, it’s seriously impressive. Think streamlined workflows & boosted productivity. Insights: AI-powered design suggestions are surprisingly good & the content rewriter saved me tons of time. Worth checking out for solo entrepreneurs & small businesses alike. What AI tools are YOU using to boost efficiency? Let's discuss! 👇\n\nLearn more & try it: https://pilottools.ai\n\n#AItools #Business #ContentCreation #AI #Marketing #Productivity #SmallBusiness #Simplified #Design",
+      "pinterest": {
+        "pins": [
+          {
+            "title": "Simplified: Design Made Easy",
+            "description": "Unlock effortless design with Simplified! Create stunning visuals & marketing materials in minutes. Check it out and other AI tools on pilottools.ai.",
+            "board": "Graphic Design Resources"
+          },
+          {
+            "title": "Simplified: AI-Powered Design Tool",
+            "description": "Streamline your design workflow with Simplified! Templates, AI features & more. Discover similar tools on pilottools.ai for enhanced productivity.",
+            "board": "Design Tools & Resources"
+          },
+          {
+            "title": "Simplified for Designers: Try Free",
+            "description": "Struggling with design? Simplified offers a free plan & powerful features! Find this & more AI design tools at pilottools.ai. Start creating!",
+            "board": "Best Design Software"
+          }
+        ]
+      },
+      "newsletter": "Struggling to juggle multiple tools for content creation? Simplified's all-in-one AI platform handles design, writing, and video, letting you focus on what matters: your audience! Check out how Simplified can streamline your workflow and boost your creativity on PilotTools: [https://pilottools.ai/tools/simplified](https://pilottools.ai/tools/simplified)"
+    },
+    {
+      "source_slug": "frase",
+      "source_type": "tool",
+      "generated_at": "2026-04-25",
+      "twitter": {
+        "tweet": "Stuck in SEO quicksand? 🕳️ Frase analyzes top-ranking content & gives you the exact recipe to climb to the top. Starting at just $15/month! Get optimizing: https://pilottools.ai #SEO #ContentOptimization #Frase",
+        "thread": [
+          "Want to outrank your competitors but don't know where to start? 🤔 Frase does the heavy lifting! It analyzes the top-ranking pages for your target keyword & gives you a data-driven blueprint for success. Get started: https://pilottools.ai #SEOTips #ContentStrategy",
+          "Frase's Solo plan is a steal at $15/month! 💰 You get keyword research, content briefs, & optimization recommendations all in one tool. Stop guessing, start ranking! Check it out: https://pilottools.ai #KeywordResearch #SEOtools",
+          "Imagine knowing *exactly* what to include in your content to rank higher. Frase makes that a reality! Stop wasting time & start creating content that gets results. Link in bio! 👉 https://pilottools.ai #ContentMarketing #RankHigher #FraseAI"
+        ]
+      },
+      "linkedin": "---\n\nStruggling to create SEO-optimized content that actually ranks? I've been digging into Frase, and the SERP analysis is a game-changer. For just $15/mo, you can quickly identify content gaps and optimize your articles for specific keywords. Found it drastically cuts down research time. Worth checking out if you're serious about content performance. Learn more at pilottools.ai! #AItools #SEO #ContentMarketing #Business #Productivity\n---",
+      "pinterest": {
+        "pins": [
+          {
+            "title": "Frase SEO: Content Optimization Made Easy",
+            "description": "Boost your content ranking with Frase! This AI-powered tool helps you research, write, and optimize SEO content that converts. Try it out with pilottools.ai!",
+            "board": "SEO Tools & Resources"
+          },
+          {
+            "title": "Rank Higher with Frase: SEO Content Tool",
+            "description": "Struggling with SEO content? Frase helps you identify content gaps and optimize for target keywords. Learn more and start your free trial via pilottools.ai!",
+            "board": "SEO Strategies & Tips"
+          },
+          {
+            "title": "Frase for SEO: AI Content Creation",
+            "description": "Frase is your all-in-one SEO content creation and optimization platform. Get data-driven insights and improve your organic rankings. Explore Frase with pilottools.ai today!",
+            "board": "Content Marketing & SEO"
+          }
+        ]
+      },
+      "newsletter": "Struggling to rank in Google? Frase analyzes top-performing SERP content to give you the data-backed insights you need to create SEO-optimized articles that actually convert. Level up your content strategy today – read the full article on PilotTools: https://pilottools.ai/tools/frase"
     }
   ]
 }
