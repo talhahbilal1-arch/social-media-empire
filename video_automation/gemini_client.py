@@ -30,9 +30,9 @@ _working_model = None  # Cache of last model that worked
 MODEL_PRIORITY = [
     "gemini-2.5-flash",
     "gemini-2.0-flash",
-    "gemini-1.5-flash",
+    "gemini-2.5-flash-lite",
     "gemini-2.5-pro",
-    "gemini-1.5-pro",
+    "gemini-2.0-flash-lite",
 ]
 
 
@@ -69,8 +69,15 @@ def discover_models():
                 ordered.append(preferred)
 
         # Also add any other flash models we didn't list (future-proofing)
+        # Skip deprecated/broken models
+        BLOCKED_MODELS = {
+            "gemini-2.0-flash-001",  # 404 NOT_FOUND — discontinued
+            "gemini-2.0-flash-lite-001",  # deprecated
+            "gemini-flash-latest",  # alias, not a real model
+            "gemini-flash-lite-latest",  # alias
+        }
         for name in sorted(available):
-            if "flash" in name and name not in ordered:
+            if "flash" in name and name not in ordered and name not in BLOCKED_MODELS:
                 ordered.append(name)
 
         if ordered:
@@ -164,13 +171,28 @@ def _generate(prompt, max_tokens=1000, json_mode=True):
                     try:
                         json.loads(text)
                     except json.JSONDecodeError:
-                        # Try to extract JSON from response
-                        json_match = re.search(r'\{.*\}', text, re.DOTALL)
-                        if json_match:
-                            json.loads(json_match.group())  # Validate
-                            text = json_match.group()
-                        else:
-                            raise ValueError(f"Response from {model_name} is not valid JSON: {text[:100]}")
+                        # Strip markdown code fences and thinking tokens
+                        cleaned = text
+                        cleaned = re.sub(r'^```json\s*', '', cleaned)
+                        cleaned = re.sub(r'^```\s*', '', cleaned)
+                        cleaned = re.sub(r'\s*```$', '', cleaned)
+                        cleaned = cleaned.strip()
+                        try:
+                            json.loads(cleaned)
+                            text = cleaned
+                        except json.JSONDecodeError:
+                            # Last resort: extract first complete JSON object
+                            json_match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', cleaned, re.DOTALL)
+                            if not json_match:
+                                json_match = re.search(r'\{.*\}', cleaned, re.DOTALL)
+                            if json_match:
+                                try:
+                                    json.loads(json_match.group())
+                                    text = json_match.group()
+                                except json.JSONDecodeError:
+                                    raise ValueError(f"Response from {model_name} is not valid JSON: {text[:100]}")
+                            else:
+                                raise ValueError(f"Response from {model_name} is not valid JSON: {text[:100]}")
 
                 # Success — cache this model
                 if _working_model != model_name:
@@ -183,7 +205,7 @@ def _generate(prompt, max_tokens=1000, json_mode=True):
                 err_str = str(e)
 
                 if "429" in err_str and attempt < 2:
-                    wait = 15 * (attempt + 1)
+                    wait = 30 * (attempt + 1)
                     logger.warning(f"Rate limit on {model_name} — waiting {wait}s (attempt {attempt + 1}/3)")
                     time.sleep(wait)
                     continue

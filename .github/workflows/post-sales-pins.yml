@@ -1,0 +1,60 @@
+name: Post Sales Pins
+
+on:
+  schedule:
+    # Every Tuesday, Wednesday, Friday at 2 PM PST (10 PM UTC)
+    - cron: '0 22 * * 2,3,5'
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Brand to post for (leave blank for all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - fitness
+          - deals
+          - menopause
+      dry_run:
+        description: 'Dry run (validate without posting)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  post-sales-pins:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests Pillow
+
+      - name: Post sales pins
+        env:
+          SUPABASE_URL:           ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY:           ${{ secrets.SUPABASE_KEY }}
+          PEXELS_API_KEY:         ${{ secrets.PEXELS_API_KEY }}
+          MAKE_WEBHOOK_FITNESS:   ${{ secrets.MAKE_WEBHOOK_FITNESS }}
+          MAKE_WEBHOOK_DEALS:     ${{ secrets.MAKE_WEBHOOK_DEALS }}
+          MAKE_WEBHOOK_MENOPAUSE: ${{ secrets.MAKE_WEBHOOK_MENOPAUSE }}
+          INPUT_BRAND:            ${{ inputs.brand }}
+          INPUT_DRY_RUN:          ${{ inputs.dry_run }}
+        run: |
+          ARGS=""
+          if [ -n "$INPUT_BRAND" ]; then
+            ARGS="$ARGS --brand $INPUT_BRAND"
+          fi
+          if [ "$INPUT_DRY_RUN" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          python3 scripts/post_sales_pins.py $ARGS

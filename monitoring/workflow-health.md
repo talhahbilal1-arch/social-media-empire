@@ -1,30 +1,32 @@
 # Workflow Health Report
 
-Generated: 2026-04-06 16:58 UTC
+Generated: 2026-04-20 17:15 UTC
 
 ## Summary
 
 | Metric | Count |
 |--------|-------|
-| Active workflows | 36 |
+| Active workflows | 39 |
 | Archived workflows | 24 |
-| Total | 60 |
+| Total | 63 |
 
-| Scheduled (cron) | 30 |
+| Scheduled (cron) | 33 |
 | Event-driven (push/manual) | 6 |
 
 ## Scheduled Workflows
 
 | Workflow | File | Schedule |
 |----------|------|----------|
+| Amazon ASIN Health Check | `asin-health-check.yml` | Daily 10:00 UTC |
 | Analytics Collector | `analytics-collector.yml` | Daily 23:00 UTC |
 | Check Affiliate Links | `check-affiliate-links.yml` | Mon 08:00 UTC |
-| Content Engine | `content-engine.yml` | Daily 14:00 UTC, Daily 17:00 UTC, Daily 20:00 UTC, Daily 23:00 UTC, Daily 03:00 UTC |
+| Content Engine | `content-engine.yml` | Daily 15:00 UTC, Daily 23:00 UTC, Daily 04:00 UTC |
 | Daily Analytics | `daily-analytics.yml` | Daily 14:00 UTC |
 | Daily Trend Scout | `daily-trend-scout.yml` | Daily 13:00 UTC |
 | Email Automation | `email-automation.yml` | Daily 17:00 UTC, Daily 01:00 UTC |
 | Emergency Alert (Dead Man's Switch) | `emergency-alert.yml` | Daily 08:00 UTC |
 | Enable All Workflows + Run Pins | `enable-and-run.yml` | Daily 13:00 UTC |
+| Etsy Product Pins | `etsy-product-pins.yml` | Daily 18:00 UTC |
 | Fitness & Deals Articles | `fitness-articles.yml` | Mon/Tue/Wed/Thu/Fri 07:00 UTC |
 | Menopause Weekly Newsletter | `menopause-newsletter.yml` | Wed 18:00 UTC |
 | PilotTools Backlink Outreach | `toolpilot-outreach.yml` | Mon 15:00 UTC |
@@ -36,7 +38,8 @@ Generated: 2026-04-06 16:58 UTC
 | PilotTools Twitter Automation | `toolpilot-twitter.yml` | Daily 17:00 UTC, Daily 21:00 UTC, Daily 02:00 UTC |
 | PilotTools Weekly Discovery | `toolpilot-weekly.yml` | Mon 07:00 UTC |
 | PilotTools Weekly Report | `toolpilot-report.yml` | Sun 08:00 UTC |
-| Pin Watchdog | `pin-watchdog.yml` | Every 2h at :30 |
+| Pin Watchdog | `pin-watchdog.yml` | Every 1h at :30 |
+| Pinterest Drop Alert | `pinterest-drop-alert.yml` | Daily 23:00 UTC |
 | Post Product Pins | `post-product-pins.yml` | Mon/Thu 19:00 UTC |
 | Revenue Activation Team | `revenue-activation.yml` | Mon 17:00 UTC |
 | Revenue Intelligence Engine | `revenue-intelligence.yml` | Daily 15:00 UTC |
@@ -65,7 +68,7 @@ Generated: 2026-04-06 16:58 UTC
   01:00  Email Automation
   02:00  Weekly Social Distribution (Mon only)
   02:00  PilotTools Twitter Automation
-  03:00  Content Engine
+  04:00  Content Engine
   06:00  Self-Improvement (Sun only)
   06:00  Weekly SEO Ping (Mon only)
   06:00  PilotTools Daily Content (Mon/Tue/Wed/Thu/Fri only)
@@ -76,30 +79,31 @@ Generated: 2026-04-06 16:58 UTC
   08:00  Emergency Alert (Dead Man's Switch)
   08:00  PilotTools Weekly Report (Sun only)
   08:00  PilotTools Content Repurposer
+  10:00  Amazon ASIN Health Check
   13:00  Daily Trend Scout
   13:00  Enable All Workflows + Run Pins
-  14:00  Content Engine
   14:00  Daily Analytics
+  15:00  Content Engine
   15:00  Revenue Intelligence Engine
   15:00  PilotTools Backlink Outreach (Mon only)
   16:00  SEO Content Machine (Mon/Wed/Fri only)
   16:00  PilotTools Pinterest Automation
   16:00  Weekly Health Report (Mon only)
-  17:00  Content Engine
   17:00  Email Automation
   17:00  Revenue Activation Team (Mon only)
   17:00  PilotTools Newsletter (Mon only)
   17:00  PilotTools Twitter Automation
   17:00  Weekly Summary Report (Sun only)
+  18:00  Etsy Product Pins
   18:00  Menopause Weekly Newsletter (Wed only)
   18:00  PilotTools LinkedIn Automation (Mon/Wed/Fri only)
   19:00  Post Product Pins (Mon/Thu only)
-  20:00  Content Engine
   21:00  PilotTools Twitter Automation
   22:00  PilotTools Pinterest Automation
   23:00  Analytics Collector
   23:00  Content Engine
-  Every 2h  Pin Watchdog
+  23:00  Pinterest Drop Alert
+  Every 1h  Pin Watchdog
 ```
 
 ## Archived Workflows

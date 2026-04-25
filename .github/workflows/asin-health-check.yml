@@ -1,0 +1,28 @@
+name: Amazon ASIN Health Check
+
+on:
+  schedule:
+    - cron: '0 10 * * *'  # Every day at 10 AM UTC (2 AM PST)
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  validate-asins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install requests google-genai supabase python-dotenv
+      - name: Validate and fix broken ASINs
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/validate_and_fix_asins.py
+      - name: Commit fixes if any
+        run: |
+          git config user.name "ASIN Health Bot"
+          git config user.email "bot@fitover35.com"
+          git add video_automation/pin_article_generator.py outputs/ logs/
+          git diff --staged --quiet || git commit -m "fix(asins): auto-replace broken Amazon product links [bot]"
+          git push origin main || echo "Nothing to push"

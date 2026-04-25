@@ -55,7 +55,7 @@ jobs:
                   'product': 'AI Fitness Coach Vault ($27)',
               },
               'deals': {
-                  'site': 'dailydealdarling.com',
+                  'site': 'www.dailydealdarling.com',
                   'dir': 'outputs/dailydealdarling-website/articles',
                   'subreddit': 'r/Frugal',
                   'gumroad': 'https://talhahbilal.gumroad.com/l/epjybe',

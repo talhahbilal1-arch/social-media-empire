@@ -178,5 +178,14 @@
     "subject": "PilotTools.ai Review of Luma AI: 4.3/5",
     "sent_at": "2026-04-13T16:20:03.117Z",
     "status": "failed"
+  },
+  {
+    "identifier": "testimonial-semrush",
+    "type": "testimonial",
+    "tool_slug": "semrush",
+    "to": "hello@semrush.com",
+    "subject": "PilotTools.ai Review of Semrush (4.6/5)",
+    "sent_at": "2026-04-20T16:16:35.949Z",
+    "status": "failed"
   }
 ]

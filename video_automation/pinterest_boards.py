@@ -37,6 +37,32 @@ PINTEREST_BOARDS = {
         "Perimenopause Tips & Support": "1076993767079898628", # "Perimenopause Guide"
         "Menopause Nutrition & Wellness": "1076993767079898631",  # "Menopause Nutrition & Diet"
     },
+    "pilottools": {
+        # PENDING — board IDs will be added when Pinterest account is created
+        "Best AI Tools": "PENDING",
+        "Productivity Hacks": "PENDING",
+        "AI for Business": "PENDING",
+        "Content Creation Tools": "PENDING",
+        "Free AI Tools": "PENDING",
+    },
+    "homedecor": {
+        # PENDING — board IDs will be added when Pinterest account is created
+        "Living Room Ideas": "PENDING",
+        "Bedroom Decor": "PENDING",
+        "Kitchen Styling": "PENDING",
+        "Budget Home Makeover": "PENDING",
+        "Cozy Home Vibes": "PENDING",
+        "Small Space Solutions": "PENDING",
+    },
+    "beauty": {
+        # PENDING — board IDs will be added when Pinterest account is created
+        "Skincare Routine": "PENDING",
+        "Makeup Must-Haves": "PENDING",
+        "Hair Care Tips": "PENDING",
+        "Beauty Dupes": "PENDING",
+        "Self Care Sunday": "PENDING",
+        "Clean Beauty": "PENDING",
+    },
 }
 
 # Default board per brand (highest-traffic board as fallback)
@@ -44,6 +70,9 @@ DEFAULT_BOARDS = {
     "fitness": "756745612325868912",       # Fitness Goods
     "deals": "874683627569021288",          # Daily Deal Darling - Amazon Finds
     "menopause": "1076993767079887530",     # Menopause Wellness Tips
+    "pilottools": "PENDING",                # Best AI Tools
+    "homedecor": "PENDING",                 # Living Room Ideas
+    "beauty": "PENDING",                    # Skincare Routine
 }
 
 # Make.com Pinterest connection IDs per brand

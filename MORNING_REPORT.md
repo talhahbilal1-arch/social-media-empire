@@ -1,67 +1,83 @@
-# Morning Report — 2026-04-13
+# Morning Report — Pinterest Automation Fix (2026-04-24)
 
-Run timestamp: overnight session finishing ~06:50 UTC (11:50 PM PST Sat 4-12).
-Triggering prompt: `OVERNIGHT_PINTEREST_MASTER_PROMPT.md`.
+## Summary
 
-## TL;DR
+- **Start:** 2026-04-24 ~05:10 UTC (10:10 PM PST the night before)
+- **End:** 2026-04-24 ~05:40 UTC (30 min total work)
+- **Branch taken:** `BRANCH H1 — Empty Queue`
+- **ROOT_CAUSE:** `H1_EMPTY_QUEUE` (letter + spirit: schema has 0 `Ready`/`Queued`, and the content engine's 24h-filtered `content_ready` query also returns 0 rows)
+- **Status:** Queue re-seeded with 9 healthy pins; **posting is not yet confirmed** because the Activator trigger step was skipped (no `MAKE_API_TOKEN`). Tall's next action (below) is required before pins actually post.
 
-Video-pin posting via Make.com webhooks is **confirmed working end-to-end** for all 3 brands. Image pins were capped for today (5x/day × 3 runs already hit the 10-pin cap before this session). Two commits pushed (summary improvement + docs). Cleaned 72 stale worktrees. No code changes were needed for Phases 1, 3, 4, 5 — the previous session had already landed them.
+## What worked
 
-## Run tested
+1. **Supabase diagnosed cleanly.** Confirmed `posted` count 925, `content_ready` 6 (all stale from April 3-6), `pending` 192 (stuck for days, no images), `failed` 14 (all from March, expired Late API). Most recent post was 2026-04-19T01:06 — **pipeline has been dead ~5 days, not the 2.5 days the runbook assumed**.
+2. **Errors table confirmed the diagnosis from another angle.** `pin_watchdog` fired at 2026-04-24T03:56 with "No pins generated in 55 hours"; `pinterest_drop_alert` fired at critical severity saying fitness/deals/menopause are at 0/3 expected.
+3. **GitHub Actions logs gave the mechanism.** Every recent scheduled run goes to `RUN TYPE: VIDEO`, which skips Phase 0 content generation entirely. Active-brand rotation for the hours observed only contains the new brands (pilottools/homedecor/beauty), never fitness/deals/menopause.
+4. **9 seed pins inserted successfully on first attempt** (3 per target brand, real Pexels images, live-schema columns, proper board IDs from recent posted rows). See `seed_result.json` for UUIDs. All have `status=content_ready` + `image_url` populated + fresh `created_at`, so they will be visible to the engine's Phase 1 on the next run.
+5. **The engine's specific failure gates are documented for a targeted fix.** `GENERATOR_STATUS.md` has grep pointers to find the VIDEO gate, the 24h filter, and the brand rotation in under 2 minutes.
 
-Content Engine run `24329500260` (workflow_dispatch, main):
+## What's still broken
 
-- Status: **success**
-- Video pins posted: **3 / 3** (fitness, deals, menopause)
-  - Every brand: Video webhook → HTTP 200 "Accepted" via Make.com
-  - File sizes rendered: fitness 1995 KB, deals 2769 KB, menopause 8002 KB
-- Image pins this run: **0 / 0** (all 3 brands already at 11 pins/day, MAX=10)
-- Pre-flight: all green (Gemini, Pexels, Supabase, all 3 Make.com brand webhooks)
+1. **No Activator trigger fired** (no `MAKE_API_TOKEN`). Whether the seeded pins actually post on the next 15:00 UTC cron depends on whether that hour's active-brand rotation includes our three target brands.
+2. **The content engine itself is still running every scheduled run into `RUN TYPE: VIDEO`.** Even if tonight's seeds clear, tomorrow's runs will produce zero fresh `content_ready` rows for the target brands. This is the durable fix needed.
+3. **Late API keys are still expired** — video pins cannot post. Out of scope for this job but worth noting since the VIDEO gate is why the engine is wasting runs.
+4. **The 6 stale `content_ready` rows from 2026-04-03/04/06** are still orphaned (no `image_url`, outside the 24h window). Leaving them in place; they'll never match Phase 1's filter and won't conflict with our seeds.
+5. **`account` column, `pin_title`/`pin_description`/`hashtags` columns all exist in schema but are never populated.** Either legacy schema drift or documentation bug — worth a schema prune later.
 
-Per the overnight prompt's Phase 1 requirement (webhooks per brand, payload shape `{title, description, image_url, board_id, link}`) — the code already matches and the live webhook test just passed.
+## Exact next steps for Tall (≤5, plain English)
 
-## What was completed this session
+1. **Run `gh workflow run content-engine.yml --ref main --field dry_run=false --field brand=fitness`** (repeat for `deals` and `menopause`). This forces the engine to act on each target brand. If Phase 1 runs, it should find our 3 seeds per brand and render + post them. Total: 3 commands, ~2 minutes. Most direct path to live pins tonight.
+2. **Watch the runs with `gh run watch <id>`** and then check whether our 9 UUIDs (listed in `seed_result.json`) transitioned to `status=posted`. Example query is in `test_trigger_result.md` Option A.
+3. **If step 1 doesn't post pins, fix the VIDEO-mode gate** (see `GENERATOR_STATUS.md` §"Minimal next actions" #2). Specifically: grep for `RUN TYPE` and force `IMAGE` until Late API is reactivated. Late API has been dead since ~March 21 per the Supabase `errors` table, so every VIDEO run has been wasted for over a month.
+4. **Delete the 9 dead V5/V7 scenarios** listed in `SCENARIOS_TO_DELETE.md` (manual Make.com UI, <2 min). Zero ops impact, keeps your account tidy.
+5. **Add `MAKE_API_TOKEN` to `.env`** with `scenarios:read, connections:read` scopes. Without it, diagnostics are crippled — H2/H3/H4 can never be confirmed and the Activator can't be triggered programmatically.
 
-| Phase | Item | State |
-|---|---|---|
-| 0 | Verify state, secrets, active runs | done |
-| 1 | Make.com video-pin posting | already in code — live-verified HTTP 200 for all 3 brands |
-| 2 | Image pins still working | yes (capped today by design, cron continues tomorrow) |
-| 3 | `DAILY VIDEO SUMMARY` log line added (per-brand video counts) | committed `5304515` |
-| 3 | Drop-alert workflow | already exists — `pinterest-drop-alert.yml` runs 23:00 UTC, min 3 pins/brand/24h |
-| 3 | Cron schedule — 5 runs/day | confirmed `14, 17, 20, 23, 3 UTC` |
-| 3 | Health check | already present — fails only when *rendered* pins didn't post (legit idle-cap runs stay green) |
-| 3 | Error logging to Supabase `errors` | already wired via `log_pipeline_error` |
-| 3 | `MAX_PINS_PER_DAY = 10` | confirmed |
-| 4 | Nano-Banana-first video backgrounds | already in `video_pipeline/pexels_fetcher.py` (`_try_nano_banana` → Pexels fallback) |
-| 5 | `fitness-articles.yml` | scheduled Mon–Fri, next run Mon 4-13 07:00 UTC — weekend gap is intentional |
-| 5 | `toolpilot-content.yml` / `daily-trend-scout.yml` | last runs green, no action |
-| 6 | Worktree cleanup | **73 → 1**, 72 removed, `git worktree prune` run |
-| 7 | Docs/tests from pre-staged work | committed `c815b16` |
+## Ops budget
 
-## Commits pushed to `main`
+- **Make.com ops consumed this run: 0.** No API calls to Make.com were made (no token).
+- **Supabase API calls:** ~40 (well under any rate limit).
+- **Pexels API calls:** 9 successful + ~6 Cloudflare-blocked (before UA fix). Cloudflare-blocked calls did not count against Pexels quota.
+- **Anthropic API calls:** 0 (no key).
 
-1. `c815b16` — docs: document Nano Banana architecture fix + update tests for raising behavior
-2. `5304515` — feat(content-engine): add DAILY VIDEO SUMMARY line + per-brand video tracking
+## Files produced (on branch `fix/pinterest-automation-2026-04-24`)
 
-## What to verify in the morning
+| File | Purpose |
+|---|---|
+| `DIAGNOSTIC_REPORT.md` | Full Phase 1 findings; ends with `ROOT_CAUSE: H1_EMPTY_QUEUE` |
+| `supabase_recent_rows.json` | Raw evidence: 10 most recent `pinterest_pins` rows |
+| `FIX_PLAN.md` | Phase 2 plan committing to H1 branch |
+| `account_mapping.json` | Brand → board_id / destination_url / status-string mapping from live data |
+| `scripts/seed_starter_pins.py` | Seed script (Pexels + Supabase, Cloudflare-safe UA) |
+| `seed_result.json` | UUIDs of the 9 seeded rows |
+| `test_trigger_result.md` | Phase 3C skip documentation + 3 options to force dispatch |
+| `SCENARIOS_TO_DELETE.md` | 9 dead scenario IDs for manual Make.com cleanup |
+| `GENERATOR_STATUS.md` | Phase 3E — the VIDEO/24h/brand-rotation gates, with grep pointers for a targeted code fix |
+| `MORNING_REPORT.md` | This file (replaces the 2026-04-13 report that was the previous MORNING_REPORT.md on main) |
 
-1. **Pinterest accounts** — open the 3 accounts and confirm the 3 overnight video pins rendered with the right brand templates (fitness black/yellow, deals beige/brown, menopause botanical). HTTP 200 from Make.com only confirms the webhook accepted; it doesn't confirm Pinterest rendered them cleanly.
-2. **Make.com video scenario execution count** — the 3 new v6 scenarios should show 1 execution each for the 06:42 UTC run.
-3. **Next scheduled content-engine run (14:00 UTC / 7 AM PST)** — watch for `DAILY VIDEO SUMMARY` in the log; that's the new line confirming the per-brand video track.
-4. **fitness-articles run at 07:00 UTC** (in ~30 min as of this writing) — Monday resume, expected green.
+## Git state
 
-## What failed / open risks
+- **Branch:** `fix/pinterest-automation-2026-04-24` (created from clean `origin/main`)
+- **Commits before morning-report commit:**
+  - `b29a185` — diag: pinterest automation root cause analysis 2026-04-24
+  - `0bfb6b7` — plan: pinterest fix plan for H1 (empty queue)
+  - `4027f43` — fix(h1): infer account mapping and seed 9 starter pins
+  - `99f4e03` — fix(h1): skip activator trigger, document dead scenarios, investigate generator
+- **This commit:** morning report + replacement of stale 2026-04-13 MORNING_REPORT.md
+- **Pushed to origin:** yes (see push confirmation at end of run)
+- **NOT merged to main** — requires Tall to review `GENERATOR_STATUS.md` and apply the code-level fix described there. The seeded pins give the pipeline something to chew on for tonight; the VIDEO-mode gate is the real fix.
 
-- The `⚠ No content_ready pins — pipeline idle` warning in the test run is benign — it reflects the daily cap, not a failure. Health-check logic already handles this correctly (`all_capped` branch).
-- **Video pin content not yet visually reviewed.** HTTP 200 means the webhook accepted the payload; it does *not* confirm Pinterest actually rendered/published a valid video pin. First thing in the morning: open one Pinterest account and eyeball the pin.
-- If Pinterest rejects the video format, the error will surface as a red run execution in the Make.com scenario panel (not in GitHub Actions logs).
+## Runbook compliance check
 
-## Next priorities (when you wake up)
+- [x] Rule #0 (diagnose before touch): Phases 1–2 read-only.
+- [x] Rule #1 (never invent credentials or values): all IDs came from live Supabase queries; used `board_id_preferred` from each brand's most recent posted row.
+- [x] Rule #2 (never re-authorize OAuth): did not attempt.
+- [x] Rule #3 (dedicated branch, commit per step): branch created, 4 commits + this one.
+- [x] Rule #4 (100 Make.com ops ceiling): 0 ops consumed.
+- [x] Rule #5 (read from live data, not defaults): `account_mapping.json` built from `status=posted` samples per brand (10 rows each).
+- [x] Stopped at every hard-stop point: seed retry logic exits after 2 attempts; Activator trigger skipped cleanly; no improvisation beyond the explicitly approved Supabase-only diagnosis + hardcoded fallback copy.
+- [x] Did not modify Make.com scenarios, website, video pipeline, or Supabase schema.
+- [x] Did not exceed 9 seeded pins.
 
-1. Eyeball one video pin per brand on Pinterest. If any brand rendered incorrectly, check the Make.com scenario run history.
-2. If all 3 video pins look good → no further action for 24–48 h; let it run on schedule (5 image + 1 video per brand per run, cron 5×/day).
-3. If video quality needs upgrading, consider whether Remotion (currently off) should be enabled; right now PIL+ffmpeg is the path (evidenced in the log: "Using Pexels video background" / "Using Ken Burns photo background").
-4. Consider bumping MAX_PINS_PER_DAY if you want more than 10 image pins/brand/day (the cap was reached within the first 3 of 5 runs today).
+## Preserved in git history
 
-— End of report —
+The previous `MORNING_REPORT.md` (2026-04-13 session) is still available on `main` and in branch history — nothing was lost.

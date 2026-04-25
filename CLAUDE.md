@@ -235,18 +235,21 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 ## Current Status
 <!-- UPDATE THIS AFTER EVERY WORK SESSION — just tell Claude "update CLAUDE.md status" -->
 - **AI API**: Gemini (gemini-2.5-flash) — migrated from 2.0-flash before June 1 deprecation. Paid tier enabled.
-- **Pinterest posting**: Active — 5x daily (6AM, 9AM, 12PM, 3PM, 7PM PST), 5 pins/brand/day (15 total)
+- **Pinterest posting**: Active — 3x daily (7AM, 3PM, 8PM PST), 3 pins/brand/day (9 total), 50% video mix, 90-pin dedup window, 8 trending topics/brand/day
 - **All workflows**: Green — content engine, rescue poster, social distribution all active
-- **Content generated**: 418 articles across 3 brands (373 indexed in sitemaps)
+- **Content generated**: 438 articles across 3 brands (412 indexed in sitemaps) — 186 fitness, 123 DDD, 103 menopause
+- **Buyer-intent articles**: 20 new high-intent articles added April 21 (7 fitness, 7 DDD, 6 menopause) targeting "Best X for Y", "X vs Y", "Top X" keywords
 - **Affiliate links**: CLEAN — 0 duplicate tags, 0 wrong tags, 0 missing tags. 1106 direct /dp/ links, 672 search URLs remaining.
 - **ASIN dictionaries**: Generator expanded from 32 to 154 products. Fix scripts have 421+ entries total.
 - **Google Analytics**: All articles have brand-specific GA tracking (G-1FC6FH34L9, G-HVCLZPEYNS, G-02ZPS3H3GC)
 - **Email capture**: Kit forms working on all 3 brand sites with correct form IDs (8946984, 9144859, 9144926)
 - **Internal links**: 363/373 articles have Related Articles sections (97%)
 - **Gumroad products**: 4 professional PDFs built — AI Fitness Vault, Pinterest Blueprint, AI Coach Machine, Free Lead Magnet
+- **Gumroad/Etsy CTAs**: Added to 49 articles total — 15 fitness (AI Vault + Free Prompts), 15 DDD (Free Prompts), 19 menopause (Etsy Planner + Free Prompts)
 - **Make.com**: 9 active scenarios healthy
 - **Revenue dashboard**: Created at outputs/fitover35-website/dashboard/index.html
-- **Last session**: April 8, 2026 — Overnight revenue fix: removed 810 duplicate affiliate tags, converted 170+ search URLs to direct product links, expanded ASIN dictionary 32→154, built 4 Gumroad PDFs.
+- **Sitemaps**: Regenerated all 3 — 189 URLs (fitness), 127 URLs (DDD), 108 URLs (menopause). robots.txt verified for all sites.
+- **Last session**: April 21, 2026 — Revenue sprint: 20 buyer-intent articles, Gumroad/Etsy CTAs added to 49 articles, sitemaps regenerated for all 3 brands. Commit ready, needs `git push origin main` to deploy.
 
 ## Active Priorities (April 2026)
 1. Sign up for top affiliate programs — Semrush ($200/sale), Grammarly, Ahrefs, Hostinger (see PHONE-ACTION-CHECKLIST.md)
@@ -258,7 +261,7 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/content-engine.y
 
 ## Known Issues
 - Schema-code mismatches have occurred (missing columns, malformed PostgREST filters)
-- Affiliate tags: CLEAN as of April 8, 2026. 0 duplicate tags, 0 wrong tags across all 418 articles.
+- Affiliate tags: CLEAN as of April 21, 2026. 0 duplicate tags, 0 wrong tags across all 438 articles.
 - Late API keys expired — video pin posting via Late returns 401. Refresh at getlate.dev
 - Etsy shop onboarding still needs banking/billing setup (manual)
 - 672 search URLs remain — these are long article-title queries that don't map to single products

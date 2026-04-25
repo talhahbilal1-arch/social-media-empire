@@ -29,7 +29,7 @@ BRAND_PLATFORM_CONFIG = {
         "youtube_playlist_id": None,
         "tiktok_account": "dailydealdarling",
         "instagram_account": "dailydealdarling",
-        "link_url": "https://dailydealdarling.com",
+        "link_url": "https://www.dailydealdarling.com",
         "videos_per_day": 2,
         "posting_slots": ["morning", "afternoon"],
         "enabled": True

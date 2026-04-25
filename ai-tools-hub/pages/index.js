@@ -6,8 +6,9 @@ import AdSlot from '../components/AdSlot'
 import HeroIllustration, { WaveDivider } from '../components/HeroIllustration'
 import Link from 'next/link'
 import { getAllTools, getAllCategories, getAllComparisons, getFeaturedTools } from '../lib/tools'
+import { getAllArticles, getReadingTime } from '../lib/articles'
 
-export default function Home({ featuredTools, categories, comparisons, totalTools, allTools }) {
+export default function Home({ featuredTools, categories, comparisons, totalTools, allTools, latestGuides }) {
   // Category icons mapping
   const CATEGORY_ICONS = {
     writing: '✍️', coding: '💻', image: '🎨', video: '🎬', marketing: '📈',
@@ -42,7 +43,7 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 text-center relative z-10">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent/10 text-accent border border-accent/20 mb-6">
-            Updated March 2026 &mdash; {totalTools}+ tools reviewed
+            Updated April 2026 &mdash; {totalTools}+ tools reviewed &bull; by Talhah Bilal, ISSA Certified
           </span>
           <h1 className="text-3xl md:text-6xl font-extrabold text-dt mb-6 leading-tight animate-fade-in-up">
             Stop Wasting Money on the<br className="hidden md:block" /> Wrong AI Tools
@@ -81,12 +82,12 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
       {/* Social Proof Bar */}
       <section className="bg-dark-surface border-b border-dark-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center items-center gap-4 md:gap-12 text-sm text-dt-muted">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap justify-center items-center gap-4 md:gap-10 text-sm text-dt-muted">
             {[
-              { icon: '🔍', stat: `${totalTools}+`, label: 'AI tools reviewed' },
-              { icon: '📊', stat: '10', label: 'categories' },
-              { icon: '⚡', stat: '5K+', label: 'monthly readers' },
-              { icon: '✅', stat: '100%', label: 'independent & unbiased' },
+              { icon: '🔍', stat: `${totalTools}+`, label: 'tools reviewed' },
+              { icon: '⏱️', stat: '4,800+', label: 'hours of testing' },
+              { icon: '📊', stat: '10', label: 'categories covered' },
+              { icon: '✅', stat: '0', label: 'paid placements' },
               { icon: '🔄', stat: 'Weekly', label: 'updated' },
             ].map(item => (
               <div key={item.label} className="flex items-center space-x-2 text-center sm:text-left">
@@ -171,6 +172,41 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         </div>
       </section>
 
+      {/* Guides & Editorial — signals editorial depth beyond the tool directory */}
+      {latestGuides && latestGuides.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-dt mb-2">Guides &amp; Deep Dives</h2>
+              <p className="text-dt-muted max-w-2xl">
+                Long-form reviews, how-tos, and category explainers from the PilotTools editors — beyond the tool directory.
+              </p>
+            </div>
+            <Link href="/blog/" className="btn-secondary whitespace-nowrap">
+              View all guides &rarr;
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {latestGuides.map(article => (
+              <Link
+                key={article.slug}
+                href={`/blog/${article.slug}/`}
+                className="card hover:border-accent/30 flex flex-col"
+              >
+                <span className="badge-blue self-start mb-3">{article.category}</span>
+                <h3 className="font-bold text-dt mb-2 leading-snug">{article.title}</h3>
+                <p className="text-sm text-dt-muted line-clamp-3 mb-4">{article.excerpt}</p>
+                <div className="mt-auto flex items-center gap-3 text-xs text-dt-muted">
+                  <span>{article.author}</span>
+                  <span>·</span>
+                  <span>{article.readingTime}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Newsletter Signup */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <NewsletterSignup variant="banner" />
@@ -181,24 +217,26 @@ export default function Home({ featuredTools, categories, comparisons, totalTool
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg">
           <h2>Why Use PilotTools to Find AI Tools?</h2>
           <p>
-            The AI tools landscape is evolving rapidly, with new products launching every week.
-            PilotTools cuts through the noise with honest, data-driven reviews and side-by-side
-            comparisons that help you make informed decisions &mdash; and save you money.
+            PilotTools was built by <Link href="/about/"><strong>Talhah Bilal</strong></Link>, an ISSA-certified
+            professional and AI automation practitioner who got tired of affiliate-first &ldquo;review&rdquo; sites
+            that rank tools by commission rate rather than quality. Every tool on PilotTools has been
+            hands-on tested across real workflows &mdash; minimum 15 hours per tool, 5+ distinct use cases.
           </p>
           <h3>What Makes Our Reviews Different</h3>
           <ul>
-            <li><strong>Hands-on testing</strong> &mdash; Every tool is evaluated on real-world tasks</li>
-            <li><strong>Transparent scoring</strong> &mdash; Our ratings break down into specific categories</li>
-            <li><strong>Updated pricing</strong> &mdash; We track pricing changes so you always see current rates</li>
-            <li><strong>Comparison tables</strong> &mdash; Side-by-side feature and pricing comparisons</li>
-            <li><strong>No sponsored rankings</strong> &mdash; Our rankings are based purely on quality and value</li>
+            <li><strong>Hands-on testing only</strong> &mdash; Every tool is evaluated on real-world tasks, not synthetic benchmarks or marketing demos</li>
+            <li><strong>Transparent scoring</strong> &mdash; Our 0–5.0 ratings break down into five weighted dimensions: output quality, ease of use, features, pricing, and community</li>
+            <li><strong>Updated pricing</strong> &mdash; We track pricing changes monthly so you always see the real cost of ownership</li>
+            <li><strong>Side-by-side comparisons</strong> &mdash; Feature and pricing comparisons against the top 3–5 competitors per category</li>
+            <li><strong>Zero paid rankings</strong> &mdash; No tool can pay for a better position. Our affiliate disclosure is public.</li>
           </ul>
           <h3>Finding the Right AI Tool for You</h3>
           <p>
             Whether you need an AI writing assistant for blog posts, an AI code editor for development,
             an image generator for marketing visuals, or a video tool for content creation,
-            our curated directory and detailed comparisons will help you find the perfect match
-            for your workflow and budget. Try our <Link href="/quiz/">Tool Finder Quiz</Link> to get personalized recommendations.
+            our curated directory and detailed comparisons will help you find the right match.
+            Try our <Link href="/quiz/">Tool Finder Quiz</Link> for personalized recommendations, or browse
+            our <Link href="/editorial-guidelines/">editorial guidelines</Link> to understand exactly how we evaluate tools.
           </p>
         </div>
       </section>
@@ -219,6 +257,14 @@ export async function getStaticProps() {
       comparisons: getAllComparisons(),
       totalTools: getAllTools().length,
       allTools: getAllTools().map(t => ({ slug: t.slug, name: t.name, category: t.category, tagline: t.tagline, rating: t.rating, best_for: t.best_for })),
+      latestGuides: getAllArticles().slice(0, 6).map(a => ({
+        slug: a.slug,
+        title: a.title || '',
+        excerpt: a.excerpt || a.meta_description || '',
+        category: a.category || 'Guide',
+        author: a.author || 'PilotTools Editors',
+        readingTime: getReadingTime(a.word_count || 0),
+      })),
     },
   }
 }
