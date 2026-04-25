@@ -7,6 +7,7 @@ const tools = require('../content/tools.json')
 const categories = require('../content/categories.json')
 const comparisons = require('../content/comparisons.json')
 const articles = require('../content/articles.json')
+const reviews = require('../content/reviews.json')
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -125,12 +126,24 @@ ${articles.map(a => `  <url>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>`).join('\n')}
+  <url>
+    <loc>${SITE_URL}/reviews/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+${reviews.map(r => `  <url>
+    <loc>${SITE_URL}/reviews/${r.slug}/</loc>
+    <lastmod>${r.published_date || today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join('\n')}
 </urlset>`
 
 const outDir = path.join(__dirname, '..', 'public')
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap)
 
-const totalUrls = 9 + comparisons.length + (tools.length * 3) + categories.length + useCases.length + 1 + articles.length
+const totalUrls = 9 + comparisons.length + (tools.length * 3) + categories.length + useCases.length + 1 + articles.length + 1 + reviews.length
 console.log(`Sitemap generated with ${totalUrls} URLs`)
 
 const robots = `User-agent: *
