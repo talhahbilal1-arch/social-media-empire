@@ -1438,5 +1438,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-04-25T16:54:09.355Z",
     "success": true
+  },
+  {
+    "slug": "notion-ai-vs-coda-ai",
+    "pin_type": "comparison",
+    "title": "Notion AI vs Coda AI: Which AI Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/notion-ai-vs-coda-ai/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-25T22:24:36.962Z",
+    "success": true
+  },
+  {
+    "slug": "perplexity",
+    "pin_type": "tool-review",
+    "title": "Perplexity AI: The Ultimate Research Assistant? (4.7/5)",
+    "link": "https://pilottools.ai/tools/perplexity/",
+    "board": "AI Research Tools",
+    "posted_at": "2026-04-25T22:24:40.970Z",
+    "success": true
+  },
+  {
+    "slug": "podcastle",
+    "pin_type": "tool-review",
+    "title": "Podcastle Review: AI Audio Magic or Just Hype?",
+    "link": "https://pilottools.ai/tools/podcastle/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-04-25T22:24:45.230Z",
+    "success": true
   }
 ]
