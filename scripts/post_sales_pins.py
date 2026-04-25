@@ -245,25 +245,36 @@ SALES_PINS = [
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 def get_pexels_image(query, used_ids=None):
-    """Fetch a unique portrait Pexels image."""
+    """Fetch a unique portrait Pexels image. Retries on timeout/transient failure."""
     if not PEXELS_API_KEY:
         print("    ⚠ PEXELS_API_KEY not set")
         return None, None
     if used_ids is None:
         used_ids = set()
-    resp = requests.get(
-        "https://api.pexels.com/v1/search",
-        headers={"Authorization": PEXELS_API_KEY},
-        params={"query": query, "per_page": 20, "orientation": "portrait"},
-        timeout=15,
-    )
-    if resp.status_code != 200:
-        print(f"    Pexels error: {resp.status_code}")
-        return None, None
-    for photo in resp.json().get("photos", []):
-        if photo["id"] not in used_ids:
-            used_ids.add(photo["id"])
-            return photo["src"]["large2x"], photo["id"]
+    last_err = None
+    for attempt in range(3):
+        try:
+            resp = requests.get(
+                "https://api.pexels.com/v1/search",
+                headers={"Authorization": PEXELS_API_KEY},
+                params={"query": query, "per_page": 20, "orientation": "portrait"},
+                timeout=30,
+            )
+            if resp.status_code != 200:
+                print(f"    Pexels error: {resp.status_code}")
+                return None, None
+            for photo in resp.json().get("photos", []):
+                if photo["id"] not in used_ids:
+                    used_ids.add(photo["id"])
+                    return photo["src"]["large2x"], photo["id"]
+            return None, None
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            last_err = e
+            if attempt < 2:
+                wait = 2 ** attempt
+                print(f"    Pexels transient error (attempt {attempt+1}/3): {e}. Retry in {wait}s.")
+                time.sleep(wait)
+    print(f"    Pexels failed after 3 attempts: {last_err}")
     return None, None
 
 
