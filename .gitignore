@@ -1,6 +1,9 @@
 # Local tooling worktrees (Claire / Claude worktrees scratch space)
 .claire/
 
+# Local pipeline runtime logs (launchd writes video_pipeline.log here)
+logs/
+
 # Python
 __pycache__/
 *.py[cod]

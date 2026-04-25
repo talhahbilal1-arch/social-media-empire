@@ -12,4 +12,7 @@ BRAND_SLUG = {
     'fitness': 'fitness-made-easy',
     'deals': 'daily-deal-darling',
     'menopause': 'menopause-planner',
+    'pilottools': 'pilottools-ai',
+    'homedecor': 'home-decor-edit',
+    'beauty': 'beauty-shelf',
 }

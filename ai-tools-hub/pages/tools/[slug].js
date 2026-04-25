@@ -3,6 +3,7 @@ import Layout from '../../components/Layout'
 import StarRating from '../../components/StarRating'
 import AffiliateLink, { AffiliateDisclosure, trackAffiliateClick } from '../../components/AffiliateLink'
 import TLDRBox from '../../components/TLDRBox'
+import EditorsTake from '../../components/EditorsTake'
 import FAQAccordion from '../../components/FAQAccordion'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import AdSlot from '../../components/AdSlot'
@@ -123,6 +124,9 @@ export default function ToolPage({ tool, relatedComparisons, relatedTools, alter
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <AffiliateDisclosure />
+
+        {/* Editor's Take — hand-written curation layer above auto-generated specs */}
+        <EditorsTake take={tool.editors_take} toolName={tool.name} />
 
         {/* TL;DR */}
         {tool.tldr && (

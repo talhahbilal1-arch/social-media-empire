@@ -1114,5 +1114,302 @@
     "board": "AI Productivity Tools",
     "posted_at": "2026-04-16T22:29:27.496Z",
     "success": true
+  },
+  {
+    "slug": "neuronwriter",
+    "pin_type": "tool-review",
+    "title": "NeuronWriter Review: AI SEO Powerhouse (4.3/5)",
+    "link": "https://pilottools.ai/tools/neuronwriter/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-17T17:00:40.886Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-tools-small-business",
+    "pin_type": "article",
+    "title": "Top 10 AI Tools to Skyrocket Your Small Business in 2026!",
+    "link": "https://pilottools.ai/blog/best-ai-tools-small-business/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-17T17:00:44.913Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Grammarly vs ChatGPT: Which AI Writing Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/grammarly-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-17T17:00:48.990Z",
+    "success": true
+  },
+  {
+    "slug": "cursor-vs-github-copilot",
+    "pin_type": "comparison",
+    "title": "Cursor vs ChatGPT: AI Coding Showdown!",
+    "link": "https://pilottools.ai/compare/cursor-vs-github-copilot/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-17T22:27:25.918Z",
+    "success": true
+  },
+  {
+    "slug": "lumen5",
+    "pin_type": "tool-review",
+    "title": "Lumen5: AI Video Creation Made Easy (4.2/5)",
+    "link": "https://pilottools.ai/tools/lumen5/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-17T22:27:30.170Z",
+    "success": true
+  },
+  {
+    "slug": "semrush-vs-surfer-seo",
+    "pin_type": "comparison",
+    "title": "Semrush vs Surfer SEO: Which SEO Tool Wins?",
+    "link": "https://pilottools.ai/compare/semrush-vs-surfer-seo/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-17T22:27:34.389Z",
+    "success": true
+  },
+  {
+    "slug": "notion-ai-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Notion AI vs ChatGPT: Which AI Tool is Right For YOU?",
+    "link": "https://pilottools.ai/compare/notion-ai-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-18T16:52:27.401Z",
+    "success": true
+  },
+  {
+    "slug": "notion-ai",
+    "pin_type": "tool-review",
+    "title": "Notion AI Review: Is It Worth the Hype? (4.6/5)",
+    "link": "https://pilottools.ai/tools/notion-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-18T16:52:31.581Z",
+    "success": true
+  },
+  {
+    "slug": "surfer-seo",
+    "pin_type": "tool-review",
+    "title": "Surfer SEO Review: Dominate Search Results with AI!",
+    "link": "https://pilottools.ai/tools/surfer-seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-18T16:52:35.882Z",
+    "success": true
+  },
+  {
+    "slug": "category-coding",
+    "pin_type": "category",
+    "title": "AI Coding Superpowers: Best Tools of 2026!",
+    "link": "https://pilottools.ai/category/coding/",
+    "board": "AI Coding Tools",
+    "posted_at": "2026-04-18T22:22:25.888Z",
+    "success": true
+  },
+  {
+    "slug": "pictory-vs-synthesia",
+    "pin_type": "comparison",
+    "title": "Pictory vs Synthesia: Which AI Video Tool is Right for YOU?",
+    "link": "https://pilottools.ai/compare/pictory-vs-synthesia/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-18T22:22:30.042Z",
+    "success": true
+  },
+  {
+    "slug": "category-design",
+    "pin_type": "category",
+    "title": "Top AI Design Tools Shaping 2026: Design Smarter, Not Harder!",
+    "link": "https://pilottools.ai/category/design/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-04-18T22:22:34.374Z",
+    "success": true
+  },
+  {
+    "slug": "fliki",
+    "pin_type": "tool-review",
+    "title": "Fliki AI Review: Turn Text into Stunning Videos! ✨",
+    "link": "https://pilottools.ai/tools/fliki/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-19T16:51:58.647Z",
+    "success": true
+  },
+  {
+    "slug": "simplified",
+    "pin_type": "tool-review",
+    "title": "Simplified Review: Your AI Design Secret Weapon! (4.3/5)",
+    "link": "https://pilottools.ai/tools/simplified/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-04-19T16:52:02.540Z",
+    "success": true
+  },
+  {
+    "slug": "synthesia-vs-heygen-ai-video",
+    "pin_type": "comparison",
+    "title": "Synthesia vs HeyGen: AI Video Generator Showdown!",
+    "link": "https://pilottools.ai/compare/synthesia-vs-heygen-ai-video/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-19T16:52:06.622Z",
+    "success": true
+  },
+  {
+    "slug": "luma-ai",
+    "pin_type": "tool-review",
+    "title": "Luma AI Review: Transform Your Videos with AI! ✨",
+    "link": "https://pilottools.ai/tools/luma-ai/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-19T22:23:28.895Z",
+    "success": true
+  },
+  {
+    "slug": "ahrefs-vs-surfer-seo",
+    "pin_type": "comparison",
+    "title": "Ahrefs vs Surfer SEO: Which is BEST for Your SEO Strategy?",
+    "link": "https://pilottools.ai/compare/ahrefs-vs-surfer-seo/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-19T22:23:32.913Z",
+    "success": true
+  },
+  {
+    "slug": "midjourney-vs-dall-e-3-business",
+    "pin_type": "comparison",
+    "title": "Midjourney vs ChatGPT: AI Art SHOWDOWN!",
+    "link": "https://pilottools.ai/compare/midjourney-vs-dall-e-3-business/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-19T22:23:37.204Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly-vs-prowritingaid-2026",
+    "pin_type": "comparison",
+    "title": "Grammarly vs ProWritingAid: Which AI Writing Tool Wins?",
+    "link": "https://pilottools.ai/compare/grammarly-vs-prowritingaid-2026/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-20T17:16:18.113Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-tools-accountants",
+    "pin_type": "article",
+    "title": "AI Revolutionizing Accounting in 2026!",
+    "link": "https://pilottools.ai/blog/best-ai-tools-accountants/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-20T22:33:47.081Z",
+    "success": true
+  },
+  {
+    "slug": "chatgpt-vs-claude",
+    "pin_type": "comparison",
+    "title": "ChatGPT vs. Claude: Which AI Reigns Supreme in 2024?",
+    "link": "https://pilottools.ai/compare/chatgpt-vs-claude/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-21T17:12:26.790Z",
+    "success": true
+  },
+  {
+    "slug": "heygen",
+    "pin_type": "tool-review",
+    "title": "HeyGen Review: AI Video Magic! ✨ (Rated 4.5/5)",
+    "link": "https://pilottools.ai/tools/heygen/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-22T17:10:40.818Z",
+    "success": true
+  },
+  {
+    "slug": "ahrefs",
+    "pin_type": "tool-review",
+    "title": "Ahrefs Review: Is This AI SEO Tool Worth $99/mo?",
+    "link": "https://pilottools.ai/tools/ahrefs/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-22T17:11:02.145Z",
+    "success": true
+  },
+  {
+    "slug": "rytr-vs-jasper",
+    "pin_type": "comparison",
+    "title": "Rytr vs Jasper AI: Which Content Creation Tool Wins?",
+    "link": "https://pilottools.ai/compare/rytr-vs-jasper/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-22T22:37:23.325Z",
+    "success": true
+  },
+  {
+    "slug": "semrush",
+    "pin_type": "tool-review",
+    "title": "Semrush: Is This AI SEO Tool Worth It? (4.6/5 Rating)",
+    "link": "https://pilottools.ai/tools/semrush/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-04-22T22:37:27.223Z",
+    "success": true
+  },
+  {
+    "slug": "chatgpt-vs-perplexity",
+    "pin_type": "comparison",
+    "title": "ChatGPT vs. Perplexity AI: Which AI Tool Wins?",
+    "link": "https://pilottools.ai/compare/chatgpt-vs-perplexity/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-22T22:37:31.418Z",
+    "success": true
+  },
+  {
+    "slug": "otter-ai",
+    "pin_type": "tool-review",
+    "title": "Otter.ai Review: Boost Productivity with AI Transcription!",
+    "link": "https://pilottools.ai/tools/otter-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-04-23T22:33:23.161Z",
+    "success": true
+  },
+  {
+    "slug": "descript",
+    "pin_type": "tool-review",
+    "title": "Descript Review: AI Video Editing Game Changer? (4.5/5)",
+    "link": "https://pilottools.ai/tools/descript/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-23T22:33:30.030Z",
+    "success": true
+  },
+  {
+    "slug": "copy-ai",
+    "pin_type": "tool-review",
+    "title": "Copy.ai Review: Level Up Your Marketing with AI!",
+    "link": "https://pilottools.ai/tools/copy-ai/",
+    "board": "AI Marketing Tools",
+    "posted_at": "2026-04-23T22:33:34.174Z",
+    "success": true
+  },
+  {
+    "slug": "synthesia",
+    "pin_type": "tool-review",
+    "title": "Synthesia AI Review: Create Stunning Videos Easily!",
+    "link": "https://pilottools.ai/tools/synthesia/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-04-24T17:07:02.505Z",
+    "success": true
+  },
+  {
+    "slug": "category-image",
+    "pin_type": "category",
+    "title": "AI Image Tools 2026: Create Stunning Visuals Effortlessly!",
+    "link": "https://pilottools.ai/category/image/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-04-24T17:07:52.814Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-tools-photographers",
+    "pin_type": "article",
+    "title": "AI Photo Editing: Best Tools for Photographers in 2026",
+    "link": "https://pilottools.ai/blog/best-ai-tools-photographers/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-24T22:31:08.926Z",
+    "success": true
+  },
+  {
+    "slug": "how-to-start-ai-automation-agency-2026",
+    "pin_type": "article",
+    "title": "Launch Your 6-Figure AI Automation Agency in 2026!",
+    "link": "https://pilottools.ai/blog/how-to-start-ai-automation-agency-2026/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-24T22:31:58.985Z",
+    "success": true
   }
 ]

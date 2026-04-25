@@ -6,8 +6,9 @@ Fetches real-time signals from 3 sources:
   2. pytrends gprop='images' (Google Image Search — best Pinterest proxy)
   3. Google News RSS for breaking niche news
 
-Claude synthesizes all signals into exactly 3 ranked topics per brand,
+Claude synthesizes all signals into exactly 8 ranked topics per brand,
 stored in the `daily_trending` Supabase table for content-engine to consume.
+More topics = more variety and less repetition across the 3 daily pin runs.
 """
 
 import os
@@ -88,6 +89,50 @@ SCOUT_CONFIGS = {
             "Menopause, perimenopause, HRT, natural remedies, supplements, nutrition, "
             "sleep issues, mood changes, bone health, weight management. "
             "EXCLUDE: pregnancy, fertility, pediatric, men's health."
+        ),
+    },
+    "pilottools": {
+        "rss_feeds": [
+            "https://www.pinterest.com/hubspot/productivity-tips/.rss",
+            "https://www.pinterest.com/buffer/social-media-tips/.rss",
+            "https://www.pinterest.com/canva/design-tips/.rss",
+        ],
+        "pytrends_seeds": ["AI tools", "productivity apps", "ChatGPT tips"],
+        "news_keywords": ["AI tools launch", "best productivity software", "AI startup"],
+        "relevance_filter": (
+            "AI tools, SaaS products, productivity software, content creation tools, "
+            "automation, writing tools, design tools, marketing tools, freelancing. "
+            "EXCLUDE: hardware, gaming, cryptocurrency, enterprise-only B2B."
+        ),
+    },
+    "homedecor": {
+        "rss_feeds": [
+            "https://www.pinterest.com/realsimple/home-decorating-ideas/.rss",
+            "https://www.pinterest.com/bhg/decorating/.rss",
+            "https://www.pinterest.com/housebeautiful/decorating/.rss",
+            "https://www.pinterest.com/apartmenttherapy/home-decor/.rss",
+        ],
+        "pytrends_seeds": ["home decor ideas", "room makeover", "budget decorating"],
+        "news_keywords": ["home decor trends", "interior design budget", "room makeover"],
+        "relevance_filter": (
+            "Home decor, interior design, room makeovers, budget decorating, DIY decor, "
+            "living room, bedroom, kitchen styling, small spaces, apartment decor. "
+            "EXCLUDE: construction, real estate, commercial interiors, luxury >$1000."
+        ),
+    },
+    "beauty": {
+        "rss_feeds": [
+            "https://www.pinterest.com/allure/beauty/.rss",
+            "https://www.pinterest.com/byrdie/skincare/.rss",
+            "https://www.pinterest.com/glamour/beauty/.rss",
+            "https://www.pinterest.com/cosmopolitan/beauty/.rss",
+        ],
+        "pytrends_seeds": ["skincare routine", "drugstore makeup", "beauty dupes"],
+        "news_keywords": ["skincare products new", "beauty trends", "drugstore beauty"],
+        "relevance_filter": (
+            "Skincare, makeup, hair care, beauty products, beauty routines, dupes, "
+            "clean beauty, drugstore beauty, product reviews, self care. "
+            "EXCLUDE: cosmetic surgery, medical dermatology, men's grooming, luxury >$200."
         ),
     },
 }
@@ -294,7 +339,8 @@ YOUR TASK:
 1. FILTER — Keep only topics relevant to this brand (use the relevance filter)
 2. DEDUPLICATE — Merge overlapping/similar topics
 3. RANK — Score by: trendiness (hot RIGHT NOW), Pinterest visual fit, click potential
-4. SELECT — Pick exactly 3 topics, ranked #1 (hottest) to #3
+4. SELECT — Pick exactly 8 topics, ranked #1 (hottest) to #8
+   We need 8 topics to ensure variety across 3 daily pin runs (no repeated topics)
 
 For each topic, provide:
 - A refined, Pinterest-friendly topic title (specific, not generic)
@@ -322,10 +368,7 @@ Return ONLY this JSON array (no markdown, no backticks):
         "rank": 2,
         ...
     }},
-    {{
-        "rank": 3,
-        ...
-    }}
+    ... (8 topics total)
 ]"""
 
     for attempt in range(3):
@@ -333,7 +376,7 @@ Return ONLY this JSON array (no markdown, no backticks):
             response = _get_gemini_client().models.generate_content(
                 model="gemini-2.5-flash",
                 contents=prompt,
-                config={"max_output_tokens": 2000, "temperature": 0.7},
+                config={"max_output_tokens": 4000, "temperature": 0.7},
             )
             break
         except Exception as e:
@@ -353,9 +396,9 @@ Return ONLY this JSON array (no markdown, no backticks):
         else:
             raise ValueError(f"Claude did not return valid JSON: {content[:300]}")
 
-    # Ensure exactly 3 topics
-    if len(topics) > 3:
-        topics = topics[:3]
+    # Ensure exactly 8 topics
+    if len(topics) > 8:
+        topics = topics[:8]
 
     return topics
 
@@ -365,7 +408,7 @@ Return ONLY this JSON array (no markdown, no backticks):
 # ═══════════════════════════════════════════════════════════════
 
 def _get_fallback_topics(brand_key):
-    """Pick 3 random topics from BRAND_CONFIGS if all trend sources fail."""
+    """Pick 8 random topics from BRAND_CONFIGS if all trend sources fail."""
     from .content_brain import BRAND_CONFIGS
 
     config = BRAND_CONFIGS[brand_key]
@@ -374,7 +417,7 @@ def _get_fallback_topics(brand_key):
         for topic in topics:
             all_topics.append({"topic": topic, "category": category})
 
-    selected = random.sample(all_topics, min(3, len(all_topics)))
+    selected = random.sample(all_topics, min(8, len(all_topics)))
     boards = config.get("pinterest_boards", ["General"])
 
     return [

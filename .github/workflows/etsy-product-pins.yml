@@ -28,7 +28,7 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: pip install requests pillow
+        run: pip install requests pillow google-genai supabase
 
       - name: Post Etsy product pins
         env:

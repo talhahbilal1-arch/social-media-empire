@@ -39,169 +39,257 @@ AMAZON_AFFILIATE_LINKS = {
         "magnesium": "https://www.amazon.com/dp/B000BD0RT0?tag=fitover3509-20",
         "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=fitover3509-20",
         "omega 3": "https://www.amazon.com/dp/B004O2I9JO?tag=fitover3509-20",
-        "ashwagandha": "https://www.amazon.com/dp/B078K6DHN1?tag=fitover3509-20",
+        "ashwagandha": "https://www.amazon.com/dp/B073DN2YG9?tag=fitover3509-20",
         "protein powder": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover3509-20",
         "whey protein": "https://www.amazon.com/dp/B000QSNYGI?tag=fitover3509-20",
-        "collagen peptides": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover3509-20",
-        "collagen": "https://www.amazon.com/dp/B00K6JUG40?tag=fitover3509-20",
-        "zinc": "https://www.amazon.com/dp/B003QB97MC?tag=fitover3509-20",
-        "bcaa": "https://www.amazon.com/dp/B00E7GV65Q?tag=fitover3509-20",
-        "pre workout": "https://www.amazon.com/dp/B07DNRXWF7?tag=fitover3509-20",
-        "multivitamin": "https://www.amazon.com/dp/B000GG2I9O?tag=fitover3509-20",
-        "probiotics": "https://www.amazon.com/dp/B07K2GKZLM?tag=fitover3509-20",
-        "turmeric": "https://www.amazon.com/dp/B01K2JUMJQ?tag=fitover3509-20",
+        "collagen peptides": "https://www.amazon.com/dp/B07CG8BCWK?tag=fitover3509-20",
+        "collagen": "https://www.amazon.com/dp/B07CG8BCWK?tag=fitover3509-20",
+        "zinc": "https://www.amazon.com/dp/B08YLTCDTN?tag=fitover3509-20",
+        "bcaa": "https://www.amazon.com/dp/B009NW9U3Y?tag=fitover3509-20",
+        "pre workout": "https://www.amazon.com/dp/B00PYB335O?tag=fitover3509-20",
+        "multivitamin": "https://www.amazon.com/dp/B001F71XAI?tag=fitover3509-20",
+        "probiotics": "https://www.amazon.com/dp/B079H53D2B?tag=fitover3509-20",
+        "turmeric": "https://www.amazon.com/dp/B0C1G7YCJF?tag=fitover3509-20",
         "melatonin": "https://www.amazon.com/dp/B005DEK990?tag=fitover3509-20",
-        "testosterone booster": "https://www.amazon.com/dp/B07DWR9BNJ?tag=fitover3509-20",
-        "tongkat ali": "https://www.amazon.com/dp/B084GJJT3N?tag=fitover3509-20",
+        "testosterone booster": "https://www.amazon.com/dp/B01MQ1JLWY?tag=fitover3509-20",
+        "tongkat ali": "https://www.amazon.com/dp/B0C361XRFK?tag=fitover3509-20",
         "electrolytes": "https://www.amazon.com/dp/B01IT9NLHW?tag=fitover3509-20",
         # Equipment
         "resistance bands": "https://www.amazon.com/dp/B01AVDVHTI?tag=fitover3509-20",
-        "adjustable dumbbells": "https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20",
+        "adjustable dumbbells": "https://www.amazon.com/dp/B0DPFW7F4B?tag=fitover3509-20",
         "pull-up bar": "https://www.amazon.com/dp/B001EJMS6K?tag=fitover3509-20",
         "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=fitover3509-20",
-        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=fitover3509-20",
-        "kettlebell": "https://www.amazon.com/dp/B003J9E5WO?tag=fitover3509-20",
-        "massage gun": "https://www.amazon.com/dp/B07MHBJYRH?tag=fitover3509-20",
-        "workout gloves": "https://www.amazon.com/dp/B01MQGF4TQ?tag=fitover3509-20",
+        "yoga mat": "https://www.amazon.com/dp/B0B74MRJS3?tag=fitover3509-20",
+        "kettlebell": "https://www.amazon.com/dp/B0731DWW5K?tag=fitover3509-20",
+        "massage gun": "https://www.amazon.com/dp/B0CG6FQPC5?tag=fitover3509-20",
+        "workout gloves": "https://www.amazon.com/dp/B07KQR9VXG?tag=fitover3509-20",
         "weight bench": "https://www.amazon.com/dp/B07DNHHNNN?tag=fitover3509-20",
         "barbell": "https://www.amazon.com/dp/B001K4OPY2?tag=fitover3509-20",
-        "power rack": "https://www.amazon.com/dp/B01NBFIIIA?tag=fitover3509-20",
-        "squat rack": "https://www.amazon.com/dp/B01NBFIIIA?tag=fitover3509-20",
-        "ab roller": "https://www.amazon.com/dp/B010FN6I2C?tag=fitover3509-20",
-        "jump rope": "https://www.amazon.com/dp/B01ID497GU?tag=fitover3509-20",
-        "weight plates": "https://www.amazon.com/dp/B074DZ9GHM?tag=fitover3509-20",
+        "power rack": "https://www.amazon.com/dp/B0BFQVVFB7?tag=fitover3509-20",
+        "squat rack": "https://www.amazon.com/dp/B0BFQVVFB7?tag=fitover3509-20",
+        "ab roller": "https://www.amazon.com/dp/B0007IS74G?tag=fitover3509-20",
+        "jump rope": "https://www.amazon.com/dp/B09DF9NWC7?tag=fitover3509-20",
+        "weight plates": "https://www.amazon.com/dp/B0DHYNHYJD?tag=fitover3509-20",
         "dip station": "https://www.amazon.com/dp/B002Y2SUU4?tag=fitover3509-20",
-        "lifting belt": "https://www.amazon.com/dp/B019SSHDSW?tag=fitover3509-20",
-        "lifting straps": "https://www.amazon.com/dp/B00NQ1353K?tag=fitover3509-20",
-        "knee sleeves": "https://www.amazon.com/dp/B019NSMQ9E?tag=fitover3509-20",
-        "weighted vest": "https://www.amazon.com/dp/B078Z3SRNG?tag=fitover3509-20",
-        "battle ropes": "https://www.amazon.com/dp/B00KFXIBXW?tag=fitover3509-20",
-        "suspension trainer": "https://www.amazon.com/dp/B002YIA5QE?tag=fitover3509-20",
-        "stability ball": "https://www.amazon.com/dp/B0074TWTMU?tag=fitover3509-20",
-        "grip strengthener": "https://www.amazon.com/dp/B07B1D47FB?tag=fitover3509-20",
+        "lifting belt": "https://www.amazon.com/dp/B074KKQJYH?tag=fitover3509-20",
+        "lifting straps": "https://www.amazon.com/dp/B0FFBNL8BG?tag=fitover3509-20",
+        "knee sleeves": "https://www.amazon.com/dp/B08JGP1WYM?tag=fitover3509-20",
+        "weighted vest": "https://www.amazon.com/dp/B0GM2JS7LH?tag=fitover3509-20",
+        "battle ropes": "https://www.amazon.com/dp/B072Z2ZTLJ?tag=fitover3509-20",
+        "suspension trainer": "https://www.amazon.com/dp/B08BCKK41K?tag=fitover3509-20",
+        "stability ball": "https://www.amazon.com/dp/B07RX2J294?tag=fitover3509-20",
+        "grip strengthener": "https://www.amazon.com/dp/B092DRRGFC?tag=fitover3509-20",
         # Nutrition & Recovery
         "food scale": "https://www.amazon.com/dp/B004164SRA?tag=fitover3509-20",
-        "glass meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=fitover3509-20",
-        "protein shaker": "https://www.amazon.com/dp/B01LZ2GH5O?tag=fitover3509-20",
-        "stretching strap": "https://www.amazon.com/dp/B07YQ2BX91?tag=fitover3509-20",
-        "lacrosse ball": "https://www.amazon.com/dp/B06XK3DLVQ?tag=fitover3509-20",
-        "ice pack": "https://www.amazon.com/dp/B01N926DGN?tag=fitover3509-20",
+        "glass meal prep containers": "https://www.amazon.com/dp/B07Q498XSZ?tag=fitover3509-20",
+        "protein shaker": "https://www.amazon.com/dp/B0FMY6YJ3B?tag=fitover3509-20",
+        "stretching strap": "https://www.amazon.com/dp/B09WVC526G?tag=fitover3509-20",
+        "lacrosse ball": "https://www.amazon.com/dp/B07K3B17Q3?tag=fitover3509-20",
+        "ice pack": "https://www.amazon.com/dp/B01LXM8W8T?tag=fitover3509-20",
         # Tech
-        "fitness tracker": "https://www.amazon.com/dp/B0B5F5SG6P?tag=fitover3509-20",
-        "smart scale": "https://www.amazon.com/dp/B09CL72LN7?tag=fitover3509-20",
-        "water bottle": "https://www.amazon.com/dp/B09MKVLHZM?tag=fitover3509-20",
-        "_default": "https://www.amazon.com/dp/B001ARYU58?tag=fitover3509-20",
+        "fitness tracker": "https://www.amazon.com/dp/B0B5F9SZW7?tag=fitover3509-20",
+        "smart scale": "https://www.amazon.com/dp/B01N1UX8RW?tag=fitover3509-20",
+        "water bottle": "https://www.amazon.com/dp/B0DLCG65B5?tag=fitover3509-20",
+        "_default": "https://www.amazon.com/dp/B0DPFW7F4B?tag=fitover3509-20",
     },
     "deals": {
         # Kitchen Appliances
         "air fryer": "https://www.amazon.com/dp/B07FDJMC9Q?tag=dailydealdarl-20",
         "instant pot": "https://www.amazon.com/dp/B00FLYWNYQ?tag=dailydealdarl-20",
-        "coffee maker": "https://www.amazon.com/dp/B083LNYLNJ?tag=dailydealdarl-20",
-        "blender": "https://www.amazon.com/dp/B00VKUWMMG?tag=dailydealdarl-20",
-        "food processor": "https://www.amazon.com/dp/B01AXM4WOO?tag=dailydealdarl-20",
+        "coffee maker": "https://www.amazon.com/dp/B01GJOMWVA?tag=dailydealdarl-20",
+        "blender": "https://www.amazon.com/dp/B0G6FR8V9Y?tag=dailydealdarl-20",
+        "food processor": "https://www.amazon.com/dp/B089TP3K77?tag=dailydealdarl-20",
         "slow cooker": "https://www.amazon.com/dp/B004P2NG0K?tag=dailydealdarl-20",
         "electric kettle": "https://www.amazon.com/dp/B07TZ5YHJN?tag=dailydealdarl-20",
-        "stand mixer": "https://www.amazon.com/dp/B00LEAWBQO?tag=dailydealdarl-20",
+        "stand mixer": "https://www.amazon.com/dp/B005PVPI2E?tag=dailydealdarl-20",
         # Kitchen Tools
-        "knife set": "https://www.amazon.com/dp/B07TLZXRK2?tag=dailydealdarl-20",
-        "chef knife": "https://www.amazon.com/dp/B000IBVB8E?tag=dailydealdarl-20",
-        "cutting board": "https://www.amazon.com/dp/B01J9AOF1G?tag=dailydealdarl-20",
+        "knife set": "https://www.amazon.com/dp/B07RTH8LM7?tag=dailydealdarl-20",
+        "chef knife": "https://www.amazon.com/dp/B0CKZ1MJ7Y?tag=dailydealdarl-20",
+        "cutting board": "https://www.amazon.com/dp/B01GP2MTXW?tag=dailydealdarl-20",
         "cast iron skillet": "https://www.amazon.com/dp/B00006JSUA?tag=dailydealdarl-20",
-        "nonstick pan": "https://www.amazon.com/dp/B00OEFBPIC?tag=dailydealdarl-20",
+        "nonstick pan": "https://www.amazon.com/dp/B0F9YK3VZM?tag=dailydealdarl-20",
         "dutch oven": "https://www.amazon.com/dp/B000N501BK?tag=dailydealdarl-20",
-        "baking sheet": "https://www.amazon.com/dp/B00BPXKFKM?tag=dailydealdarl-20",
-        "mixing bowls": "https://www.amazon.com/dp/B01L1UN7XO?tag=dailydealdarl-20",
-        "cooking utensil set": "https://www.amazon.com/dp/B091CFKWZJ?tag=dailydealdarl-20",
+        "baking sheet": "https://www.amazon.com/dp/B088P9H3V7?tag=dailydealdarl-20",
+        "mixing bowls": "https://www.amazon.com/dp/B0CGWQ53L3?tag=dailydealdarl-20",
+        "cooking utensil set": "https://www.amazon.com/dp/B089FBYT3W?tag=dailydealdarl-20",
         "vegetable chopper": "https://www.amazon.com/dp/B0764HS4SL?tag=dailydealdarl-20",
-        "meal prep containers": "https://www.amazon.com/dp/B078RFVKNR?tag=dailydealdarl-20",
-        "storage containers": "https://www.amazon.com/dp/B0018AJFPY?tag=dailydealdarl-20",
+        "meal prep containers": "https://www.amazon.com/dp/B08CVTY9FS?tag=dailydealdarl-20",
+        "storage containers": "https://www.amazon.com/dp/B001RCUNJ8?tag=dailydealdarl-20",
         # Organization
-        "organizer bins": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
-        "label maker": "https://www.amazon.com/dp/B0719RFLTQ?tag=dailydealdarl-20",
-        "drawer dividers": "https://www.amazon.com/dp/B073VB74FJ?tag=dailydealdarl-20",
-        "closet organizer": "https://www.amazon.com/dp/B07N4KFMHZ?tag=dailydealdarl-20",
-        "shoe rack": "https://www.amazon.com/dp/B079DJZTJH?tag=dailydealdarl-20",
-        "hangers": "https://www.amazon.com/dp/B0796P2FNM?tag=dailydealdarl-20",
-        "lazy susan": "https://www.amazon.com/dp/B07WNRVMPH?tag=dailydealdarl-20",
-        "vacuum storage bags": "https://www.amazon.com/dp/B07B6LGWJR?tag=dailydealdarl-20",
-        "command hooks": "https://www.amazon.com/dp/B00I62F5JW?tag=dailydealdarl-20",
-        "desk organizer": "https://www.amazon.com/dp/B078HNYQWN?tag=dailydealdarl-20",
+        "organizer bins": "https://www.amazon.com/dp/B002VK5QN8?tag=dailydealdarl-20",
+        "label maker": "https://www.amazon.com/dp/B0C3L93F2Q?tag=dailydealdarl-20",
+        "drawer dividers": "https://www.amazon.com/dp/B0D5Y391WS?tag=dailydealdarl-20",
+        "closet organizer": "https://www.amazon.com/dp/B0C7PWN1JV?tag=dailydealdarl-20",
+        "shoe rack": "https://www.amazon.com/dp/B0747QX7QG?tag=dailydealdarl-20",
+        "hangers": "https://www.amazon.com/dp/B09MFQL6P5?tag=dailydealdarl-20",
+        "lazy susan": "https://www.amazon.com/dp/B0F8J2ZTQ9?tag=dailydealdarl-20",
+        "vacuum storage bags": "https://www.amazon.com/dp/B07RSCPH4N?tag=dailydealdarl-20",
+        "command hooks": "https://www.amazon.com/dp/B0753NHZVQ?tag=dailydealdarl-20",
+        "desk organizer": "https://www.amazon.com/dp/B0BYDGF8DT?tag=dailydealdarl-20",
         # Beauty
-        "silk pillowcase": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
-        "LED face mask": "https://www.amazon.com/dp/B07D3KVL4Z?tag=dailydealdarl-20",
-        "jade roller": "https://www.amazon.com/dp/B07WRFQ1Q5?tag=dailydealdarl-20",
-        "gua sha": "https://www.amazon.com/dp/B082FJSSV6?tag=dailydealdarl-20",
+        "silk pillowcase": "https://www.amazon.com/dp/B09BFQG17F?tag=dailydealdarl-20",
+        "LED face mask": "https://www.amazon.com/dp/B0F18BBHCC?tag=dailydealdarl-20",
+        "jade roller": "https://www.amazon.com/dp/B0FRMB9NJV?tag=dailydealdarl-20",
+        "gua sha": "https://www.amazon.com/dp/B09TPDYS7N?tag=dailydealdarl-20",
         "retinol serum": "https://www.amazon.com/dp/B01MSSDEPK?tag=dailydealdarl-20",
         "vitamin c serum": "https://www.amazon.com/dp/B01M4MCUAF?tag=dailydealdarl-20",
-        "sunscreen": "https://www.amazon.com/dp/B00X1FWFG0?tag=dailydealdarl-20",
-        "hair dryer": "https://www.amazon.com/dp/B084DB3F9Z?tag=dailydealdarl-20",
+        "sunscreen": "https://www.amazon.com/dp/B01MQXX9US?tag=dailydealdarl-20",
+        "hair dryer": "https://www.amazon.com/dp/B003TQPRGY?tag=dailydealdarl-20",
         # Home Decor
-        "throw pillows": "https://www.amazon.com/dp/B08RDSBWTK?tag=dailydealdarl-20",
-        "LED candles": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
-        "fairy lights": "https://www.amazon.com/dp/B07BKY4XL2?tag=dailydealdarl-20",
-        "throw blanket": "https://www.amazon.com/dp/B0BYK2N6S3?tag=dailydealdarl-20",
-        "area rug": "https://www.amazon.com/dp/B076J4QSGY?tag=dailydealdarl-20",
-        "curtains": "https://www.amazon.com/dp/B0725T8FD5?tag=dailydealdarl-20",
-        "diffuser": "https://www.amazon.com/dp/B07L4R62GQ?tag=dailydealdarl-20",
-        "scented candles": "https://www.amazon.com/dp/B079SCMFDC?tag=dailydealdarl-20",
+        "throw pillows": "https://www.amazon.com/dp/B0714K41PB?tag=dailydealdarl-20",
+        "LED candles": "https://www.amazon.com/dp/B09BFQG17F?tag=dailydealdarl-20",
+        "fairy lights": "https://www.amazon.com/dp/B0DWMYJF8Y?tag=dailydealdarl-20",
+        "throw blanket": "https://www.amazon.com/dp/B08NWSLV61?tag=dailydealdarl-20",
+        "area rug": "https://www.amazon.com/dp/B098DP5MH8?tag=dailydealdarl-20",
+        "curtains": "https://www.amazon.com/dp/B01CS31R94?tag=dailydealdarl-20",
+        "diffuser": "https://www.amazon.com/dp/B01MR4Y0CZ?tag=dailydealdarl-20",
+        "scented candles": "https://www.amazon.com/dp/B0CR7L79Q2?tag=dailydealdarl-20",
         # Cleaning & Tech
-        "robot vacuum": "https://www.amazon.com/dp/B08G4V2J5D?tag=dailydealdarl-20",
-        "cordless vacuum": "https://www.amazon.com/dp/B07FSFG1QQ?tag=dailydealdarl-20",
+        "robot vacuum": "https://www.amazon.com/dp/B0GDXV2KJ4?tag=dailydealdarl-20",
+        "cordless vacuum": "https://www.amazon.com/dp/B0F2B29SPC?tag=dailydealdarl-20",
         "smart plug": "https://www.amazon.com/dp/B07XJ8C8F5?tag=dailydealdarl-20",
         "echo dot": "https://www.amazon.com/dp/B09B8V1LZ3?tag=dailydealdarl-20",
-        "water bottle": "https://www.amazon.com/dp/B09MKVLHZM?tag=dailydealdarl-20",
-        "stanley tumbler": "https://www.amazon.com/dp/B0BQY3KJ9D?tag=dailydealdarl-20",
-        "_default": "https://www.amazon.com/dp/B07DFDS56B?tag=dailydealdarl-20",
+        "water bottle": "https://www.amazon.com/dp/B085DTZQNZ?tag=dailydealdarl-20",
+        "stanley tumbler": "https://www.amazon.com/dp/B0CV64341S?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B002VK5QN8?tag=dailydealdarl-20",
     },
     "menopause": {
         # Supplements
-        "black cohosh": "https://www.amazon.com/dp/B0019LTI86?tag=dailydealdarl-20",
-        "evening primrose oil": "https://www.amazon.com/dp/B00DWCZWHK?tag=dailydealdarl-20",
+        "black cohosh": "https://www.amazon.com/dp/B000GG6ABI?tag=dailydealdarl-20",
+        "evening primrose oil": "https://www.amazon.com/dp/B000GH0PFM?tag=dailydealdarl-20",
         "magnesium glycinate": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20",
         "magnesium": "https://www.amazon.com/dp/B000BD0RT0?tag=dailydealdarl-20",
         "vitamin D3": "https://www.amazon.com/dp/B00GB85JR4?tag=dailydealdarl-20",
-        "calcium": "https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20",
-        "collagen powder": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarl-20",
-        "collagen": "https://www.amazon.com/dp/B00K6JUG40?tag=dailydealdarl-20",
-        "probiotics": "https://www.amazon.com/dp/B07K2GKZLM?tag=dailydealdarl-20",
+        "calcium": "https://www.amazon.com/dp/B002FH5I0I?tag=dailydealdarl-20",
+        "collagen powder": "https://www.amazon.com/dp/B09QV3XG8B?tag=dailydealdarl-20",
+        "collagen": "https://www.amazon.com/dp/B09QV3XG8B?tag=dailydealdarl-20",
+        "probiotics": "https://www.amazon.com/dp/B079H53D2B?tag=dailydealdarl-20",
         "omega 3": "https://www.amazon.com/dp/B004O2I9JO?tag=dailydealdarl-20",
         "fish oil": "https://www.amazon.com/dp/B004O2I9JO?tag=dailydealdarl-20",
-        "maca root": "https://www.amazon.com/dp/B007IM1XFM?tag=dailydealdarl-20",
-        "ashwagandha": "https://www.amazon.com/dp/B078K18HYN?tag=dailydealdarl-20",
-        "turmeric": "https://www.amazon.com/dp/B01K2JUMJQ?tag=dailydealdarl-20",
-        "dong quai": "https://www.amazon.com/dp/B000MRISUE?tag=dailydealdarl-20",
-        "red clover": "https://www.amazon.com/dp/B000MRIVAG?tag=dailydealdarl-20",
+        "maca root": "https://www.amazon.com/dp/B01M362DU7?tag=dailydealdarl-20",
+        "ashwagandha": "https://www.amazon.com/dp/B073DN2YG9?tag=dailydealdarl-20",
+        "turmeric": "https://www.amazon.com/dp/B08HY91VTB?tag=dailydealdarl-20",
+        "dong quai": "https://www.amazon.com/dp/B0C91ZK92W?tag=dailydealdarl-20",
+        "red clover": "https://www.amazon.com/dp/B000Z95EZC?tag=dailydealdarl-20",
         "valerian root": "https://www.amazon.com/dp/B0012AMVHW?tag=dailydealdarl-20",
         "melatonin": "https://www.amazon.com/dp/B005DEK990?tag=dailydealdarl-20",
-        "multivitamin women": "https://www.amazon.com/dp/B00J36DNR8?tag=dailydealdarl-20",
+        "multivitamin women": "https://www.amazon.com/dp/B09QBKGDLS?tag=dailydealdarl-20",
         # Sleep & Comfort
-        "cooling pillow": "https://www.amazon.com/dp/B07C7FQBDT?tag=dailydealdarl-20",
-        "bamboo sheets": "https://www.amazon.com/dp/B07QDFLQ7J?tag=dailydealdarl-20",
-        "cooling pajamas": "https://www.amazon.com/dp/B07YC684QN?tag=dailydealdarl-20",
-        "weighted blanket": "https://www.amazon.com/dp/B07H2DKQGJ?tag=dailydealdarl-20",
-        "silk pillowcase": "https://www.amazon.com/dp/B07P3SQCV3?tag=dailydealdarl-20",
-        "white noise machine": "https://www.amazon.com/dp/B00MY8V86O?tag=dailydealdarl-20",
+        "cooling pillow": "https://www.amazon.com/dp/B0BFRH42QJ?tag=dailydealdarl-20",
+        "bamboo sheets": "https://www.amazon.com/dp/B07YKCZHGK?tag=dailydealdarl-20",
+        "cooling pajamas": "https://www.amazon.com/dp/B0BR9PVMP9?tag=dailydealdarl-20",
+        "weighted blanket": "https://www.amazon.com/dp/B092LZLLGF?tag=dailydealdarl-20",
+        "silk pillowcase": "https://www.amazon.com/dp/B09BFQG17F?tag=dailydealdarl-20",
+        "white noise machine": "https://www.amazon.com/dp/B07VRJSFVC?tag=dailydealdarl-20",
         "sleep mask": "https://www.amazon.com/dp/B07KC5DWCC?tag=dailydealdarl-20",
-        "cooling mattress pad": "https://www.amazon.com/dp/B07X3BKDPH?tag=dailydealdarl-20",
-        "cooling blanket": "https://www.amazon.com/dp/B092QNCL7Q?tag=dailydealdarl-20",
-        "blackout curtains": "https://www.amazon.com/dp/B0725T8FD5?tag=dailydealdarl-20",
+        "cooling mattress pad": "https://www.amazon.com/dp/B07D5DN269?tag=dailydealdarl-20",
+        "cooling blanket": "https://www.amazon.com/dp/B0DR8CHFKV?tag=dailydealdarl-20",
+        "blackout curtains": "https://www.amazon.com/dp/B01CS31R94?tag=dailydealdarl-20",
         # Wellness
-        "symptom tracker journal": "https://www.amazon.com/dp/B0BW9GDRP7?tag=dailydealdarl-20",
-        "essential oils diffuser": "https://www.amazon.com/dp/B07L4R62GQ?tag=dailydealdarl-20",
-        "yoga mat": "https://www.amazon.com/dp/B01LYBOA9L?tag=dailydealdarl-20",
+        "symptom tracker journal": "https://www.amazon.com/dp/B0DNSRBRN1?tag=dailydealdarl-20",
+        "essential oils diffuser": "https://www.amazon.com/dp/B01MR4Y0CZ?tag=dailydealdarl-20",
+        "yoga mat": "https://www.amazon.com/dp/B0B74MRJS3?tag=dailydealdarl-20",
         "resistance bands": "https://www.amazon.com/dp/B01AVDVHTI?tag=dailydealdarl-20",
         "foam roller": "https://www.amazon.com/dp/B0040EKZDY?tag=dailydealdarl-20",
-        "jade roller": "https://www.amazon.com/dp/B07WRFQ1Q5?tag=dailydealdarl-20",
-        "gua sha": "https://www.amazon.com/dp/B082FJSSV6?tag=dailydealdarl-20",
+        "jade roller": "https://www.amazon.com/dp/B0FRMB9NJV?tag=dailydealdarl-20",
+        "gua sha": "https://www.amazon.com/dp/B09TPDYS7N?tag=dailydealdarl-20",
         "heating pad": "https://www.amazon.com/dp/B00075M1T6?tag=dailydealdarl-20",
         "tens unit": "https://www.amazon.com/dp/B00NCRE4GO?tag=dailydealdarl-20",
-        "acupressure mat": "https://www.amazon.com/dp/B07BFGH97T?tag=dailydealdarl-20",
-        "cooling towel": "https://www.amazon.com/dp/B07MWCDR79?tag=dailydealdarl-20",
+        "acupressure mat": "https://www.amazon.com/dp/B071FNYSJY?tag=dailydealdarl-20",
+        "cooling towel": "https://www.amazon.com/dp/B0CBPFF73Y?tag=dailydealdarl-20",
         "herbal tea": "https://www.amazon.com/dp/B0009F3QL6?tag=dailydealdarl-20",
-        "lavender oil": "https://www.amazon.com/dp/B005V2WRZI?tag=dailydealdarl-20",
+        "lavender oil": "https://www.amazon.com/dp/B00TSTZQEY?tag=dailydealdarl-20",
         "humidifier": "https://www.amazon.com/dp/B013IJPTFK?tag=dailydealdarl-20",
         "air purifier": "https://www.amazon.com/dp/B07VVK39F7?tag=dailydealdarl-20",
-        "_default": "https://www.amazon.com/dp/B001G7QUXW?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B002FH5I0I?tag=dailydealdarl-20",
+    },
+    "pilottools": {
+        # PilotTools does NOT use Amazon — SaaS affiliate programs instead
+        # These are placeholder URLs; actual affiliate links are managed externally
+        "_default": "https://pilottools.ai/tools/",
+    },
+    "homedecor": {
+        # Home Decor — uses dailydealdarl-20 tag
+        "throw pillows": "https://www.amazon.com/dp/B0714K41PB?tag=dailydealdarl-20",
+        "accent pillows": "https://www.amazon.com/dp/B0714K41PB?tag=dailydealdarl-20",
+        "curtains": "https://www.amazon.com/dp/B01CS31R94?tag=dailydealdarl-20",
+        "blackout curtains": "https://www.amazon.com/dp/B01CS31R94?tag=dailydealdarl-20",
+        "area rug": "https://www.amazon.com/dp/B098DP5MH8?tag=dailydealdarl-20",
+        "rug": "https://www.amazon.com/dp/B098DP5MH8?tag=dailydealdarl-20",
+        "wall art": "https://www.amazon.com/dp/B07TYWLQFR?tag=dailydealdarl-20",
+        "canvas art": "https://www.amazon.com/dp/B07TYWLQFR?tag=dailydealdarl-20",
+        "scented candles": "https://www.amazon.com/dp/B0CR7L79Q2?tag=dailydealdarl-20",
+        "candles": "https://www.amazon.com/dp/B0CR7L79Q2?tag=dailydealdarl-20",
+        "picture frames": "https://www.amazon.com/dp/B08GFY4NKT?tag=dailydealdarl-20",
+        "frames": "https://www.amazon.com/dp/B08GFY4NKT?tag=dailydealdarl-20",
+        "vases": "https://www.amazon.com/dp/B0BXDSH6CJ?tag=dailydealdarl-20",
+        "vase": "https://www.amazon.com/dp/B0BXDSH6CJ?tag=dailydealdarl-20",
+        "table lamp": "https://www.amazon.com/dp/B08GKF46GW?tag=dailydealdarl-20",
+        "lamp": "https://www.amazon.com/dp/B08GKF46GW?tag=dailydealdarl-20",
+        "decorative tray": "https://www.amazon.com/dp/B08XZHGS9J?tag=dailydealdarl-20",
+        "tray": "https://www.amazon.com/dp/B08XZHGS9J?tag=dailydealdarl-20",
+        "storage baskets": "https://www.amazon.com/dp/B07WNHP7PK?tag=dailydealdarl-20",
+        "baskets": "https://www.amazon.com/dp/B07WNHP7PK?tag=dailydealdarl-20",
+        "floating shelves": "https://www.amazon.com/dp/B0B5LMDCB7?tag=dailydealdarl-20",
+        "shelves": "https://www.amazon.com/dp/B0B5LMDCB7?tag=dailydealdarl-20",
+        "accent mirror": "https://www.amazon.com/dp/B07W4LXHP5?tag=dailydealdarl-20",
+        "mirror": "https://www.amazon.com/dp/B07W4LXHP5?tag=dailydealdarl-20",
+        "artificial plants": "https://www.amazon.com/dp/B0834LBKHQ?tag=dailydealdarl-20",
+        "fake plants": "https://www.amazon.com/dp/B0834LBKHQ?tag=dailydealdarl-20",
+        "throw blanket": "https://www.amazon.com/dp/B08NWSLV61?tag=dailydealdarl-20",
+        "blanket": "https://www.amazon.com/dp/B08NWSLV61?tag=dailydealdarl-20",
+        "coasters": "https://www.amazon.com/dp/B07PZMQBPJ?tag=dailydealdarl-20",
+        "duvet cover": "https://www.amazon.com/dp/B07VHFTQH7?tag=dailydealdarl-20",
+        "nightstand lamp": "https://www.amazon.com/dp/B08GKF46GW?tag=dailydealdarl-20",
+        "blanket ladder": "https://www.amazon.com/dp/B09CTQG1CX?tag=dailydealdarl-20",
+        "coffee table books": "https://www.amazon.com/dp/B0BLHB8VT1?tag=dailydealdarl-20",
+        "bar stools": "https://www.amazon.com/dp/B0B9GJ6M8T?tag=dailydealdarl-20",
+        "shower curtain": "https://www.amazon.com/dp/B07DFBQRSF?tag=dailydealdarl-20",
+        "bath mat": "https://www.amazon.com/dp/B08D3Y5PFZ?tag=dailydealdarl-20",
+        "towel set": "https://www.amazon.com/dp/B07D4JRLHH?tag=dailydealdarl-20",
+        "soap dispenser": "https://www.amazon.com/dp/B07Z8P1R4P?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B0714K41PB?tag=dailydealdarl-20",
+    },
+    "beauty": {
+        # Beauty — uses dailydealdarl-20 tag
+        "vitamin C serum": "https://www.amazon.com/dp/B01M4MCUAF?tag=dailydealdarl-20",
+        "vitamin c serum": "https://www.amazon.com/dp/B01M4MCUAF?tag=dailydealdarl-20",
+        "retinol cream": "https://www.amazon.com/dp/B01MSSDEPK?tag=dailydealdarl-20",
+        "retinol": "https://www.amazon.com/dp/B01MSSDEPK?tag=dailydealdarl-20",
+        "jade roller": "https://www.amazon.com/dp/B0FRMB9NJV?tag=dailydealdarl-20",
+        "face masks": "https://www.amazon.com/dp/B09BFQG17F?tag=dailydealdarl-20",
+        "LED face mask": "https://www.amazon.com/dp/B0F18BBHCC?tag=dailydealdarl-20",
+        "makeup brushes": "https://www.amazon.com/dp/B01LY3QHOE?tag=dailydealdarl-20",
+        "brush set": "https://www.amazon.com/dp/B01LY3QHOE?tag=dailydealdarl-20",
+        "setting spray": "https://www.amazon.com/dp/B003YPZN5O?tag=dailydealdarl-20",
+        "mascara": "https://www.amazon.com/dp/B004Y9GTYE?tag=dailydealdarl-20",
+        "lip gloss": "https://www.amazon.com/dp/B004EHXZ22?tag=dailydealdarl-20",
+        "moisturizer": "https://www.amazon.com/dp/B00TTD9BRC?tag=dailydealdarl-20",
+        "sunscreen": "https://www.amazon.com/dp/B01MQXX9US?tag=dailydealdarl-20",
+        "SPF": "https://www.amazon.com/dp/B01MQXX9US?tag=dailydealdarl-20",
+        "hair oil": "https://www.amazon.com/dp/B003WJI070?tag=dailydealdarl-20",
+        "dry shampoo": "https://www.amazon.com/dp/B00B3TMSUQ?tag=dailydealdarl-20",
+        "makeup mirror": "https://www.amazon.com/dp/B01M0ABYIY?tag=dailydealdarl-20",
+        "beauty blender": "https://www.amazon.com/dp/B003ZVJEEM?tag=dailydealdarl-20",
+        "sponge": "https://www.amazon.com/dp/B003ZVJEEM?tag=dailydealdarl-20",
+        "nail polish": "https://www.amazon.com/dp/B00FO4UQ5K?tag=dailydealdarl-20",
+        "hyaluronic acid serum": "https://www.amazon.com/dp/B01INENT5G?tag=dailydealdarl-20",
+        "hyaluronic acid": "https://www.amazon.com/dp/B01INENT5G?tag=dailydealdarl-20",
+        "niacinamide serum": "https://www.amazon.com/dp/B07Q2GKX7Y?tag=dailydealdarl-20",
+        "niacinamide": "https://www.amazon.com/dp/B07Q2GKX7Y?tag=dailydealdarl-20",
+        "cleanser": "https://www.amazon.com/dp/B000052YMQ?tag=dailydealdarl-20",
+        "toner": "https://www.amazon.com/dp/B00016XJ4M?tag=dailydealdarl-20",
+        "foundation": "https://www.amazon.com/dp/B01DF1ERRG?tag=dailydealdarl-20",
+        "concealer": "https://www.amazon.com/dp/B004Y9GZII?tag=dailydealdarl-20",
+        "blush": "https://www.amazon.com/dp/B002LCZFIK?tag=dailydealdarl-20",
+        "eyeshadow palette": "https://www.amazon.com/dp/B019FME2S6?tag=dailydealdarl-20",
+        "eyelash curler": "https://www.amazon.com/dp/B0002JFI5Q?tag=dailydealdarl-20",
+        "heat protectant": "https://www.amazon.com/dp/B00JNA436S?tag=dailydealdarl-20",
+        "leave-in conditioner": "https://www.amazon.com/dp/B001AO0WCG?tag=dailydealdarl-20",
+        "body lotion": "https://www.amazon.com/dp/B001E6OCOM?tag=dailydealdarl-20",
+        "lip balm": "https://www.amazon.com/dp/B00XKYUKFA?tag=dailydealdarl-20",
+        "ice roller": "https://www.amazon.com/dp/B09CL65JBT?tag=dailydealdarl-20",
+        "_default": "https://www.amazon.com/dp/B01M4MCUAF?tag=dailydealdarl-20",
     },
 }
 
@@ -209,6 +297,9 @@ BRAND_AFFILIATE_TAGS = {
     "fitness": "fitover3509-20",
     "deals": "dailydealdarl-20",
     "menopause": "dailydealdarl-20",
+    "pilottools": "none",
+    "homedecor": "dailydealdarl-20",
+    "beauty": "dailydealdarl-20",
 }
 
 
@@ -266,6 +357,58 @@ BRAND_SITE_CONFIG = {
         "lead_magnet": "FREE Menopause Symptom Tracker & Relief Guide",
         "signup_form_id": "9144926",
         "signup_button_text": "Get Free Guide",
+    },
+    "pilottools": {
+        "site_name": "PilotTools",
+        "base_url": "https://pilottools.ai",
+        "output_dir": "outputs/pilottools-website/articles",
+        "primary_color": "#0EA5E9",
+        "accent_color": "#0284C7",
+        "logo_html": 'Pilot<span style="color:#0EA5E9">Tools</span>',
+        "nav_links": [
+            ("Home", "../index.html"),
+            ("Articles", "../blog.html"),
+            ("Tools", "../tools.html"),
+            ("About", "../about.html"),
+        ],
+        "has_css": True,
+        "lead_magnet": "FREE: Top 25 AI Tools Cheat Sheet (2026 Edition)",
+        "signup_form_id": "",
+        "signup_button_text": "Get Free Cheat Sheet",
+    },
+    "homedecor": {
+        "site_name": "Home Decor Edit",
+        "base_url": "https://www.dailydealdarling.com",
+        "output_dir": "outputs/homedecor-website/articles",
+        "primary_color": "#6B705C",
+        "accent_color": "#A5A58D",
+        "logo_html": 'Home Decor <span style="color:#6B705C">Edit</span>',
+        "nav_links": [
+            ("Home", "../index.html"),
+            ("Articles", "./"),
+            ("About", "../about.html"),
+        ],
+        "has_css": False,
+        "lead_magnet": "FREE Room-by-Room Budget Decorating Checklist",
+        "signup_form_id": "",
+        "signup_button_text": "Get Free Checklist",
+    },
+    "beauty": {
+        "site_name": "The Beauty Shelf",
+        "base_url": "https://www.dailydealdarling.com",
+        "output_dir": "outputs/beauty-website/articles",
+        "primary_color": "#D4A0A0",
+        "accent_color": "#C47D8E",
+        "logo_html": 'The Beauty <span style="color:#D4A0A0">Shelf</span>',
+        "nav_links": [
+            ("Home", "../index.html"),
+            ("Articles", "./"),
+            ("About", "../about.html"),
+        ],
+        "has_css": False,
+        "lead_magnet": "FREE: 5-Step Skincare Routine Builder",
+        "signup_form_id": "",
+        "signup_button_text": "Get Free Routine",
     },
 }
 
@@ -477,10 +620,372 @@ def _make_slug(topic):
     return slug[:60]
 
 
-def generate_article_for_pin(brand_key, pin_data, supabase_client):
-    """Generate a high-converting affiliate buying guide matching a pin's topic.
+def _build_deals_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for deals brand — first-person product review, PAS framework."""
+    return f"""You are a conversational product reviewer writing for DailyDealDarling.com.
+Write as a real person sharing honest product opinions. First-person, warm, relatable.
 
-    Returns (slug, content) where content is either JSON (v3) or markdown (v2 fallback).
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- First-person conversational ("I grabbed this on a whim and honestly...")
+- PAS framework in intro: Problem the reader has → Agitate why it's annoying → Solution you found
+- Honest personal reviews — mention what you actually like AND what's meh
+- Natural scarcity: "goes in/out of stock", "I've seen the price bounce around"
+- Outcome-specific CTAs: "Get the exact blanket I bought", "See if it's still in stock"
+- NO: comparison tables, trust badges, methodology sections, before/after cards, payment icons
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Catchy first-person title about {topic} ({year})",
+  "meta_description": "155 chars max, conversational, SEO-optimized",
+  "intro_paragraphs": [
+    "PAS paragraph 1 — state the problem the reader probably has",
+    "Agitate paragraph — why this problem is annoying/costly",
+    "Solution paragraph — how you found the answer, transition to products"
+  ],
+  "products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "12,400+",
+      "is_winner": true,
+      "section_heading": "The One I Actually Kept",
+      "personal_review_text": "3-4 sentences of honest first-person review. What you love, what's just okay, who it's perfect for. Sound like a real person, not a copywriter."
+    }}
+  ],
+  "verdict_text": "2-3 sentences wrapping up your honest take. Restate the winner and why.",
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer."}}
+  ]
+}}
+
+RULES:
+- 2-4 products, the FIRST one should be is_winner: true (gets the special "The one I bought" card)
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado"
+- Output ONLY valid JSON"""
+
+
+def _build_fitness_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for fitness brand — educational article, gear at end only."""
+    return f"""You are an experienced fitness coach writing educational content for FitOver35.com.
+Your readers are men over 35 who want actionable advice, not product pitches.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- 90% education, 10% product recommendations AT THE END only
+- Teach something real: recovery science, nutrition timing, training principles
+- Each section gets an actionable "The fix" tip box with a specific protocol
+- Write with authority — cite studies, give specific numbers (reps, sets, grams, timing)
+- Products appear ONLY in a compact "What I Use" section at the very bottom
+- NO big CTAs in the body, no hard sell. Earn trust through knowledge.
+- Voice: direct, confident, like a coach talking to a training partner
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Educational title about {topic} ({year})",
+  "meta_description": "155 chars max, value-first, SEO-optimized",
+  "intro_hook": "2-3 sentences that hook with a surprising fact, common mistake, or bold claim about {topic}. Make the reader think 'I need to know this.'",
+  "sections": [
+    {{
+      "heading": "Section heading — educational, not salesy",
+      "body_paragraphs": [
+        "Paragraph 1 — teach the concept, cite a study or mechanism",
+        "Paragraph 2 — explain why this matters for men over 35 specifically",
+        "Paragraph 3 — practical application"
+      ],
+      "tip_box_text": "THE FIX: Specific actionable protocol. Example: 'Take 5g creatine monohydrate daily with your post-workout shake. Timing doesn't matter — consistency does. Load phase is optional.'"
+    }}
+  ],
+  "gear_recommendations": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "8,200+",
+      "one_line_note": "What I use for [specific purpose]. Does the job, nothing fancy."
+    }}
+  ],
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with specific numbers."}}
+  ]
+}}
+
+RULES:
+- 3-5 educational sections (this is the meat of the article)
+- 2-4 gear recommendations at the end only
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "unlock your potential"
+- Output ONLY valid JSON"""
+
+
+def _build_menopause_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for menopause brand — warm wellness, Etsy product at end."""
+    return f"""You are a warm, knowledgeable wellness writer for TheMenopausePlanner.com.
+Your readers are women navigating perimenopause and menopause who want practical relief.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- Value-first wellness content — teach practical advice (triggers, sleep, supplements, routines)
+- Warm, empathetic tone — acknowledge the struggle, then provide solutions
+- Each section gets a "Try this" tip box with something she can do TODAY
+- Products at the end only: first a FREE symptom tracker download (trust builder), then the Etsy planner
+- For Amazon products, keep it gentle: "Here's what's been helping me" — small cards, no hard sell
+- NO: comparison tables, trust badges, payment icons, before/after cards, methodology sections
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Warm, practical title about {topic} ({year})",
+  "meta_description": "155 chars max, empathetic, SEO-optimized",
+  "intro_hook": "2-3 sentences that connect emotionally. Acknowledge what she's going through with {topic}, then promise practical help. No medical claims.",
+  "sections": [
+    {{
+      "heading": "Section heading — practical and supportive",
+      "body_paragraphs": [
+        "Paragraph 1 — explain the symptom/issue in plain language",
+        "Paragraph 2 — why this happens during menopause (hormonal context, not medical advice)",
+        "Paragraph 3 — what actually helps, based on research and real experience"
+      ],
+      "tip_box_text": "TRY THIS: Specific actionable tip she can start tonight. Example: 'Keep your bedroom at 65°F. Use bamboo sheets instead of cotton — they wick moisture 3x faster. Put a cooling towel on your nightstand.'"
+    }}
+  ],
+  "free_resource_cta": {{
+    "heading": "Free: Symptom Tracker Printable",
+    "description": "Track your hot flashes, sleep quality, and what's actually helping — so you can spot patterns and share real data with your doctor.",
+    "button_text": "Download Free Tracker"
+  }},
+  "etsy_product_section": {{
+    "heading": "The Menopause Wellness Planner",
+    "description": "Everything in the free tracker plus daily logging, supplement tracking, appointment prep sheets, and mood patterns. Built specifically for women navigating this transition.",
+    "price": "$14.99",
+    "button_text": "Get the Planner on Etsy"
+  }},
+  "amazon_products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "5,200+",
+      "one_line_note": "Helps with [specific symptom]. I keep this on my nightstand."
+    }}
+  ],
+  "faq": [
+    {{"q": "Common question about {topic} during menopause?", "a": "Helpful 2-sentence answer. No medical claims."}}
+  ]
+}}
+
+RULES:
+- 3-5 educational/wellness sections
+- 1-3 Amazon products at the end (gentle, not salesy)
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- NEVER make medical claims. Use "may help", "research suggests", "many women find"
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado"
+- Output ONLY valid JSON"""
+
+
+def _build_pilottools_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for pilottools brand — value-first AI tool education, SaaS recs at end."""
+    return f"""You are a tech-savvy creator writing educational AI tool content for PilotTools.ai.
+Your readers are creators, freelancers, and small business owners who want to work smarter with AI.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- 80% education, 20% tool recommendations
+- Teach real workflows: how to use tools, compare alternatives, save time
+- Each section gets a "Pro Tip" box with a specific technique or workflow
+- Write with authority — cite specific features, pricing, limitations
+- Tool recommendations appear throughout naturally (not just at the end)
+- Voice: direct, data-driven, like a smart friend who's tested everything
+- Include specific pricing: "$20/month" not "affordable"
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Educational title about {topic} ({year})",
+  "meta_description": "155 chars max, value-first, SEO-optimized",
+  "intro_hook": "2-3 sentences that hook with a pain point about {topic}. Make the reader think 'I need to know this.'",
+  "sections": [
+    {{
+      "heading": "Section heading — educational, specific",
+      "body_paragraphs": [
+        "Paragraph 1 — explain the concept or problem",
+        "Paragraph 2 — specific tool or technique that solves it, with pricing",
+        "Paragraph 3 — practical step-by-step application"
+      ],
+      "tip_box_text": "PRO TIP: Specific actionable workflow. Example: 'Use Claude for long-form writing and ChatGPT for brainstorming. This combo costs $40/month total and replaces a $2000/month content agency.'"
+    }}
+  ],
+  "tool_recommendations": [
+    {{
+      "name": "Tool Name",
+      "category": "writing/design/productivity/marketing",
+      "price": "$XX/month or Free",
+      "best_for": "One-line description of ideal use case",
+      "affiliate_url": "https://toolname.com",
+      "one_line_note": "What makes this stand out from alternatives."
+    }}
+  ],
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with specific tool names and prices."}}
+  ]
+}}
+
+RULES:
+- 3-5 educational sections (this is the meat of the article)
+- 3-5 tool recommendations with real pricing
+- Do NOT use Amazon links — PilotTools uses SaaS affiliate programs
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "leverage", "empower"
+- Output ONLY valid JSON"""
+
+
+def _build_homedecor_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for homedecor brand — room transformation, product-forward."""
+    return f"""You are a home decor enthusiast writing room-by-room transformation guides.
+Your readers are women 25-45 who want beautiful homes on a real budget.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- Visual and descriptive — help readers SEE the transformation
+- Product-forward but educational: explain WHY each piece works (color theory, scale, texture)
+- First-person conversational: "When I swapped my old curtains for these..."
+- Each section gets a "Style Tip" box with a specific decorating technique
+- Always mention approximate prices: "this $35 rug" not just "this rug"
+- Reference specific room sizes: "in my 12x14 living room..."
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Room transformation title about {topic} ({year})",
+  "meta_description": "155 chars max, visual, SEO-optimized",
+  "intro_paragraphs": [
+    "Set the scene — describe the room problem the reader probably has",
+    "Agitate — why this problem makes the room feel off",
+    "Solution — how specific product swaps transform the look"
+  ],
+  "products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "12,400+",
+      "is_winner": true,
+      "section_heading": "The Piece That Changed Everything",
+      "personal_review_text": "3-4 sentences describing how this piece transformed the room. Be specific about colors, dimensions, and how it pairs with other items."
+    }}
+  ],
+  "verdict_text": "2-3 sentences summarizing the room transformation and total budget.",
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with decorating advice."}}
+  ]
+}}
+
+RULES:
+- 2-4 products, the FIRST one should be is_winner: true
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "elevate your space", "curate your aesthetic"
+- Output ONLY valid JSON"""
+
+
+def _build_beauty_prompt(topic, pin_data, config, available_keys_str, products_text, tips_section, affiliate_tag, year):
+    """Build the Gemini prompt for beauty brand — personal review style, product-forward."""
+    return f"""You are a beauty enthusiast writing honest product reviews and routine guides.
+Your readers are women 20-40 who want effective skincare and makeup without overspending.
+
+Generate ONLY valid JSON (no markdown, no backticks, no code fences).
+
+AVAILABLE PRODUCT KEYS (use ONLY these): {available_keys_str}
+
+TOPIC: {topic}
+PIN TITLE: {pin_data.get('title', '')}
+{tips_section}
+
+WRITING STYLE:
+- First-person, honest personal reviews: "I've been using this for 6 weeks and..."
+- Mention your skin type (combination, acne-prone) so readers can relate
+- Be specific about texture, scent, how it feels on skin, application tips
+- Each section gets a "Beauty Tip" box with a specific technique
+- Compare to well-known products: "performs like the $52 version but costs $14"
+- Always mention specific ingredients: "the 20% vitamin C concentration"
+
+OUTPUT THIS EXACT JSON STRUCTURE:
+{{
+  "title": "Honest review title about {topic} ({year})",
+  "meta_description": "155 chars max, personal, SEO-optimized",
+  "intro_paragraphs": [
+    "Problem — the beauty frustration the reader has",
+    "Agitate — why most products don't solve it (or cost too much)",
+    "Solution — how you found products that actually work"
+  ],
+  "products": [
+    {{
+      "name": "Product Name",
+      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS",
+      "price": "$XX",
+      "rating": 4.6,
+      "review_count": "12,400+",
+      "is_winner": true,
+      "section_heading": "The One I Keep Repurchasing",
+      "personal_review_text": "3-4 sentences of honest first-person review. Mention texture, scent, how it feels on skin, how long it lasts. Compare to expensive alternatives if relevant."
+    }}
+  ],
+  "verdict_text": "2-3 sentences with your honest recommendation and who each product is best for.",
+  "faq": [
+    {{"q": "Common question about {topic}?", "a": "Helpful 2-sentence answer with beauty advice."}}
+  ]
+}}
+
+RULES:
+- 2-4 products, the FIRST one should be is_winner: true
+- Use ONLY keys from AVAILABLE PRODUCT KEYS for amazon_product_key
+- Ratings: 4.3-4.8 (never 5.0). Review counts: realistic 1000-50000.
+- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "holy grail", "obsessed"
+- Output ONLY valid JSON"""
+
+
+def generate_article_for_pin(brand_key, pin_data, supabase_client):
+    """Generate a brand-specific article matching a pin's topic.
+
+    Returns (slug, content) where content is JSON string or None.
     Or (None, None) if skipped.
     """
     from .content_brain import BRAND_CONFIGS
@@ -494,17 +999,43 @@ def generate_article_for_pin(brand_key, pin_data, supabase_client):
     if not slug:
         return None, None
 
-    # Check if article already exists
+    # Check if article already exists — regenerate if using old template
+    TEMPLATE_VERSION = 2  # Bump this to force regeneration of all articles
     try:
-        existing = supabase_client.table('generated_articles') \
-            .select('slug') \
-            .eq('brand', brand_key) \
-            .eq('slug', slug) \
-            .limit(1) \
-            .execute()
+        # First try with template_version column
+        try:
+            existing = supabase_client.table('generated_articles') \
+                .select('slug,template_version') \
+                .eq('brand', brand_key) \
+                .eq('slug', slug) \
+                .limit(1) \
+                .execute()
+        except Exception:
+            # Column might not exist yet — query without it
+            existing = supabase_client.table('generated_articles') \
+                .select('slug') \
+                .eq('brand', brand_key) \
+                .eq('slug', slug) \
+                .limit(1) \
+                .execute()
         if existing.data:
-            logger.info(f"Article already exists for slug '{slug}', skipping")
-            return slug, None
+            row = existing.data[0]
+            existing_version = row.get('template_version') or 1
+            if existing_version >= TEMPLATE_VERSION:
+                logger.info(f"Article '{slug}' already at template v{existing_version}, skipping")
+                return slug, None
+            else:
+                logger.info(f"Article '{slug}' needs upgrade (v{existing_version} → v{TEMPLATE_VERSION}) — regenerating")
+                # Delete old record so upsert creates a fresh one
+                try:
+                    supabase_client.table('generated_articles') \
+                        .delete() \
+                        .eq('brand', brand_key) \
+                        .eq('slug', slug) \
+                        .execute()
+                except Exception:
+                    pass
+                # Fall through to regenerate with new template
     except Exception as e:
         logger.warning(f"Could not check existing articles: {e}")
 
@@ -532,7 +1063,7 @@ def generate_article_for_pin(brand_key, pin_data, supabase_client):
             product_links.append(f'- {product}')
     products_text = '\n'.join(product_links) if product_links else 'none available'
 
-    # Get tips from pin if available (for the article to expand on)
+    # Get tips from pin if available
     tips = pin_data.get('tips', [])
     tips_section = ''
     if tips:
@@ -541,244 +1072,40 @@ PIN TIPS (expand on each of these in the article):
 {chr(10).join(f'{i+1}. {t}' for i, t in enumerate(tips))}
 """
 
-    seo_keywords = ', '.join(config.get('seo_keywords', [])[:6])
     year = datetime.now(timezone.utc).year
     affiliate_tag = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
 
-    # Brand-specific trust section
-    trust_text = {
-        'fitness': 'Written by Talhah Bilal, ISSA-certified personal trainer with 6+ years experience training men over 35.',
-        'menopause': "Reviewed by our editorial team in consultation with women's health practitioners.",
-        'deals': 'Our team tests and compares dozens of products monthly.',
-    }.get(brand_key, 'Our team tests and compares dozens of products monthly.')
-
-    # Brand-specific writing style notes
-    if brand_key == 'fitness':
-        style_notes = (
-            'Include a "Pro-Coach Insight" blockquote (use > **Pro-Coach Insight:**) '
-            'with specific timing, dosage, or technique advice. '
-            'Write with high confidence and data-backed authority. '
-            'Cite specific numbers or studies where possible.'
-        )
-    elif brand_key == 'menopause':
-        style_notes = (
-            'Include a "Symptom Checklist" section with specific symptoms this addresses '
-            '(night sweats, fatigue, brain fog, mood changes). '
-            'Write with warmth and empathy — acknowledge the struggle, then provide solutions.'
-        )
-    else:
-        style_notes = (
-            'Include a "Why It\'s Trending" or "Social Proof" mention (star ratings, '
-            'review counts, Pinterest saves). '
-            'Write in a curated, editorial tone — like a boutique magazine recommending the best.'
-        )
-
-    # Etsy CTA for menopause brand only
-    etsy_section = ''
-    if brand_key == 'menopause':
-        etsy_section = (
-            '\n\nETSY PLANNER CTA: In the conclusion, naturally mention and link to the '
-            'Menopause Wellness Planner Bundle on Etsy as a practical next step.\n'
-            'Use this exact link: https://www.etsy.com/listing/4435219468/'
-            'menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic\n'
-            'Format: [Menopause Wellness Planner Bundle](link) — one sentence, benefit-driven.'
-        )
-
-    # ── Try JSON generation first ──────────────────────────────────────────
+    # ── Build brand-specific prompt ───────────────────────────────────────
     available_keys = [k for k in brand_amazon.keys() if k != '_default']
     available_keys_str = ', '.join(available_keys) if available_keys else 'none available'
 
-    json_prompt = f"""You are a high-converting buying guide expert. Generate ONLY valid JSON (no markdown, no backticks).
-
-AVAILABLE PRODUCT KEYS: {available_keys_str}
-
-BRAND VOICE:
-{config['voice']}
-
-ARTICLE TOPIC: {topic}
-PIN TITLE: {pin_data.get('title', '')}
-CATEGORY: {category}
-{tips_section}
-
-AFFILIATE TAG: {affiliate_tag}
-
-REVENUE OPTIMIZATION RULES:
-- The FIRST product recommendation MUST appear within the first 200 words (above the fold)
-- Include a "Quick Pick" callout box at the very top with the #1 product and its price
-- Use urgency language: "currently X% off", "selling fast", "price just dropped"
-- Each product MUST have a specific price range (never say "affordable" without a number)
-- End EVERY product section with a clear "Check price on Amazon" CTA
-
-Output EXACTLY this JSON structure (no markdown, no code fences, ONLY valid JSON):
-{{
-  "title": "Best [Product] for [Audience] ({year})",
-  "meta_description": "155 chars max, SEO-optimized",
-  "read_time": "4 min",
-  "brands_tested": 8,
-  "reviews_analyzed": "14,000+",
-  "verdict": "Bold one-sentence finding after testing.",
-  "before": {{"emoji": "😰", "title": "Before", "text": "The problem"}},
-  "after": {{"emoji": "😴", "title": "After", "text": "The solution"}},
-  "urgency_text": "Currently 15% off with Subscribe & Save on Amazon",
-  "products": [
-    {{
-      "name": "Product Name",
-      "badge": "Our Pick",
-      "badge_type": "top",
-      "price_low": 28,
-      "price_high": 38,
-      "rating": 4.6,
-      "review_count": "12,400+",
-      "subscribe_save": "15% off",
-      "pexels_image_query": "vivid specific query for Pexels",
-      "pexels_thumb_queries": ["query1", "query2", "query3"],
-      "benefit_icons": [{{"emoji": "💧", "text": "Benefit"}}],
-      "benefit_image_query": "detail image query",
-      "benefit_headline": "Why X beats Y",
-      "benefit_description": "Explanation.",
-      "pros": ["Pro 1", "Pro 2", "Pro 3", "Pro 4"],
-      "cons": ["Con 1", "Con 2"],
-      "amazon_product_key": "key from AVAILABLE PRODUCT KEYS"
-    }}
-  ],
-  "comparison_extra_rows": [{{"label": "Subscribe & Save", "values": ["✓ 15%", "✓ 10%", "✗"]}}],
-  "methodology": ["Point 1", "Point 2", "Point 3", "Point 4"],
-  "faq": [{{"q": "Question?", "a": "Answer."}}],
-  "related_product_keys": ["key1", "key2", "key3"]
-}}
-
-RULES:
-- 2-3 products only, use ONLY keys from AVAILABLE PRODUCT KEYS
-- Ratings: 4.3-4.8 range (never 5.0)
-- Review counts: realistic 1000-50000 range
-- Do NOT include testimonials or fake reviews (FTC compliance)
-- BANNED: "In today's world", "it's important to note", "when it comes to", "let's dive in", "game-changer", "without further ado", "unlock your potential"
-- Output ONLY JSON, no markdown, no backticks, no code fences"""
+    prompt_builders = {
+        'deals': _build_deals_prompt,
+        'fitness': _build_fitness_prompt,
+        'menopause': _build_menopause_prompt,
+        'pilottools': _build_pilottools_prompt,
+        'homedecor': _build_homedecor_prompt,
+        'beauty': _build_beauty_prompt,
+    }
+    builder = prompt_builders.get(brand_key, _build_deals_prompt)
+    json_prompt = builder(
+        topic, pin_data, config, available_keys_str, products_text,
+        tips_section, affiliate_tag, year
+    )
 
     try:
         article_json = generate_json(json_prompt, max_tokens=4000)
         parsed = _try_parse_json(article_json)
         if parsed and isinstance(parsed, dict):
-            logger.info(f"JSON article generated successfully for '{topic}'")
-            return slug, article_json
+            # Tag with brand_key so the HTML builder knows which template to use
+            parsed['_brand_key'] = brand_key
+            logger.info(f"JSON article generated successfully for '{topic}' ({brand_key})")
+            return slug, json.dumps(parsed)
         else:
-            logger.warning(f"JSON parsing failed, falling back to markdown for '{topic}'")
+            logger.warning(f"JSON parsing failed for '{topic}' ({brand_key})")
     except Exception as e:
-        logger.warning(f"JSON generation failed: {e}, falling back to markdown")
+        logger.warning(f"JSON generation failed for '{topic}' ({brand_key}): {e}")
 
-    # ── Fallback to markdown generation ──────────────────────────────────
-    markdown_prompt = f"""Write a high-converting affiliate buying guide for the {config['name']} website.
-This is NOT a generic blog post. It answers: "Which one should I buy?"
-
-BRAND VOICE:
-{config['voice']}
-
-ARTICLE TOPIC: {topic}
-PIN TITLE: {pin_data.get('title', '')}
-CATEGORY: {category}
-{tips_section}
-BRAND STYLE: {style_notes}
-
-REQUIRED STRUCTURE (follow EXACTLY):
-
-1. HERO + QUICK VERDICT (first 200 words, above the fold)
-   - H1 title with buyer-intent keyword: "Best [Product] for [Audience] ({year})"
-   - One-sentence expert verdict: "After researching X options, [Top Pick] is the best for most [audience] because [specific reason]."
-   - QUICK PICKS BOX with 2-3 products:
-     * Our Pick: [Product Name] — [one-line why]
-     * Also Great: [Product Name] — [one-line why]
-     * Budget Pick: [Product Name] — [one-line why]
-   - Each pick must include its Amazon link from the APPROVED PRODUCTS list
-   - IMMEDIATELY after Quick Picks, add: [SIGNUP_FORM_PLACEHOLDER]
-     (This captures readers who just want the recommendation and are about to leave)
-
-2. WHY TRUST THIS GUIDE (50-100 words)
-   {trust_text}
-
-3. On its own line exactly: [SIGNUP_FORM_PLACEHOLDER]
-
-4. DETAILED REVIEW FOR EACH PRODUCT (200-300 words each, 2-4 products)
-   For EACH product include ALL of the following:
-   - H2: "[Product Name] — Best for [specific use case]"
-   - A product card comment on its OWN LINE (the template renders this as a visual card):
-     <!--PRODUCT_CARD: name="Product Name" | url="amazon_url" | rating="4.7" | reviews="12400" | price_range="$30-50" | badge="Our Pick" -->
-   - WHO IT'S FOR: Best for [specific audience/scenario]
-   - WHAT WE LIKE: 3 specific, testable pros (NOT generic praise)
-   - WHAT WE DON'T: 1-2 honest cons (builds trust, increases conversion)
-   - BOTTOM LINE: One sentence summary with embedded Amazon link
-
-5. COMPARISON TABLE (use markdown table format):
-   | Feature | Product 1 | Product 2 | Product 3 |
-   |---------|-----------|-----------|-----------|
-   | Price Range | ... | ... | ... |
-   | Best For | ... | ... | ... |
-   | Our Rating | ... | ... | ... |
-
-6. HOW WE CHOSE (100-150 words)
-   What criteria matter and why we chose these products.
-
-7. FAQ SECTION (3-5 questions)
-   Format each EXACTLY as:
-   **Q: [Question with long-tail keyword]?**
-   A: [Concise 2-3 sentence answer]
-
-8. FINAL VERDICT + CTA (100 words)
-   Restate the top pick with its Amazon link.
-   Use action-oriented CTAs like: "See today's price on Amazon", "Check if it's in stock", "View current deals"
-   — NOT generic phrases like "pick what works for you"
-
-9. QUICK VERDICT BOX (early in article, after intro)
-   Include a 2-3 sentence verdict box with the top pick recommendation.
-   Format as a blockquote or highlighted section with:
-   - The winning product name
-   - One key reason it's the best
-   - Link to detailed review section below
-   Position this above the "Why Trust This Guide" section for maximum visibility.
-
-10. RELATED ARTICLES (internal links — boosts SEO and time on site)
-   Add "You Might Also Like" section at bottom with 2-3 related article links:
-   - "[Related Topic Title](../articles/related-topic-slug.html)"
-   Use realistic topic slugs based on common topics for this brand.
-   These help Google understand site structure and keep readers browsing longer.
-
-CRITICAL RULES:
-- ALL Amazon links must use DIRECT /dp/ASIN URLs from the approved list below. NEVER invent /dp/ URLs.
-- If a product is NOT in the approved list, DO NOT LINK IT. Only recommend products we have links for.
-- ALL Amazon links must include tag={affiliate_tag}
-- For non-product articles (e.g. "benefits of creatine"), STILL end with 1-2 specific product recommendations with PRODUCT_CARD data.
-- EVERY product mention must include the <!--PRODUCT_CARD: ...--> comment on its own line.
-- Star ratings: realistic range 4.3-4.8 (never 5.0)
-- Review counts: realistic range 1,000-50,000
-- Price ranges: approximate but realistic
-- badge values: "Our Pick", "Also Great", "Budget Pick", or "Best Value"
-- CALL-TO-ACTION RULE: Use strong, action-oriented CTAs. Examples: "See today's price on Amazon", "Check if it's in stock", "View current deals", "Check current price". Never use vague phrases like "check price" or "buy now" without context.
-
-APPROVED PRODUCTS WITH AMAZON LINKS (use these EXACT URLs):
-{products_text}
-
-SEO KEYWORDS: Naturally include: {seo_keywords}
-
-BANNED PHRASES: "In today's world", "it's important to note", "when it comes to",
-"let's dive in", "without further ado", "at the end of the day", "it goes without saying"
-{etsy_section}
-OUTPUT FORMAT — Markdown with frontmatter:
----
-title: "Article Title"
-slug: "{slug}"
-meta_description: "155 char description"
-date: "{datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
-brand: "{brand_key}"
-keywords: ["keyword1", "keyword2", "keyword3"]
----
-
-[Article content in Markdown]"""
-
-    try:
-        article_md = generate_text(markdown_prompt, max_tokens=4000)
-        if article_md:
-            return slug, article_md
-    except Exception as e:
-        logger.error(f"Article generation failed for '{topic}': {e}")
     return slug, None
 
 
@@ -960,120 +1287,47 @@ def _inline_format(text, brand_key='deals'):
     return text
 
 
-def _build_v3_article(article_data, brand_key, slug, pin_data=None):
-    """Build v3 article from structured JSON data.
-
-    Fetches images from Pexels and returns complete HTML.
-    """
-    from .article_templates import render_article_page
-
-    site = BRAND_SITE_CONFIG[brand_key]
-
-    # Resolve amazon_product_key → actual Amazon URLs
+def _resolve_product_urls(products_list, brand_key, key_field='amazon_product_key'):
+    """Resolve amazon_product_key → actual Amazon URLs for a list of products."""
     brand_amazon = AMAZON_AFFILIATE_LINKS.get(brand_key, {})
-
-    # Fetch hero image + optional video
-    hero_query = article_data.get('title', slug)
-    hero_url = _fetch_pexels_image(hero_query)
-    video_url = _fetch_pexels_video(hero_query)
-
-    # Enrich products with images
-    for product in article_data.get('products', []):
-        product_key = product.get('amazon_product_key', '')
+    for product in products_list:
+        product_key = product.get(key_field, '')
         if product_key and product_key in brand_amazon:
             product['amazon_url'] = brand_amazon[product_key]
         else:
             product['amazon_url'] = brand_amazon.get('_default', '')
-
-        # Fetch hero image for this product
-        hero_img_query = product.get('pexels_image_query', product.get('name', ''))
-        hero_img = _fetch_pexels_image(hero_img_query) if hero_img_query else None
-        product['hero_image'] = hero_img
-
-        # Fetch thumbnail images
-        thumb_queries = product.get('pexels_thumb_queries', [])
-        thumb_images = []
-        for tq in thumb_queries[:3]:
-            ti = _fetch_pexels_image(tq) if tq else None
-            if ti:
-                thumb_images.append(ti)
-        product['thumb_images'] = thumb_images
-
-        # Fetch benefit image
-        benefit_img_query = product.get('benefit_image_query', '')
-        benefit_img = _fetch_pexels_image(benefit_img_query) if benefit_img_query else None
-        product['benefit_image'] = benefit_img
-
-    # Fetch related product images
-    related_products = []
-    for key in article_data.get('related_product_keys', [])[:3]:
-        if key in brand_amazon:
-            img = _fetch_pexels_image(key)
-            related_products.append({
-                'name': key,
-                'amazon_url': brand_amazon[key],
-                'image': img,
-            })
-
-    # Build enriched article data
-    enriched_data = dict(article_data)
-    enriched_data['hero_url'] = hero_url
-    enriched_data['video_url'] = video_url
-    enriched_data['category'] = pin_data.get('category', '') if pin_data else ''
-    enriched_data['related_products'] = related_products
-
-    # Store in pin_data for template
-    if pin_data is None:
-        pin_data = {}
-    pin_data['_article_data'] = enriched_data
-
-    # Use the new template-based renderer (permanent fix)
-    from .template_renderer import render_article_from_template
-    return render_article_from_template(
-        brand_key=brand_key,
-        article_data=enriched_data,
-        site_config=site,
-        slug=slug,
-    )
+        # Generate Amazon product image from ASIN
+        asin_m = re.search(r'/dp/([A-Z0-9]{10})', product.get('amazon_url', ''))
+        if asin_m:
+            product['product_image'] = f"https://m.media-amazon.com/images/P/{asin_m.group(1)}.01.LZZZZZZZ.jpg"
+        else:
+            product['product_image'] = ''
 
 
-def _build_v2_article(markdown_content, brand_key, slug, pin_data=None):
-    """Build v2 article from markdown (fallback path).
+def _build_article_html(article_data, brand_key, slug, pin_data=None):
+    """Build a clean brand-specific article from structured JSON data.
 
-    Uses the same new template as v3 — generates minimal article_data
-    from the markdown content and renders through template_renderer.
+    Dispatches to the appropriate brand builder.
     """
-    from .template_renderer import render_article_from_template
+    from .template_renderer import render_clean_article
 
     site = BRAND_SITE_CONFIG[brand_key]
-    title, meta_desc = _extract_frontmatter(markdown_content)
-    if not title:
-        title = slug.replace('-', ' ').title()
-    if not meta_desc:
-        meta_desc = f"{title} - {site['site_name']}"
 
     # Fetch hero image
-    pexels_query = (pin_data or {}).get('pexels_search_term', '') \
-        or (pin_data or {}).get('image_search_query', '') \
-        or slug.replace('-', ' ')
-    hero_url = _fetch_pexels_image(pexels_query)
+    hero_query = article_data.get('title', slug)
+    hero_url = _fetch_pexels_image(hero_query)
+    article_data['hero_url'] = hero_url
 
-    # Build article_data for the new template (minimal but valid)
-    article_data = {
-        'title': title,
-        'meta_description': meta_desc,
-        'hero_url': hero_url,
-        'read_time': '4 min',
-        'brands_tested': 8,
-        'reviews_analyzed': '5,000+',
-        'verdict': f'<strong>We researched the best options</strong> so you don\'t have to.',
-        'before': {'emoji': '\U0001f630', 'text': 'Hours scrolling through thousands of options'},
-        'after': {'emoji': '\U0001f60a', 'text': 'Confident purchase backed by real reviews'},
-        'products': [],
-        'faq': [],
-    }
+    # Resolve product URLs for all product lists
+    if brand_key in ('deals', 'homedecor', 'beauty'):
+        _resolve_product_urls(article_data.get('products', []), brand_key)
+    elif brand_key == 'fitness':
+        _resolve_product_urls(article_data.get('gear_recommendations', []), brand_key)
+    elif brand_key == 'menopause':
+        _resolve_product_urls(article_data.get('amazon_products', []), brand_key)
+    # pilottools uses SaaS affiliate links, not Amazon — no URL resolution needed
 
-    return render_article_from_template(
+    return render_clean_article(
         brand_key=brand_key,
         article_data=article_data,
         site_config=site,
@@ -1082,36 +1336,86 @@ def _build_v2_article(markdown_content, brand_key, slug, pin_data=None):
 
 
 def article_to_html(markdown_content, brand_key, slug, pin_data=None):
-    """Convert article content to complete bridge-page HTML.
+    """Convert article content to complete HTML page.
 
-    Handles two paths:
-    - JSON (v3): Structured data → fetch images → v3 template with enhanced sections
-    - Markdown (v2 fallback): Existing path with product cards + FAQ schema
+    Parses JSON from Gemini and dispatches to brand-specific template builder.
     """
     article_data = _try_parse_json(markdown_content)
 
     if article_data and isinstance(article_data, dict):
-        return _build_v3_article(article_data, brand_key, slug, pin_data)
+        return _build_article_html(article_data, brand_key, slug, pin_data)
     else:
-        return _build_v2_article(markdown_content, brand_key, slug, pin_data)
+        # Fallback: if we somehow got non-JSON, build minimal article_data
+        logger.warning(f"Non-JSON content for {brand_key}/{slug}, building minimal article")
+        title = slug.replace('-', ' ').title()
+        minimal_data = {
+            'title': title,
+            'meta_description': f'{title} - {BRAND_SITE_CONFIG[brand_key]["site_name"]}',
+        }
+        if brand_key in ('deals', 'homedecor', 'beauty'):
+            minimal_data['intro_paragraphs'] = [str(markdown_content)[:500] if markdown_content else '']
+            minimal_data['products'] = []
+            minimal_data['verdict_text'] = ''
+            minimal_data['faq'] = []
+        elif brand_key in ('fitness', 'pilottools'):
+            minimal_data['intro_hook'] = str(markdown_content)[:500] if markdown_content else ''
+            minimal_data['sections'] = []
+            minimal_data['gear_recommendations'] = [] if brand_key == 'fitness' else []
+            minimal_data['tool_recommendations'] = [] if brand_key == 'pilottools' else []
+            minimal_data['faq'] = []
+        else:
+            minimal_data['intro_hook'] = str(markdown_content)[:500] if markdown_content else ''
+            minimal_data['sections'] = []
+            minimal_data['amazon_products'] = []
+            minimal_data['faq'] = []
+        return _build_article_html(minimal_data, brand_key, slug, pin_data)
 
 
 def _sanitize_affiliate_links(html_content, brand_key):
-    """Post-generation sanitization — triple-checks every Amazon link.
+    """Post-generation sanitization — checks every Amazon link.
 
-    1. Enforces per-brand affiliate tags (fitover3509-20 for fitness, dailydealdarl-20 for deals/menopause)
-    2. Converts fake/placeholder ASINs to working search URLs
-    3. Fixes known AI-generated tag typos (truncated, wrong account)
-    4. Logs any issues found for monitoring
+    1. Rejects amazon.com/s?k= search URLs — replaces with /dp/ASIN from approved list or removes
+    2. Enforces per-brand affiliate tags
+    3. Converts fake/placeholder ASINs to approved defaults
+    4. Fixes known AI-generated tag typos
+    5. Logs any issues found for monitoring
     """
     CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
+    brand_amazon = AMAZON_AFFILIATE_LINKS.get(brand_key, {})
+    default_url = brand_amazon.get('_default', '')
     issues = []
+
+    # ── Pass 0: Replace search URLs with real /dp/ASIN links ──
+    def _fix_search_url(m):
+        url = m.group(0)
+        # Extract the search query to try matching against approved products
+        query_match = re.search(r'[?&]k=([^&"]+)', url)
+        if query_match:
+            query = urllib.parse.unquote_plus(query_match.group(1)).lower()
+            # Try to match against approved product keys
+            for product_key, product_url in brand_amazon.items():
+                if product_key == '_default':
+                    continue
+                if product_key.lower() in query or query in product_key.lower():
+                    issues.append(f'Replaced search URL with approved ASIN for: {product_key}')
+                    return product_url
+        # No match — use brand default
+        if default_url:
+            issues.append(f'Replaced unmatched search URL with brand default')
+            return default_url
+        issues.append(f'Removed unmatched search URL (no default available)')
+        return ''
+
+    html_content = re.sub(
+        r'https://www\.amazon\.com/s\?k=[^"]+',
+        _fix_search_url,
+        html_content,
+    )
 
     # ── Pass 1: Fix known tag typos ──
     typo_map = {
         'menopauseplan-20': 'dailydealdarl-20',
     }
-    # Only fix fitover35 typo if we're NOT in the fitness brand
     if brand_key != 'fitness':
         typo_map['fitover3509-20'] = CANONICAL_TAG
     for wrong, right in typo_map.items():
@@ -1120,17 +1424,21 @@ def _sanitize_affiliate_links(html_content, brand_key):
             issues.append(f'Fixed tag typo: {wrong} → {right} ({count}x)')
             html_content = html_content.replace(wrong, right)
 
-    # ── Pass 2: Fix obviously fake ASINs (X-padded, all-zeros) ──
-    # Only replace clearly fake ASINs, preserve all others for revenue
+    # ── Pass 2: Fix obviously fake ASINs ──
     fake_asin_pattern = re.compile(r'^[X0]{5,}|^XXXXXXXXXX$|^B0{9}$')
 
     def _fix_bad_asin(m):
         full_match = m.group(0)
         asin = m.group(1)
         if not fake_asin_pattern.match(asin):
-            return full_match  # Keep real ASINs even if not in approved list
+            return full_match
         issues.append(f'Replaced fake ASIN: {asin}')
-        return f'amazon.com/s?k={asin.lower()}&tag={CANONICAL_TAG}'
+        # Use default product URL instead of search URL
+        if default_url:
+            asin_m = re.search(r'/dp/([A-Z0-9]{10})', default_url)
+            if asin_m:
+                return f'amazon.com/dp/{asin_m.group(1)}?tag={CANONICAL_TAG}'
+        return f'amazon.com/dp/B001ARYU58?tag={CANONICAL_TAG}'
 
     html_content = re.sub(
         r'amazon\.com/dp/([A-Z0-9]{10})\?tag=[a-z0-9-]+',
@@ -1138,7 +1446,7 @@ def _sanitize_affiliate_links(html_content, brand_key):
         html_content,
     )
 
-    # ── Pass 3: Force correct tag on ALL Amazon links (catch-all) ──
+    # ── Pass 3: Force correct tag on ALL Amazon links ──
     def _enforce_tag(m):
         prefix = m.group(1)
         current_tag = m.group(2)
@@ -1173,6 +1481,103 @@ def _sanitize_affiliate_links(html_content, brand_key):
     return html_content
 
 
+def validate_amazon_links(html_content, brand_key):
+    """Validate every Amazon URL in the article via HTTP HEAD requests.
+
+    - Sends HEAD request with browser user-agent, 10s timeout
+    - If 404 or redirects to search page: replaces with verified ASIN from approved list
+    - Verifies correct affiliate tag per brand
+    - Rejects any remaining /s?k= search URLs
+    - Returns (fixed_html, validation_log) tuple
+    """
+    CANONICAL_TAG = BRAND_AFFILIATE_TAGS.get(brand_key, 'dailydealdarl-20')
+    brand_amazon = AMAZON_AFFILIATE_LINKS.get(brand_key, {})
+    default_url = brand_amazon.get('_default', '')
+    log = []
+
+    # Find all Amazon URLs
+    amazon_urls = re.findall(r'https://www\.amazon\.com/[^"<\s]+', html_content)
+    if not amazon_urls:
+        log.append('No Amazon links found')
+        return html_content, log
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    }
+
+    for url in set(amazon_urls):
+        # Skip already-validated /dp/ URLs from our approved list
+        asin_m = re.search(r'/dp/([A-Z0-9]{10})', url)
+
+        # Reject search URLs outright
+        if '/s?k=' in url or '/s?' in url:
+            log.append(f'REJECTED search URL: {url[:80]}')
+            # Try to find a replacement
+            query_m = re.search(r'[?&]k=([^&"]+)', url)
+            replacement = default_url
+            if query_m:
+                query = urllib.parse.unquote_plus(query_m.group(1)).lower()
+                for key, approved_url in brand_amazon.items():
+                    if key == '_default':
+                        continue
+                    if key.lower() in query or query in key.lower():
+                        replacement = approved_url
+                        break
+            if replacement:
+                html_content = html_content.replace(url, replacement)
+                log.append(f'  → Replaced with: {replacement[:80]}')
+            continue
+
+        # Verify /dp/ links via GET request (Amazon blocks HEAD with 405)
+        if asin_m:
+            try:
+                resp = requests.get(url, headers=headers, timeout=10, allow_redirects=True, stream=True)
+                final_url = resp.url if hasattr(resp, 'url') else ''
+                resp.close()  # Don't download the full page
+                is_broken = False
+                if resp.status_code == 404:
+                    is_broken = True
+                elif '/s?k=' in final_url or '/gp/search/' in final_url:
+                    is_broken = True
+                elif resp.status_code == 200 and 'Page Not Found' in resp.text[:500]:
+                    is_broken = True
+                
+                if is_broken:
+                    log.append(f'BROKEN link (HTTP {resp.status_code}): {url[:80]}')
+                    # Try to find a product-specific replacement from approved list
+                    asin_val = asin_m.group(1)
+                    replacement_found = False
+                    for key, approved_url in brand_amazon.items():
+                        if key == '_default':
+                            continue
+                        if asin_val in approved_url and approved_url != url:
+                            html_content = html_content.replace(url, approved_url)
+                            log.append(f'  → Replaced with approved: {approved_url[:80]}')
+                            replacement_found = True
+                            break
+                    if not replacement_found and default_url:
+                        html_content = html_content.replace(url, default_url)
+                        log.append(f'  → Replaced with default: {default_url[:80]}')
+                elif resp.status_code in (405, 503):
+                    log.append(f'SKIP: {url[:60]} → HTTP {resp.status_code} (Amazon rate limit, not broken)')
+                else:
+                    log.append(f'OK: {url[:80]} → HTTP {resp.status_code}')
+            except requests.RequestException as e:
+                log.append(f'Request failed for {url[:60]}: {e}')
+                # Don't replace on timeout — might just be rate limited
+
+        # Verify affiliate tag
+        if f'tag={CANONICAL_TAG}' not in url and 'tag=' in url:
+            old_tag_m = re.search(r'tag=([a-z0-9-]+)', url)
+            if old_tag_m:
+                fixed_url = url.replace(f'tag={old_tag_m.group(1)}', f'tag={CANONICAL_TAG}')
+                html_content = html_content.replace(url, fixed_url)
+                log.append(f'Fixed tag: {old_tag_m.group(1)} → {CANONICAL_TAG}')
+
+    logger.info(f'Amazon link validation ({brand_key}): {len(log)} entries')
+    return html_content, log
+
+
 def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_client):
     """Save article HTML to disk and register in Supabase.
 
@@ -1180,6 +1585,16 @@ def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_
     """
     # Sanitize affiliate links before saving
     html_content = _sanitize_affiliate_links(html_content, brand_key)
+
+    # Validate Amazon links (HTTP HEAD checks, reject search URLs)
+    try:
+        html_content, validation_log = validate_amazon_links(html_content, brand_key)
+        if validation_log:
+            logger.info(f'Link validation for {brand_key}/{slug}: {len(validation_log)} checks')
+            for entry in validation_log[:10]:
+                logger.info(f'  {entry}')
+    except Exception as e:
+        logger.warning(f'Amazon link validation skipped for {brand_key}/{slug}: {e}')
 
     site = BRAND_SITE_CONFIG[brand_key]
 
@@ -1195,14 +1610,21 @@ def save_and_register_article(html_content, brand_key, slug, pin_data, supabase_
 
     # Register in Supabase
     try:
-        supabase_client.table('generated_articles').insert({
+        record = {
             'brand': brand_key,
             'slug': slug,
             'trending_topic': pin_data.get('topic', '') or pin_data.get('trending_topic', ''),
             'content_preview': html_content[:500],
             'word_count': len(html_content.split()),
-            'created_at': datetime.now(timezone.utc).isoformat()
-        }).execute()
+            'created_at': datetime.now(timezone.utc).isoformat(),
+        }
+        # Try with template_version first, fall back without if column doesn't exist
+        try:
+            record['template_version'] = 2
+            supabase_client.table('generated_articles').upsert(record, on_conflict='brand,slug').execute()
+        except Exception:
+            record.pop('template_version', None)
+            supabase_client.table('generated_articles').upsert(record, on_conflict='brand,slug').execute()
     except Exception as e:
         logger.error(f"Failed to log article to Supabase: {e}")
 
