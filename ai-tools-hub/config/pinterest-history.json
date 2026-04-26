@@ -1492,5 +1492,32 @@
     "board": "AI Audio Tools",
     "posted_at": "2026-04-26T16:55:40.575Z",
     "success": true
+  },
+  {
+    "slug": "tidio",
+    "pin_type": "tool-review",
+    "title": "Tidio AI Chat: Boost Sales or Bust? (Review)",
+    "link": "https://pilottools.ai/tools/tidio/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-04-26T22:26:20.427Z",
+    "success": true
+  },
+  {
+    "slug": "grammarly-vs-jasper",
+    "pin_type": "comparison",
+    "title": "Grammarly vs Jasper AI: Which Tool is Right For YOU?",
+    "link": "https://pilottools.ai/compare/grammarly-vs-jasper/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-26T22:26:24.316Z",
+    "success": true
+  },
+  {
+    "slug": "elevenlabs-vs-descript",
+    "pin_type": "comparison",
+    "title": "ElevenLabs vs Descript: AI Voice & Video Showdown!",
+    "link": "https://pilottools.ai/compare/elevenlabs-vs-descript/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-04-26T22:26:28.378Z",
+    "success": true
   }
 ]
