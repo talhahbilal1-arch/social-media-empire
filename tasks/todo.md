@@ -21,42 +21,42 @@ Current: 80 clicks/month, 0-1 conversions. Goal: 5-10% conversion rate on clicks
 - [x] best-creatine-for-men-over-40.html
 - [x] best-home-gym-equipment-for-men-over-35-complete-setup-under.html
 - [x] best-protein-powder-for-men-over-50.html
-- [ ] best-pre-workout-for-men-over-40.html
-- [ ] best-testosterone-booster-for-men-over-40.html
-- [ ] best-lifting-belt-for-squats-and-deadlifts.html
-- [ ] best-fitness-tracker-weight-training.html
-- [ ] best-foam-roller-for-recovery-review.html
-- [ ] best-supplements-joint-health-men.html
+- [x] best-pre-workout-for-men-over-40.html
+- [x] best-testosterone-booster-for-men-over-40.html
+- [x] best-lifting-belt-for-squats-and-deadlifts.html
+- [x] best-fitness-tracker-weight-training.html
+- [x] best-foam-roller-for-recovery-review.html
+- [x] best-supplements-joint-health-men.html
 
 **DEALS (10):**
 - [x] best-air-fryer-under-100-2026.html
 - [x] best-robot-vacuum-for-pet-hair-budget.html
 - [x] best-portable-blender-for-smoothies-review.html
-- [ ] best-bed-sheets-under-50-tested.html
-- [ ] best-kitchen-gadgets-under-30.md → best-kitchen-gadgets-2026.html
-- [ ] best-closet-organizer-system-under-100.html
-- [ ] best-insulated-water-bottles-2026.html
-- [ ] best-portable-charger-2026.html
-- [ ] best-budget-friendly-makeup-brush-sets.html
-- [ ] best-cutting-boards-by-material-and-price.html
+- [x] best-bed-sheets-under-50-tested.html
+- [x] best-kitchen-gadgets-2026.html
+- [x] best-closet-organizer-system-under-100.html
+- [x] best-insulated-water-bottles-2026.html
+- [x] best-portable-charger-2026.html
+- [x] best-budget-friendly-makeup-brush-sets.html
+- [x] best-cutting-boards-by-material-and-price.html
 
 **MENOPAUSE (10):**
 - [x] best-cooling-pajamas-for-night-sweats-review.html
-- [ ] best-cooling-pillows-for-menopause-night-sweats.html
-- [ ] best-cooling-sheets-for-menopause-night-sweats.html
-- [ ] best-cooling-mattress-topper-menopause.html
+- [x] best-cooling-pillows-for-menopause-night-sweats.html
+- [x] best-cooling-sheets-for-menopause-night-sweats.html
+- [x] best-cooling-mattress-topper-menopause.html
 - [x] best-magnesium-supplement-for-menopause-sleep.html
 - [x] best-menopause-supplements-2026-ranked.html
-- [ ] best-weighted-blanket-for-menopause-sleep.html
-- [ ] best-sleep-aids-menopause-insomnia.html
-- [ ] best-books-about-menopause-2026.html
-- [ ] best-menopause-supplements-for-weight-loss-over-50.html
+- [x] best-weighted-blanket-for-menopause-sleep.html
+- [x] best-sleep-aids-menopause-insomnia.html
+- [x] best-books-about-menopause-2026.html
+- [x] best-menopause-supplements-for-weight-loss-over-50.html
 
 ### Execution
-- [ ] Read sample articles to understand current format
-- [ ] Process all 30 articles
-- [ ] Verify no broken Amazon links
-- [ ] Git commit
+- [x] Read sample articles to understand current format
+- [x] Process all 30 articles
+- [x] Verify no broken Amazon links
+- [x] Git commit
 
 ### Execution
 - [x] Read sample articles to understand current format
