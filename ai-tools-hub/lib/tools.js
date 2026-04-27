@@ -104,3 +104,11 @@ export function getAllUseCases() {
 export function getRelatedComparisons(toolSlug) {
   return comparisons.filter(c => c.tools.includes(toolSlug))
 }
+
+export function getOfferBadge(slug, freeTier) {
+  const config = affiliateConfig.tools[slug]
+  if (!config) return null
+  if (freeTier) return 'Free Trial Available'
+  if (config.commission && config.commission !== 'TBD') return 'Special Offer'
+  return null
+}
