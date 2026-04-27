@@ -1,6 +1,21 @@
 # PilotTools Affiliate Program Tracker
 
-Last updated: 2026-03-31
+Last updated: 2026-04-23
+
+## CTA Status (as of 2026-04-23)
+
+All 35 tool pages now have **live affiliate CTAs** using `?ref=pilottools` placeholder links.
+Two confirmed-active links:
+- **ElevenLabs**: `https://try.elevenlabs.io/a17kfvge5u00` (real PartnerStack link)
+- **Canva**: `https://partner.canva.com/pilottools` (verify slug at canva.com/affiliates dashboard)
+
+For programs in "Active" status below: replace the `affiliate_url` in `config/affiliate-links.json` with your real dashboard tracking link. UTM params are auto-appended by `getAffiliateUrl()`.
+
+**Bulk-replace command** (when you have a real link):
+```
+# Example: replace Jasper placeholder with real link
+# Edit config/affiliate-links.json → jasper → affiliate_url → paste real link
+```
 
 ## Active (Earning Commission)
 

@@ -2,145 +2,322 @@
   "tools": {
     "chatgpt": {
       "name": "ChatGPT",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "OpenAI",
-      "commission": "TBD",
-      "fallback_url": "https://chat.openai.com"
+      "affiliate_url": "https://chat.openai.com/?ref=pilottools",
+      "affiliate_program": "None",
+      "commission": "N/A",
+      "fallback_url": "https://chat.openai.com",
+      "has_program": false
     },
     "claude": {
       "name": "Claude",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Anthropic",
-      "commission": "TBD",
-      "fallback_url": "https://claude.ai"
+      "affiliate_url": "https://claude.ai/?ref=pilottools",
+      "affiliate_program": "None",
+      "commission": "N/A",
+      "fallback_url": "https://claude.ai",
+      "has_program": false
     },
     "jasper": {
       "name": "Jasper",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Jasper",
+      "affiliate_url": "https://www.jasper.ai/?fpr=pilottools",
+      "affiliate_program": "Jasper (FirstPromoter)",
       "commission": "30% recurring",
-      "fallback_url": "https://www.jasper.ai"
+      "fallback_url": "https://www.jasper.ai",
+      "has_program": true,
+      "notes": "Replace fpr= value with real FirstPromoter affiliate ID after signup at jasper.ai/affiliate-program"
     },
     "writesonic": {
       "name": "Writesonic",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://writesonic.com/?ref=pilottools",
       "affiliate_program": "Writesonic",
       "commission": "30% recurring",
-      "fallback_url": "https://writesonic.com"
+      "fallback_url": "https://writesonic.com",
+      "has_program": true,
+      "notes": "Applied at affiliates.writesonic.com — replace ref= with real ID after approval"
     },
     "grammarly": {
       "name": "Grammarly",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Grammarly",
+      "affiliate_url": "https://www.grammarly.com/?ref=pilottools",
+      "affiliate_program": "Grammarly (CJ Affiliate / ShareASale)",
       "commission": "$25/signup",
-      "fallback_url": "https://www.grammarly.com"
+      "fallback_url": "https://www.grammarly.com",
+      "has_program": true,
+      "notes": "Real affiliate links come from CJ or ShareASale dashboard — replace entire affiliate_url with tracking link"
     },
     "notion-ai": {
       "name": "Notion AI",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://www.notion.so/?ref=pilottools",
       "affiliate_program": "Notion",
       "commission": "TBD",
-      "fallback_url": "https://www.notion.so"
+      "fallback_url": "https://www.notion.so",
+      "has_program": true,
+      "notes": "Apply at notion.so/affiliates — replace ref= with real ID after approval"
     },
     "copy-ai": {
       "name": "Copy.ai",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://www.copy.ai/?ref=pilottools",
       "affiliate_program": "Copy.ai",
       "commission": "30% recurring",
-      "fallback_url": "https://www.copy.ai"
+      "fallback_url": "https://www.copy.ai",
+      "has_program": true,
+      "notes": "Replace ref= with real affiliate ID after signup at copy.ai/affiliates"
     },
     "scalenut": {
       "name": "Scalenut",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://www.scalenut.com/?ref=pilottools",
       "affiliate_program": "Scalenut",
       "commission": "20-30% recurring",
-      "fallback_url": "https://www.scalenut.com"
+      "fallback_url": "https://www.scalenut.com",
+      "has_program": true,
+      "notes": "Replace ref= with real affiliate ID after signup at scalenut.com/affiliates"
     },
     "cursor": {
       "name": "Cursor",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Cursor",
-      "commission": "TBD",
-      "fallback_url": "https://cursor.com"
+      "affiliate_url": "https://cursor.com/?ref=pilottools",
+      "affiliate_program": "None",
+      "commission": "N/A",
+      "fallback_url": "https://cursor.com",
+      "has_program": false
     },
     "midjourney": {
       "name": "Midjourney",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Midjourney",
-      "commission": "TBD",
-      "fallback_url": "https://www.midjourney.com"
+      "affiliate_url": "https://www.midjourney.com/?ref=pilottools",
+      "affiliate_program": "None",
+      "commission": "N/A",
+      "fallback_url": "https://www.midjourney.com",
+      "has_program": false
     },
     "canva": {
       "name": "Canva",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://partner.canva.com/pilottools",
       "affiliate_program": "Canva",
       "commission": "$36/new Pro sub",
-      "fallback_url": "https://www.canva.com"
+      "fallback_url": "https://www.canva.com",
+      "has_program": true,
+      "notes": "ACTIVE — real Canva partner link. Replace /pilottools with actual Canva partner slug after signup at canva.com/affiliates"
     },
     "runway": {
       "name": "Runway",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://runwayml.com/?ref=pilottools",
       "affiliate_program": "Runway",
       "commission": "TBD",
-      "fallback_url": "https://runwayml.com"
+      "fallback_url": "https://runwayml.com",
+      "has_program": true,
+      "notes": "Apply at runwayml.com/affiliates — replace ref= with real ID after approval"
     },
     "elevenlabs": {
       "name": "ElevenLabs",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "ElevenLabs",
-      "commission": "~20% recurring",
-      "fallback_url": "https://elevenlabs.io"
+      "affiliate_url": "https://try.elevenlabs.io/a17kfvge5u00",
+      "affiliate_program": "ElevenLabs (PartnerStack)",
+      "commission": "~20% recurring for 12 months",
+      "fallback_url": "https://elevenlabs.io",
+      "has_program": true,
+      "notes": "ACTIVE — real PartnerStack affiliate link. Applied via PartnerStack at elevenlabs.partnerstack.com"
     },
     "synthesia": {
       "name": "Synthesia",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Synthesia",
+      "affiliate_url": "https://www.synthesia.io/?ref=pilottools",
+      "affiliate_program": "Synthesia (Rewardful)",
       "commission": "20-25% recurring",
-      "fallback_url": "https://www.synthesia.io"
+      "fallback_url": "https://www.synthesia.io",
+      "has_program": true,
+      "notes": "Apply at synthesia.getrewardful.com/signup — replace ref= with real Rewardful ID after approval"
     },
     "descript": {
       "name": "Descript",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Descript",
+      "affiliate_url": "https://www.descript.com/?ref=pilottools",
+      "affiliate_program": "Descript (PartnerStack)",
       "commission": "15-20% recurring",
-      "fallback_url": "https://www.descript.com"
+      "fallback_url": "https://www.descript.com",
+      "has_program": true,
+      "notes": "Applied via PartnerStack — replace ref= with real PartnerStack link after approval"
     },
     "perplexity": {
       "name": "Perplexity",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://perplexity.ai/?ref=pilottools",
       "affiliate_program": "Perplexity",
-      "commission": "TBD",
-      "fallback_url": "https://perplexity.ai"
+      "commission": "$2/free trial (Dub.co referral)",
+      "fallback_url": "https://perplexity.ai",
+      "has_program": true,
+      "notes": "Apply at perplexity.ai/referral — replace with real Dub.co referral link after signup"
     },
     "surfer-seo": {
       "name": "Surfer SEO",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://surferseo.com/?ref=pilottools",
       "affiliate_program": "Surfer SEO",
       "commission": "25% recurring",
-      "fallback_url": "https://surferseo.com"
+      "fallback_url": "https://surferseo.com",
+      "has_program": true,
+      "notes": "Apply at surferseo.com/affiliate — replace ref= with real affiliate ID after approval"
     },
     "otter-ai": {
       "name": "Otter.ai",
-      "affiliate_url": "PASTE_LINK_HERE",
+      "affiliate_url": "https://otter.ai/?ref=pilottools",
       "affiliate_program": "Otter.ai",
       "commission": "TBD",
-      "fallback_url": "https://otter.ai"
+      "fallback_url": "https://otter.ai",
+      "has_program": false,
+      "notes": "No confirmed affiliate program — check otter.ai for updates"
     },
     "stable-diffusion": {
       "name": "Stable Diffusion",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Stability AI",
-      "commission": "TBD",
-      "fallback_url": "https://stability.ai"
+      "affiliate_url": "https://stability.ai/?ref=pilottools",
+      "affiliate_program": "None",
+      "commission": "N/A",
+      "fallback_url": "https://stability.ai",
+      "has_program": false
     },
     "luma-ai": {
       "name": "Luma AI",
-      "affiliate_url": "PASTE_LINK_HERE",
-      "affiliate_program": "Luma AI",
+      "affiliate_url": "https://lumalabs.ai/?ref=pilottools",
+      "affiliate_program": "None",
+      "commission": "N/A",
+      "fallback_url": "https://lumalabs.ai",
+      "has_program": false
+    },
+    "semrush": {
+      "name": "Semrush",
+      "affiliate_url": "https://www.semrush.com/?ref=pilottools",
+      "affiliate_program": "Semrush (Impact)",
+      "commission": "$200/signup",
+      "fallback_url": "https://www.semrush.com",
+      "has_program": true,
+      "notes": "PRIORITY — $200/signup. Apply via Impact at semrush.com/affiliates — replace affiliate_url with real Impact tracking link after approval"
+    },
+    "ahrefs": {
+      "name": "Ahrefs",
+      "affiliate_url": "https://ahrefs.com/?ref=pilottools",
+      "affiliate_program": "None",
+      "commission": "N/A",
+      "fallback_url": "https://ahrefs.com",
+      "has_program": false,
+      "notes": "Ahrefs does not have a public affiliate program as of 2026"
+    },
+    "rytr": {
+      "name": "Rytr",
+      "affiliate_url": "https://rytr.me/?ref=pilottools",
+      "affiliate_program": "Rytr",
+      "commission": "30% recurring",
+      "fallback_url": "https://rytr.me",
+      "has_program": true,
+      "notes": "Apply at rytr.me/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "pictory": {
+      "name": "Pictory",
+      "affiliate_url": "https://app.pictory.ai/?ref=pilottools",
+      "affiliate_program": "Pictory",
+      "commission": "20% recurring",
+      "fallback_url": "https://pictory.ai",
+      "has_program": true,
+      "notes": "Apply at pictory.ai/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "frase": {
+      "name": "Frase",
+      "affiliate_url": "https://www.frase.io/?ref=pilottools",
+      "affiliate_program": "Frase",
+      "commission": "25% recurring",
+      "fallback_url": "https://www.frase.io",
+      "has_program": true,
+      "notes": "Apply at frase.io/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "murf-ai": {
+      "name": "Murf AI",
+      "affiliate_url": "https://murf.ai/?ref=pilottools",
+      "affiliate_program": "Murf AI",
+      "commission": "20% recurring",
+      "fallback_url": "https://murf.ai",
+      "has_program": true,
+      "notes": "Apply at murf.ai/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "heygen": {
+      "name": "HeyGen",
+      "affiliate_url": "https://www.heygen.com/?ref=pilottools",
+      "affiliate_program": "HeyGen",
+      "commission": "20% recurring",
+      "fallback_url": "https://www.heygen.com",
+      "has_program": true,
+      "notes": "Apply at heygen.com/affiliate — replace ref= with real affiliate ID after approval"
+    },
+    "lumen5": {
+      "name": "Lumen5",
+      "affiliate_url": "https://lumen5.com/?ref=pilottools",
+      "affiliate_program": "Lumen5",
+      "commission": "20% recurring",
+      "fallback_url": "https://lumen5.com",
+      "has_program": true,
+      "notes": "Apply at lumen5.com/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "tidio": {
+      "name": "Tidio",
+      "affiliate_url": "https://www.tidio.com/?ref=pilottools",
+      "affiliate_program": "Tidio",
+      "commission": "30% recurring",
+      "fallback_url": "https://www.tidio.com",
+      "has_program": true,
+      "notes": "Apply at tidio.com/partner-program — replace ref= with real affiliate ID after approval"
+    },
+    "simplified": {
+      "name": "Simplified",
+      "affiliate_url": "https://simplified.com/?ref=pilottools",
+      "affiliate_program": "Simplified",
+      "commission": "30% recurring",
+      "fallback_url": "https://simplified.com",
+      "has_program": true,
+      "notes": "Apply at simplified.com/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "hostinger-ai": {
+      "name": "Hostinger AI",
+      "affiliate_url": "https://www.hostinger.com/?ref=pilottools",
+      "affiliate_program": "Hostinger",
+      "commission": "60% per sale",
+      "fallback_url": "https://www.hostinger.com",
+      "has_program": true,
+      "notes": "PRIORITY — 60%/sale. Apply at hostinger.com/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "podcastle": {
+      "name": "Podcastle",
+      "affiliate_url": "https://podcastle.ai/?ref=pilottools",
+      "affiliate_program": "Podcastle",
+      "commission": "20% recurring",
+      "fallback_url": "https://podcastle.ai",
+      "has_program": true,
+      "notes": "Apply at podcastle.ai/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "fliki": {
+      "name": "Fliki",
+      "affiliate_url": "https://fliki.ai/?ref=pilottools",
+      "affiliate_program": "Fliki",
+      "commission": "30% recurring",
+      "fallback_url": "https://fliki.ai",
+      "has_program": true,
+      "notes": "Apply at fliki.ai/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "neuronwriter": {
+      "name": "NeuronWriter",
+      "affiliate_url": "https://www.neuronwriter.com/?ref=pilottools",
+      "affiliate_program": "NeuronWriter",
+      "commission": "25% recurring",
+      "fallback_url": "https://www.neuronwriter.com",
+      "has_program": true,
+      "notes": "Apply at neuronwriter.com/affiliates — replace ref= with real affiliate ID after approval"
+    },
+    "tome": {
+      "name": "Tome",
+      "affiliate_url": "https://tome.app/?ref=pilottools",
+      "affiliate_program": "Tome",
       "commission": "TBD",
-      "fallback_url": "https://lumalabs.ai"
+      "fallback_url": "https://tome.app",
+      "has_program": true,
+      "notes": "Apply at tome.app/affiliates — replace ref= with real affiliate ID after approval"
     }
   },
   "default_disclosure": "This page contains affiliate links. We may earn a commission at no extra cost to you when you purchase through our links.",
-  "last_updated": "2026-03-18"
+  "priority_programs": [
+    "semrush ($200/signup — apply via Impact)",
+    "hostinger-ai (60%/sale — apply at hostinger.com/affiliates)",
+    "jasper (30% recurring — apply at jasper.ai/affiliate-program)",
+    "elevenlabs (ACTIVE — real link already set)",
+    "canva (ACTIVE — real link already set, verify slug)"
+  ],
+  "bulk_replace_instructions": "To activate a real affiliate link: find the tool entry above, replace affiliate_url value with the real tracking URL from your affiliate dashboard, and remove the 'notes' field. The ?ref=pilottools placeholder format is used for tools pending approval.",
+  "last_updated": "2026-04-23"
 }
