@@ -44,6 +44,72 @@ _BRAND_FORM_IDS = {
     'menopause': '9144926',
 }
 
+# Cross-promotion: which brands each site promotes and with what tagline
+_CROSS_PROMO_DATA = {
+    'fitness': [
+        {'name': 'Daily Deal Darling', 'tagline': 'Fitness gear deals curated daily — save without settling.', 'url': 'https://www.dailydealdarling.com'},
+        {'name': 'The Menopause Planner', 'tagline': 'Wellness tools for women navigating hormonal changes.', 'url': 'https://menopause-planner-website.vercel.app'},
+    ],
+    'deals': [
+        {'name': 'Home Decor Edit', 'tagline': 'Budget-friendly home upgrades that look expensive.', 'url': 'https://www.dailydealdarling.com'},
+        {'name': 'FitOver35', 'tagline': 'Science-backed fitness for men over 35.', 'url': 'https://fitover35.com'},
+    ],
+    'menopause': [
+        {'name': 'The Beauty Shelf', 'tagline': 'Skincare that actually works for mature skin.', 'url': 'https://www.dailydealdarling.com'},
+        {'name': 'FitOver35', 'tagline': 'Fitness and wellness for the over-35 crowd.', 'url': 'https://fitover35.com'},
+    ],
+    'pilottools': [
+        {'name': 'Daily Deal Darling', 'tagline': 'The sharpest deal-finding tools, reviewed and ranked.', 'url': 'https://www.dailydealdarling.com'},
+        {'name': 'FitOver35', 'tagline': 'AI fitness apps and training science for men over 35.', 'url': 'https://fitover35.com'},
+    ],
+    'homedecor': [
+        {'name': 'Daily Deal Darling', 'tagline': 'Budget home finds that look a million bucks.', 'url': 'https://www.dailydealdarling.com'},
+        {'name': 'The Beauty Shelf', 'tagline': 'Vanity essentials and bathroom beauty picks.', 'url': 'https://www.dailydealdarling.com'},
+    ],
+    'beauty': [
+        {'name': 'The Menopause Planner', 'tagline': 'Skincare and wellness through hormonal changes.', 'url': 'https://menopause-planner-website.vercel.app'},
+        {'name': 'Home Decor Edit', 'tagline': 'Vanity organization and bathroom upgrade ideas.', 'url': 'https://www.dailydealdarling.com'},
+    ],
+}
+
+# Per-brand visual theme for the cross-promo section
+_CROSS_PROMO_THEME = {
+    'fitness':   {'bg': '#0a0a0a', 'border': '#333', 'label': '#E8C547', 'font': 'Space Grotesk', 'card_bg': '#1a1a1a', 'card_border': '#222', 'name': '#fff', 'tagline': '#888', 'btn_bg': '#E8C547', 'btn_fg': '#111'},
+    'deals':     {'bg': '#fdf5f7', 'border': '#f0d5dc', 'label': '#C47D8E', 'font': 'Lora', 'card_bg': '#fff', 'card_border': '#f0d5dc', 'name': '#2D2D2D', 'tagline': '#666', 'btn_bg': '#C47D8E', 'btn_fg': '#fff'},
+    'menopause': {'bg': '#f5ede0', 'border': '#e8dcc8', 'label': '#6B705C', 'font': 'DM Serif Display', 'card_bg': '#fff', 'card_border': '#DDBEA9', 'name': '#3a3a3a', 'tagline': '#666', 'btn_bg': '#6B705C', 'btn_fg': '#fff'},
+    'pilottools': {'bg': '#0c1a2e', 'border': '#1e293b', 'label': '#0EA5E9', 'font': 'Space Grotesk', 'card_bg': '#1e293b', 'card_border': '#334155', 'name': '#f1f5f9', 'tagline': '#94a3b8', 'btn_bg': '#0EA5E9', 'btn_fg': '#fff'},
+    'homedecor': {'bg': '#f5f0e8', 'border': '#e8dcc8', 'label': '#6B705C', 'font': 'DM Serif Display', 'card_bg': '#fff', 'card_border': '#DDBEA9', 'name': '#3a3a3a', 'tagline': '#666', 'btn_bg': '#6B705C', 'btn_fg': '#fff'},
+    'beauty':    {'bg': '#fdf5f5', 'border': '#f0e0e0', 'label': '#D4A0A0', 'font': 'Lora', 'card_bg': '#fff', 'card_border': '#f0d0d0', 'name': '#3a3a3a', 'tagline': '#666', 'btn_bg': '#D4A0A0', 'btn_fg': '#fff'},
+}
+
+
+def _cross_promo_section(brand_key):
+    """Return a themed 'From Our Network' cross-promotion section."""
+    promos = _CROSS_PROMO_DATA.get(brand_key, [])
+    if not promos:
+        return ''
+    t = _CROSS_PROMO_THEME.get(brand_key, _CROSS_PROMO_THEME['deals'])
+    cards = ''
+    for promo in promos:
+        name = _esc(promo['name'])
+        tagline = _esc(promo['tagline'])
+        url = _esc(promo['url'])
+        cards += f'''
+        <div style="background:{t['card_bg']};border:1px solid {t['card_border']};border-radius:10px;padding:18px 20px;flex:1;min-width:220px;">
+          <div style="font-family:'{t['font']}',serif;font-weight:600;font-size:1em;color:{t['name']};margin-bottom:6px;">{name}</div>
+          <p style="margin:0 0 14px;font-size:0.88em;color:{t['tagline']};line-height:1.5;">{tagline}</p>
+          <a href="{url}" target="_blank" rel="noopener"
+             style="display:inline-block;background:{t['btn_bg']};color:{t['btn_fg']};padding:8px 18px;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.85em;">
+            Visit Site &rarr;</a>
+        </div>'''
+    return f'''
+    <section style="margin:40px 0;padding:24px;background:{t['bg']};border-radius:12px;border-top:2px solid {t['border']};">
+      <p style="font-size:0.72em;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:{t['label']};margin:0 0 14px;">From Our Network</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        {cards}
+      </div>
+    </section>'''
+
 
 def _esc(text):
     """HTML-escape a string."""
@@ -227,6 +293,8 @@ def _render_deals_article(article_data, site_config, slug):
   {f'<h2 style="font-family:Lora,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
 
   {signup_html}
+
+  {_cross_promo_section('deals')}
 </main>
 
 <footer style="border-top:1px solid #eee;padding:24px 20px;text-align:center;color:#999;font-size:0.82em;">
@@ -383,6 +451,8 @@ def _render_fitness_article(article_data, site_config, slug):
   {f'<section style="margin:36px 0;"><h2 style="font-family:Space Grotesk,sans-serif;font-size:1.2em;color:#E8C547;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
 
   {signup_html}
+
+  {_cross_promo_section('fitness')}
 </main>
 
 <footer style="border-top:1px solid #222;padding:24px 20px;text-align:center;color:#666;font-size:0.82em;">
@@ -577,6 +647,8 @@ def _render_menopause_article(article_data, site_config, slug):
   {amazon_html}
 
   {f'<section style="margin:36px 0;"><h2 style="font-family:DM Serif Display,serif;font-size:1.2em;color:#6B705C;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
+
+  {_cross_promo_section('menopause')}
 </main>
 
 <footer style="border-top:1px solid #e8dcc8;padding:24px 20px;text-align:center;color:#A5A58D;font-size:0.82em;">
@@ -724,6 +796,8 @@ def _render_pilottools_article(article_data, site_config, slug):
   {f'<section style="margin:36px 0;"><h2 style="font-family:Space Grotesk,sans-serif;font-size:1.2em;color:#0EA5E9;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
 
   {signup_html}
+
+  {_cross_promo_section('pilottools')}
 </main>
 
 <footer style="border-top:1px solid #1e293b;padding:24px 20px;text-align:center;color:#475569;font-size:0.82em;">
@@ -851,6 +925,8 @@ def _render_homedecor_article(article_data, site_config, slug):
   {verdict_html}
 
   {f'<h2 style="font-family:DM Serif Display,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
+
+  {_cross_promo_section('homedecor')}
 </main>
 
 <footer style="border-top:1px solid #e8dcc8;padding:24px 20px;text-align:center;color:#A5A58D;font-size:0.82em;">
@@ -978,6 +1054,8 @@ def _render_beauty_article(article_data, site_config, slug):
   {verdict_html}
 
   {f'<h2 style="font-family:Lora,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
+
+  {_cross_promo_section('beauty')}
 </main>
 
 <footer style="border-top:1px solid #f0e0e0;padding:24px 20px;text-align:center;color:#b08080;font-size:0.82em;">
