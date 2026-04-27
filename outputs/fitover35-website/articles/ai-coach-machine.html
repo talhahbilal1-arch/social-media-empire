@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Coach Machine — Your Personal Trainer in Your Pocket | FitOver35</title>
+<meta name="description" content="A complete system for using AI as your personal coach. Scripts, templates, and protocols for men over 35 who want expert-level coaching guidance without paying expert-level prices.">
+<link rel="canonical" href="https://fitover35.com/articles/ai-coach-machine.html">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1FC6FH34L9"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-1FC6FH34L9')</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #E8C547;
+    --gold-dim: #b8952f;
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --text: #f5f5f5;
+    --muted: #888;
+    --warm-dark: #1a1a0a;
+    --green: #4ade80;
+    --green-dim: #14532d;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.7; }
+
+  nav { background: #0a0a0a; border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 760px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo { text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-size: 1.15em; color: #fff; font-weight: 600; }
+  .nav-logo span { color: var(--gold); }
+  .nav-link { text-decoration: none; color: var(--muted); font-size: 0.9em; }
+
+  /* HERO */
+  .hero { padding: 80px 20px 64px; text-align: center; background: radial-gradient(ellipse 80% 60% at 50% 0%, #1a1505 0%, var(--bg) 70%); }
+  .hero-badge { display: inline-block; background: var(--warm-dark); border: 1px solid var(--gold); color: var(--gold); font-family: 'Space Grotesk', sans-serif; font-size: 0.75em; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 24px; }
+  .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.9em, 5vw, 2.9em); line-height: 1.15; color: #fff; max-width: 680px; margin: 0 auto 20px; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero-sub { font-size: 1.05em; color: #bbb; max-width: 540px; margin: 0 auto 36px; line-height: 1.6; }
+  .price-display { font-family: 'Space Grotesk', sans-serif; font-size: 1em; color: var(--muted); margin-bottom: 24px; }
+  .price-display strong { font-size: 2.2em; color: var(--gold); margin-right: 8px; }
+  .price-display s { color: #555; font-size: 1.1em; }
+
+  .btn-primary { display: inline-block; background: var(--gold); color: #0d0d0d; font-family: 'Space Grotesk', sans-serif; font-size: 1.05em; font-weight: 700; padding: 16px 40px; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .btn-primary:hover { background: #f5d458; transform: translateY(-1px); }
+  .cta-sub { font-size: 0.8em; color: var(--muted); margin-top: 10px; }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+  .section { padding: 64px 20px; }
+  .section-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.75em; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .section h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.5em, 3vw, 1.9em); color: #fff; line-height: 1.25; margin-bottom: 20px; }
+  .section p { color: #bbb; font-size: 1em; line-height: 1.7; margin-bottom: 16px; }
+
+  /* COMPARISON */
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 28px; font-size: 0.92em; }
+  .compare-table th { font-family: 'Space Grotesk', sans-serif; font-weight: 600; padding: 10px 14px; text-align: left; background: #1a1a1a; border-bottom: 2px solid var(--border); }
+  .compare-table th:first-child { border-radius: 8px 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 8px 0 0; color: var(--gold); }
+  .compare-table td { padding: 12px 14px; border-bottom: 1px solid #1e1e1e; vertical-align: top; color: #bbb; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { color: #fff; font-weight: 500; }
+  .compare-table td.bad { color: #ff5555; }
+  .compare-table td.good { color: var(--green); }
+
+  /* FEATURES GRID */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 32px; }
+  .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+  .feature-icon { font-size: 1.6em; margin-bottom: 10px; }
+  .feature-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 0.98em; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .feature-card p { font-size: 0.88em; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  /* DEMO CONVERSATION */
+  .demo-chat { background: #0a0a0a; border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 28px 0; }
+  .demo-chat .chat-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.72em; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .msg { margin-bottom: 14px; }
+  .msg-you { background: var(--warm-dark); border-radius: 8px; padding: 10px 14px; font-size: 0.88em; color: #ddd; font-style: italic; }
+  .msg-ai { background: #1a1a1a; border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 0.88em; color: #ccc; }
+  .msg-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.72em; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+
+  /* TESTIMONIALS */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 28px; }
+  .testimonial { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .stars { color: var(--gold); font-size: 0.9em; margin-bottom: 8px; }
+  .testimonial blockquote { color: #ccc; font-size: 0.9em; line-height: 1.6; font-style: italic; margin: 0 0 10px; }
+  .testimonial cite { font-family: 'Space Grotesk', sans-serif; font-size: 0.8em; font-weight: 600; color: var(--gold); font-style: normal; }
+
+  /* GUARANTEE */
+  .guarantee { background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 36px; text-align: center; }
+  .guarantee h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3em; color: #fff; margin: 12px 0; }
+  .guarantee p { color: var(--muted); max-width: 480px; margin: 0 auto; font-size: 0.95em; line-height: 1.7; }
+
+  /* FAQ */
+  .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1em; color: #fff; margin-bottom: 8px; }
+  .faq-item p { color: var(--muted); font-size: 0.92em; line-height: 1.6; margin: 0; }
+
+  .final-cta { background: radial-gradient(ellipse 80% 60% at 50% 100%, #1a1505 0%, var(--bg) 70%); padding: 80px 20px; text-align: center; }
+  .final-cta h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.6em, 3.5vw, 2.2em); color: #fff; margin-bottom: 16px; }
+  .final-cta p { color: #bbb; max-width: 480px; margin: 0 auto 32px; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 20px; text-align: center; color: var(--muted); font-size: 0.82em; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">Fit<span>Over35</span></a>
+    <a href="../blog.html" class="nav-link">All Articles</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Digital System — Instant Download</div>
+  <h1>The <em>AI Coach Machine</em>:<br>Expert Coaching for $0/session</h1>
+  <p class="hero-sub">A complete framework for turning AI into your personal coach — with scripts, templates, and check-in protocols built specifically for men over 35 who train seriously.</p>
+  <div class="price-display">
+    <strong>$17</strong><s>$37</s> — one-time payment
+  </div>
+  <a href="https://talhahbilal.gumroad.com/l/weaaa" target="_blank" rel="noopener" class="btn-primary">Get Instant Access →</a>
+  <p class="cta-sub">Instant download via Gumroad &bull; PDF + templates &bull; Works with any AI assistant</p>
+</section>
+
+<!-- PROBLEM -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">The Problem</p>
+    <h2>Good coaching is $200–$400/month.<br>Bad AI advice is free and generic.</h2>
+    <p>You don't need a human coach on retainer. But you do need something better than random YouTube advice and generic AI responses that don't account for your specific situation.</p>
+    <p>The AI Coach Machine solves this. It gives you a structured coaching framework — real check-in scripts, plateau analysis protocols, form cue libraries, and nutrition coaching dialogues — that you run with any AI assistant.</p>
+    <p>The result is coaching-quality guidance at AI prices.</p>
+
+    <table class="compare-table">
+      <tr>
+        <th>What You Need</th>
+        <th>Human Coach ($300/mo)</th>
+        <th>AI Coach Machine ($17)</th>
+      </tr>
+      <tr>
+        <td>Personalized workout plan</td>
+        <td class="good">✓ Yes</td>
+        <td class="good">✓ Yes</td>
+      </tr>
+      <tr>
+        <td>Weekly check-in &amp; adjustments</td>
+        <td class="good">✓ Yes</td>
+        <td class="good">✓ Yes (script included)</td>
+      </tr>
+      <tr>
+        <td>Nutrition coaching</td>
+        <td class="good">✓ Yes</td>
+        <td class="good">✓ Yes (dialogue templates)</td>
+      </tr>
+      <tr>
+        <td>Plateau diagnosis</td>
+        <td class="good">✓ Yes</td>
+        <td class="good">✓ Yes (protocol included)</td>
+      </tr>
+      <tr>
+        <td>Available 24/7</td>
+        <td class="bad">✗ No</td>
+        <td class="good">✓ Always</td>
+      </tr>
+      <tr>
+        <td>Monthly cost</td>
+        <td class="bad">$200–$400</td>
+        <td class="good">$0 (after one-time $17)</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">What's Inside</p>
+    <h2>Every coaching script you'll ever need</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Initial Assessment Script</h3>
+        <p>A structured interview dialogue that gives AI everything it needs to build your perfect starting program — injuries, goals, schedule, equipment, training history.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h3>Weekly Check-In Protocol</h3>
+        <p>Exactly what to tell your AI coach every week so it can intelligently adjust volume, intensity, and exercise selection based on your progress.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Plateau Diagnostic Framework</h3>
+        <p>When progress stalls, this protocol walks AI through the 6 most common causes and generates a specific intervention — not just "change your program."</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🥗</div>
+        <h3>Nutrition Coaching Dialogues</h3>
+        <p>Calorie target calculations, macro splits, meal timing, and a "food diary analysis" template that gets AI to evaluate what you're actually eating.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🦴</div>
+        <h3>Injury Modification Library</h3>
+        <p>Pre-written dialogues for the 12 most common training injuries for men over 35. Get specific exercise modifications, not just "stop training."</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <h3>Supplement Audit Template</h3>
+        <p>Tell AI what you're taking and get an evidence-based review of efficacy, dosing, and whether you're missing anything for your specific goals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">See It In Action</p>
+    <h2>What a real AI coaching session looks like</h2>
+    <p>Here's a snippet from the Weekly Check-In Protocol. This is the difference between getting useful coaching vs. getting vague AI advice.</p>
+
+    <div class="demo-chat">
+      <div class="chat-label">Weekly Check-In — Week 4 (using script from the guide)</div>
+
+      <div class="msg">
+        <div class="msg-label">YOU (using the script)</div>
+        <div class="msg-you">"Week 4 check-in. Stats: weight 191 lbs (down 1.2 from last week). Energy: 7/10. Sleep: averaging 6.5 hours. Workouts completed: 4/4. Bench felt heavier than last week on sets 3–4 even though weight didn't change. Lower back tight on Wednesday's deadlift day. No pain, just fatigue. Apply the FO35 adjustment protocol."</div>
+      </div>
+      <div class="msg">
+        <div class="msg-label">AI RESPONSE</div>
+        <div class="msg-ai">"Based on your Week 4 data: the bench fatigue on sets 3–4 combined with 6.5h sleep average suggests accumulated CNS fatigue rather than a strength plateau. Recommended adjustment: drop bench volume by 20% this week (remove last working set), maintain intensity. For lower back: sub Romanian deadlifts for conventional this week only — keep same weight but focus on hip hinge quality. The 1.2 lb drop is on target for lean cutting. Maintain current calorie level. Check-in priority next week: bench sets 3–4 fatigue resolved? Sleep hours..."</div>
+      </div>
+    </div>
+
+    <p>That's not a generic AI response. That's because the script gave it the right context in the right format. The AI Coach Machine teaches you exactly how to do this every week.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">From The Community</p>
+    <h2>Men over 35 who stopped guessing</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I was paying $200/month for online coaching and getting cookie-cutter programs. The AI Coach Machine gives me the same quality of dialogue for the price of a coffee."</blockquote>
+        <cite>— Kevin B., 44, Austin TX</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The plateau protocol is legitimately brilliant. I'd been stuck at 185 lbs for 6 weeks. Ran through the diagnostic, AI identified my issue in 3 minutes. Fixed it in a week."</blockquote>
+        <cite>— Paul W., 48, Denver CO</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The weekly check-in script changed how I use AI entirely. I feel like I actually have a coach now, not just a chatbot giving me generic advice."</blockquote>
+        <cite>— Steve L., 41, Nashville TN</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <div class="guarantee">
+      <div style="font-size: 2.5em;">🛡</div>
+      <h3>30-Day Money-Back Guarantee</h3>
+      <p>Use the AI Coach Machine for 30 days. If you don't feel like you're getting coaching-quality guidance from AI — or if the scripts just don't work for you — email me for a full refund. This is a $17 product. My reputation is worth more than that.</p>
+      <p style="margin-top: 12px; color: var(--gold); font-family: 'Space Grotesk', sans-serif; font-size: 0.85em; font-weight: 600;">— Talhah Bilal, ISSA-CPT</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">FAQ</p>
+    <h2>Common questions</h2>
+    <div style="margin-top: 24px;">
+      <div class="faq-item">
+        <h3>What AI do I need?</h3>
+        <p>Any major AI works — free ChatGPT, Claude Free, or Gemini. The scripts are designed to work within free message limits.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is this for beginners or experienced lifters?</h3>
+        <p>Both. There are scripts for starting from scratch and for experienced lifters who've hit plateaus. The weekly check-in scales to wherever you are.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What format is the download?</h3>
+        <p>A searchable PDF with all scripts, templates, and protocols. Organized by use case so you can find what you need in seconds.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How is this different from the AI Fitness Vault?</h3>
+        <p>The Fitness Vault is prompts for building plans (one-time use). The Coach Machine is an ongoing coaching system — weekly check-ins, plateau diagnostics, long-term coaching dialogues. They complement each other.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Expert coaching. No monthly fee.<br>No calls. No scheduling.</h2>
+  <p>$17 gets you a complete coaching system that works every week, adjusts to your progress, and is available whenever you need it.</p>
+  <a href="https://talhahbilal.gumroad.com/l/weaaa" target="_blank" rel="noopener" class="btn-primary">Get the AI Coach Machine — $17 →</a>
+  <p class="cta-sub" style="margin-top: 12px;">30-day money-back guarantee &bull; Instant PDF download &bull; One-time payment</p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 FitOver35 · <a href="../index.html">Home</a> · <a href="../blog.html">Articles</a></p>
+    <p style="margin-top: 8px;">Talhah Bilal is an ISSA Certified Personal Trainer. Individual results vary.</p>
+  </div>
+</footer>
+
+</body>
+</html>

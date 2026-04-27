@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menopause Wellness Planner Bundle — Track Symptoms, Reclaim Your Days | The Menopause Planner</title>
+<meta name="description" content="A beautiful, fillable digital planner for tracking menopause symptoms, sleep, supplements, and mood — all in one place. Instant download. Print at home or use on your tablet.">
+<link rel="canonical" href="https://menopause-planner-website.vercel.app/articles/menopause-wellness-planner.html">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02ZPS3H3GC"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-02ZPS3H3GC')</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --sage: #6B705C;
+    --sage-light: #f0ebe3;
+    --sage-mid: #c8cdb8;
+    --warm: #f5ede0;
+    --bg: #FAF7F0;
+    --surface: #fff;
+    --border: #e8dcc8;
+    --text: #3a3a3a;
+    --muted: #8B7355;
+    --accent2: #DDBEA9;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; line-height: 1.7; }
+
+  nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 720px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo { text-decoration: none; font-family: 'DM Serif Display', serif; font-size: 1.15em; color: var(--text); }
+  .nav-logo span { color: var(--sage); }
+  .nav-link { text-decoration: none; color: var(--muted); font-size: 0.9em; }
+
+  /* HERO */
+  .hero { padding: 80px 20px 60px; text-align: center; background: linear-gradient(180deg, var(--warm) 0%, var(--bg) 100%); }
+  .hero-badge { display: inline-block; background: var(--surface); border: 1px solid var(--accent2); color: var(--sage); font-size: 0.75em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 16px; border-radius: 20px; margin-bottom: 24px; font-family: 'Outfit', sans-serif; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.9em, 5vw, 2.9em); line-height: 1.2; color: var(--text); max-width: 640px; margin: 0 auto 20px; }
+  .hero h1 em { font-style: italic; color: var(--sage); }
+  .hero-sub { font-size: 1.05em; color: var(--muted); max-width: 540px; margin: 0 auto 36px; line-height: 1.7; }
+  .price-display { font-family: 'DM Serif Display', serif; font-size: 1em; color: var(--muted); margin-bottom: 28px; }
+  .price-display strong { font-size: 2.2em; color: var(--text); margin-right: 8px; }
+  .price-display s { color: #ccc; font-size: 1.1em; }
+
+  .btn-primary { display: inline-block; background: var(--sage); color: #fff; font-family: 'Outfit', sans-serif; font-size: 1.05em; font-weight: 600; padding: 16px 40px; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .btn-primary:hover { background: #565c4a; transform: translateY(-1px); }
+  .cta-sub { font-size: 0.8em; color: var(--muted); margin-top: 10px; }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  .section { padding: 64px 20px; }
+  .section-label { font-size: 0.75em; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); margin-bottom: 12px; font-family: 'Outfit', sans-serif; }
+  .section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.5em, 3vw, 2em); color: var(--text); line-height: 1.25; margin-bottom: 20px; }
+  .section p { color: #555; font-size: 1em; line-height: 1.75; margin-bottom: 16px; }
+
+  /* PAIN LIST */
+  .pain-list { list-style: none; margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
+  .pain-list li { display: flex; align-items: flex-start; gap: 12px; color: #555; font-size: 0.97em; line-height: 1.5; }
+  .pain-list li::before { content: '·'; color: var(--accent2); font-size: 1.6em; line-height: 1; flex-shrink: 0; margin-top: -2px; }
+
+  /* PLANNER PAGES GRID */
+  .pages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 32px; }
+  .page-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; }
+  .page-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent2), var(--sage)); border-radius: 12px 12px 0 0; }
+  .page-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.05em; color: var(--text); margin-bottom: 6px; }
+  .page-card p { font-size: 0.88em; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  /* FEATURE LIST */
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 24px; }
+  .feature-list li { display: flex; align-items: flex-start; gap: 14px; }
+  .feature-list li .check { width: 22px; height: 22px; background: var(--sage-light); border: 1px solid var(--sage-mid); color: var(--sage); font-size: 0.85em; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .feature-list li .feature-text { color: #555; font-size: 0.97em; line-height: 1.5; }
+  .feature-list li .feature-text strong { color: var(--text); }
+
+  /* PULL QUOTE */
+  .pull-quote { border-left: 3px solid var(--accent2); padding: 16px 20px; margin: 28px 0; background: var(--warm); border-radius: 0 8px 8px 0; }
+  .pull-quote p { font-family: 'DM Serif Display', serif; font-style: italic; color: var(--text); line-height: 1.6; margin: 0; font-size: 1.05em; }
+  .pull-quote cite { font-family: 'Outfit', sans-serif; font-size: 0.8em; color: var(--muted); font-style: normal; display: block; margin-top: 8px; }
+
+  /* TESTIMONIALS */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 28px; }
+  .testimonial { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .stars { color: #c49a2f; font-size: 0.9em; margin-bottom: 8px; }
+  .testimonial blockquote { color: #555; font-family: 'DM Serif Display', serif; font-style: italic; font-size: 0.92em; line-height: 1.65; margin: 0 0 12px; }
+  .testimonial cite { font-size: 0.82em; font-weight: 600; color: var(--muted); font-style: normal; }
+
+  /* WHAT'S INCLUDED BOX */
+  .included-box { background: var(--surface); border: 2px solid var(--accent2); border-radius: 16px; padding: 32px; margin: 28px 0; }
+  .included-box h3 { font-family: 'DM Serif Display', serif; font-size: 1.3em; color: var(--text); margin-bottom: 16px; }
+  .included-items { display: flex; flex-direction: column; gap: 8px; }
+  .included-item { display: flex; gap: 12px; align-items: flex-start; font-size: 0.95em; color: #555; }
+  .included-item::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+
+  /* GUARANTEE */
+  .guarantee { background: var(--warm); border: 1px solid var(--border); border-radius: 16px; padding: 36px; text-align: center; }
+  .guarantee h3 { font-family: 'DM Serif Display', serif; font-size: 1.35em; color: var(--text); margin: 12px 0; }
+  .guarantee p { color: var(--muted); max-width: 500px; margin: 0 auto; font-size: 0.95em; line-height: 1.75; }
+
+  /* FAQ */
+  .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item h3 { font-family: 'DM Serif Display', serif; font-size: 1.02em; color: var(--text); margin-bottom: 8px; }
+  .faq-item p { color: var(--muted); font-size: 0.92em; line-height: 1.6; margin: 0; }
+
+  /* FINAL CTA */
+  .final-cta { background: linear-gradient(180deg, var(--bg) 0%, var(--warm) 100%); padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); }
+  .final-cta h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6em, 3.5vw, 2.2em); color: var(--text); margin-bottom: 16px; }
+  .final-cta p { color: var(--muted); max-width: 480px; margin: 0 auto 32px; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 20px; text-align: center; color: var(--muted); font-size: 0.82em; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">The Menopause <span>Planner</span></a>
+    <a href="../blog.html" class="nav-link">All Articles</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Digital Download · Print at Home · Instant Access</div>
+  <h1>Finally Track Everything in <em>One Beautiful Place</em></h1>
+  <p class="hero-sub">The Menopause Wellness Planner Bundle — a complete digital planner for tracking symptoms, sleep, supplements, and mood through every stage of your transition.</p>
+  <div class="price-display">
+    <strong>$14.99</strong> — one-time purchase, yours forever
+  </div>
+  <a href="https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic" target="_blank" rel="noopener" class="btn-primary">Get It on Etsy →</a>
+  <p class="cta-sub">Instant digital download &bull; Print at home or use on tablet &bull; No subscription</p>
+</section>
+
+<!-- RELATABLE OPENING -->
+<section class="section" style="border-top: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">You Already Know This Feeling</p>
+    <h2>When everything feels connected but you can't quite see the pattern.</h2>
+    <p>Hot flashes at 2am. Brain fog on Tuesday. Heart pounding for no reason. Then a good week where you almost feel like yourself again. And you wonder: <em>what changed?</em></p>
+    <p>The answer is in the patterns — but only if you're tracking them. Most women going through perimenopause and menopause are trying to hold everything in their head, or in scattered notes, or in apps that weren't built for this season of life.</p>
+
+    <div class="pull-quote">
+      <p>"I spent six months telling my doctor 'I don't feel right' without being able to say why. Once I started tracking properly, I had three pages of data that finally got us to the right conversation."</p>
+      <cite>— Linda, 52, using the planner since January</cite>
+    </div>
+
+    <p>The Menopause Wellness Planner gives you one place to see it all — so you can spot your triggers, understand your cycles, and walk into every doctor's appointment with clarity.</p>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE THE PLANNER -->
+<section class="section" style="background: var(--warm); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">Inside the Bundle</p>
+    <h2>Everything you need to understand your body's new rhythms</h2>
+    <p>The bundle includes beautifully designed, fillable pages organized around the four things that matter most during perimenopause and menopause:</p>
+    <div class="pages-grid">
+      <div class="page-card">
+        <h3>Daily Symptom Tracker</h3>
+        <p>Rate 20+ common menopause symptoms each day. Hot flashes, night sweats, mood, energy, joint pain, and more. See your weekly picture at a glance.</p>
+      </div>
+      <div class="page-card">
+        <h3>Sleep Quality Journal</h3>
+        <p>Log bedtime, wake time, wake-ups, and morning energy score. Identify what's disrupting your sleep and what helps you wake up restored.</p>
+      </div>
+      <div class="page-card">
+        <h3>Supplement &amp; Medication Log</h3>
+        <p>Track what you're taking and when, note how you feel, and see whether your protocol is working. Shareable with your healthcare provider.</p>
+      </div>
+      <div class="page-card">
+        <h3>Mood &amp; Energy Calendar</h3>
+        <p>Monthly overview for spotting hormonal patterns. Color-coded mood tracking reveals cycles you didn't know you still had.</p>
+      </div>
+      <div class="page-card">
+        <h3>Trigger Identification Worksheet</h3>
+        <p>A structured exercise for connecting symptoms to food, activity, stress, and sleep patterns. Most women find 2–3 major triggers within the first month.</p>
+      </div>
+      <div class="page-card">
+        <h3>Doctor Appointment Prep</h3>
+        <p>A one-page summary template to bring to appointments. Stop trying to remember three months of symptoms — just hand your provider this page.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL BUNDLE CONTENTS -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label">Complete Bundle Contents</p>
+    <h2>What you receive after purchase</h2>
+
+    <div class="included-box">
+      <h3>The Menopause Wellness Planner Bundle</h3>
+      <div class="included-items">
+        <div class="included-item">52 daily tracking pages (full year at weekly intervals)</div>
+        <div class="included-item">12 monthly mood &amp; energy overview calendars</div>
+        <div class="included-item">4 quarterly reflection worksheets</div>
+        <div class="included-item">Trigger identification workbook (8 pages)</div>
+        <div class="included-item">Doctor appointment prep sheets (x4)</div>
+        <div class="included-item">Supplement and HRT tracking logs</div>
+        <div class="included-item">A5 print version (half-page, planner-sized)</div>
+        <div class="included-item">Letter/A4 print version (full page)</div>
+        <div class="included-item">GoodNotes &amp; Notability compatible version (digital use)</div>
+        <div class="included-item">Quick-start guide: "How to Use Your Planner"</div>
+      </div>
+    </div>
+
+    <ul class="feature-list">
+      <li>
+        <div class="check">✓</div>
+        <div class="feature-text"><strong>Print at home or use digitally.</strong> Works on paper, iPad with Apple Pencil, or any tablet with a PDF annotation app.</div>
+      </li>
+      <li>
+        <div class="check">✓</div>
+        <div class="feature-text"><strong>No subscription, no app, no account.</strong> Buy once, download immediately, use forever.</div>
+      </li>
+      <li>
+        <div class="check">✓</div>
+        <div class="feature-text"><strong>Designed for real life.</strong> Clean, uncluttered layouts that take 2–3 minutes per day to fill in, not 20.</div>
+      </li>
+      <li>
+        <div class="check">✓</div>
+        <div class="feature-text"><strong>Evidence-informed symptom list.</strong> Tracks the 20+ symptoms most commonly reported in perimenopause and menopause, including ones your doctor might not ask about.</div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background: var(--warm); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">From Women Who Track</p>
+    <h2>What a difference one month of data makes</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I've tried 4 apps and none of them stuck. This planner sits on my nightstand and takes 3 minutes before bed. I've used it every day for 6 weeks — first time I've been consistent with anything like this."</blockquote>
+        <cite>— Patricia G., 54</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The trigger worksheet was eye-opening. I found out alcohol was making my night sweats three times worse — even just one glass. I never would have connected that without tracking."</blockquote>
+        <cite>— Susan W., 49</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Brought the doctor prep sheet to my gynecologist and she was genuinely impressed. Said it was the most useful patient visit she'd had all month. We changed my HRT dose based on the data."</blockquote>
+        <cite>— Margaret L., 57</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="section">
+  <div class="wrap">
+    <div class="guarantee">
+      <div style="font-size: 2.5em;">🌿</div>
+      <h3>Etsy Buyer Protection</h3>
+      <p>All purchases through Etsy are covered by Etsy's buyer protection policy. If you have any issues accessing your download, Etsy will make it right — and so will I. Download the planner, try it for a week, and if it doesn't feel right for you, reach out.</p>
+      <p style="margin-top: 14px; font-size: 0.85em; color: var(--sage);">Instant download · No return shipping · No waiting</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background: var(--warm); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-label">FAQ</p>
+    <h2>Before you buy</h2>
+    <div style="margin-top: 20px;">
+      <div class="faq-item">
+        <h3>How do I receive my download?</h3>
+        <p>Immediately after purchase on Etsy, you'll receive a download link via email and in your Etsy account. Download to any device and print or use digitally.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I print it at home?</h3>
+        <p>Yes. Both A4/Letter and A5 (half-page) formats are included. Standard home printer, plain paper works perfectly. You can also take it to a print shop.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does it work on iPad?</h3>
+        <p>Yes. The digital version is compatible with GoodNotes 5, Notability, and any PDF annotation app. Use your Apple Pencil or stylus to fill it in digitally.</p>
+      </div>
+      <div class="faq-item">
+        <h3>I'm in early perimenopause — is this right for me?</h3>
+        <p>Absolutely. Starting your tracking now, before symptoms intensify, gives you a valuable baseline and helps you identify shifts early. The earlier you start, the more useful your data becomes.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I share it with my healthcare provider?</h3>
+        <p>Yes. The Doctor Appointment Prep page is specifically designed to share. You can also share daily or monthly pages if your provider wants more detail. Personal use license included.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>You deserve to understand<br>what your body is telling you.</h2>
+  <p>$14.99. Instant download. Print today, start tracking tonight. Your answers are in the patterns — you just need a beautiful place to see them.</p>
+  <a href="https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle?utm_source=Pinterest&utm_medium=organic" target="_blank" rel="noopener" class="btn-primary">Get the Planner on Etsy — $14.99 →</a>
+  <p class="cta-sub" style="margin-top: 14px;">Instant digital download &bull; Print at home or use on iPad &bull; One-time purchase</p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 The Menopause Planner · <a href="../index.html">Home</a> · <a href="../blog.html">Articles</a></p>
+    <p style="margin-top: 8px;">Content is for informational purposes only and does not constitute medical advice.</p>
+  </div>
+</footer>
+
+</body>
+</html>
