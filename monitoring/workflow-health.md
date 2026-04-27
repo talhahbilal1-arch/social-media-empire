@@ -1,16 +1,16 @@
 # Workflow Health Report
 
-Generated: 2026-04-20 17:15 UTC
+Generated: 2026-04-27 17:37 UTC
 
 ## Summary
 
 | Metric | Count |
 |--------|-------|
-| Active workflows | 39 |
+| Active workflows | 40 |
 | Archived workflows | 24 |
-| Total | 63 |
+| Total | 64 |
 
-| Scheduled (cron) | 33 |
+| Scheduled (cron) | 34 |
 | Event-driven (push/manual) | 6 |
 
 ## Scheduled Workflows
@@ -41,6 +41,7 @@ Generated: 2026-04-20 17:15 UTC
 | Pin Watchdog | `pin-watchdog.yml` | Every 1h at :30 |
 | Pinterest Drop Alert | `pinterest-drop-alert.yml` | Daily 23:00 UTC |
 | Post Product Pins | `post-product-pins.yml` | Mon/Thu 19:00 UTC |
+| Post Sales Pins | `post-sales-pins.yml` | Tue/Wed/Fri 22:00 UTC |
 | Revenue Activation Team | `revenue-activation.yml` | Mon 17:00 UTC |
 | Revenue Intelligence Engine | `revenue-intelligence.yml` | Daily 15:00 UTC |
 | SEO Content Machine | `seo-content-machine.yml` | Mon/Wed/Fri 16:00 UTC |
@@ -99,6 +100,7 @@ Generated: 2026-04-20 17:15 UTC
   18:00  PilotTools LinkedIn Automation (Mon/Wed/Fri only)
   19:00  Post Product Pins (Mon/Thu only)
   21:00  PilotTools Twitter Automation
+  22:00  Post Sales Pins (Tue/Wed/Fri only)
   22:00  PilotTools Pinterest Automation
   23:00  Analytics Collector
   23:00  Content Engine
