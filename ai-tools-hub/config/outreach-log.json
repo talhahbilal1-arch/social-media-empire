@@ -187,5 +187,14 @@
     "subject": "PilotTools.ai Review of Semrush (4.6/5)",
     "sent_at": "2026-04-20T16:16:35.949Z",
     "status": "failed"
+  },
+  {
+    "identifier": "testimonial-claude",
+    "type": "testimonial",
+    "tool_slug": "claude",
+    "to": "hello@claude.ai",
+    "subject": "PilotTools.ai Review of Claude: 4.8/5 Rating",
+    "sent_at": "2026-04-27T16:48:06.733Z",
+    "status": "failed"
   }
 ]
