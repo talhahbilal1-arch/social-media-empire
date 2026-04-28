@@ -108,12 +108,6 @@ ${categories.map(c => `  <url>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>`).join('\n')}
-${useCases.map(uc => `  <url>
-    <loc>${SITE_URL}/best/${slugify(uc)}/</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`).join('\n')}
   <url>
     <loc>${SITE_URL}/blog/</loc>
     <lastmod>${today}</lastmod>
@@ -143,12 +137,13 @@ ${reviews.map(r => `  <url>
 const outDir = path.join(__dirname, '..', 'public')
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap)
 
-const totalUrls = 9 + comparisons.length + (tools.length * 3) + categories.length + useCases.length + 1 + articles.length + 1 + reviews.length
+const totalUrls = 9 + comparisons.length + (tools.length * 3) + categories.length + 1 + articles.length + 1 + reviews.length
 console.log(`Sitemap generated with ${totalUrls} URLs`)
 
 const robots = `User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /best/
 
 User-agent: GPTBot
 Allow: /
