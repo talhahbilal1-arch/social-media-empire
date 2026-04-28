@@ -273,7 +273,7 @@ IMPORTANT:
   <meta name="description" content="{article.meta_description}">
   <meta name="keywords" content="{', '.join(article.keywords)}">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://fitover35.com/articles/{article.slug}.html">
+  <link rel="canonical" href="https://fitover35.com/articles/{article.slug}">
 
   <!-- Open Graph -->
   <meta property="og:type" content="article">
