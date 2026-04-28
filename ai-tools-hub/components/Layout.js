@@ -12,10 +12,11 @@ const GA4_ID = googleConfig.analytics.ga4_measurement_id
 const hasGSC = GSC_TAG && !GSC_TAG.startsWith('PASTE')
 const hasGA4 = GA4_ID && !GA4_ID.startsWith('PASTE')
 
-export default function Layout({ children, title, description, canonical, ogType, structuredData }) {
+export default function Layout({ children, title, description, canonical, ogType, structuredData, robots }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} - ${SITE_TAGLINE}`
   const metaDesc = description || 'Compare the best AI tools in 2026. Honest reviews, pricing comparisons, and expert recommendations for AI writing, coding, image, video, and marketing tools.'
   const canonicalUrl = canonical || SITE_URL
+  const robotsMeta = robots || 'index, follow'
 
   return (
     <>
@@ -36,7 +37,7 @@ export default function Layout({ children, title, description, canonical, ogType
         <meta name="twitter:title" content={fullTitle} />
         <meta name="twitter:description" content={metaDesc} />
         <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content={robotsMeta} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />

@@ -41,6 +41,7 @@ export default function BestForPage({ useCase, useCaseSlug, tools }) {
       description={`Compare the best AI tools for ${displayName.toLowerCase()} in 2026. Ranked by features, pricing, and real user ratings.`}
       canonical={`https://pilottools.ai/best/${useCaseSlug}/`}
       structuredData={structuredData}
+      robots="noindex,nofollow"
     >
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },
