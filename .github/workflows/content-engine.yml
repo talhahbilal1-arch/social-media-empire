@@ -183,13 +183,14 @@ jobs:
                   print(f'  Scenario activator skipped: {_e}')
 
           # ══════════════════════════════════════════════════════════════
-          # VIDEO/IMAGE RUN DECISION — 50% video mix for Pinterest 2026
-          # Pinterest's algorithm now prioritizes video pins. Alternating
-          # between video-only and image-only runs ensures a natural 50/50
-          # mix in the feed without doubling total pin volume.
+          # VIDEO/IMAGE RUN DECISION
+          # Late API has been returning 401 since March, so video pin posting
+          # is non-functional. Force IMAGE mode until the video pipeline is
+          # restored, otherwise every scheduled run skips Phase 0 and no new
+          # content_ready rows are created for fitness/deals/menopause.
           # ══════════════════════════════════════════════════════════════
           import random
-          is_video_run = True  # 2026 algorithm: video pins get 5x distribution  # 50% chance each run is video-focused
+          is_video_run = False
           print(f'=== RUN TYPE: {"VIDEO" if is_video_run else "IMAGE"} ===')
 
           # ══════════════════════════════════════════════════════════════
@@ -201,16 +202,15 @@ jobs:
               print('  SKIPPED — this is a video run (Phase 1v will handle content)')
 
           ALL_BRANDS = ['fitness', 'deals', 'menopause', 'pilottools', 'homedecor', 'beauty']
-          
-          # Stagger brands across runs to avoid Gemini API rate limits
-          # 6 brands × content gen = too many API calls for free tier
-          # Rotate: even hours = Group A (fitness, deals, menopause)
-          #         odd hours = Group B (pilottools, homedecor, beauty)
+
+          # Only brands with non-PENDING board IDs in pinterest_boards.py post
+          # successfully. The original even/odd-hour rotation between Group A
+          # and Group B sent ~⅔ of crons (hours 15, 23 UTC) to Group B brands
+          # whose boards are still PENDING, so those runs produced no posted
+          # pins. Restrict to Group A until the other accounts are wired up.
           import datetime as _dt
           _hour = _dt.datetime.now(_dt.timezone.utc).hour
-          GROUP_A = ['fitness', 'deals', 'menopause']
-          GROUP_B = ['pilottools', 'homedecor', 'beauty']
-          ACTIVE_GROUP = GROUP_A if (_hour % 2 == 0) else GROUP_B
+          ACTIVE_GROUP = ['fitness', 'deals', 'menopause']
           brand_filter = os.environ.get('BRAND_INPUT', '').strip()
           brands_to_generate = [brand_filter] if brand_filter in ALL_BRANDS else ACTIVE_GROUP
           print(f'=== ACTIVE BRANDS THIS RUN: {brands_to_generate} (hour={_hour}) ===')
