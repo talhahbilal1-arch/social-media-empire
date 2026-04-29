@@ -20,6 +20,23 @@
     <key>WorkingDirectory</key>
     <string>/Users/homefolder/Desktop/social-media-empire</string>
 
+    <!--
+      Defensive env: launchd does not inherit a login shell's locale, so
+      Python 3.9 can fail with `init_fs_encoding` errors on some macOS
+      configurations. Pin UTF-8 explicitly. (Note: this does NOT bypass
+      Full Disk Access — see docs/VIDEO_PIPELINE_TROUBLESHOOT.md if you
+      see `[Errno 1] Operation not permitted` in the error log.)
+    -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PYTHONIOENCODING</key>
+        <string>utf-8</string>
+        <key>LANG</key>
+        <string>en_US.UTF-8</string>
+        <key>LC_ALL</key>
+        <string>en_US.UTF-8</string>
+    </dict>
+
     <!-- Every 8 hours, matching the content-engine cron cadence. -->
     <key>StartInterval</key>
     <integer>28800</integer>
