@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-24",
+  "last_updated": "2026-04-30",
   "items": [
     {
       "id": 1,
@@ -1860,10 +1860,11 @@
       "id": 223,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-email-writing",
       "keyword": "best ai tools for email writing",
-      "title": "Best AI Tools for Email Writing 2026"
+      "title": "Best AI Tools for Email Writing 2026",
+      "published_date": "2026-04-30"
     },
     {
       "id": 224,
