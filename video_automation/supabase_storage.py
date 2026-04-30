@@ -66,11 +66,24 @@ def ensure_bucket(url, key):
             logger.warning(f"Bucket creation response: {resp.status_code} {resp.text[:200]}")
 
 
+def _content_type_for(filename):
+    """Pick a Content-Type from the filename extension. PNGs uploaded with
+    image/jpeg can be silently rejected by downstream image fetchers."""
+    lower = filename.lower()
+    if lower.endswith(".png"):
+        return "image/png"
+    if lower.endswith(".webp"):
+        return "image/webp"
+    if lower.endswith(".gif"):
+        return "image/gif"
+    return "image/jpeg"
+
+
 def upload_pin_image(image_bytes, filename):
     """Upload a rendered pin image to Supabase Storage.
 
     Args:
-        image_bytes: JPEG image as bytes (from BytesIO.getvalue())
+        image_bytes: image bytes (PNG or JPEG)
         filename: Target filename (e.g. 'fitness_20260216_143022.jpg')
 
     Returns:
@@ -80,7 +93,7 @@ def upload_pin_image(image_bytes, filename):
     ensure_bucket(url, key)
 
     headers = _storage_headers(key)
-    headers["Content-Type"] = "image/jpeg"
+    headers["Content-Type"] = _content_type_for(filename)
 
     # Upload (upsert to overwrite if exists)
     upload_url = f"{url}/storage/v1/object/{BUCKET_NAME}/{filename}"

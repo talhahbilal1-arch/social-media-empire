@@ -1498,25 +1498,36 @@ OUTPUT ONLY THIS JSON (no markdown, no backticks, no explanation):
 
 
 def validate_destination_link(url, timeout=10):
-    """Check if a destination URL returns HTTP 200 OK.
+    """Check if a destination URL is reachable.
+
+    Tries HEAD first, then falls back to a small GET. Several static hosts
+    (Vercel in particular) return 403/405 to HEAD on .html files even when
+    GET returns 200, which would cause valid article pins to be flagged as
+    broken and rerouted to the homepage.
 
     Returns the URL if valid, or None if the link is broken.
-    Used before posting to prevent pins from linking to dead pages.
     """
     if not url or url == 'NEEDS_LANDING_PAGE':
         return None
-    try:
-        import urllib.request
-        req = urllib.request.Request(url, method='HEAD')
-        req.add_header('User-Agent', 'Mozilla/5.0 (Pinterest Pin Validator)')
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            if resp.status == 200:
-                return url
-            logger.warning(f"Link validation: {url} returned HTTP {resp.status}")
+    import urllib.request
+    headers = {'User-Agent': 'Mozilla/5.0 (Pinterest Pin Validator)'}
+    for method in ('HEAD', 'GET'):
+        try:
+            req = urllib.request.Request(url, method=method, headers=headers)
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                if 200 <= resp.status < 400:
+                    return url
+                last_status = resp.status
+        except urllib.error.HTTPError as e:
+            last_status = e.code
+            if e.code in (403, 405) and method == 'HEAD':
+                continue  # Retry with GET
+            break
+        except Exception as e:
+            logger.warning(f"Link validation failed for {url}: {e}")
             return None
-    except Exception as e:
-        logger.warning(f"Link validation failed for {url}: {e}")
-        return None
+    logger.warning(f"Link validation: {url} returned HTTP {last_status}")
+    return None
 
 
 def log_pin_to_history(pin_data, supabase_client):
