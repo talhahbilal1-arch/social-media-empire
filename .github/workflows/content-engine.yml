@@ -1017,7 +1017,25 @@ jobs:
                       )
                       with urllib.request.urlopen(req, timeout=30) as resp:
                           resp_body = resp.read().decode('utf-8', errors='replace')
-                          print(f'  [{brand}] Webhook → HTTP {resp.status} "{resp_body[:60]}"')
+                          print(f'  [{brand}] Webhook → HTTP {resp.status} body={len(resp_body)}B "{resp_body[:80]}"')
+                      # Make.com returns 200 even when its scenario filters drop
+                      # the pin. A bare "Accepted" body usually means no custom
+                      # response module is attached, so we have no Pinterest
+                      # pin_id to confirm the post. Log this so the silent-drop
+                      # case is visible without changing posting behavior.
+                      _resp_lower = resp_body.strip().lower()
+                      _is_bare_accepted = _resp_lower in ('accepted', '"accepted"', 'ok', '"ok"')
+                      if _is_bare_accepted:
+                          try:
+                              db.client.table('errors').insert({
+                                  'error_type': 'webhook_bare_response',
+                                  'error_message': f'Make.com returned bare "{resp_body[:30]}" for pin {pin_id} ({brand}). Add a custom response module after createPin so the scenario echoes the Pinterest pin_id back.',
+                                  'context': json.dumps({'brand': brand, 'pin_id': str(pin_id), 'resp_body_len': len(resp_body)}),
+                                  'severity': 'low',
+                                  'created_at': datetime.now(timezone.utc).isoformat(),
+                              }).execute()
+                          except Exception:
+                              pass
                       # Update status — try with posted_at, fallback without
                       try:
                           db.client.table('pinterest_pins').update({
