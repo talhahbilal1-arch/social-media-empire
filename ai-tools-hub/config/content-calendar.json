@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-30",
+  "last_updated": "2026-05-01",
   "items": [
     {
       "id": 1,
@@ -1870,10 +1870,11 @@
       "id": 224,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-blog-posts",
       "keyword": "best ai tools for blog posts",
-      "title": "Best AI Tools for Blog Posts 2026"
+      "title": "Best AI Tools for Blog Posts 2026",
+      "published_date": "2026-05-01"
     },
     {
       "id": 225,
