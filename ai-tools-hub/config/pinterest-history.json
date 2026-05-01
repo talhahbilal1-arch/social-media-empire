@@ -1537,5 +1537,32 @@
     "board": "AI Research Tools",
     "posted_at": "2026-04-30T22:41:47.109Z",
     "success": true
+  },
+  {
+    "slug": "category-writing",
+    "pin_type": "category",
+    "title": "Top AI Writing Tools 2026: Write Smarter, Not Harder!",
+    "link": "https://pilottools.ai/category/writing/",
+    "board": "AI Writing Tools",
+    "posted_at": "2026-05-01T22:39:15.447Z",
+    "success": true
+  },
+  {
+    "slug": "midjourney",
+    "pin_type": "tool-review",
+    "title": "Midjourney Review: Stunning AI Art in Seconds! (Rated 4.9/5)",
+    "link": "https://pilottools.ai/tools/midjourney/",
+    "board": "AI Image Generators",
+    "posted_at": "2026-05-01T22:39:19.630Z",
+    "success": true
+  },
+  {
+    "slug": "canva",
+    "pin_type": "tool-review",
+    "title": "Canva Review: Is It Worth It? (AI Design)",
+    "link": "https://pilottools.ai/tools/canva/",
+    "board": "AI Design Tools",
+    "posted_at": "2026-05-01T22:39:25.417Z",
+    "success": true
   }
 ]
