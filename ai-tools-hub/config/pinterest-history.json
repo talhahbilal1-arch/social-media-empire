@@ -1591,5 +1591,32 @@
     "board": "Best AI Tools 2026",
     "posted_at": "2026-05-02T16:59:00.715Z",
     "success": true
+  },
+  {
+    "slug": "notion-ai",
+    "pin_type": "tool-review",
+    "title": "Notion AI Review: Is It Worth It? (Productivity Boost!)",
+    "link": "https://pilottools.ai/tools/notion-ai/",
+    "board": "AI Productivity Tools",
+    "posted_at": "2026-05-02T22:28:57.754Z",
+    "success": true
+  },
+  {
+    "slug": "lumen5",
+    "pin_type": "tool-review",
+    "title": "Lumen5 AI Video Maker: Is It Worth It? (Review)",
+    "link": "https://pilottools.ai/tools/lumen5/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-05-02T22:29:01.873Z",
+    "success": true
+  },
+  {
+    "slug": "canva-vs-adobe-express-ai",
+    "pin_type": "comparison",
+    "title": "Canva vs Adobe Express AI: Which Design Tool Wins?",
+    "link": "https://pilottools.ai/compare/canva-vs-adobe-express-ai/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-05-02T22:29:06.065Z",
+    "success": true
   }
 ]
