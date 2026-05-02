@@ -83,6 +83,68 @@ _CROSS_PROMO_THEME = {
 }
 
 
+def _pin_button_html():
+    """Pinterest 'Pin This' button — uses JS to read the page URL/title at click
+    time so the same block works on every article without needing per-article URLs.
+    """
+    return (
+        '\n<div style="text-align:center;margin:32px 0;">'
+        '<a href="#" onclick="window.open(\'https://pinterest.com/pin/create/button/?url=\''
+        '+encodeURIComponent(window.location.href)+\'&description=\'+encodeURIComponent(document.title), '
+        '\'pin\', \'width=720,height=600\'); return false;" '
+        'style="display:inline-block;background:#E60023;color:#fff;padding:10px 22px;'
+        'border-radius:6px;text-decoration:none;font-weight:700;font-size:0.95em;">'
+        '\U0001F4CC Pin This Article</a></div>\n'
+    )
+
+
+# Brand-specific monetization CTAs auto-injected into every new article.
+# These match the patterns inserted by scripts/migrations/fix_conversion_leaks.py
+# so existing articles and future articles render the same monetization layer.
+_BRAND_CTA = {
+    'fitness': (
+        '\n<div style="background:linear-gradient(135deg,#1565C0,#0D47A1);color:#fff;padding:28px;'
+        'border-radius:14px;margin:36px 0;text-align:center;box-shadow:0 4px 16px rgba(13,71,161,0.18);">'
+        '<h3 style="color:#fff;margin:0 0 12px;font-size:1.4em;">Want a Done-For-You Coaching System?</h3>'
+        '<p style="color:#e3f2fd;margin:0 0 20px;font-size:1.05em;line-height:1.5;">'
+        'The AI Fitness Coach Vault — 75 prompts, 5 done-for-you training blocks, '
+        'and a discovery call script. Built for men 35+ who want to stop guessing.</p>'
+        '<a href="https://talhahbilal.gumroad.com/l/lupkl" target="_blank" rel="noopener sponsored" '
+        'style="background:#CCFF00;color:#000;padding:14px 32px;border-radius:8px;font-weight:800;'
+        'text-decoration:none;display:inline-block;font-size:1.05em;">Get the Vault — $27 →</a></div>\n'
+    ),
+    'deals': (
+        '\n<div style="background:#FDF6F0;border:2px solid #C47D8E;color:#2c2c2c;padding:24px;'
+        'border-radius:14px;margin:36px 0;text-align:center;">'
+        '<h3 style="color:#C47D8E;margin:0 0 12px;font-size:1.3em;">Free: 30 AI Prompts for Smart Shopping</h3>'
+        '<p style="margin:0 0 18px;line-height:1.5;">Get the curated prompt pack to find better deals, '
+        'compare products faster, and stop overspending. Free download, instant access.</p>'
+        '<a href="https://talhahbilal.gumroad.com/l/free-ai-prompts" target="_blank" rel="noopener" '
+        'style="background:#C47D8E;color:#fff;padding:12px 28px;border-radius:8px;font-weight:700;'
+        'text-decoration:none;display:inline-block;">Download Free →</a></div>\n'
+    ),
+    'menopause': (
+        '\n<div style="background:#F4F1EA;border:2px solid #6B705C;padding:24px;'
+        'border-radius:14px;margin:36px 0;text-align:center;">'
+        '<h3 style="color:#6B705C;font-family:\'DM Serif Display\',serif;margin:0 0 12px;">'
+        'Track Every Symptom. Reclaim Your Sleep.</h3>'
+        '<p style="color:#555;margin:0 0 18px;line-height:1.5;">A printable digital planner built '
+        'specifically for women navigating menopause — track symptoms, sleep patterns, supplements, '
+        'and mood in one place.</p>'
+        '<a href="https://www.etsy.com/listing/4435219468/menopause-wellness-planner-bundle?utm_source=article&utm_medium=organic" '
+        'target="_blank" rel="noopener sponsored" style="background:#6B705C;color:#fff;padding:14px 28px;'
+        'border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">'
+        'Get the Planner on Etsy →</a></div>\n'
+    ),
+}
+
+
+def _brand_cta_html(brand_key):
+    """Return brand-appropriate Gumroad/Etsy CTA. Empty string for brands
+    without a defined upsell (pilottools, homedecor, beauty)."""
+    return _BRAND_CTA.get(brand_key, '')
+
+
 def _cross_promo_section(brand_key):
     """Return a themed 'From Our Network' cross-promotion section."""
     promos = _CROSS_PROMO_DATA.get(brand_key, [])
@@ -294,6 +356,8 @@ def _render_deals_article(article_data, site_config, slug):
 
   {signup_html}
 
+  {_brand_cta_html('deals')}
+  {_pin_button_html()}
   {_cross_promo_section('deals')}
 </main>
 
@@ -452,6 +516,8 @@ def _render_fitness_article(article_data, site_config, slug):
 
   {signup_html}
 
+  {_brand_cta_html('fitness')}
+  {_pin_button_html()}
   {_cross_promo_section('fitness')}
 </main>
 
@@ -648,6 +714,8 @@ def _render_menopause_article(article_data, site_config, slug):
 
   {f'<section style="margin:36px 0;"><h2 style="font-family:DM Serif Display,serif;font-size:1.2em;color:#6B705C;margin:0 0 16px;">FAQ</h2>' + faq_html + '</section>' if faq_html else ''}
 
+  {_brand_cta_html('menopause')}
+  {_pin_button_html()}
   {_cross_promo_section('menopause')}
 </main>
 
@@ -797,6 +865,7 @@ def _render_pilottools_article(article_data, site_config, slug):
 
   {signup_html}
 
+  {_pin_button_html()}
   {_cross_promo_section('pilottools')}
 </main>
 
@@ -926,6 +995,7 @@ def _render_homedecor_article(article_data, site_config, slug):
 
   {f'<h2 style="font-family:DM Serif Display,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
 
+  {_pin_button_html()}
   {_cross_promo_section('homedecor')}
 </main>
 
@@ -1055,6 +1125,7 @@ def _render_beauty_article(article_data, site_config, slug):
 
   {f'<h2 style="font-family:Lora,serif;margin:36px 0 16px;">FAQ</h2>' + faq_html if faq_html else ''}
 
+  {_pin_button_html()}
   {_cross_promo_section('beauty')}
 </main>
 
