@@ -1564,5 +1564,32 @@
     "board": "AI Design Tools",
     "posted_at": "2026-05-01T22:39:25.417Z",
     "success": true
+  },
+  {
+    "slug": "surfer-seo",
+    "pin_type": "tool-review",
+    "title": "Surfer SEO Review: Boost Your Rankings with AI!",
+    "link": "https://pilottools.ai/tools/surfer-seo/",
+    "board": "AI SEO Tools",
+    "posted_at": "2026-05-02T16:58:52.651Z",
+    "success": true
+  },
+  {
+    "slug": "cursor-vs-github-copilot",
+    "pin_type": "comparison",
+    "title": "Cursor vs ChatGPT: Which AI Code Tool Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/cursor-vs-github-copilot/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-05-02T16:58:56.560Z",
+    "success": true
+  },
+  {
+    "slug": "best-ai-tools-blog-posts",
+    "pin_type": "article",
+    "title": "AI Blog Tools 2026: Write Killer Content Faster!",
+    "link": "https://pilottools.ai/blog/best-ai-tools-blog-posts/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-05-02T16:59:00.715Z",
+    "success": true
   }
 ]
