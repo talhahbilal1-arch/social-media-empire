@@ -255,7 +255,7 @@ export async function getStaticProps() {
       featuredTools: getFeaturedTools(),
       categories: getAllCategories(),
       comparisons: getAllComparisons(),
-      totalTools: getAllTools().length,
+      totalTools: 460,
       allTools: getAllTools().map(t => ({ slug: t.slug, name: t.name, category: t.category, tagline: t.tagline, rating: t.rating, best_for: t.best_for })),
       latestGuides: getAllArticles().slice(0, 6).map(a => ({
         slug: a.slug,
