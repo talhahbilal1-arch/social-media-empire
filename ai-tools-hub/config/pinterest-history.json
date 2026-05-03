@@ -1618,5 +1618,32 @@
     "board": "AI Tool Comparisons",
     "posted_at": "2026-05-02T22:29:06.065Z",
     "success": true
+  },
+  {
+    "slug": "synthesia-vs-runway",
+    "pin_type": "comparison",
+    "title": "Synthesia vs Runway: Which AI Video Tool Wins?",
+    "link": "https://pilottools.ai/compare/synthesia-vs-runway/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-05-03T17:00:17.990Z",
+    "success": true
+  },
+  {
+    "slug": "notion-ai-vs-chatgpt",
+    "pin_type": "comparison",
+    "title": "Notion AI vs ChatGPT: Which AI Assistant is BEST for YOU?",
+    "link": "https://pilottools.ai/compare/notion-ai-vs-chatgpt/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-05-03T17:00:22.261Z",
+    "success": true
+  },
+  {
+    "slug": "murf-ai",
+    "pin_type": "tool-review",
+    "title": "Murf AI Review: Is This AI Voice Generator Worth It?",
+    "link": "https://pilottools.ai/tools/murf-ai/",
+    "board": "AI Audio Tools",
+    "posted_at": "2026-05-03T17:00:26.326Z",
+    "success": true
   }
 ]
