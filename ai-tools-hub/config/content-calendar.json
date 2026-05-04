@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-01",
+  "last_updated": "2026-05-04",
   "items": [
     {
       "id": 1,
@@ -1880,28 +1880,31 @@
       "id": 225,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-social-media-captions",
       "keyword": "best ai tools for social media captions",
-      "title": "Best AI Tools for Social Media Captions 2026"
+      "title": "Best AI Tools for Social Media Captions 2026",
+      "published_date": "2026-05-04"
     },
     {
       "id": 226,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-resume-writing",
       "keyword": "best ai tools for resume writing",
-      "title": "Best AI Tools for Resume Writing 2026"
+      "title": "Best AI Tools for Resume Writing 2026",
+      "published_date": "2026-05-04"
     },
     {
       "id": 227,
       "type": "listicle",
       "priority": "medium",
-      "status": "pending",
+      "status": "published",
       "slug": "best-ai-tools-cover-letters",
       "keyword": "best ai tools for cover letters",
-      "title": "Best AI Tools for Cover Letters 2026"
+      "title": "Best AI Tools for Cover Letters 2026",
+      "published_date": "2026-05-04"
     },
     {
       "id": 228,
