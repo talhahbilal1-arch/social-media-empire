@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /best/
 
 User-agent: GPTBot
 Allow: /

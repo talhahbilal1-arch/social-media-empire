@@ -7,644 +7,686 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/supplements.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/supplements</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/sleep.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/sleep</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/wellness.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/wellness</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/wellness-planner.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/wellness-planner</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/anti-inflammatory-eating-for-menopause-symptom-relief.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/anti-inflammatory-eating-for-menopause-symptom-relief</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/anxiety-during-menopause-vs-general-anxiety-differences.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/anxiety-during-menopause-vs-general-anxiety-differences</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-books-about-menopause-2026.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-books-about-menopause-2026</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-mattress-topper-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-mattress-topper-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pajamas-for-menopause-night-sweats.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pajamas-for-menopause-night-sweats</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pajamas-for-night-sweats-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pajamas-for-night-sweats-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pajamas-for-night-sweats-review.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pajamas-for-night-sweats-review</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pillow-hot-flashes-tested.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pillow-hot-flashes-tested</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pillows-for-menopause-night-sweats.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pillows-for-menopause-night-sweats</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pillows-night-sweats.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-pillows-night-sweats</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-sheets-for-menopause-night-sweats-2024.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-sheets-for-menopause-night-sweats-2024</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-sheets-for-menopause-night-sweats.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-sheets-for-menopause-night-sweats</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-for-menopause-sleep-and-anxiety.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-for-menopause-sleep-and-anxiety</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-for-menopause-sleep.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-for-menopause-sleep</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-menopause-compared.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-menopause-compared</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplement-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplements-for-menopause-sleep-and-anxiety.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-magnesium-supplements-for-menopause-sleep-and-anxiety</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-menopause-books-must-read-2026.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-menopause-books-must-read-2026</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-menopause-supplements-2026-ranked.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-menopause-supplements-2026-ranked</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-menopause-supplements-for-weight-loss-over-50.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-menopause-supplements-for-weight-loss-over-50</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-sleep-aids-menopause-insomnia.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-sleep-aids-menopause-insomnia</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-weighted-blanket-for-menopause-sleep.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-weighted-blanket-for-menopause-sleep</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/best-weighted-blanket-menopause-sleep.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-weighted-blanket-menopause-sleep</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/body-image-during-menopause-self-compassion-practices.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/body-image-during-menopause-self-compassion-practices</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/breathing-techniques-for-hot-flash-management.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/breathing-techniques-for-hot-flash-management</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/building-a-menopause-support-network.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/building-a-menopause-support-network</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/calcium-and-bone-health-critical-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/calcium-and-bone-health-critical-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/celebrating-menopause-reframing-the-narrative.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/celebrating-menopause-reframing-the-narrative</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/cortisol-face-perimenopause-connection.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/cortisol-face-perimenopause-connection</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/creating-a-menopause-management-plan.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/creating-a-menopause-management-plan</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/creativity-and-hobbies-for-menopause-mental-health.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/creativity-and-hobbies-for-menopause-mental-health</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/digestive-changes-bloating-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/digestive-changes-bloating-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/early-signs-of-perimenopause-you-shouldnt-ignore.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/early-signs-of-perimenopause-you-shouldnt-ignore</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/essential-oils-menopause-symptoms.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/essential-oils-menopause-symptoms</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/essential-perimenopause-symptom-relief-strategies.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/essential-perimenopause-symptom-relief-strategies</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/estrogen-patch-shortage-alternative-hrt-options.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/estrogen-patch-shortage-alternative-hrt-options</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/estrogen-patch-shortage-hrt-alternatives-natural-hormone-sup.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/estrogen-patch-shortage-hrt-alternatives-natural-hormone-sup</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/estrogen-patch-shortage-natural-alternative-hrt-solutions.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/estrogen-patch-shortage-natural-alternative-hrt-solutions</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/fda-removes-black-box-warning-on-hrt-what-this-means-for-you.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/fda-removes-black-box-warning-on-hrt-what-this-means-for-you</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/financial-planning-for-menopause-related-health-costs.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/financial-planning-for-menopause-related-health-costs</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/foods-that-help-balance-hormones-naturally-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/foods-that-help-balance-hormones-naturally-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/frozen-shoulder-the-surprising-menopause-symptom.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/frozen-shoulder-the-surprising-menopause-symptom</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/glp-1-medications-for-menopause-weight-loss.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/glp-1-medications-for-menopause-weight-loss</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hair-thinning-during-menopause-what-helps.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hair-thinning-during-menopause-what-helps</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/headaches-and-migraines-during-perimenopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/headaches-and-migraines-during-perimenopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/heart-palpitations-and-menopause-when-to-worry.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/heart-palpitations-and-menopause-when-to-worry</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hormone-balance-diet-meal-plan.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hormone-balance-diet-meal-plan</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hormone-balance-support-through-strategic-supplementation.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hormone-balance-support-through-strategic-supplementation</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hot-flash-triggers-identification-and-avoidance-strategies.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hot-flash-triggers-identification-and-avoidance-strategies</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hrt-and-brain-health-new-dementia-research.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hrt-and-brain-health-new-dementia-research</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hrt-mortality-study-new-safety-data-reassures-women.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hrt-mortality-study-new-safety-data-reassures-women</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hrt-shortage-crisis-estrogen-patch-alternatives-what-to-do-n.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hrt-shortage-crisis-estrogen-patch-alternatives-what-to-do-n</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/hydration-and-its-role-in-managing-hot-flashes.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/hydration-and-its-role-in-managing-hot-flashes</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/identity-shifts-during-menopause-finding-yourself-again.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/identity-shifts-during-menopause-finding-yourself-again</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/iron-needs-change-during-and-after-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/iron-needs-change-during-and-after-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/joint-pain-during-menopause-often-overlooked-symptom.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/joint-pain-during-menopause-often-overlooked-symptom</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/journaling-prompts-for-processing-menopause-emotions.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/journaling-prompts-for-processing-menopause-emotions</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/loneliness-during-menopause-building-connection.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/loneliness-during-menopause-building-connection</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/magnesium-glycinate-sleep-protocol-for-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/magnesium-glycinate-sleep-protocol-for-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/meditation-and-mindfulness-for-menopause-anxiety.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/meditation-and-mindfulness-for-menopause-anxiety</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-and-depression-when-to-seek-help.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-and-depression-when-to-seek-help</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-and-gut-health-the-important-connection.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-and-gut-health-the-important-connection</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-brain-fog-alzheimers-prevention.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-brain-fog-alzheimers-prevention</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-brain-fog-coping-strategies-that-work.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-brain-fog-coping-strategies-that-work</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-brain-fog-solutions-supplements.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-brain-fog-solutions-supplements</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-fatigue-vs-regular-tiredness.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-fatigue-vs-regular-tiredness</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-rage-understanding-sudden-anger.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-rage-understanding-sudden-anger</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/menopause-workout-plan-beginners.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-workout-plan-beginners</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/natural-progesterone-cream-for-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/natural-progesterone-cream-for-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/natural-progesterone-cream-for-perimenopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/natural-progesterone-cream-for-perimenopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/natural-supplements-hot-flashes.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/natural-supplements-hot-flashes</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/night-sweats-and-sleep-disruption-practical-solutions.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/night-sweats-and-sleep-disruption-practical-solutions</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/nutrient-deficiencies-causing-brain-fog-in-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/nutrient-deficiencies-causing-brain-fog-in-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/omega-3-benefits-specifically-for-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/omega-3-benefits-specifically-for-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/partner-support-during-menopause-what-actually-helps.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/partner-support-during-menopause-what-actually-helps</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/pelvic-floor-exercises-importance-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/pelvic-floor-exercises-importance-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-acne-hormonal-skin-breakouts-natural-solutions.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-acne-hormonal-skin-breakouts-natural-solutions</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-age-when-symptoms-really-start.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-age-when-symptoms-really-start</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-in-your-30s-early-symptoms-what-to-know.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-in-your-30s-early-symptoms-what-to-know</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-symptoms-visual-checklist-are-you-in-perimenop.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-symptoms-visual-checklist-are-you-in-perimenop</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-vs-menopause-knowing-where-you-are.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/perimenopause-vs-menopause-knowing-where-you-are</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/phytoestrogen-foods-and-their-actual-impact.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/phytoestrogen-foods-and-their-actual-impact</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/preparing-for-doctor-appointments-about-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/preparing-for-doctor-appointments-about-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/preventive-health-screenings-every-woman-needs-during-menopa.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/preventive-health-screenings-every-woman-needs-during-menopa</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/protein-needs-increase-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/protein-needs-increase-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/relationship-communication-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/relationship-communication-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/self-care-massage-techniques-for-menopause-symptom-relief.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/self-care-massage-techniques-for-menopause-symptom-relief</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/skin-changes-during-menopause-care-routine-adjustments.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/skin-changes-during-menopause-care-routine-adjustments</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/sleep-disruption-beyond-night-sweats-menopause-insomnia.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/sleep-disruption-beyond-night-sweats-menopause-insomnia</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/sleep-hygiene-routine-for-night-sweats-and-insomnia.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/sleep-hygiene-routine-for-night-sweats-and-insomnia</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/social-connection-importance-during-menopause-transition.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/social-connection-importance-during-menopause-transition</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/strength-training-importance-during-menopause-for-bone-densi.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/strength-training-importance-during-menopause-for-bone-densi</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/strength-training-over-cardio-for-menopause-metabolism.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/strength-training-over-cardio-for-menopause-metabolism</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/sugar-and-caffeine-impact-on-menopause-symptoms.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/sugar-and-caffeine-impact-on-menopause-symptoms</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/telehealth-menopause-treatment-15-accessible-options.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/telehealth-menopause-treatment-15-accessible-options</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/tracking-symptoms-to-identify-patterns-and-triggers.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/tracking-symptoms-to-identify-patterns-and-triggers</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/travel-tips-for-managing-menopause-symptoms.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/travel-tips-for-managing-menopause-symptoms</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/vaginal-dryness-practical-solutions-and-products.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/vaginal-dryness-practical-solutions-and-products</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/walking-benefits-for-menopause-mood-and-weight.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/walking-benefits-for-menopause-mood-and-weight</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/weight-distribution-changes-during-menopause.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/weight-distribution-changes-during-menopause</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/when-to-consider-hrt-conversation-guide-for-doctors.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/when-to-consider-hrt-conversation-guide-for-doctors</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/workplace-strategies-for-managing-symptoms.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/workplace-strategies-for-managing-symptoms</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://menopause-planner-website.vercel.app/articles/yoga-poses-specifically-for-menopause-symptom-relief.html</loc>
+    <loc>https://menopause-planner-website.vercel.app/articles/yoga-poses-specifically-for-menopause-symptom-relief</loc>
     <lastmod>2026-04-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-cooling-products-for-hot-flashes.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-sleep-aids-for-menopause.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://menopause-planner-website.vercel.app/articles/best-supplements-for-menopause.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://menopause-planner-website.vercel.app/articles/herbal-tea-cup-cozy.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://menopause-planner-website.vercel.app/articles/menopause-wellness-planner.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://menopause-planner-website.vercel.app/articles/woman-meditation-peaceful-calm.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://menopause-planner-website.vercel.app/articles/woman-walking-outdoors-nature.html</loc>
+    <lastmod>2026-04-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
