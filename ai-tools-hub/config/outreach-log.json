@@ -196,5 +196,50 @@
     "subject": "PilotTools.ai Review of Claude: 4.8/5 Rating",
     "sent_at": "2026-04-27T16:48:06.733Z",
     "status": "failed"
+  },
+  {
+    "identifier": "testimonial-chatgpt",
+    "type": "testimonial",
+    "tool_slug": "chatgpt",
+    "to": "hello@chat.openai.com",
+    "subject": "PilotTools.ai Review of ChatGPT - 4.7/5",
+    "sent_at": "2026-05-04T16:53:47.717Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-jasper",
+    "type": "testimonial",
+    "tool_slug": "jasper",
+    "to": "hello@jasper.ai",
+    "subject": "PilotTools.ai Review of Jasper: 4.5/5 Stars!",
+    "sent_at": "2026-05-04T16:53:52.720Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-midjourney",
+    "type": "testimonial",
+    "tool_slug": "midjourney",
+    "to": "hello@midjourney.com",
+    "subject": "PilotTools.ai Review of Midjourney: 4.9/5 Rating",
+    "sent_at": "2026-05-04T16:53:57.494Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-cursor",
+    "type": "testimonial",
+    "tool_slug": "cursor",
+    "to": "hello@cursor.com",
+    "subject": "PilotTools.ai Review of Cursor - 4.8/5 Rating",
+    "sent_at": "2026-05-04T16:54:02.375Z",
+    "status": "failed"
+  },
+  {
+    "identifier": "testimonial-writesonic",
+    "type": "testimonial",
+    "tool_slug": "writesonic",
+    "to": "hello@writesonic.com",
+    "subject": "PilotTools.ai Review of Writesonic: 4.4/5!",
+    "sent_at": "2026-05-04T16:54:07.486Z",
+    "status": "failed"
   }
 ]
