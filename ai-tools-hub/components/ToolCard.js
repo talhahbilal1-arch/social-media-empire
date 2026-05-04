@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { formatPrice } from '../lib/tools'
 import StarRating from './StarRating'
+import FeaturedBadge from './FeaturedBadge'
 
 function getLogoUrl(website) {
   if (!website) return null
@@ -23,7 +24,12 @@ export default function ToolCard({ tool, rank }) {
   const logoUrl = getLogoUrl(tool.website)
 
   return (
-    <div className="card group gradient-border">
+    <div className={`card group gradient-border ${tool.featured ? 'border-yellow-500/20 shadow-[0_0_20px_rgba(234,179,8,0.08)]' : ''}`}>
+      {tool.featured && (
+        <div className="mb-3">
+          <FeaturedBadge />
+        </div>
+      )}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
           {rank && (
