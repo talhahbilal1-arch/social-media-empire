@@ -1672,5 +1672,32 @@
     "board": "Best AI Tools 2026",
     "posted_at": "2026-05-03T22:29:19.398Z",
     "success": true
+  },
+  {
+    "slug": "best-ai-tools-nurses",
+    "pin_type": "article",
+    "title": "AI Tools Empowering Nurses in 2026",
+    "link": "https://pilottools.ai/blog/best-ai-tools-nurses/",
+    "board": "Best AI Tools 2026",
+    "posted_at": "2026-05-04T17:47:02.384Z",
+    "success": true
+  },
+  {
+    "slug": "category-video",
+    "pin_type": "category",
+    "title": "Top AI Video Tools of 2026: Create Stunning Videos Effortlessly!",
+    "link": "https://pilottools.ai/category/video/",
+    "board": "AI Video Tools",
+    "posted_at": "2026-05-04T17:47:06.467Z",
+    "success": true
+  },
+  {
+    "slug": "descript-vs-capcut-video-editing",
+    "pin_type": "comparison",
+    "title": "Descript vs CapCut: Which Video Editor Reigns Supreme?",
+    "link": "https://pilottools.ai/compare/descript-vs-capcut-video-editing/",
+    "board": "AI Tool Comparisons",
+    "posted_at": "2026-05-04T17:47:10.493Z",
+    "success": true
   }
 ]
