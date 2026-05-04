@@ -1,0 +1,68 @@
+{
+  "date": "2026-05-04",
+  "brands": [
+    {
+      "brand": "fitness",
+      "content": "REDDIT TITLE: Training smarter after 35: Deloads, injuries, and the \"winter arc\"\n\nREDDIT POST:",
+      "articles": [
+        {
+          "title": "How to Train Around Injuries Without Losing Progress \u2014 FitOver35",
+          "slug": "training-around-injuries",
+          "url": "https://fitover35.com/articles/training-around-injuries.html"
+        },
+        {
+          "title": "5 Winter Arc Truths Nobody Admits About Transformation Results \u2014 FitOver35",
+          "slug": "winter-arc-challenge-final-transformation-results",
+          "url": "https://fitover35.com/articles/winter-arc-challenge-final-transformation-results.html"
+        },
+        {
+          "title": "Why Deload Weeks Matter More After 35 (And How to Actually Do Them Right) \u2014 FitOver35",
+          "slug": "why-deload-weeks-matter-more-after-35-and-how-to-do-them",
+          "url": "https://fitover35.com/articles/why-deload-weeks-matter-more-after-35-and-how-to-do-them.html"
+        }
+      ]
+    },
+    {
+      "brand": "deals",
+      "content": "REDDIT TITLE: Frugal kitchen investments & avoiding gift waste \u2013 my recent deep dive\n\nREDDIT POST:\nHey everyone,\n\nBeen doing",
+      "articles": [
+        {
+          "title": "Valentine's Gifts That Actually Get Used (Not Shoved in a Drawer) \u2014 Daily Deal Darling",
+          "slug": "valentines-day-gift-ideas-actually-useful",
+          "url": "https://www.dailydealdarling.com/articles/valentines-day-gift-ideas-actually-useful.html"
+        },
+        {
+          "title": "5 Viral Kitchen Gadgets Actually Worth Your Money (I Tested Them All) \u2014 Daily Deal Darling",
+          "slug": "viral-kitchen-gadgets-modern-must-haves-tiktok-finds",
+          "url": "https://www.dailydealdarling.com/articles/viral-kitchen-gadgets-modern-must-haves-tiktok-finds.html"
+        },
+        {
+          "title": "Williams Sonoma Outlet Deals: 5 Premium Kitchen Finds Actually Worth Your Money \u2014 Daily Deal Darling",
+          "slug": "williams-sonoma-outlet-deals-premium-kitchen-finds-up-to-44-",
+          "url": "https://www.dailydealdarling.com/articles/williams-sonoma-outlet-deals-premium-kitchen-finds-up-to-44-.html"
+        }
+      ]
+    },
+    {
+      "brand": "menopause",
+      "content": "REDDIT TITLE: A couple of simple tips that really helped my menopause journey (HRT prep & finding calm)\n\nREDDIT POST:",
+      "articles": [
+        {
+          "title": "Finding Your Calm: Simple Meditation &amp; Mindfulness for Menopause Peace",
+          "slug": "woman-meditation-peaceful-calm",
+          "url": "https://menopause-planner-website.vercel.app/articles/woman-meditation-peaceful-calm.html"
+        },
+        {
+          "title": "HRT Conversation Prep: A Doctor Visit Guide for Menopause (2024)",
+          "slug": "when-to-consider-hrt-conversation-guide-for-doctors",
+          "url": "https://menopause-planner-website.vercel.app/articles/when-to-consider-hrt-conversation-guide-for-doctors.html"
+        },
+        {
+          "title": "Yoga Poses for Menopause Relief: Does It Actually Work for Symptom Relief? \u2014 The Menopause Planner",
+          "slug": "yoga-poses-specifically-for-menopause-symptom-relief",
+          "url": "https://menopause-planner-website.vercel.app/articles/yoga-poses-specifically-for-menopause-symptom-relief.html"
+        }
+      ]
+    }
+  ]
+}
